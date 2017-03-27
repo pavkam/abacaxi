@@ -48,7 +48,7 @@ namespace Abacaxi.Numerics
                     if (i == 0)
                     {
                         selection.Push(number);
-                        yield return selection.ToArray();
+                        yield return  selection.ToArray();
                         selection.Pop();
 
                         i = sign;
