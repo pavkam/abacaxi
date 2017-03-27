@@ -13,33 +13,37 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Numerics
+namespace Abacaxi.Tests
 {
-    using System;
+    using NUnit.Framework;
     using System.Collections.Generic;
+    using System.Linq;
 
-    public static class PowersOfTwo
+    internal static class TestHelper
     {
-        /// <summary>
-        /// Returns a sequence of numbers (powers of two), which summed, result in the original number <paramref name="number"/>.
-        /// </summary>
-        /// <remarks>
-        /// If number is 
-        /// </remarks>
-        /// <param name="number">The number to be decomposed.</param>
-        /// <returns>A sequence of numbers.</returns>
-        public static IEnumerable<int> Decompose(int number)
+        public static void AssertSequence<T>(IEnumerable<T> sequence, params T[] expected)
         {
-            var sign = Math.Sign(number);
+            Assert.NotNull(sequence, "The sequence is null.");
 
-            var power = 1;
-            while (number != 0)
+            var array = sequence.ToArray();
+            Assert.AreEqual(expected.Length, array.Length, $"The length of the sequence [{array.Length}] does not match the expected length.");
+
+            for (var i = 0; i < expected.Length; i++)
             {
-                if (number % 2 != 0)
-                    yield return sign * power;
+                Assert.AreEqual(expected[i], array[i], $"Element [{i}] of the sequence does not match the expected value.");
+            }
+        }
 
-                power *= 2;
-                number /= 2;
+        public static void AssertSequence<T>(IEnumerable<IEnumerable<T>> sequence, params T[][] expected)
+        {
+            Assert.NotNull(sequence);
+
+            var array = sequence.ToArray();
+            Assert.AreEqual(expected.Length, array.Length);
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                AssertSequence(array[i], expected[i]);
             }
         }
     }
