@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Numerics\IntegerPartitioningDeconstructorTests.cs" />
+    <Compile Include="Numerics\PrimeFactorsDeconstructorTests.cs" />
     <Compile Include="Numerics\PowersOfTwoDeconstructorTests.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

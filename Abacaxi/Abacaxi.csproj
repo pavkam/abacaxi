@@ -40,6 +40,7 @@
     <Compile Include="Numerics\IntegerPartitioningDeconstructor.cs" />
     <Compile Include="Numerics\ICombinationalDeconstructor.cs" />
     <Compile Include="Numerics\ISequentialDeconstructor.cs" />
+    <Compile Include="Numerics\PrimeFactorsDeconstructor.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Numerics\PowersOfTwoDeconstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

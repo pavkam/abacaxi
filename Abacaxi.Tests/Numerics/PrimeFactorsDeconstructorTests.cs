@@ -20,13 +20,13 @@ namespace Abacaxi.Tests.Numerics
     using System.Linq;
 
     [TestFixture]
-    public class PowersOfTwoDeconstructorTests
+    public class PrimeFactorsDeconstructorTests
     {
         private ISequentialDeconstructor<int, int> _deconstructor;
 
         protected virtual ISequentialDeconstructor<int, int> CreateDeconstructor()
         {
-            return new PowersOfTwoDeconstructor();
+            return new PrimeFactorsDeconstructor();
         }
 
         [SetUp]
@@ -36,10 +36,11 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DeconstructZero_ReturnsNothing()
+        public void DeconstructZero_ReturnsZero()
         {
             TestHelper.AssertSequence(
-                _deconstructor.Deconstruct(0));
+                _deconstructor.Deconstruct(0),
+                0);
         }
 
         [Test]
@@ -59,19 +60,27 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DeconstructThree_ReturnsOneThenTwo()
+        public void DeconstructThree_ReturnsThree()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(3),
-                1, 2);
+                3);
         }
 
         [Test]
-        public void DeconstructFour_ReturnsFour()
+        public void DeconstructFour_ReturnsTwoTwo()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(4),
-                4);
+                2, 2);
+        }
+
+        [Test]
+        public void DeconstructTwenty_ReturnsTwoTwoFive()
+        {
+            TestHelper.AssertSequence(
+                _deconstructor.Deconstruct(20),
+                2, 2, 5);
         }
 
 
@@ -92,28 +101,36 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DeconstructMinusThree_ReturnsMinusOneThenMinusTwo()
+        public void DeconstructMinusThree_ReturnsMinusThree()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(-3),
-                -1, -2);
+                -3);
         }
 
         [Test]
-        public void DeconstructFour_ReturnsMinusFour()
+        public void DeconstructMinusFour_ReturnsMinusOneMinusTwoMinusTwo()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(-4),
-                -4);
+                -2, -2, -1);
+        }
+
+        [Test]
+        public void DeconstructMinusEight_ReturnsMinusTwoMinusTwoMinusTwo()
+        {
+            TestHelper.AssertSequence(
+                _deconstructor.Deconstruct(-8),
+                -2, -2, -2);
         }
 
         [TestCase(int.MaxValue)]
         [TestCase(int.MinValue)]
-        public void Deconstruct_SumsToOriginal(int number)
+        public void Deconstruct_MultipliesToOriginal(int number)
         {
-            var backSum = _deconstructor.Deconstruct(number).Sum();
+            var mul = _deconstructor.Deconstruct(number).Aggregate((x, y) => x * y);
 
-            Assert.AreEqual(number, backSum);
+            Assert.AreEqual(number, mul);
         }
     }
 }

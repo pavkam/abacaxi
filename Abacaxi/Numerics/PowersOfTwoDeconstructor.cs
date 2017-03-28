@@ -19,7 +19,7 @@ namespace Abacaxi.Numerics
     using System.Collections.Generic;
 
     /// <summary>
-    /// Utility class to decompose any integer number into its "power of two" components. Any integer number can be decomposed into
+    /// Deconstracts any integer number into its "power of two" components. Any integer number can be decomposed into
     /// a sum of its "power of two" components: d0 * 2^0 + d1 * 2^1 + d2 * 2^2 + ... where each "d" is a binary digit in the original number.
     /// </summary>
     public class PowersOfTwoDeconstructor: ISequentialDeconstructor<int, int>

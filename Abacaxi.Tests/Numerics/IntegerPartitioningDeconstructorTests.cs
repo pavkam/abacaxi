@@ -36,14 +36,14 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DecomposeZero_ReturnsNothing()
+        public void DeconstructZero_ReturnsNothing()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(0));
         }
 
         [Test]
-        public void DecomposeOne_ReturnsOne()
+        public void DeconstructOne_ReturnsOne()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(1),
@@ -51,7 +51,7 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DecomposeTwo_ReturnsTwo_ThenOneOne()
+        public void DeconstructTwo_ReturnsTwo_ThenOneOne()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(2),
@@ -60,7 +60,7 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DecomposeThree_ReturnsThree_ThenTwoOne_ThenOneOneOne()
+        public void DeconstructThree_ReturnsThree_ThenTwoOne_ThenOneOneOne()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(3),
@@ -70,7 +70,7 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DecomposeFour_ReturnsFour_ThenThreeOne_ThenTwoTwo_ThenTwoOneOne_ThenOneOneOneOne()
+        public void DeconstructFour_ReturnsFour_ThenThreeOne_ThenTwoTwo_ThenTwoOneOne_ThenOneOneOneOne()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(4),
@@ -82,7 +82,7 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DecomposeMinusOne_ReturnsMinusOne()
+        public void DeconstructMinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(-1),
@@ -90,7 +90,7 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DecomposeMinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
+        public void DeconstructMinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(-2),
@@ -99,7 +99,7 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DecomposeMinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
+        public void DeconstructMinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(-3),
@@ -109,7 +109,7 @@ namespace Abacaxi.Tests.Numerics
         }
 
         [Test]
-        public void DecomposeMinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
+        public void DeconstructMinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
                 _deconstructor.Deconstruct(-4),
@@ -122,7 +122,7 @@ namespace Abacaxi.Tests.Numerics
 
         [TestCase(20)]
         [TestCase(-20)]
-        public void Decompose_SumsToOriginal(int number)
+        public void Deconstruct_SumsToOriginal(int number)
         {
             foreach (var combo in _deconstructor.Deconstruct(number))
             {
