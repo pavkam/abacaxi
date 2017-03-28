@@ -36,6 +36,14 @@ namespace Abacaxi
                 throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than zero.");
         }
 
+        public static void ArgumentGreaterThanOne(string argumentName, int value)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value < 2)
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than one.");
+        }
+
         public static void ArgumentNotNull(string argumentName, object value)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");

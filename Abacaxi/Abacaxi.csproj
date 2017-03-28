@@ -41,6 +41,7 @@
     <Compile Include="Numerics\ICombinationalDeconstructor.cs" />
     <Compile Include="Numerics\ISequentialDeconstructor.cs" />
     <Compile Include="Numerics\PrimeFactorsDeconstructor.cs" />
+    <Compile Include="Theory\DecimalZipper.cs" />
     <Compile Include="Theory\DuckTypingStringRepeater.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Numerics\PowersOfTwoDeconstructor.cs" />
