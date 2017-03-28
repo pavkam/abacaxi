@@ -17,24 +17,37 @@ namespace Abacaxi.Tests.Numerics
 {
     using Abacaxi.Numerics;
     using NUnit.Framework;
-    using System.Collections.Generic;
     using System.Linq;
 
     [TestFixture]
-    public class PowersOfTwoPartitioningTests
+    public class PowersOfTwoDeconstructorTests
     {
-        [Test]
+        private ISequentialDeconstructor<int, int> _deconstructor;
+
+        protected virtual ISequentialDeconstructor<int, int> CreateDeconstructor()
+        {
+            return new PowersOfTwoDeconstructor();
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _deconstructor = CreateDeconstructor();
+        }
+
+
+            [Test]
         public void DecomposeZero_ReturnsNothing()
         {
             TestHelper.AssertSequence(
-                PowersOfTwoPartitioning.Decompose(0));
+                _deconstructor.Deconstruct(0));
         }
 
         [Test]
         public void DecomposeOne_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                PowersOfTwoPartitioning.Decompose(1),
+                _deconstructor.Deconstruct(1),
                 1);
         }
 
@@ -42,7 +55,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeTwo_ReturnsTwo()
         {
             TestHelper.AssertSequence(
-                PowersOfTwoPartitioning.Decompose(2),
+                _deconstructor.Deconstruct(2),
                 2);
         }
 
@@ -50,7 +63,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeThree_ReturnsOneThenTwo()
         {
             TestHelper.AssertSequence(
-                PowersOfTwoPartitioning.Decompose(3),
+                _deconstructor.Deconstruct(3),
                 1, 2);
         }
 
@@ -58,7 +71,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeFour_ReturnsFour()
         {
             TestHelper.AssertSequence(
-                PowersOfTwoPartitioning.Decompose(4),
+                _deconstructor.Deconstruct(4),
                 4);
         }
 
@@ -67,7 +80,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeMinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                PowersOfTwoPartitioning.Decompose(-1),
+                _deconstructor.Deconstruct(-1),
                 -1);
         }
 
@@ -75,7 +88,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeMinusTwo_ReturnsMinusTwo()
         {
             TestHelper.AssertSequence(
-                PowersOfTwoPartitioning.Decompose(-2),
+                _deconstructor.Deconstruct(-2),
                 -2);
         }
 
@@ -83,7 +96,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeMinusThree_ReturnsMinusOneThenMinusTwo()
         {
             TestHelper.AssertSequence(
-                PowersOfTwoPartitioning.Decompose(-3),
+                _deconstructor.Deconstruct(-3),
                 -1, -2);
         }
 
@@ -91,7 +104,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeFour_ReturnsMinusFour()
         {
             TestHelper.AssertSequence(
-                PowersOfTwoPartitioning.Decompose(-4),
+                _deconstructor.Deconstruct(-4),
                 -4);
         }
 
@@ -99,7 +112,7 @@ namespace Abacaxi.Tests.Numerics
         [TestCase(int.MinValue)]
         public void Decompose_SumsToOriginal(int number)
         {
-            var backSum = PowersOfTwoPartitioning.Decompose(number).Sum();
+            var backSum = _deconstructor.Deconstruct(number).Sum();
 
             Assert.AreEqual(number, backSum);
         }

@@ -17,24 +17,36 @@ namespace Abacaxi.Tests.Numerics
 {
     using Abacaxi.Numerics;
     using NUnit.Framework;
-    using System.Collections.Generic;
     using System.Linq;
 
     [TestFixture]
-    public class IntegerPartitioningTests
+    public class IntegerPartitioningDeconstructorTests
     {
+        private ICombinationalDeconstructor<int, int> _deconstructor;
+
+        protected virtual ICombinationalDeconstructor<int, int> CreateDeconstructor()
+        {
+            return new IntegerPartitioningDeconstructor();
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _deconstructor = CreateDeconstructor();
+        }
+
         [Test]
         public void DecomposeZero_ReturnsNothing()
         {
             TestHelper.AssertSequence(
-                IntegerPartitioning.Decompose(0));
+                _deconstructor.Deconstruct(0));
         }
 
         [Test]
         public void DecomposeOne_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitioning.Decompose(1),
+                _deconstructor.Deconstruct(1),
                 new[] { 1 });
         }
 
@@ -42,7 +54,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeTwo_ReturnsTwo_ThenOneOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitioning.Decompose(2),
+                _deconstructor.Deconstruct(2),
                 new[] { 2 },
                 new[] { 1, 1 });
         }
@@ -51,7 +63,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeThree_ReturnsThree_ThenTwoOne_ThenOneOneOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitioning.Decompose(3),
+                _deconstructor.Deconstruct(3),
                 new[] { 3 },
                 new[] { 2, 1 },
                 new[] { 1, 1, 1 });
@@ -61,7 +73,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeFour_ReturnsFour_ThenThreeOne_ThenTwoTwo_ThenTwoOneOne_ThenOneOneOneOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitioning.Decompose(4),
+                _deconstructor.Deconstruct(4),
                 new[] { 4 },
                 new[] { 3, 1 },
                 new[] { 2, 1, 1 },
@@ -73,7 +85,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeMinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitioning.Decompose(-1),
+                _deconstructor.Deconstruct(-1),
                 new[] { -1 });
         }
 
@@ -81,7 +93,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeMinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitioning.Decompose(-2),
+                _deconstructor.Deconstruct(-2),
                 new[] { -2 },
                 new[] { -1, -1 });
         }
@@ -90,7 +102,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeMinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitioning.Decompose(-3),
+                _deconstructor.Deconstruct(-3),
                 new[] { -3 },
                 new[] { -2, -1 },
                 new[] { -1, -1, -1 });
@@ -100,7 +112,7 @@ namespace Abacaxi.Tests.Numerics
         public void DecomposeMinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitioning.Decompose(-4),
+                _deconstructor.Deconstruct(-4),
                 new[] { -4 },
                 new[] { -3, -1 },
                 new[] { -2, -1, -1 },
@@ -112,7 +124,7 @@ namespace Abacaxi.Tests.Numerics
         [TestCase(-20)]
         public void Decompose_SumsToOriginal(int number)
         {
-            foreach (var combo in IntegerPartitioning.Decompose(number))
+            foreach (var combo in _deconstructor.Deconstruct(number))
             {
                 var sum = combo.Sum();
                 Assert.AreEqual(number, sum);
