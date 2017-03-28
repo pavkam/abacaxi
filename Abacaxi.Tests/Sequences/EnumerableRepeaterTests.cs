@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Theory
+namespace Abacaxi.Tests.Sequences
 {
     using System;
     using Abacaxi.Sequences;
