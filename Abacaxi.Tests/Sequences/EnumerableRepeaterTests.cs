@@ -16,50 +16,50 @@
 namespace Abacaxi.Tests.Theory
 {
     using System;
-    using Abacaxi.Theory;
+    using Abacaxi.Sequences;
     using NUnit.Framework;
 
     [TestFixture]
-    public class DuckTypingStringRepeaterTests
+    public class EnumerableRepeaterTests
     {
         [Test]
         public void Repeat_ThrowsException_ForNullString()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                DuckTypingStringRepeater.Repeat(null, 1));
+                EnumerableRepeater.Repeat((int[])null, 1));
         }
-
-        [Test]
-        public void Repeat_ThrowsException_ForEmptyString()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                DuckTypingStringRepeater.Repeat(string.Empty, 1));
-        }
-
+        
         [Test]
         public void Repeat_ThrowsException_ForZeroRepetitions()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                DuckTypingStringRepeater.Repeat("A", 0));
+                EnumerableRepeater.Repeat("A", 0));
+        }
+
+        [Test]
+        public void Repeat_ReturnsNothing_ForEmptyEnumerable()
+        {
+            var result = EnumerableRepeater.Repeat("", 5);
+            Assert.AreEqual("", result);
         }
 
         [Test]
         public void Repeat_DoesNothing_ForOneRepetition()
         {
-            var result = DuckTypingStringRepeater.Repeat("A", 1);
+            var result = EnumerableRepeater.Repeat("A", 1);
             Assert.AreEqual("A", result);
         }
 
         [Test]
         public void Repeat_DoublesString_ForTwoRepetition()
         {
-            var result = DuckTypingStringRepeater.Repeat("A", 2);
+            var result = EnumerableRepeater.Repeat("A", 2);
             Assert.AreEqual("AA", result);
         }
 
         public void Repeat_TriplesString_ForThreeRepetition()
         {
-            var result = DuckTypingStringRepeater.Repeat("A", 3);
+            var result = EnumerableRepeater.Repeat("A", 3);
             Assert.AreEqual("AAA", result);
         }
     }

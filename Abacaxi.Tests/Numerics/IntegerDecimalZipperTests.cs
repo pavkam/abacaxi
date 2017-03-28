@@ -13,10 +13,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Theory
+namespace Abacaxi.Tests.Numerics
 {
     using System;
-    using Abacaxi.Theory;
+    using Abacaxi.Numerics;
     using NUnit.Framework;
 
     [TestFixture]
@@ -26,21 +26,21 @@ namespace Abacaxi.Tests.Theory
         public void Zip_ThrowsException_ForNegativeX()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                DecimalZipper.Zip(-1, 1, 2));
+                IntegerDecimalZipper.Zip(-1, 1, 2));
         }
 
         [Test]
         public void Zip_ThrowsException_ForNegativeY()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                DecimalZipper.Zip(1, -1, 2));
+                IntegerDecimalZipper.Zip(1, -1, 2));
         }
 
         [Test]
         public void Zip_ThrowsException_ForBaseOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                DecimalZipper.Zip(1, 1, 1));
+                IntegerDecimalZipper.Zip(1, 1, 1));
         }
 
         [TestCase(0, 0, 0)]
@@ -51,7 +51,7 @@ namespace Abacaxi.Tests.Theory
         [TestCase(12, 34, 3142)]
         public void Zip_ReturnsCorrectResult_IntBase10(int x, int y, int expected)
         {
-            var result = DecimalZipper.Zip(x, y);
+            var result = IntegerDecimalZipper.Zip(x, y);
             Assert.AreEqual(expected, result);
         }
 
@@ -60,7 +60,7 @@ namespace Abacaxi.Tests.Theory
         [TestCase(0xAB, 0xCD, 0xCADB)]
         public void Zip_ReturnsCorrectResult_IntBase16(int x, int y, int expected)
         {
-            var result = DecimalZipper.Zip(x, y, 16);
+            var result = IntegerDecimalZipper.Zip(x, y, 16);
             Assert.AreEqual(expected, result);
         }
     }

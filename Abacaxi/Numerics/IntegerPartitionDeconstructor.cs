@@ -22,14 +22,14 @@ namespace Abacaxi.Numerics
     /// Partitions an integer number into all possible combinations of smaller numbers. When summed, the original integer number is
     /// obtained. All combinations are unique. E.g. 1 1 2; 2 1 1 and 1 2 1 are considered equal and only one will be returned.
     /// </summary>
-    public class IntegerPartitioningDeconstructor: ICombinationalDeconstructor<int, int>
+    public static class IntegerPartitionDeconstructor
     {
         /// <summary>
         /// Partitions a given integer into all possible combinations of smaller integers.
         /// </summary>
         /// <param name="number">The input number.</param>
         /// <returns>A sequence of combinations.</returns>
-        public virtual IEnumerable<int[]> Deconstruct(int number)
+        public static IEnumerable<int[]> Deconstruct(int number)
         {
             if (number == 0)
             {

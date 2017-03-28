@@ -37,13 +37,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Numerics\IntegerPartitioningDeconstructorTests.cs" />
-    <Compile Include="Numerics\PrimeFactorsDeconstructorTests.cs" />
-    <Compile Include="Numerics\PowersOfTwoDeconstructorTests.cs" />
+    <Compile Include="Numerics\IntegerPartitionDeconstructorTests.cs" />
+    <Compile Include="Numerics\IntegerPrimeFactorDeconstructorTests.cs" />
+    <Compile Include="Numerics\IntegerPowerOfTwoDeconstructorTests.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Theory\DecimalZipperTests.cs" />
-    <Compile Include="Theory\DuckTypingStringRepeaterTests.cs" />
+    <Compile Include="Numerics\IntegerDecimalZipperTests.cs" />
+    <Compile Include="Sequences\EnumerableRepeaterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

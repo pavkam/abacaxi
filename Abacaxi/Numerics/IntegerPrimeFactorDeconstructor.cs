@@ -23,9 +23,9 @@ namespace Abacaxi.Numerics
     /// Deconstructs any integer number into its prime factors. Positive numbers will be deconstructed into positive factors whie negative will be deconstructed
     /// into only negative numbers.
     /// </summary>
-    public class PrimeFactorsDeconstructor: ISequentialDeconstructor<int, int>
+    public static class IntegerPrimeFactorDeconstructor
     {
-        private int GetIterationLimit(int number)
+        private static int GetIterationLimit(int number)
         {
             double sqrt;
             if (number > 0)
@@ -49,7 +49,7 @@ namespace Abacaxi.Numerics
         /// </summary>
         /// <param name="number">The number to be deconstructed into its prime factors.</param>
         /// <returns>A sequence of primes.</returns>
-        public virtual IEnumerable<int> Deconstruct(int number)
+        public static IEnumerable<int> Deconstruct(int number)
         {
             var sign = Math.Sign(number);
             
@@ -95,7 +95,7 @@ namespace Abacaxi.Numerics
         /// </summary>
         /// <param name="number">The number to check.</param>
         /// <returns><c>true</c> if the number is prime; <c>false</c> otherwise.</returns>
-        public bool IsPrimeNumber(int number)
+        public static bool IsPrimeNumber(int number)
         {
             var primesOfNumber = Deconstruct(number).Count();
             return primesOfNumber == 1;

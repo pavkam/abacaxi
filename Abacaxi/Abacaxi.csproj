@@ -37,14 +37,12 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Numerics\IntegerPartitioningDeconstructor.cs" />
-    <Compile Include="Numerics\ICombinationalDeconstructor.cs" />
-    <Compile Include="Numerics\ISequentialDeconstructor.cs" />
-    <Compile Include="Numerics\PrimeFactorsDeconstructor.cs" />
-    <Compile Include="Theory\DecimalZipper.cs" />
-    <Compile Include="Theory\DuckTypingStringRepeater.cs" />
+    <Compile Include="Numerics\IntegerPartitionDeconstructor.cs" />
+    <Compile Include="Numerics\IntegerPrimeFactorDeconstructor.cs" />
+    <Compile Include="Numerics\IntegerDecimalZipper.cs" />
+    <Compile Include="Sequences\EnumerableRepeater.cs" />
     <Compile Include="Validate.cs" />
-    <Compile Include="Numerics\PowersOfTwoDeconstructor.cs" />
+    <Compile Include="Numerics\IntegerPowerOfTwoDeconstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

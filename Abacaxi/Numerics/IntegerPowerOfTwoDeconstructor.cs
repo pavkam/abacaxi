@@ -22,14 +22,14 @@ namespace Abacaxi.Numerics
     /// Deconstracts any integer number into its "power of two" components. Any integer number can be decomposed into
     /// a sum of its "power of two" components: d0 * 2^0 + d1 * 2^1 + d2 * 2^2 + ... where each "d" is a binary digit in the original number.
     /// </summary>
-    public class PowersOfTwoDeconstructor: ISequentialDeconstructor<int, int>
+    public static class IntegerPowerOfTwoDeconstructor
     {
         /// <summary>
         /// Returns a sequence of numbers (powers of two), which summed, result in the original number <paramref name="number"/>.
         /// </summary>
         /// <param name="number">The number to be decomposed.</param>
         /// <returns>A sequence of numbers.</returns>
-        public virtual IEnumerable<int> Deconstruct(int number)
+        public static IEnumerable<int> Deconstruct(int number)
         {
             var sign = Math.Sign(number);
 
