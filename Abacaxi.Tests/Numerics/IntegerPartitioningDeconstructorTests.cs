@@ -22,9 +22,9 @@ namespace Abacaxi.Tests.Numerics
     [TestFixture]
     public class IntegerPartitioningDeconstructorTests
     {
-        private ICombinationalDeconstructor<int, int> _deconstructor;
+        private IntegerPartitioningDeconstructor _deconstructor;
 
-        protected virtual ICombinationalDeconstructor<int, int> CreateDeconstructor()
+        protected virtual IntegerPartitioningDeconstructor CreateDeconstructor()
         {
             return new IntegerPartitioningDeconstructor();
         }

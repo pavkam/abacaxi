@@ -16,6 +16,7 @@
 namespace Abacaxi.Numerics
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
 
     /// <summary>
@@ -87,6 +88,17 @@ namespace Abacaxi.Numerics
                 if (sign == -1 && factors % 2 == 0)
                     yield return sign;
             }
+        }
+
+        /// <summary>
+        /// Checks whether a given number is prime.
+        /// </summary>
+        /// <param name="number">The number to check.</param>
+        /// <returns><c>true</c> if the number is prime; <c>false</c> otherwise.</returns>
+        public bool IsPrimeNumber(int number)
+        {
+            var primesOfNumber = Deconstruct(number).Count();
+            return primesOfNumber == 1;
         }
     }
 }

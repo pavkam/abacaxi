@@ -22,9 +22,9 @@ namespace Abacaxi.Tests.Numerics
     [TestFixture]
     public class PrimeFactorsDeconstructorTests
     {
-        private ISequentialDeconstructor<int, int> _deconstructor;
+        private PrimeFactorsDeconstructor _deconstructor;
 
-        protected virtual ISequentialDeconstructor<int, int> CreateDeconstructor()
+        protected virtual PrimeFactorsDeconstructor CreateDeconstructor()
         {
             return new PrimeFactorsDeconstructor();
         }
@@ -131,6 +131,35 @@ namespace Abacaxi.Tests.Numerics
             var mul = _deconstructor.Deconstruct(number).Aggregate((x, y) => x * y);
 
             Assert.AreEqual(number, mul);
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(13)]
+        [TestCase(239)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-3)]
+        [TestCase(-13)]
+        [TestCase(-239)]
+        public void IsPrimeNumber_ReturnsTrue(int number)
+        {
+            var result = _deconstructor.IsPrimeNumber(number);
+            Assert.IsTrue(result);
+        }
+
+        [TestCase(4)]
+        [TestCase(8)]
+        [TestCase(144)]
+        [TestCase(-4)]
+        [TestCase(-8)]
+        [TestCase(-144)]
+        public void IsPrimeNumber_ReturnsFalse(int number)
+        {
+            var result = _deconstructor.IsPrimeNumber(number);
+            Assert.IsFalse(result);
         }
     }
 }

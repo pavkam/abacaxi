@@ -22,9 +22,9 @@ namespace Abacaxi.Tests.Numerics
     [TestFixture]
     public class PowersOfTwoDeconstructorTests
     {
-        private ISequentialDeconstructor<int, int> _deconstructor;
+        private PowersOfTwoDeconstructor _deconstructor;
 
-        protected virtual ISequentialDeconstructor<int, int> CreateDeconstructor()
+        protected virtual PowersOfTwoDeconstructor CreateDeconstructor()
         {
             return new PowersOfTwoDeconstructor();
         }
