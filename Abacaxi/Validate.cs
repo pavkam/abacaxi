@@ -25,7 +25,43 @@ namespace Abacaxi
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value < 0)
-                throw new ArgumentOutOfRangeException($"Argument {argumentName} must be greater or equal to zero.");
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater or equal to zero.");
+        }
+
+        public static void ArgumentGreaterThanZero(string argumentName, int value)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value < 1)
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than zero.");
+        }
+
+        public static void ArgumentNotNull(string argumentName, object value)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value == null)
+                throw new ArgumentNullException(argumentName, $"Argument {argumentName} must not be null.");
+        }
+
+        public static void ArrayNotEmpty<T>(string argumentName, T[] array)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (array == null)
+                throw new ArgumentNullException(argumentName, $"Array argument {argumentName} must not be null.");
+            if (array.Length == 0)
+                throw new ArgumentException($"Array argument {argumentName} must not be empty.", argumentName);
+        }
+
+        public static void StringNotEmpty(string argumentName, string array)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (array == null)
+                throw new ArgumentNullException(argumentName, $"String argument {argumentName} must not be null.");
+            if (array.Length == 0)
+                throw new ArgumentException($"String argument {argumentName} must not be empty.", argumentName);
         }
     }
 }
