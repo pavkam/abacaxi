@@ -16,8 +16,14 @@
 namespace Abacaxi.Matrix
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
 
+    /// <summary>
+    /// The "flood fill" algorithm. For any given matrix the algorithm will start at a given (X, Y) position and will fill in the
+    /// matrix with a given "color" using a "path function".
+    /// This class contains two implementations, one recursive and the other one - iterative.
+    /// </summary>
     public static class FloodFill
     {
         private static void ApplyRecursiveNoChecks<T>(
@@ -45,6 +51,17 @@ namespace Abacaxi.Matrix
             }
         }
 
+        /// <summary>
+        /// Performs the "flood fill" using the recursive method.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the matrix (color).</typeparam>
+        /// <param name="matrix">The two-dimensional matrix.</param>
+        /// <param name="rootCellCoordinates">The starting position.</param>
+        /// <param name="pathFunc">The path function that dictates the neighbor selection.</param>
+        /// <param name="cellCanBeColoredFunc">The predicate that tests whether a specific cell is coloreable.</param>
+        /// <param name="color">The color to fill the matrix with.</param>
+        /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="marix"/>, <paramref name="pathFunc"/> or <paramref name="cellCanBeColoredFunc"/> are null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="rootCellCoordinates"/> is pointing to a cell outside the <paramref name="matrix"/>.</exception>
         public static void ApplyRecursive<T>(
             T[,] matrix,
             CellCoordinates rootCellCoordinates,
@@ -59,6 +76,48 @@ namespace Abacaxi.Matrix
             Validate.ArgumentLessThan(nameof(rootCellCoordinates.X), rootCellCoordinates.Y, matrix.GetLength(1));
 
             ApplyRecursiveNoChecks(matrix, rootCellCoordinates, pathFunc, cellCanBeColoredFunc, color);
+        }
+
+
+        /// <summary>
+        /// Performs the "flood fill" using the iterative method.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the matrix (color).</typeparam>
+        /// <param name="matrix">The two-dimensional matrix.</param>
+        /// <param name="rootCellCoordinates">The starting position.</param>
+        /// <param name="pathFunc">The path function that dictates the neighbor selection.</param>
+        /// <param name="cellCanBeColoredFunc">The predicate that tests whether a specific cell is coloreable.</param>
+        /// <param name="color">The color to fill the matrix with.</param>
+        /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="marix"/>, <paramref name="pathFunc"/> or <paramref name="cellCanBeColoredFunc"/> are null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="rootCellCoordinates"/> is pointing to a cell outside the <paramref name="matrix"/>.</exception>
+        public static void ApplyIterative<T>(
+            T[,] matrix,
+            CellCoordinates rootCellCoordinates,
+            PathFunction<T> pathFunc,
+            Predicate<T> cellCanBeColoredFunc,
+            T color)
+        {
+            Validate.ArgumentNotNull(nameof(matrix), matrix);
+            Validate.ArgumentNotNull(nameof(pathFunc), pathFunc);
+            Validate.ArgumentNotNull(nameof(cellCanBeColoredFunc), cellCanBeColoredFunc);
+            Validate.ArgumentLessThan(nameof(rootCellCoordinates.X), rootCellCoordinates.X, matrix.GetLength(0));
+            Validate.ArgumentLessThan(nameof(rootCellCoordinates.X), rootCellCoordinates.Y, matrix.GetLength(1));
+
+            var cellsToInspectNext = new Queue<CellCoordinates>();
+            cellsToInspectNext.Enqueue(rootCellCoordinates);
+
+            while(cellsToInspectNext.Count > 0)
+            {
+                var nextCellToInspect = cellsToInspectNext.Dequeue();
+                if (cellCanBeColoredFunc(matrix[nextCellToInspect.X, nextCellToInspect.Y]))
+                {
+                    matrix[nextCellToInspect.X, nextCellToInspect.Y] = color;
+                    foreach (var neighbor in pathFunc(matrix, nextCellToInspect))
+                    {
+                        cellsToInspectNext.Enqueue(neighbor);
+                    }
+                }
+            }
         }
     }
 }

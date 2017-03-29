@@ -162,5 +162,105 @@ namespace Abacaxi.Tests.Matrix
             Assert.AreEqual(O, M);
         }
 
+
+
+
+
+
+        [Test]
+        public void ApplyIterative_ThrowsException_WhenMatrixIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                FloodFill.ApplyIterative(
+                    null,
+                    new CellCoordinates(0, 0),
+                    UpRightDownLeftPathFunction,
+                    ZeroCanBeColored,
+                    2)
+            );
+        }
+
+        [Test]
+        public void ApplyIterative_ThrowsException_WhenPathFunctionIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                FloodFill.ApplyIterative(
+                    M,
+                    new CellCoordinates(0, 0),
+                    null,
+                    ZeroCanBeColored,
+                    2)
+            );
+        }
+
+        [Test]
+        public void ApplyIterative_ThrowsException_WhenCellCanBeColoredFuncIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                FloodFill.ApplyIterative(
+                    M,
+                    new CellCoordinates(0, 0),
+                    UpRightDownLeftPathFunction,
+                    null,
+                    2)
+            );
+        }
+
+        [TestCase(5, 0)]
+        [TestCase(0, 5)]
+        public void ApplyIterative_ThrowsException_WhenOutsideTheBounds(int x, int y)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                FloodFill.ApplyIterative(
+                    M,
+                    new CellCoordinates(x, y),
+                    UpRightDownLeftPathFunction,
+                    ZeroCanBeColored,
+                    2)
+            );
+        }
+
+        [TestCase(1, 0)]
+        public void ApplyIterative_DoesNothing_WhenStartingOnNonColorable(int y, int x)
+        {
+            FloodFill.ApplyIterative(
+                M,
+                new CellCoordinates(x, y),
+                UpRightDownLeftPathFunction,
+                ZeroCanBeColored,
+                2);
+
+            Assert.AreEqual(O, M);
+        }
+
+        [Test]
+        public void ApplyIterative_ColorsZeroes()
+        {
+            FloodFill.ApplyIterative(
+                M,
+                new CellCoordinates(0, 0),
+                UpRightDownLeftPathFunction,
+                ZeroCanBeColored,
+                2);
+
+
+            for (var x = 0; x < O.GetLength(0); x++)
+            {
+                for (var y = 0; y < O.GetLength(1); y++)
+                {
+                    if (ZeroCanBeColored(O[x, y]))
+                    {
+                        O[x, y] = 2;
+                    }
+                }
+            }
+
+            O[0, 2] = 0;
+            O[1, 2] = 0;
+            O[2, 2] = 0;
+
+            Assert.AreEqual(O, M);
+        }
+
     }
 }
