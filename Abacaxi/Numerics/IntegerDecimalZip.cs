@@ -19,7 +19,7 @@ namespace Abacaxi.Numerics
     /// Class that allows zipping of digits of two numbers into a new number. For example, <code>12 and 34</code>, zipped toghether would result in
     /// <code>3142</code>. The class also takes care of the special case of <code>0</code> and allows zipping digits in multiple bases.
     /// </summary>
-    public static class IntegerDecimalZipper
+    public static class IntegerDecimalZip
     {
         private static void AppendLastDigit(ref int number, ref int result, ref int power, int @base)
         {

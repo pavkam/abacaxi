@@ -23,7 +23,7 @@ namespace Abacaxi.Sequences
     /// Class that allows repeating an enumerable N times in an efficient manner.
     /// It uses the fact that any number N can be expressed as a sum of power of twos.
     /// </summary>
-    public static class EnumerableRepeater
+    public static class EnumerableRepeat
     {
         /// <summary>
         /// Creates an array whose contents are the elements of the <paramref name="input"/> repeated <paramref name="repetitions"/> times.

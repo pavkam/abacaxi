@@ -22,7 +22,7 @@ namespace Abacaxi.Numerics
     /// Partitions an integer number into all possible combinations of smaller numbers. When summed, the original integer number is
     /// obtained. All combinations are unique. E.g. 1 1 2; 2 1 1 and 1 2 1 are considered equal and only one will be returned.
     /// </summary>
-    public static class IntegerPartitionDeconstructor
+    public static class IntegerPartitionDeconstruct
     {
         /// <summary>
         /// Partitions a given integer into all possible combinations of smaller integers.

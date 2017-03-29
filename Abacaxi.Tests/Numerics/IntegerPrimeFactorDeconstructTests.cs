@@ -20,13 +20,13 @@ namespace Abacaxi.Tests.Numerics
     using System.Linq;
 
     [TestFixture]
-    public class IntegerPrimeFactorDeconstructorTests
+    public class IntegerPrimeFactorDeconstructTests
     {
         [Test]
         public void DeconstructZero_ReturnsZero()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(0),
+                IntegerPrimeFactorDeconstruct.Deconstruct(0),
                 0);
         }
 
@@ -34,7 +34,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructOne_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(1),
+                IntegerPrimeFactorDeconstruct.Deconstruct(1),
                 1);
         }
 
@@ -42,7 +42,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructTwo_ReturnsTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(2),
+                IntegerPrimeFactorDeconstruct.Deconstruct(2),
                 2);
         }
 
@@ -50,7 +50,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructThree_ReturnsThree()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(3),
+                IntegerPrimeFactorDeconstruct.Deconstruct(3),
                 3);
         }
 
@@ -58,7 +58,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructFour_ReturnsTwoTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(4),
+                IntegerPrimeFactorDeconstruct.Deconstruct(4),
                 2, 2);
         }
 
@@ -66,7 +66,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructTwenty_ReturnsTwoTwoFive()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(20),
+                IntegerPrimeFactorDeconstruct.Deconstruct(20),
                 2, 2, 5);
         }
 
@@ -75,7 +75,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(-1),
+                IntegerPrimeFactorDeconstruct.Deconstruct(-1),
                 -1);
         }
 
@@ -83,7 +83,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusTwo_ReturnsMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(-2),
+                IntegerPrimeFactorDeconstruct.Deconstruct(-2),
                 -2);
         }
 
@@ -91,7 +91,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusThree_ReturnsMinusThree()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(-3),
+                IntegerPrimeFactorDeconstruct.Deconstruct(-3),
                 -3);
         }
 
@@ -99,7 +99,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusFour_ReturnsMinusOneMinusTwoMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(-4),
+                IntegerPrimeFactorDeconstruct.Deconstruct(-4),
                 -2, -2, -1);
         }
 
@@ -107,7 +107,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusEight_ReturnsMinusTwoMinusTwoMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstructor.Deconstruct(-8),
+                IntegerPrimeFactorDeconstruct.Deconstruct(-8),
                 -2, -2, -2);
         }
 
@@ -115,7 +115,7 @@ namespace Abacaxi.Tests.Numerics
         [TestCase(int.MinValue)]
         public void Deconstruct_MultipliesToOriginal(int number)
         {
-            var mul = IntegerPrimeFactorDeconstructor.Deconstruct(number).Aggregate((x, y) => x * y);
+            var mul = IntegerPrimeFactorDeconstruct.Deconstruct(number).Aggregate((x, y) => x * y);
 
             Assert.AreEqual(number, mul);
         }
@@ -133,7 +133,7 @@ namespace Abacaxi.Tests.Numerics
         [TestCase(-239)]
         public void IsPrimeNumber_ReturnsTrue(int number)
         {
-            var result = IntegerPrimeFactorDeconstructor.IsPrimeNumber(number);
+            var result = IntegerPrimeFactorDeconstruct.IsPrimeNumber(number);
             Assert.IsTrue(result);
         }
 
@@ -145,7 +145,7 @@ namespace Abacaxi.Tests.Numerics
         [TestCase(-144)]
         public void IsPrimeNumber_ReturnsFalse(int number)
         {
-            var result = IntegerPrimeFactorDeconstructor.IsPrimeNumber(number);
+            var result = IntegerPrimeFactorDeconstruct.IsPrimeNumber(number);
             Assert.IsFalse(result);
         }
     }

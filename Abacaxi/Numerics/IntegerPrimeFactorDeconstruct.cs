@@ -23,7 +23,7 @@ namespace Abacaxi.Numerics
     /// Deconstructs any integer number into its prime factors. Positive numbers will be deconstructed into positive factors whie negative will be deconstructed
     /// into only negative numbers.
     /// </summary>
-    public static class IntegerPrimeFactorDeconstructor
+    public static class IntegerPrimeFactorDeconstruct
     {
         private static int GetIterationLimit(int number)
         {

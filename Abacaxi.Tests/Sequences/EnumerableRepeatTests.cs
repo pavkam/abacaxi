@@ -13,55 +13,54 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Numerics
+namespace Abacaxi.Tests.Sequences
 {
     using System;
-    using Abacaxi.Numerics;
+    using Abacaxi.Sequences;
     using NUnit.Framework;
 
     [TestFixture]
-    public class DecimalZipperTests
+    public class EnumerableRepeatTests
     {
         [Test]
-        public void Zip_ThrowsException_ForNegativeX()
+        public void Repeat_ThrowsException_ForNullString()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                EnumerableRepeat.Repeat((int[])null, 1));
+        }
+        
+        [Test]
+        public void Repeat_ThrowsException_ForZeroRepetitions()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                IntegerDecimalZipper.Zip(-1, 1, 2));
+                EnumerableRepeat.Repeat("A", 0));
         }
 
         [Test]
-        public void Zip_ThrowsException_ForNegativeY()
+        public void Repeat_ReturnsNothing_ForEmptyEnumerable()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                IntegerDecimalZipper.Zip(1, -1, 2));
+            var result = EnumerableRepeat.Repeat("", 5);
+            Assert.AreEqual("", result);
         }
 
         [Test]
-        public void Zip_ThrowsException_ForBaseOne()
+        public void Repeat_DoesNothing_ForOneRepetition()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                IntegerDecimalZipper.Zip(1, 1, 1));
+            var result = EnumerableRepeat.Repeat("A", 1);
+            Assert.AreEqual("A", result);
         }
 
-        [TestCase(0, 0, 0)]
-        [TestCase(0, 1, 10)]
-        [TestCase(1, 0, 1)]
-        [TestCase(12, 3, 132)]
-        [TestCase(1, 23, 231)]
-        [TestCase(12, 34, 3142)]
-        public void Zip_ReturnsCorrectResult_IntBase10(int x, int y, int expected)
+        [Test]
+        public void Repeat_DoublesString_ForTwoRepetition()
         {
-            var result = IntegerDecimalZipper.Zip(x, y);
-            Assert.AreEqual(expected, result);
+            var result = EnumerableRepeat.Repeat("A", 2);
+            Assert.AreEqual("AA", result);
         }
 
-        [TestCase(0xA, 0xBC, 0xBCA)]
-        [TestCase(0xAB, 0xC, 0xACB)]
-        [TestCase(0xAB, 0xCD, 0xCADB)]
-        public void Zip_ReturnsCorrectResult_IntBase16(int x, int y, int expected)
+        public void Repeat_TriplesString_ForThreeRepetition()
         {
-            var result = IntegerDecimalZipper.Zip(x, y, 16);
-            Assert.AreEqual(expected, result);
+            var result = EnumerableRepeat.Repeat("A", 3);
+            Assert.AreEqual("AAA", result);
         }
     }
 }

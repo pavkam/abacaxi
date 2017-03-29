@@ -20,6 +20,14 @@ namespace Abacaxi
 
     internal static class Validate
     {
+        public static void ArgumentLessThan(string argumentName, int value, int bound)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value >= bound)
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be less than {bound}.");
+        }
+
         public static void ArgumentGreaterThanOrEqualToZero(string argumentName, int value)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");

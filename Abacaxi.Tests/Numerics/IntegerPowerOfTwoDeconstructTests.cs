@@ -20,20 +20,20 @@ namespace Abacaxi.Tests.Numerics
     using System.Linq;
 
     [TestFixture]
-    public class IntegerPowerOfTwoDeconstructorTests
+    public class IntegerPowerOfTwoDeconstructTests
     {
         [Test]
         public void DeconstructZero_ReturnsNothing()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstructor.Deconstruct(0));
+                IntegerPowerOfTwoDeconstruct.Deconstruct(0));
         }
 
         [Test]
         public void DeconstructOne_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstructor.Deconstruct(1),
+                IntegerPowerOfTwoDeconstruct.Deconstruct(1),
                 1);
         }
 
@@ -41,7 +41,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructTwo_ReturnsTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstructor.Deconstruct(2),
+                IntegerPowerOfTwoDeconstruct.Deconstruct(2),
                 2);
         }
 
@@ -49,7 +49,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructThree_ReturnsOneThenTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstructor.Deconstruct(3),
+                IntegerPowerOfTwoDeconstruct.Deconstruct(3),
                 1, 2);
         }
 
@@ -57,7 +57,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructFour_ReturnsFour()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstructor.Deconstruct(4),
+                IntegerPowerOfTwoDeconstruct.Deconstruct(4),
                 4);
         }
 
@@ -66,7 +66,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstructor.Deconstruct(-1),
+                IntegerPowerOfTwoDeconstruct.Deconstruct(-1),
                 -1);
         }
 
@@ -74,7 +74,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusTwo_ReturnsMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstructor.Deconstruct(-2),
+                IntegerPowerOfTwoDeconstruct.Deconstruct(-2),
                 -2);
         }
 
@@ -82,7 +82,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusThree_ReturnsMinusOneThenMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstructor.Deconstruct(-3),
+                IntegerPowerOfTwoDeconstruct.Deconstruct(-3),
                 -1, -2);
         }
 
@@ -90,7 +90,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructFour_ReturnsMinusFour()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstructor.Deconstruct(-4),
+                IntegerPowerOfTwoDeconstruct.Deconstruct(-4),
                 -4);
         }
 
@@ -98,7 +98,7 @@ namespace Abacaxi.Tests.Numerics
         [TestCase(int.MinValue)]
         public void Deconstruct_SumsToOriginal(int number)
         {
-            var backSum = IntegerPowerOfTwoDeconstructor.Deconstruct(number).Sum();
+            var backSum = IntegerPowerOfTwoDeconstruct.Deconstruct(number).Sum();
 
             Assert.AreEqual(number, backSum);
         }
