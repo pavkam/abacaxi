@@ -28,6 +28,14 @@ namespace Abacaxi
                 throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be less than {bound}.");
         }
 
+        public static void ArgumentLessThanOrEqual(string argumentName, int value, int bound)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value > bound)
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be less than or equal to {bound}.");
+        }
+
         public static void ArgumentGreaterOrEqualTo(string argumentName, int value, int bound)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");

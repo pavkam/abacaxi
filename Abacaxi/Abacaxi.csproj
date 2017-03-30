@@ -44,6 +44,7 @@
     <Compile Include="Numerics\IntegerPrimeFactorDeconstruct.cs" />
     <Compile Include="Numerics\IntegerDecimalZip.cs" />
     <Compile Include="Sequences\DuplicatesInSequence.cs" />
+    <Compile Include="Sequences\ReverseSequence.cs" />
     <Compile Include="Sequences\RepeatSequence.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Numerics\IntegerPowerOfTwoDeconstruct.cs" />
