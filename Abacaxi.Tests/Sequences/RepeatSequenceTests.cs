@@ -20,46 +20,46 @@ namespace Abacaxi.Tests.Sequences
     using NUnit.Framework;
 
     [TestFixture]
-    public class EnumerableRepeatTests
+    public class RepeatSequenceTests
     {
         [Test]
         public void Repeat_ThrowsException_ForNullString()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                EnumerableRepeat.Repeat((int[])null, 1));
+                RepeatSequence.Repeat((int[])null, 1));
         }
         
         [Test]
         public void Repeat_ThrowsException_ForZeroRepetitions()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                EnumerableRepeat.Repeat("A", 0));
+                RepeatSequence.Repeat("A", 0));
         }
 
         [Test]
         public void Repeat_ReturnsNothing_ForEmptyEnumerable()
         {
-            var result = EnumerableRepeat.Repeat("", 5);
+            var result = RepeatSequence.Repeat("", 5);
             Assert.AreEqual("", result);
         }
 
         [Test]
         public void Repeat_DoesNothing_ForOneRepetition()
         {
-            var result = EnumerableRepeat.Repeat("A", 1);
+            var result = RepeatSequence.Repeat("A", 1);
             Assert.AreEqual("A", result);
         }
 
         [Test]
         public void Repeat_DoublesString_ForTwoRepetition()
         {
-            var result = EnumerableRepeat.Repeat("A", 2);
+            var result = RepeatSequence.Repeat("A", 2);
             Assert.AreEqual("AA", result);
         }
 
         public void Repeat_TriplesString_ForThreeRepetition()
         {
-            var result = EnumerableRepeat.Repeat("A", 3);
+            var result = RepeatSequence.Repeat("A", 3);
             Assert.AreEqual("AAA", result);
         }
     }

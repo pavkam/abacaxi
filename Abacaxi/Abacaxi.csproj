@@ -43,7 +43,8 @@
     <Compile Include="Numerics\IntegerPartitionDeconstruct.cs" />
     <Compile Include="Numerics\IntegerPrimeFactorDeconstruct.cs" />
     <Compile Include="Numerics\IntegerDecimalZip.cs" />
-    <Compile Include="Sequences\EnumerableRepeat.cs" />
+    <Compile Include="Sequences\DuplicatesInSequence.cs" />
+    <Compile Include="Sequences\RepeatSequence.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Numerics\IntegerPowerOfTwoDeconstruct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
