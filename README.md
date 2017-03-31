@@ -1,4 +1,7 @@
+![Logo](https://github.com/pavkam/abacaxi/raw/master/40218-200.png "Project Logo")
+
 # abacaxi (Pineapple in Português, do not ask me why!)
+
 
 Almost everyone gets to be asked about algorithms during interviews. It has been a long time ago that I actually got to play with algorithms in any detail. This library is my attempt to get back to the __roots__.
 
