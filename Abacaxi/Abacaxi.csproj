@@ -43,6 +43,7 @@
     <Compile Include="Numerics\IntegerPartitionDeconstruct.cs" />
     <Compile Include="Numerics\IntegerPrimeFactorDeconstruct.cs" />
     <Compile Include="Numerics\IntegerDecimalZip.cs" />
+    <Compile Include="Sequences\LinkedListMiddle.cs" />
     <Compile Include="Sequences\FindDuplicateElements.cs" />
     <Compile Include="Sequences\BinarySearch.cs" />
     <Compile Include="Sequences\ReverseSequence.cs" />
