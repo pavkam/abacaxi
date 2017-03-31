@@ -23,7 +23,7 @@ namespace Abacaxi.Sequences
     /// an in-memory array to strore the appearances (which is very efficient in terms of speed but very wasteful in terms of memory).
     /// The string variant uses a combination of an array (for ASCII characters) and a dictionary for Unicode.
     /// </summary>
-    public static class DuplicatesInSequence
+    public static class FindDuplicateElements
     {
         /// <summary>
         /// Finds all duplicate items in a given <paramref name="sequence"/>.

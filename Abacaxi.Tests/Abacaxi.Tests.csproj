@@ -42,7 +42,8 @@
     <Compile Include="Numerics\IntegerPartitionDeconstructTests.cs" />
     <Compile Include="Numerics\IntegerPrimeFactorDeconstructTests.cs" />
     <Compile Include="Numerics\IntegerPowerOfTwoDeconstructTests.cs" />
-    <Compile Include="Sequences\DuplicatesInSequenceTests.cs" />
+    <Compile Include="Sequences\FindDuplicateElementsTests.cs" />
+    <Compile Include="Sequences\BinarySearchTests.cs" />
     <Compile Include="Sequences\ReverseSequenceTests.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
