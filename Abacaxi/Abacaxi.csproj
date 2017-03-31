@@ -37,13 +37,16 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LinkedLists\ReverseList.cs" />
+    <Compile Include="LinkedLists\Node.cs" />
     <Compile Include="Matrix\CellCoordinates.cs" />
     <Compile Include="Matrix\FloodFill.cs" />
     <Compile Include="Matrix\PathFunction.cs" />
     <Compile Include="Numerics\IntegerPartitionDeconstruct.cs" />
     <Compile Include="Numerics\IntegerPrimeFactorDeconstruct.cs" />
     <Compile Include="Numerics\IntegerDecimalZip.cs" />
-    <Compile Include="Sequences\LinkedListMiddle.cs" />
+    <Compile Include="LinkedLists\KnottedList.cs" />
+    <Compile Include="LinkedLists\ListMiddle.cs" />
     <Compile Include="Sequences\FindDuplicateElements.cs" />
     <Compile Include="Sequences\BinarySearch.cs" />
     <Compile Include="Sequences\ReverseSequence.cs" />

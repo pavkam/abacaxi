@@ -13,42 +13,42 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Sequences
+namespace Abacaxi.LinkedLists
 {
     using System.Collections.Generic;
 
     /// <summary>
-    /// Class implements the simplest way to find a linked list's middle. The idea is to navigate the list with two pointers
-    /// at the same time. One moves from node to node, while the other skips a node. When the second reaches the end, the first one will be pointing
-    /// to the middle of the list.
+    /// Class implements the simplest way to find out if a linked list of "knotted" (circular). The idea is to use two pointers. One moves
+    /// by one element and the second moves by two elements. If, after a wile they meet, then the list is considered circular.
     /// </summary>
-    public static class LinkedListMiddle
+    public static class KnottedList
     {
         /// <summary>
-        /// Find the middle node of a linked list.
+        /// Finds whether the list is knotted.
         /// </summary>
         /// <typeparam name="T">The type of linked list node.</typeparam>
-        /// <param name="list">The linked list.</param>
-        /// <returns>The middle node; <c>null</c> if the list is empty.</returns>
-        public static LinkedListNode<T> Find<T>(LinkedList<T> list)
+        /// <param name="head">The linked list head.</param>
+        /// <returns><c>true</c> if the list is knotted; <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="head"/> is <c>null</c>.</exception>
+        public static bool Check<T>(Node<T> head)
         {
-            Validate.ArgumentNotNull(nameof(list), list);
-           
-            if (list.First == null)
-            {
-                return null;
-            }
+            Validate.ArgumentNotNull(nameof(head), head);
 
-            var one = list.First;
-            var two = list.First;
+            var one = head;
+            var two = head.Next?.Next;
 
-            while (two?.Next != null)
+            while (two != null)
             {
                 one = one.Next;
                 two = two.Next.Next;
+
+                if(two == one)
+                {
+                    return true;
+                }
             }
 
-            return one;
+            return false;
         }
     }
 }

@@ -13,63 +13,48 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Sequences
+namespace Abacaxi.Tests.LinkedLists
 {
     using System;
     using System.Collections.Generic;
-    using Abacaxi.Sequences;
+    using Abacaxi.LinkedLists;
     using NUnit.Framework;
 
     [TestFixture]
-    public class LinkedListMiddleTests
+    public class ListMiddleTests
     {
         [Test]
-        public void Find_ThrowsException_ForNullList()
+        public void Find_ThrowsException_ForNullHead()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                LinkedListMiddle.Find<int>(null));
-        }
-
-        [Test]
-        public void Find_ReturnsNull_ForEmptyList()
-        {
-            var list = new LinkedList<int>();
-            var node = LinkedListMiddle.Find(list);
-
-            Assert.IsNull(node);
+                ListMiddle.Find<int>(null));
         }
 
         [Test]
         public void Find_ReturnsFirst_ForSingleNodeList()
         {
-            var list = new LinkedList<int>();
-            list.AddLast(1);
+            var head = Node<int>.Create(new[] { 1 });
 
-            var node = LinkedListMiddle.Find(list);
-            Assert.AreSame(list.First, node);
+            var node = ListMiddle.Find(head);
+            Assert.AreSame(head, node);
         }
 
         [Test]
-        public void Find_ReturnsSecond_ForTwoNodeList()
+        public void Find_ReturnsFirst_ForTwoNodeList()
         {
-            var list = new LinkedList<int>();
-            list.AddLast(1);
-            list.AddLast(2);
+            var head = Node<int>.Create(new[] { 1, 2 });
 
-            var node = LinkedListMiddle.Find(list);
-            Assert.AreSame(list.Last, node);
+            var node = ListMiddle.Find(head);
+            Assert.AreSame(head, node);
         }
 
         [Test]
         public void Find_ReturnsSecond_ForThreeNodeList()
         {
-            var list = new LinkedList<int>();
-            list.AddLast(1);
-            list.AddLast(2);
-            list.AddLast(3);
+            var head = Node<int>.Create(new[] { 1, 2, 3 });
 
-            var node = LinkedListMiddle.Find(list);
-            Assert.AreSame(list.First.Next, node);
+            var node = ListMiddle.Find(head);
+            Assert.AreSame(head.Next, node);
         }
     }
 }
