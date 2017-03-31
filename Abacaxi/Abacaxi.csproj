@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphs\CellCoordinates.cs" />
+    <Compile Include="Graphs\ShortestPath.cs" />
     <Compile Include="Graphs\FloodFill.cs" />
     <Compile Include="Graphs\TolledGraph.cs" />
     <Compile Include="Graphs\MatrixGraph.cs" />
