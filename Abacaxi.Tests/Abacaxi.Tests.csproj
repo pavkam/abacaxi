@@ -37,9 +37,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphs\MatrixGraphTests.cs" />
     <Compile Include="LinkedLists\ReverseListTests.cs" />
-    <Compile Include="Matrix\FloodFillTests.cs" />
-    <Compile Include="Matrix\CellCoordinatesTests.cs" />
+    <Compile Include="Graphs\FloodFillTests.cs" />
+    <Compile Include="Graphs\CellCoordinatesTests.cs" />
     <Compile Include="Numerics\IntegerPartitionDeconstructTests.cs" />
     <Compile Include="Numerics\IntegerPrimeFactorDeconstructTests.cs" />
     <Compile Include="Numerics\IntegerPowerOfTwoDeconstructTests.cs" />

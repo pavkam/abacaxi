@@ -13,11 +13,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Matrix
+namespace Abacaxi.Tests.Graphs
 {
     using System;
-    using System.Collections.Generic;
-    using Abacaxi.Matrix;
+    using Abacaxi.Graphs;
     using NUnit.Framework;
 
     [TestFixture]
@@ -40,22 +39,6 @@ namespace Abacaxi.Tests.Matrix
             O = (int[,])M.Clone();
         }
 
-        private static IEnumerable<CellCoordinates> UpRightDownLeftPathFunction(int[,] matrix, CellCoordinates root)
-        {
-            Assert.NotNull(matrix);
-            Assert.That(root.X >= 0 && root.X < matrix.GetLength(0));
-            Assert.That(root.Y >= 0 && root.Y < matrix.GetLength(1));
-
-            if (root.Y > 0)
-                yield return new CellCoordinates(root.X, root.Y - 1);
-            if (root.X < matrix.GetLength(0) - 1)
-                yield return new CellCoordinates(root.X + 1, root.Y);
-            if (root.Y < matrix.GetLength(1) - 1)
-                yield return new CellCoordinates(root.X, root.Y + 1);
-            if (root.X > 0)
-                yield return new CellCoordinates(root.X - 1, root.Y);
-        }
-
         private static bool ZeroCanBeColored(int color)
         {
             return color == 0;
@@ -66,7 +49,6 @@ namespace Abacaxi.Tests.Matrix
             return color == 1;
         }
 
-
         [Test]
         public void ApplyRecursive_ThrowsException_WhenMatrixIsNull()
         {
@@ -74,20 +56,6 @@ namespace Abacaxi.Tests.Matrix
                 FloodFill.ApplyRecursive(
                     null,
                     new CellCoordinates(0, 0),
-                    UpRightDownLeftPathFunction,
-                    ZeroCanBeColored,
-                    2)
-            );
-        }
-
-        [Test]
-        public void ApplyRecursive_ThrowsException_WhenPathFunctionIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                FloodFill.ApplyRecursive(
-                    M,
-                    new CellCoordinates(0, 0),
-                    null,
                     ZeroCanBeColored,
                     2)
             );
@@ -98,9 +66,8 @@ namespace Abacaxi.Tests.Matrix
         {
             Assert.Throws<ArgumentNullException>(() =>
                 FloodFill.ApplyRecursive(
-                    M,
+                    new MatrixGraph<int>(M),
                     new CellCoordinates(0, 0),
-                    UpRightDownLeftPathFunction,
                     null,
                     2)
             );
@@ -112,9 +79,8 @@ namespace Abacaxi.Tests.Matrix
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 FloodFill.ApplyRecursive(
-                    M,
+                    new MatrixGraph<int>(M),
                     new CellCoordinates(x, y),
-                    UpRightDownLeftPathFunction,
                     ZeroCanBeColored,
                     2)
             );
@@ -124,9 +90,8 @@ namespace Abacaxi.Tests.Matrix
         public void ApplyRecursive_DoesNothing_WhenStartingOnNonColorable(int y, int x)
         {
             FloodFill.ApplyRecursive(
-                M, 
+                new MatrixGraph<int>(M), 
                 new CellCoordinates(x, y), 
-                UpRightDownLeftPathFunction, 
                 ZeroCanBeColored,
                 2);
 
@@ -137,9 +102,8 @@ namespace Abacaxi.Tests.Matrix
         public void ApplyRecursive_ColorsZeroes()
         {
             FloodFill.ApplyRecursive(
-                M,
+                new MatrixGraph<int>(M),
                 new CellCoordinates(0, 0),
-                UpRightDownLeftPathFunction,
                 ZeroCanBeColored,
                 2);
 
@@ -163,10 +127,6 @@ namespace Abacaxi.Tests.Matrix
         }
 
 
-
-
-
-
         [Test]
         public void ApplyIterative_ThrowsException_WhenMatrixIsNull()
         {
@@ -174,33 +134,18 @@ namespace Abacaxi.Tests.Matrix
                 FloodFill.ApplyIterative(
                     null,
                     new CellCoordinates(0, 0),
-                    UpRightDownLeftPathFunction,
                     ZeroCanBeColored,
                     2)
             );
         }
-
-        [Test]
-        public void ApplyIterative_ThrowsException_WhenPathFunctionIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                FloodFill.ApplyIterative(
-                    M,
-                    new CellCoordinates(0, 0),
-                    null,
-                    ZeroCanBeColored,
-                    2)
-            );
-        }
-
+        
         [Test]
         public void ApplyIterative_ThrowsException_WhenCellCanBeColoredFuncIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 FloodFill.ApplyIterative(
-                    M,
+                    new MatrixGraph<int>(M),
                     new CellCoordinates(0, 0),
-                    UpRightDownLeftPathFunction,
                     null,
                     2)
             );
@@ -212,9 +157,8 @@ namespace Abacaxi.Tests.Matrix
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 FloodFill.ApplyIterative(
-                    M,
+                    new MatrixGraph<int>(M),
                     new CellCoordinates(x, y),
-                    UpRightDownLeftPathFunction,
                     ZeroCanBeColored,
                     2)
             );
@@ -224,9 +168,8 @@ namespace Abacaxi.Tests.Matrix
         public void ApplyIterative_DoesNothing_WhenStartingOnNonColorable(int y, int x)
         {
             FloodFill.ApplyIterative(
-                M,
+                new MatrixGraph<int>(M),
                 new CellCoordinates(x, y),
-                UpRightDownLeftPathFunction,
                 ZeroCanBeColored,
                 2);
 
@@ -237,9 +180,8 @@ namespace Abacaxi.Tests.Matrix
         public void ApplyIterative_ColorsZeroes()
         {
             FloodFill.ApplyIterative(
-                M,
+                new MatrixGraph<int>(M),
                 new CellCoordinates(0, 0),
-                UpRightDownLeftPathFunction,
                 ZeroCanBeColored,
                 2);
 

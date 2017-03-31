@@ -13,10 +13,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Matrix
+namespace Abacaxi.Tests.Graphs
 {
     using System;
-    using Abacaxi.Matrix;
+    using Abacaxi.Graphs;
     using NUnit.Framework;
 
     [TestFixture]
