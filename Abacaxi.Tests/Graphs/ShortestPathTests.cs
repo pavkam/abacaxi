@@ -63,13 +63,13 @@ namespace Abacaxi.Tests.Graphs
             { 0, 0, 0, 0, 1 }
         });
 
-        private static bool AcceptZeros(Graph<int, CellCoordinates> graph, CellCoordinates cellCoordinates)
+        private static bool AcceptZeros(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Assert.IsNotNull(graph);
             return graph.GetNodeValue(cellCoordinates) == 0;
         }
 
-        private static bool AcceptOnes(Graph<int, CellCoordinates> graph, CellCoordinates cellCoordinates)
+        private static bool AcceptOnes(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Assert.IsNotNull(graph);
             return graph.GetNodeValue(cellCoordinates) == 1;

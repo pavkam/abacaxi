@@ -21,7 +21,7 @@ namespace Abacaxi.Graphs
     /// Class used to treat a 2-dimensional array as a graph.
     /// </summary>
     /// <typeparam name="TValue">The type of the value stored in the graph's nodes.</typeparam>
-    public class MatrixGraph<TValue> : Graph<TValue, CellCoordinates>
+    public class MatrixGraph<TValue> : Graph<TValue, CellCoordinates, int>
     {
         private TValue[,] _matrix;
 
@@ -83,19 +83,19 @@ namespace Abacaxi.Graphs
         /// <param name="cellCoordinates">The cell coordinates.</param>
         /// <returns>The list of connected nodes and the associated connection cost.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value of <paramref name="cellCoordinates"/> is outside the bounds of the array.</exception>
-        public override IEnumerable<CellCoordinates> GetNodeConnections(CellCoordinates cellCoordinates)
+        public override IEnumerable<Connection<CellCoordinates, int>> GetConnections(CellCoordinates cellCoordinates)
         {
             Validate.ArgumentLessThan(nameof(cellCoordinates.X), cellCoordinates.X, ColumnCount);
             Validate.ArgumentLessThan(nameof(cellCoordinates.Y), cellCoordinates.Y, RowCount);
 
             if (cellCoordinates.Y > 0)
-                yield return new CellCoordinates(cellCoordinates.X, cellCoordinates.Y - 1);
+                yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(cellCoordinates.X, cellCoordinates.Y - 1), 1);
             if (cellCoordinates.X < ColumnCount - 1)
-                yield return new CellCoordinates(cellCoordinates.X + 1, cellCoordinates.Y);
+                yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(cellCoordinates.X + 1, cellCoordinates.Y), 1);
             if (cellCoordinates.Y < RowCount - 1)
-                yield return new CellCoordinates(cellCoordinates.X, cellCoordinates.Y + 1);
+                yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(cellCoordinates.X, cellCoordinates.Y + 1), 1);
             if (cellCoordinates.X > 0)
-                yield return new CellCoordinates(cellCoordinates.X - 1, cellCoordinates.Y);
+                yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(cellCoordinates.X - 1, cellCoordinates.Y), 1);
         }
     }
 }

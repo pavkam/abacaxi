@@ -37,6 +37,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphs\Connection.cs" />
     <Compile Include="Graphs\Move.cs" />
     <Compile Include="Graphs\CellCoordinates.cs" />
     <Compile Include="Graphs\ChessHorseVirtualGraph.cs" />
@@ -44,7 +45,6 @@
     <Compile Include="Graphs\ChessHorseShortestPath.cs" />
     <Compile Include="Graphs\ShortestPath.cs" />
     <Compile Include="Graphs\FloodFill.cs" />
-    <Compile Include="Graphs\TolledGraph.cs" />
     <Compile Include="Graphs\MatrixGraph.cs" />
     <Compile Include="Graphs\Graph.cs" />
     <Compile Include="LinkedLists\ReverseList.cs" />

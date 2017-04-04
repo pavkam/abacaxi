@@ -22,7 +22,7 @@ namespace Abacaxi.Graphs
     /// Virtual graph in which each cell represents a cell on a chess board (travelled by the a horse).
     /// </summary>
     /// <typeparam name="TValue">The type of the value stored in the graph's nodes.</typeparam>
-    internal sealed class ChessHorseVirtualGraph : Graph<int, CellCoordinates>
+    internal sealed class ChessHorseVirtualGraph : Graph<int, CellCoordinates, int>
     {
         private int _columns;
         private int _rows;
@@ -70,7 +70,7 @@ namespace Abacaxi.Graphs
         /// <param name="cellCoordinates">The cell coordinates.</param>
         /// <returns>The list of connected nodes and the associated connection cost.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value of <paramref name="cellCoordinates"/> is outside the bounds of the array.</exception>
-        public override IEnumerable<CellCoordinates> GetNodeConnections(CellCoordinates cellCoordinates)
+        public override IEnumerable<Connection<CellCoordinates, int>> GetConnections(CellCoordinates cellCoordinates)
         {
             Validate.ArgumentLessThan(nameof(cellCoordinates.X), cellCoordinates.X, _columns);
             Validate.ArgumentLessThan(nameof(cellCoordinates.Y), cellCoordinates.Y, _rows);
@@ -82,12 +82,12 @@ namespace Abacaxi.Graphs
                     var x = cellCoordinates.X + i;
                     var y = cellCoordinates.Y + j;
                     if (x >= 0 && x < _columns && y >= 0 && y < _rows)
-                        yield return new CellCoordinates(x, y);
+                        yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(x, y), 1);
 
                     x = cellCoordinates.X + j;
                     y = cellCoordinates.Y + i;
                     if (x >= 0 && x < _columns && y >= 0 && y < _rows)
-                        yield return new CellCoordinates(x, y);
+                        yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(x, y), 1);
                 }
             }
         }

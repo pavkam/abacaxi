@@ -39,14 +39,14 @@ namespace Abacaxi.Tests.Graphs
             O = (int[,])M.Clone();
         }
 
-        private static bool ZeroCanBeColored(Graph<int, CellCoordinates> graph, CellCoordinates cellCoordinates)
+        private static bool ZeroCanBeColored(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Assert.IsNotNull(graph);
 
             return graph.GetNodeValue(cellCoordinates) == 0;
         }
 
-        private static bool OneCanBeColored(Graph<int, CellCoordinates> graph, CellCoordinates cellCoordinates)
+        private static bool OneCanBeColored(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Assert.IsNotNull(graph);
 
@@ -58,7 +58,7 @@ namespace Abacaxi.Tests.Graphs
         {
             Assert.Throws<ArgumentNullException>(() =>
                 FloodFill.ApplyRecursive(
-                    null,
+                    (MatrixGraph<int>)null,
                     new CellCoordinates(0, 0),
                     ZeroCanBeColored,
                     2)
@@ -137,7 +137,7 @@ namespace Abacaxi.Tests.Graphs
         {
             Assert.Throws<ArgumentNullException>(() =>
                 FloodFill.ApplyIterative(
-                    null,
+                    (MatrixGraph<int>)null,
                     new CellCoordinates(0, 0),
                     ZeroCanBeColored,
                     2)

@@ -34,8 +34,8 @@ namespace Abacaxi.Tests.Graphs
         private void CheckConnections(CellCoordinates from, params CellCoordinates[] to)
         {
             var matrix = new MatrixGraph<int>(M);
-            var set = new HashSet<CellCoordinates>();
-            foreach (var connection in matrix.GetNodeConnections(from))
+            var set = new HashSet<Connection<CellCoordinates, int>>();
+            foreach (var connection in matrix.GetConnections(from))
             {
                 set.Add(connection);
             }
@@ -44,7 +44,7 @@ namespace Abacaxi.Tests.Graphs
 
             foreach (var expected in to)
             {
-                Assert.IsTrue(set.Contains(expected));
+                Assert.IsTrue(set.Contains(new Connection<CellCoordinates, int>(from, expected, 1)));
             }
         }
 
@@ -121,18 +121,18 @@ namespace Abacaxi.Tests.Graphs
         }
 
         [Test]
-        public void GetNodeConnections_ThrowsException_ForOutOfBoundsX()
+        public void GetConnections_ThrowsException_ForOutOfBoundsX()
         {
             var array = new MatrixGraph<int>(new int[1, 1] { { 1 } });
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => array.GetNodeConnections(new CellCoordinates(1, 0)).ToArray());
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.GetConnections(new CellCoordinates(1, 0)).ToArray());
         }
 
-        public void GetNodeConnections_ThrowsException_ForOutOfBoundsY()
+        public void GetConnections_ThrowsException_ForOutOfBoundsY()
         {
             var array = new MatrixGraph<int>(new int[1, 1] { { 1 } });
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => array.GetNodeConnections(new CellCoordinates(0, 1)).ToArray());
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.GetConnections(new CellCoordinates(0, 1)).ToArray());
         }
 
         [Test]

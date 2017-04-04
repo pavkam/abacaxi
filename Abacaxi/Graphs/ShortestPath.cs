@@ -29,15 +29,16 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <typeparam name="TValue">The value of the graph nodes.</typeparam>
         /// <typeparam name="TIdentifier">The type used to identify nodes in the graph.</typeparam>
+        /// <typeparam name="TCost">The node connection cost type.</typeparam>
         /// <param name="graph">The graph.</param>
         /// <param name="nodePredicate">Predicate used to decide whether a graph node can be visited.</param>
         /// <param name="startingNodeIdentifier">The starting node.</param>
         /// <param name="endingNodeIdentifier">The final node.</param>
         /// <returns>A sequence of graph node identifiers, representing the shortest path.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="graph"/> or <paramref name="nodePredicate"/> are <c>null</c>.</exception>
-        public static IEnumerable<TIdentifier> Find<TValue, TIdentifier>(
-            Graph<TValue, TIdentifier> graph,
-            NodePredicate<TValue, TIdentifier> nodePredicate,
+        public static IEnumerable<TIdentifier> Find<TValue, TIdentifier, TCost>(
+            Graph<TValue, TIdentifier, TCost> graph,
+            NodePredicate<TValue, TIdentifier, TCost> nodePredicate,
             TIdentifier startingNodeIdentifier,
             TIdentifier endingNodeIdentifier)
         {
@@ -65,19 +66,19 @@ namespace Abacaxi.Graphs
             {
                 var visitedNodeIdentifier = nodesToVisitNext.Dequeue();
 
-                foreach (var connectedNodeIdentifier in graph.GetNodeConnections(visitedNodeIdentifier))
+                foreach (var connection in graph.GetConnections(visitedNodeIdentifier))
                 {
-                    if (!nodePredicate(graph, connectedNodeIdentifier))
+                    if (!nodePredicate(graph, connection.To))
                     {
                         continue;
                     }
 
                     TIdentifier incomingNodeIdentifier;
-                    if (!visitedNodeIdentifiers.TryGetValue(connectedNodeIdentifier, out incomingNodeIdentifier))
+                    if (!visitedNodeIdentifiers.TryGetValue(connection.To, out incomingNodeIdentifier))
                     {
-                        visitedNodeIdentifiers.Add(connectedNodeIdentifier, visitedNodeIdentifier);
+                        visitedNodeIdentifiers.Add(connection.To, visitedNodeIdentifier);
 
-                        if (Equals(connectedNodeIdentifier, endingNodeIdentifier))
+                        if (Equals(connection.To, endingNodeIdentifier))
                         {
                             var road = new List<TIdentifier>();
 
@@ -97,7 +98,7 @@ namespace Abacaxi.Graphs
                             }
                         }
 
-                        nodesToVisitNext.Enqueue(connectedNodeIdentifier);
+                        nodesToVisitNext.Enqueue(connection.To);
                     }
                 }
             }

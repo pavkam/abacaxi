@@ -26,7 +26,7 @@ namespace Abacaxi.Graphs
     {
         private const int PaddingSize = 2;
 
-        private static bool TruePredicate(Graph<int, CellCoordinates> graph, CellCoordinates cellCoordinates)
+        private static bool TruePredicate(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Debug.Assert(graph != null);
 

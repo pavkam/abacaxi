@@ -15,6 +15,7 @@
 
 namespace Abacaxi.Graphs
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -23,7 +24,7 @@ namespace Abacaxi.Graphs
     /// </summary>
     /// <typeparam name="TValue">The type of the value stored in the graph nodes.</typeparam>
     /// <typeparam name="TIdentifier">The type of the values used to identify nodes in the graph.</typeparam>
-    public abstract class Graph<TValue, TIdentifier>
+    public abstract class Graph<TValue, TIdentifier, TCost>
     {
         /// <summary>
         /// Gets the value of the node identified by the <paramref name="nodeIdentifier"/> parameter.
@@ -44,6 +45,6 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <param name="nodeIdentifier">The unique node identifier.</param>
         /// <returns>The list of connected nodes.</returns>
-        public abstract IEnumerable<TIdentifier> GetNodeConnections(TIdentifier nodeIdentifier);
+        public abstract IEnumerable<Connection<TIdentifier, TCost>> GetConnections(TIdentifier nodeIdentifier);
     }
 }

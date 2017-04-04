@@ -25,10 +25,10 @@ namespace Abacaxi.Graphs
     /// </summary>
     public static class FloodFill
     {
-        private static void ApplyRecursiveNoChecks<TColor, TIdentifier>(
-            Graph<TColor, TIdentifier> graph,
+        private static void ApplyRecursiveNoChecks<TColor, TIdentifier, TCost>(
+            Graph<TColor, TIdentifier, TCost> graph,
             TIdentifier startingNodeIdentifier,
-            NodePredicate<TColor, TIdentifier> nodePredicate,
+            NodePredicate<TColor, TIdentifier, TCost> nodePredicate,
             TColor color)
         {
             Debug.Assert(graph != null);
@@ -37,9 +37,9 @@ namespace Abacaxi.Graphs
             if (nodePredicate(graph, startingNodeIdentifier))
             {
                 graph.SetNodeValue(startingNodeIdentifier, color);
-                foreach (var connectedNodeIdentifier in graph.GetNodeConnections(startingNodeIdentifier))
+                foreach (var connection in graph.GetConnections(startingNodeIdentifier))
                 {
-                    ApplyRecursiveNoChecks(graph, connectedNodeIdentifier, nodePredicate, color);
+                    ApplyRecursiveNoChecks(graph, connection.To, nodePredicate, color);
                 }
             }
         }
@@ -49,15 +49,16 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <typeparam name="TColor">The type of the "color" of graph nodes.</typeparam>
         /// <typeparam name="TIdentifier">The type of the graph node identifiers.</typeparam>
+        /// <typeparam name="TCost">The node connection cost type.</typeparam>
         /// <param name="graph">The graph to fill.</param>
         /// <param name="startingNodeIdentifier">The starting node identifier.</param>
         /// <param name="nodePredicate">Predicate to check whether a certain node can be colored.</param>
         /// <param name="color">The color to fill the nodes with.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="nodePredicate"/> are null.</exception>
-        public static void ApplyRecursive<TColor, TIdentifier>(
-            Graph<TColor, TIdentifier> graph,
+        public static void ApplyRecursive<TColor, TIdentifier, TCost>(
+            Graph<TColor, TIdentifier, TCost> graph,
             TIdentifier startingNodeIdentifier,
-            NodePredicate<TColor, TIdentifier> nodePredicate,
+            NodePredicate<TColor, TIdentifier, TCost> nodePredicate,
             TColor color)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
@@ -71,15 +72,16 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <typeparam name="TColor">The type of the "color" of graph nodes.</typeparam>
         /// <typeparam name="TIdentifier">The type of the graph node identifiers.</typeparam>
+        /// <typeparam name="TCost">The node connection cost type.</typeparam>
         /// <param name="graph">The graph to fill.</param>
         /// <param name="startingNodeIdentifier">The starting node identifier.</param>
         /// <param name="nodePredicate">Predicate to check whether a certain node can be colored.</param>
         /// <param name="color">The color to fill the nodes with.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="nodePredicate"/> are null.</exception>
-        public static void ApplyIterative<TColor, TIdentifier>(
-            Graph<TColor, TIdentifier> graph,
+        public static void ApplyIterative<TColor, TIdentifier, TCost>(
+            Graph<TColor, TIdentifier, TCost> graph,
             TIdentifier startingNodeIdentifier,
-            NodePredicate<TColor, TIdentifier> nodePredicate,
+            NodePredicate<TColor, TIdentifier, TCost> nodePredicate,
             TColor color)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
@@ -94,9 +96,9 @@ namespace Abacaxi.Graphs
                 if (nodePredicate(graph, visitiedNodeIdentifier))
                 {
                     graph.SetNodeValue(visitiedNodeIdentifier, color);
-                    foreach (var connectedNodeIdentifier in graph.GetNodeConnections(visitiedNodeIdentifier))
+                    foreach (var connection in graph.GetConnections(visitiedNodeIdentifier))
                     {
-                        nodesToVisitNext.Enqueue(connectedNodeIdentifier);
+                        nodesToVisitNext.Enqueue(connection.To);
                     }
                 }
             }

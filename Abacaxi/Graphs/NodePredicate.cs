@@ -22,8 +22,9 @@ namespace Abacaxi.Graphs
     /// </summary>
     /// <typeparam name="TValue">The type of the value stored by teh graph nodes.</typeparam>
     /// <typeparam name="TIdentifier">The type of the graph node identifier.</typeparam>
+    /// <typeparam name="TCost">The node connection cost type.</typeparam>
     /// <param name="graph">The graph that owes the nodes.</param>
     /// <param name="nodeIdentifier">The identifier of the node to validate.</param>
     /// <returns><c>true</c> if the node is validated; <c>false</c> otherwise.</returns>
-    public delegate bool NodePredicate<TValue, TIdentifier>(Graph<TValue, TIdentifier> graph, TIdentifier nodeIdentifier);
+    public delegate bool NodePredicate<TValue, TIdentifier, TCost>(Graph<TValue, TIdentifier, TCost> graph, TIdentifier nodeIdentifier);
 }
