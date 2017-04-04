@@ -39,14 +39,18 @@ namespace Abacaxi.Tests.Graphs
             O = (int[,])M.Clone();
         }
 
-        private static bool ZeroCanBeColored(int color)
+        private static bool ZeroCanBeColored(Graph<int, CellCoordinates> graph, CellCoordinates cellCoordinates)
         {
-            return color == 0;
+            Assert.IsNotNull(graph);
+
+            return graph.GetNodeValue(cellCoordinates) == 0;
         }
 
-        private static bool OneCanBeColored(int color)
+        private static bool OneCanBeColored(Graph<int, CellCoordinates> graph, CellCoordinates cellCoordinates)
         {
-            return color == 1;
+            Assert.IsNotNull(graph);
+
+            return graph.GetNodeValue(cellCoordinates) == 1;
         }
 
         [Test]
@@ -62,7 +66,7 @@ namespace Abacaxi.Tests.Graphs
         }
 
         [Test]
-        public void ApplyRecursive_ThrowsException_WhenCellCanBeColoredFuncIsNull()
+        public void ApplyRecursive_ThrowsException_ForNullNodePredicate()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 FloodFill.ApplyRecursive(
@@ -108,11 +112,12 @@ namespace Abacaxi.Tests.Graphs
                 2);
 
 
+            var o = new MatrixGraph<int>(O);
             for (var x = 0; x < O.GetLength(0); x++)
             {
                 for (var y = 0; y < O.GetLength(1); y++)
                 {
-                    if (ZeroCanBeColored(O[x, y]))
+                    if (ZeroCanBeColored(o, new CellCoordinates(x, y)))
                     {
                         O[x, y] = 2;
                     }
@@ -185,12 +190,12 @@ namespace Abacaxi.Tests.Graphs
                 ZeroCanBeColored,
                 2);
 
-
+            var o = new MatrixGraph<int>(O);
             for (var x = 0; x < O.GetLength(0); x++)
             {
                 for (var y = 0; y < O.GetLength(1); y++)
                 {
-                    if (ZeroCanBeColored(O[x, y]))
+                    if (ZeroCanBeColored(o, new CellCoordinates(x, y)))
                     {
                         O[x, y] = 2;
                     }

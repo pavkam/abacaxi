@@ -28,18 +28,18 @@ namespace Abacaxi.Graphs
         private static void ApplyRecursiveNoChecks<TColor, TIdentifier>(
             Graph<TColor, TIdentifier> graph,
             TIdentifier startingNodeIdentifier,
-            Predicate<TColor> nodeCanBeColoredFunc,
+            NodePredicate<TColor, TIdentifier> nodePredicate,
             TColor color)
         {
             Debug.Assert(graph != null);
             Debug.Assert(startingNodeIdentifier != null);
 
-            if (nodeCanBeColoredFunc(graph.GetNodeValue(startingNodeIdentifier)))
+            if (nodePredicate(graph, startingNodeIdentifier))
             {
                 graph.SetNodeValue(startingNodeIdentifier, color);
                 foreach (var connectedNodeIdentifier in graph.GetNodeConnections(startingNodeIdentifier))
                 {
-                    ApplyRecursiveNoChecks(graph, connectedNodeIdentifier, nodeCanBeColoredFunc, color);
+                    ApplyRecursiveNoChecks(graph, connectedNodeIdentifier, nodePredicate, color);
                 }
             }
         }
@@ -51,19 +51,19 @@ namespace Abacaxi.Graphs
         /// <typeparam name="TIdentifier">The type of the graph node identifiers.</typeparam>
         /// <param name="graph">The graph to fill.</param>
         /// <param name="startingNodeIdentifier">The starting node identifier.</param>
-        /// <param name="nodeCanBeColoredFunc">Predicate to check whether a certain node can be colored.</param>
+        /// <param name="nodePredicate">Predicate to check whether a certain node can be colored.</param>
         /// <param name="color">The color to fill the nodes with.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="nodeCanBeColoredFunc"/> are null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="nodePredicate"/> are null.</exception>
         public static void ApplyRecursive<TColor, TIdentifier>(
             Graph<TColor, TIdentifier> graph,
             TIdentifier startingNodeIdentifier,
-            Predicate<TColor> nodeCanBeColoredFunc,
+            NodePredicate<TColor, TIdentifier> nodePredicate,
             TColor color)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
-            Validate.ArgumentNotNull(nameof(nodeCanBeColoredFunc), nodeCanBeColoredFunc);
+            Validate.ArgumentNotNull(nameof(nodePredicate), nodePredicate);
 
-            ApplyRecursiveNoChecks(graph, startingNodeIdentifier, nodeCanBeColoredFunc, color);
+            ApplyRecursiveNoChecks(graph, startingNodeIdentifier, nodePredicate, color);
         }
 
         /// <summary>
@@ -73,28 +73,28 @@ namespace Abacaxi.Graphs
         /// <typeparam name="TIdentifier">The type of the graph node identifiers.</typeparam>
         /// <param name="graph">The graph to fill.</param>
         /// <param name="startingNodeIdentifier">The starting node identifier.</param>
-        /// <param name="nodeCanBeColoredFunc">Predicate to check whether a certain node can be colored.</param>
+        /// <param name="nodePredicate">Predicate to check whether a certain node can be colored.</param>
         /// <param name="color">The color to fill the nodes with.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="nodeCanBeColoredFunc"/> are null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="nodePredicate"/> are null.</exception>
         public static void ApplyIterative<TColor, TIdentifier>(
             Graph<TColor, TIdentifier> graph,
             TIdentifier startingNodeIdentifier,
-            Predicate<TColor> nodeCanBeColoredFunc,
+            NodePredicate<TColor, TIdentifier> nodePredicate,
             TColor color)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
-            Validate.ArgumentNotNull(nameof(nodeCanBeColoredFunc), nodeCanBeColoredFunc);
+            Validate.ArgumentNotNull(nameof(nodePredicate), nodePredicate);
 
             var nodesToVisitNext = new Queue<TIdentifier>();
             nodesToVisitNext.Enqueue(startingNodeIdentifier);
 
             while (nodesToVisitNext.Count > 0)
             {
-                var nextNodeIdentifierToInspect = nodesToVisitNext.Dequeue();
-                if (nodeCanBeColoredFunc(graph.GetNodeValue(nextNodeIdentifierToInspect)))
+                var visitiedNodeIdentifier = nodesToVisitNext.Dequeue();
+                if (nodePredicate(graph, visitiedNodeIdentifier))
                 {
-                    graph.SetNodeValue(nextNodeIdentifierToInspect, color);
-                    foreach (var connectedNodeIdentifier in graph.GetNodeConnections(nextNodeIdentifierToInspect))
+                    graph.SetNodeValue(visitiedNodeIdentifier, color);
+                    foreach (var connectedNodeIdentifier in graph.GetNodeConnections(visitiedNodeIdentifier))
                     {
                         nodesToVisitNext.Enqueue(connectedNodeIdentifier);
                     }

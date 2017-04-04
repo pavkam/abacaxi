@@ -37,6 +37,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphs\MoveTests.cs" />
+    <Compile Include="Graphs\ChessHorseShortestPathTests.cs" />
+    <Compile Include="Graphs\ShortestPathTests.cs" />
     <Compile Include="Graphs\MatrixGraphTests.cs" />
     <Compile Include="LinkedLists\ReverseListTests.cs" />
     <Compile Include="Graphs\FloodFillTests.cs" />

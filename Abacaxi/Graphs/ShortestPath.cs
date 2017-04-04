@@ -19,31 +19,44 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using System.Diagnostics;
 
+    /// <summary>
+    /// Class implements the "shortest path" algorithm. The method can be applied to any graph.
+    /// </summary>
     public static class ShortestPath
     {
-        private sealed class Path<TIndentifier>
-        {
-            public TIndentifier _entryNodeIdentifier;
-            public int _numberOfHops;
-
-            public Path(TIndentifier entryNodeIdentifier, int numberOfHops)
-            {
-                Debug.Assert(numberOfHops >= 0);
-
-                _entryNodeIdentifier = entryNodeIdentifier;
-                _numberOfHops = numberOfHops;
-            }
-        }
-
+        /// <summary>
+        /// Finds the shortest path between two nodes in a graph (smallest number of hops).
+        /// </summary>
+        /// <typeparam name="TValue">The value of the graph nodes.</typeparam>
+        /// <typeparam name="TIdentifier">The type used to identify nodes in the graph.</typeparam>
+        /// <param name="graph">The graph.</param>
+        /// <param name="nodePredicate">Predicate used to decide whether a graph node can be visited.</param>
+        /// <param name="startingNodeIdentifier">The starting node.</param>
+        /// <param name="endingNodeIdentifier">The final node.</param>
+        /// <returns>A sequence of graph node identifiers, representing the shortest path.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="graph"/> or <paramref name="nodePredicate"/> are <c>null</c>.</exception>
         public static IEnumerable<TIdentifier> Find<TValue, TIdentifier>(
             Graph<TValue, TIdentifier> graph,
+            NodePredicate<TValue, TIdentifier> nodePredicate,
             TIdentifier startingNodeIdentifier,
             TIdentifier endingNodeIdentifier)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
+            Validate.ArgumentNotNull(nameof(nodePredicate), nodePredicate);
 
-            var paths = new Dictionary<TIdentifier, Path<TIdentifier>>();
-            paths.Add(startingNodeIdentifier, new Path<TIdentifier>(null, 0));
+            if (!nodePredicate(graph, startingNodeIdentifier))
+            {
+                yield break;
+            }
+
+            if (Equals(startingNodeIdentifier, endingNodeIdentifier))
+            {
+                yield return startingNodeIdentifier;
+                yield break;
+            }
+
+            var visitedNodeIdentifiers = new Dictionary<TIdentifier, TIdentifier>();
+            visitedNodeIdentifiers.Add(startingNodeIdentifier, startingNodeIdentifier);
 
             var nodesToVisitNext = new Queue<TIdentifier>();
             nodesToVisitNext.Enqueue(startingNodeIdentifier);
@@ -51,28 +64,39 @@ namespace Abacaxi.Graphs
             while (nodesToVisitNext.Count > 0)
             {
                 var visitedNodeIdentifier = nodesToVisitNext.Dequeue();
-                var visitedNodePath = paths[visitedNodeIdentifier];
 
                 foreach (var connectedNodeIdentifier in graph.GetNodeConnections(visitedNodeIdentifier))
                 {
-                    Path<TIdentifier> connectedNodePath;
-
-                    if (!paths.TryGetValue(connectedNodeIdentifier, out connectedNodePath))
+                    if (!nodePredicate(graph, connectedNodeIdentifier))
                     {
-                        connectedNodePath = new Path<TIdentifier>(visitedNodeIdentifier, visitedNodePath._numberOfHops + 1);
-                        paths.Add(connectedNodeIdentifier, connectedNodePath);
+                        continue;
+                    }
+
+                    TIdentifier incomingNodeIdentifier;
+                    if (!visitedNodeIdentifiers.TryGetValue(connectedNodeIdentifier, out incomingNodeIdentifier))
+                    {
+                        visitedNodeIdentifiers.Add(connectedNodeIdentifier, visitedNodeIdentifier);
 
                         if (Equals(connectedNodeIdentifier, endingNodeIdentifier))
                         {
-                            break;
+                            var road = new List<TIdentifier>();
+
+                            while (!Equals(endingNodeIdentifier, startingNodeIdentifier))
+                            {
+                                var previousNodeIdentifier = visitedNodeIdentifiers[endingNodeIdentifier];
+                                road.Add(endingNodeIdentifier);
+
+                                endingNodeIdentifier = previousNodeIdentifier;
+                            }
+
+                            road.Add(startingNodeIdentifier);
+
+                            for (var i = road.Count - 1; i >= 0; i--)
+                            {
+                                yield return road[i];
+                            }
                         }
 
-                        nodesToVisitNext.Enqueue(connectedNodeIdentifier);
-                    }
-                    else if (connectedNodePath._numberOfHops > visitedNodePath._numberOfHops + 1)
-                    {
-                        connectedNodePath._numberOfHops = visitedNodePath._numberOfHops + 1;
-                        connectedNodePath._entryNodeIdentifier = visitedNodeIdentifier;
                         nodesToVisitNext.Enqueue(connectedNodeIdentifier);
                     }
                 }
