@@ -63,16 +63,16 @@ namespace Abacaxi.Tests.Graphs
             { 0, 0, 0, 0, 1 }
         });
 
-        private static bool AcceptZeros(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
+        private static bool AcceptZeros(IGraph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Assert.IsNotNull(graph);
-            return graph.GetNodeValue(cellCoordinates) == 0;
+            return graph.GetValue(cellCoordinates) == 0;
         }
 
-        private static bool AcceptOnes(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
+        private static bool AcceptOnes(IGraph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Assert.IsNotNull(graph);
-            return graph.GetNodeValue(cellCoordinates) == 1;
+            return graph.GetValue(cellCoordinates) == 1;
         }
 
         [Test]

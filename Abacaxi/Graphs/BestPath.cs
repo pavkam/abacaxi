@@ -20,22 +20,10 @@ namespace Abacaxi.Graphs
     using System.Diagnostics;
 
     /// <summary>
-    /// Class implements the "shortest path" algorithm. The method can be applied to any graph.
+    /// Class implements the "best path" algorithm (the A*, optimized Djikstra).
     /// </summary>
-    public static class ShortestPath
+    public static class BestPath
     {
-        /// <summary>
-        /// Finds the shortest path between two nodes in a graph (smallest number of hops).
-        /// </summary>
-        /// <typeparam name="TValue">The value of the graph nodes.</typeparam>
-        /// <typeparam name="TIdentifier">The type used to identify nodes in the graph.</typeparam>
-        /// <typeparam name="TCost">The node connection cost type.</typeparam>
-        /// <param name="graph">The graph.</param>
-        /// <param name="nodePredicate">Predicate used to decide whether a graph node can be visited.</param>
-        /// <param name="startingNodeIdentifier">The starting node.</param>
-        /// <param name="endingNodeIdentifier">The final node.</param>
-        /// <returns>A sequence of graph node identifiers, representing the shortest path.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="graph"/> or <paramref name="nodePredicate"/> are <c>null</c>.</exception>
         public static IEnumerable<TIdentifier> Find<TValue, TIdentifier, TCost>(
             IGraph<TValue, TIdentifier, TCost> graph,
             NodePredicate<TValue, TIdentifier, TCost> nodePredicate,

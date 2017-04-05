@@ -39,18 +39,18 @@ namespace Abacaxi.Tests.Graphs
             O = (int[,])M.Clone();
         }
 
-        private static bool ZeroCanBeColored(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
+        private static bool ZeroCanBeColored(IGraph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Assert.IsNotNull(graph);
 
-            return graph.GetNodeValue(cellCoordinates) == 0;
+            return graph.GetValue(cellCoordinates) == 0;
         }
 
-        private static bool OneCanBeColored(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
+        private static bool OneCanBeColored(IGraph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Assert.IsNotNull(graph);
 
-            return graph.GetNodeValue(cellCoordinates) == 1;
+            return graph.GetValue(cellCoordinates) == 1;
         }
 
         [Test]

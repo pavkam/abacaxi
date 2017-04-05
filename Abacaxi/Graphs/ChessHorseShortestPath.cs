@@ -26,13 +26,83 @@ namespace Abacaxi.Graphs
     {
         private const int PaddingSize = 2;
 
-        private static bool TruePredicate(Graph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
+        private sealed class ChessHorseVirtualGraph : IGraph<int, CellCoordinates, int>
+        {
+            private int _columns;
+            private int _rows;
+
+            public ChessHorseVirtualGraph(int columns, int rows)
+            {
+                Validate.ArgumentGreaterThanZero(nameof(columns), columns);
+                Validate.ArgumentGreaterThanZero(nameof(rows), rows);
+
+                _columns = columns;
+                _rows = rows;
+            }
+
+            public int GetValue(CellCoordinates cellCoordinates)
+            {
+                throw new NotSupportedException();
+            }
+
+            public void SetValue(CellCoordinates cellCoordinates, int value)
+            {
+                throw new NotSupportedException();
+            }
+
+            public IEnumerable<Connection<CellCoordinates, int>> GetConnections(CellCoordinates cellCoordinates)
+            {
+                Validate.ArgumentLessThan(nameof(cellCoordinates.X), cellCoordinates.X, _columns);
+                Validate.ArgumentLessThan(nameof(cellCoordinates.Y), cellCoordinates.Y, _rows);
+
+                for (var i = -1; i <= 1; i += 2)
+                {
+                    for (var j = -2; j <= 2; j += 4)
+                    {
+                        var x = cellCoordinates.X + i;
+                        var y = cellCoordinates.Y + j;
+                        if (x >= 0 && x < _columns && y >= 0 && y < _rows)
+                            yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(x, y), 1);
+
+                        x = cellCoordinates.X + j;
+                        y = cellCoordinates.Y + i;
+                        if (x >= 0 && x < _columns && y >= 0 && y < _rows)
+                            yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(x, y), 1);
+                    }
+                }
+            }
+
+            public int AddConnectionCosts(int a, int b)
+            {
+                throw new NotImplementedException();
+            }
+
+            public int CompareConnectionCosts(int a, int b)
+            {
+                throw new NotImplementedException();
+            }
+
+            public int EvaluatePotentialConnectionCost(CellCoordinates from, CellCoordinates to)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private static bool TruePredicate(IGraph<int, CellCoordinates, int> graph, CellCoordinates cellCoordinates)
         {
             Debug.Assert(graph != null);
 
             return true;
         }
 
+        /// <summary>
+        /// Finds the shortest path between a starting and an ending cell on a chess .board
+        /// </summary>
+        /// <param name="startX">The starting cell X.</param>
+        /// <param name="startY">The starting cell Y.</param>
+        /// <param name="endX">The ending cell X.</param>
+        /// <param name="endY">The ending cell Y.</param>
+        /// <returns>A sequence of moves required to get from starting cell to the ending cell.</returns>
         public static IEnumerable<Move> Find(int startX, int startY, int endX, int endY)
         {
             var minX = Math.Min(startX, endX);

@@ -26,7 +26,7 @@ namespace Abacaxi.Graphs
     public static class FloodFill
     {
         private static void ApplyRecursiveNoChecks<TColor, TIdentifier, TCost>(
-            Graph<TColor, TIdentifier, TCost> graph,
+            IGraph<TColor, TIdentifier, TCost> graph,
             TIdentifier startingNodeIdentifier,
             NodePredicate<TColor, TIdentifier, TCost> nodePredicate,
             TColor color)
@@ -36,7 +36,7 @@ namespace Abacaxi.Graphs
 
             if (nodePredicate(graph, startingNodeIdentifier))
             {
-                graph.SetNodeValue(startingNodeIdentifier, color);
+                graph.SetValue(startingNodeIdentifier, color);
                 foreach (var connection in graph.GetConnections(startingNodeIdentifier))
                 {
                     ApplyRecursiveNoChecks(graph, connection.To, nodePredicate, color);
@@ -56,7 +56,7 @@ namespace Abacaxi.Graphs
         /// <param name="color">The color to fill the nodes with.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="nodePredicate"/> are null.</exception>
         public static void ApplyRecursive<TColor, TIdentifier, TCost>(
-            Graph<TColor, TIdentifier, TCost> graph,
+            IGraph<TColor, TIdentifier, TCost> graph,
             TIdentifier startingNodeIdentifier,
             NodePredicate<TColor, TIdentifier, TCost> nodePredicate,
             TColor color)
@@ -79,7 +79,7 @@ namespace Abacaxi.Graphs
         /// <param name="color">The color to fill the nodes with.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="nodePredicate"/> are null.</exception>
         public static void ApplyIterative<TColor, TIdentifier, TCost>(
-            Graph<TColor, TIdentifier, TCost> graph,
+            IGraph<TColor, TIdentifier, TCost> graph,
             TIdentifier startingNodeIdentifier,
             NodePredicate<TColor, TIdentifier, TCost> nodePredicate,
             TColor color)
@@ -95,7 +95,7 @@ namespace Abacaxi.Graphs
                 var visitiedNodeIdentifier = nodesToVisitNext.Dequeue();
                 if (nodePredicate(graph, visitiedNodeIdentifier))
                 {
-                    graph.SetNodeValue(visitiedNodeIdentifier, color);
+                    graph.SetValue(visitiedNodeIdentifier, color);
                     foreach (var connection in graph.GetConnections(visitiedNodeIdentifier))
                     {
                         nodesToVisitNext.Enqueue(connection.To);

@@ -56,25 +56,25 @@ namespace Abacaxi.Tests.Graphs
         }
 
         [Test]
-        public void GetNodeValue_ThrowsException_ForOutOfBoundsX()
+        public void GetValue_ThrowsException_ForOutOfBoundsX()
         {
             var array = new MatrixGraph<int>(new int[1, 1] { { 1 } });
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => array.GetNodeValue(new CellCoordinates(1, 0)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.GetValue(new CellCoordinates(1, 0)));
         }
 
-        public void GetNodeValue_ThrowsException_ForOutOfBoundsY()
+        public void GetValue_ThrowsException_ForOutOfBoundsY()
         {
             var array = new MatrixGraph<int>(new int[1, 1] { { 1 } });
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => array.GetNodeValue(new CellCoordinates(0, 1)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.GetValue(new CellCoordinates(0, 1)));
         }
 
         [TestCase(0, 0)]
         [TestCase(0, 1)]
         [TestCase(1, 0)]
         [TestCase(1, 1)]
-        public void GetNodeValue_Returns_ValidValue(int x, int y)
+        public void GetValue_Returns_ValidValue(int x, int y)
         {
             var array = new int[2, 2]
             {
@@ -84,29 +84,29 @@ namespace Abacaxi.Tests.Graphs
 
             var matrix = new MatrixGraph<int>(array);
 
-            Assert.AreEqual(array[x, y], matrix.GetNodeValue(new CellCoordinates(x, y)));
+            Assert.AreEqual(array[x, y], matrix.GetValue(new CellCoordinates(x, y)));
         }
 
         [Test]
-        public void SetNodeValue_ThrowsException_ForOutOfBoundsX()
+        public void SetValue_ThrowsException_ForOutOfBoundsX()
         {
             var array = new MatrixGraph<int>(new int[1, 1] { { 1 } });
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => array.SetNodeValue(new CellCoordinates(1, 0), 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.SetValue(new CellCoordinates(1, 0), 0));
         }
 
-        public void SetNodeValue_ThrowsException_ForOutOfBoundsY()
+        public void SetValue_ThrowsException_ForOutOfBoundsY()
         {
             var array = new MatrixGraph<int>(new int[1, 1] { { 1 } });
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => array.SetNodeValue(new CellCoordinates(0, 1), 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.SetValue(new CellCoordinates(0, 1), 0));
         }
 
         [TestCase(0, 0)]
         [TestCase(0, 1)]
         [TestCase(1, 0)]
         [TestCase(1, 1)]
-        public void SetNodeValue_ModifiesTheArray(int x, int y)
+        public void SetValue_ModifiesTheArray(int x, int y)
         {
             var array = new int[2, 2]
             {
@@ -115,7 +115,7 @@ namespace Abacaxi.Tests.Graphs
             };
 
             var matrix = new MatrixGraph<int>(array);
-            matrix.SetNodeValue(new CellCoordinates(x, y), 100);
+            matrix.SetValue(new CellCoordinates(x, y), 100);
 
             Assert.AreEqual(100, array[x, y]);
         }
@@ -220,6 +220,96 @@ namespace Abacaxi.Tests.Graphs
                 new CellCoordinates(2, 2),
                 new CellCoordinates(1, 2),
                 new CellCoordinates(2, 1));
+        }
+
+        [Test]
+        public void AddConnectionCosts_ThrowsException_ForNegativeA()
+        {
+            var array = new MatrixGraph<int>(new int[,] { {  } });
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.AddConnectionCosts(-1, 0));
+        }
+
+        [Test]
+        public void AddConnectionCosts_ThrowsException_ForNegativeB()
+        {
+            var array = new MatrixGraph<int>(new int[,] { { } });
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.AddConnectionCosts(0, -1));
+        }
+
+        [Test]
+        public void AddConnectionCosts_ReturnsSimpleSumOfAandB()
+        {
+            var array = new MatrixGraph<int>(new int[,] { { } });
+
+            Assert.AreEqual(23, array.AddConnectionCosts(11, 12));
+        }
+
+        [Test]
+        public void CompareConnectionCosts_ThrowsException_ForNegativeA()
+        {
+            var array = new MatrixGraph<int>(new int[,] { { } });
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.CompareConnectionCosts(-1, 0));
+        }
+
+        [Test]
+        public void CompareConnectionCosts_ThrowsException_ForNegativeB()
+        {
+            var array = new MatrixGraph<int>(new int[,] { { } });
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.CompareConnectionCosts(0, -1));
+        }
+
+        [Test]
+        public void CompareConnectionCosts_ReturnsNegativeForALessThanB()
+        {
+            var array = new MatrixGraph<int>(new int[,] { { } });
+
+            Assert.IsTrue(array.CompareConnectionCosts(1, 2) < 0);
+        }
+
+        [Test]
+        public void CompareConnectionCosts_ReturnsPositiveForAGreaterThanB()
+        {
+            var array = new MatrixGraph<int>(new int[,] { { } });
+
+            Assert.IsTrue(array.CompareConnectionCosts(2, 1) > 0);
+        }
+
+        [Test]
+        public void CompareConnectionCosts_ReturnsZeroForAEqualToB()
+        {
+            var array = new MatrixGraph<int>(new int[,] { { } });
+
+            Assert.IsTrue(array.CompareConnectionCosts(1, 1) == 0);
+        }
+
+        [TestCase(3, 0, 0, 0)]
+        [TestCase(0, 3, 0, 0)]
+        [TestCase(0, 0, 3, 0)]
+        [TestCase(0, 0, 0, 3)]
+        public void EvaluatePotentialConnectionCost_ThrowsException_ForInvalidFromOrTo(int fx, int fy, int tx, int ty)
+        {
+            var array = new MatrixGraph<int>(M);
+
+            var from = new CellCoordinates(fx, fy);
+            var to = new CellCoordinates(tx, ty);
+            Assert.Throws<ArgumentOutOfRangeException>(() => array.EvaluatePotentialConnectionCost(from, to));
+        }
+
+        [TestCase(0, 0, 0, 0, 0)]
+        [TestCase(0, 0, 1, 0, 1)]
+        [TestCase(0, 0, 1, 1, 2)]
+        [TestCase(0, 0, 2, 2, 4)]
+        public void EvaluatePotentialConnectionCost_ReturnsNumberOfStepsBetweenNodes(int fx, int fy, int tx, int ty, int expected)
+        {
+            var array = new MatrixGraph<int>(M);
+
+            var from = new CellCoordinates(fx, fy);
+            var to = new CellCoordinates(tx, ty);
+            Assert.IsTrue(array.EvaluatePotentialConnectionCost(from, to) == expected);
         }
     }
 }

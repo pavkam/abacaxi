@@ -26,5 +26,5 @@ namespace Abacaxi.Graphs
     /// <param name="graph">The graph that owes the nodes.</param>
     /// <param name="nodeIdentifier">The identifier of the node to validate.</param>
     /// <returns><c>true</c> if the node is validated; <c>false</c> otherwise.</returns>
-    public delegate bool NodePredicate<TValue, TIdentifier, TCost>(Graph<TValue, TIdentifier, TCost> graph, TIdentifier nodeIdentifier);
+    public delegate bool NodePredicate<TValue, TIdentifier, TCost>(IGraph<TValue, TIdentifier, TCost> graph, TIdentifier nodeIdentifier);
 }

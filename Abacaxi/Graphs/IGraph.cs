@@ -19,32 +19,55 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
 
     /// <summary>
-    /// Generic graph class. Does not actually implement the storage of the graph nodes, but provides a common public interface
-    /// that is implemented by concrete classes.
+    /// Generic graph interface.
     /// </summary>
     /// <typeparam name="TValue">The type of the value stored in the graph nodes.</typeparam>
     /// <typeparam name="TIdentifier">The type of the values used to identify nodes in the graph.</typeparam>
-    public abstract class Graph<TValue, TIdentifier, TCost>
+    public interface IGraph<TValue, TIdentifier, TCost>
     {
         /// <summary>
         /// Gets the value of the node identified by the <paramref name="nodeIdentifier"/> parameter.
         /// </summary>
         /// <param name="nodeIdentifier">The unique node identifier.</param>
         /// <returns>The value of the node.</returns>
-        public abstract TValue GetNodeValue(TIdentifier nodeIdentifier);
+        TValue GetValue(TIdentifier nodeIdentifier);
 
         /// <summary>
         /// Sets the value of the node identified by the <paramref name="nodeIdentifier"/> parameter.
         /// </summary>
         /// <param name="nodeIdentifier">The unique node identifier.</param>
         /// <param name="value">The new value of the node.</param>
-        public abstract void SetNodeValue(TIdentifier nodeIdentifier, TValue value);
+        void SetValue(TIdentifier nodeIdentifier, TValue value);
 
         /// <summary>
         /// Returns a list of all nodes connected to the node identified by the <paramref name="nodeIdentifier"/> parameter.
         /// </summary>
         /// <param name="nodeIdentifier">The unique node identifier.</param>
         /// <returns>The list of connected nodes.</returns>
-        public abstract IEnumerable<Connection<TIdentifier, TCost>> GetConnections(TIdentifier nodeIdentifier);
+        IEnumerable<Connection<TIdentifier, TCost>> GetConnections(TIdentifier nodeIdentifier);
+
+        /// <summary>
+        /// Adds up two connection costs to form a sum.
+        /// </summary>
+        /// <param name="a">The first cost.</param>
+        /// <param name="b">The second cost.</param>
+        /// <returns>Aggregated cost.</returns>
+        TCost AddConnectionCosts(TCost a, TCost b);
+
+        /// <summary>
+        /// Compares two connection costs.
+        /// </summary>
+        /// <param name="a">The first cost.</param>
+        /// <param name="b">The second cost.</param>
+        /// <returns>Comparison result.</returns>
+        int CompareConnectionCosts(TCost a, TCost b);
+
+        /// <summary>
+        /// Evaluates the potential connection cost between two nodes in the graph.
+        /// </summary>
+        /// <param name="from">The first node.</param>
+        /// <param name="to">The seccond node.</param>
+        /// <returns>The potential connection cost.</returns>
+        TCost EvaluatePotentialConnectionCost(TIdentifier from, TIdentifier to);
     }
 }

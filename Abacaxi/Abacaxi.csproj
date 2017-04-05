@@ -40,13 +40,13 @@
     <Compile Include="Graphs\Connection.cs" />
     <Compile Include="Graphs\Move.cs" />
     <Compile Include="Graphs\CellCoordinates.cs" />
-    <Compile Include="Graphs\ChessHorseVirtualGraph.cs" />
     <Compile Include="Graphs\NodePredicate.cs" />
     <Compile Include="Graphs\ChessHorseShortestPath.cs" />
+    <Compile Include="Graphs\BestPath.cs" />
     <Compile Include="Graphs\ShortestPath.cs" />
     <Compile Include="Graphs\FloodFill.cs" />
     <Compile Include="Graphs\MatrixGraph.cs" />
-    <Compile Include="Graphs\Graph.cs" />
+    <Compile Include="Graphs\IGraph.cs" />
     <Compile Include="LinkedLists\ReverseList.cs" />
     <Compile Include="LinkedLists\Node.cs" />
     <Compile Include="Numerics\IntegerPartitionDeconstruct.cs" />

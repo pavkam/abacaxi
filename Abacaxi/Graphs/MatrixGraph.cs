@@ -15,13 +15,14 @@
 
 namespace Abacaxi.Graphs
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
     /// Class used to treat a 2-dimensional array as a graph.
     /// </summary>
     /// <typeparam name="TValue">The type of the value stored in the graph's nodes.</typeparam>
-    public class MatrixGraph<TValue> : Graph<TValue, CellCoordinates, int>
+    public class MatrixGraph<TValue> : IGraph<TValue, CellCoordinates, int>
     {
         private TValue[,] _matrix;
 
@@ -55,7 +56,7 @@ namespace Abacaxi.Graphs
         /// <param name="cellCoordinates">The cell coordinates.</param>
         /// <returns>The value of the node.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value of <paramref name="cellCoordinates"/> is outside the bounds of the array.</exception>
-        public override TValue GetNodeValue(CellCoordinates cellCoordinates)
+        public TValue GetValue(CellCoordinates cellCoordinates)
         {
             Validate.ArgumentLessThan(nameof(cellCoordinates.X), cellCoordinates.X, ColumnCount);
             Validate.ArgumentLessThan(nameof(cellCoordinates.Y), cellCoordinates.Y, RowCount);
@@ -69,7 +70,7 @@ namespace Abacaxi.Graphs
         /// <param name="cellCoordinates">The cell coordinates.</param>
         /// <param name="value">The new value of the node.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value of <paramref name="cellCoordinates"/> is outside the bounds of the array.</exception>
-        public override void SetNodeValue(CellCoordinates cellCoordinates, TValue value)
+        public void SetValue(CellCoordinates cellCoordinates, TValue value)
         {
             Validate.ArgumentLessThan(nameof(cellCoordinates.X), cellCoordinates.X, ColumnCount);
             Validate.ArgumentLessThan(nameof(cellCoordinates.Y), cellCoordinates.Y, RowCount);
@@ -83,7 +84,7 @@ namespace Abacaxi.Graphs
         /// <param name="cellCoordinates">The cell coordinates.</param>
         /// <returns>The list of connected nodes and the associated connection cost.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value of <paramref name="cellCoordinates"/> is outside the bounds of the array.</exception>
-        public override IEnumerable<Connection<CellCoordinates, int>> GetConnections(CellCoordinates cellCoordinates)
+        public IEnumerable<Connection<CellCoordinates, int>> GetConnections(CellCoordinates cellCoordinates)
         {
             Validate.ArgumentLessThan(nameof(cellCoordinates.X), cellCoordinates.X, ColumnCount);
             Validate.ArgumentLessThan(nameof(cellCoordinates.Y), cellCoordinates.Y, RowCount);
@@ -96,6 +97,53 @@ namespace Abacaxi.Graphs
                 yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(cellCoordinates.X, cellCoordinates.Y + 1), 1);
             if (cellCoordinates.X > 0)
                 yield return new Connection<CellCoordinates, int>(cellCoordinates, new CellCoordinates(cellCoordinates.X - 1, cellCoordinates.Y), 1);
+        }
+
+        /// <summary>
+        /// Adds up two connection costs to form a sum.
+        /// </summary>
+        /// <param name="a">The first cost.</param>
+        /// <param name="b">The second cost.</param>
+        /// <returns>Aggregated cost.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if either <paramref name="a"/> or <paramref name="b"/> are negative.</exception>
+        public int AddConnectionCosts(int a, int b)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(a), a);
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(b), b);
+
+            return a + b;
+        }
+
+        /// <summary>
+        /// Compares two connection costs.
+        /// </summary>
+        /// <param name="a">The first cost.</param>
+        /// <param name="b">The second cost.</param>
+        /// <returns>Comparison result.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if either <paramref name="a"/> or <paramref name="b"/> are negative.</exception>
+        public int CompareConnectionCosts(int a, int b)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(a), a);
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(b), b);
+
+            return a - b;
+        }
+
+        /// <summary>
+        /// Evaluates the potential connection cost between two cells in the matrix.
+        /// </summary>
+        /// <param name="from">The first node.</param>
+        /// <param name="to">The seccond node.</param>
+        /// <returns>The potential connection cost.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the values of either <paramref name="from"/> or <paramref name="to"/> are outside the bounds of the array.</exception>
+        public int EvaluatePotentialConnectionCost(CellCoordinates from, CellCoordinates to)
+        {
+            Validate.ArgumentLessThan(nameof(from.X), from.X, ColumnCount);
+            Validate.ArgumentLessThan(nameof(from.Y), from.Y, RowCount);
+            Validate.ArgumentLessThan(nameof(to.X), to.X, ColumnCount);
+            Validate.ArgumentLessThan(nameof(to.Y), to.Y, RowCount);
+
+            return Math.Abs(to.X - from.X) + Math.Abs(to.Y - from.Y);
         }
     }
 }
