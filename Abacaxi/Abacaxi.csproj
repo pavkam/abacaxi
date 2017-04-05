@@ -42,7 +42,7 @@
     <Compile Include="Graphs\CellCoordinates.cs" />
     <Compile Include="Graphs\NodePredicate.cs" />
     <Compile Include="Graphs\ChessHorseShortestPath.cs" />
-    <Compile Include="Graphs\BestPath.cs" />
+    <Compile Include="Graphs\CheapestPath.cs" />
     <Compile Include="Graphs\ShortestPath.cs" />
     <Compile Include="Graphs\FloodFill.cs" />
     <Compile Include="Graphs\MatrixGraph.cs" />
