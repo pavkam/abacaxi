@@ -46,6 +46,7 @@
     <Compile Include="LinkedLists\ReverseListTests.cs" />
     <Compile Include="Graphs\FloodFillTests.cs" />
     <Compile Include="Graphs\CellCoordinatesTests.cs" />
+    <Compile Include="Numerics\LargestPossibleNaturalSummedSequenceTests.cs" />
     <Compile Include="Numerics\IntegerPartitionDeconstructTests.cs" />
     <Compile Include="Numerics\IntegerPrimeFactorDeconstructTests.cs" />
     <Compile Include="Numerics\IntegerPowerOfTwoDeconstructTests.cs" />

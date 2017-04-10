@@ -54,6 +54,7 @@
     <Compile Include="Numerics\IntegerDecimalZip.cs" />
     <Compile Include="LinkedLists\KnottedList.cs" />
     <Compile Include="LinkedLists\ListMiddle.cs" />
+    <Compile Include="Numerics\LargestPossibleNaturalSummedSequence.cs" />
     <Compile Include="Sequences\FindDuplicateElements.cs" />
     <Compile Include="Sequences\BinarySearch.cs" />
     <Compile Include="Sequences\ReverseSequence.cs" />
