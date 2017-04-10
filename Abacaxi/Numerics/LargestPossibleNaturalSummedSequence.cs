@@ -26,7 +26,7 @@ namespace Abacaxi.Numerics
     public static class LargestPossibleNaturalSummedSequence
     {
         /// <summary>
-        /// Finds the sequence of integers, which summed, return the closest sum to a given <paramref name="targetSum"/>.
+        /// Finds the <paramref name="sequence"/> of integers, which summed, return the closest sum to a given <paramref name="targetSum"/>.
         /// </summary>
         /// <param name="sequence">The sequence of natural integers.</param>
         /// <param name="targetSum">The target sum to aim for.</param>
@@ -77,6 +77,20 @@ namespace Abacaxi.Numerics
 
                 rsi--;
             }
+        }
+
+        /// <summary>
+        /// Checks if the <paramref name="sequence"/> contains elements, which, summed, yield a given target <paramref name="exactSum"/>.
+        /// </summary>
+        /// <param name="sequence">The sequence of natural integers.</param>
+        /// <param name="exactSum">The sum to target for.</param>
+        /// <returns><c>true</c> if the condition is satisfied; <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="targetSum"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
+        public static bool ContainsExactSum(IEnumerable<int> sequence, int exactSum)
+        {
+            return Find(sequence, exactSum).Sum() == exactSum;
+
         }
     }
 }

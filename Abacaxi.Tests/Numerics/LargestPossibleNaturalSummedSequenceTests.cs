@@ -131,5 +131,76 @@ namespace Abacaxi.Tests.Numerics
                 LargestPossibleNaturalSummedSequence.Find(array, 11),
                 10, 1);
         }
+
+
+
+
+
+
+
+        [Test]
+        public void ContainsExactSum_ThowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                LargestPossibleNaturalSummedSequence.ContainsExactSum(null, 1));
+        }
+
+        [Test]
+        public void ContainsExactSum_ThowsException_ForZeroTargedSum()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                LargestPossibleNaturalSummedSequence.ContainsExactSum(new int[] { }, 0));
+        }
+
+        [Test]
+        public void ContainsExactSum_ThowsException_ForNegativeNumberInSequence()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                LargestPossibleNaturalSummedSequence.ContainsExactSum(new int[] { -1 }, 1));
+        }
+
+        [Test]
+        public void ContainsExactSum_ReturnsFalse_WhenSumCannotBeCompleted()
+        {
+            var result = LargestPossibleNaturalSummedSequence.ContainsExactSum(new[] { 2 }, 1);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ContainsExactSum_ReturnsFalse_ForEmptyArray()
+        {
+            var result = LargestPossibleNaturalSummedSequence.ContainsExactSum(new int[] { }, 1);
+            Assert.IsFalse(result);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(6)]
+        [TestCase(7)]
+        [TestCase(8)]
+        [TestCase(9)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(12)]
+        [TestCase(13)]
+        [TestCase(14)]
+        [TestCase(15)]
+        public void ContainsExactSum_ReturnsTrue_IfSumFound(int target)
+        {
+            var result = LargestPossibleNaturalSummedSequence.ContainsExactSum(new[] { 1, 2, 3, 4, 5 }, target);
+            Assert.IsTrue(result);
+        }
+
+        [TestCase(2)]
+        [TestCase(14)]
+        [TestCase(17)]
+        public void ContainsExactSum_ReturnsFalse_IfSumNotFound(int target)
+        {
+            var result = LargestPossibleNaturalSummedSequence.ContainsExactSum(new[] { 1, 3, 5, 7 }, target);
+            Assert.IsFalse(result);
+        }
     }
 }
