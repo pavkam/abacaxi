@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphs\Connection.cs" />
+    <Compile Include="Sequences\CocktailShakerSort.cs" />
     <Compile Include="Sequences\InsertionSort.cs" />
     <Compile Include="Sequences\BubbleSort.cs" />
     <Compile Include="Sequences\OptimalSequenceCycle.cs" />
