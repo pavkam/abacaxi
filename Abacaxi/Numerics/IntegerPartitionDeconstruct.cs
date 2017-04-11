@@ -21,6 +21,7 @@ namespace Abacaxi.Numerics
     /// <summary>
     /// Partitions an integer number into all possible combinations of smaller numbers. When summed, the original integer number is
     /// obtained. All combinations are unique. E.g. 1 1 2; 2 1 1 and 1 2 1 are considered equal and only one will be returned.
+    /// Class also implemnts a dynamic algorithm for calculting the partition count.
     /// </summary>
     public static class IntegerPartitionDeconstruct
     {
@@ -75,6 +76,43 @@ namespace Abacaxi.Numerics
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Calculates the count of partitions that a <paramref name="number"/> can be split into.
+        /// </summary>
+        /// <param name="number">The number to split.</param>
+        /// <returns>The partition count.</returns>
+        public static int GetCombinationCount(int number)
+        {
+            number = Math.Abs(number);
+
+            var solutions = new int[number + 1, number + 1];
+
+            for(var m = 0; m <= number; m++)
+            {
+                for (var n = 0; n <= number; n++)
+                {
+                    if (m == 0)
+                    {
+                        solutions[n, m] = 0;
+                    }
+                    else if (n == 0)
+                    {
+                        solutions[n, m] = 1;
+                    }
+                    else if (n - m < 0)
+                    {
+                        solutions[n, m] = solutions[n, m - 1];
+                    }
+                    else
+                    {
+                        solutions[n, m] = solutions[n - m, m] + solutions[n, m - 1];
+                    }
+                }
+            }
+
+            return solutions[number, number];
         }
     }
 }

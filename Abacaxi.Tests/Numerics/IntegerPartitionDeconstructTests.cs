@@ -117,5 +117,28 @@ namespace Abacaxi.Tests.Numerics
                 Assert.AreEqual(number, sum);
             }
         }
+
+        [TestCase(0, 0)]
+        [TestCase(1, 1)]
+        [TestCase(2, 2)]
+        [TestCase(3, 3)]
+        [TestCase(4, 5)]
+        [TestCase(5, 7)]
+        public void GetCombinationCount_ReturnsValidCount_ForPositiveNumber(int number, int expected)
+        {
+            var result = IntegerPartitionDeconstruct.GetCombinationCount(number);
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestCase(-1, 1)]
+        [TestCase(-2, 2)]
+        [TestCase(-3, 3)]
+        [TestCase(-4, 5)]
+        [TestCase(-5, 7)]
+        public void GetCombinationCount_ReturnsValidCount_ForNegativeNumber(int number, int expected)
+        {
+            var result = IntegerPartitionDeconstruct.GetCombinationCount(number);
+            Assert.AreEqual(expected, result);
+        }
     }
 }
