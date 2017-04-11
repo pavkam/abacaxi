@@ -53,6 +53,7 @@
     <Compile Include="LinkedLists\NodeTests.cs" />
     <Compile Include="LinkedLists\KnottedListTests.cs" />
     <Compile Include="LinkedLists\ListMiddleTests.cs" />
+    <Compile Include="Sequences\ShellSortTests.cs" />
     <Compile Include="Sequences\QuickSortTests.cs" />
     <Compile Include="Sequences\GnomeSortTests.cs" />
     <Compile Include="Sequences\CombSortTests.cs" />
