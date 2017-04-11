@@ -53,6 +53,9 @@
     <Compile Include="LinkedLists\NodeTests.cs" />
     <Compile Include="LinkedLists\KnottedListTests.cs" />
     <Compile Include="LinkedLists\ListMiddleTests.cs" />
+    <Compile Include="Sequences\InsertionSortTests.cs" />
+    <Compile Include="Sequences\BubbleSortTests.cs" />
+    <Compile Include="Sequences\SortingAlgorithmTests.cs" />
     <Compile Include="Sequences\SequenceBlocksTests.cs" />
     <Compile Include="Sequences\OptimalSequenceCycleTests.cs" />
     <Compile Include="Sequences\FindDuplicateElementsTests.cs" />
