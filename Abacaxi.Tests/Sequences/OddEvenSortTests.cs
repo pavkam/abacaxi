@@ -21,11 +21,11 @@ namespace Abacaxi.Tests.Sequences
     using NUnit.Framework;
 
     [TestFixture]
-    public sealed class BubbleSortTests : SortingAlgorithmTests
+    public sealed class OddEvenSortTests : SortingAlgorithmTests
     {
         protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
         {
-            BubbleSort.Sort(array, startIndex, length, comparer);
+            OddEvenSort.Sort(array, startIndex, length, comparer);
         }
 
         protected override bool IsStable => true;

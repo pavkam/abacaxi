@@ -17,8 +17,9 @@ namespace Abacaxi.Tests.Sequences
 {
     using System;
     using System.Collections.Generic;
-    using Abacaxi.Sequences;
+    using System.Linq;
     using NUnit.Framework;
+    using Abacaxi.Sequences;
 
     public abstract class SortingAlgorithmTests
     {
@@ -80,8 +81,9 @@ namespace Abacaxi.Tests.Sequences
             var array = new[] { "B", "A", "a" };
             Sort(array, 0, 3, StringComparer.OrdinalIgnoreCase);
 
-            TestHelper.AssertSequence(array,
-                "A", "a", "B");
+            Assert.IsTrue(StringComparer.OrdinalIgnoreCase.Equals(array[0], "A"));
+            Assert.IsTrue(StringComparer.OrdinalIgnoreCase.Equals(array[1], "A"));
+            Assert.IsTrue(StringComparer.OrdinalIgnoreCase.Equals(array[2], "B"));
         }
 
         [Test]
@@ -161,6 +163,19 @@ namespace Abacaxi.Tests.Sequences
             {
                 Assert.Ignore("This sorting algorithm is not stable.");
             }
+        }
+
+        [Test]
+        public void Sort_WorksAsExpected_OnLargeArray()
+        {
+            var expected = Enumerable.Range(0, 1000).ToArray();
+            var array = new int[expected.Length];
+            Array.Copy(expected, array, array.Length);
+            Array.Reverse(array, 0, array.Length);
+
+            Sort(array, 0, array.Length, Comparer<int>.Default);
+
+            TestHelper.AssertSequence(array, expected);
         }
     }
 }

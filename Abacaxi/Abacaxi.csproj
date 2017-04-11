@@ -38,6 +38,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphs\Connection.cs" />
+    <Compile Include="Sequences\QuickSort.cs" />
+    <Compile Include="Sequences\GnomeSort.cs" />
+    <Compile Include="Sequences\CombSort.cs" />
+    <Compile Include="Sequences\OddEvenSort.cs" />
     <Compile Include="Sequences\CocktailShakerSort.cs" />
     <Compile Include="Sequences\InsertionSort.cs" />
     <Compile Include="Sequences\BubbleSort.cs" />
