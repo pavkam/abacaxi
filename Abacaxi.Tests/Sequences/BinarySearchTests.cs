@@ -133,12 +133,14 @@ namespace Abacaxi.Tests.Sequences
             Assert.AreEqual(expectedIndex, result);
         }
 
+        [Test]
         public void Search_ReturnsMinusOne_ForIncorrectlySortedArray()
         {
             var result = BinarySearch.Search(new int[] { 5, 4, 3, 2, 1 }, 0, 5, 5, Comparer<int>.Default, true);
             Assert.AreEqual(-1, result);
         }
 
+        [Test]
         public void Search_UsesTheComparer()
         {
             var result = BinarySearch.Search(new[] { "A" }, 0, 1, "a", StringComparer.OrdinalIgnoreCase, true);

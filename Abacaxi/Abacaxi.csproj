@@ -60,6 +60,7 @@
     <Compile Include="Sequences\BinarySearch.cs" />
     <Compile Include="Sequences\ReverseSequence.cs" />
     <Compile Include="Sequences\RepeatSequence.cs" />
+    <Compile Include="Sequences\NestedGroups.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Numerics\IntegerPowerOfTwoDeconstruct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
