@@ -68,16 +68,17 @@ namespace Abacaxi.Sequences
                 array[lo] = last;
 
                 var j = lo;
-                while (j < tailIndex)
+                for (;;)
                 {
                     var leftIndex = ((j - lo) << 1) + 1 + lo;
+                    if (leftIndex >= tailIndex)
+                    {
+                        break;
+                    }
+
                     var rightIndex = leftIndex + 1;
-
-                    var canGoLeft = leftIndex < tailIndex && comparer.Compare(array[j], array[leftIndex]) < 0;
-                    var canGoRight = rightIndex < tailIndex && comparer.Compare(array[j], array[rightIndex]) < 0;
-                    var leftIsGreaterThenRight = !canGoRight || comparer.Compare(array[leftIndex], array[rightIndex]) > 0;
-
-                    if (canGoLeft && leftIsGreaterThenRight)
+                    if (comparer.Compare(array[j], array[leftIndex]) < 0 &&
+                        (rightIndex >= tailIndex || comparer.Compare(array[leftIndex], array[rightIndex]) > 0))
                     {
                         var temp = array[leftIndex];
                         array[leftIndex] = array[j];
@@ -85,7 +86,7 @@ namespace Abacaxi.Sequences
 
                         j = leftIndex;
                     }
-                    else if (canGoRight)
+                    else if (rightIndex < tailIndex && comparer.Compare(array[j], array[rightIndex]) < 0)
                     {
                         var temp = array[rightIndex];
                         array[rightIndex] = array[j];
