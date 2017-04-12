@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphs\Connection.cs" />
+    <Compile Include="Sequences\HeapSort.cs" />
     <Compile Include="Sequences\ShellSort.cs" />
     <Compile Include="Sequences\QuickSort.cs" />
     <Compile Include="Sequences\GnomeSort.cs" />
