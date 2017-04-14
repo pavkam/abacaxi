@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphs\Connection.cs" />
+    <Compile Include="Graphs\CompletePath.cs" />
     <Compile Include="Sequences\HeapSort.cs" />
     <Compile Include="Sequences\ShellSort.cs" />
     <Compile Include="Sequences\QuickSort.cs" />
@@ -47,7 +48,6 @@
     <Compile Include="Sequences\CocktailShakerSort.cs" />
     <Compile Include="Sequences\InsertionSort.cs" />
     <Compile Include="Sequences\BubbleSort.cs" />
-    <Compile Include="Sequences\OptimalSequenceCycle.cs" />
     <Compile Include="Graphs\Move.cs" />
     <Compile Include="Graphs\CellCoordinates.cs" />
     <Compile Include="Graphs\NodePredicate.cs" />

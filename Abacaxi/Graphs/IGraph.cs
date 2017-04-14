@@ -23,6 +23,7 @@ namespace Abacaxi.Graphs
     /// </summary>
     /// <typeparam name="TValue">The type of the value stored in the graph nodes.</typeparam>
     /// <typeparam name="TIdentifier">The type of the values used to identify nodes in the graph.</typeparam>
+    /// <typeparam name="TCost">The type of the cost of connections.</typeparam>
     public interface IGraph<TValue, TIdentifier, TCost>
     {
         /// <summary>
@@ -45,6 +46,12 @@ namespace Abacaxi.Graphs
         /// <param name="nodeIdentifier">The unique node identifier.</param>
         /// <returns>The list of connected nodes.</returns>
         IEnumerable<Connection<TIdentifier, TCost>> GetConnections(TIdentifier nodeIdentifier);
+
+        /// <summary>
+        /// Returns all nodes in the graph.
+        /// </summary>
+        /// <returns>A sequence of nodes.</returns>
+        IEnumerable<TIdentifier> GetNodes();
 
         /// <summary>
         /// Adds up two connection costs to form a sum.

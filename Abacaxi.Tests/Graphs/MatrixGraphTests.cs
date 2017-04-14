@@ -311,5 +311,32 @@ namespace Abacaxi.Tests.Graphs
             var to = new CellCoordinates(tx, ty);
             Assert.IsTrue(array.EvaluatePotentialConnectionCost(from, to) == expected);
         }
+
+        [Test]
+        public void GetNodes_ReturnsNothing_ForEmptyMatrix()
+        {
+            var array = new int[,] { { } };
+            var graph = new MatrixGraph<int>(array);
+
+            TestHelper.AssertSequence(graph.GetNodes()); 
+        }
+
+        [Test]
+        public void GetNodes_ReturnsAllCells_InMatrix()
+        {
+            var array = new int[,] 
+            { 
+                { 1, 3 }, 
+                { 2, 4 }
+            };
+            var graph = new MatrixGraph<int>(array);
+
+            TestHelper.AssertSequence(
+                graph.GetNodes(),
+                new CellCoordinates(0, 0),
+                new CellCoordinates(0, 1),
+                new CellCoordinates(1, 0),
+                new CellCoordinates(1, 1));
+        }
     }
 }

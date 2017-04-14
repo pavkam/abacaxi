@@ -79,6 +79,21 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
+        /// Returns all cells in the graph.
+        /// </summary>
+        /// <returns>A sequence of cells.</returns>
+        public IEnumerable<CellCoordinates> GetNodes()
+        {
+            for (var x = 0; x < ColumnCount; x++)
+            {
+                for (var y = 0; y < RowCount; y++)
+                {
+                    yield return new CellCoordinates(x, y);
+                }
+            }
+        }
+
+        /// <summary>
         /// Returns a list of all nodes connected to the node identified by the <paramref name="cellCoordinates"/> parameter.
         /// </summary>
         /// <param name="cellCoordinates">The cell coordinates.</param>

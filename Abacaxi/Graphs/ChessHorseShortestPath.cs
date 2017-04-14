@@ -50,6 +50,11 @@ namespace Abacaxi.Graphs
                 throw new NotSupportedException();
             }
 
+            public IEnumerable<CellCoordinates> GetNodes()
+            {
+                throw new NotSupportedException();
+            }
+
             public IEnumerable<Connection<CellCoordinates, int>> GetConnections(CellCoordinates cellCoordinates)
             {
                 Validate.ArgumentLessThan(nameof(cellCoordinates.X), cellCoordinates.X, _columns);
