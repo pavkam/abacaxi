@@ -73,7 +73,7 @@ namespace Abacaxi.Sequences
         public static IEnumerable<KeyValuePair<int, int>> Find(IEnumerable<int> sequence, int minInSequence, int maxInSequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
-            Validate.ArgumentGreaterOrEqualTo(nameof(maxInSequence), maxInSequence, minInSequence);
+            Validate.ArgumentGreaterThanOrEqualTo(nameof(maxInSequence), maxInSequence, minInSequence);
 
             var appearances = new int[maxInSequence - minInSequence + 1];
             foreach(var item in sequence)

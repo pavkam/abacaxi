@@ -38,7 +38,7 @@ namespace Abacaxi.Sequences
             Validate.ArgumentNotNull(nameof(comparer), comparer);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(startIndex), startIndex);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(length), length);
-            Validate.ArgumentLessThanOrEqual($"{nameof(startIndex)} + {nameof(length)}", startIndex + length, array.Length);
+            Validate.ArgumentLessThanOrEqualTo($"{nameof(startIndex)} + {nameof(length)}", startIndex + length, array.Length);
 
             var i = startIndex;
             while (i < startIndex + length - 1)

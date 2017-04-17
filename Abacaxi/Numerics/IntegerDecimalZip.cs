@@ -49,7 +49,7 @@ namespace Abacaxi.Numerics
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(x), x);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(y), y);
-            Validate.ArgumentGreaterThanOne(nameof(@base), @base);
+            Validate.ArgumentGreaterThanOrEqualTo(nameof(@base), @base, 2);
 
             var result = -1;
             var power = 1;

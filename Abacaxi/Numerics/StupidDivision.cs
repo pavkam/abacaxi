@@ -23,6 +23,13 @@ namespace Abacaxi.Numerics
     /// </summary>
     public static class StupidDivision
     {
+        /// <summary>
+        /// Divides <paramref name="number"/> by <paramref name="divisor"/>.
+        /// </summary>
+        /// <param name="number">The number to divide.</param>
+        /// <param name="divisor">The divisor.</param>
+        /// <returns>The result of division.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="divisor"/> is <c>0</c>.</exception>
         public static int Divide(int number, int divisor)
         {
             Validate.ArgumentDifferentThanZero(nameof(divisor), divisor);

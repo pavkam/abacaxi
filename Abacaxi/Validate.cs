@@ -17,15 +17,24 @@ namespace Abacaxi
 {
     using System;
     using System.Diagnostics;
+    using System.Collections.Generic;
 
     internal static class Validate
     {
-        public static void ArgumentDifferentThanZero(string argumentName, int value)
+        public static void ArgumentDifferentThan(string argumentName, int value, int bound)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
 
-            if (value == 0)
-                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be different from 0.");
+            if (value == bound)
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be different from {bound}.");
+        }
+
+        public static void ArgumentGreaterThan(string argumentName, int value, int bound)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value <= bound)
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than {bound}.");
         }
 
         public static void ArgumentLessThan(string argumentName, int value, int bound)
@@ -36,7 +45,7 @@ namespace Abacaxi
                 throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be less than {bound}.");
         }
 
-        public static void ArgumentLessThanOrEqual(string argumentName, int value, int bound)
+        public static void ArgumentLessThanOrEqualTo(string argumentName, int value, int bound)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
 
@@ -44,7 +53,7 @@ namespace Abacaxi
                 throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be less than or equal to {bound}.");
         }
 
-        public static void ArgumentGreaterOrEqualTo(string argumentName, int value, int bound)
+        public static void ArgumentGreaterThanOrEqualTo(string argumentName, int value, int bound)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
 
@@ -52,28 +61,21 @@ namespace Abacaxi
                 throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than or equal to {bound}.");
         }
 
+
+
+        public static void ArgumentDifferentThanZero(string argumentName, int value)
+        {
+            ArgumentDifferentThan(argumentName, value, 0);
+        }
+
         public static void ArgumentGreaterThanOrEqualToZero(string argumentName, int value)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
-
-            if (value < 0)
-                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater or equal to zero.");
+            ArgumentGreaterThanOrEqualTo(argumentName, value, 0);
         }
 
         public static void ArgumentGreaterThanZero(string argumentName, int value)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
-
-            if (value < 1)
-                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than zero.");
-        }
-
-        public static void ArgumentGreaterThanOne(string argumentName, int value)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
-
-            if (value < 2)
-                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than one.");
+            ArgumentGreaterThan(argumentName, value, 0);
         }
 
         public static void ArgumentNotNull(string argumentName, object value)
@@ -84,24 +86,32 @@ namespace Abacaxi
                 throw new ArgumentNullException(argumentName, $"Argument {argumentName} must not be null.");
         }
 
-        public static void ArrayNotEmpty<T>(string argumentName, T[] array)
+        public static void ArgumentNotEmpty<T>(string argumentName, IEnumerable<T> sequence)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
 
-            if (array == null)
-                throw new ArgumentNullException(argumentName, $"Array argument {argumentName} must not be null.");
-            if (array.Length == 0)
-                throw new ArgumentException($"Array argument {argumentName} must not be empty.", argumentName);
-        }
+            ArgumentNotNull(argumentName, sequence);
+            var collection = sequence as ICollection<T>;
+            if (collection != null)
+            {
+                if (collection.Count == 0)
+                    throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
 
-        public static void StringNotEmpty(string argumentName, string array)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+                return;
+            }
 
-            if (array == null)
-                throw new ArgumentNullException(argumentName, $"String argument {argumentName} must not be null.");
-            if (array.Length == 0)
-                throw new ArgumentException($"String argument {argumentName} must not be empty.", argumentName);
+            var @string = sequence as string;
+            if (@string != null)
+            {
+                if (@string.Length == 0)
+                    throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
+
+                return;
+            }
+
+            var enumerator = sequence.GetEnumerator();
+            if (!enumerator.MoveNext())
+                throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
         }
     }
 }

@@ -37,6 +37,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Containers\BitSetTests.cs" />
     <Compile Include="Graphs\ConnectionTests.cs" />
     <Compile Include="Graphs\IntegerSequenceGraph.cs" />
     <Compile Include="Graphs\MoveTests.cs" />
