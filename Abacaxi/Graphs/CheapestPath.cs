@@ -15,6 +15,7 @@
 
 namespace Abacaxi.Graphs
 {
+    using Containers;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -73,7 +74,7 @@ namespace Abacaxi.Graphs
             };
 
             var visitedNodes = new Dictionary<TIdentifier, Mark<TIdentifier, TCost>>();
-            var nodesToVisitNext = new SortedSet<Mark<TIdentifier, TCost>>(Comparer<Mark<TIdentifier, TCost>>.Create(comparison));
+            var nodesToVisitNext = new Heap<Mark<TIdentifier, TCost>>(Comparer<Mark<TIdentifier, TCost>>.Create(comparison));
 
             var startingMark = new Mark<TIdentifier, TCost>()
             {
@@ -91,8 +92,7 @@ namespace Abacaxi.Graphs
 
             while (nodesToVisitNext.Count > 0)
             {
-                var visitedMark = nodesToVisitNext.Min;
-                nodesToVisitNext.Remove(visitedMark);
+                var visitedMark = nodesToVisitNext.RemoveTop();
 
                 if (pathWasFound && graph.CompareConnectionCosts(cheapestCostFoundSoFar, visitedMark.CostFromStart) < 0)
                 {

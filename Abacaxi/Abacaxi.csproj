@@ -37,6 +37,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Containers\Heap.cs" />
     <Compile Include="Containers\BitSet.cs" />
     <Compile Include="Graphs\Connection.cs" />
     <Compile Include="Graphs\CompletePath.cs" />
