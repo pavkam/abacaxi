@@ -16,6 +16,8 @@
 namespace Abacaxi.Sequences
 {
     using System;
+    using System.Linq;
+    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
@@ -32,22 +34,74 @@ namespace Abacaxi.Sequences
         /// <param name="aggregateFunc">The aggregate function which sums elements.</param>
         /// <param name="comparer">The comparer.</param>
         /// <returns>An array of elements with the highest sum.</returns>
-        public static T[] FindBiggestSumOfNumberOfElements<T>(T[] sequence, int count, Func<T, T, T> aggregateFunc, IComparer<T> comparer)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregateFunc"/> or <paramref name="comparer"/> are null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="count"/> is greater than the number of elements in <paramref name="sequence"/>.</exception>
+        public static T[] FindBiggestSumOfNumberOfElements<T>(IEnumerable<T> sequence, int count, Func<T, T, T> aggregateFunc, IComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(aggregateFunc), aggregateFunc);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
             Validate.ArgumentGreaterThanOrEqualTo(nameof(count), count, 1);
-            Validate.ArgumentLessThanOrEqualTo(nameof(count), count, sequence.Length);
 
-            var array = new T[sequence.Length];
-            Array.Copy(sequence, array, array.Length);
+            var array = sequence.ToArray();
+            Validate.ArgumentLessThanOrEqualTo(nameof(count), count, array.Length);
+
             QuickSort.Sort(array, 0, array.Length, comparer);
 
             var result = new T[count];
             Array.Copy(array, array.Length - count, result, 0, count);
 
             return result; 
+        }
+
+        /// <summary>
+        /// Determines whether the sequence contains two elements that aggregate to a given <paramref name="aggregate"/> value.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to check.</param>
+        /// <param name="aggregate">The aggregate value to search for..</param>
+        /// <param name="aggregateFunc">The function that aggregates two values.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns>
+        ///   <c>true</c> if the <paramref name="sequence"/> contains two elements that aggregate; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregateFunc"/> or <paramref name="comparer"/> are null.</exception>
+        public static bool ContainsTwoElementsThatAggregateTo<T>(IEnumerable<T> sequence, T aggregate, Func<T, T, T> aggregateFunc, IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(aggregateFunc), aggregateFunc);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var array = sequence.ToArray();
+            if (array.Length == 0)
+            {
+                return false;
+            }
+
+            QuickSort.Sort(array, 0, array.Length, comparer);
+            var i = 0;
+            var j = array.Length - 1;
+            while (i < j)
+            {
+                var a = aggregateFunc(array[i], array[j]);
+                var cr = comparer.Compare(a, aggregate);
+
+                if (cr == 0)
+                {
+                    return true;
+                }
+                else if (cr > 0)
+                {
+                    j--;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+
+
+            return false;
         }
     }
 }

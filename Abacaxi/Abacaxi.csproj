@@ -42,10 +42,11 @@
     <Compile Include="Graphs\Connection.cs" />
     <Compile Include="Graphs\CompletePath.cs" />
     <Compile Include="Numerics\StupidDivision.cs" />
+    <Compile Include="Sequences\MergeSort.cs" />
     <Compile Include="Sequences\HeapSort.cs" />
     <Compile Include="Sequences\InterleaveSequences.cs" />
     <Compile Include="Sequences\SequenceElements.cs" />
-    <Compile Include="Sequences\ShellSort.cs" />
+    <Compile Include="ShellSort.cs" />
     <Compile Include="Sequences\QuickSort.cs" />
     <Compile Include="Sequences\GnomeSort.cs" />
     <Compile Include="Sequences\CombSort.cs" />

@@ -79,5 +79,58 @@ namespace Abacaxi.Tests.Sequences
                 SequenceElements.FindBiggestSumOfNumberOfElements(new int[] { 100, 200, 1, 50, 70, 188 }, 3, StdAgg, Comparer<int>.Default),
                 100, 188, 200);
         }
+
+        [Test]
+        public void ContainsTwoElementsThatAggregateTo_ThrowsException_IfSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.ContainsTwoElementsThatAggregateTo((int[])null, 1, StdAgg, Comparer<int>.Default));
+        }
+
+        [Test]
+        public void ContainsTwoElementsThatAggregateTo_ThrowsException_IfAggregatorIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.ContainsTwoElementsThatAggregateTo(new int[] { 1 }, 1, null, Comparer<int>.Default));
+        }
+
+        [Test]
+        public void ContainsTwoElementsThatAggregateTo_ThrowsException_IfComparerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.ContainsTwoElementsThatAggregateTo(new int[] { 1 }, 1, StdAgg, null));
+        }
+
+        [Test]
+        public void ContainsTwoElementsThatAggregateTo_ReturnsFalse_ForEmptySequence()
+        {
+            var result = SequenceElements.ContainsTwoElementsThatAggregateTo(new int[] { }, 3, StdAgg, Comparer<int>.Default);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ContainsTwoElementsThatAggregateTo_ReturnsTrue_ForTwoElements()
+        {
+            var result = SequenceElements.ContainsTwoElementsThatAggregateTo(new int[] { 1, 0 }, 1, StdAgg, Comparer<int>.Default);
+
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ContainsTwoElementsThatAggregateTo_ReturnsFalse_IsSumImpossible_ForFiveElements()
+        {
+            var result = SequenceElements.ContainsTwoElementsThatAggregateTo(new int[] { 1, 2, 3, 4, 5 }, 10, StdAgg, Comparer<int>.Default);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ContainsTwoElementsThatAggregateTo_ReturnsTrue_ForLongSequence()
+        {
+            var result = SequenceElements.ContainsTwoElementsThatAggregateTo(new int[] { 1, 10, 2, 8, 2, 2, 3, 4, 19, 6 }, 29, StdAgg, Comparer<int>.Default);
+
+            Assert.IsTrue(result);
+        }
     }
 }
