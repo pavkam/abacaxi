@@ -58,6 +58,7 @@
     <Compile Include="LinkedLists\KnottedListTests.cs" />
     <Compile Include="LinkedLists\ListMiddleTests.cs" />
     <Compile Include="Sequences\HeapSortTests.cs" />
+    <Compile Include="Sequences\InterleaveSequencesTests.cs" />
     <Compile Include="Sequences\ShellSortTests.cs" />
     <Compile Include="Sequences\QuickSortTests.cs" />
     <Compile Include="Sequences\GnomeSortTests.cs" />

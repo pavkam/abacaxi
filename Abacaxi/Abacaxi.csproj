@@ -43,6 +43,7 @@
     <Compile Include="Graphs\CompletePath.cs" />
     <Compile Include="Numerics\StupidDivision.cs" />
     <Compile Include="Sequences\HeapSort.cs" />
+    <Compile Include="Sequences\InterleaveSequences.cs" />
     <Compile Include="Sequences\ShellSort.cs" />
     <Compile Include="Sequences\QuickSort.cs" />
     <Compile Include="Sequences\GnomeSort.cs" />
