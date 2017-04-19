@@ -165,8 +165,13 @@ namespace Abacaxi.Sequences
         }
 
 
-        private static bool FindPartitionsEqualByAggregate<T>(T[] array, int index, T[] aggregates,
-            Func<T, T, T> aggregateFunc, IComparer<T> comparer, List<KeyValuePair<int, T>> result)
+        private static bool FindPartitionsEqualByAggregate<T>(
+            T[] array, 
+            int index, 
+            T[] aggregates,
+            Func<T, T, T> aggregateFunc,
+            IComparer<T> comparer, 
+            List<KeyValuePair<int, T>> result)
         {
             if (index == array.Length)
             {
