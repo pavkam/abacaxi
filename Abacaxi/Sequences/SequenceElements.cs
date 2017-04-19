@@ -103,5 +103,60 @@ namespace Abacaxi.Sequences
 
             return false;
         }
+
+        /// <summary>
+        /// Finds all the sub-sequences of <paramref name="sequence">/ whose aggreagate is provided. 
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
+        /// <param name="sequence">The sequence of elements.</param>
+        /// <param name="aggregate">The aggregate to search for.</param>
+        /// <param name="aggregateFunc">The aggregate function which sums elements.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns>An array of elements with the highest sum.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregateFunc"/>, <paramref name="disaggregateFunc"/> or <paramref name="comparer"/> are null.</exception>
+        public static IEnumerable<T[]> FindAllSequencesThatAggregateTo<T>(IEnumerable<T> sequence, T aggregate, 
+            Func<T, T, T> aggregateFunc, Func<T, T, T> disaggregateFunc, IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(aggregateFunc), aggregateFunc);
+            Validate.ArgumentNotNull(nameof(disaggregateFunc), disaggregateFunc);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var queue = new Queue<T>();
+            T currentAgg = default(T);
+            var isFirst = true;
+
+            foreach (var i in sequence)
+            {
+                queue.Enqueue(i);
+                if (isFirst)
+                {
+                    isFirst = false;
+                    currentAgg = i;
+                }
+                else
+                {
+                    currentAgg = aggregateFunc(currentAgg, i);
+                }
+
+                for(;;)
+                {
+                    var comparison = comparer.Compare(currentAgg, aggregate);
+                    if (comparison == 0)
+                    {
+                        yield return queue.ToArray();
+                        break;
+                    }
+                    else if (comparison > 0)
+                    {
+                        currentAgg = disaggregateFunc(currentAgg, queue.Dequeue());
+                    }
+                    else
+                    {
+                        break;
+                    }
+                };
+            }
+        }
     }
 }

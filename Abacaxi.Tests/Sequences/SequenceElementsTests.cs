@@ -16,6 +16,7 @@
 namespace Abacaxi.Tests.Sequences
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using Abacaxi.Sequences;
     using NUnit.Framework;
@@ -26,6 +27,11 @@ namespace Abacaxi.Tests.Sequences
         private int StdAgg(int a, int b)
         {
             return a + b;
+        }
+
+        private int StdDisagg(int a, int b)
+        {
+            return a - b;
         }
 
         [Test]
@@ -131,6 +137,90 @@ namespace Abacaxi.Tests.Sequences
             var result = SequenceElements.ContainsTwoElementsThatAggregateTo(new int[] { 1, 10, 2, 8, 2, 2, 3, 4, 19, 6 }, 29, StdAgg, Comparer<int>.Default);
 
             Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ThrowsException_IfSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.FindAllSequencesThatAggregateTo((int[])null, 1, StdAgg, StdDisagg, Comparer<int>.Default).ToArray());
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ThrowsException_IfAggregatorIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.FindAllSequencesThatAggregateTo(new int[] { 1 }, 1, null, StdDisagg, Comparer<int>.Default).ToArray());
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ThrowsException_IfDisaggregatorIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.FindAllSequencesThatAggregateTo(new int[] { 1 }, 1, StdAgg, null, Comparer<int>.Default).ToArray());
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ThrowsException_IfComparerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.FindAllSequencesThatAggregateTo(new int[] { 1 }, 1, StdAgg, StdDisagg, null).ToArray());
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ReturnsNothing_ForEmptySequence()
+        {
+            var array = new int[] { };
+            TestHelper.AssertSequence(
+                SequenceElements.FindAllSequencesThatAggregateTo(array, 1, StdAgg, StdDisagg, Comparer<int>.Default)
+                );
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ReturnsSingleElement_IfAggregates()
+        {
+            var array = new int[] { 1 };
+            TestHelper.AssertSequence(
+                SequenceElements.FindAllSequencesThatAggregateTo(array, 1, StdAgg, StdDisagg, Comparer<int>.Default),
+                new[] { 1 });
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ReturnsAllSequence_IfAggregates()
+        {
+            var array = new int[] { 1, 2, 3, 4, 5, 6 };
+            TestHelper.AssertSequence(
+                SequenceElements.FindAllSequencesThatAggregateTo(array, 21, StdAgg, StdDisagg, Comparer<int>.Default),
+                new[] { 1, 2, 3, 4, 5, 6 });
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ReturnsNothing_IfDoesNotAggregate()
+        {
+            var array = new int[] { 1, 2, 3, 4, 5, 6 };
+            TestHelper.AssertSequence(
+                SequenceElements.FindAllSequencesThatAggregateTo(array, 8, StdAgg, StdDisagg, Comparer<int>.Default));
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ReturnsTwoSequences_IfAggregates()
+        {
+            var array = new int[] { 1, 2, 3, 4, 5, 6 };
+            TestHelper.AssertSequence(
+                SequenceElements.FindAllSequencesThatAggregateTo(array, 6, StdAgg, StdDisagg, Comparer<int>.Default),
+                new[] { 1, 2, 3 },
+                new[] { 6 });
+        }
+
+        [Test]
+        public void FindAllSequencesThatAggregateTo_ReturnsAll_ForNeutrals()
+        {
+            var array = new int[] { 1, 0, 0 };
+            TestHelper.AssertSequence(
+                SequenceElements.FindAllSequencesThatAggregateTo(array, 1, StdAgg, StdDisagg, Comparer<int>.Default),
+                new[] { 1 },
+                new[] { 1, 0 },
+                new[] { 1, 0, 0 });
         }
     }
 }
