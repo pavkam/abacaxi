@@ -222,5 +222,89 @@ namespace Abacaxi.Tests.Sequences
                 new[] { 1, 0 },
                 new[] { 1, 0, 0 });
         }
+
+
+
+
+
+
+
+
+
+        [Test]
+        public void FindPartitionsEqualByAggregate_ThrowsException_IfSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.FindPartitionsEqualByAggregate((int[])null, 1, StdAgg, Comparer<int>.Default).ToArray());
+        }
+
+        [Test]
+        public void FindPartitionsEqualByAggregate_ThrowsException_IfAggregatorIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.FindPartitionsEqualByAggregate(new int[] { 1 }, 1, null, Comparer<int>.Default).ToArray());
+        }
+
+        [Test]
+        public void FindPartitionsEqualByAggregate_ThrowsException_IfComparerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceElements.FindPartitionsEqualByAggregate(new int[] { 1 }, 1, StdAgg, null).ToArray());
+        }
+
+        [Test]
+        public void FindPartitionsEqualByAggregate_ThrowsException_IsCountOfPartitionsLessThanOne()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                SequenceElements.FindPartitionsEqualByAggregate(new int[] { 1 }, 0, StdAgg, Comparer<int>.Default).ToArray());
+        }
+
+        [Test]
+        public void FindPartitionsEqualByAggregate_ReturnsNothing_ForEmptySequence()
+        {
+            var array = new int[] { };
+            TestHelper.AssertSequence(
+                SequenceElements.FindPartitionsEqualByAggregate(array, 1, StdAgg, Comparer<int>.Default)
+                );
+        }
+
+        [Test]
+        public void FindPartitionsEqualByAggregate_ReturnsEverything_IfOnlyOnePartition()
+        {
+            var array = new int[] { 1, 2, 3, 4, 5 };
+            TestHelper.AssertSequence(
+                SequenceElements.FindPartitionsEqualByAggregate(array, 1, StdAgg, Comparer<int>.Default),
+                new [] { 1, 2, 3, 4, 5 } );
+        }
+
+        [Test]
+        public void FindPartitionsEqualByAggregate_ReturnsTwoPartitions_IfPossible()
+        {
+            var array = new int[] { 2, 1, 3, 2 };
+            TestHelper.AssertSequence(
+                SequenceElements.FindPartitionsEqualByAggregate(array, 2, StdAgg, Comparer<int>.Default),
+                new[] { 2, 2 },
+                new[] { 1, 3 });
+        }
+
+        [Test]
+        public void FindPartitionsEqualByAggregate_ReturnsThreePartitions_IfPossible()
+        {
+            var array = new int[] { 2, 1, 3, 2, 4 };
+            TestHelper.AssertSequence(
+                SequenceElements.FindPartitionsEqualByAggregate(array, 3, StdAgg, Comparer<int>.Default),
+                new[] { 2, 2 },
+                new[] { 1, 3 },
+                new[] { 4 });
+        }
+
+        [Test]
+        public void FindPartitionsEqualByAggregate_ReturnsNothing_IfThreePartitionsNotPossible()
+        {
+            var array = new int[] { 2, 1, 3, 2, 5 };
+            TestHelper.AssertSequence(
+                SequenceElements.FindPartitionsEqualByAggregate(array, 3, StdAgg, Comparer<int>.Default)
+                );
+        }
     }
 }
