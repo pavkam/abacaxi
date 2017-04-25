@@ -46,7 +46,7 @@ namespace Abacaxi.Sequences
             var array = sequence.ToArray();
             Validate.ArgumentLessThanOrEqualTo(nameof(count), count, array.Length);
 
-            QuickSort.Sort(array, 0, array.Length, comparer);
+            Sequence.QuickSort(array, 0, array.Length, comparer);
 
             var result = new T[count];
             Array.Copy(array, array.Length - count, result, 0, count);
@@ -78,7 +78,7 @@ namespace Abacaxi.Sequences
                 return false;
             }
 
-            QuickSort.Sort(array, 0, array.Length, comparer);
+            Sequence.QuickSort(array, 0, array.Length, comparer);
             var i = 0;
             var j = array.Length - 1;
             while (i < j)
@@ -105,12 +105,13 @@ namespace Abacaxi.Sequences
         }
 
         /// <summary>
-        /// Finds all the sub-sequences of <paramref name="sequence">/ whose aggreagate is provided. 
+        /// Finds all the sub-sequences of <paramref name="sequence"/> whose aggregate is provided. 
         /// </summary>
         /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
         /// <param name="sequence">The sequence of elements.</param>
         /// <param name="aggregate">The aggregate to search for.</param>
         /// <param name="aggregateFunc">The aggregate function which sums elements.</param>
+        /// <param name="disaggregateFunc">The dis-aggregator.</param>
         /// <param name="comparer">The comparer.</param>
         /// <returns>An array of elements with the highest sum.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregateFunc"/>, <paramref name="disaggregateFunc"/> or <paramref name="comparer"/> are null.</exception>

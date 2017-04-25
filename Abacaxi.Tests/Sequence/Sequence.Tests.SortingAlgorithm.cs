@@ -13,15 +13,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Sequences
+namespace Abacaxi.Tests.Sequence
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using NUnit.Framework;
-    using Abacaxi.Sequences;
 
-    public abstract class SortingAlgorithmTests
+    public abstract class SequenceSortingAlgorithmTests
     {
         protected abstract void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer);
 
@@ -31,7 +30,7 @@ namespace Abacaxi.Tests.Sequences
         public void Sort_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Sort((int[])null, 1, 1, Comparer<int>.Default));
+                Sort(null, 1, 1, Comparer<int>.Default));
         }
         
         [Test]
@@ -66,7 +65,7 @@ namespace Abacaxi.Tests.Sequences
         public void Sort_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Sort(new[] { 1 }, 1, 1, null));
+                Sort(new[] { 1 }, 0, 1, null));
         }
 
         [Test]
@@ -89,7 +88,7 @@ namespace Abacaxi.Tests.Sequences
         [Test]
         public void Sort_DoesNothing_OnOneElementArray()
         {
-            var array = new int[] { 1 };
+            var array = new[] { 1 };
 
             Sort(array, 0, 1, Comparer<int>.Default);
 
@@ -101,7 +100,7 @@ namespace Abacaxi.Tests.Sequences
         [Test]
         public void Sort_SortsTheArray_ForTwoElementArray()
         {
-            var array = new int[] { 2, 1 };
+            var array = new[] { 2, 1 };
             Sort(array, 0, 2, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,
@@ -111,7 +110,7 @@ namespace Abacaxi.Tests.Sequences
         [Test]
         public void Sort_SortsTheFirstTwoElements_ForThreeElementArray()
         {
-            var array = new int[] { 3, 2, 1 };
+            var array = new[] { 3, 2, 1 };
             Sort(array, 0, 2, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,
@@ -121,7 +120,7 @@ namespace Abacaxi.Tests.Sequences
         [Test]
         public void Sort_DoesNothing_ForAlreadySortedArray()
         {
-            var array = new int[] { 1, 2, 3 };
+            var array = new[] { 1, 2, 3 };
             Sort(array, 0, 3, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,
@@ -131,7 +130,7 @@ namespace Abacaxi.Tests.Sequences
         [Test]
         public void Sort_SortsTheArray_ForTenElementArray()
         {
-            var array = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+            var array = new[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
             Sort(array, 0, 10, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,
@@ -141,7 +140,7 @@ namespace Abacaxi.Tests.Sequences
         [Test]
         public void Sort_SortsHalfTheArray_ForTenElementArray()
         {
-            var array = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+            var array = new[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
             Sort(array, 5, 5, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,

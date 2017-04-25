@@ -13,64 +13,63 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Sequences
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+namespace Abacaxi.Tests.Sequence
 {
     using System;
     using System.Linq;
-    using Abacaxi.Sequences;
     using NUnit.Framework;
     using System.Collections.Generic;
 
     [TestFixture]
-    public class InterleaveSequencesTests
+    public class SequenceInterleaveTests
     {
         [Test]
         public void Interleave_ThrowsException_WhenComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                InterleaveSequences.Interleave(null, new int[] { }).ToArray());
+                Abacaxi.Sequence.Interleave(null, new int[] { }).ToArray());
+        }
+
+        [Test]
+        public void Interleave_ThrowsException_WhenSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                Abacaxi.Sequence.Interleave(Comparer<int>.Default, null, new int[] { }).ToArray());
         }
 
         [Test]
         public void Interleave_ThrowsException_WhenParamsIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                InterleaveSequences.Interleave(Comparer<int>.Default, null).ToArray());
+                Abacaxi.Sequence.Interleave(Comparer<int>.Default, new int[] { }, null).ToArray());
         }
-
-        [Test]
-        public void Interleave_ThrowsException_WhenParamsIsEmpty()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                InterleaveSequences.Interleave(Comparer<int>.Default).ToArray());
-        }
-
 
         [Test]
         public void Interleave_ThrowsException_WhenStreamIsUnsorted()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                InterleaveSequences.Interleave(Comparer<int>.Default, new int[] { 10, 11 }).ToArray());
+                Abacaxi.Sequence.Interleave(Comparer<int>.Default, new[] { 10, 11 }).ToArray());
         }
 
         [Test]
         public void Interleave_ReturnsOriginalSequence_IfOnlyOne()
         {
-            TestHelper.AssertSequence(InterleaveSequences.Interleave(Comparer<int>.Default, new[] { 10, 9, 8, 7 }),
+            TestHelper.AssertSequence(Abacaxi.Sequence.Interleave(Comparer<int>.Default, new[] { 10, 9, 8, 7 }),
                 10, 9, 8, 7);
         }
 
         [Test]
         public void Interleave_ReturnsNothingIfSequencesAreEmpty()
         {
-            TestHelper.AssertSequence(InterleaveSequences.Interleave(Comparer<int>.Default, new int[] { }, new int[] { }, new int[] { }));
+            TestHelper.AssertSequence(Abacaxi.Sequence.Interleave(Comparer<int>.Default, new int[] { }, new int[] { }, new int[] { }));
         }
 
         [Test]
         public void Interleave_InterleavesThreeStreams()
         {
             TestHelper.AssertSequence(
-                InterleaveSequences.Interleave(Comparer<int>.Default, new int[] { 20, 17 }, new int[] { 19, 16, 14 }, new int[] { 18, 15, 13, 12 }),
+                Abacaxi.Sequence.Interleave(Comparer<int>.Default, new[] { 20, 17 }, new[] { 19, 16, 14 }, new[] { 18, 15, 13, 12 }),
                 20, 19, 18, 17, 16, 15, 14, 13, 12);
         }
     }

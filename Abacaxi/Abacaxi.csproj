@@ -37,6 +37,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sequence.cs" />
     <Compile Include="Containers\Heap.cs" />
     <Compile Include="Containers\BitSet.cs" />
     <Compile Include="Graphs\Dfs.cs" />
@@ -52,18 +53,7 @@
     <Compile Include="Graphs\Edge.cs" />
     <Compile Include="Graphs\IWeightedGraph.cs" />
     <Compile Include="Numerics\StupidDivision.cs" />
-    <Compile Include="Sequences\MergeSort.cs" />
-    <Compile Include="Sequences\HeapSort.cs" />
-    <Compile Include="Sequences\InterleaveSequences.cs" />
     <Compile Include="Sequences\SequenceElements.cs" />
-    <Compile Include="Sequences\ShellSort.cs" />
-    <Compile Include="Sequences\QuickSort.cs" />
-    <Compile Include="Sequences\GnomeSort.cs" />
-    <Compile Include="Sequences\CombSort.cs" />
-    <Compile Include="Sequences\OddEvenSort.cs" />
-    <Compile Include="Sequences\CocktailShakerSort.cs" />
-    <Compile Include="Sequences\InsertionSort.cs" />
-    <Compile Include="Sequences\BubbleSort.cs" />
     <Compile Include="Graphs\Cell.cs" />
     <Compile Include="Graphs\MazeGraph.cs" />
     <Compile Include="Graphs\IGraph.cs" />
@@ -76,7 +66,6 @@
     <Compile Include="LinkedLists\ListMiddle.cs" />
     <Compile Include="Numerics\LargestPossibleNaturalSummedSequence.cs" />
     <Compile Include="Sequences\FindDuplicateElements.cs" />
-    <Compile Include="Sequences\BinarySearch.cs" />
     <Compile Include="Sequences\ReverseSequence.cs" />
     <Compile Include="Sequences\RepeatSequence.cs" />
     <Compile Include="Sequences\NestedGroups.cs" />

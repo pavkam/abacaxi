@@ -87,7 +87,7 @@ namespace Abacaxi
                 throw new ArgumentNullException(argumentName, $"Argument {argumentName} must not be null.");
         }
 
-        public static void ArgumentNotEmpty<T>(string argumentName, IEnumerable<T> sequence)
+        public static void SequenceArgumentNotEmpty<T>(string argumentName, IEnumerable<T> sequence)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
 
@@ -115,5 +115,15 @@ namespace Abacaxi
                 throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
         }
 
+        public static void CollectionArgumentsInBounds<T>(string sequenceArgName, ICollection<T> sequence, int startIndex, int length)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(sequenceArgName), $"Argument {nameof(sequenceArgName)} cannot be null or empty.");
+
+            ArgumentNotNull(nameof(sequence), sequence);
+            if (startIndex < 0 || length < 0 || startIndex + length > sequence.Count)
+            {
+                throw new ArgumentOutOfRangeException($"The combination of start index ({startIndex}) and length ({length}) must be less of equal to {sequence.Count}");
+            }
+        }
     }
 }
