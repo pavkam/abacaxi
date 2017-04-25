@@ -18,6 +18,7 @@ namespace Abacaxi
     using System;
     using System.Diagnostics;
     using System.Collections.Generic;
+    using Graphs;
 
     internal static class Validate
     {
@@ -113,5 +114,6 @@ namespace Abacaxi
             if (!enumerator.MoveNext())
                 throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
         }
+
     }
 }

@@ -20,12 +20,12 @@ namespace Abacaxi.Tests.Graphs
     using NUnit.Framework;
 
     [TestFixture]
-    public class MoveTests
+    public class CellTests
     {
         [Test]
         public void X_ReturnsValidValue()
         {
-            var coords = new Move(99, 0);
+            var coords = new Cell(99, 0);
 
             Assert.AreEqual(99, coords.X);
         }
@@ -33,7 +33,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void Y_ReturnsValidValue()
         {
-            var coords = new Move(0, 99);
+            var coords = new Cell(0, 99);
 
             Assert.AreEqual(99, coords.Y);
         }
@@ -41,7 +41,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void ToString_ReturnsValidValue()
         {
-            var coords = new Move(11, 22);
+            var coords = new Cell(11, 22);
 
             Assert.AreEqual($"(11, 22)", coords.ToString());
         }
@@ -49,8 +49,8 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void Equals_ReturnsTrue_ForEqualCoordinates()
         {
-            var c1 = new Move(11, 22);
-            var c2 = new Move(11, 22);
+            var c1 = new Cell(11, 22);
+            var c2 = new Cell(11, 22);
 
             Assert.IsTrue(c1.Equals(c2));
         }
@@ -58,8 +58,8 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void Equals_ReturnsFalse_ForNonEqualCoordinates()
         {
-            var c1 = new Move(10, 22);
-            var c2 = new Move(11, 22);
+            var c1 = new Cell(10, 22);
+            var c2 = new Cell(11, 22);
 
             Assert.IsFalse(c1.Equals(c2));
         }
@@ -67,7 +67,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void Equals_ReturnsFalse_ForNonCoordinateObject()
         {
-            var c1 = new Move(10, 22);
+            var c1 = new Cell(10, 22);
 
             Assert.IsFalse(c1.Equals(this));
         }
@@ -75,7 +75,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void Equals_ReturnsFalse_ForNullObject()
         {
-            var c1 = new Move(10, 22);
+            var c1 = new Cell(10, 22);
 
             Assert.IsFalse(c1.Equals(null));
         }
@@ -84,8 +84,8 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void GetHashcode_ReturnsEqualHashcodes_ForEqualCoordinates()
         {
-            var c1 = new Move(11, 22);
-            var c2 = new Move(11, 22);
+            var c1 = new Cell(11, 22);
+            var c2 = new Cell(11, 22);
 
             Assert.AreEqual(c1.GetHashCode(), c2.GetHashCode());
         }
@@ -93,8 +93,8 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void GetHashcode_ReturnsDifferentHashcodes_ForDifferentCoordinates()
         {
-            var c1 = new Move(10, 22);
-            var c2 = new Move(11, 22);
+            var c1 = new Cell(10, 22);
+            var c2 = new Cell(11, 22);
 
             Assert.AreNotEqual(c1.GetHashCode(), c2.GetHashCode());
         }

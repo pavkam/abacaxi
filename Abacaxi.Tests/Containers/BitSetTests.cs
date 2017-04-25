@@ -257,11 +257,12 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void SymmetricExceptWith_LeavesTheDifferenceFromBoth()
         {
-            var set = new BitSet(10);
-            set.Add(1);
-            set.Add(2);
-            set.Add(3);
-
+            var set = new BitSet(10)
+            {
+                1,
+                2,
+                3
+            };
             set.SymmetricExceptWith(new[] { 1, 2, 4 });
 
             Assert.IsFalse(set.Contains(1));
@@ -304,11 +305,12 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void UnionWith_KeepsElementsFromBothSets()
         {
-            var set = new BitSet(100);
-            set.Add(1);
-            set.Add(2);
-            set.Add(3);
-
+            var set = new BitSet(100)
+            {
+                1,
+                2,
+                3
+            };
             set.UnionWith(new[] { 1, 2, 4 });
 
             Assert.IsTrue(set.Contains(1));

@@ -16,6 +16,7 @@
 namespace Abacaxi.LinkedLists
 {
     using System.Collections.Generic;
+    using System;
 
     /// <summary>
     /// Class implements the simplest way to find a linked list's middle. The idea is to navigate the list with two pointers
@@ -27,7 +28,7 @@ namespace Abacaxi.LinkedLists
         /// <summary>
         /// Find the middle node of a linked list.
         /// </summary>
-        /// <remarks>This method does not check for knotted lists. A knowtted list will force this method to execute indefinitely.</remarks>
+        /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
         /// <typeparam name="T">The type of linked list node.</typeparam>
         /// <param name="head">The linked list head node.</param>
         /// <returns>The middle node; <c>null</c> if the list is empty.</returns>

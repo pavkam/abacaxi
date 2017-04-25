@@ -40,7 +40,7 @@ namespace Abacaxi.LinkedLists
         /// <summary>
         /// Reverses a given linked list using the iterative method.
         /// </summary>
-        /// <remarks>This method does not check for knotted lists. A knowtted list will force this method to execute indefinitely.</remarks>
+        /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
         /// <typeparam name="T">The type of values stored in the linked list.</typeparam>
         /// <param name="head">The head of the linked list.</param>
         /// <returns>The new head of the linked list.</returns>
@@ -66,7 +66,7 @@ namespace Abacaxi.LinkedLists
         /// <summary>
         /// Reverses a given linked list using the recursive method.
         /// </summary>
-        /// <remarks>This method does not check for knotted lists. A knowtted list will force this method to fail.</remarks>
+        /// <remarks>This method does not check for knotted lists. A knotted list will force this method to fail.</remarks>
         /// <typeparam name="T">The type of values stored in the linked list.</typeparam>
         /// <param name="head">The head of the linked list.</param>
         /// <returns>The new head of the linked list.</returns>

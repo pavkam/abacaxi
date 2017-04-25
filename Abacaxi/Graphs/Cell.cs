@@ -20,59 +20,69 @@ namespace Abacaxi.Graphs
     /// <summary>
     /// Defines a 2-D coordinate to be used when manipulating matrices.
     /// </summary>
-    public struct CellCoordinates
+    public struct Cell
     {
         /// <summary>
-        /// The X coordinate in a 2-D matrix.
+        /// Gets the X coordinate.
         /// </summary>
+        /// <value>
+        /// The X coordinate.
+        /// </value>
         public int X { get; private set; }
+
         /// <summary>
-        /// The Y coordinate in a 2-D matrix.
+        /// Gets the Y coordinate.
         /// </summary>
+        /// <value>
+        /// The Y coordinate.
+        /// </value>
         public int Y { get; private set; }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="CellCoordinates"/> struct.
+        /// Initializes a new instance of the <see cref="Cell"/> struct.
         /// </summary>
-        /// <param name="x">The X coordinate of the 2-D matrix.</param>
-        /// <param name="y">The Y coordinate of the 2-D matrix.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when either <paramref name="x"/> or <paramref name="y"/> are less than zero.</exception>
-        public CellCoordinates(int x, int y)
+        /// <param name="x">The X coordinate.</param>
+        /// <param name="y">The Y coordinate.</param>
+        public Cell(int x, int y)
         {
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(x), x);
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(y), y);
 
             X = x;
             Y = y;
         }
 
         /// <summary>
-        /// Checks that current instance of <see cref="CellCoordinates"/> is equal to the given object.
+        /// Determines whether the specified <see cref="Object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The object ot compare to.</param>
-        /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
+        /// <param name="obj">The <see cref="Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is CellCoordinates))
+            if (!(obj is Cell))
                 return false;
 
-            var co = (CellCoordinates)obj;
+            var co = (Cell)obj;
             return co.X == X && co.Y == Y; 
         }
 
         /// <summary>
-        /// Returns the hashcode of this <see cref="CellCoordinates"/> instance.
+        /// Returns a hash code for this instance.
         /// </summary>
-        /// <returns>The hashcode.</returns>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
             return X.GetHashCode() ^ Y.GetHashCode();
         }
 
         /// <summary>
-        /// Returns the string representation of this instance of <see cref="CellCoordinates"/> struct.
+        /// Returns a <see cref="String" /> that represents this instance.
         /// </summary>
-        /// <returns>The string representation.</returns>
+        /// <returns>
+        /// A <see cref="String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return $"({X}, {Y})";

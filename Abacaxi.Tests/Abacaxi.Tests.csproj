@@ -30,25 +30,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.0.5813.39031, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\Abacaxi\packages\NUnit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\Abacaxi\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
-    <Compile Include="Graphs\ConnectionTests.cs" />
-    <Compile Include="Graphs\IntegerSequenceGraph.cs" />
-    <Compile Include="Graphs\MoveTests.cs" />
-    <Compile Include="Graphs\ChessHorseShortestPathTests.cs" />
-    <Compile Include="Graphs\CheapestPathTests.cs" />
-    <Compile Include="Graphs\ShortestPathTests.cs" />
-    <Compile Include="Graphs\MatrixGraphTests.cs" />
+    <Compile Include="Graphs\WeightedEdgeTests.cs" />
+    <Compile Include="Graphs\EdgeTests.cs" />
+    <Compile Include="Graphs\MazeGraphTests.cs" />
     <Compile Include="LinkedLists\ReverseListTests.cs" />
-    <Compile Include="Graphs\FloodFillTests.cs" />
-    <Compile Include="Graphs\CellCoordinatesTests.cs" />
+    <Compile Include="Graphs\CellTests.cs" />
     <Compile Include="Numerics\StupidDivisionTests.cs" />
     <Compile Include="Numerics\LargestPossibleNaturalSummedSequenceTests.cs" />
     <Compile Include="Numerics\IntegerPartitionDeconstructTests.cs" />
@@ -71,7 +65,6 @@
     <Compile Include="Sequences\BubbleSortTests.cs" />
     <Compile Include="Sequences\SortingAlgorithmTests.cs" />
     <Compile Include="Sequences\SequenceBlocksTests.cs" />
-    <Compile Include="Graphs\CompletePathTests.cs" />
     <Compile Include="Sequences\FindDuplicateElementsTests.cs" />
     <Compile Include="Sequences\BinarySearchTests.cs" />
     <Compile Include="Sequences\ReverseSequenceTests.cs" />
@@ -81,9 +74,6 @@
     <Compile Include="Sequences\RepeatSequenceTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +81,9 @@
       <Project>{d17d48c6-b342-4dee-86b2-54f869f2d3a2}</Project>
       <Name>Abacaxi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

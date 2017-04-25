@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Linq;
+
 namespace Abacaxi.Containers
 {
     using System;
@@ -21,14 +23,16 @@ namespace Abacaxi.Containers
     using System.Diagnostics;
 
     /// <summary>
-    /// Class implements an integer set intenrally represented by a bit array. Provides O(1) access times.
+    /// Class implements an integer set internally represented by a bit array. Provides O(1) access times.
     /// </summary>
     public sealed class BitSet : ISet<int>
     {
         private const int BitsPerChunk = sizeof(int) * 8;
 
         private int[] _chunks;
-        private int _max, _min, _count, _ver;
+        private readonly int _max;
+        private readonly int _min;
+        private int _ver;
 
         private void LocateItem(int item, out int chunk, out int mask)
         {
@@ -43,7 +47,7 @@ namespace Abacaxi.Containers
         /// Initializes a new instance of <see cref="BitSet"/> class.
         /// </summary>
         /// <param name="min">The minimum value stored in the set.</param>
-        /// <param name="max">The maxixum value stored in the set.</param>
+        /// <param name="max">The maximum value stored in the set.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="min"/> is greater then <paramref name="max"/>.</exception>
         public BitSet(int min, int max)
         {
@@ -67,7 +71,7 @@ namespace Abacaxi.Containers
         /// <summary>
         /// The count of integers currently stored in the set.
         /// </summary>
-        public int Count => _count;
+        public int Count { get; private set; }
 
         /// <summary>
         /// Always returns <c>false</c>. The <see cref="BitSet"/> is not read-only.
@@ -91,11 +95,10 @@ namespace Abacaxi.Containers
                 return false;
 
             _chunks[chunk] |= mask;
-            _count++;
+            Count++;
             _ver++;
             return true;
         }
-
 
         /// <summary>
         /// Removes all elements in the specified collection from the current set.
@@ -128,7 +131,8 @@ namespace Abacaxi.Containers
             {
                 if (Contains(item))
                 {
-                    int chunk, mask;
+                    int mask;
+                    int chunk;
                     LocateItem(item, out chunk, out mask);
 
                     inner[chunk] |= mask;
@@ -138,7 +142,7 @@ namespace Abacaxi.Containers
 
             _ver++;
             _chunks = inner;
-            _count = count;
+            Count = count;
         }
 
         /// <summary>
@@ -315,15 +319,7 @@ namespace Abacaxi.Containers
                 }
             }
 
-            for (var i = 0; i < copy.Length; i++)
-            {
-                if (copy[i] != 0)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return copy.All(t => t == 0);
         }
 
         /// <summary>
@@ -395,7 +391,7 @@ namespace Abacaxi.Containers
             }
 
             _ver++;
-            _count = 0;
+            Count = 0;
         }
 
         /// <summary>
@@ -424,7 +420,7 @@ namespace Abacaxi.Containers
         /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="array"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the the destination <paramref name="array"/> does not have enough space to hold the contents of the set.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the destination <paramref name="array"/> does not have enough space to hold the contents of the set.</exception>
         public void CopyTo(int[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
@@ -450,23 +446,24 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.
+        /// Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection{T}" />.
         /// </summary>
-        /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+        /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection{T}" />.</param>
         /// <returns>
-        /// true if <paramref name="item" /> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.
+        /// true if <paramref name="item" /> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection{T}" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </returns>
         public bool Remove(int item)
         {
             if (item >= _min && item <= _max)
             {
-                int chunk, mask;
+                int chunk;
+                int mask;
                 LocateItem(item, out chunk, out mask);
 
                 if ((_chunks[chunk] & mask) != 0)
                 {
                     _chunks[chunk] &= ~mask;
-                    _count--;
+                    Count--;
                     _ver++;
                     return true;
                 }
@@ -479,7 +476,7 @@ namespace Abacaxi.Containers
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        /// A <see cref="T:System.Collections.Generic.IEnumerator{T}" /> that can be used to iterate through the collection.
         /// </returns>
         public IEnumerator<int> GetEnumerator()
         {

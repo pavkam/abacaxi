@@ -21,60 +21,29 @@ namespace Abacaxi.Graphs
     /// <summary>
     /// Generic graph interface.
     /// </summary>
-    /// <typeparam name="TValue">The type of the value stored in the graph nodes.</typeparam>
-    /// <typeparam name="TIdentifier">The type of the values used to identify nodes in the graph.</typeparam>
-    /// <typeparam name="TCost">The type of the cost of connections.</typeparam>
-    public interface IGraph<TValue, TIdentifier, TCost>
+    /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
+    public interface IGraph<TVertex>
     {
         /// <summary>
-        /// Gets the value of the node identified by the <paramref name="nodeIdentifier"/> parameter.
+        /// Gets a value indicating whether this graph's edges are directed.
         /// </summary>
-        /// <param name="nodeIdentifier">The unique node identifier.</param>
-        /// <returns>The value of the node.</returns>
-        TValue GetValue(TIdentifier nodeIdentifier);
+        /// <value>
+        ///   <c>true</c> if this graph's edges are directed; otherwise, <c>false</c>.
+        /// </value>
+        bool IsDirected { get; }
 
         /// <summary>
-        /// Sets the value of the node identified by the <paramref name="nodeIdentifier"/> parameter.
+        /// Gets the edges for a given <param name="vertex"/>.
         /// </summary>
-        /// <param name="nodeIdentifier">The unique node identifier.</param>
-        /// <param name="value">The new value of the node.</param>
-        void SetValue(TIdentifier nodeIdentifier, TValue value);
+        /// <param name="node">The vertex.</param>
+        /// <returns>A sequence of edges connected to the given <param name="vertex"/></returns>
+        IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex);
+
 
         /// <summary>
-        /// Returns a list of all nodes connected to the node identified by the <paramref name="nodeIdentifier"/> parameter.
+        /// Gets all vertices in the graph.
         /// </summary>
-        /// <param name="nodeIdentifier">The unique node identifier.</param>
-        /// <returns>The list of connected nodes.</returns>
-        IEnumerable<Connection<TIdentifier, TCost>> GetConnections(TIdentifier nodeIdentifier);
-
-        /// <summary>
-        /// Returns all nodes in the graph.
-        /// </summary>
-        /// <returns>A sequence of nodes.</returns>
-        IEnumerable<TIdentifier> GetNodes();
-
-        /// <summary>
-        /// Adds up two connection costs to form a sum.
-        /// </summary>
-        /// <param name="a">The first cost.</param>
-        /// <param name="b">The second cost.</param>
-        /// <returns>Aggregated cost.</returns>
-        TCost AddConnectionCosts(TCost a, TCost b);
-
-        /// <summary>
-        /// Compares two connection costs.
-        /// </summary>
-        /// <param name="a">The first cost.</param>
-        /// <param name="b">The second cost.</param>
-        /// <returns>Comparison result.</returns>
-        int CompareConnectionCosts(TCost a, TCost b);
-
-        /// <summary>
-        /// Evaluates the potential connection cost between two nodes in the graph.
-        /// </summary>
-        /// <param name="from">The first node.</param>
-        /// <param name="to">The seccond node.</param>
-        /// <returns>The potential connection cost.</returns>
-        TCost EvaluatePotentialConnectionCost(TIdentifier from, TIdentifier to);
+        /// <returns>The sequence of all vertices in the graph.</returns>
+        IEnumerable<TVertex> GetVertices();
     }
 }
