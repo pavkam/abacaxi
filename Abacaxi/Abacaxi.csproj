@@ -66,8 +66,6 @@
     <Compile Include="LinkedLists\ListMiddle.cs" />
     <Compile Include="Numerics\LargestPossibleNaturalSummedSequence.cs" />
     <Compile Include="Sequences\FindDuplicateElements.cs" />
-    <Compile Include="Sequences\ReverseSequence.cs" />
-    <Compile Include="Sequences\RepeatSequence.cs" />
     <Compile Include="Sequences\NestedGroups.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Numerics\IntegerPowerOfTwoDeconstruct.cs" />

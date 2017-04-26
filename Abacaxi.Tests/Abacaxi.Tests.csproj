@@ -67,11 +67,11 @@
     <Compile Include="Sequences\SequenceBlocksTests.cs" />
     <Compile Include="Sequences\FindDuplicateElementsTests.cs" />
     <Compile Include="Sequence\Sequence.Tests.BinarySearch.cs" />
-    <Compile Include="Sequences\ReverseSequenceTests.cs" />
+    <Compile Include="Sequence\Sequence.Tests.Reverse.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Numerics\IntegerDecimalZipTests.cs" />
-    <Compile Include="Sequences\RepeatSequenceTests.cs" />
+    <Compile Include="Sequence\Sequence.Tests.Repeat.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

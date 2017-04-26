@@ -13,53 +13,52 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Sequences
+namespace Abacaxi.Tests.Sequence
 {
     using System;
-    using Abacaxi.Sequences;
     using NUnit.Framework;
 
     [TestFixture]
-    public class RepeatSequenceTests
+    public class SequenceRepeatTests
     {
         [Test]
         public void Repeat_ThrowsException_ForNullString()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                RepeatSequence.Repeat((int[])null, 1));
+                ((int[])null).Repeat(1));
         }
         
         [Test]
         public void Repeat_ThrowsException_ForZeroRepetitions()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                RepeatSequence.Repeat("A", 0));
+                "A".Repeat(0));
         }
 
         [Test]
         public void Repeat_ReturnsNothing_ForEmptyEnumerable()
         {
-            var result = RepeatSequence.Repeat("", 5);
+            var result = "".Repeat(5);
             Assert.AreEqual("", result);
         }
 
         [Test]
         public void Repeat_DoesNothing_ForOneRepetition()
         {
-            var result = RepeatSequence.Repeat("A", 1);
+            var result = "A".Repeat(1);
             Assert.AreEqual("A", result);
         }
 
         [Test]
         public void Repeat_DoublesString_ForTwoRepetition()
         {
-            var result = RepeatSequence.Repeat("A", 2);
+            var result = "A".Repeat(2);
             Assert.AreEqual("AA", result);
         }
 
         public void Repeat_TriplesString_ForThreeRepetition()
         {
-            var result = RepeatSequence.Repeat("A", 3);
+            var result = "A".Repeat(3);
             Assert.AreEqual("AAA", result);
         }
     }

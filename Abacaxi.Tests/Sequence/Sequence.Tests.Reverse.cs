@@ -13,55 +13,54 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Sequences
+namespace Abacaxi.Tests.Sequence
 {
     using System;
-    using Abacaxi.Sequences;
     using NUnit.Framework;
 
     [TestFixture]
-    public class ReverseSequenceTests
+    public class SequenceReverseTests
     {
         [Test]
         public void Reverse_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ReverseSequence.Reverse((int[])null, 1, 1));
+                ((int[])null).Reverse(1, 1));
         }
         
         [Test]
         public void Reverse_ThrowsException_ForNegativeStartIndex()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                ReverseSequence.Reverse(new[] { 1 }, -1, 1));
+                new[] { 1 }.Reverse(-1, 1));
         }
 
         [Test]
         public void Reverse_ThrowsException_ForNegativeLength()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                ReverseSequence.Reverse(new[] { 1 }, 0, -1));
+                new[] { 1 }.Reverse(0, -1));
         }
 
         [Test]
         public void Reverse_ThrowsException_ForOutOfBounds1()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                ReverseSequence.Reverse(new[] { 1 }, 0, 2));
+                new[] { 1 }.Reverse(0, 2));
         }
 
         [Test]
         public void Reverse_ThrowsException_ForOutOfBounds2()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                ReverseSequence.Reverse(new[] { 1 }, 1, 1));
+                new[] { 1 }.Reverse(1, 1));
         }
 
         [Test]
         public void Reverse_DoesNothing_ForZeroLength()
         {
             var array = new int[] { 1, 2 };
-            ReverseSequence.Reverse(array, 1, 0);
+            array.Reverse(1, 0);
 
             Assert.AreEqual(new[] { 1, 2 }, array);
         }
@@ -70,7 +69,7 @@ namespace Abacaxi.Tests.Sequences
         public void Reverse_DoesNothing_ForEmptyArray()
         {
             var array = new int[] { };
-            ReverseSequence.Reverse(array, 0, 0);
+            array.Reverse(0, 0);
 
             Assert.AreEqual(new int[] { }, array);
         }
@@ -79,7 +78,7 @@ namespace Abacaxi.Tests.Sequences
         public void Reverse_Reverses_AnEvenLengthArray()
         {
             var array = new int[] { 1, 2, 3, 4 };
-            ReverseSequence.Reverse(array, 0, 4);
+            array.Reverse(0, 4);
 
             Assert.AreEqual(new[] { 4, 3, 2, 1 }, array);
         }
@@ -88,7 +87,7 @@ namespace Abacaxi.Tests.Sequences
         public void Reverse_Reverses_AnOddLengthArray()
         {
             var array = new int[] { 1, 2, 3, 4, 5 };
-            ReverseSequence.Reverse(array, 0, 5);
+            array.Reverse(0, 5);
 
             Assert.AreEqual(new[] { 5, 4, 3, 2, 1 }, array);
         }
@@ -97,7 +96,7 @@ namespace Abacaxi.Tests.Sequences
         public void Reverse_Reverses_ASegmentOfTheArray()
         {
             var array = new int[] { 1, 2, 3, 4, 5 };
-            ReverseSequence.Reverse(array, 0, 2);
+            array.Reverse(0, 2);
 
             Assert.AreEqual(new[] { 2, 1, 3, 4, 5 }, array);
         }

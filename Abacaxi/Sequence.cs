@@ -13,6 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Linq;
 using Abacaxi.Containers;
 
 namespace Abacaxi
@@ -257,6 +258,7 @@ namespace Abacaxi
             var heap = new Heap<IEnumerator<T>>(innerComparer);
             for (var i = -1; i < sequences.Length; i++)
             {
+                // ReSharper disable once PossibleMultipleEnumeration
                 var enumerator = i < 0 ? sequence.GetEnumerator() : sequences[i].GetEnumerator();
                 if (enumerator.MoveNext())
                 {
@@ -291,7 +293,7 @@ namespace Abacaxi
         /// <param name="length">The length of sequence to reverse.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void Reverse<T>(IList<T> sequence, int startIndex, int length)
+        public static void Reverse<T>(this IList<T> sequence, int startIndex, int length)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
 
@@ -301,6 +303,44 @@ namespace Abacaxi
                 sequence[i + startIndex] = sequence[length - i + startIndex - 1];
                 sequence[length - i + startIndex - 1] = swap;
             }
+        }
+
+        /// <summary>
+        /// Creates an array whose contents are the elements of the <paramref name="input"/> repeated <paramref name="repetitions"/> times.
+        /// </summary>
+        /// <typeparam name="T">The type of the sequence's elements</typeparam>
+        /// <param name="input">The input sequence.</param>
+        /// <param name="repetitions">Number of times to repeat the sequence.</param>
+        /// <returns>A new array.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="input"/> sequence is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value of <paramref name="repetitions"/> argument is less than <c>1</c>.</exception>
+        public static T[] Repeat<T>(this IEnumerable<T> input, int repetitions)
+        {
+            Validate.ArgumentNotNull(nameof(input), input);
+            Validate.ArgumentGreaterThanZero(nameof(repetitions), repetitions);
+
+            var arrayInput = input.ToArray();
+            var arrayOutput = new T[arrayInput.Length * repetitions];
+            var outputIndex = 0;
+
+            while (repetitions > 0)
+            {
+                if (repetitions % 2 == 1)
+                {
+                    Array.Copy(arrayInput, 0, arrayOutput, outputIndex, arrayInput.Length);
+                    outputIndex += arrayInput.Length;
+                }
+
+                repetitions >>= 1;
+                if (repetitions > 0)
+                {
+                    var currentLength = arrayInput.Length;
+                    Array.Resize(ref arrayInput, currentLength * 2);
+                    Array.Copy(arrayInput, 0, arrayInput, currentLength, currentLength);
+                }
+            }
+
+            return arrayOutput;
         }
 
         /// <summary>
