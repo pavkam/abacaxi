@@ -26,9 +26,9 @@ namespace Abacaxi.Tests.Combinatorics
         [TestCase(3, 3)]
         [TestCase(4, 5)]
         [TestCase(5, 7)]
-        public void GetCombinationCount_ReturnsValidCount_ForPositiveNumber(int number, int expected)
+        public void EvaluateIntegerPartitionCombinations_ReturnsValidCount_ForPositiveNumber(int number, int expected)
         {
-            var result = Abacaxi.Combinatorics.EvaluateIntegerPartitionCombinations(number);
+            var result = number.EvaluateIntegerPartitionCombinations();
             Assert.AreEqual(expected, result);
         }
 
@@ -37,9 +37,9 @@ namespace Abacaxi.Tests.Combinatorics
         [TestCase(-3, 3)]
         [TestCase(-4, 5)]
         [TestCase(-5, 7)]
-        public void GetCombinationCount_ReturnsValidCount_ForNegativeNumber(int number, int expected)
+        public void EvaluateIntegerPartitionCombinations_ReturnsValidCount_ForNegativeNumber(int number, int expected)
         {
-            var result = Abacaxi.Combinatorics.EvaluateIntegerPartitionCombinations(number);
+            var result = number.EvaluateIntegerPartitionCombinations();
             Assert.AreEqual(expected, result);
         }
     }

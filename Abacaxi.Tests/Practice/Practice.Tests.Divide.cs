@@ -13,48 +13,33 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.LinkedLists
+namespace Abacaxi.Tests.Practice
 {
     using System;
-    using System.Collections.Generic;
-    using Abacaxi.LinkedLists;
     using NUnit.Framework;
 
     [TestFixture]
-    public class ListMiddleTests
+    public class PracticeDivideTests
     {
         [Test]
-        public void Find_ThrowsException_ForNullHead()
+        public void Divide_ThrowsException_ForZeroDivisor()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                ListMiddle.Find<int>(null));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                1.Divide(0));
         }
 
-        [Test]
-        public void Find_ReturnsFirst_ForSingleNodeList()
+        [TestCase(0, 1, 0)]
+        [TestCase(1, 1, 1)]
+        [TestCase(2, 1, 2)]
+        [TestCase(10, 2, 5)]
+        [TestCase(100, 3, 33)]
+        [TestCase(-10, 2, -5)]
+        [TestCase(-10, -2, 5)]
+        [TestCase(10, -2, -5)]
+        public void Divide_ReturnsCorrectResult(int x, int y, int expected)
         {
-            var head = Node<int>.Create(new[] { 1 });
-
-            var node = ListMiddle.Find(head);
-            Assert.AreSame(head, node);
-        }
-
-        [Test]
-        public void Find_ReturnsFirst_ForTwoNodeList()
-        {
-            var head = Node<int>.Create(new[] { 1, 2 });
-
-            var node = ListMiddle.Find(head);
-            Assert.AreSame(head, node);
-        }
-
-        [Test]
-        public void Find_ReturnsSecond_ForThreeNodeList()
-        {
-            var head = Node<int>.Create(new[] { 1, 2, 3 });
-
-            var node = ListMiddle.Find(head);
-            Assert.AreSame(head.Next, node);
+            var result = x.Divide(y);
+            Assert.AreEqual(expected, result);
         }
     }
 }

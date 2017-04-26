@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests
+namespace Abacaxi.Tests.Sequence
 {
     using System;
     using System.Collections.Generic;
@@ -23,86 +23,86 @@ namespace Abacaxi.Tests
     public class SequenceBinarySearchTests
     {
         [Test]
-        public void Search_ThrowsException_ForNullArray()
+        public void BinarySearch_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.Sequence.BinarySearch((int[])null, 1, 1, 0, Comparer<int>.Default));
+                ((int[])null).BinarySearch(1, 1, 0, Comparer<int>.Default));
         }
         
         [Test]
-        public void Search_ThrowsException_ForNegativeStartIndex()
+        public void BinarySearch_ThrowsException_ForNegativeStartIndex()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Sequence.BinarySearch(new[] { 1 }, -1, 1, 0, Comparer<int>.Default));
+                new[] { 1 }.BinarySearch(-1, 1, 0, Comparer<int>.Default));
         }
 
         [Test]
-        public void Search_ThrowsException_ForNegativeLength()
+        public void BinarySearch_ThrowsException_ForNegativeLength()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Sequence.BinarySearch(new[] { 1 }, 0, -1, 0, Comparer<int>.Default));
+                new[] { 1 }.BinarySearch(0, -1, 0, Comparer<int>.Default));
         }
 
         [Test]
-        public void Search_ThrowsException_ForOutOfBounds1()
+        public void BinarySearch_ThrowsException_ForOutOfBounds1()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Sequence.BinarySearch(new[] { 1 }, 0, 2, 0, Comparer<int>.Default));
+                new[] { 1 }.BinarySearch(0, 2, 0, Comparer<int>.Default));
         }
 
         [Test]
-        public void Search_ThrowsException_ForOutOfBounds2()
+        public void BinarySearch_ThrowsException_ForOutOfBounds2()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Sequence.BinarySearch(new[] { 1 }, 1, 1, 0, Comparer<int>.Default));
+                new[] { 1 }.BinarySearch(1, 1, 0, Comparer<int>.Default));
         }
 
         [Test]
-        public void Search_ThrowsException_ForNullComparer()
+        public void BinarySearch_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.Sequence.BinarySearch(new[] { 1 }, 0, 1, 0, null));
+                new[] { 1 }.BinarySearch(0, 1, 0, null));
         }
 
         [Test]
-        public void Search_ReturnsMinusOne_ForEmptyArray()
+        public void BinarySearch_ReturnsMinusOne_ForEmptyArray()
         {
-            var result = Abacaxi.Sequence.BinarySearch(new int[] { }, 0, 0, 0, Comparer<int>.Default);
+            var result = new int[] { }.BinarySearch(0, 0, 0, Comparer<int>.Default);
             Assert.AreEqual(-1, result);
         }
 
         [Test]
-        public void Search_ReturnsMinusOne_ForZeroLength()
+        public void BinarySearch_ReturnsMinusOne_ForZeroLength()
         {
-            var result = Abacaxi.Sequence.BinarySearch(new int[] { 1 }, 0, 0, 0, Comparer<int>.Default);
+            var result = new[] { 1 }.BinarySearch(0, 0, 0, Comparer<int>.Default);
             Assert.AreEqual(-1, result);
         }
 
         [Test]
-        public void Search_ReturnsMinusOne_WhenNotFound()
+        public void BinarySearch_ReturnsMinusOne_WhenNotFound()
         {
-            var result = Abacaxi.Sequence.BinarySearch(new int[] { 1, 2, 3 }, 0, 3, 0, Comparer<int>.Default);
+            var result = new[] { 1, 2, 3 }.BinarySearch(0, 3, 0, Comparer<int>.Default);
             Assert.AreEqual(-1, result);
         }
 
         [Test]
-        public void Search_ReturnsIndex_ForOneElementArray()
+        public void BinarySearch_ReturnsIndex_ForOneElementArray()
         {
-            var result = Abacaxi.Sequence.BinarySearch(new int[] { 1 }, 0, 1, 1, Comparer<int>.Default);
+            var result = new[] { 1 }.BinarySearch(0, 1, 1, Comparer<int>.Default);
             Assert.AreEqual(0, result);
         }
 
         [Test]
-        public void Search_ReturnsZeroIndex_ForTwoElementArray()
+        public void BinarySearch_ReturnsZeroIndex_ForTwoElementArray()
         {
-            var result = Abacaxi.Sequence.BinarySearch(new int[] { 1, 2 }, 0, 2, 1, Comparer<int>.Default);
+            var result = new[] { 1, 2 }.BinarySearch(0, 2, 1, Comparer<int>.Default);
             Assert.AreEqual(0, result);
         }
 
         [Test]
-        public void Search_ReturnsOneIndex_ForTwoElementArray()
+        public void BinarySearch_ReturnsOneIndex_ForTwoElementArray()
         {
-            var result = Abacaxi.Sequence.BinarySearch(new int[] { 1, 2 }, 0, 2, 2, Comparer<int>.Default);
+            var result = new[] { 1, 2 }.BinarySearch(0, 2, 2, Comparer<int>.Default);
             Assert.AreEqual(1, result);
         }
 
@@ -113,9 +113,9 @@ namespace Abacaxi.Tests
         [TestCase(4, 3)]
         [TestCase(5, 4)]
         [TestCase(6, -1)]
-        public void Search_ReturnsValidIndex_ForAscSortedArray(int element, int expectedIndex)
+        public void BinarySearch_ReturnsValidIndex_ForAscSortedArray(int element, int expectedIndex)
         {
-            var result = Abacaxi.Sequence.BinarySearch(new int[] { 1, 2, 3, 4, 5 }, 0, 5, element, Comparer<int>.Default);
+            var result = new[] { 1, 2, 3, 4, 5 }.BinarySearch(0, 5, element, Comparer<int>.Default);
             Assert.AreEqual(expectedIndex, result);
         }
 
@@ -126,23 +126,23 @@ namespace Abacaxi.Tests
         [TestCase(4, 1)]
         [TestCase(5, 0)]
         [TestCase(6, -1)]
-        public void Search_ReturnsValidIndex_ForDescSortedArray(int element, int expectedIndex)
+        public void BinarySearch_ReturnsValidIndex_ForDescSortedArray(int element, int expectedIndex)
         {
-            var result = Abacaxi.Sequence.BinarySearch(new int[] { 5, 4, 3, 2, 1 }, 0, 5, element, Comparer<int>.Default, false);
+            var result = new[] { 5, 4, 3, 2, 1 }.BinarySearch(0, 5, element, Comparer<int>.Default, false);
             Assert.AreEqual(expectedIndex, result);
         }
 
         [Test]
-        public void Search_ReturnsMinusOne_ForIncorrectlySortedArray()
+        public void BinarySearch_ReturnsMinusOne_ForIncorrectlySortedArray()
         {
-            var result = Abacaxi.Sequence.BinarySearch(new int[] { 5, 4, 3, 2, 1 }, 0, 5, 5, Comparer<int>.Default, true);
+            var result = new[] { 5, 4, 3, 2, 1 }.BinarySearch(0, 5, 5, Comparer<int>.Default);
             Assert.AreEqual(-1, result);
         }
 
         [Test]
-        public void Search_UsesTheComparer()
+        public void BinarySearch_UsesTheComparer()
         {
-            var result = Abacaxi.Sequence.BinarySearch(new[] { "A" }, 0, 1, "a", StringComparer.OrdinalIgnoreCase, true);
+            var result = new[] { "A" }.BinarySearch(0, 1, "a", StringComparer.OrdinalIgnoreCase);
             Assert.AreEqual(0, result);
         }
     }

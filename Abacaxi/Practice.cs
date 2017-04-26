@@ -13,15 +13,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Numerics
+namespace Abacaxi
 {
     using System;
     using System.Collections.Generic;
 
     /// <summary>
-    /// Class implements an algorithm to do division without using the * or / operators.
+    /// Class that only contains "practice methods" with no real use.
     /// </summary>
-    public static class StupidDivision
+    public static class Practice
     {
         /// <summary>
         /// Divides <paramref name="number"/> by <paramref name="divisor"/>.
@@ -30,11 +30,11 @@ namespace Abacaxi.Numerics
         /// <param name="divisor">The divisor.</param>
         /// <returns>The result of division.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="divisor"/> is <c>0</c>.</exception>
-        public static int Divide(int number, int divisor)
+        public static int Divide(this int number, int divisor)
         {
             Validate.ArgumentDifferentThanZero(nameof(divisor), divisor);
 
-            var neg = 
+            var neg =
                 number < 0 && divisor > 0 ||
                 number > 0 && divisor < 0;
 

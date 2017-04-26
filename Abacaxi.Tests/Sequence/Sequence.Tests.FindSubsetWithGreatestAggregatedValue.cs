@@ -28,35 +28,35 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void FindBiggestSumOfNumberOfElements_ThrowsException_IfSequenceIsNull()
+        public void FindSubsetWithGreatestAggregatedValue_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 ((int[])null).FindSubsetWithGreatestAggregatedValue(1, IntegerAggregator, Comparer<int>.Default));
         }
 
         [Test]
-        public void FindBiggestSumOfNumberOfElements_ThrowsException_IfCountIsLessThanOne()
+        public void FindSubsetWithGreatestAggregatedValue_ThrowsException_IfCountIsLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new int[] { }.FindSubsetWithGreatestAggregatedValue(0, IntegerAggregator, Comparer<int>.Default));
         }
 
         [Test]
-        public void FindBiggestSumOfNumberOfElements_ThrowsException_IfAggregatorIsNull()
+        public void FindSubsetWithGreatestAggregatedValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new[] { 1 }.FindSubsetWithGreatestAggregatedValue(1, null, Comparer<int>.Default));
         }
 
         [Test]
-        public void FindBiggestSumOfNumberOfElements_ThrowsException_IfComparerIsNull()
+        public void FindSubsetWithGreatestAggregatedValue_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new[] { 1 }.FindSubsetWithGreatestAggregatedValue(1, IntegerAggregator, null));
         }
 
         [Test]
-        public void FindBiggestSumOfNumberOfElements_ReturnsBiggestElement_ForCountOfOne()
+        public void FindSubsetWithGreatestAggregatedValue_ReturnsBiggestElement_ForCountOfOne()
         {
             TestHelper.AssertSequence(
                 new[] { 1, 2, 3 }.FindSubsetWithGreatestAggregatedValue(1, IntegerAggregator, Comparer<int>.Default),
@@ -64,7 +64,7 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void FindBiggestSumOfNumberOfElements_ReturnsAllElements_ForCountOfThree()
+        public void FindSubsetWithGreatestAggregatedValue_ReturnsAllElements_ForCountOfThree()
         {
             TestHelper.AssertSequence(
                 new[] { 3, 2, 1 }.FindSubsetWithGreatestAggregatedValue(3, IntegerAggregator, Comparer<int>.Default),
@@ -72,7 +72,7 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void FindBiggestSumOfNumberOfElements_ReturnsLastThreeElements()
+        public void FindSubsetWithGreatestAggregatedValue_ReturnsLastThreeElements()
         {
             TestHelper.AssertSequence(
                 new[] { 100, 200, 1, 50, 70, 188 }.FindSubsetWithGreatestAggregatedValue(3, IntegerAggregator, Comparer<int>.Default),

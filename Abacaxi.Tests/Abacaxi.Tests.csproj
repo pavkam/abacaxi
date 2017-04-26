@@ -42,16 +42,15 @@
     <Compile Include="Graphs\WeightedEdgeTests.cs" />
     <Compile Include="Graphs\EdgeTests.cs" />
     <Compile Include="Graphs\MazeGraphTests.cs" />
-    <Compile Include="LinkedLists\ReverseListTests.cs" />
+    <Compile Include="Integer\Integer.Tests.IsPrime.cs" />
     <Compile Include="Graphs\CellTests.cs" />
-    <Compile Include="Numerics\StupidDivisionTests.cs" />
-    <Compile Include="Numerics\LargestPossibleNaturalSummedSequenceTests.cs" />
+    <Compile Include="Practice\Practice.Tests.Divide.cs" />
+    <Compile Include="Sequence\Sequence.Tests.ContainsSubsequenceWithAggregatedValue.cs" />
+    <Compile Include="Sequence\Sequence.Tests.FindSubsequenceWithClosestAggregatedValue.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateIntegerPartitionCombinations.cs" />
-    <Compile Include="Numerics\IntegerPrimeFactorDeconstructTests.cs" />
-    <Compile Include="Numerics\IntegerPowerOfTwoDeconstructTests.cs" />
-    <Compile Include="LinkedLists\NodeTests.cs" />
-    <Compile Include="LinkedLists\KnottedListTests.cs" />
-    <Compile Include="LinkedLists\ListMiddleTests.cs" />
+    <Compile Include="Integer\Integer.Tests.DeconstructIntoPrimeFactors.cs" />
+    <Compile Include="Integer\Integer.Tests.DeconstructIntoPowersOfTwo.cs" />
+    <Compile Include="Containers\SingleLinkedNodeTests.cs" />
     <Compile Include="Sequence\Sequence.Tests.MergeSort.cs" />
     <Compile Include="Sequences\SequenceElementsTests.cs" />
     <Compile Include="Sequence\Sequence.Tests.HeapSort.cs" />
@@ -74,7 +73,7 @@
     <Compile Include="Sequence\Sequence.Tests.ContainsTwoElementsThatAggregateTo.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Numerics\IntegerDecimalZipTests.cs" />
+    <Compile Include="Integer\Integer.Tests.Zip.cs" />
     <Compile Include="Sequence\Sequence.Tests.Repeat.cs" />
   </ItemGroup>
   <ItemGroup>

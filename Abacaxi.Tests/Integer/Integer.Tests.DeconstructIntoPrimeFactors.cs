@@ -13,140 +13,110 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Numerics
+namespace Abacaxi.Tests.Integer
 {
-    using Abacaxi.Numerics;
     using NUnit.Framework;
     using System.Linq;
 
     [TestFixture]
-    public class IntegerPrimeFactorDeconstructTests
+    public class IntegerDeconstructIntoPrimeFactorsTests
     {
         [Test]
-        public void DeconstructZero_ReturnsZero()
+        public void DeconstructIntoPrimeFactors_Zero_ReturnsZero()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(0),
+                0.DeconstructIntoPrimeFactors(),
                 0);
         }
 
         [Test]
-        public void DeconstructOne_ReturnsOne()
+        public void DeconstructIntoPrimeFactors_One_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(1),
+                1.DeconstructIntoPrimeFactors(),
                 1);
         }
 
         [Test]
-        public void DeconstructTwo_ReturnsTwo()
+        public void DeconstructIntoPrimeFactors_Two_ReturnsTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(2),
+                2.DeconstructIntoPrimeFactors(),
                 2);
         }
 
         [Test]
-        public void DeconstructThree_ReturnsThree()
+        public void DeconstructIntoPrimeFactors_Three_ReturnsThree()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(3),
+                3.DeconstructIntoPrimeFactors(),
                 3);
         }
 
         [Test]
-        public void DeconstructFour_ReturnsTwoTwo()
+        public void DeconstructIntoPrimeFactors_Four_ReturnsTwoTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(4),
+                4.DeconstructIntoPrimeFactors(),
                 2, 2);
         }
 
         [Test]
-        public void DeconstructTwenty_ReturnsTwoTwoFive()
+        public void DeconstructIntoPrimeFactors_Twenty_ReturnsTwoTwoFive()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(20),
+                20.DeconstructIntoPrimeFactors(),
                 2, 2, 5);
         }
 
 
         [Test]
-        public void DeconstructMinusOne_ReturnsMinusOne()
+        public void DeconstructIntoPrimeFactors_MinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(-1),
+                (-1).DeconstructIntoPrimeFactors(),
                 -1);
         }
 
         [Test]
-        public void DeconstructMinusTwo_ReturnsMinusTwo()
+        public void DeconstructIntoPrimeFactors_MinusTwo_ReturnsMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(-2),
+                (-2).DeconstructIntoPrimeFactors(),
                 -2);
         }
 
         [Test]
-        public void DeconstructMinusThree_ReturnsMinusThree()
+        public void DeconstructIntoPrimeFactors_MinusThree_ReturnsMinusThree()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(-3),
+                (-3).DeconstructIntoPrimeFactors(),
                 -3);
         }
 
         [Test]
-        public void DeconstructMinusFour_ReturnsMinusOneMinusTwoMinusTwo()
+        public void DeconstructIntoPrimeFactors_MinusFour_ReturnsMinusOneMinusTwoMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(-4),
+                (-4).DeconstructIntoPrimeFactors(),
                 -2, -2, -1);
         }
 
         [Test]
-        public void DeconstructMinusEight_ReturnsMinusTwoMinusTwoMinusTwo()
+        public void DeconstructIntoPrimeFactors_MinusEight_ReturnsMinusTwoMinusTwoMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPrimeFactorDeconstruct.Deconstruct(-8),
+                (-8).DeconstructIntoPrimeFactors(),
                 -2, -2, -2);
         }
 
         [TestCase(int.MaxValue)]
         [TestCase(int.MinValue)]
-        public void Deconstruct_MultipliesToOriginal(int number)
+        public void DeconstructIntoPrimeFactors__MultipliesToOriginal(int number)
         {
-            var mul = IntegerPrimeFactorDeconstruct.Deconstruct(number).Aggregate((x, y) => x * y);
+            var mul = number.DeconstructIntoPrimeFactors().Aggregate((x, y) => x * y);
 
             Assert.AreEqual(number, mul);
-        }
-
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(13)]
-        [TestCase(239)]
-        [TestCase(-1)]
-        [TestCase(-2)]
-        [TestCase(-3)]
-        [TestCase(-13)]
-        [TestCase(-239)]
-        public void IsPrimeNumber_ReturnsTrue(int number)
-        {
-            var result = IntegerPrimeFactorDeconstruct.IsPrimeNumber(number);
-            Assert.IsTrue(result);
-        }
-
-        [TestCase(4)]
-        [TestCase(8)]
-        [TestCase(144)]
-        [TestCase(-4)]
-        [TestCase(-8)]
-        [TestCase(-144)]
-        public void IsPrimeNumber_ReturnsFalse(int number)
-        {
-            var result = IntegerPrimeFactorDeconstruct.IsPrimeNumber(number);
-            Assert.IsFalse(result);
         }
     }
 }

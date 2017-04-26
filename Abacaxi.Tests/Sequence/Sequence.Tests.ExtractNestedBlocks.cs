@@ -26,42 +26,42 @@ namespace Abacaxi.Tests.Sequence
     public class SequenceExtractNestedBlocksTests
     {
         [Test]
-        public void Extract_ThrowsException_ForNullSequence()
+        public void ExtractNestedBlocks_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 ((int[])null).ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default).ToArray());
         }
 
         [Test]
-        public void Extract_ThrowsException_ForComparer()
+        public void ExtractNestedBlocks_ThrowsException_ForComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new int[] { }.ExtractNestedBlocks(1, 1, null).ToArray());
         }
 
         [Test]
-        public void Extract_ThrowsException_ForOrphanOpenBracket()
+        public void ExtractNestedBlocks_ThrowsException_ForOrphanOpenBracket()
         {
             Assert.Throws<InvalidOperationException>(() =>
                 "(".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
         }
 
         [Test]
-        public void Extract_ThrowsException_ForOrphanCloseBracket()
+        public void ExtractNestedBlocks_ThrowsException_ForOrphanCloseBracket()
         {
             Assert.Throws<InvalidOperationException>(() =>
                 ")".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
         }
 
         [Test]
-        public void Extract_ReturnsNothing_ForEmptySequence()
+        public void ExtractNestedBlocks_ReturnsNothing_ForEmptySequence()
         {
             TestHelper.AssertSequence(
                 new int[] { }.ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default));
         }
 
         [Test]
-        public void Extract_ReturnsFullSequence_IfNoBlocksDefined()
+        public void ExtractNestedBlocks_ReturnsFullSequence_IfNoBlocksDefined()
         {
             TestHelper.AssertSequence(
                 "Hello World".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
@@ -69,7 +69,7 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void Extract_ReturnsTwoSequences_IfOneBlockPresent()
+        public void ExtractNestedBlocks_ReturnsTwoSequences_IfOneBlockPresent()
         {
             TestHelper.AssertSequence(
                 "(Hello World)".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
@@ -78,7 +78,7 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void Extract_ReturnsAllSequences_InMultiBlock()
+        public void ExtractNestedBlocks_ReturnsAllSequences_InMultiBlock()
         {
             TestHelper.AssertSequence(
                 "a(b(c))d(e)".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),

@@ -22,45 +22,45 @@ namespace Abacaxi.Tests.Combinatorics
     public class CombinatoricsPartitionIntegerTests
     {
         [Test]
-        public void DeconstructZero_ReturnsNothing()
+        public void PartitionInteger_Zero_ReturnsNothing()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Combinatorics.PartitionInteger(0)
+                0.PartitionInteger()
                 );
         }
 
         [Test]
-        public void DeconstructOne_ReturnsOne()
+        public void PartitionInteger_One_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Combinatorics.PartitionInteger(1),
+                1.PartitionInteger(),
                 new[] { 1 });
         }
 
         [Test]
-        public void DeconstructTwo_ReturnsTwo_ThenOneOne()
+        public void PartitionInteger_Two_ReturnsTwo_ThenOneOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Combinatorics.PartitionInteger(2),
+                2.PartitionInteger(),
                 new[] { 2 },
                 new[] { 1, 1 });
         }
 
         [Test]
-        public void DeconstructThree_ReturnsThree_ThenTwoOne_ThenOneOneOne()
+        public void PartitionInteger_Three_ReturnsThree_ThenTwoOne_ThenOneOneOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Combinatorics.PartitionInteger(3),
+                3.PartitionInteger(),
                 new[] { 3 },
                 new[] { 2, 1 },
                 new[] { 1, 1, 1 });
         }
 
         [Test]
-        public void DeconstructFour_ReturnsFour_ThenThreeOne_ThenTwoTwo_ThenTwoOneOne_ThenOneOneOneOne()
+        public void PartitionInteger_Four_ReturnsFour_ThenThreeOne_ThenTwoTwo_ThenTwoOneOne_ThenOneOneOneOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Combinatorics.PartitionInteger(4),
+                4.PartitionInteger(),
                 new[] { 4 },
                 new[] { 3, 1 },
                 new[] { 2, 1, 1 },
@@ -69,37 +69,37 @@ namespace Abacaxi.Tests.Combinatorics
         }
 
         [Test]
-        public void DeconstructMinusOne_ReturnsMinusOne()
+        public void PartitionInteger_MinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Combinatorics.PartitionInteger(-1),
+                (-1).PartitionInteger(),
                 new[] { -1 });
         }
 
         [Test]
-        public void DeconstructMinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
+        public void PartitionInteger_MinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Combinatorics.PartitionInteger(-2),
+                (-2).PartitionInteger(),
                 new[] { -2 },
                 new[] { -1, -1 });
         }
 
         [Test]
-        public void DeconstructMinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
+        public void PartitionInteger_MinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Combinatorics.PartitionInteger(-3),
+                (-3).PartitionInteger(),
                 new[] { -3 },
                 new[] { -2, -1 },
                 new[] { -1, -1, -1 });
         }
 
         [Test]
-        public void DeconstructMinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
+        public void PartitionInteger_MinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Combinatorics.PartitionInteger(-4),
+                (-4).PartitionInteger(),
                 new[] { -4 },
                 new[] { -3, -1 },
                 new[] { -2, -1, -1 },
@@ -109,9 +109,9 @@ namespace Abacaxi.Tests.Combinatorics
 
         [TestCase(20)]
         [TestCase(-20)]
-        public void Deconstruct_SumsToOriginal(int number)
+        public void PartitionInteger_SumsToOriginal(int number)
         {
-            foreach (var combo in Abacaxi.Combinatorics.PartitionInteger(number))
+            foreach (var combo in number.PartitionInteger())
             {
                 var sum = combo.Sum();
                 Assert.AreEqual(number, sum);

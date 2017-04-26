@@ -238,6 +238,73 @@ namespace Abacaxi
         }
 
         /// <summary>
+        /// Finds the <paramref name="sequence"/> of integers, which summed, return the closest sum to a given <paramref name="target"/>.
+        /// </summary>
+        /// <param name="sequence">The sequence of natural integers.</param>
+        /// <param name="target">The target sum to aim for.</param>
+        /// <returns>A sequence of found integers.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="target"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
+        public static IEnumerable<int> FindSubsequenceWithClosestAggregatedValue(this IEnumerable<int> sequence, int target)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentGreaterThanZero(nameof(target), target);
+
+            var elements = sequence.ToArray();
+            Array.Sort(elements);
+
+            if (elements.Length > 0)
+            {
+                Validate.ArgumentGreaterThanOrEqualToZero(nameof(sequence), elements[0]);
+            }
+
+            var solutions = new int[target + 1, elements.Length + 1];
+            for (var si = 1; si <= elements.Length; si++)
+            {
+                for (var wi = 0; wi <= target; wi++)
+                {
+                    var currentElement = elements[si - 1];
+                    if (currentElement > wi)
+                    {
+                        solutions[wi, si] = solutions[wi, si - 1];
+                    }
+                    else
+                    {
+                        solutions[wi, si] = Math.Max(
+                            currentElement + solutions[wi - currentElement, si - 1],
+                            solutions[wi, si - 1]);
+                    }
+                }
+            }
+
+            var rwi = target;
+            var rsi = elements.Length;
+            while (rsi > 0 && rwi > 0)
+            {
+                if (solutions[rwi, rsi] > solutions[rwi, rsi - 1])
+                {
+                    rwi -= elements[rsi - 1];
+                    yield return elements[rsi - 1];
+                }
+
+                rsi--;
+            }
+        }
+
+        /// <summary>
+        /// Checks if the <paramref name="sequence"/> contains elements, which, summed, yield a given target <paramref name="target"/>.
+        /// </summary>
+        /// <param name="sequence">The sequence of natural integers.</param>
+        /// <param name="target">The sum to target for.</param>
+        /// <returns><c>true</c> if the condition is satisfied; <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="target"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
+        public static bool ContainsSubsequenceWithAggregatedValue(this IEnumerable<int> sequence, int target)
+        {
+            return FindSubsequenceWithClosestAggregatedValue(sequence, target).Sum() == target;
+        }
+
+        /// <summary>
         /// Determines whether the sequence contains two elements that target to a given <paramref name="target"/> value.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>

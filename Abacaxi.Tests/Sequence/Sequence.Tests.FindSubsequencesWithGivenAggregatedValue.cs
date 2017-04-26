@@ -35,35 +35,35 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ThrowsException_IfSequenceIsNull()
+        public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 ((int[])null).FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, 1).ToArray());
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ThrowsException_IfAggregatorIsNull()
+        public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new[] { 1 }.FindSubsequencesWithGivenAggregatedValue(null, IntegerDisaggregator, Comparer<int>.Default, 1).ToArray());
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ThrowsException_IfDisaggregatorIsNull()
+        public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfDisaggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new[] { 1 }.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, null, Comparer<int>.Default, 1).ToArray());
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ThrowsException_IfComparerIsNull()
+        public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new[] { 1 }.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator, null, 1).ToArray());
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ReturnsNothing_ForEmptySequence()
+        public void FindSubsequencesWithGivenAggregatedValue_ReturnsNothing_ForEmptySequence()
         {
             var array = new int[] { };
             TestHelper.AssertSequence(
@@ -72,7 +72,7 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ReturnsSingleElement_IfAggregates()
+        public void FindSubsequencesWithGivenAggregatedValue_ReturnsSingleElement_IfAggregates()
         {
             var array = new[] { 1 };
             TestHelper.AssertSequence(
@@ -81,7 +81,7 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ReturnsAllSequence_IfAggregates()
+        public void FindSubsequencesWithGivenAggregatedValue_ReturnsAllSequence_IfAggregates()
         {
             var array = new[] { 1, 2, 3, 4, 5, 6 };
             TestHelper.AssertSequence(
@@ -90,7 +90,7 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ReturnsNothing_IfDoesNotAggregate()
+        public void FindSubsequencesWithGivenAggregatedValue_ReturnsNothing_IfDoesNotAggregate()
         {
             var array = new[] { 1, 2, 3, 4, 5, 6 };
             TestHelper.AssertSequence(
@@ -98,7 +98,7 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ReturnsTwoSequences_IfAggregates()
+        public void FindSubsequencesWithGivenAggregatedValue_ReturnsTwoSequences_IfAggregates()
         {
             var array = new[] { 1, 2, 3, 4, 5, 6 };
             TestHelper.AssertSequence(
@@ -108,7 +108,7 @@ namespace Abacaxi.Tests.Sequence
         }
 
         [Test]
-        public void FindAllSequencesThatAggregateTo_ReturnsAll_ForNeutrals()
+        public void FindSubsequencesWithGivenAggregatedValue_ReturnsAll_ForNeutrals()
         {
             var array = new[] { 1, 0, 0 };
             TestHelper.AssertSequence(

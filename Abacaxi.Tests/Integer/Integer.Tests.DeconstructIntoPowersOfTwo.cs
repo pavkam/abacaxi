@@ -13,92 +13,91 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Numerics
+namespace Abacaxi.Tests.Integer
 {
-    using Abacaxi.Numerics;
     using NUnit.Framework;
     using System.Linq;
 
     [TestFixture]
-    public class IntegerPowerOfTwoDeconstructTests
+    public class IntegerDeconstructIntoPowersOfTwoTests
     {
         [Test]
-        public void DeconstructZero_ReturnsNothing()
+        public void DeconstructIntoPowersOfTwo_Zero_ReturnsNothing()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstruct.Deconstruct(0));
+                0.DeconstructIntoPowersOfTwo());
         }
 
         [Test]
-        public void DeconstructOne_ReturnsOne()
+        public void DeconstructIntoPowersOfTwo_One_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstruct.Deconstruct(1),
+                1.DeconstructIntoPowersOfTwo(),
                 1);
         }
 
         [Test]
-        public void DeconstructTwo_ReturnsTwo()
+        public void DeconstructIntoPowersOfTwo_Two_ReturnsTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstruct.Deconstruct(2),
+                2.DeconstructIntoPowersOfTwo(),
                 2);
         }
 
         [Test]
-        public void DeconstructThree_ReturnsOneThenTwo()
+        public void DeconstructIntoPowersOfTwo_Three_ReturnsOneThenTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstruct.Deconstruct(3),
+                3.DeconstructIntoPowersOfTwo(),
                 1, 2);
         }
 
         [Test]
-        public void DeconstructFour_ReturnsFour()
+        public void DeconstructIntoPowersOfTwo_Four_ReturnsFour()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstruct.Deconstruct(4),
+                4.DeconstructIntoPowersOfTwo(),
                 4);
         }
 
 
         [Test]
-        public void DeconstructMinusOne_ReturnsMinusOne()
+        public void DeconstructIntoPowersOfTwo_MinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstruct.Deconstruct(-1),
+                (-1).DeconstructIntoPowersOfTwo(),
                 -1);
         }
 
         [Test]
-        public void DeconstructMinusTwo_ReturnsMinusTwo()
+        public void DeconstructIntoPowersOfTwo_MinusTwo_ReturnsMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstruct.Deconstruct(-2),
+                (-2).DeconstructIntoPowersOfTwo(),
                 -2);
         }
 
         [Test]
-        public void DeconstructMinusThree_ReturnsMinusOneThenMinusTwo()
+        public void DeconstructIntoPowersOfTwo_MinusThree_ReturnsMinusOneThenMinusTwo()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstruct.Deconstruct(-3),
+                (-3).DeconstructIntoPowersOfTwo(),
                 -1, -2);
         }
 
         [Test]
-        public void DeconstructFour_ReturnsMinusFour()
+        public void DeconstructIntoPowersOfTwo_Four_ReturnsMinusFour()
         {
             TestHelper.AssertSequence(
-                IntegerPowerOfTwoDeconstruct.Deconstruct(-4),
+                (-4).DeconstructIntoPowersOfTwo(),
                 -4);
         }
 
         [TestCase(int.MaxValue)]
         [TestCase(int.MinValue)]
-        public void Deconstruct_SumsToOriginal(int number)
+        public void DeconstructIntoPowersOfTwo__SumsToOriginal(int number)
         {
-            var backSum = IntegerPowerOfTwoDeconstruct.Deconstruct(number).Sum();
+            var backSum = number.DeconstructIntoPowersOfTwo().Sum();
 
             Assert.AreEqual(number, backSum);
         }

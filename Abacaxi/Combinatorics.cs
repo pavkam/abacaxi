@@ -28,7 +28,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="number">The input number.</param>
         /// <returns>A sequence of combinations.</returns>
-        public static IEnumerable<int[]> PartitionInteger(int number)
+        public static IEnumerable<int[]> PartitionInteger(this int number)
         {
             if (number != 0)
             {
@@ -77,7 +77,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="number">The number to split.</param>
         /// <returns>The partition count.</returns>
-        public static int EvaluateIntegerPartitionCombinations(int number)
+        public static int EvaluateIntegerPartitionCombinations(this int number)
         {
             number = Math.Abs(number);
 

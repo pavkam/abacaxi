@@ -13,35 +13,40 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Numerics
+namespace Abacaxi.Tests.Integer
 {
-    using System;
-    using System.Collections.Generic;
+    using NUnit.Framework;
 
-    /// <summary>
-    /// Deconstracts any integer number into its "power of two" components. Any integer number can be decomposed into
-    /// a sum of its "power of two" components: d0 * 2^0 + d1 * 2^1 + d2 * 2^2 + ... where each "d" is a binary digit in the original number.
-    /// </summary>
-    public static class IntegerPowerOfTwoDeconstruct
+    [TestFixture]
+    public class IntegerIsPrimeTests
     {
-        /// <summary>
-        /// Returns a sequence of numbers (powers of two), which summed, result in the original number <paramref name="number"/>.
-        /// </summary>
-        /// <param name="number">The number to be decomposed.</param>
-        /// <returns>A sequence of numbers.</returns>
-        public static IEnumerable<int> Deconstruct(int number)
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(13)]
+        [TestCase(239)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-3)]
+        [TestCase(-13)]
+        [TestCase(-239)]
+        public void IsPrime_ReturnsTrue(int number)
         {
-            var sign = Math.Sign(number);
+            var result = number.IsPrime();
+            Assert.IsTrue(result);
+        }
 
-            var power = 1;
-            while (number != 0)
-            {
-                if (number % 2 != 0)
-                    yield return sign * power;
-
-                power *= 2;
-                number /= 2;
-            }
+        [TestCase(4)]
+        [TestCase(8)]
+        [TestCase(144)]
+        [TestCase(-4)]
+        [TestCase(-8)]
+        [TestCase(-144)]
+        public void IsPrime_ReturnsFalse(int number)
+        {
+            var result = number.IsPrime();
+            Assert.IsFalse(result);
         }
     }
 }

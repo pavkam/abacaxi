@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Aggregator.cs" />
     <Compile Include="Combinatorics.cs" />
+    <Compile Include="Practice.cs" />
     <Compile Include="Sequence.cs" />
     <Compile Include="Containers\Heap.cs" />
     <Compile Include="Containers\BitSet.cs" />
@@ -54,20 +55,13 @@
     <Compile Include="Graphs\WeightedEdge.cs" />
     <Compile Include="Graphs\Edge.cs" />
     <Compile Include="Graphs\IWeightedGraph.cs" />
-    <Compile Include="Numerics\StupidDivision.cs" />
     <Compile Include="Sequences\SequenceElements.cs" />
     <Compile Include="Graphs\Cell.cs" />
     <Compile Include="Graphs\MazeGraph.cs" />
     <Compile Include="Graphs\IGraph.cs" />
-    <Compile Include="LinkedLists\ReverseList.cs" />
-    <Compile Include="LinkedLists\Node.cs" />
-    <Compile Include="Numerics\IntegerPrimeFactorDeconstruct.cs" />
-    <Compile Include="Numerics\IntegerDecimalZip.cs" />
-    <Compile Include="LinkedLists\KnottedList.cs" />
-    <Compile Include="LinkedLists\ListMiddle.cs" />
-    <Compile Include="Numerics\LargestPossibleNaturalSummedSequence.cs" />
+    <Compile Include="Containers\SingleLinkedNode.cs" />
     <Compile Include="Validate.cs" />
-    <Compile Include="Numerics\IntegerPowerOfTwoDeconstruct.cs" />
+    <Compile Include="Integer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
