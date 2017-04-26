@@ -13,57 +13,58 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Sequences
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+
+namespace Abacaxi.Tests.Sequence
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Abacaxi.Sequences;
     using NUnit.Framework;
 
     [TestFixture]
-    public class SequenceBlocksTests
+    public class SequenceExtractNestedBlocksTests
     {
         [Test]
         public void Extract_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                NestedGroups.Extract((int[])null, 1, 1, EqualityComparer<int>.Default).ToArray());
+                ((int[])null).ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default).ToArray());
         }
 
         [Test]
         public void Extract_ThrowsException_ForComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                NestedGroups.Extract(new int[] { }, 1, 1, null).ToArray());
+                new int[] { }.ExtractNestedBlocks(1, 1, null).ToArray());
         }
 
         [Test]
         public void Extract_ThrowsException_ForOrphanOpenBracket()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                NestedGroups.Extract("(", '(', ')', EqualityComparer<char>.Default).ToArray());
+                "(".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
         }
 
         [Test]
         public void Extract_ThrowsException_ForOrphanCloseBracket()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                NestedGroups.Extract(")", '(', ')', EqualityComparer<char>.Default).ToArray());
+                ")".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
         }
 
         [Test]
         public void Extract_ReturnsNothing_ForEmptySequence()
         {
             TestHelper.AssertSequence(
-                NestedGroups.Extract(new int[] { }, 1, 1, EqualityComparer<int>.Default));
+                new int[] { }.ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default));
         }
 
         [Test]
         public void Extract_ReturnsFullSequence_IfNoBlocksDefined()
         {
             TestHelper.AssertSequence(
-                NestedGroups.Extract("Hello World", '(', ')', EqualityComparer<char>.Default),
+                "Hello World".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
                 "Hello World".ToCharArray());
         }
 
@@ -71,7 +72,7 @@ namespace Abacaxi.Tests.Sequences
         public void Extract_ReturnsTwoSequences_IfOneBlockPresent()
         {
             TestHelper.AssertSequence(
-                NestedGroups.Extract("(Hello World)", '(', ')', EqualityComparer<char>.Default),
+                "(Hello World)".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
                 "Hello World".ToCharArray(),
                 "(Hello World)".ToCharArray());
         }
@@ -80,7 +81,7 @@ namespace Abacaxi.Tests.Sequences
         public void Extract_ReturnsAllSequences_InMultiBlock()
         {
             TestHelper.AssertSequence(
-                NestedGroups.Extract("a(b(c))d(e)", '(', ')', EqualityComparer<char>.Default),
+                "a(b(c))d(e)".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
                 "c".ToCharArray(),
                 "b(c)".ToCharArray(),
                 "e".ToCharArray(),

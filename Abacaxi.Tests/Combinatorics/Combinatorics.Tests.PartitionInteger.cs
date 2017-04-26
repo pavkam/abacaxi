@@ -13,27 +13,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Numerics
+namespace Abacaxi.Tests.Combinatorics
 {
-    using Abacaxi.Numerics;
     using NUnit.Framework;
     using System.Linq;
 
     [TestFixture]
-    public class IntegerPartitionDeconstructTests
+    public class CombinatoricsPartitionIntegerTests
     {
         [Test]
         public void DeconstructZero_ReturnsNothing()
         {
             TestHelper.AssertSequence(
-                IntegerPartitionDeconstruct.Deconstruct(0));
+                Abacaxi.Combinatorics.PartitionInteger(0)
+                );
         }
 
         [Test]
         public void DeconstructOne_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitionDeconstruct.Deconstruct(1),
+                Abacaxi.Combinatorics.PartitionInteger(1),
                 new[] { 1 });
         }
 
@@ -41,7 +41,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructTwo_ReturnsTwo_ThenOneOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitionDeconstruct.Deconstruct(2),
+                Abacaxi.Combinatorics.PartitionInteger(2),
                 new[] { 2 },
                 new[] { 1, 1 });
         }
@@ -50,7 +50,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructThree_ReturnsThree_ThenTwoOne_ThenOneOneOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitionDeconstruct.Deconstruct(3),
+                Abacaxi.Combinatorics.PartitionInteger(3),
                 new[] { 3 },
                 new[] { 2, 1 },
                 new[] { 1, 1, 1 });
@@ -60,7 +60,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructFour_ReturnsFour_ThenThreeOne_ThenTwoTwo_ThenTwoOneOne_ThenOneOneOneOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitionDeconstruct.Deconstruct(4),
+                Abacaxi.Combinatorics.PartitionInteger(4),
                 new[] { 4 },
                 new[] { 3, 1 },
                 new[] { 2, 1, 1 },
@@ -72,7 +72,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitionDeconstruct.Deconstruct(-1),
+                Abacaxi.Combinatorics.PartitionInteger(-1),
                 new[] { -1 });
         }
 
@@ -80,7 +80,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitionDeconstruct.Deconstruct(-2),
+                Abacaxi.Combinatorics.PartitionInteger(-2),
                 new[] { -2 },
                 new[] { -1, -1 });
         }
@@ -89,7 +89,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitionDeconstruct.Deconstruct(-3),
+                Abacaxi.Combinatorics.PartitionInteger(-3),
                 new[] { -3 },
                 new[] { -2, -1 },
                 new[] { -1, -1, -1 });
@@ -99,7 +99,7 @@ namespace Abacaxi.Tests.Numerics
         public void DeconstructMinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                IntegerPartitionDeconstruct.Deconstruct(-4),
+                Abacaxi.Combinatorics.PartitionInteger(-4),
                 new[] { -4 },
                 new[] { -3, -1 },
                 new[] { -2, -1, -1 },
@@ -111,34 +111,11 @@ namespace Abacaxi.Tests.Numerics
         [TestCase(-20)]
         public void Deconstruct_SumsToOriginal(int number)
         {
-            foreach (var combo in IntegerPartitionDeconstruct.Deconstruct(number))
+            foreach (var combo in Abacaxi.Combinatorics.PartitionInteger(number))
             {
                 var sum = combo.Sum();
                 Assert.AreEqual(number, sum);
             }
-        }
-
-        [TestCase(0, 0)]
-        [TestCase(1, 1)]
-        [TestCase(2, 2)]
-        [TestCase(3, 3)]
-        [TestCase(4, 5)]
-        [TestCase(5, 7)]
-        public void GetCombinationCount_ReturnsValidCount_ForPositiveNumber(int number, int expected)
-        {
-            var result = IntegerPartitionDeconstruct.GetCombinationCount(number);
-            Assert.AreEqual(expected, result);
-        }
-
-        [TestCase(-1, 1)]
-        [TestCase(-2, 2)]
-        [TestCase(-3, 3)]
-        [TestCase(-4, 5)]
-        [TestCase(-5, 7)]
-        public void GetCombinationCount_ReturnsValidCount_ForNegativeNumber(int number, int expected)
-        {
-            var result = IntegerPartitionDeconstruct.GetCombinationCount(number);
-            Assert.AreEqual(expected, result);
         }
     }
 }

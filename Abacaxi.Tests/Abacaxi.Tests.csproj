@@ -36,6 +36,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Combinatorics\Combinatorics.Tests.PartitionInteger.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
     <Compile Include="Graphs\WeightedEdgeTests.cs" />
@@ -45,7 +46,7 @@
     <Compile Include="Graphs\CellTests.cs" />
     <Compile Include="Numerics\StupidDivisionTests.cs" />
     <Compile Include="Numerics\LargestPossibleNaturalSummedSequenceTests.cs" />
-    <Compile Include="Numerics\IntegerPartitionDeconstructTests.cs" />
+    <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateIntegerPartitionCombinations.cs" />
     <Compile Include="Numerics\IntegerPrimeFactorDeconstructTests.cs" />
     <Compile Include="Numerics\IntegerPowerOfTwoDeconstructTests.cs" />
     <Compile Include="LinkedLists\NodeTests.cs" />
@@ -64,10 +65,13 @@
     <Compile Include="Sequence\Sequence.Tests.InsertionSort.cs" />
     <Compile Include="Sequence\Sequence.Tests.BubbleSort.cs" />
     <Compile Include="Sequence\Sequence.Tests.SortingAlgorithm.cs" />
-    <Compile Include="Sequences\SequenceBlocksTests.cs" />
-    <Compile Include="Sequences\FindDuplicateElementsTests.cs" />
+    <Compile Include="Sequence\Sequence.Tests.ExtractNestedBlocks.cs" />
+    <Compile Include="Sequence\Sequence.Tests.FindDuplicates.cs" />
     <Compile Include="Sequence\Sequence.Tests.BinarySearch.cs" />
     <Compile Include="Sequence\Sequence.Tests.Reverse.cs" />
+    <Compile Include="Sequence\Sequence.Tests.FindSubsequencesWithGivenAggregatedValue.cs" />
+    <Compile Include="Sequence\Sequence.Tests.FindSubsetWithGreatestAggregatedValue.cs" />
+    <Compile Include="Sequence\Sequence.Tests.ContainsTwoElementsThatAggregateTo.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Numerics\IntegerDecimalZipTests.cs" />

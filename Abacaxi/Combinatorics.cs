@@ -13,30 +13,24 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Numerics
+namespace Abacaxi
 {
     using System;
     using System.Collections.Generic;
 
     /// <summary>
-    /// Partitions an integer number into all possible combinations of smaller numbers. When summed, the original integer number is
-    /// obtained. All combinations are unique. E.g. 1 1 2; 2 1 1 and 1 2 1 are considered equal and only one will be returned.
-    /// Class also implemnts a dynamic algorithm for calculting the partition count.
+    /// Class implements multiple algorithms that deals with combinatorial problems.
     /// </summary>
-    public static class IntegerPartitionDeconstruct
+    public static class Combinatorics
     {
         /// <summary>
         /// Partitions a given integer into all possible combinations of smaller integers.
         /// </summary>
         /// <param name="number">The input number.</param>
         /// <returns>A sequence of combinations.</returns>
-        public static IEnumerable<int[]> Deconstruct(int number)
+        public static IEnumerable<int[]> PartitionInteger(int number)
         {
-            if (number == 0)
-            {
-                yield break;
-            }
-            else
+            if (number != 0)
             {
                 var selection = new Stack<int>();
                 var numbers = new Stack<int>();
@@ -83,7 +77,7 @@ namespace Abacaxi.Numerics
         /// </summary>
         /// <param name="number">The number to split.</param>
         /// <returns>The partition count.</returns>
-        public static int GetCombinationCount(int number)
+        public static int EvaluateIntegerPartitionCombinations(int number)
         {
             number = Math.Abs(number);
 

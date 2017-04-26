@@ -172,7 +172,8 @@ namespace Abacaxi
             }
         }
 
-        private static void MergeSegments<T>(IList<T> sequence, int llo, int lhi, int rlo, int rhi, IComparer<T> comparer)
+        private static void MergeSegments<T>(IList<T> sequence, int llo, int lhi, int rlo, int rhi,
+            IComparer<T> comparer)
         {
             Debug.Assert(sequence != null);
             Debug.Assert(comparer != null);
@@ -234,6 +235,323 @@ namespace Abacaxi
             MergeSortSegments(sequence, middle + 1, hi, comparer);
 
             MergeSegments(sequence, lo, middle, middle + 1, hi, comparer);
+        }
+
+        /// <summary>
+        /// Determines whether the sequence contains two elements that target to a given <paramref name="target"/> value.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to check.</param>
+        /// <param name="target">The target value to search for.</param>
+        /// <param name="aggregator">The function that aggregates two values.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns>
+        ///   <c>true</c> if the <paramref name="sequence"/> contains two elements that target; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregator"/> or <paramref name="comparer"/> are null.</exception>
+        public static bool ContainsTwoElementsThatAggregateTo<T>(this IEnumerable<T> sequence, Aggregator<T> aggregator, IComparer<T> comparer, T target)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(aggregator), aggregator);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var array = sequence.ToArray();
+            if (array.Length == 0)
+            {
+                return false;
+            }
+
+            array.QuickSort(0, array.Length, comparer);
+            var i = 0;
+            var j = array.Length - 1;
+            while (i < j)
+            {
+                var a = aggregator(array[i], array[j]);
+                var cr = comparer.Compare(a, target);
+
+                if (cr == 0)
+                {
+                    return true;
+                }
+                if (cr > 0)
+                {
+                    j--;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+
+
+            return false;
+        }
+
+        /// <summary>
+        /// Finds the elements, which summed, yield the biggest sum.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
+        /// <param name="sequence">The sequence of elements.</param>
+        /// <param name="count">The count of elements to consider.</param>
+        /// <param name="aggregator">The aggregator function which sums elements.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns>An array of elements with the highest sum.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregator"/> or <paramref name="comparer"/> are null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="count"/> is greater than the number of elements in <paramref name="sequence"/>.</exception>
+        public static T[] FindSubsetWithGreatestAggregatedValue<T>(this IEnumerable<T> sequence, int count, Aggregator<T> aggregator, IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(aggregator), aggregator);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+            Validate.ArgumentGreaterThanOrEqualTo(nameof(count), count, 1);
+
+            var array = sequence.ToArray();
+            Validate.ArgumentLessThanOrEqualTo(nameof(count), count, array.Length);
+
+            array.QuickSort(0, array.Length, comparer);
+
+            var result = new T[count];
+            Array.Copy(array, array.Length - count, result, 0, count);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds all duplicate items in a given <paramref name="sequence"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to inspect.</param>
+        /// <param name="equalityComparer">The comparer used to verify the elements in the sequence.</param>
+        /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if either the <paramref name="sequence"/> or the <paramref name="equalityComparer"/> are <c>null</c>.</exception>
+        public static IEnumerable<KeyValuePair<T, int>> FindDuplicates<T>(this IEnumerable<T> sequence, IEqualityComparer<T> equalityComparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(equalityComparer), equalityComparer);
+
+            var appearances = new Dictionary<T, int>(equalityComparer);
+            foreach (var item in sequence)
+            {
+                int count;
+                if (!appearances.TryGetValue(item, out count))
+                {
+                    appearances.Add(item, 1);
+                }
+                else
+                {
+                    appearances[item] = count + 1;
+                }
+            }
+
+            foreach (var appearance in appearances)
+            {
+                if (appearance.Value > 1)
+                {
+                    yield return appearance;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds all duplicate integers in a given <paramref name="sequence"/>.
+        /// </summary>
+        /// <param name="sequence">The sequence to inspect.</param>
+        /// <param name="minInSequence">The minimum possible value of an element part of the <paramref name="sequence"/>.</param>
+        /// <param name="maxInSequence">The maximum possible value of an element part of the <paramref name="sequence"/>.</param>
+        /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="maxInSequence"/> is less than <paramref name="minInSequence"/>.</exception>
+        public static IEnumerable<KeyValuePair<int, int>> FindDuplicates(this IEnumerable<int> sequence, int minInSequence, int maxInSequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentGreaterThanOrEqualTo(nameof(maxInSequence), maxInSequence, minInSequence);
+
+            var appearances = new int[maxInSequence - minInSequence + 1];
+            foreach (var item in sequence)
+            {
+                if (item < minInSequence || item > maxInSequence)
+                    throw new InvalidOperationException($"The sequence of integers contains element {item} which is outside of the given {minInSequence}..{maxInSequence} range.");
+
+                appearances[item - minInSequence]++;
+            }
+
+            for (var i = 0; i < appearances.Length; i++)
+            {
+                if (appearances[i] > 1)
+                {
+                    yield return new KeyValuePair<int, int>(i + minInSequence, appearances[i]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds all duplicate characters in a given <paramref name="sequence"/>.
+        /// </summary>
+        /// <param name="sequence">The sequence to inspect.</param>
+        /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        public static IEnumerable<KeyValuePair<char, int>> FindDuplicates(this string sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            var asciiAppearances = new int[Byte.MaxValue + 1];
+            var appearances = new Dictionary<char, int>();
+
+            foreach (var item in sequence)
+            {
+                if (item <= Byte.MaxValue)
+                {
+                    asciiAppearances[item]++;
+                }
+                else
+                {
+                    int count;
+                    if (!appearances.TryGetValue(item, out count))
+                    {
+                        appearances.Add(item, 1);
+                    }
+                    else
+                    {
+                        appearances[item] = count + 1;
+                    }
+                }
+            }
+
+            for (var i = 0; i < asciiAppearances.Length; i++)
+            {
+                if (asciiAppearances[i] > 1)
+                {
+                    yield return new KeyValuePair<char, int>((char)i, asciiAppearances[i]);
+                }
+            }
+
+            foreach (var appearance in appearances)
+            {
+                if (appearance.Value > 1)
+                {
+                    yield return appearance;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Extracts all nested groups from sequence. The method returns a sequence of sequences.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of <paramref name="sequence"/>.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="openBracket">The element that signifies the start of a group.</param>
+        /// <param name="closeBracket">The element that signifies the end of a group.</param>
+        /// <param name="comparer">The equality comparer for the elements of the <paramref name="sequence"/>.</param>
+        /// <returns>The sequence of extracted groups, starting with the inner most ones.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">Throws if the number of open and close brackets do not match.</exception>
+        public static IEnumerable<T[]> ExtractNestedBlocks<T>(this IEnumerable<T> sequence, T openBracket, T closeBracket, IEqualityComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var stack = new Stack<List<T>>();
+            var currentList = new List<T>();
+            foreach (var item in sequence)
+            {
+                if (comparer.Equals(item, openBracket))
+                {
+                    currentList.Add(item);
+
+                    stack.Push(currentList);
+                    currentList = new List<T>();
+                }
+                else if (comparer.Equals(item, closeBracket))
+                {
+                    yield return currentList.ToArray();
+                    if (stack.Count == 0)
+                    {
+                        throw new InvalidOperationException($"There are no blocks open to be closed.");
+                    }
+
+                    var previousList = stack.Pop();
+                    previousList.AddRange(currentList);
+                    currentList = previousList;
+                    currentList.Add(item);
+                }
+                else
+                {
+                    currentList.Add(item);
+                }
+            }
+
+            if (stack.Count > 0)
+            {
+                throw new InvalidOperationException($"There are {stack.Count} number of blocks that have not been closed.");
+            }
+
+            if (currentList.Count > 0)
+            {
+                yield return currentList.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Finds the sub-sequences whose aggregated values are equal to a given <paramref name="target"/> value.
+        /// </summary>
+        /// <param name="sequence">The sequence to check.</param>
+        /// <param name="aggregator">The value aggregator.</param>
+        /// <param name="disaggregator">The value dis-aggregator.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <param name="target">The target aggregated value.</param>
+        /// <returns>A sequence of found integers.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
+        public static IEnumerable<T[]> FindSubsequencesWithGivenAggregatedValue<T>(this IList<T> sequence,
+            Aggregator<T> aggregator, Aggregator<T> disaggregator, IComparer<T> comparer, T target)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(aggregator), aggregator);
+            Validate.ArgumentNotNull(nameof(disaggregator), disaggregator);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            if (sequence.Count == 0)
+            {
+                yield break;
+            }
+            
+            var s = 0;
+            var e = 0;
+            var sum = sequence[s];
+
+            while (e < sequence.Count)
+            {
+                var cmp = comparer.Compare(sum, target);
+                if (cmp < 0)
+                {
+                    e++;
+                    if (e < sequence.Count)
+                    {
+                        sum = aggregator(sum, sequence[e]);
+                    }
+                }
+                else if (cmp > 0)
+                {
+                    sum = disaggregator(sum, sequence[s]);
+                    s++;
+                }
+                else
+                {
+                    var l = e - s + 1;
+                    var t = new T[l];
+                    for (var i = 0; i < l; i++)
+                    {
+                        t[i] = sequence[i + s];
+                    }
+
+                    yield return t;
+
+                    e++;
+                    if (e < sequence.Count)
+                    {
+                        sum = aggregator(sum, sequence[e]);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -363,7 +681,7 @@ namespace Abacaxi
 
             var start = startIndex;
             var end = startIndex + length - 1;
-            var direction = ascending ? 1 : -1;
+            var direction = @ascending ? 1 : -1;
 
             while (start <= end)
             {

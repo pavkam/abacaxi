@@ -37,6 +37,8 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregator.cs" />
+    <Compile Include="Combinatorics.cs" />
     <Compile Include="Sequence.cs" />
     <Compile Include="Containers\Heap.cs" />
     <Compile Include="Containers\BitSet.cs" />
@@ -59,14 +61,11 @@
     <Compile Include="Graphs\IGraph.cs" />
     <Compile Include="LinkedLists\ReverseList.cs" />
     <Compile Include="LinkedLists\Node.cs" />
-    <Compile Include="Numerics\IntegerPartitionDeconstruct.cs" />
     <Compile Include="Numerics\IntegerPrimeFactorDeconstruct.cs" />
     <Compile Include="Numerics\IntegerDecimalZip.cs" />
     <Compile Include="LinkedLists\KnottedList.cs" />
     <Compile Include="LinkedLists\ListMiddle.cs" />
     <Compile Include="Numerics\LargestPossibleNaturalSummedSequence.cs" />
-    <Compile Include="Sequences\FindDuplicateElements.cs" />
-    <Compile Include="Sequences\NestedGroups.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Numerics\IntegerPowerOfTwoDeconstruct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -13,64 +13,65 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Sequences
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+
+namespace Abacaxi.Tests.Sequence
 {
     using System;
     using System.Linq;
-    using Abacaxi.Sequences;
     using NUnit.Framework;
     using System.Collections.Generic;
 
     [TestFixture]
-    public class FindDuplicateElementsTests
+    public class SequenceFindDuplicates
     {
         [Test]
         public void GenericFind_ThowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                FindDuplicateElements.Find(null, EqualityComparer<int>.Default).ToArray());
+                Abacaxi.Sequence.FindDuplicates(null, EqualityComparer<int>.Default).ToArray());
         }
 
         [Test]
         public void GenericFind_ThowsException_ForNullEqualityComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                FindDuplicateElements.Find(new[] { 1 }, null).ToArray());
+                new[] { 1 }.FindDuplicates(null).ToArray());
         }
 
         [Test]
         public void IntegerFind_ThowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                FindDuplicateElements.Find(null, 1, 1).ToArray());
+                Abacaxi.Sequence.FindDuplicates(null, 1, 1).ToArray());
         }
 
         [Test]
         public void IntegerFind_ThowsException_ForMaxLessThanMin()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                FindDuplicateElements.Find(new[] { 1 }, 1, 0).ToArray());
+                new[] { 1 }.FindDuplicates(1, 0).ToArray());
         }
 
         [Test]
         public void StringFind_ThowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                FindDuplicateElements.Find((string)null).ToArray());
+                ((string)null).FindDuplicates().ToArray());
         }
 
         [Test]
         public void GenericFind_ReturnsNothing_ForDistinctElements()
         {
             TestHelper.AssertSequence(
-                FindDuplicateElements.Find("123456789", EqualityComparer<char>.Default));
+                "123456789".FindDuplicates(EqualityComparer<char>.Default));
         }
 
         [Test]
         public void GenericFind_ReturnsDuplicates_ForDistinctElements()
         {
             TestHelper.AssertSequence(
-                FindDuplicateElements.Find("121312", EqualityComparer<char>.Default),
+                "121312".FindDuplicates(EqualityComparer<char>.Default),
                 new KeyValuePair<char, int>('1', 3),
                 new KeyValuePair<char, int>('2', 2));
         }
@@ -79,7 +80,7 @@ namespace Abacaxi.Tests.Sequences
         public void GenericFind_UsesTheComparer()
         {
             TestHelper.AssertSequence(
-                FindDuplicateElements.Find(new[] { "a", "A" }, StringComparer.InvariantCultureIgnoreCase),
+                new[] { "a", "A" }.FindDuplicates(StringComparer.InvariantCultureIgnoreCase),
                 new KeyValuePair<string, int>("a", 2));
         }
 
@@ -87,14 +88,14 @@ namespace Abacaxi.Tests.Sequences
         public void IntegerFind_ReturnsNothing_ForDistinctElements()
         {
             TestHelper.AssertSequence(
-                FindDuplicateElements.Find(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 1, 9));
+                new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.FindDuplicates(1, 9));
         }
 
         [Test]
         public void IntegerFind_ReturnsDuplicates_ForDistinctElements()
         {
             TestHelper.AssertSequence(
-                FindDuplicateElements.Find(new[] { 1, 2, 1, 3, 1, 2 }, 1, 3),
+                new[] { 1, 2, 1, 3, 1, 2 }.FindDuplicates(1, 3),
                 new KeyValuePair<int, int>(1, 3),
                 new KeyValuePair<int, int>(2, 2));
         }
@@ -103,21 +104,21 @@ namespace Abacaxi.Tests.Sequences
         public void IntegerFind_ThowsException_IfSequenceContainsElementsOutOfMinAndMax()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                FindDuplicateElements.Find(new[] { 0, 1, -1 }, 0, 1).ToArray());
+                new[] { 0, 1, -1 }.FindDuplicates(0, 1).ToArray());
         }
 
         [Test]
         public void StringFind_ReturnsNothing_ForDistinctElements()
         {
             TestHelper.AssertSequence(
-                FindDuplicateElements.Find("123456789\u5000\u5001"));
+                "123456789\u5000\u5001".FindDuplicates());
         }
 
         [Test]
         public void StringFind_ReturnsDuplicates_ForDistinctElements()
         {
             TestHelper.AssertSequence(
-                FindDuplicateElements.Find("\u5000121312\u5000"),
+                "\u5000121312\u5000".FindDuplicates(),
                 new KeyValuePair<char, int>('1', 3),
                 new KeyValuePair<char, int>('2', 2),
                 new KeyValuePair<char, int>('\u5000', 2));
