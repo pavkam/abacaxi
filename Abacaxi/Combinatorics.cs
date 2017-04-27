@@ -175,6 +175,15 @@ namespace Abacaxi
             }
         }
 
+        /// <summary>
+        /// Finds the subsets with equal aggregate value.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in <paramref name="sequence"/>.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="aggregator">The aggregator function.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <param name="subsets">The number of subsets to split into.</param>
+        /// <returns>The first sequence of subsets that have the same aggregated value.</returns>
         public static T[][] FindSubsetsWithEqualAggregateValue<T>(
             this IList<T> sequence, 
             Aggregator<T> aggregator, 
