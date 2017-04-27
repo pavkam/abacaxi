@@ -22,27 +22,27 @@ namespace Abacaxi.Tests.Sequence
     using NUnit.Framework;
 
     [TestFixture]
-    public class SequenceFindSubsequenceWithClosestAggregatedValueTests
+    public class SequenceFindSubsetWithClosestAggregatedValueTests
     {
         [Test]
         public void FindSubsequenceWithClosestAggregatedValue_ThowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).FindSubsequenceWithClosestAggregatedValue(1).ToArray());
+                ((int[])null).FindSubsetWithClosestAggregatedValue(1).ToArray());
         }
 
         [Test]
         public void FindSubsequenceWithClosestAggregatedValue_ThowsException_ForZeroTargedSum()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new int[] { }.FindSubsequenceWithClosestAggregatedValue(0).ToArray());
+                new int[] { }.FindSubsetWithClosestAggregatedValue(0).ToArray());
         }
 
         [Test]
         public void FindSubsequenceWithClosestAggregatedValue_ThowsException_ForNegativeNumberInSequence()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { -1 }.FindSubsequenceWithClosestAggregatedValue(1).ToArray());
+                new[] { -1 }.FindSubsetWithClosestAggregatedValue(1).ToArray());
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new[] { 2, 3, 4 };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(1));
+                array.FindSubsetWithClosestAggregatedValue(1));
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new int[] { };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(1));
+                array.FindSubsetWithClosestAggregatedValue(1));
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new[] { 1 };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(1),
+                array.FindSubsetWithClosestAggregatedValue(1),
                 1);
         }
 
@@ -75,7 +75,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new[] { 0, 0, 1 };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(1),
+                array.FindSubsetWithClosestAggregatedValue(1),
                 1);
         }
 
@@ -84,7 +84,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new[] { 1, 2 };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(2),
+                array.FindSubsetWithClosestAggregatedValue(2),
                 2);
         }
 
@@ -93,7 +93,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new[] { 1, 2, 3 };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(10),
+                array.FindSubsetWithClosestAggregatedValue(10),
                 3, 2, 1);
         }
 
@@ -102,7 +102,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new[] { 1, 2, 3, 4, 5 };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(3),
+                array.FindSubsetWithClosestAggregatedValue(3),
                 2, 1);
         }
 
@@ -111,7 +111,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new[] { 1, 2, 3, 10 };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(7),
+                array.FindSubsetWithClosestAggregatedValue(7),
                 3, 2, 1);
         }
 
@@ -120,7 +120,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new[] { 5, 10 };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(11),
+                array.FindSubsetWithClosestAggregatedValue(11),
                 10);
         }
 
@@ -129,7 +129,7 @@ namespace Abacaxi.Tests.Sequence
         {
             var array = new[] { 1, 2, 3, 10 };
             TestHelper.AssertSequence(
-                array.FindSubsequenceWithClosestAggregatedValue(11),
+                array.FindSubsetWithClosestAggregatedValue(11),
                 10, 1);
         }
     }

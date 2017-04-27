@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Linq;
+
 namespace Abacaxi
 {
     using System;
@@ -23,6 +25,18 @@ namespace Abacaxi
     /// </summary>
     public static class Combinatorics
     {
+        private struct Step
+        {
+            public int ItemIndex { get; }
+            public int SetIndex { get; }
+
+            public Step(int itemIndex, int setIndex)
+            {
+                ItemIndex = itemIndex;
+                SetIndex = setIndex;
+            }
+        }
+
         /// <summary>
         /// Partitions a given integer into all possible combinations of smaller integers.
         /// </summary>
@@ -43,7 +57,7 @@ namespace Abacaxi
                     if (i == 0)
                     {
                         selection.Push(number);
-                        yield return  selection.ToArray();
+                        yield return selection.ToArray();
                         selection.Pop();
 
                         i = sign;
@@ -83,7 +97,7 @@ namespace Abacaxi
 
             var solutions = new int[number + 1, number + 1];
 
-            for(var m = 0; m <= number; m++)
+            for (var m = 0; m <= number; m++)
             {
                 for (var n = 0; n <= number; n++)
                 {
@@ -107,6 +121,55 @@ namespace Abacaxi
             }
 
             return solutions[number, number];
+        }
+
+        /// <summary>
+        /// Evaluates all combinations of items in <paramref name="sequence"/> divided into <paramref name="subsets"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the <paramref name="sequence"/></typeparam>
+        /// <param name="sequence">The sequence of elements.</param>
+        /// <param name="subsets">Number of sub-sets.</param>
+        /// <returns>All the combinations of subsets.</returns>
+        public static IEnumerable<T[][]> EvaluateAllSubsetCombinations<T>(this IList<T> sequence, int subsets)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentGreaterThanZero(nameof(subsets), subsets);
+
+            if (sequence.Count == 0)
+            {
+                yield break;
+            }
+
+            var resultSets = new HashSet<T>[subsets];
+            for (var i = 0; i < resultSets.Length; i++)
+            {
+                resultSets[i] = new HashSet<T>();
+            }
+
+            var stack = new Stack<Step>();
+            stack.Push(new Step(0, 0));
+
+            while (stack.Count > 0)
+            {
+                var step = stack.Pop();
+
+                if (step.ItemIndex == sequence.Count)
+                {
+                    yield return resultSets.Select(s => s.ToArray()).ToArray();
+                    continue;
+                }
+                if (step.SetIndex > 0)
+                {
+                    resultSets[step.SetIndex - 1].Remove(sequence[step.ItemIndex]);
+                }
+                if (step.SetIndex < subsets)
+                {
+                    resultSets[step.SetIndex].Add(sequence[step.ItemIndex]);
+
+                    stack.Push(new Step(step.ItemIndex, step.SetIndex + 1));
+                    stack.Push(new Step(step.ItemIndex + 1, 0));
+                }
+            }
         }
     }
 }

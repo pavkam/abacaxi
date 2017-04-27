@@ -245,7 +245,7 @@ namespace Abacaxi
         /// <returns>A sequence of found integers.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="target"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
-        public static IEnumerable<int> FindSubsequenceWithClosestAggregatedValue(this IEnumerable<int> sequence, int target)
+        public static IEnumerable<int> FindSubsetWithClosestAggregatedValue(this IEnumerable<int> sequence, int target)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentGreaterThanZero(nameof(target), target);
@@ -299,9 +299,9 @@ namespace Abacaxi
         /// <returns><c>true</c> if the condition is satisfied; <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="target"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
-        public static bool ContainsSubsequenceWithAggregatedValue(this IEnumerable<int> sequence, int target)
+        public static bool ContainsSubsetWithAggregatedValue(this IEnumerable<int> sequence, int target)
         {
-            return FindSubsequenceWithClosestAggregatedValue(sequence, target).Sum() == target;
+            return FindSubsetWithClosestAggregatedValue(sequence, target).Sum() == target;
         }
 
         /// <summary>

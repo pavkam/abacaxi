@@ -36,7 +36,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Combinatorics\Combinatorics.Tests.PartitionInteger.cs" />
+    <Compile Include="Combinatorics\Combinatorics.Tests.PartitionInteger - Copy.cs" />
+    <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateAllSubsetCombinations.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
     <Compile Include="Graphs\WeightedEdgeTests.cs" />
@@ -45,8 +46,8 @@
     <Compile Include="Integer\Integer.Tests.IsPrime.cs" />
     <Compile Include="Graphs\CellTests.cs" />
     <Compile Include="Practice\Practice.Tests.Divide.cs" />
-    <Compile Include="Sequence\Sequence.Tests.ContainsSubsequenceWithAggregatedValue.cs" />
-    <Compile Include="Sequence\Sequence.Tests.FindSubsequenceWithClosestAggregatedValue.cs" />
+    <Compile Include="Sequence\Sequence.Tests.ContainsSubsetWithAggregatedValue.cs" />
+    <Compile Include="Sequence\Sequence.Tests.FindSubsetWithClosestAggregatedValue.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateIntegerPartitionCombinations.cs" />
     <Compile Include="Integer\Integer.Tests.DeconstructIntoPrimeFactors.cs" />
     <Compile Include="Integer\Integer.Tests.DeconstructIntoPowersOfTwo.cs" />

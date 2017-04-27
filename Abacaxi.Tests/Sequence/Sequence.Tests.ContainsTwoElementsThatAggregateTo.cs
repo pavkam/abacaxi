@@ -59,7 +59,7 @@ namespace Abacaxi.Tests.Sequence
         [Test]
         public void ContainsTwoElementsThatAggregateTo_ReturnsTrue_ForTwoElements()
         {
-            var result = new[] { 1, 0 }.ContainsTwoElementsThatAggregateTo(IntegerAggregator, Comparer<int>.Default, 3);
+            var result = new[] { 1, 0 }.ContainsTwoElementsThatAggregateTo(IntegerAggregator, Comparer<int>.Default, 1);
 
             Assert.IsTrue(result);
         }

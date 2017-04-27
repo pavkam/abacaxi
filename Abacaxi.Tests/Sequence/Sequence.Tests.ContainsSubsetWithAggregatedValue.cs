@@ -21,40 +21,40 @@ namespace Abacaxi.Tests.Sequence
     using NUnit.Framework;
 
     [TestFixture]
-    public class SequenceContainsSubsequenceWithAggregatedValueTests
+    public class SequenceContainsSubsetWithAggregatedValueTests
     {
         [Test]
         public void ContainsSubsequenceWithAggregatedValue_ThowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).ContainsSubsequenceWithAggregatedValue(1));
+                ((int[])null).ContainsSubsetWithAggregatedValue(1));
         }
 
         [Test]
         public void ContainsSubsequenceWithAggregatedValue_ThowsException_ForZeroTargedSum()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new int[] { }.ContainsSubsequenceWithAggregatedValue(0));
+                new int[] { }.ContainsSubsetWithAggregatedValue(0));
         }
 
         [Test]
         public void ContainsSubsequenceWithAggregatedValue_ThowsException_ForNegativeNumberInSequence()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { -1 }.ContainsSubsequenceWithAggregatedValue(1));
+                new[] { -1 }.ContainsSubsetWithAggregatedValue(1));
         }
 
         [Test]
         public void ContainsSubsequenceWithAggregatedValue_ReturnsFalse_WhenSumCannotBeCompleted()
         {
-            var result = new[] { 2 }.ContainsSubsequenceWithAggregatedValue(1);
+            var result = new[] { 2 }.ContainsSubsetWithAggregatedValue(1);
             Assert.IsFalse(result);
         }
 
         [Test]
         public void ContainsSubsequenceWithAggregatedValue_ReturnsFalse_ForEmptyArray()
         {
-            var result = new int[] { }.ContainsSubsequenceWithAggregatedValue(1);
+            var result = new int[] { }.ContainsSubsetWithAggregatedValue(1);
             Assert.IsFalse(result);
         }
 
@@ -75,7 +75,7 @@ namespace Abacaxi.Tests.Sequence
         [TestCase(15)]
         public void ContainsSubsequenceWithAggregatedValue_ReturnsTrue_IfSumFound(int target)
         {
-            var result = new[] { 1, 2, 3, 4, 5 }.ContainsSubsequenceWithAggregatedValue(target);
+            var result = new[] { 1, 2, 3, 4, 5 }.ContainsSubsetWithAggregatedValue(target);
             Assert.IsTrue(result);
         }
 
@@ -84,7 +84,7 @@ namespace Abacaxi.Tests.Sequence
         [TestCase(17)]
         public void ContainsSubsequenceWithAggregatedValue_ReturnsFalse_IfSumNotFound(int target)
         {
-            var result = new[] { 1, 3, 5, 7 }.ContainsSubsequenceWithAggregatedValue(target);
+            var result = new[] { 1, 3, 5, 7 }.ContainsSubsetWithAggregatedValue(target);
             Assert.IsFalse(result);
         }
     }

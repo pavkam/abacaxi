@@ -46,5 +46,18 @@ namespace Abacaxi.Tests
                 AssertSequence(array[i], expected[i]);
             }
         }
+
+        public static void AssertSequence<T>(IEnumerable<T[][]> sequence, params T[][][] expected)
+        {
+            Assert.NotNull(sequence);
+
+            var array = sequence.ToArray();
+            Assert.AreEqual(expected.Length, array.Length);
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                AssertSequence(array[i], expected[i]);
+            }
+        }
     }
 }
