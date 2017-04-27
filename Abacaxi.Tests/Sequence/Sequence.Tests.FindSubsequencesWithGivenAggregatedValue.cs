@@ -13,12 +13,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+
 namespace Abacaxi.Tests.Sequence
 {
     using System;
     using System.Linq;
     using System.Collections.Generic;
-    using Abacaxi.Sequences;
     using NUnit.Framework;
 
     [TestFixture]

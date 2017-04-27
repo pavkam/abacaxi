@@ -55,7 +55,6 @@
     <Compile Include="Graphs\WeightedEdge.cs" />
     <Compile Include="Graphs\Edge.cs" />
     <Compile Include="Graphs\IWeightedGraph.cs" />
-    <Compile Include="Sequences\SequenceElements.cs" />
     <Compile Include="Graphs\Cell.cs" />
     <Compile Include="Graphs\MazeGraph.cs" />
     <Compile Include="Graphs\IGraph.cs" />

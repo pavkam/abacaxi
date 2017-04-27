@@ -67,11 +67,54 @@ namespace Abacaxi.Tests.Combinatorics
         public void EvaluateAllSubsetCombinations_ReturnsFourCombinations_ForTwoElementAndTwoSubsets()
         {
             TestHelper.AssertSequence(
-                new[] { 11, 19 }.EvaluateAllSubsetCombinations(2),
-                new[] { new[] { 11, 19 }, new int[] { } },
-                new[] { new[] { 11 }, new[] { 19 } },
-                new[] { new[] { 19 }, new[] { 11 } },
-                new[] { new int[] { }, new[] { 11, 19 } });
+                new[] {11, 19}.EvaluateAllSubsetCombinations(2),
+                new[]
+                {
+                    new[] {11, 19},
+                    new int[] {}
+                },
+                new[]
+                {
+                    new[] {11},
+                    new[] {19}
+                },
+                new[]
+                {
+                    new[] {19},
+                    new[] {11}
+                },
+                new[]
+                {
+                    new int[] {},
+                    new[] {11, 19}
+                });
+        }
+
+        [Test]
+        public void EvaluateAllSubsetCombinations_DoesNotCareIfDuplicates()
+        {
+            TestHelper.AssertSequence(
+                new[] { 1, 1 }.EvaluateAllSubsetCombinations(2),
+                new[]
+                {
+                    new[] {1, 1},
+                    new int[] {}
+                },
+                new[]
+                {
+                    new[] {1},
+                    new[] {1}
+                },
+                new[]
+                {
+                    new[] {1},
+                    new[] {1}
+                },
+                new[]
+                {
+                    new int[] {},
+                    new[] {1, 1}
+                });
         }
     }
 }

@@ -140,10 +140,10 @@ namespace Abacaxi
                 yield break;
             }
 
-            var resultSets = new HashSet<T>[subsets];
+            var resultSets = new List<T>[subsets];
             for (var i = 0; i < resultSets.Length; i++)
             {
-                resultSets[i] = new HashSet<T>();
+                resultSets[i] = new List<T>();
             }
 
             var stack = new Stack<Step>();
@@ -153,23 +153,67 @@ namespace Abacaxi
             {
                 var step = stack.Pop();
 
-                if (step.ItemIndex == sequence.Count)
-                {
-                    yield return resultSets.Select(s => s.ToArray()).ToArray();
-                    continue;
-                }
                 if (step.SetIndex > 0)
                 {
-                    resultSets[step.SetIndex - 1].Remove(sequence[step.ItemIndex]);
+                    resultSets[step.SetIndex - 1].RemoveAt(resultSets[step.SetIndex - 1].Count - 1);
                 }
                 if (step.SetIndex < subsets)
                 {
                     resultSets[step.SetIndex].Add(sequence[step.ItemIndex]);
 
                     stack.Push(new Step(step.ItemIndex, step.SetIndex + 1));
-                    stack.Push(new Step(step.ItemIndex + 1, 0));
+
+                    if (step.ItemIndex == sequence.Count - 1)
+                    {
+                        yield return resultSets.Select(s => s.ToArray()).ToArray();
+                    }
+                    else
+                    {
+                        stack.Push(new Step(step.ItemIndex + 1, 0));
+                    }
                 }
             }
+        }
+
+        public static T[][] FindSubsetsWithEqualAggregateValue<T>(
+            this IList<T> sequence, 
+            Aggregator<T> aggregator, 
+            IComparer<T> comparer, 
+            int subsets)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(aggregator), aggregator);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+            Validate.ArgumentGreaterThanZero(nameof(subsets), subsets);
+
+            foreach (var combo in EvaluateAllSubsetCombinations(sequence, subsets))
+            {
+                var firstSum = default(T);
+                var allEqual = true;
+                for (var i = 0; i < subsets; i++)
+                {
+                    var subsetSum = combo[i].Length == 0 ? default(T) : combo[i].Aggregate((current, item) => aggregator(current, item));
+                    if (i == 0)
+                    {
+                        firstSum = subsetSum;
+                    }
+                    else
+                    {
+                        if (comparer.Compare(firstSum, subsetSum) != 0)
+                        {
+                            allEqual = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (allEqual)
+                {
+                    return combo;
+                }
+            }
+
+            return new T[][] {};
         }
     }
 }
