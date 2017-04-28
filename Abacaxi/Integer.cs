@@ -161,5 +161,61 @@ namespace Abacaxi
 
             return result;
         }
+
+        /// <summary>
+        /// Enumerates the first <param name="count"></param> Fibonacci numbers.
+        /// </summary>
+        /// <param name="count">The count of Fibonacci "numbers" to enumerate.</param>
+        /// <returns>The Fibonacci sequence.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count"/> is less than zero.</exception>
+        public static IEnumerable<int> EnumerateFibonacciNumbers(int count)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(count), count);
+
+            var b2 = 0;
+            var b1 = 1;
+
+            if (count > 0)
+            {
+                yield return b2;
+            }
+            if (count > 1)
+            {
+                yield return b1;
+            }
+            if (count > 2)
+            {
+                for (var i = 2; i < count; i++)
+                {
+                    var b = b2 + b1;
+                    b2 = b1;
+                    b1 = b;
+
+                    yield return b;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the Nth Fibonacci number.
+        /// </summary>
+        /// <param name="number">The index of the Fibonacci number to calculate.</param>
+        /// <returns>The Fibonacci number</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="number"/> is less than zero.</exception>
+        public static int GetFibonacciNumber(int number)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(number), number);
+
+            foreach (var result in EnumerateFibonacciNumbers(number + 1))
+            {
+                if (number == 0)
+                {
+                    return result;
+                }
+                number--;
+            }
+
+            return -1;
+        }
     }
 }

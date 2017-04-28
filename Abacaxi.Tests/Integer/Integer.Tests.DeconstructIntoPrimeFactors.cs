@@ -118,5 +118,34 @@ namespace Abacaxi.Tests.Integer
 
             Assert.AreEqual(number, mul);
         }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(13)]
+        [TestCase(239)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-3)]
+        [TestCase(-13)]
+        [TestCase(-239)]
+        public void IsPrime_ReturnsTrue(int number)
+        {
+            var result = number.IsPrime();
+            Assert.IsTrue(result);
+        }
+
+        [TestCase(4)]
+        [TestCase(8)]
+        [TestCase(144)]
+        [TestCase(-4)]
+        [TestCase(-8)]
+        [TestCase(-144)]
+        public void IsPrime_ReturnsFalse(int number)
+        {
+            var result = number.IsPrime();
+            Assert.IsFalse(result);
+        }
     }
 }

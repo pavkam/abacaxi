@@ -46,8 +46,8 @@
     <Compile Include="Graph\WeightedEdgeTests.cs" />
     <Compile Include="Graph\EdgeTests.cs" />
     <Compile Include="Graph\MazeGraphTests.cs" />
-    <Compile Include="Integer\Integer.Tests.IsPrime.cs" />
     <Compile Include="Graph\CellTests.cs" />
+    <Compile Include="Integer\Integer.Tests.EnumerateFibonacciNumbers.cs" />
     <Compile Include="Practice\Practice.Tests.Divide.cs" />
     <Compile Include="Sequence\Sequence.Tests.ContainsSubsetWithAggregatedValue.cs" />
     <Compile Include="Sequence\Sequence.Tests.FindSubsetWithClosestAggregatedValue.cs" />

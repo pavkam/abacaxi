@@ -14,6 +14,7 @@
  */
 
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Abacaxi.Containers;
 
 namespace Abacaxi
