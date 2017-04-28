@@ -65,5 +65,16 @@ namespace Abacaxi.Tests.Graph
 
             Assert.AreEqual(expected, actual);
         }
+
+        [TestCase("ABCD", true)]
+        [TestCase("ABC", false)]
+        [TestCase("ABD", true)]
+        public void IsDirected_AdjustsBasedOnVertices(string vertices, bool expected)
+        {
+            var graph = new LiteralGraph("A-B,B-C,C-D,D-A,D<B");
+            var sub = new SubGraph<char>(graph, vertices);
+
+            Assert.AreEqual(expected, sub.IsDirected);
+        }
     }
 }
