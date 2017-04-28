@@ -40,11 +40,14 @@
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateAllSubsetCombinations.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
-    <Compile Include="Graphs\WeightedEdgeTests.cs" />
-    <Compile Include="Graphs\EdgeTests.cs" />
-    <Compile Include="Graphs\MazeGraphTests.cs" />
+    <Compile Include="Graph\Graph.Tests.TraverseDfs.cs" />
+    <Compile Include="Graph\Graph.Tests.TraverseBfs.cs" />
+    <Compile Include="Graph\LiteralGraphTests.cs" />
+    <Compile Include="Graph\WeightedEdgeTests.cs" />
+    <Compile Include="Graph\EdgeTests.cs" />
+    <Compile Include="Graph\MazeGraphTests.cs" />
     <Compile Include="Integer\Integer.Tests.IsPrime.cs" />
-    <Compile Include="Graphs\CellTests.cs" />
+    <Compile Include="Graph\CellTests.cs" />
     <Compile Include="Practice\Practice.Tests.Divide.cs" />
     <Compile Include="Sequence\Sequence.Tests.ContainsSubsetWithAggregatedValue.cs" />
     <Compile Include="Sequence\Sequence.Tests.FindSubsetWithClosestAggregatedValue.cs" />
@@ -89,9 +92,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Sequences\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

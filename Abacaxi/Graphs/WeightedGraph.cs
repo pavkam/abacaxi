@@ -13,31 +13,37 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System;
+using System.Linq;
+
 namespace Abacaxi.Graphs
 {
     using System.Collections.Generic;
 
     /// <summary>
-    /// Weighted graph interface.
+    /// Describes a weighted graph class.
     /// </summary>
     /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
     /// <typeparam name="TWeight">The type of edge weights.</typeparam>
-    public interface IWeightedGraph<TVertex, TWeight>: IGraph<TVertex>
+    public abstract class WeightedGraph<TVertex, TWeight>: Graph<TVertex>
     {
+        /// <summary>
+        /// Gets the edges for a given <param name="vertex"/>.
+        /// </summary>
+        /// <param name="vertex">The vertex to get the edges for.</param>
+        /// <returns>A sequence of edges connected to the given <param name="vertex"/></returns>
+        /// <exception cref="InvalidOperationException">The <paramref name="vertex"/> is not part of this graph.</exception>
+        public sealed override IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex)
+        {
+            return GetEdgesAndWeights(vertex).Select(weightedEdge => new Edge<TVertex>(weightedEdge.FromVertex, weightedEdge.ToVertex));
+        }
+
         /// <summary>
         /// Gets the edges of a given <paramref name="vertex"/>.
         /// </summary>
         /// <param name="vertex">The vertex.</param>
         /// <returns>A sequence of edges connecting the <paramref name="vertex"/> to other vertices.</returns>
-        new IEnumerable<WeightedEdge<TVertex, TWeight>> GetEdges(TVertex vertex);
-
-        /// <summary>
-        /// Gets the zero weight.
-        /// </summary>
-        /// <value>
-        /// The zero weight.
-        /// </value>
-        TWeight ZeroWeight { get; }
+        public abstract IEnumerable<WeightedEdge<TVertex, TWeight>> GetEdgesAndWeights(TVertex vertex);
 
         /// <summary>
         /// Adds two weights.
@@ -45,7 +51,7 @@ namespace Abacaxi.Graphs
         /// <param name="left">The left weight.</param>
         /// <param name="right">The right weight.</param>
         /// <returns>The sum of two weights.</returns>
-        TWeight AddWeights(TWeight left, TWeight right);
+        public abstract TWeight AddWeights(TWeight left, TWeight right);
 
         /// <summary>
         /// Compares two weights.
@@ -53,15 +59,14 @@ namespace Abacaxi.Graphs
         /// <param name="left">The left weight.</param>
         /// <param name="right">The right weight.</param>
         /// <returns>The comparison result.</returns>
-        int CompareWeights(TWeight left, TWeight right);
+        public abstract int CompareWeights(TWeight left, TWeight right);
 
         /// <summary>
         /// Gets the potential total weight connecting <paramref name="fromVertex"/> and <paramref name="toVertex"/> vertices.
-        /// This is a heuristical function and can be implemented to always return <see cref="ZeroWeight"/>.
         /// </summary>
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The destination vertex.</param>
         /// <returns>The potential total cost.</returns>
-        TWeight GetPotentialWeight(TVertex fromVertex, TVertex toVertex);
+        public abstract TWeight GetPotentialWeight(TVertex fromVertex, TVertex toVertex);
     }
 }

@@ -23,11 +23,10 @@ namespace Abacaxi.Graphs
     /// to obtain the edges but only reports the edges which stay within the given set of vertices.
     /// </summary>
     /// <typeparam name="TVertex">The type of the vertex.</typeparam>
-    /// <seealso cref="Abacaxi.Graphs.IGraph{TVertex}" />
-    public class SubGraph<TVertex> : IGraph<TVertex>
+    public class SubGraph<TVertex> : Graph<TVertex>
     {
-        private IGraph<TVertex> _graph;
-        private HashSet<TVertex> _vertices;
+        private readonly Graph<TVertex> _graph;
+        private readonly HashSet<TVertex> _vertices;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubGraph{TVertex}"/> class.
@@ -35,7 +34,7 @@ namespace Abacaxi.Graphs
         /// <param name="graph">The graph.</param>
         /// <param name="vertices">The vertices that part of this sub-graph.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="vertices"/> are <c>null</c>.</exception>
-        public SubGraph(IGraph<TVertex> graph, IEnumerable<TVertex> vertices)
+        public SubGraph(Graph<TVertex> graph, IEnumerable<TVertex> vertices)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
             Validate.ArgumentNotNull(nameof(vertices), vertices);
@@ -54,7 +53,7 @@ namespace Abacaxi.Graphs
         /// <value>
         /// The value of <see cref="IsDirected"/> from the parent graph.
         /// </value>
-        public bool IsDirected => _graph.IsDirected;
+        public override bool IsDirected => _graph.IsDirected;
 
         /// <summary>
         /// Gets all vertices in the sub-graph.
@@ -62,12 +61,9 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// The sequence of all vertices in the sub-graph.
         /// </returns>
-        public IEnumerable<TVertex> GetVertices()
+        public override IEnumerable<TVertex> GetVertices()
         {
-            foreach (var vertex in _vertices)
-            {
-                yield return vertex;
-            }
+            return _vertices;
         }
 
         /// <summary>
@@ -78,7 +74,7 @@ namespace Abacaxi.Graphs
         /// A sequence of edges connected to the given <param name="vertex"/>.
         /// </returns>
         /// <exception cref="InvalidOperationException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
-        public IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex)
+        public override IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex)
         {
             if (!_vertices.Contains(vertex))
                 throw new InvalidOperationException($"Vertex {vertex} is not part of this sub-graph.");

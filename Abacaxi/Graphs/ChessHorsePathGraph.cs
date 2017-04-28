@@ -21,9 +21,10 @@ namespace Abacaxi.Graphs
     /// <summary>
     /// A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped movements).
     /// </summary>
-    public class ChessHorsePathGraph : IGraph<Cell>
+    public class ChessHorsePathGraph : Graph<Cell>
     {
-        private int _lenghtX, _lengthY;
+        private readonly int _lenghtX;
+        private readonly int _lengthY;
 
         private bool VertexExists(int x, int y)
         {
@@ -36,10 +37,10 @@ namespace Abacaxi.Graphs
         /// <value>
         /// Always returns <c>true</c>.
         /// </value>
-        public bool IsDirected => false;
+        public override bool IsDirected => false;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChessHorsePathGraph{TValue}"/> class.
+        /// Initializes a new instance of the <see cref="ChessHorsePathGraph"/> class.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="boardWidth"/> or <paramref name="boardHeight"/> are less than <c>1</c>.</exception>
         public ChessHorsePathGraph(int boardWidth, int boardHeight)
@@ -57,7 +58,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// The sequence of all vertices in the graph.
         /// </returns>
-        public IEnumerable<Cell> GetVertices()
+        public override IEnumerable<Cell> GetVertices()
         {
             for (var x = 0; x < _lenghtX; x++)
             {
@@ -76,7 +77,7 @@ namespace Abacaxi.Graphs
         /// A sequence of edges connected to the given <param name="vertex" />
         /// </returns>
         /// <exception cref="InvalidOperationException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
-        public IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
+        public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             if (!VertexExists(vertex.X, vertex.Y))
                 throw new InvalidOperationException($"Vertex {vertex} is not part of this graph.");
@@ -94,6 +95,29 @@ namespace Abacaxi.Graphs
                         yield return new Edge<Cell>(vertex, new Cell(vertex.X + j, vertex.Y + i));
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Finds the shortest path between any two arbitrary cells on an infinite chess board.
+        /// </summary>
+        /// <param name="startCell">The start cell.</param>
+        /// <param name="endCell">The end cell.</param>
+        /// <returns>The shortest path between any two arbitrary cells in space.</returns>
+        public static IEnumerable<Cell> FindShortestPathInInfiniteBoard(Cell startCell, Cell endCell)
+        {
+            const int padding = 2;
+
+            var boardWidth = Math.Abs(endCell.X - startCell.X) + padding * 2;
+            var boardHeight = Math.Abs(endCell.Y - startCell.Y) + padding * 2;
+
+            var deltaX = Math.Min(startCell.X, endCell.X) - padding;
+            var deltaY = Math.Min(startCell.Y, endCell.Y) - padding;
+
+            var board = new ChessHorsePathGraph(boardWidth, boardHeight);
+            foreach (var cell in board.FindShortestPath(new Cell(startCell.X - deltaX, startCell.Y - deltaY), new Cell(endCell.X - deltaX, endCell.Y - deltaY)))
+            {
+                yield return new Cell(cell.X + deltaX, cell.Y + deltaY);
             }
         }
     }

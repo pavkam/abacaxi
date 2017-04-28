@@ -15,10 +15,8 @@
 
 namespace Abacaxi.Graphs
 {
-    using System;
-
     /// <summary>
-    /// Defines an adge connecting two graph vertices.
+    /// Defines an edge connecting two graph vertices.
     /// <typeparam name="TVertex">The type of the vertex.</typeparam>
     /// </summary>
     public struct Edge<TVertex>
@@ -29,7 +27,7 @@ namespace Abacaxi.Graphs
         /// <value>
         /// From starting vertex.
         /// </value>
-        public TVertex FromVertex { get; private set; }
+        public TVertex FromVertex { get; }
 
         /// <summary>
         /// Gets the connected vertex.
@@ -37,10 +35,10 @@ namespace Abacaxi.Graphs
         /// <value>
         /// The connected vertex.
         /// </value>
-        public TVertex ToVertex { get; private set; }
+        public TVertex ToVertex { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Edge{TVertex}"/> struct.
+        /// Initializes a new instance of the <see cref="Edge{TVertex}"/> structure.
         /// </summary>
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The second vertex.</param>
@@ -51,11 +49,11 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Object" />, is equal to this instance.
+        /// Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="Object" /> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="Object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -82,10 +80,10 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Returns a <see cref="String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString()
         {

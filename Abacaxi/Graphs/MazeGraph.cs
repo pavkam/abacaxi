@@ -21,11 +21,11 @@ namespace Abacaxi.Graphs
     /// <summary>
     /// A maze-structured graph.
     /// </summary>
-    public class MazeGraph : IGraph<Cell>
+    public sealed class MazeGraph : Graph<Cell>
     {
-        private bool[,] _matrix;
-        private int _lenghtX;
-        private int _lengthY;
+        private readonly bool[,] _matrix;
+        private readonly int _lenghtX;
+        private readonly int _lengthY;
 
         private bool VertexExists(int x, int y)
         {
@@ -38,10 +38,10 @@ namespace Abacaxi.Graphs
         /// <value>
         /// Always returns <c>true</c>.
         /// </value>
-        public bool IsDirected => false;
+        public override bool IsDirected => false;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MatrixGraph{TValue}"/> class.
+        /// Initializes a new instance of the <see cref="MazeGraph"/> class.
         /// </summary>
         /// <param name="matrix">The backing two-dimensional array.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="matrix"/> is <c>null</c>.</exception>
@@ -60,7 +60,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// The sequence of all vertices in the graph.
         /// </returns>
-        public IEnumerable<Cell> GetVertices()
+        public override IEnumerable<Cell> GetVertices()
         {
             for (var x = 0; x < _lenghtX; x++)
             {
@@ -82,7 +82,7 @@ namespace Abacaxi.Graphs
         /// A sequence of edges connected to the given <param name="vertex" />
         /// </returns>
         /// <exception cref="InvalidOperationException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
-        public IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
+        public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             if (!VertexExists(vertex.X, vertex.Y))
                 throw new InvalidOperationException($"Vertex {vertex} is not part of this graph.");

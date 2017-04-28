@@ -15,7 +15,8 @@
 
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 // ReSharper disable ObjectCreationAsStatement
-namespace Abacaxi.Tests.Graphs
+
+namespace Abacaxi.Tests.Graph
 {
     using System;
     using System.Collections.Generic;
@@ -26,15 +27,13 @@ namespace Abacaxi.Tests.Graphs
     [TestFixture]
     public class MazeGraphTests
     {
-        private readonly bool[,] _m3X3 = new bool[,]
-        {
+        private readonly bool[,] _m3X3 = {
             { true, true, true },
             { true, true, true },
             { true, true, true },
         };
 
-        private readonly bool[,] _m2X2 = new bool[,]
-        {
+        private readonly bool[,] _m2X2 = {
             { true, false },
             { true, true },
         };

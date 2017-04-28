@@ -13,9 +13,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Graphs
+// ReSharper disable SuspiciousTypeConversion.Global
+
+namespace Abacaxi.Tests.Graph
 {
-    using System;
     using Abacaxi.Graphs;
     using NUnit.Framework;
 
