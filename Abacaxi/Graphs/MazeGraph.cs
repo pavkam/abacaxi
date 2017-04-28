@@ -55,12 +55,12 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Gets all vertices in the graph.
+        /// Returns an enumerator that iterates all vertices in the graph.
         /// </summary>
         /// <returns>
-        /// The sequence of all vertices in the graph.
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
-        public override IEnumerable<Cell> GetVertices()
+        public override IEnumerator<Cell> GetEnumerator()
         {
             for (var x = 0; x < _lenghtX; x++)
             {

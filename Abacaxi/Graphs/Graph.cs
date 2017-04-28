@@ -13,19 +13,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Abacaxi.Graphs
 {
+    using System;
+    using System.Collections;
+    using System.Diagnostics;
+    using System.Linq;
     using System.Collections.Generic;
 
     /// <summary>
     /// Generic graph class. This class serves as an abstract base for all concrete implementations.
     /// </summary>
     /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
-    public abstract class Graph<TVertex>
+    public abstract class Graph<TVertex> : IEnumerable<TVertex>
     {
         private sealed class BfsNode : IBfsNode
         {
@@ -187,7 +188,7 @@ namespace Abacaxi.Graphs
             /// </value>
             int ExitTime { get; }
         }
-
+        
         /// <summary>
         /// Gets a value indicating whether this graph's edges are directed.
         /// </summary>
@@ -205,10 +206,23 @@ namespace Abacaxi.Graphs
         public abstract IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex);
 
         /// <summary>
-        /// Gets all vertices in the graph.
+        /// Returns an enumerator that iterates all vertices in the graph.
         /// </summary>
-        /// <returns>The sequence of all vertices in the graph.</returns>
-        public abstract IEnumerable<TVertex> GetVertices();
+        /// <returns>
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        /// </returns>
+        public abstract IEnumerator<TVertex> GetEnumerator();
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         /// <summary>
         /// Traverses the graph using the breadth-first-search starting from <paramref name="startVertex"/>.
@@ -324,7 +338,7 @@ namespace Abacaxi.Graphs
         public IEnumerable<Graph<TVertex>> GetComponents()
         {
             var undiscoveredVertices = new HashSet<TVertex>();
-            foreach (var vertex in GetVertices())
+            foreach (var vertex in this)
             {
                 undiscoveredVertices.Add(vertex);
             }

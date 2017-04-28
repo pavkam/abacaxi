@@ -172,14 +172,12 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Gets all vertices in the graph.
+        /// Gets the enumerator.
         /// </summary>
-        /// <returns>
-        /// The sequence of all vertices in the graph.
-        /// </returns>
-        public override IEnumerable<char> GetVertices()
+        /// <returns></returns>
+        public override IEnumerator<char> GetEnumerator()
         {
-            return _vertices.Keys;
+            return _vertices.Keys.GetEnumerator();
         }
 
         /// <summary>

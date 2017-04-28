@@ -15,12 +15,11 @@
 
 // ReSharper disable ObjectCreationAsStatement
 
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Graphs;
     using NUnit.Framework;
 
@@ -87,11 +86,11 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetVertices_ReturnsAllVertices()
+        public void Enumeration_ReturnsAllVertices()
         {
             var graph = new LiteralGraph("A>B,B-Z,K<T");
 
-            var v = graph.GetVertices().ToArray();
+            var v = graph.ToArray();
             v.QuickSort(0, v.Length, Comparer<char>.Default);
 
             TestHelper.AssertSequence(v,

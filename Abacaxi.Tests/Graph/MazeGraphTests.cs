@@ -21,7 +21,7 @@ namespace Abacaxi.Tests.Graph
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Abacaxi.Graphs;
+    using Graphs;
     using NUnit.Framework;
 
     [TestFixture]
@@ -136,16 +136,16 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetVertices_ReturnsNothing_ForEmptyMatrix()
+        public void Enumeration_ReturnsNothing_ForEmptyMatrix()
         {
             var m = new bool[0, 0];
             var graph = new MazeGraph(m);
 
-            TestHelper.AssertSequence(graph.GetVertices());
+            TestHelper.AssertSequence(graph);
         }
 
         [TestCase("00,10,11")]
-        public void GetVertices_ReturnsOnlyTrueCells(string cells)
+        public void Enumeration_ReturnsOnlyTrueCells(string cells)
         {
             var expectedCells = new HashSet<Cell>();
             foreach (var vertex in ParseList(cells))
@@ -155,7 +155,7 @@ namespace Abacaxi.Tests.Graph
 
             var graph = new MazeGraph(_m2X2);
             var actualCells = new HashSet<Cell>();
-            foreach (var vertex in graph.GetVertices())
+            foreach (var vertex in graph)
             {
                 actualCells.Add(vertex);
             }

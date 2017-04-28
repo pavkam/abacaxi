@@ -34,16 +34,19 @@ namespace Abacaxi.Graphs
         /// <param name="graph">The graph.</param>
         /// <param name="vertices">The vertices that part of this sub-graph.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="vertices"/> are <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if <paramref name="vertices"/> contains at least one vertex that is not contained in <paramref name="graph"/>.</exception>
         public SubGraph(Graph<TVertex> graph, IEnumerable<TVertex> vertices)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
             Validate.ArgumentNotNull(nameof(vertices), vertices);
 
             _graph = graph;
-            _vertices = new HashSet<TVertex>();
-            foreach (var vertex in vertices)
+            _vertices = new HashSet<TVertex>(vertices);
+            var originalVertexSet = new HashSet<TVertex>(graph);
+
+            if (!_vertices.IsSubsetOf(originalVertexSet))
             {
-                _vertices.Add(vertex);
+                throw new InvalidOperationException("The supplied vertex set contains one or more vertices not part of the original graph.");
             }
         }
 
@@ -56,14 +59,14 @@ namespace Abacaxi.Graphs
         public override bool IsDirected => _graph.IsDirected;
 
         /// <summary>
-        /// Gets all vertices in the sub-graph.
+        /// Returns an enumerator that iterates all vertices in the graph.
         /// </summary>
         /// <returns>
-        /// The sequence of all vertices in the sub-graph.
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
-        public override IEnumerable<TVertex> GetVertices()
+        public override IEnumerator<TVertex> GetEnumerator()
         {
-            return _vertices;
+            return _vertices.GetEnumerator();
         }
 
         /// <summary>
