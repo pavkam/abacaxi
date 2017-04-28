@@ -297,6 +297,13 @@ namespace Abacaxi.Graphs
             }, ref time, discoveredSet, handleVertexCompleted, handleCycle);
         }
 
+        /// <summary>
+        /// Fills the graph with one color.
+        /// </summary>
+        /// <param name="startVertex">The start vertex.</param>
+        /// <param name="applyColor">Color to apply to each vertex.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="applyColor"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
         public void FillWithOneColor(TVertex startVertex, Action<TVertex> applyColor)
         {
             Validate.ArgumentNotNull(nameof(applyColor), applyColor);
@@ -308,6 +315,13 @@ namespace Abacaxi.Graphs
             });
         }
 
+        /// <summary>
+        /// Finds the shortest path between two vertices in a graph.
+        /// </summary>
+        /// <param name="startVertex">The start vertex.</param>
+        /// <param name="endVertex">The end vertex.</param>
+        /// <returns>Returns a sequence of vertices in visitation order.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
         public IEnumerable<TVertex> FindShortestPath(TVertex startVertex, TVertex endVertex)
         {
             IBfsNode solution = null;
