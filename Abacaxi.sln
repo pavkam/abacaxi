@@ -10,7 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA960A00-F5C7-4299-8C52-41F254607F5E}"
 	ProjectSection(SolutionItems) = preProject
 		40218-200.png = 40218-200.png
-		Abacaxi.nuspec = Abacaxi.nuspec
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
