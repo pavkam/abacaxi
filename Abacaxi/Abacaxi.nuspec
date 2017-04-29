@@ -16,8 +16,6 @@
     <dependencies>
       <group targetFramework="net45">
       </group>
-      <group targetFramework="netcore45">
-      </group>
     </dependencies>
   </metadata>
 </package>
