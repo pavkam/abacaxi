@@ -65,6 +65,21 @@ namespace Abacaxi.Tests.Graph
             Assert.DoesNotThrow(() => new LiteralGraph("  A -     B   ,      "));
         }
 
+        [Test]
+        public void Ctor_AcceptsASingleUnconnectedVertex()
+        {
+            var graph = new LiteralGraph("A,B,C-D");
+
+            TestHelper.AssertSequence(graph.GetEdges('A'));
+            TestHelper.AssertSequence(graph.GetEdges('B'));
+        }
+
+        [Test]
+        public void Ctor_AcceptsLettersAndDigits()
+        {
+            Assert.DoesNotThrow(() => new LiteralGraph("a-B,B-0"));
+        }
+
         [TestCase("0-1")]
         [TestCase("0>1,0<1")]
         [TestCase("0>1,0>2,1>0,2>0")]
