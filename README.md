@@ -1,5 +1,5 @@
-# abacaxi (Pineapple in Português, do not ask me why!)
-
+# abacaxi (Pineapple in Português, do not ask me why I chose the name!)
+(https://ci.appveyor.com/project/pavkam/abacaxi/branch/master)
 
 Almost everyone gets to be asked about algorithms during interviews. It has been a long time ago that I actually got to play with algorithms in any detail. This library is my attempt to get back to the __roots__.
 
