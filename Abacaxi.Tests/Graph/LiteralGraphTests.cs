@@ -34,12 +34,10 @@ namespace Abacaxi.Tests.Graph
 
         [TestCase("")]
         [TestCase(".")]
-        [TestCase("A")]
         [TestCase("A.")]
         [TestCase("AA-B")]
         [TestCase("A-")]
         [TestCase("A-BA")]
-        [TestCase("A-B,A")]
         public void Ctor_ThrowsException_ForInvalidFormat(string relationships)
         {
             Assert.Throws<FormatException>(() => new LiteralGraph(relationships));
