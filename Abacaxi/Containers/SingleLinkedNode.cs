@@ -15,13 +15,14 @@
 
 namespace Abacaxi.Containers
 {
+    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
     /// Represents a linked list node.
     /// </summary>
     /// <typeparam name="T">The type of the value stored in the node.</typeparam>
-    public sealed class SingleLinkedNode<T>
+    public sealed class SingleLinkedNode<T> : IEnumerable<SingleLinkedNode<T>>
     {
         /// <summary>
         /// The node's value.
@@ -75,7 +76,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
         /// <returns>The middle node; <c>null</c> if the list is empty.</returns>
-        public SingleLinkedNode<T> GetMiddleNode()
+        public SingleLinkedNode<T> FindMiddle()
         {
             var one = this;
             var two = Next?.Next;
@@ -93,7 +94,7 @@ namespace Abacaxi.Containers
         /// Finds whether the list is knotted.
         /// </summary>
         /// <returns><c>true</c> if the list is knotted; <c>false</c> otherwise.</returns>
-        public bool CheckIsKnotted()
+        public bool VerifyIfKnotted()
         {
             var one = this;
             var two = Next?.Next;
@@ -132,6 +133,34 @@ namespace Abacaxi.Containers
             }
 
             return head;
+        }
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// An enumerator that can be used to iterate through the collection.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public IEnumerator<SingleLinkedNode<T>> GetEnumerator()
+        {
+            var current = this;
+            while (current != null)
+            {
+                yield return current;
+                current = current.Next;
+            }
         }
     }
 }

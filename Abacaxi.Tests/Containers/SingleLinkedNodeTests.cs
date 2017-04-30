@@ -78,68 +78,68 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void CheckIsKnotted_ReturnsFalse_ForSingleUnknottedNode()
+        public void VerifyIfKnotted_ReturnsFalse_ForSingleUnknottedNode()
         {
             var head = SingleLinkedNode<int>.Create(new[] { 1 });
 
-            var check = head.CheckIsKnotted();
+            var check = head.VerifyIfKnotted();
             Assert.IsFalse(check);
         }
 
         [Test]
-        public void CheckIsKnotted_ReturnsTrue_ForSingleKnottedNode()
+        public void VerifyIfKnotted_ReturnsTrue_ForSingleKnottedNode()
         {
             var head = SingleLinkedNode<int>.Create(new[] { 1 });
             head.Next = head;
 
-            var check = head.CheckIsKnotted();
+            var check = head.VerifyIfKnotted();
             Assert.IsTrue(check);
         }
 
         [Test]
-        public void CheckIsKnotted_ReturnsTrue_ForDoubleKnottedNode()
+        public void VerifyIfKnotted_ReturnsTrue_ForDoubleKnottedNode()
         {
             var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
             head.Next.Next = head;
 
-            var check = head.CheckIsKnotted();
+            var check = head.VerifyIfKnotted();
             Assert.IsTrue(check);
         }
 
         [Test]
-        public void CheckIsKnotted_ReturnsTrue_ForTripleKnottedNode()
+        public void VerifyIfKnotted_ReturnsTrue_ForTripleKnottedNode()
         {
             var head = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
             head.Next.Next.Next = head.Next;
 
-            var check = head.CheckIsKnotted();
+            var check = head.VerifyIfKnotted();
             Assert.IsTrue(check);
         }
 
         [Test]
-        public void GetMiddleNode_ReturnsFirst_ForSingleNodeList()
+        public void FindMiddle_ReturnsFirst_ForSingleNodeList()
         {
             var head = SingleLinkedNode<int>.Create(new[] { 1 });
 
-            var node = head.GetMiddleNode();
+            var node = head.FindMiddle();
             Assert.AreSame(head, node);
         }
 
         [Test]
-        public void GetMiddleNode_ReturnsFirst_ForTwoNodeList()
+        public void FindMiddle_ReturnsFirst_ForTwoNodeList()
         {
             var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
 
-            var node = head.GetMiddleNode();
+            var node = head.FindMiddle();
             Assert.AreSame(head, node);
         }
 
         [Test]
-        public void GetMiddleNode_ReturnsSecond_ForThreeNodeList()
+        public void FindMiddle_ReturnsSecond_ForThreeNodeList()
         {
             var head = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
 
-            var node = head.GetMiddleNode();
+            var node = head.FindMiddle();
             Assert.AreSame(head.Next, node);
         }
 
@@ -181,6 +181,27 @@ namespace Abacaxi.Tests.Containers
             Assert.AreSame(e3.Next, e2);
             Assert.AreSame(e2.Next, e1);
             Assert.IsNull(e1.Next);
+        }
+
+        [Test]
+        public void Enumeration_ReturnsSelf()
+        {
+            var node = SingleLinkedNode<char>.Create("A");
+
+            TestHelper.AssertSequence(node,
+                node);
+        }
+
+        [Test]
+        public void Enumeration_ReturnsSequence()
+        {
+            var head = SingleLinkedNode<char>.Create("ALEX");
+
+            TestHelper.AssertSequence(head,
+                head,
+                head.Next,
+                head.Next.Next,
+                head.Next.Next.Next);
         }
     }
 }
