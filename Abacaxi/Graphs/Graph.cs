@@ -82,7 +82,7 @@ namespace Abacaxi.Graphs
                     breakRequested =
                         !TraverseDfs(visitedNode, ref time, visitedNodes, handleVertexCompleted, handleCycle);
 
-                    if (vertexNode.ReachableAncestor != null && 
+                    if (vertexNode.ReachableAncestor != null &&
                         vertexNode.ReachableAncestor.EntryTime > visitedNode.ReachableAncestor.EntryTime)
                     {
                         vertexNode.ReachableAncestor = visitedNode.ReachableAncestor;
@@ -110,7 +110,7 @@ namespace Abacaxi.Graphs
             }
             else if (vertexNode.ReachableAncestor == vertexNode.Parent)
             {
-                ((DfsNode)vertexNode.Parent).Articulation = true;
+                ((DfsNode) vertexNode.Parent).Articulation = true;
             }
 
             if (!handleVertexCompleted(vertexNode))
@@ -188,7 +188,7 @@ namespace Abacaxi.Graphs
             /// </value>
             int ExitTime { get; }
         }
-        
+
         /// <summary>
         /// Gets a value indicating whether this graph's edges are directed.
         /// </summary>
@@ -196,6 +196,14 @@ namespace Abacaxi.Graphs
         ///   <c>true</c> if this graph's edges are directed; otherwise, <c>false</c>.
         /// </value>
         public abstract bool IsDirected { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public abstract bool IsReadOnly { get; }
 
         /// <summary>
         /// Gets the edges for a given <param name="vertex"/>.
@@ -349,6 +357,11 @@ namespace Abacaxi.Graphs
             }
         }
 
+        /// <summary>
+        /// Gets all connected components in a given undirected graph.
+        /// </summary>
+        /// <returns>A sequence of sub-graphs, each representing a connected component.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if this graph is directed.</exception>
         public IEnumerable<Graph<TVertex>> GetComponents()
         {
             var undiscoveredVertices = new HashSet<TVertex>();

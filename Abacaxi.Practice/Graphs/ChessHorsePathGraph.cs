@@ -13,10 +13,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Graphs
+namespace Abacaxi.Practice.Graphs
 {
     using System;
     using System.Collections.Generic;
+    using Abacaxi.Graphs;
 
     /// <summary>
     /// A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped movements).
@@ -38,6 +39,14 @@ namespace Abacaxi.Graphs
         /// Always returns <c>true</c>.
         /// </value>
         public override bool IsDirected => false;
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsReadOnly => true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChessHorsePathGraph"/> class.
@@ -104,7 +113,7 @@ namespace Abacaxi.Graphs
         /// <param name="startCell">The start cell.</param>
         /// <param name="endCell">The end cell.</param>
         /// <returns>The shortest path between any two arbitrary cells in space.</returns>
-        public static IEnumerable<Cell> FindShortestPathInInfiniteBoard(Cell startCell, Cell endCell)
+        public static IEnumerable<Cell> FindChessHorsePathBetweenTwoPoints(Cell startCell, Cell endCell)
         {
             const int padding = 2;
 

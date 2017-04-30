@@ -38,6 +38,8 @@
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateAllSubsetCombinations.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
+    <Compile Include="Graph\Graph.Tests.GetComponents.cs" />
+    <Compile Include="Graph\Graph.Tests.FindChessHorsePathBetweenTwoPoints.cs" />
     <Compile Include="Graph\Graph.Tests.FindShortestPath.cs" />
     <Compile Include="Graph\Graph.Tests.FillWithOneColor.cs" />
     <Compile Include="Graph\Graph.Tests.TraverseDfs.cs" />
@@ -50,7 +52,7 @@
     <Compile Include="Graph\MazeGraphTests.cs" />
     <Compile Include="Graph\CellTests.cs" />
     <Compile Include="Integer\Integer.Tests.EnumerateFibonacciNumbers.cs" />
-    <Compile Include="Practice\Practice.Tests.Divide.cs" />
+    <Compile Include="Integer\Integer.Tests.Divide.cs" />
     <Compile Include="Sequence\Sequence.Tests.ContainsSubsetWithAggregatedValue.cs" />
     <Compile Include="Sequence\Sequence.Tests.FindSubsetWithClosestAggregatedValue.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateIntegerPartitionCombinations.cs" />
@@ -86,6 +88,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Abacaxi.Practice\Abacaxi.Practice.csproj">
+      <Project>{adcfd10b-65c7-4d15-a896-5533c3afa923}</Project>
+      <Name>Abacaxi.Practice</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Abacaxi\Abacaxi.csproj">
       <Project>{d17d48c6-b342-4dee-86b2-54f869f2d3a2}</Project>
       <Name>Abacaxi</Name>

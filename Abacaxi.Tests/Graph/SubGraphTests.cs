@@ -76,5 +76,23 @@ namespace Abacaxi.Tests.Graph
 
             Assert.AreEqual(expected, sub.IsDirected);
         }
+
+        [Test]
+        public void IsReadOnly_ReturnsTrue_IfBackingGraphIsReaOnly()
+        {
+            var graph = new LiteralGraph("A");
+            var sub = new SubGraph<char>(graph, new[] {'A'});
+
+            Assert.IsTrue(sub.IsReadOnly);
+        }
+
+        [Test]
+        public void IsReadOnly_ReturnsFalse_IfBackingGraphIsNotReaOnly()
+        {
+            var graph = new MazeGraph(new [,] { { true } });
+            var sub = new SubGraph<Cell>(graph, new[] { new Cell(0, 0) });
+
+            Assert.IsFalse(sub.IsReadOnly);
+        }
     }
 }

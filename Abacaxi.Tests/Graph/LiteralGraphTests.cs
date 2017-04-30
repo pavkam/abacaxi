@@ -101,6 +101,14 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        public void IsReadOnly_ReturnsTrue()
+        {
+            var graph = new LiteralGraph("A,B");
+
+            Assert.IsTrue(graph.IsReadOnly);
+        }
+
+        [Test]
         public void Enumeration_ReturnsAllVertices()
         {
             var graph = new LiteralGraph("A>B,B-Z,K<T");

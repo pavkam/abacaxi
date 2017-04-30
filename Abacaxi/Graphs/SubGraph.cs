@@ -27,6 +27,28 @@ namespace Abacaxi.Graphs
     {
         private readonly Graph<TVertex> _graph;
         private readonly HashSet<TVertex> _vertices;
+        private readonly bool _isDirected;
+
+        private bool CheckGraphIsDirected()
+        {
+            var checkSet = new HashSet<KeyValuePair<TVertex, TVertex>>();
+
+            foreach (var vertex in _vertices)
+            {
+                foreach (var edge in _graph.GetEdges(vertex))
+                {
+                    if (_vertices.Contains(edge.ToVertex))
+                    {
+                        if (!checkSet.Remove(new KeyValuePair<TVertex, TVertex>(edge.ToVertex, edge.FromVertex)))
+                        {
+                            checkSet.Add(new KeyValuePair<TVertex, TVertex>(edge.FromVertex, edge.ToVertex));
+                        }
+                    }
+                }
+            }
+
+            return checkSet.Count > 0;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubGraph{TVertex}"/> class.
@@ -40,23 +62,30 @@ namespace Abacaxi.Graphs
             Validate.ArgumentNotNull(nameof(graph), graph);
             Validate.ArgumentNotNull(nameof(vertices), vertices);
 
-            _graph = graph;
             _vertices = new HashSet<TVertex>(vertices);
-            var originalVertexSet = new HashSet<TVertex>(graph);
+            _graph = graph;
 
-            if (!_vertices.IsSubsetOf(originalVertexSet))
+            if (_graph.IsReadOnly)
             {
-                throw new InvalidOperationException("The supplied vertex set contains one or more vertices not part of the original graph.");
+                _isDirected = CheckGraphIsDirected();
             }
         }
 
         /// <summary>
-        /// Gets a value indicating whether this graph's edges are directed.
+        /// Checks whether the sub-graph has directed edges.
         /// </summary>
         /// <value>
-        /// The value of <see cref="IsDirected"/> from the parent graph.
+        ///     <c>true</c> if the sub-graph is directed. <c>false</c> otherwise.
         /// </value>
-        public override bool IsDirected => _graph.IsDirected;
+        public override bool IsDirected => _graph.IsReadOnly ? _isDirected : CheckGraphIsDirected();
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsReadOnly => _graph.IsReadOnly;
 
         /// <summary>
         /// Returns an enumerator that iterates all vertices in the graph.

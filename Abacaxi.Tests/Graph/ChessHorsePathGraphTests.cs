@@ -16,6 +16,8 @@
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 // ReSharper disable ObjectCreationAsStatement
 
+
+
 namespace Abacaxi.Tests.Graph
 {
     using System;
@@ -23,6 +25,7 @@ namespace Abacaxi.Tests.Graph
     using System.Linq;
     using Graphs;
     using NUnit.Framework;
+    using Practice.Graphs;
 
     [TestFixture]
     public class ChessHorsePathGraphTests
@@ -44,6 +47,13 @@ namespace Abacaxi.Tests.Graph
         {
             var graph = new ChessHorsePathGraph(2, 3);
             Assert.IsFalse(graph.IsDirected);
+        }
+
+        [Test]
+        public void IsReadOnly_ReturnsTrue()
+        {
+            var graph = new ChessHorsePathGraph(2, 3);
+            Assert.IsTrue(graph.IsReadOnly);
         }
 
         [TestCase(-1, 0)]

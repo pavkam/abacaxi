@@ -13,8 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics;
-
 namespace Abacaxi
 {
     using System;
@@ -29,7 +27,7 @@ namespace Abacaxi
             {
                 sqrt = Math.Sqrt(number);
             }
-            else if (number > Int32.MinValue)
+            else if (number > int.MinValue)
             {
                 sqrt = Math.Sqrt(Math.Abs(number));
             }
@@ -132,9 +130,7 @@ namespace Abacaxi
         {
             // ReSharper disable once GenericEnumeratorNotDisposed
             var enumerator = DeconstructIntoPrimeFactors(number).GetEnumerator();
-            Debug.Assert(enumerator.MoveNext());
-
-            return !enumerator.MoveNext();
+            return enumerator.MoveNext() && !enumerator.MoveNext();
         }
 
         /// <summary>

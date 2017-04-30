@@ -13,15 +13,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi
+namespace Abacaxi.Practice
 {
     using System;
     using System.Collections.Generic;
 
     /// <summary>
-    /// Class that only contains "practice methods" with no real use.
+    /// Class that only contains practice algorithms related to integers.
     /// </summary>
-    public static class Practice
+    public static class Integer
     {
         /// <summary>
         /// Divides <paramref name="number"/> by <paramref name="divisor"/>.

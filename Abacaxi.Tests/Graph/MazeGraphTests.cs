@@ -66,23 +66,43 @@ namespace Abacaxi.Tests.Graph
             Assert.Throws<ArgumentNullException>(() => new MazeGraph(null));
         }
 
+        [Test]
+        public void IsDirected_ReturnsFalse()
+        {
+            var graph = new MazeGraph(new[,]
+            {
+                { true, false },
+                { true, true },
+            });
+
+            Assert.IsFalse(graph.IsDirected);
+        }
+
+        [Test]
+        public void IsReadOnly_ReturnsFalse()
+        {
+            var graph = new MazeGraph(new[,] { { true } });
+
+            Assert.IsFalse(graph.IsReadOnly);
+        }
+
         [TestCase(-1, 0)]
         [TestCase(0, -1)]
         [TestCase(1, 0)]
         [TestCase(0, 1)]
         public void GetEdges_ThrowsException_ForInvalidCell(int x, int y)
         {
-            var array = new MazeGraph(new[,] { { true } });
+            var graph = new MazeGraph(new[,] { { true } });
 
-            Assert.Throws<InvalidOperationException>(() => array.GetEdges(new Cell(x, y)).ToArray());
+            Assert.Throws<InvalidOperationException>(() => graph.GetEdges(new Cell(x, y)).ToArray());
         }
 
         [Test]
         public void GetEdges_ThrowsException_ForFalseCell()
         {
-            var array = new MazeGraph(new[,] { { false } });
+            var graph = new MazeGraph(new[,] { { false } });
 
-            Assert.Throws<InvalidOperationException>(() => array.GetEdges(new Cell(0, 0)).ToArray());
+            Assert.Throws<InvalidOperationException>(() => graph.GetEdges(new Cell(0, 0)).ToArray());
         }
 
         [TestCase("00", "10,01")]

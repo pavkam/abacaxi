@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abacaxi.Practice", "Abacaxi.Practice\Abacaxi.Practice.csproj", "{ADCFD10B-65C7-4D15-A896-5533C3AFA923}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADCFD10B-65C7-4D15-A896-5533C3AFA923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADCFD10B-65C7-4D15-A896-5533C3AFA923}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADCFD10B-65C7-4D15-A896-5533C3AFA923}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADCFD10B-65C7-4D15-A896-5533C3AFA923}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

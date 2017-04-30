@@ -28,6 +28,21 @@ namespace Abacaxi.Graphs
     {
         private readonly Dictionary<char, ISet<char>> _vertices;
 
+        private void AddVertex(char vertex)
+        {
+            Debug.Assert(char.IsLetterOrDigit(vertex));
+            Debug.Assert(_vertices != null);
+
+            if (!_vertices.TryGetValue(vertex, out ISet<char> set))
+            {
+                set = new HashSet<char>();
+                _vertices.Add(vertex, set);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Vertex '{vertex}' has already been defined.");
+            }
+        }
         private void AddRelation(char from, char to)
         {
             Debug.Assert(char.IsLetterOrDigit(from));
@@ -87,6 +102,13 @@ namespace Abacaxi.Graphs
                             stage += 1;
                             break;
                         case 1:
+                            if (c == ',')
+                            {
+                                AddVertex(vertexChars[0]);
+                                stage = 0;
+                                break;
+                            }
+
                             switch (c)
                             {
                                 case '-':
@@ -143,6 +165,10 @@ namespace Abacaxi.Graphs
                     AddRelation(vertexChars[1], vertexChars[0]);
                 }
             }
+            else if (stage == 1)
+            {
+                AddVertex(vertexChars[0]);
+            }
             else if (stage != 0)
             {
                 throw new FormatException($"Unexpected end in the relationship string: \"{relationships}\".");
@@ -158,6 +184,14 @@ namespace Abacaxi.Graphs
         ///     <c>true</c> if the graph is directed; <c>false</c> otherwise.
         /// </value>
         public override bool IsDirected { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsReadOnly => true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LiteralGraph"/> class.

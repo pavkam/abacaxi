@@ -41,6 +41,14 @@ namespace Abacaxi.Graphs
         public override bool IsDirected => false;
 
         /// <summary>
+        /// Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsReadOnly => false;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MazeGraph"/> class.
         /// </summary>
         /// <param name="matrix">The backing two-dimensional array.</param>

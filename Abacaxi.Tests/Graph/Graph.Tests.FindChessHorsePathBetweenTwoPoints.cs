@@ -13,33 +13,32 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Practice
+// ReSharper disable SuspiciousTypeConversion.Global
+
+using System.Linq;
+using Abacaxi.Practice.Graphs;
+
+namespace Abacaxi.Tests.Graph
 {
     using System;
+    using System.Collections.Generic;
+    using Graphs;
     using NUnit.Framework;
 
     [TestFixture]
-    public class PracticeDivideTests
+    public class GraphFindChessHorsePathBetweenTwoPointsTests
     {
-        [Test]
-        public void Divide_ThrowsException_ForZeroDivisor()
+        [TestCase(0, 0, 0, 0, "0,0")]
+        [TestCase(0, 0, 1, 0, "0,0;-2,-1;0,-2;1,0")]
+        [TestCase(0, 0, 0, 1, "0,0;-1,-2;-2,0;0,1")]
+        [TestCase(0, 0, 1, 1, "0,0;2,-1;1,1")]
+        [TestCase(-5, -5, 10, 10, "-5,-5;-3,-4;-1,-3;1,-2;3,-1;5,0;6,2;7,4;8,6;9,8;10,10")]
+        public void FindChessHorsePathBetweenTwoPoints_FindsShortestPathBetweenTwoPoints(int sx, int sy, int ex, int ey, string expected)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                1.Divide(0));
-        }
+            var actual = string.Join(";", ChessHorsePathGraph.FindChessHorsePathBetweenTwoPoints(new Cell(sx, sy), new Cell(ex, ey))
+                .Select(s => $"{s.X},{s.Y}"));
 
-        [TestCase(0, 1, 0)]
-        [TestCase(1, 1, 1)]
-        [TestCase(2, 1, 2)]
-        [TestCase(10, 2, 5)]
-        [TestCase(100, 3, 33)]
-        [TestCase(-10, 2, -5)]
-        [TestCase(-10, -2, 5)]
-        [TestCase(10, -2, -5)]
-        public void Divide_ReturnsCorrectResult(int x, int y, int expected)
-        {
-            var result = x.Divide(y);
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected, actual);
         }
     }
 }

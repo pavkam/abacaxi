@@ -34,7 +34,7 @@ namespace Abacaxi.Containers
         public SingleLinkedNode<T> Next { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="SingleLinkedSingleLinkedNode{T}"/> class with a given value.
+        /// Initializes a new instance of <see cref="SingleLinkedNode{T}"/> class with a given value.
         /// </summary>
         /// <param name="value">The node's value.</param>
         public SingleLinkedNode(T value)
@@ -133,6 +133,5 @@ namespace Abacaxi.Containers
 
             return head;
         }
-
     }
 }
