@@ -13,7 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 namespace Abacaxi.Graphs
 {
     using System;
@@ -110,7 +109,7 @@ namespace Abacaxi.Graphs
             }
             else if (vertexNode.ReachableAncestor == vertexNode.Parent)
             {
-                ((DfsNode) vertexNode.Parent).Articulation = true;
+                ((DfsNode)vertexNode.Parent).Articulation = true;
             }
 
             if (!handleVertexCompleted(vertexNode))
@@ -384,6 +383,69 @@ namespace Abacaxi.Graphs
                 });
 
                 yield return new SubGraph<TVertex>(this, verticesInThisComponent);
+            }
+        }
+
+        /// <summary>
+        /// Sorts a directed acyclic graph in topological order.
+        /// </summary>
+        /// <returns>A sequence of vertices sorted in topological order.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the graph contains one or more cycles.</exception>
+        public IEnumerable<TVertex> TopologicalSort()
+        {
+            var outAdj = new Dictionary<TVertex, ISet<TVertex>>();
+            var inAdj = new Dictionary<TVertex, ISet<TVertex>>();
+
+            foreach (var v in this)
+            {
+                var outSet = new HashSet<TVertex>();
+                outAdj.Add(v, outSet);
+
+                if (!inAdj.ContainsKey(v))
+                {
+                    inAdj.Add(v, new HashSet<TVertex>());
+                }
+
+                foreach (var z in GetEdges(v))
+                {
+                    outSet.Add(z.ToVertex);
+
+                    if (!inAdj.TryGetValue(z.ToVertex, out ISet<TVertex> inSet))
+                    {
+                        inSet = new HashSet<TVertex>();
+                        inAdj.Add(z.ToVertex, inSet);
+                    }
+
+                    inSet.Add(v);
+                }
+            }
+
+            var nextQueue = new Queue<TVertex>();
+            foreach (var v in inAdj.Where(k => k.Value.Count == 0))
+            {
+                nextQueue.Enqueue(v.Key);
+            }
+
+            while (nextQueue.Count > 0)
+            {
+                var next = nextQueue.Dequeue();
+                inAdj.Remove(next);
+
+                yield return next;
+
+                foreach (var d in outAdj[next])
+                {
+                    inAdj[d].Remove(next);
+                    if (inAdj[d].Count == 0)
+                    {
+                        nextQueue.Enqueue(d);
+                    }
+                }
+            }
+
+            if (inAdj.Count > 0)
+            {
+                throw new InvalidOperationException("Topological sorting not supported on cyclical graphs.");
             }
         }
     }

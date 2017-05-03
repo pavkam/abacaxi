@@ -27,28 +27,6 @@ namespace Abacaxi.Graphs
     {
         private readonly Graph<TVertex> _graph;
         private readonly HashSet<TVertex> _vertices;
-        private readonly bool _isDirected;
-
-        private bool CheckGraphIsDirected()
-        {
-            var checkSet = new HashSet<KeyValuePair<TVertex, TVertex>>();
-
-            foreach (var vertex in _vertices)
-            {
-                foreach (var edge in _graph.GetEdges(vertex))
-                {
-                    if (_vertices.Contains(edge.ToVertex))
-                    {
-                        if (!checkSet.Remove(new KeyValuePair<TVertex, TVertex>(edge.ToVertex, edge.FromVertex)))
-                        {
-                            checkSet.Add(new KeyValuePair<TVertex, TVertex>(edge.FromVertex, edge.ToVertex));
-                        }
-                    }
-                }
-            }
-
-            return checkSet.Count > 0;
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubGraph{TVertex}"/> class.
@@ -64,20 +42,15 @@ namespace Abacaxi.Graphs
 
             _vertices = new HashSet<TVertex>(vertices);
             _graph = graph;
-
-            if (_graph.IsReadOnly)
-            {
-                _isDirected = CheckGraphIsDirected();
-            }
         }
 
         /// <summary>
         /// Checks whether the sub-graph has directed edges.
         /// </summary>
         /// <value>
-        ///     <c>true</c> if the sub-graph is directed. <c>false</c> otherwise.
+        ///     <c>true</c> if the sub-graph is directed; otherwise, <c>false</c> .
         /// </value>
-        public override bool IsDirected => _graph.IsReadOnly ? _isDirected : CheckGraphIsDirected();
+        public override bool IsDirected => _graph.IsDirected;
 
         /// <summary>
         /// Gets a value indicating whether this instance is read only.

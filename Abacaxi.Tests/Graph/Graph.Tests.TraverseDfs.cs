@@ -30,7 +30,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void TraverseDfs_ThrowsException_ForNullCompletionHandler()
         {
-            var graph = new LiteralGraph("A>B");
+            var graph = new LiteralGraph("A>B", true);
 
             Assert.Throws<ArgumentNullException>(() => graph.TraverseDfs('A', null, (node, dfsNode) => true));
         }
@@ -38,7 +38,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void TraverseDfs_ThrowsException_ForNullCycleHandler()
         {
-            var graph = new LiteralGraph("A>B");
+            var graph = new LiteralGraph("A>B", true);
 
             Assert.Throws<ArgumentNullException>(() => graph.TraverseDfs('A', node => true, null));
         }
@@ -46,7 +46,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void TraverseDfs_ThrowsException_ForInvalidVertex()
         {
-            var graph = new LiteralGraph("A>B");
+            var graph = new LiteralGraph("A>B", true);
 
             Assert.Throws<InvalidOperationException>(() => graph.TraverseDfs('Z', node => true, (node, dfsNode) => true));
         }
@@ -57,7 +57,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", "E>G,B>E,B>F,A>B,A>C,A>D,>A")]
         public void TraverseDfs_ReturnsProperSequence_ForUndirectedGraph(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseDfs('A', node =>
@@ -76,7 +76,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A>B,B>C,C>A,D>B,C>D", "C>D,B>C,A>B,>A")]
         public void TraverseDfs_ReturnsProperSequence_ForDirectedGraph(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseDfs('A', node =>
@@ -94,7 +94,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", 'E', "E>G,B>E,A>B,>A")]
         public void TraverseDfs_ReturnsProperSequence_IfInterrupted(string relationships, char killVertex, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseDfs('A', node =>
@@ -118,7 +118,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,B-C,C-D,D-A,B>D", "D~A")]
         public void TraverseDfs_ReportsTheCycles(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseDfs('A', node => true, (from, to) =>
@@ -136,7 +136,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,B-C,C-D,D-A,B>D", 'B', "C>D,B>C,A>B,>A")]
         public void TraverseDfs_InterruptsOnCycle(string relationships, char killVertex, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseDfs('A', node =>
@@ -155,7 +155,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,B-D,D-F,F-A,F-Z,A-C,C-E,E-A,E-G,G-H,H-E", "F,E,A")]
         public void TraverseDfs_MarksNodesAsArticulations(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<char>();
 
             graph.TraverseDfs('A', node =>
@@ -173,7 +173,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,B-D,D-F,F-A,F-Z,A-C,C-E,E-A,E-G,G-H,H-E", "Z4,F3,D2,B1,H12,G11,E10,C9,A0")]
         public void TraverseDfs_MarksNodesWithCorrectEntryTimes(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseDfs('A', node =>
@@ -189,7 +189,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,B-D,D-F,F-A,F-Z,A-C,C-E,E-A,E-G,G-H,H-E", "Z5,F6,D7,B8,H13,G14,E15,C16,A17")]
         public void TraverseDfs_MarksNodesWithCorrectExitTimes(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseDfs('A', node =>

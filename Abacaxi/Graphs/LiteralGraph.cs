@@ -43,6 +43,7 @@ namespace Abacaxi.Graphs
                 throw new InvalidOperationException($"Vertex '{vertex}' has already been defined.");
             }
         }
+
         private void AddRelation(char from, char to)
         {
             Debug.Assert(char.IsLetterOrDigit(from));
@@ -66,7 +67,7 @@ namespace Abacaxi.Graphs
             }
         }
 
-        private bool ParseRelations(string relationships)
+        private void Parse(string relationships)
         {
             Debug.Assert(relationships != null);
 
@@ -116,10 +117,22 @@ namespace Abacaxi.Graphs
                                     toFromEdge = true;
                                     break;
                                 case '>':
+                                    if (!IsDirected)
+                                    {
+                                        throw new InvalidOperationException(
+                                            $"Invalid character \"{c}\" found at position {ci} in \"{relationships}\". This graph is no directed!");
+                                    }
+
                                     fromToEdge = true;
                                     toFromEdge = false;
                                     break;
                                 case '<':
+                                    if (!IsDirected)
+                                    {
+                                        throw new InvalidOperationException(
+                                            $"Invalid character \"{c}\" found at position {ci} in \"{relationships}\". This graph is no directed!");
+                                    }
+
                                     fromToEdge = false;
                                     toFromEdge = true;
                                     break;
@@ -154,27 +167,28 @@ namespace Abacaxi.Graphs
                 ci++;
             }
 
-            if (stage == 3)
+            switch (stage)
             {
-                if (fromToEdge)
-                {
-                    AddRelation(vertexChars[0], vertexChars[1]);
-                }
-                if (toFromEdge)
-                {
-                    AddRelation(vertexChars[1], vertexChars[0]);
-                }
+                case 3:
+                    if (fromToEdge)
+                    {
+                        AddRelation(vertexChars[0], vertexChars[1]);
+                    }
+                    if (toFromEdge)
+                    {
+                        AddRelation(vertexChars[1], vertexChars[0]);
+                    }
+                    break;
+                case 1:
+                    AddVertex(vertexChars[0]);
+                    break;
+                default:
+                    if (stage != 0)
+                    {
+                        throw new FormatException($"Unexpected end in the relationship string: \"{relationships}\".");
+                    }
+                    break;
             }
-            else if (stage == 1)
-            {
-                AddVertex(vertexChars[0]);
-            }
-            else if (stage != 0)
-            {
-                throw new FormatException($"Unexpected end in the relationship string: \"{relationships}\".");
-            }
-
-            return _vertices.All(f => f.Value.All(t => _vertices[t].Contains(f.Key)));
         }
 
         /// <summary>
@@ -197,12 +211,16 @@ namespace Abacaxi.Graphs
         /// Initializes a new instance of the <see cref="LiteralGraph"/> class.
         /// </summary>
         /// <param name="relationships">The vertex relationship definitions.</param>
-        public LiteralGraph(string relationships)
+        /// <param name="isDirected">Specifies whether the graph is directed.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="relationships"/> is <c>null</c>.</exception>
+        public LiteralGraph(string relationships, bool isDirected)
         {
             Validate.ArgumentNotNull(nameof(relationships), relationships);
 
             _vertices = new Dictionary<char, ISet<char>>();
-            IsDirected = ParseRelations(relationships);
+
+            IsDirected = isDirected;
+            Parse(relationships);
         }
 
         /// <summary>

@@ -15,8 +15,6 @@
 
 // ReSharper disable SuspiciousTypeConversion.Global
 
-
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
@@ -30,7 +28,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void TraverseBfs_ThrowsException_ForNullCompletionHandler()
         {
-            var graph = new LiteralGraph("A>B");
+            var graph = new LiteralGraph("A>B", true);
 
             Assert.Throws<ArgumentNullException>(() => graph.TraverseBfs('A', null));
         }
@@ -38,7 +36,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void TraverseBfs_ThrowsException_ForInvalidVertex()
         {
-            var graph = new LiteralGraph("A>B");
+            var graph = new LiteralGraph("A>B", true);
 
             Assert.Throws<InvalidOperationException>(() => graph.TraverseBfs('Z', node => true));
         }
@@ -49,7 +47,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", ">A,A>B,A>C,A>D,B>E,B>F,E>G")]
         public void TraverseBfs_ReturnsProperSequence_ForUndirectedGraph(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseBfs('A', node =>
@@ -68,7 +66,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A>B,B>C,C>A,D>B,C>D", ">A,A>B,B>C,C>D")]
         public void TraverseBfs_ReturnsProperSequence_ForDirectedGraph(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseBfs('A', node =>
@@ -86,7 +84,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", 'G', ">A,A>B,A>C,A>D,B>E,B>F,E>G")]
         public void TraverseBfs_ReturnsProperSequence_IfInterrupted(string relationships, char killVertex, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<string>();
 
             graph.TraverseBfs('A', node =>

@@ -28,14 +28,14 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void FillWithOneColor_ThrowsException_ForInvalidVertex()
         {
-            var graph = new LiteralGraph("A>B");
+            var graph = new LiteralGraph("A>B", true);
             Assert.Throws<InvalidOperationException>(() => graph.FillWithOneColor('Z', v => { }));
         }
 
         [Test]
         public void FillWithOneColor_ThrowsException_ForNullApplyColor()
         {
-            var graph = new LiteralGraph("A>B");
+            var graph = new LiteralGraph("A>B", true);
             Assert.Throws<ArgumentNullException>(() => graph.FillWithOneColor('A', null));
         }
 
@@ -44,7 +44,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A>B,A>C,C<F,F-E,E-D,D>B,D>C", 'D', "D,E,B,C,F")]
         public void FillWithOneColor_FillsExpectedVertices(string relationships, char startVertex, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, true);
             var result = new List<char>();
 
             graph.FillWithOneColor(startVertex, vertex =>

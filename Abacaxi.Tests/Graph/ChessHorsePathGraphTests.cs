@@ -16,8 +16,6 @@
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 // ReSharper disable ObjectCreationAsStatement
 
-
-
 namespace Abacaxi.Tests.Graph
 {
     using System;

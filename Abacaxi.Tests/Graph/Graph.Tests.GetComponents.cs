@@ -20,7 +20,6 @@
 
 namespace Abacaxi.Tests.Graph
 {
-    using System;
     using System.Linq;
     using Graphs;
     using NUnit.Framework;
@@ -34,7 +33,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-B,B-C,C-A,D-E", "A,B,C;D,E")]
         public void GetComponents_ReturnsProperComponents(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships);
+            var graph = new LiteralGraph(relationships, false);
             var result = string.Join(";",
                 graph.GetComponents().Select(component => string.Join(",", component)));
 

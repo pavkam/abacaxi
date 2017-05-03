@@ -24,27 +24,37 @@ namespace Abacaxi.Tests.Graph
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphFindShortestPathTests
+    public class GraphTopologicalSortTests
     {
         [Test]
-        public void FindShortestPath_ThrowsException_ForInvalidStartVertex()
+        public void TopologicalSort_ThrowsException_ForUndirectedGraph()
         {
-            var graph = new LiteralGraph("A>B", true);
-            Assert.Throws<InvalidOperationException>(() => graph.FindShortestPath('Z', 'A').ToArray());
+            var graph = new LiteralGraph("A-B", false);
+            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort().ToArray());
         }
 
-        [TestCase("A-B,A-C", 'A', 'B', "A,B")]
-        [TestCase("A-B,B-C,C-D,D-A,B>D", 'D', 'B', "D,C,B")]
-        [TestCase("A-B,B-C,C-D,D-A,B>D", 'B', 'D', "B,D")]
-        [TestCase("A>B,A>C,C<F,F-E,E-D,D>B,D>C", 'A', 'E', "")]
-        [TestCase("A>B,A>C,C<F,F-E,E-D,D>B,D>C", 'E', 'Z', "")]
-        public void FindShortestPath_FillsExpectedVertices(
-            string relationships, char startVertex, char endVertex, string expected)
+        [TestCase("A-B")]
+        [TestCase("A>B,B>A")]
+        [TestCase("A>B,B>C,C>A")]
+        public void TopologicalSort_ThrowsException_ForDirectedGraphWith(string relationships)
         {
             var graph = new LiteralGraph(relationships, true);
-            var seq = graph.FindShortestPath(startVertex, endVertex);
+            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort().ToArray());
+        }
 
-            Assert.AreEqual(expected, string.Join(",", seq));
+        [TestCase("A", "A")]
+        [TestCase("A>B", "A,B")]
+        [TestCase("A>B,B>C", "A,B,C")]
+        [TestCase("A>B,B>C,A>C", "A,B,C")]
+        [TestCase("A,B,C,C>D", "A,B,C,D")]
+        [TestCase("A>B,C>B,B>D,B>E,E>D,F", "A,C,F,B,E,D")]
+        public void TopologicalSort_AlignsTheVerticesAsExpected(string relationships, string expected)
+        {
+            var graph = new LiteralGraph(relationships, true);
+            var result = graph.TopologicalSort().ToList();
+            var actual = string.Join(",", result);
+
+            Assert.AreEqual(expected, actual);
         }
     }
 }

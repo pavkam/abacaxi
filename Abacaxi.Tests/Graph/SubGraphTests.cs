@@ -33,13 +33,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void Ctor_ThrowsException_ForNullVerticesSequence()
         {
-            Assert.Throws<ArgumentNullException>(() => new SubGraph<char>(new LiteralGraph("A-B"), null));
-        }
-
-        [Test]
-        public void Ctor_ThrowsException_ForVerticesNotPartOfTheGraph()
-        {
-            Assert.Throws<InvalidOperationException>(() => new SubGraph<char>(new LiteralGraph("A-B"), new[] { 'Z' }));
+            Assert.Throws<ArgumentNullException>(() => new SubGraph<char>(new LiteralGraph("A-B", false), null));
         }
 
         [TestCase("A", 'A', "")]
@@ -47,7 +41,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("ABC", 'B', "B >==> A, B >==> C")]
         public void GetEdges_ReturnsOnlySuppliedVertices(string vertices, char vertex, string expected)
         {
-            var graph = new LiteralGraph("A-B,B-C,C-D,D-A,D<B");
+            var graph = new LiteralGraph("A-B,B-C,C-D,D-A,D<B", true);
             var sub = new SubGraph<char>(graph, vertices);
             var actual = string.Join(", ", sub.GetEdges(vertex));
 
@@ -59,28 +53,35 @@ namespace Abacaxi.Tests.Graph
         [TestCase("ABC", "A,B,C")]
         public void Enumeration_ReturnsOnlyIncludedVertices(string vertices, string expected)
         {
-            var graph = new LiteralGraph("A-B,B-C,C-D,D-A,D<B");
+            var graph = new LiteralGraph("A-B,B-C,C-D,D-A,D<B", true);
             var sub = new SubGraph<char>(graph, vertices);
             var actual = string.Join(",", sub);
 
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("ABCD", true)]
-        [TestCase("ABC", false)]
-        [TestCase("ABD", true)]
-        public void IsDirected_AdjustsBasedOnVertices(string vertices, bool expected)
+        [Test]
+        public void IsDirected_ReturnsTrue_IfBackingGraphIsDirected()
         {
-            var graph = new LiteralGraph("A-B,B-C,C-D,D-A,D<B");
-            var sub = new SubGraph<char>(graph, vertices);
+            var graph = new LiteralGraph("A", true);
+            var sub = new SubGraph<char>(graph, "A");
 
-            Assert.AreEqual(expected, sub.IsDirected);
+            Assert.IsTrue(sub.IsDirected);
+        }
+
+        [Test]
+        public void IsDirected_ReturnsFalse_IfBackingGraphIsUndirected()
+        {
+            var graph = new LiteralGraph("A", false);
+            var sub = new SubGraph<char>(graph, "A");
+
+            Assert.IsFalse(sub.IsDirected);
         }
 
         [Test]
         public void IsReadOnly_ReturnsTrue_IfBackingGraphIsReaOnly()
         {
-            var graph = new LiteralGraph("A");
+            var graph = new LiteralGraph("A", true);
             var sub = new SubGraph<char>(graph, new[] {'A'});
 
             Assert.IsTrue(sub.IsReadOnly);
