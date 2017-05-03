@@ -28,13 +28,13 @@ namespace Abacaxi.Containers
     {
         private const int DefaultArraySize = 32;
 
-        private IComparer<T> _comparer;
+        private readonly IComparer<T> _comparer;
         private T[] _array;
         private int _count, _ver;
 
-        private void SiftDown(T[] array, int length, int pi)
+        private void SiftDown(IList<T> array, int length, int pi)
         {
-            Debug.Assert(length <= array.Length);
+            Debug.Assert(length <= array.Count);
             Debug.Assert(pi >= 0 && pi < length);
 
             while (pi < length)
@@ -66,11 +66,8 @@ namespace Abacaxi.Containers
 
         }
 
-        private void SiftUp(T[] array, int length, int ci)
+        private void SiftUp(IList<T> array, int ci)
         {
-            Debug.Assert(length <= array.Length);
-            Debug.Assert(ci >= 0 && ci < length);
-
             while (ci > 0)
             {
                 var pi = (ci % 2 == 1) ? (ci - 1) / 2 : (ci - 2) / 2;
@@ -89,13 +86,13 @@ namespace Abacaxi.Containers
             }
         }
 
-        private void BuildHeap(T[] array, int length)
+        private void BuildHeap(IList<T> array, int length)
         {
-            Debug.Assert(length <= array.Length);
+            Debug.Assert(length <= array.Count);
              
             for (var ci = 1; ci < length; ci++)
             {
-                SiftUp(array, length, ci);
+                SiftUp(array, ci);
             }
         }
 
@@ -171,12 +168,11 @@ namespace Abacaxi.Containers
         {
             if (_count == _array.Length)
             {
-                var extended = new T[_array.Length * 2];
                 Array.Resize(ref _array, _count * 2);
             }
 
             _array[_count] = item;
-            SiftUp(_array, _count + 1, _count);
+            SiftUp(_array, _count);
 
             _ver++;
             _count++;
@@ -302,7 +298,7 @@ namespace Abacaxi.Containers
                         var pi = (i % 2 == 1) ? (i - 1) / 2 : (i - 2) / 2;
                         if (pi >= 0 && _comparer.Compare(_array[pi], _array[i]) < 0)
                         {
-                            SiftUp(_array, _count - 1, i);
+                            SiftUp(_array, i);
                         }
                         else
                         {
