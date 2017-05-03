@@ -13,11 +13,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
-using System.Linq;
-
 namespace Abacaxi.Graphs
 {
+    using System;
+    using System.Linq;
     using System.Collections.Generic;
 
     /// <summary>
