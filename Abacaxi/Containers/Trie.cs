@@ -28,10 +28,8 @@ namespace Abacaxi.Containers
     {
         private class Node
         {
-            public char Char;
-            public Node Parent;
-            public TValue Value;
             public bool IsTerminal;
+            public TValue Value;
             public readonly Dictionary<char, Node> Children = new Dictionary<char, Node>();
         }
 
@@ -54,15 +52,6 @@ namespace Abacaxi.Containers
             }
 
             return i == key.Length;
-        }
-
-        private static void SwipeUselessBranch(Node node)
-        {
-            while (!node.IsTerminal && node.Children.Count == 0 && node.Parent != null)
-            {
-                node.Parent.Children.Remove(node.Char);
-                node = node.Parent;
-            }
         }
 
         /// <summary>
@@ -124,9 +113,9 @@ namespace Abacaxi.Containers
                     yield return new KeyValuePair<string, TValue>(c.Key, c.Value.Value);
                 }
 
-                foreach (var n in c.Value.Children.Values)
+                foreach (var n in c.Value.Children)
                 {
-                    stack.Push(new KeyValuePair<string, Node>(c.Key + n.Char, n));
+                    stack.Push(new KeyValuePair<string, Node>(c.Key + n.Key, n.Value));
                 }
             }
         }
@@ -136,7 +125,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="prefix">The prefix to query.</param>
         /// <returns>The sequence of all key/value pairs that share the given <paramref name="prefix"/>.</returns>
-        /// <exception cref="System.InvalidOperationException">Collection has been modified while enumerating.</exception>
+        /// <exception cref="InvalidOperationException">Collection has been modified while enumerating.</exception>
         public IEnumerable<KeyValuePair<string, TValue>> Query(string prefix)
         {
             Validate.ArgumentNotNull(nameof(prefix), prefix);
@@ -160,9 +149,9 @@ namespace Abacaxi.Containers
                         yield return new KeyValuePair<string, TValue>(c.Key, c.Value.Value);
                     }
 
-                    foreach (var n in c.Value.Children.Values)
+                    foreach (var n in c.Value.Children)
                     {
-                        stack.Push(new KeyValuePair<string, Node>(c.Key + n.Char, n));
+                        stack.Push(new KeyValuePair<string, Node>(c.Key + n.Key, n.Value));
                     }
                 }
             }
@@ -214,11 +203,7 @@ namespace Abacaxi.Containers
             {
                 for (var r = i; r < key.Length; r++)
                 {
-                    var nn = new Node()
-                    {
-                        Parent = node,
-                        Char = key[r],
-                    };
+                    var nn = new Node();
 
                     node.Children.Add(key[r], nn);
                     node = nn;
@@ -303,20 +288,7 @@ namespace Abacaxi.Containers
         {
             Validate.ArgumentNotNull(nameof(item.Key), item.Key);
 
-            if (FlowDown(item.Key, out Node node) && 
-                node.IsTerminal &&
-                ValueDefaultComparer.Equals(node.Value, item.Value))
-            {
-                node.IsTerminal = false;
-                SwipeUselessBranch(node);
-
-                _ver++;
-                Count--;
-
-                return true;
-            }
-
-            return false;
+            return Contains(item) && Remove(item.Key);
         }
 
         /// <summary>
@@ -329,10 +301,31 @@ namespace Abacaxi.Containers
         {
             Validate.ArgumentNotNull(nameof(key), key);
 
-            if (FlowDown(key, out Node node) && node.IsTerminal)
+            var i = 0;
+            var node = _root;
+            var path = new Stack<Node>();
+            while (i < key.Length && node.Children.TryGetValue(key[i], out Node child))
+            {
+                path.Push(node);
+
+                node = child;
+                i++;
+            }
+
+            if (i == key.Length && node.IsTerminal)
             {
                 node.IsTerminal = false;
-                SwipeUselessBranch(node);
+
+                while (
+                    !node.IsTerminal && 
+                    node.Children.Count == 0 &&
+                    path.Count > 0)
+                {
+                    var parent = path.Pop();
+
+                    parent.Children.Remove(key[--i]);
+                    node = parent;
+                }
 
                 _ver++;
                 Count--;
