@@ -13,16 +13,17 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Abacaxi.Containers;
-
 namespace Abacaxi
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
+    using Containers;
 
+    /// <summary>
+    /// Class provides a large number of algorithms to use on sequences.
+    /// </summary>
     public static class Sequence
     {
         private const double CombSortShrinkFactor = 1.3;
@@ -236,6 +237,59 @@ namespace Abacaxi
             MergeSortSegments(sequence, middle + 1, hi, comparer);
 
             MergeSegments(sequence, lo, middle, middle + 1, hi, comparer);
+        }
+
+
+        /// <summary>
+        /// Finds the longest increasing sequence in a given <paramref name="sequence"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to verify.</param>
+        /// <param name="comparer">The comparer used to comapare the elements in the sequence.</param>
+        /// <returns>The longest increasing sequence.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="comparer"/> is <c>null</c>.</exception>
+        public static IEnumerable<T> FindLongestIncreasingSequence<T>(this IEnumerable<T> sequence,
+            IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var dyna = new List<Tuple<T, int, int>>();
+            var li = -1;
+            var lm = 0;
+            foreach (var e in sequence)
+            {
+                var pi = -1;
+                var pm = 0;
+
+                for (var i = dyna.Count - 1; i >= 0; i--)
+                {
+                    if (comparer.Compare(dyna[i].Item1, e) < 0 && (pi == -1 || pm < dyna[i].Item2))
+                    {
+                        pi = i;
+                        pm = dyna[i].Item2;
+                    }
+                }
+
+                var nm = pm + 1;
+                dyna.Add(Tuple.Create(e, nm, pi));
+
+                if (lm < nm)
+                {
+                    lm = nm;
+                    li = dyna.Count - 1;
+                }
+            }
+
+            var result = new T[lm];
+            while (li > -1)
+            {
+                result[--lm] = dyna[li].Item1;
+                li = dyna[li].Item3;
+            }
+
+            return result;
         }
 
         /// <summary>

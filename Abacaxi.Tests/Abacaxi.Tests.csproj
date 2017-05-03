@@ -55,6 +55,7 @@
     <Compile Include="Integer\Integer.Tests.EnumerateFibonacciNumbers.cs" />
     <Compile Include="Integer\Integer.Tests.Divide.cs" />
     <Compile Include="Sequence\Sequence.Tests.ContainsSubsetWithAggregatedValue.cs" />
+    <Compile Include="Sequence\Sequence.Tests.FindLongestIncreasingSequence.cs" />
     <Compile Include="Sequence\Sequence.Tests.FindSubsetWithClosestAggregatedValue.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateIntegerPartitionCombinations.cs" />
     <Compile Include="Integer\Integer.Tests.DeconstructIntoPrimeFactors.cs" />
