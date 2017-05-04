@@ -32,7 +32,6 @@ namespace Abacaxi.Tests.Graph
             Assert.Throws<ArgumentNullException>(() => new LiteralGraph(null, true));
         }
 
-        [TestCase("")]
         [TestCase(".")]
         [TestCase("A.")]
         [TestCase("AA-B")]
@@ -77,6 +76,13 @@ namespace Abacaxi.Tests.Graph
 
             TestHelper.AssertSequence(graph.GetEdges('A'));
             TestHelper.AssertSequence(graph.GetEdges('B'));
+        }
+
+        [Test]
+        public void Ctor_AcceptsEmptyRelationships()
+        {
+            var graph = new LiteralGraph("", false);
+            TestHelper.AssertSequence(graph);
         }
 
         [Test]

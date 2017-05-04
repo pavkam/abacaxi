@@ -14,9 +14,12 @@
  */
 
 // ReSharper disable SuspiciousTypeConversion.Global
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed
 
 namespace Abacaxi.Tests.Graph
 {
+    using System;
+    using System.Linq;
     using Graphs;
     using NUnit.Framework;
 
@@ -35,6 +38,13 @@ namespace Abacaxi.Tests.Graph
             var actual = string.Join(",", graph.FindAllArticulationVertices());
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void FindAllArticulationVertices_ThrowsException_ForDirectedGraphs()
+        {
+            var graph = new LiteralGraph("A>B", true);
+            Assert.Throws<InvalidOperationException>(() => graph.FindAllArticulationVertices().ToArray());
         }
     }
 }

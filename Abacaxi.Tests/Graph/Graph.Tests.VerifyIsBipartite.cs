@@ -15,38 +15,39 @@
 
 // ReSharper disable SuspiciousTypeConversion.Global
 
-
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+using System.Linq;
 
 namespace Abacaxi.Tests.Graph
 {
     using System;
-    using System.Linq;
+    using System.Collections.Generic;
     using Graphs;
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphGetComponentsTests
+    public class GraphVerifyIsBipartiteTests
     {
-        [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A-B,B-C,C-D", "A,B,C,D")]
-        [TestCase("A,B,C", "A;B;C")]
-        [TestCase("A-B,B-C,C-A,D-E", "A,B,C;D,E")]
-        public void GetComponents_ReturnsProperComponents(string relationships, string expected)
+        [TestCase("", true)]
+        [TestCase("A", true)]
+        [TestCase("A,B", true)]
+        [TestCase("A-B,C", true)]
+        [TestCase("A-B", true)]
+        [TestCase("A-B,B-C", true)]
+        [TestCase("A-B,B-C,C-A", false)]
+        [TestCase("A-B,C-D", true)]
+        public void VerifyIsBipartite_ReturnsExpectedResult(string relationships, bool expected)
         {
             var graph = new LiteralGraph(relationships, false);
-            var result = string.Join(";",
-                graph.GetComponents().Select(component => string.Join(",", component)));
+            var actual = graph.VerifyIsBipartite();
 
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
-        public void GetComponents_ThrowsException_ForDirectedGraphs()
+        public void VerifyIsBipartite_ThrowsException_ForDirectedGraphs()
         {
             var graph = new LiteralGraph("A>B", true);
-            Assert.Throws<InvalidOperationException>(() => graph.GetComponents().ToArray());
+            Assert.Throws<InvalidOperationException>(() => graph.VerifyIsBipartite());
         }
     }
 }

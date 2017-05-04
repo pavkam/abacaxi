@@ -72,7 +72,7 @@ namespace Abacaxi.Graphs
             Debug.Assert(relationships != null);
 
             var ci = 0;
-            var stage = -1;
+            var stage = 0;
 
             var vertexChars = new char[2];
             var fromToEdge = false;
@@ -83,11 +83,6 @@ namespace Abacaxi.Graphs
                 var c = relationships[ci];
                 if (!char.IsWhiteSpace(c))
                 {
-                    if (stage == -1)
-                    {
-                        stage = 0;
-                    }
-
                     switch (stage)
                     {
                         case 0:

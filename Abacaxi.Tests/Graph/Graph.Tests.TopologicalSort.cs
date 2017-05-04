@@ -42,6 +42,7 @@ namespace Abacaxi.Tests.Graph
             Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort().ToArray());
         }
 
+        [TestCase("", "")]
         [TestCase("A", "A")]
         [TestCase("A>B", "A,B")]
         [TestCase("A>B,B>C", "A,B,C")]

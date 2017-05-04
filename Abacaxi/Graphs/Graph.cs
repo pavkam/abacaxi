@@ -101,6 +101,14 @@ namespace Abacaxi.Graphs
             return !breakRequested;
         }
 
+        protected void RequireUndirectedGraph()
+        {
+            if (IsDirected)
+            {
+                throw new InvalidOperationException("This operation is not allowed on directed graphs.");
+            }
+        }
+
         /// <summary>
         /// Describes a node in a BFS traversal tree.
         /// </summary>
@@ -337,9 +345,11 @@ namespace Abacaxi.Graphs
         /// Gets all connected components in a given undirected graph.
         /// </summary>
         /// <returns>A sequence of sub-graphs, each representing a connected component.</returns>
-        /// <exception cref="InvalidOperationException">Thrown if this graph is directed.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
         public IEnumerable<Graph<TVertex>> GetComponents()
         {
+            RequireUndirectedGraph();
+
             var undiscoveredVertices = new HashSet<TVertex>(this);
 
             while (undiscoveredVertices.Count > 0)
@@ -363,7 +373,7 @@ namespace Abacaxi.Graphs
         /// Sorts a directed acyclic graph in topological order.
         /// </summary>
         /// <returns>A sequence of vertices sorted in topological order.</returns>
-        /// <exception cref="InvalidOperationException">Thrown if the graph contains one or more cycles.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the graph is undirected or contains one or more cycles.</exception>
         public IEnumerable<TVertex> TopologicalSort()
         {
             var outAdj = new Dictionary<TVertex, ISet<TVertex>>();
@@ -426,8 +436,11 @@ namespace Abacaxi.Graphs
         /// Finds all articulation vertices in the given graph.
         /// </summary>
         /// <returns>A sequence of all articulation vertices.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
         public IEnumerable<TVertex> FindAllArticulationVertices()
         {
+            RequireUndirectedGraph();
+
             var verticesToCheck = new HashSet<TVertex>(this);
             var articulationVertices = new HashSet<TVertex>();
 
@@ -489,6 +502,50 @@ namespace Abacaxi.Graphs
             }
 
             return articulationVertices;
+        }
+
+        /// <summary>
+        /// Verifies the current graph is bipartite.
+        /// </summary>
+        /// <returns><c>true</c> if the graph is bipartite; otherwise, <c>false</c>.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
+        public bool VerifyIsBipartite()
+        {
+            RequireUndirectedGraph();
+
+            var remainingVertices = new HashSet<TVertex>(this);
+            var isBipartite = true;
+            while (remainingVertices.Count > 0 && isBipartite)
+            {
+                var assignments = new Dictionary<TVertex, bool>();
+                TraverseDfs(remainingVertices.First(),
+                    node =>
+                    {
+                        remainingVertices.Remove(node.Vertex);
+
+                        if (node.Parent == null)
+                        {
+                            assignments.Add(node.Vertex, false);
+                        }
+                        else
+                        {
+                            assignments.Add(node.Vertex, !assignments[node.Parent.Vertex]);
+                        }
+                        return true;
+                    },
+                    node => true,
+                    (fromNode, toNode) =>
+                    {
+                        if (assignments[fromNode.Vertex] == assignments[toNode.Vertex])
+                        {
+                            isBipartite = false;
+                        }
+
+                        return isBipartite;
+                    });
+            }
+
+            return isBipartite;
         }
     }
 }
