@@ -24,12 +24,12 @@ namespace Abacaxi.Graphs
     public sealed class MazeGraph : Graph<Cell>
     {
         private readonly bool[,] _matrix;
-        private readonly int _lenghtX;
+        private readonly int _lengthX;
         private readonly int _lengthY;
 
         private bool VertexExists(int x, int y)
         {
-            return x >= 0 && x < _lenghtX && y >= 0 && y < _lengthY && _matrix[x, y];
+            return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY && _matrix[x, y];
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Abacaxi.Graphs
             Validate.ArgumentNotNull(nameof(matrix), matrix);
 
             _matrix = matrix;
-            _lenghtX = matrix.GetLength(0);
+            _lengthX = matrix.GetLength(0);
             _lengthY = matrix.GetLength(1); 
         }
 
@@ -70,7 +70,7 @@ namespace Abacaxi.Graphs
         /// </returns>
         public override IEnumerator<Cell> GetEnumerator()
         {
-            for (var x = 0; x < _lenghtX; x++)
+            for (var x = 0; x < _lengthX; x++)
             {
                 for (var y = 0; y < _lengthY; y++)
                 {

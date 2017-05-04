@@ -83,7 +83,7 @@ namespace Abacaxi.Graphs
                     breakRequested =
                         !TraverseDfs(visitedNode, ref time, visitedNodes, handleVertexVisited, handleVertexCompleted, handleCycle);
                 }
-                else if (visitedNode != vertexNode.Parent && visitedNode.EntryTime <= vertexNode.EntryTime)
+                else if ((IsDirected || visitedNode != vertexNode.Parent) && visitedNode.EntryTime <= vertexNode.EntryTime)
                 {
                     if (!handleCycle(vertexNode, visitedNode))
                     {

@@ -118,18 +118,38 @@ namespace Abacaxi.Tests.Graph
             Assert.AreEqual(expected, string.Join(",", result));
         }
 
-        [TestCase("A-B,A-C", "")]
-        [TestCase("A-B,C-D", "")]
-        [TestCase("A-B,A-D,B-C,C-D,C-E", "D~A")]
-        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", "")]
+        [TestCase("A-B,A-C", "B~A,C~A")]
+        [TestCase("A-B,C-D", "B~A")]
+        [TestCase("A-B,A-D,B-C,C-D,C-E", "B~A,C~B,D~A,D~C,E~C")]
+        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", "B~A,E~B,G~E,F~B,C~A,D~A")]
         [TestCase("A>A", "A~A")]
         [TestCase("A>B,B>C,C>A", "C~A")]
         [TestCase("A>B,C>A,C>B", "")]
         [TestCase("A>B,B>C,C>A,D>B,C>D", "C~A,D~B")]
-        [TestCase("A-B,B-C,C-D,D-A,B>D", "D~A")]
-        public void TraverseDfs_ReportsTheCycles(string relationships, string expected)
+        [TestCase("A-B,B-C,C-D,D-A,B>D", "B~A,C~B,D~C,D~A")]
+        public void TraverseDfs_ReportsTheCycles_InDirectedGraphs(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
+            var result = new List<string>();
+
+            graph.TraverseDfs('A', True, True, (from, to) =>
+            {
+                result.Add($"{from.Vertex}~{to.Vertex}");
+                return true;
+            });
+
+            Assert.AreEqual(expected, string.Join(",", result));
+        }
+
+        [TestCase("A", "")]
+        [TestCase("A,B,C", "")]
+        [TestCase("A-B,A-C", "")]
+        [TestCase("A-B,C-D", "")]
+        [TestCase("A-B,A-D,B-C,C-D,C-E", "D~A")]
+        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", "")]
+        public void TraverseDfs_ReportsTheCycles_InUndirectedGraphs(string relationships, string expected)
+        {
+            var graph = new LiteralGraph(relationships, false);
             var result = new List<string>();
 
             graph.TraverseDfs('A', True, True, (from, to) =>
@@ -144,7 +164,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A>A", 'A', ">A")]
         [TestCase("A>B,B>C,C>A", 'A', "B>C,A>B,>A")]
         [TestCase("A>B,B>C,C>A,D>B,C>D", 'A', "B>C,A>B,>A")]
-        [TestCase("A-B,B-C,C-D,D-A,B>D", 'B', "C>D,B>C,A>B,>A")]
+        [TestCase("A-B,B-C,C-D,D-A,B>D", 'B', "B>C,A>B,>A")]
         public void TraverseDfs_InterruptsOnCycle(string relationships, char killVertex, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
