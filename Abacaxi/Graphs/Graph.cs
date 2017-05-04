@@ -35,35 +35,38 @@ namespace Abacaxi.Graphs
 
         private sealed class DfsNode : IDfsNode
         {
-            public bool Articulation { get; set; }
             public TVertex Vertex { get; set; }
+            public IDfsNode Parent { get; set; }
             public int EntryTime { get; set; }
             public int ExitTime { get; set; }
-            public IDfsNode Parent { get; set; }
-            public DfsNode ReachableAncestor { get; set; }
         }
 
         private bool TraverseDfs(
             DfsNode vertexNode,
             ref int time,
             IDictionary<TVertex, DfsNode> visitedNodes,
+            Predicate<IDfsNode> handleVertexVisited,
             Predicate<IDfsNode> handleVertexCompleted,
             Func<IDfsNode, IDfsNode, bool> handleCycle)
         {
             Debug.Assert(vertexNode != null);
             Debug.Assert(visitedNodes != null);
             Debug.Assert(handleVertexCompleted != null);
+            Debug.Assert(handleVertexVisited != null);
             Debug.Assert(handleCycle != null);
 
             visitedNodes.Add(vertexNode.Vertex, vertexNode);
             vertexNode.EntryTime = time++;
 
+            if (!handleVertexVisited(vertexNode))
+            {
+                return false;
+            }
+
             var breakRequested = false;
-            var children = 0;
+
             foreach (var edge in GetEdges(vertexNode.Vertex))
             {
-                children++;
-
                 if (breakRequested)
                 {
                     break;
@@ -75,26 +78,13 @@ namespace Abacaxi.Graphs
                     {
                         Parent = vertexNode,
                         Vertex = edge.ToVertex,
-                        ReachableAncestor = vertexNode,
                     };
 
                     breakRequested =
-                        !TraverseDfs(visitedNode, ref time, visitedNodes, handleVertexCompleted, handleCycle);
-
-                    if (vertexNode.ReachableAncestor != null &&
-                        vertexNode.ReachableAncestor.EntryTime > visitedNode.ReachableAncestor.EntryTime)
-                    {
-                        vertexNode.ReachableAncestor = visitedNode.ReachableAncestor;
-                    }
+                        !TraverseDfs(visitedNode, ref time, visitedNodes, handleVertexVisited, handleVertexCompleted, handleCycle);
                 }
                 else if (visitedNode != vertexNode.Parent && visitedNode.EntryTime <= vertexNode.EntryTime)
                 {
-                    if (vertexNode.ReachableAncestor != null &&
-                        vertexNode.ReachableAncestor.EntryTime > visitedNode.EntryTime)
-                    {
-                        vertexNode.ReachableAncestor = visitedNode;
-                    }
-
                     if (!handleCycle(vertexNode, visitedNode))
                     {
                         breakRequested = true;
@@ -103,15 +93,6 @@ namespace Abacaxi.Graphs
             }
 
             vertexNode.ExitTime = time++;
-            if (vertexNode.Parent == null)
-            {
-                vertexNode.Articulation = children > 1;
-            }
-            else if (vertexNode.ReachableAncestor == vertexNode.Parent)
-            {
-                ((DfsNode)vertexNode.Parent).Articulation = true;
-            }
-
             if (!handleVertexCompleted(vertexNode))
             {
                 breakRequested = true;
@@ -162,14 +143,6 @@ namespace Abacaxi.Graphs
             /// The parent node.
             /// </value>
             IDfsNode Parent { get; }
-
-            /// <summary>
-            /// Gets a value indicating whether the <see cref="Vertex"/> is an articulation vertex.
-            /// </summary>
-            /// <value>
-            ///   <c>true</c> if articulation vertex; otherwise, <c>false</c>.
-            /// </value>
-            bool Articulation { get; }
 
             /// <summary>
             /// Gets the vertex "entry time".
@@ -285,13 +258,17 @@ namespace Abacaxi.Graphs
         /// Traverses the graph using the depth-first-search starting from <paramref name="startVertex"/>.
         /// </summary>
         /// <param name="startVertex">The start vertex.</param>
+        /// <param name="handleVertexVisited">The function called when a vertex is being visited.</param>
         /// <param name="handleVertexCompleted">The function called when a vertex is completed.</param>
         /// <param name="handleCycle">The function called when a cycle is identified.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="handleVertexVisited"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handleCycle"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="startVertex"/> is not part of this graph.</exception>
-        public void TraverseDfs(TVertex startVertex, Predicate<IDfsNode> handleVertexCompleted, Func<IDfsNode, IDfsNode, bool> handleCycle)
+        public void TraverseDfs(TVertex startVertex, Predicate<IDfsNode> handleVertexVisited, 
+            Predicate<IDfsNode> handleVertexCompleted, Func<IDfsNode, IDfsNode, bool> handleCycle)
         {
+            Validate.ArgumentNotNull(nameof(handleVertexVisited), handleVertexVisited);
             Validate.ArgumentNotNull(nameof(handleVertexCompleted), handleVertexCompleted);
             Validate.ArgumentNotNull(nameof(handleCycle), handleCycle);
 
@@ -301,7 +278,7 @@ namespace Abacaxi.Graphs
             TraverseDfs(new DfsNode()
             {
                 Vertex = startVertex,
-            }, ref time, discoveredSet, handleVertexCompleted, handleCycle);
+            }, ref time, discoveredSet, handleVertexVisited, handleVertexCompleted, handleCycle);
         }
 
         /// <summary>
@@ -363,11 +340,7 @@ namespace Abacaxi.Graphs
         /// <exception cref="InvalidOperationException">Thrown if this graph is directed.</exception>
         public IEnumerable<Graph<TVertex>> GetComponents()
         {
-            var undiscoveredVertices = new HashSet<TVertex>();
-            foreach (var vertex in this)
-            {
-                undiscoveredVertices.Add(vertex);
-            }
+            var undiscoveredVertices = new HashSet<TVertex>(this);
 
             while (undiscoveredVertices.Count > 0)
             {
@@ -447,6 +420,75 @@ namespace Abacaxi.Graphs
             {
                 throw new InvalidOperationException("Topological sorting not supported on cyclical graphs.");
             }
+        }
+
+        /// <summary>
+        /// Finds all articulation vertices in the given graph.
+        /// </summary>
+        /// <returns>A sequence of all articulation vertices.</returns>
+        public IEnumerable<TVertex> FindAllArticulationVertices()
+        {
+            var verticesToCheck = new HashSet<TVertex>(this);
+            var articulationVertices = new HashSet<TVertex>();
+
+            while (verticesToCheck.Count > 0)
+            {
+                var eaDict = new Dictionary<TVertex, IDfsNode>();
+                var parentVertexToInspect = verticesToCheck.First();
+                var branchesOfRoot = 0;
+
+                TraverseDfs(parentVertexToInspect,
+                    node =>
+                    {
+                        if (node.Parent != null)
+                        {
+                            eaDict.Add(node.Vertex, node.Parent);
+                        }
+
+                        return true;
+                    },
+                    node =>
+                    {
+                        if (node.Parent == null)
+                        {
+                            if (branchesOfRoot > 1)
+                            {
+                                articulationVertices.Add(node.Vertex);
+                            }
+                        }
+                        else if (node.Parent.Parent != null)
+                        {
+                            var ea = eaDict[node.Vertex];
+                            if (ea == node.Parent)
+                            {
+                                articulationVertices.Add(node.Parent.Vertex);
+                            }
+                            else
+                            {
+                                eaDict[node.Parent.Vertex] = ea;
+                            }
+                        }
+                        else
+                        {
+                            branchesOfRoot++;
+                        }
+
+                        verticesToCheck.Remove(node.Vertex);
+                        return true;
+                    },
+                    (fromNode, toNode) =>
+                    {
+                        var ea = eaDict[fromNode.Vertex];
+                        if (ea == null || ea.EntryTime > toNode.EntryTime)
+                        {
+                            eaDict[fromNode.Vertex] = toNode;
+                        }
+
+                        return true;
+                    });
+            }
+
+            return articulationVertices;
         }
     }
 }

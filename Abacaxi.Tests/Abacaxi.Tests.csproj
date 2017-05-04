@@ -44,6 +44,7 @@
     <Compile Include="Graph\Graph.Tests.FindShortestPath.cs" />
     <Compile Include="Graph\Graph.Tests.FillWithOneColor.cs" />
     <Compile Include="Graph\Graph.Tests.TopologicalSort.cs" />
+    <Compile Include="Graph\Graph.Tests.FindAllArticulationVertices.cs" />
     <Compile Include="Graph\Graph.Tests.TraverseDfs.cs" />
     <Compile Include="Graph\Graph.Tests.TraverseBfs.cs" />
     <Compile Include="Graph\ChessHorsePathGraphTests.cs" />
