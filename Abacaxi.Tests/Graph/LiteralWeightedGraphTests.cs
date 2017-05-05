@@ -36,6 +36,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A.")]
         [TestCase("AA-B")]
         [TestCase("A-")]
+        [TestCase("A-5 5-B")]
         [TestCase("A-BA")]
         [TestCase("A<BA")]
         [TestCase("A-<B")]
@@ -79,6 +80,13 @@ namespace Abacaxi.Tests.Graph
         public void Ctor_IgnoresWhitespaces_InRelationships()
         {
             Assert.DoesNotThrow(() => new LiteralWeightedGraph("  A -   4-  B   ,      ", true));
+        }
+
+        [Test]
+        public void Ctor_AcceptsMultiDigitWeights()
+        {
+            var graph = new LiteralWeightedGraph("A-1234-B", false);
+            Assert.AreEqual(1234, graph.GetEdgesAndWeights('A').Single().Weight);
         }
 
         [Test]
@@ -177,6 +185,80 @@ namespace Abacaxi.Tests.Graph
             var result = string.Join(",", v);
 
             Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void SupportsPotentialWeightEvaluation_ReturnsFalse()
+        {
+            var graph = new LiteralWeightedGraph("", true);
+
+            Assert.IsFalse(graph.SupportsPotentialWeightEvaluation);
+        }
+
+        [Test]
+        public void AddWeights_ThrowsException_IfLeftIsLessThanZero()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new LiteralWeightedGraph("", true).AddWeights(-1, 0));
+        }
+
+        [Test]
+        public void AddWeights_ThrowsException_IfRightIsLessThanZero()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new LiteralWeightedGraph("", true).AddWeights(0, -1));
+        }
+
+        [Test]
+        public void AddWeights_ReturnsTheSumOfWeights()
+        {
+            Assert.AreEqual(100, new LiteralWeightedGraph("", true).AddWeights(1, 99));
+        }
+
+        [Test]
+        public void CompareWeights_ThrowsException_IfLeftIsLessThanZero()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new LiteralWeightedGraph("", true).CompareWeights(-1, 0));
+        }
+
+        [Test]
+        public void CompareWeights_ThrowsException_IfRightIsLessThanZero()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new LiteralWeightedGraph("", true).CompareWeights(0, -1));
+        }
+
+        [Test]
+        public void CompareWeights_ReturnsNegativeIfLeftLessThanRight()
+        {
+            Assert.IsTrue(new LiteralWeightedGraph("", true).CompareWeights(0, 1) < 0);
+        }
+
+        [Test]
+        public void CompareWeights_ReturnsZeroIfLeftEqualsToRight()
+        {
+            Assert.IsTrue(new LiteralWeightedGraph("", true).CompareWeights(1, 1) == 0);
+        }
+
+        [Test]
+        public void CompareWeights_ReturnsPositiveIfLeftGreaterThanRight()
+        {
+            Assert.IsTrue(new LiteralWeightedGraph("", true).CompareWeights(1, 0) > 0);
+        }
+
+        [Test]
+        public void GetPotentialWeight_ThrowsException_IfFromVertexNotPartOfGraph()
+        {
+            Assert.Throws<ArgumentException>(() => new LiteralWeightedGraph("A,B", true).GetPotentialWeight('Z', 'A'));
+        }
+
+        [Test]
+        public void GetPotentialWeight_ThrowsException_IfToVertexNotPartOfGraph()
+        {
+            Assert.Throws<ArgumentException>(() => new LiteralWeightedGraph("A,B", true).GetPotentialWeight('A', 'Z'));
+        }
+
+        [Test]
+        public void GetPotentialWeight_ThrowsException_Always()
+        {
+            Assert.Throws<NotSupportedException>(() => new LiteralWeightedGraph("A,B", true).GetPotentialWeight('A', 'B'));
         }
     }
 }

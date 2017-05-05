@@ -15,12 +15,9 @@
 
 // ReSharper disable SuspiciousTypeConversion.Global
 
-using System.Linq;
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
-    using System.Collections.Generic;
     using Graphs;
     using NUnit.Framework;
 

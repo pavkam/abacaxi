@@ -19,7 +19,6 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using Containers;
 
     /// <summary>
     /// A graph class used primarily for designing algorithms. Each vertex is a digit or letter and can be connected with other
@@ -321,7 +320,7 @@ namespace Abacaxi.Graphs
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(left), left);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(right), right);
 
-            if (int.MaxValue - left > right || int.MaxValue - right > left)
+            if (left > int.MaxValue - right)
             {
                 return int.MaxValue;
             }
@@ -352,13 +351,23 @@ namespace Abacaxi.Graphs
         /// <param name="fromVertex">From vertex.</param>
         /// <param name="toVertex">To vertex.</param>
         /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="NotSupportedException">Always thrown.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if either of <paramref name="fromVertex"/> or <paramref name="fromVertex"/> are not part of this graph.</exception>
         public override int GetPotentialWeight(char fromVertex, char toVertex)
         {
             ValidateVertex(nameof(fromVertex), fromVertex);
             ValidateVertex(nameof(toVertex), toVertex);
 
-            return int.MaxValue;
+            throw new NotSupportedException("This graph does not support potential weight calculation.");
         }
+
+        /// <summary>
+        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics). This
+        /// implementation always returns <c>false</c>.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsPotentialWeightEvaluation => false;
     }
 }
