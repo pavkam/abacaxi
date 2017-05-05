@@ -21,7 +21,8 @@ namespace Abacaxi.Graphs
     using System.Linq;
 
     /// <summary>
-    /// A maze-structured graph.
+    /// A graph used mostly for designing algorithms. Each vertex is a digit or letter and each vertex can be connected
+    /// in undirected or directed fashion to other vertices.
     /// </summary>
     public sealed class LiteralGraph : Graph<char>
     {
@@ -43,7 +44,7 @@ namespace Abacaxi.Graphs
             }
         }
 
-        private void AddRelation(char from, char to)
+        private void AddVertices(char from, char to)
         {
             Debug.Assert(char.IsLetterOrDigit(from));
             Debug.Assert(char.IsLetterOrDigit(to));
@@ -66,122 +67,121 @@ namespace Abacaxi.Graphs
             }
         }
 
+        private void AddVertices(char from, char to, char relation)
+        {
+            switch (relation)
+            {
+                case '>':
+                    AddVertices(from, to);
+                    break;
+                case '<':
+                    AddVertices(to, from);
+                    break;
+                case '-':
+                    AddVertices(from, to);
+                    AddVertices(to, from);
+                    break;
+                default:
+                    Debug.Fail("Unexpected relation character.");
+                    break;
+            }
+        }
+
+
         private void Parse(string relationships)
         {
             Debug.Assert(relationships != null);
 
-            var ci = 0;
-            var stage = 0;
-
-            var vertexChars = new char[2];
-            var fromToEdge = false;
-            var toFromEdge = false;
-
-            while (ci < relationships.Length)
+            var rels = new HashSet<char> { '-' };
+            if (IsDirected)
             {
-                var c = relationships[ci];
-                if (!char.IsWhiteSpace(c))
+                rels.Add('>');
+                rels.Add('<');
+            }
+
+            var vertices = new char[2];
+            var relation = '\0';
+            var stage = 0;
+            for (var i = 0; i < relationships.Length; i++)
+            {
+                var c = relationships[i];
+
+                switch (stage)
                 {
-                    switch (stage)
-                    {
-                        case 0:
-                        case 2:
-                            if (!char.IsLetterOrDigit(c))
-                            {
-                                throw new FormatException(
-                                    $"Invalid character \"{c}\" found at position {ci} in \"{relationships}\".");
-                            }
+                    case 0: /* Expect char or whitespace. */
+                        if (char.IsWhiteSpace(c))
+                        {
+                            continue;
+                        }
+                        if (!char.IsLetterOrDigit(c))
+                        {
+                            throw new FormatException($"Invalid character \"{c}\" found at position {i}. Expected a letter or digit.");
+                        }
 
-                            vertexChars[stage / 2] = c;
-
-                            stage += 1;
-                            break;
-                        case 1:
-                            if (c == ',')
-                            {
-                                AddVertex(vertexChars[0]);
-                                stage = 0;
-                                break;
-                            }
-
-                            switch (c)
-                            {
-                                case '-':
-                                    fromToEdge = true;
-                                    toFromEdge = true;
-                                    break;
-                                case '>':
-                                    if (!IsDirected)
-                                    {
-                                        throw new InvalidOperationException(
-                                            $"Invalid character \"{c}\" found at position {ci} in \"{relationships}\". This graph is no directed!");
-                                    }
-
-                                    fromToEdge = true;
-                                    toFromEdge = false;
-                                    break;
-                                case '<':
-                                    if (!IsDirected)
-                                    {
-                                        throw new InvalidOperationException(
-                                            $"Invalid character \"{c}\" found at position {ci} in \"{relationships}\". This graph is no directed!");
-                                    }
-
-                                    fromToEdge = false;
-                                    toFromEdge = true;
-                                    break;
-                                default:
-                                    throw new FormatException(
-                                        $"Invalid character \"{c}\" found at position {ci} in \"{relationships}\".");
-                            }
-
-                            stage = 2;
-                            break;
-                        case 3:
-                            if (c != ',')
-                            {
-                                throw new FormatException(
-                                    $"Invalid character \"{c}\" found at position {ci} in \"{relationships}\".");
-                            }
-
-                            if (fromToEdge)
-                            {
-                                AddRelation(vertexChars[0], vertexChars[1]);
-                            }
-                            if (toFromEdge)
-                            {
-                                AddRelation(vertexChars[1], vertexChars[0]);
-                            }
-
+                        vertices[0] = c;
+                        stage = 1;
+                        break;
+                    case 1: /* Expect relationship char or whitespace or comma */
+                        if (char.IsWhiteSpace(c))
+                        {
+                            continue;
+                        }
+                        if (c == ',')
+                        {
+                            AddVertex(vertices[0]);
                             stage = 0;
-                            break;
-                    }
-                }
+                            continue;
+                        }
+                        if (!rels.Contains(c))
+                        {
+                            throw new FormatException($"Invalid character '{c}' at position {i}. Expected a relationship character.");
+                        }
 
-                ci++;
+                        relation = c;
+                        stage = 2;
+                        break;
+                    case 2: /* Expect char or whitespace. */
+                        if (char.IsWhiteSpace(c))
+                        {
+                            continue;
+                        }
+                        if (!char.IsLetterOrDigit(c))
+                        {
+                            throw new FormatException($"Invalid character \"{c}\" found at position {i}. Expected a letter or digit.");
+                        }
+
+                        vertices[1] = c;
+                        stage = 3;
+                        break;
+                    case 3: /* Expect comma or whitespace */
+                        if (char.IsWhiteSpace(c))
+                        {
+                            continue;
+                        }
+                        if (c != ',')
+                        {
+                            throw new FormatException($"Invalid character \"{c}\" found at position {i}. Expected comma.");
+                        }
+
+                        AddVertices(vertices[0], vertices[1], relation);
+
+                        stage = 0;
+                        break;
+                }
             }
 
             switch (stage)
             {
                 case 3:
-                    if (fromToEdge)
-                    {
-                        AddRelation(vertexChars[0], vertexChars[1]);
-                    }
-                    if (toFromEdge)
-                    {
-                        AddRelation(vertexChars[1], vertexChars[0]);
-                    }
+                    AddVertices(vertices[0], vertices[1], relation);
                     break;
                 case 1:
-                    AddVertex(vertexChars[0]);
+                    AddVertex(vertices[0]);
+                    break;
+                case 0:
                     break;
                 default:
-                    if (stage != 0)
-                    {
-                        throw new FormatException($"Unexpected end in the relationship string: \"{relationships}\".");
-                    }
-                    break;
+                    throw new FormatException("Unexpected end of relationships string.");
             }
         }
 

@@ -89,11 +89,13 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// A sequence of edges connected to the given <param name="vertex" />
         /// </returns>
-        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             if (!VertexExists(vertex.X, vertex.Y))
-                throw new InvalidOperationException($"Vertex {vertex} is not part of this graph.");
+            {
+                throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", nameof(vertex));
+            }
 
             for (var i = -1; i < 2; i += 2)
             {

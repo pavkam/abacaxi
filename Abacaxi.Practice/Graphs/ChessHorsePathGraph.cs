@@ -24,12 +24,12 @@ namespace Abacaxi.Practice.Graphs
     /// </summary>
     public class ChessHorsePathGraph : Graph<Cell>
     {
-        private readonly int _lenghtX;
+        private readonly int _lengthX;
         private readonly int _lengthY;
 
         private bool VertexExists(int x, int y)
         {
-            return x >= 0 && x < _lenghtX && y >= 0 && y < _lengthY;
+            return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Abacaxi.Practice.Graphs
             Validate.ArgumentGreaterThanZero(nameof(boardWidth), boardWidth);
             Validate.ArgumentGreaterThanZero(nameof(boardHeight), boardHeight);
 
-            _lenghtX = boardWidth;
+            _lengthX = boardWidth;
             _lengthY = boardHeight; 
         }
 
@@ -69,7 +69,7 @@ namespace Abacaxi.Practice.Graphs
         /// </returns>
         public override IEnumerator<Cell> GetEnumerator()
         {
-            for (var x = 0; x < _lenghtX; x++)
+            for (var x = 0; x < _lengthX; x++)
             {
                 for (var y = 0; y < _lengthY; y++)
                 {
@@ -85,11 +85,13 @@ namespace Abacaxi.Practice.Graphs
         /// <returns>
         /// A sequence of edges connected to the given <param name="vertex" />
         /// </returns>
-        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             if (!VertexExists(vertex.X, vertex.Y))
-                throw new InvalidOperationException($"Vertex {vertex} is not part of this graph.");
+            {
+                throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", nameof(vertex));
+            }
 
             for (var i = -2; i <= 2; i += 4)
             {

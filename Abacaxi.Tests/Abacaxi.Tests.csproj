@@ -49,6 +49,7 @@
     <Compile Include="Graph\Graph.Tests.TraverseDfs.cs" />
     <Compile Include="Graph\Graph.Tests.TraverseBfs.cs" />
     <Compile Include="Graph\ChessHorsePathGraphTests.cs" />
+    <Compile Include="Graph\LiteralWeightedGraphTests.cs" />
     <Compile Include="Graph\SubGraphTests.cs" />
     <Compile Include="Graph\LiteralGraphTests.cs" />
     <Compile Include="Graph\WeightedEdgeTests.cs" />

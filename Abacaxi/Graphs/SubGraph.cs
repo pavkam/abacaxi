@@ -78,11 +78,13 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// A sequence of edges connected to the given <param name="vertex"/>.
         /// </returns>
-        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
         public override IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex)
         {
             if (!_vertices.Contains(vertex))
-                throw new InvalidOperationException($"Vertex {vertex} is not part of this sub-graph.");
+            {
+                throw new ArgumentException($"Vertex '{vertex}' is not part of this sub-graph.", nameof(vertex));
+            }
 
             foreach(var edge in _graph.GetEdges(vertex))
             {

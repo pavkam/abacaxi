@@ -94,7 +94,7 @@ namespace Abacaxi.Tests.Graph
         {
             var graph = new MazeGraph(new[,] { { true } });
 
-            Assert.Throws<InvalidOperationException>(() => graph.GetEdges(new Cell(x, y)).ToArray());
+            Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(x, y)).ToArray());
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace Abacaxi.Tests.Graph
         {
             var graph = new MazeGraph(new[,] { { false } });
 
-            Assert.Throws<InvalidOperationException>(() => graph.GetEdges(new Cell(0, 0)).ToArray());
+            Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(0, 0)).ToArray());
         }
 
         [TestCase("00", "10,01")]

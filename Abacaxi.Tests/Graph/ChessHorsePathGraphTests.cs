@@ -61,7 +61,7 @@ namespace Abacaxi.Tests.Graph
         public void GetEdges_ThrowsException_ForInvalidCell(int x, int y)
         {
             var graph = new ChessHorsePathGraph(2, 3);
-            Assert.Throws<InvalidOperationException>(() => graph.GetEdges(new Cell(x, y)).ToArray());
+            Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(x, y)).ToArray());
         }
 
         [TestCase(0, 0, "21,12")]

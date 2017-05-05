@@ -101,14 +101,6 @@ namespace Abacaxi.Graphs
             return !breakRequested;
         }
 
-        protected void RequireUndirectedGraph()
-        {
-            if (IsDirected)
-            {
-                throw new InvalidOperationException("This operation is not allowed on directed graphs.");
-            }
-        }
-
         /// <summary>
         /// Describes a node in a BFS traversal tree.
         /// </summary>
@@ -170,6 +162,18 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
+        /// Asserts this graph is undirected.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">This operation is not allowed on directed graphs.</exception>
+        protected void RequireUndirectedGraph()
+        {
+            if (IsDirected)
+            {
+                throw new InvalidOperationException("This operation is not allowed on directed graphs.");
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this graph's edges are directed.
         /// </summary>
         /// <value>
@@ -190,14 +194,14 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <param name="vertex">The vertex to get the edges for.</param>
         /// <returns>A sequence of edges connected to the given <param name="vertex"/></returns>
-        /// <exception cref="InvalidOperationException">The <paramref name="vertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="vertex"/> is not part of this graph.</exception>
         public abstract IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex);
 
         /// <summary>
         /// Returns an enumerator that iterates all vertices in the graph.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        /// A <see cref="IEnumerator{TVertex}" /> that can be used to iterate through the collection.
         /// </returns>
         public abstract IEnumerator<TVertex> GetEnumerator();
 
@@ -205,7 +209,7 @@ namespace Abacaxi.Graphs
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -218,7 +222,7 @@ namespace Abacaxi.Graphs
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="handleVertexCompleted">The function called when a vertex is completed.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="startVertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
         public void TraverseBfs(TVertex startVertex, Predicate<IBfsNode> handleVertexCompleted)
         {
             Validate.ArgumentNotNull(nameof(handleVertexCompleted), handleVertexCompleted);
@@ -272,7 +276,7 @@ namespace Abacaxi.Graphs
         /// <exception cref="ArgumentNullException">The <paramref name="handleVertexVisited"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handleCycle"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="startVertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
         public void TraverseDfs(TVertex startVertex, Predicate<IDfsNode> handleVertexVisited, 
             Predicate<IDfsNode> handleVertexCompleted, Func<IDfsNode, IDfsNode, bool> handleCycle)
         {
@@ -295,7 +299,7 @@ namespace Abacaxi.Graphs
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="applyColor">Color to apply to each vertex.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="applyColor"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
         public void FillWithOneColor(TVertex startVertex, Action<TVertex> applyColor)
         {
             Validate.ArgumentNotNull(nameof(applyColor), applyColor);
@@ -313,7 +317,7 @@ namespace Abacaxi.Graphs
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="endVertex">The end vertex.</param>
         /// <returns>Returns a sequence of vertices in visitation order.</returns>
-        /// <exception cref="InvalidOperationException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
         public IEnumerable<TVertex> FindShortestPath(TVertex startVertex, TVertex endVertex)
         {
             IBfsNode solution = null;
