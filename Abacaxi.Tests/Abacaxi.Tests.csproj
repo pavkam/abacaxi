@@ -40,6 +40,7 @@
     <Compile Include="Containers\TrieTests.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
+    <Compile Include="Graph\StringNeighborhoodGraphTests.cs" />
     <Compile Include="Graph\Graph.Tests.FindCheapestPath.cs" />
     <Compile Include="Graph\Graph.Tests.VerifyIsBipartite.cs" />
     <Compile Include="Graph\Graph.Tests.GetComponents.cs" />

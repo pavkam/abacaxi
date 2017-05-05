@@ -38,6 +38,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphs\StringNeighborhoodGraph.cs" />
     <Compile Include="Graphs\ChessHorsePathGraph.cs" />
     <Compile Include="Integer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
