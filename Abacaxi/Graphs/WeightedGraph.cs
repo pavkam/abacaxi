@@ -88,7 +88,13 @@ namespace Abacaxi.Graphs
         /// <returns>The potential total cost.</returns>
         public abstract TWeight GetPotentialWeight(TVertex fromVertex, TVertex toVertex);
 
-
+        /// <summary>
+        /// Finds the cheapest path in a graph between two vertices <paramref name="fromVertex"/> and <paramref name="toVertex"/>
+        /// </summary>
+        /// <param name="fromVertex">The start vertex.</param>
+        /// <param name="toVertex">The end vertex.</param>
+        /// <returns>A sequence of vertices that yield the shortest path. Returns an empty sequence if no path available.</returns>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="fromVertex"/> is not part of teh graph.</exception>
         public IEnumerable<TVertex> FindCheapestPath(TVertex fromVertex, TVertex toVertex)
         {
             var comparer = Comparer<PathNode>.Create((a, b) =>

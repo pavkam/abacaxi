@@ -48,6 +48,7 @@
     <Compile Include="Graphs\Edge.cs" />
     <Compile Include="Graphs\LiteralWeightedGraph.cs" />
     <Compile Include="Graphs\LiteralGraph.cs" />
+    <Compile Include="HelperMethods.cs" />
     <Compile Include="Sequence.cs" />
     <Compile Include="Containers\Heap.cs" />
     <Compile Include="Containers\BitSet.cs" />

@@ -13,12 +13,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Linq;
-
 namespace Abacaxi
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Class implements multiple algorithms that deals with combinatorial problems.
@@ -130,6 +129,8 @@ namespace Abacaxi
         /// <param name="sequence">The sequence of elements.</param>
         /// <param name="subsets">Number of sub-sets.</param>
         /// <returns>All the combinations of subsets.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets"/> is less than one.</exception>
         public static IEnumerable<T[][]> EvaluateAllSubsetCombinations<T>(this IList<T> sequence, int subsets)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -184,6 +185,8 @@ namespace Abacaxi
         /// <param name="comparer">The comparer.</param>
         /// <param name="subsets">The number of subsets to split into.</param>
         /// <returns>The first sequence of subsets that have the same aggregated value.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="aggregator"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets"/> is less than one.</exception>
         public static T[][] FindSubsetsWithEqualAggregateValue<T>(
             this IList<T> sequence, 
             Aggregator<T> aggregator, 
@@ -223,6 +226,45 @@ namespace Abacaxi
             }
 
             return new T[][] {};
+        }
+
+        /// <summary>
+        /// Finds the minimum number of sets that cover the full set of elements.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the set.</typeparam>
+        /// <param name="sets">The sets.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns>A sequence of selected sets whose union results in the full coverage.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sets"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
+        public static IEnumerable<ISet<T>> FindMinimumNumberOfSetsWithFullCoverage<T>(IEnumerable<ISet<T>> sets, IEqualityComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sets), sets);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var copies = sets.ToSet();
+            var superSet = new HashSet<T>(comparer);
+            foreach (var set in copies)
+            {
+                superSet.UnionWith(set);
+            }
+
+            while (superSet.Count > 0)
+            {
+                ISet<T> bestSet = null;
+
+                foreach (var set in copies)
+                {
+                    var itemsInSuperSet = set.Count(p => superSet.Contains(p));
+                    if (bestSet == null || itemsInSuperSet > bestSet.Count)
+                    {
+                        bestSet = set;
+                    }
+                }
+
+                superSet.ExceptWith(bestSet);
+                copies.Remove(bestSet);
+                yield return bestSet;
+            }
         }
     }
 }

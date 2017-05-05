@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Combinatorics\Combinatorics.Tests.PartitionInteger.cs" />
+    <Compile Include="Combinatorics\Combinatorics.Tests.FindBestSetCoverage.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateAllSubsetCombinations.cs" />
     <Compile Include="Containers\TrieTests.cs" />
     <Compile Include="Containers\HeapTests.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Graph\CellTests.cs" />
     <Compile Include="Integer\Integer.Tests.EnumerateFibonacciNumbers.cs" />
     <Compile Include="Integer\Integer.Tests.Divide.cs" />
+    <Compile Include="HelperMethodsTests.cs" />
     <Compile Include="Sequence\Sequence.Tests.ContainsSubsetWithAggregatedValue.cs" />
     <Compile Include="Sequence\Sequence.Tests.FindLongestIncreasingSequence.cs" />
     <Compile Include="Sequence\Sequence.Tests.FindSubsetWithClosestAggregatedValue.cs" />
