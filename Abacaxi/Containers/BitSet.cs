@@ -13,14 +13,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Linq;
-
 namespace Abacaxi.Containers
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
 
     /// <summary>
     /// Class implements an integer set internally represented by a bit array. Provides O(1) access times.
