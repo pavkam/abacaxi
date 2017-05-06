@@ -24,59 +24,91 @@ namespace Abacaxi.Containers
     /// Class implements a "trie" data structure, perfectly suited for fast string matching.
     /// </summary>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-    public sealed class Trie<TValue> : ICollection<KeyValuePair<string, TValue>>, IReadOnlyCollection<KeyValuePair<string, TValue>>
+    /// <typeparam name="TElement">The element of array keys.</typeparam>
+    public sealed class Trie<TElement, TValue> : ICollection<KeyValuePair<TElement[], TValue>>, IReadOnlyCollection<KeyValuePair<TElement[], TValue>>
     {
         private class Node
         {
             public bool IsTerminal;
             public TValue Value;
-            public readonly Dictionary<char, Node> Children = new Dictionary<char, Node>();
+            public readonly Dictionary<TElement, Node> Children;
+
+            public Node(IEqualityComparer<TElement> comparer)
+            {
+                Debug.Assert(comparer != null);
+                Children = new Dictionary<TElement, Node>(comparer);
+            }
         }
 
         private static readonly IEqualityComparer<TValue> ValueDefaultComparer =
             EqualityComparer<TValue>.Default;
 
+        private readonly IEqualityComparer<TElement> _comparer;
         private int _ver;
         private Node _root;
 
-        private bool FlowDown(string key, out Node node)
+        private bool FlowDown(IList<TElement> key, out Node node)
         {
             Debug.Assert(key != null);
 
             var i = 0;
             node = _root;
-            while (i < key.Length && node.Children.TryGetValue(key[i], out Node child))
+            while (i < key.Count && node.Children.TryGetValue(key[i], out Node child))
             {
                 node = child;
                 i++;
             }
 
-            return i == key.Length;
+            return i == key.Count;
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="Trie{TValue}"/> class.
+        /// Initializes a new instance of <see cref="Trie{TElement,TValue}"/> class.
         /// </summary>
-        public Trie()
+        /// <param name="comparer">The element comparer.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer"/> is <c>null</c>.</exception>
+        public Trie(IEqualityComparer<TElement> comparer)
         {
-            _root = new Node();
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            _comparer = comparer;
+            _root = new Node(_comparer);
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="Trie{TValue}"/> class.
+        /// Initializes a new instance of <see cref="Trie{TElement,TValue}"/> class.
+        /// </summary>
+        public Trie() : this(EqualityComparer<TElement>.Default)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="Trie{TElement,TValue}"/> class.
         /// </summary>
         /// <param name="sequence">Ane existing collection of key/value pairs to store in the trie.</param>
+        /// <param name="comparer">The element comparer.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="sequence"/> contains duplicate keys.</exception>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> contains <c>null</c> keys.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        public Trie(IEnumerable<KeyValuePair<string, TValue>> sequence) : this()
+        public Trie(IEnumerable<KeyValuePair<TElement[], TValue>> sequence, IEqualityComparer<TElement> comparer) : this(comparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
             foreach (var kvp in sequence)
             {
-                Add(kvp);
+                Add(kvp.Key, kvp.Value);
             }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="Trie{TElement,TValue}"/> class.
+        /// </summary>
+        /// <param name="sequence">Ane existing collection of key/value pairs to store in the trie.</param>
+        /// <exception cref="ArgumentException">Thrown if the <paramref name="sequence"/> contains duplicate keys.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> contains <c>null</c> keys.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        public Trie(IEnumerable<KeyValuePair<TElement[], TValue>> sequence) : this(sequence, EqualityComparer<TElement>.Default)
+        {
         }
 
         /// <summary>
@@ -94,10 +126,10 @@ namespace Abacaxi.Containers
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
         /// <exception cref="InvalidOperationException">Collection has been modified while enumerating.</exception>
-        public IEnumerator<KeyValuePair<string, TValue>> GetEnumerator()
+        public IEnumerator<KeyValuePair<TElement[], TValue>> GetEnumerator()
         {
-            var stack = new Stack<KeyValuePair<string, Node>>();
-            stack.Push(new KeyValuePair<string, Node>(string.Empty, _root));
+            var stack = new Stack<KeyValuePair<TElement[], Node>>();
+            stack.Push(new KeyValuePair<TElement[], Node>(new TElement[] {}, _root));
 
             var ver = _ver;
             while (stack.Count > 0)
@@ -110,30 +142,34 @@ namespace Abacaxi.Containers
                 var c = stack.Pop();
                 if (c.Value.IsTerminal)
                 {
-                    yield return new KeyValuePair<string, TValue>(c.Key, c.Value.Value);
+                    yield return new KeyValuePair<TElement[], TValue>(c.Key, c.Value.Value);
                 }
 
                 foreach (var n in c.Value.Children)
                 {
-                    stack.Push(new KeyValuePair<string, Node>(c.Key + n.Key, n.Value));
+                    var combo = new TElement[c.Key.Length + 1];
+                    c.Key.CopyTo(combo, 0);
+                    combo[combo.Length - 1] = n.Key;
+
+                    stack.Push(new KeyValuePair<TElement[], Node>(combo, n.Value));
                 }
             }
         }
 
         /// <summary>
-        /// Queries this <see cref="Trie{TValue}"/> for all key/value pairs that start with a given <paramref name="prefix"/>.
+        /// Queries this <see cref="Trie{TElement,TValue}"/> for all key/value pairs that start with a given <paramref name="prefix"/>.
         /// </summary>
         /// <param name="prefix">The prefix to query.</param>
         /// <returns>The sequence of all key/value pairs that share the given <paramref name="prefix"/>.</returns>
         /// <exception cref="InvalidOperationException">Collection has been modified while enumerating.</exception>
-        public IEnumerable<KeyValuePair<string, TValue>> Query(string prefix)
+        public IEnumerable<KeyValuePair<TElement[], TValue>> Query(TElement[] prefix)
         {
             Validate.ArgumentNotNull(nameof(prefix), prefix);
 
             if (FlowDown(prefix, out Node root))
             {
-                var stack = new Stack<KeyValuePair<string, Node>>();
-                stack.Push(new KeyValuePair<string, Node>(prefix, root));
+                var stack = new Stack<KeyValuePair<TElement[], Node>>();
+                stack.Push(new KeyValuePair<TElement[], Node>(prefix, root));
 
                 var ver = _ver;
                 while (stack.Count > 0)
@@ -146,38 +182,59 @@ namespace Abacaxi.Containers
                     var c = stack.Pop();
                     if (c.Value.IsTerminal)
                     {
-                        yield return new KeyValuePair<string, TValue>(c.Key, c.Value.Value);
+                        yield return new KeyValuePair<TElement[], TValue>(c.Key, c.Value.Value);
                     }
 
                     foreach (var n in c.Value.Children)
                     {
-                        stack.Push(new KeyValuePair<string, Node>(c.Key + n.Key, n.Value));
+                        var combo = new TElement[c.Key.Length + 1];
+                        c.Key.CopyTo(combo, 0);
+                        combo[combo.Length - 1] = n.Key;
+
+                        stack.Push(new KeyValuePair<TElement[], Node>(combo, n.Value));
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Adds an item to the <see cref="Trie{TValue}" />.
+        /// Adds an item to the <see cref="Trie{TElement,TValue}" />.
         /// </summary>
-        /// <param name="item">The object to add to the <see cref="Trie{TValue}" />.</param>
+        /// <param name="item">The object to add to the <see cref="Trie{TElement,TValue}" />.</param>
         /// <exception cref="ArgumentException">The key component of <paramref name="item"/> is already present in the collection.</exception>
         /// <exception cref="ArgumentNullException">The key component of <paramref name="item"/> is <c>null</c>.</exception>
-        public void Add(KeyValuePair<string, TValue> item)
+        void ICollection<KeyValuePair<TElement[], TValue>>.Add(KeyValuePair<TElement[], TValue> item)
         {
             Add(item.Key, item.Value);
         }
 
         /// <summary>
-        /// Adds the specified key/value pair into the <see cref="Trie{TValue}"/>.
+        /// Adds the specified key/value pair into the <see cref="Trie{TElement,TValue}"/>.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key"/> is already present in the collection.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="key"/> is <c>null</c>.</exception>
-        public void Add(string key, TValue value)
+        public void Add(TElement[] key, TValue value)
+        {
+            AddOrUpdate(key, value, i =>
+            {
+                throw new ArgumentException($"Key \"{key}\" has already been inserted into the collection.");
+            });
+        }
+
+        /// <summary>
+        /// Adds a new, or updates and existing element.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="updateFunc">The update function.</param>
+        /// <returns><c>true</c> if the key/value was added; otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> or <paramref name="updateFunc"/> are <c>null</c>.</exception>
+        public bool AddOrUpdate(TElement[] key, TValue value, Func<TValue, TValue> updateFunc)
         {
             Validate.ArgumentNotNull(nameof(key), key);
+            Validate.ArgumentNotNull(nameof(updateFunc), updateFunc);
 
             var i = 0;
             var node = _root;
@@ -191,19 +248,23 @@ namespace Abacaxi.Containers
             {
                 if (node.IsTerminal)
                 {
-                    throw new ArgumentException($"Key \"{key}\" has already been inserted into the collection.");
+                    node.Value = updateFunc(value);
+                    return false;
+                }
+                else
+                {
+                    node.IsTerminal = true;
+                    node.Value = value;
+                    Count++;
                 }
 
-                node.IsTerminal = true;
-                node.Value = value;
-                Count++;
                 _ver++;
             }
             else
             {
                 for (var r = i; r < key.Length; r++)
                 {
-                    var nn = new Node();
+                    var nn = new Node(_comparer);
 
                     node.Children.Add(key[r], nn);
                     node = nn;
@@ -214,27 +275,29 @@ namespace Abacaxi.Containers
                 Count++;
                 _ver++;
             }
+
+            return true;
         }
 
         /// <summary>
-        /// Removes all items from the <see cref="Trie{TValue}" />.
+        /// Removes all items from the <see cref="Trie{TElement,TValue}" />.
         /// </summary>
         public void Clear()
         {
-            _root = new Node();
+            _root = new Node(_comparer);
             Count = 0;
             _ver++;
         }
 
         /// <summary>
-        /// Determines whether the <see cref="Trie{TValue}" /> contains a specific value.
+        /// Determines whether the <see cref="Trie{TElement,TValue}" /> contains a specific value.
         /// </summary>
-        /// <param name="item">The object to locate in the <see cref="Trie{TValue}" />.</param>
+        /// <param name="item">The object to locate in the <see cref="Trie{TElement,TValue}" />.</param>
         /// <returns>
-        /// true if <paramref name="item" /> is found in the <see cref="Trie{TValue}" />; otherwise, false.
+        /// true if <paramref name="item" /> is found in the <see cref="Trie{TElement,TValue}" />; otherwise, false.
         /// </returns>
         /// <exception cref="ArgumentNullException">The key component of <paramref name="item"/> is <c>null</c>.</exception>
-        public bool Contains(KeyValuePair<string, TValue> item)
+        bool ICollection<KeyValuePair<TElement[], TValue>>.Contains(KeyValuePair<TElement[], TValue> item)
         {
             Validate.ArgumentNotNull(nameof(item.Key), item.Key);
 
@@ -245,14 +308,14 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Determines whether this <see cref="Trie{TValue}"/> contains the specified key.
+        /// Determines whether this <see cref="Trie{TElement,TValue}"/> contains the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>
-        ///   <c>true</c> if the <see cref="Trie{TValue}"/> contains the specified key; otherwise, <c>false</c>.
+        ///   <c>true</c> if the <see cref="Trie{TElement,TValue}"/> contains the specified key; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="key"/> is <c>null</c>.</exception>
-        public bool Contains(string key)
+        public bool Contains(TElement[] key)
         {
             Validate.ArgumentNotNull(nameof(key), key);
 
@@ -262,13 +325,13 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Copies the elements of the <see cref="Trie{TValue}" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
+        /// Copies the elements of the <see cref="Trie{TElement,TValue}" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="Trie{T}" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="Trie{TElement,TValue}" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="array"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="arrayIndex"/> is out of bounds or there is not enough space in the array.</exception>
-        public void CopyTo(KeyValuePair<string, TValue>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<TElement[], TValue>[] array, int arrayIndex)
         {
             Validate.CollectionArgumentsInBounds(nameof(array), array, arrayIndex, Count);
 
@@ -279,25 +342,25 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes the specified key/value pair from the <see cref="Trie{TValue}"/>.
+        /// Removes the specified key/value pair from the <see cref="Trie{TElement,TValue}"/>.
         /// </summary>
         /// <param name="item">The key/value pair to remove.</param>
         /// <returns><c>true</c> if the key/value pair was found and removed; <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the key component of <paramref name="item"/> is <c>null</c>.</exception>
-        public bool Remove(KeyValuePair<string, TValue> item)
+        bool ICollection<KeyValuePair<TElement[], TValue>>.Remove(KeyValuePair<TElement[], TValue> item)
         {
             Validate.ArgumentNotNull(nameof(item.Key), item.Key);
 
-            return Contains(item) && Remove(item.Key);
+            return ((ICollection<KeyValuePair<TElement[], TValue>>)this).Contains(item) && Remove(item.Key);
         }
 
         /// <summary>
-        /// Removes the specified key (and the associated value) from the <see cref="Trie{TValue}"/>.
+        /// Removes the specified key (and the associated value) from the <see cref="Trie{TElement,TValue}"/>.
         /// </summary>
         /// <param name="key">The key to remove.</param>
         /// <returns><c>true</c> if the key was found and removed; <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="key"/> is <c>null</c>.</exception>
-        public bool Remove(string key)
+        public bool Remove(TElement[] key)
         {
             Validate.ArgumentNotNull(nameof(key), key);
 
@@ -337,12 +400,29 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="Trie{TValue}" />.
+        /// Tries to get the value associated with the <paramref name="key"/>.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The output value.</param>
+        /// <returns><c>true</c> if the key was found; otherwise, <c>false</c>.</returns>
+        public bool TryGetValue(TElement[] key, out TValue value)
+        {
+            Validate.ArgumentNotNull(nameof(key), key);
+
+            var success =
+                FlowDown(key, out Node node) && node.IsTerminal;
+            value = success ? node.Value : default(TValue);
+
+            return success;
+        }
+
+        /// <summary>
+        /// Gets the number of elements contained in the <see cref="Trie{TElement,TValue}" />.
         /// </summary>
         public int Count { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="Trie{TValue}" /> is read-only.
+        /// Gets a value indicating whether the <see cref="Trie{TElement,TValue}" /> is read-only.
         /// </summary>
         public bool IsReadOnly => false;
     }

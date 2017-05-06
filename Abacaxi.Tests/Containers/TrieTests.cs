@@ -30,20 +30,43 @@ namespace Abacaxi.Tests.Containers
     [TestFixture]
     public class TrieTests
     {
-        private Trie<int> _trie0;
-        private Trie<int> _trie5;
+        private Trie<char, int> _trie0;
+        private Trie<char, int> _trie5;
+
+        private static char[] _(string a)
+        {
+            return a?.ToCharArray();
+        }
 
         [SetUp]
         public void SetUp()
         {
-            _trie0 = new Trie<int>();
-            _trie5 = new Trie<int> { { "abc", 1 }, { "acb", 2 }, { "abd", 3 }, { "cbc", 4 }, { "cba", 5 } };
+            _trie0 = new Trie<char, int>();
+            _trie5 = new Trie<char, int> { { _("abc"), 1 }, { _("acb"), 2 }, { _("abd"), 3 }, { _("cbc"), 4 }, { _("cba"), 5 } };
         }
 
         [Test]
-        public void Ctor_ThrowsException_IfEnumerableIsNull()
+        public void Ctor_ThrowsException_IfEnumerableIsNull1()
         {
-            Assert.Throws<ArgumentNullException>(() => new Trie<int>(null));
+            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>((IEnumerable<KeyValuePair<char[], int>>)null));
+        }
+
+        [Test]
+        public void Ctor_ThrowsException_IfEnumerableIsNull2()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(null, EqualityComparer<char>.Default));
+        }
+
+        [Test]
+        public void Ctor_ThrowsException_IfComparerIsNull1()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>((IEqualityComparer<char>)null));
+        }
+
+        [Test]
+        public void Ctor_ThrowsException_IfComparerIsNull2()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(new KeyValuePair<char[], int>[] { }, null));
         }
 
         [Test]
@@ -51,11 +74,11 @@ namespace Abacaxi.Tests.Containers
         {
             var seq = new[]
             {
-                new KeyValuePair<string, int>("1", 1),
-                new KeyValuePair<string, int>("1", 2),
+                new KeyValuePair<char[], int>(_("1"), 1),
+                new KeyValuePair<char[], int>(_("1"), 2),
             };
 
-            Assert.Throws<ArgumentException>(() => new Trie<int>(seq));
+            Assert.Throws<ArgumentException>(() => new Trie<char, int>(seq));
         }
 
         [Test]
@@ -63,11 +86,11 @@ namespace Abacaxi.Tests.Containers
         {
             var seq = new[]
             {
-                new KeyValuePair<string, int>(null, 1),
-                new KeyValuePair<string, int>("2", 2),
+                new KeyValuePair<char[], int>(_(null), 1),
+                new KeyValuePair<char[], int>(_("2"), 2),
             };
 
-            Assert.Throws<ArgumentNullException>(() => new Trie<int>(seq));
+            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(seq));
         }
 
         [Test]
@@ -80,25 +103,25 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Query_ReturnsNothing_IfKeyNotFound()
         {
-            TestHelper.AssertSequence(_trie0.Query("hello"));
+            TestHelper.AssertSequence(_trie0.Query(_("hello")));
         }
 
         [Test]
         public void Query_ReturnsTheKey_IfOnlyKeyPrefixedWithString()
         {
             TestHelper.AssertSequence(
-                _trie5.Query("abc"),
-                new KeyValuePair<string, int>("abc", 1));
+                _trie5.Query(_("abc")),
+                new KeyValuePair<char[], int>(_("abc"), 1));
         }
 
         [Test]
         public void Query_ReturnsAllKeyValuesForAGivenPrefix()
         {
             TestHelper.AssertSequence(
-                _trie5.Query("a"),
-                new KeyValuePair<string, int>("acb", 2),
-                new KeyValuePair<string, int>("abd", 3),
-                new KeyValuePair<string, int>("abc", 1));
+                _trie5.Query(_("a")),
+                new KeyValuePair<char[], int>(_("acb"), 2),
+                new KeyValuePair<char[], int>(_("abd"), 3),
+                new KeyValuePair<char[], int>(_("abc"), 1));
         }
 
 
@@ -108,9 +131,9 @@ namespace Abacaxi.Tests.Containers
             Assert.Throws<InvalidOperationException>(() =>
             {
                 // ReSharper disable once UnusedVariable
-                foreach (var kvp in _trie5.Query("a"))
+                foreach (var kvp in _trie5.Query(_("a")))
                 {
-                    _trie5.Add("test", 0);
+                    _trie5.Add(_("test"), 0);
                 }
             });
         }
@@ -121,9 +144,9 @@ namespace Abacaxi.Tests.Containers
             Assert.Throws<InvalidOperationException>(() =>
             {
                 // ReSharper disable once UnusedVariable
-                foreach (var kvp in _trie5.Query("a"))
+                foreach (var kvp in _trie5.Query(_("a")))
                 {
-                    _trie5.Remove("abc");
+                    _trie5.Remove(_("abc"));
                 }
             });
         }
@@ -134,7 +157,7 @@ namespace Abacaxi.Tests.Containers
             Assert.Throws<InvalidOperationException>(() =>
             {
                 // ReSharper disable once UnusedVariable
-                foreach (var kvp in _trie5.Query("a"))
+                foreach (var kvp in _trie5.Query(_("a")))
                 {
                     _trie5.Clear();
                 }
@@ -151,11 +174,11 @@ namespace Abacaxi.Tests.Containers
         public void Enumeration_ListsAllElements()
         {
             TestHelper.AssertSequence(_trie5,
-                new KeyValuePair<string, int>("cba", 5),
-                new KeyValuePair<string, int>("cbc", 4),
-                new KeyValuePair<string, int>("acb", 2),
-                new KeyValuePair<string, int>("abd", 3),
-                new KeyValuePair<string, int>("abc", 1)
+                new KeyValuePair<char[], int>(_("cba"), 5),
+                new KeyValuePair<char[], int>(_("cbc"), 4),
+                new KeyValuePair<char[], int>(_("acb"), 2),
+                new KeyValuePair<char[], int>(_("abd"), 3),
+                new KeyValuePair<char[], int>(_("abc"), 1)
             );
         }
 
@@ -163,7 +186,7 @@ namespace Abacaxi.Tests.Containers
         public void ImplicitGetEnumerator_IsActuallyTheGenericOne()
         {
             var enumerator = ((IEnumerable)_trie5).GetEnumerator();
-            Assert.IsInstanceOf<IEnumerator<KeyValuePair<string, int>>>(enumerator);
+            Assert.IsInstanceOf<IEnumerator<KeyValuePair<char[], int>>>(enumerator);
         }
 
         [Test]
@@ -174,7 +197,7 @@ namespace Abacaxi.Tests.Containers
                 // ReSharper disable once UnusedVariable
                 foreach (var kvp in _trie5)
                 {
-                    _trie5.Add("test", 0);
+                    _trie5.Add(_("test"), 0);
                 }
             });
         }
@@ -187,7 +210,7 @@ namespace Abacaxi.Tests.Containers
                 // ReSharper disable once UnusedVariable
                 foreach (var kvp in _trie5)
                 {
-                    _trie5.Remove("abc");
+                    _trie5.Remove(_("abc"));
                 }
             });
         }
@@ -208,31 +231,31 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Contains_ReturnsTrue_IfKeyIsContained()
         {
-            Assert.IsTrue(_trie5.Contains("cba"));
+            Assert.IsTrue(_trie5.Contains(_("cba")));
         }
 
         [Test]
         public void Contains_ReturnsFalse_IfKeyIsNotContained()
         {
-            Assert.IsFalse(_trie5.Contains("cbz"));
+            Assert.IsFalse(_trie5.Contains(_("cbz")));
         }
 
         [Test]
         public void Contains_ReturnsTrue_IfKeyAndValueAreContained()
         {
-            Assert.IsTrue(_trie5.Contains(new KeyValuePair<string, int>("cba", 5)));
+            Assert.IsTrue(_trie5.Contains(new KeyValuePair<char[], int>(_("cba"), 5)));
         }
 
         [Test]
         public void Contains_ReturnsFalse_IfKeyIsContainedButNotTheValue()
         {
-            Assert.IsFalse(_trie5.Contains(new KeyValuePair<string, int>("abc", -1)));
+            Assert.IsFalse(_trie5.Contains(new KeyValuePair<char[], int>(_("abc"), -1)));
         }
 
         [Test]
         public void Contains_ReturnsFalse_IfKeyNotContained()
         {
-            Assert.IsFalse(_trie5.Contains(new KeyValuePair<string, int>("zzz", 4)));
+            Assert.IsFalse(_trie5.Contains(new KeyValuePair<char[], int>(_("zzz"), 4)));
         }
 
         [Test]
@@ -244,7 +267,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Contains_ThrowsException_IfKeyIsNull2()
         {
-            Assert.Throws<ArgumentNullException>(() => _trie0.Contains(new KeyValuePair<string, int>(null, -1)));
+            Assert.Throws<ArgumentNullException>(() => _trie0.Contains(new KeyValuePair<char[], int>(null, -1)));
         }
 
 
@@ -267,13 +290,13 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Add_ThrowsException_IfKeyIsAlreadyInTheTrie1()
         {
-            Assert.Throws<ArgumentException>(() => _trie5.Add("abc", -1));
+            Assert.Throws<ArgumentException>(() => _trie5.Add(_("abc"), -1));
         }
 
         [Test]
         public void Add_ThrowsException_IfKeyIsAlreadyInTheTrie2()
         {
-            Assert.Throws<ArgumentException>(() => _trie5.Add(new KeyValuePair<string, int>("abc", -1)));
+            Assert.Throws<ArgumentException>(() => (_trie5 as ICollection<KeyValuePair<char[], int>>).Add(new KeyValuePair<char[], int>(_("abc"), -1)));
         }
 
         [Test]
@@ -285,13 +308,13 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Add_ThrowsException_IfKeyIsNull2()
         {
-            Assert.Throws<ArgumentNullException>(() => _trie5.Add(new KeyValuePair<string, int>(null, -1)));
+            Assert.Throws<ArgumentNullException>(() => (_trie5 as ICollection<KeyValuePair<char[], int>>).Add(new KeyValuePair<char[], int>(null, -1)));
         }
 
         [Test]
         public void Add_IncreasesTheCountByOne_IfKeyValueIsAdded()
         {
-            _trie0.Add("test", 1);
+            _trie0.Add(_("test"), 1);
             Assert.AreEqual(1, _trie0.Count);
         }
 
@@ -301,7 +324,7 @@ namespace Abacaxi.Tests.Containers
             var preCount = _trie5.Count;
             try
             {
-                _trie5.Add("abc", -1);
+                _trie5.Add(_("abc"), -1);
             }
             // ReSharper disable once EmptyGeneralCatchClause
             catch
@@ -314,24 +337,82 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Add_ActuallyAddsTheKey()
         {
-            _trie0.Add("test", 1);
+            _trie0.Add(_("test"), 1);
 
-            Assert.IsTrue(_trie0.Contains("test"));
+            Assert.IsTrue(_trie0.Contains(_("test")));
         }
 
         [Test]
         public void Add_ActuallyAddsTheKeyAndValue()
         {
-            _trie0.Add("test", 1);
+            _trie0.Add(_("test"), 1);
 
-            Assert.IsTrue(_trie0.Contains(new KeyValuePair<string, int>("test", 1)));
+            Assert.IsTrue(_trie0.Contains(new KeyValuePair<char[], int>(_("test"), 1)));
         }
 
         [Test]
         public void Add_WorksAsExpectedOn_EmptyString()
         {
-            _trie0.Add("", 10);
-            Assert.IsTrue(_trie0.Contains(""));
+            _trie0.Add(_(""), 10);
+            Assert.IsTrue(_trie0.Contains(_("")));
+        }
+
+        [Test]
+        public void AddOrUpdate_ThrowsException_IfKeyIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _trie5.AddOrUpdate(null, 1, i => i));
+        }
+
+        [Test]
+        public void AddOrUpdate_ThrowsException_IfUpdateFuncIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _trie5.AddOrUpdate(_("a"), 1, null));
+        }
+
+        [Test]
+        public void AddOrUpdate_ReturnsTrue_IfKeyValueIsAdded()
+        {
+            Assert.IsTrue(_trie0.AddOrUpdate(_("test"), 1, i => i));
+        }
+
+        [Test]
+        public void AddOrUpdate_IncreasesTheCountByOne_IfKeyValueIsAdded()
+        {
+            _trie0.AddOrUpdate(_("test"), 1, i => i);
+            Assert.AreEqual(1, _trie0.Count);
+        }
+
+        [Test]
+        public void AddOrUpdate_ReturnsFalse_IfKeyValueIsUpdated()
+        {
+            Assert.IsFalse(_trie5.AddOrUpdate(_("abc"), 1, i => i));
+        }
+
+        [Test]
+        public void AddOrUpdate_DoesNotIncreaseTheCount_IfValueIsUpdated()
+        {
+            var preCount = _trie5.Count;
+            _trie5.AddOrUpdate(_("abc"), -1, i => -1);
+
+            Assert.AreEqual(preCount, _trie5.Count);
+        }
+
+        [Test]
+        public void AddOrUpdate_AddsTheKeyValue_IfTheKeyIsNotFound()
+        {
+            _trie0.AddOrUpdate(_("test"), 1, i => i);
+
+            Assert.IsTrue(_trie0.TryGetValue(_("test"), out int value));
+            Assert.AreEqual(1, value);
+        }
+
+        [Test]
+        public void AddOrUpdate_UpdatesTheValue_IfTheKeyIsFound()
+        {
+            _trie5.AddOrUpdate(_("abc"), 1, i => -1);
+
+            Assert.IsTrue(_trie5.TryGetValue(_("abc"), out int value));
+            Assert.AreEqual(-1, value);
         }
 
         [Test]
@@ -346,14 +427,14 @@ namespace Abacaxi.Tests.Containers
         [TestCase(5, 1)]
         public void CopyTo_ThrowsException_ForInvalidArrayIndex(int arrayLength, int arrayIndex)
         {
-            var a = new KeyValuePair<string, int>[arrayLength];
+            var a = new KeyValuePair<char[], int>[arrayLength];
             Assert.Throws<ArgumentOutOfRangeException>(() => _trie5.CopyTo(a, arrayIndex));
         }
 
         [Test]
         public void CopyTo_CopiesTheContentsIntoArray()
         {
-            var a = new KeyValuePair<string, int>[_trie5.Count];
+            var a = new KeyValuePair<char[], int>[_trie5.Count];
             _trie5.CopyTo(a, 0);
             TestHelper.AssertSequence(_trie5, a);
         }
@@ -361,8 +442,8 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void CopyTo_TakesArrayIndexIntoAccount()
         {
-            var a = new KeyValuePair<string, int>[10];
-            _trie0.Add("alex", 100);
+            var a = new KeyValuePair<char[], int>[10];
+            _trie0.Add(_("alex"), 100);
             _trie0.CopyTo(a, 9);
 
             Assert.AreEqual(_trie0.Single(), a[9]);
@@ -377,13 +458,13 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Remove_ThrowsException_IfKeyIsNull2()
         {
-            Assert.Throws<ArgumentNullException>(() => _trie0.Remove(new KeyValuePair<string, int>(null, -1)));
+            Assert.Throws<ArgumentNullException>(() => (_trie0 as ICollection<KeyValuePair<char[], int>>).Remove(new KeyValuePair<char[], int>(null, -1)));
         }
 
         [Test]
         public void Remove_ReturnsTrue_IfKeyValueWasRemoved()
         {
-            var result = _trie5.Remove("abc");
+            var result = _trie5.Remove(_("abc"));
 
             Assert.IsTrue(result);
         }
@@ -391,7 +472,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Remove_ReturnsFalse_IfKeyValueWasNotRemoved()
         {
-            var result = _trie5.Remove("abz");
+            var result = _trie5.Remove(_("abz"));
 
             Assert.IsFalse(result);
         }
@@ -400,7 +481,7 @@ namespace Abacaxi.Tests.Containers
         public void Remove_DecreasesTheCountByOne_IfKeyValueWasRemoved()
         {
             var count = _trie5.Count;
-            _trie5.Remove("abc");
+            _trie5.Remove(_("abc"));
 
             Assert.AreEqual(count - 1, _trie5.Count);
         }
@@ -409,7 +490,7 @@ namespace Abacaxi.Tests.Containers
         public void Remove_DoesNotChangeTheCount_IfKeyValueWasNotRemoved()
         {
             var count = _trie5.Count;
-            _trie5.Remove("abz");
+            _trie5.Remove(_("abz"));
 
             Assert.AreEqual(count, _trie5.Count);
         }
@@ -417,7 +498,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Remove_ReturnsFalse_IfKeyPresentButValueIsNot()
         {
-            var result = _trie5.Remove(new KeyValuePair<string, int>("abc", -1));
+            var result = (_trie5 as ICollection<KeyValuePair<char[], int>>).Remove(new KeyValuePair<char[], int>(_("abc"), -1));
 
             Assert.IsFalse(result);
         }
@@ -425,7 +506,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Remove_ReturnsTrue_IfKeyAndValueAreBothPresent()
         {
-            var result = _trie5.Remove(new KeyValuePair<string, int>("abc", 1));
+            var result = (_trie5 as ICollection<KeyValuePair<char[], int>>).Remove(new KeyValuePair<char[], int>(_("abc"), 1));
 
             Assert.IsTrue(result);
         }
@@ -433,9 +514,35 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Remove_WorksAsExpectedOn_EmptyString()
         {
-            _trie0.Add("", 10);
+            _trie0.Add(_(""), 10);
 
-            Assert.IsTrue(_trie0.Remove(""));
+            Assert.IsTrue(_trie0.Remove(_("")));
+        }
+
+        [Test]
+        public void TryGetValue_ThrowsException_IfKeyIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _trie5.TryGetValue(null, out int dummy));
+        }
+
+        [Test]
+        public void TryGetValue_ReturnsFalse_IfTheKeyIsNotFound()
+        {
+            Assert.IsFalse(_trie5.TryGetValue(_("cbz"), out int dummy));
+        }
+
+        [Test]
+        public void TryGetValue_ReturnsTrue_IfTheKeyIsFound()
+        {
+            Assert.IsTrue(_trie5.TryGetValue(_("cba"), out int dummy));
+        }
+
+        [Test]
+        public void TryGetValue_SetsTheOutputValue_IfTheKeyIsFound()
+        {
+            _trie5.TryGetValue(_("cba"), out int output);
+
+            Assert.AreEqual(5, output);
         }
 
         [Test]
@@ -464,7 +571,7 @@ namespace Abacaxi.Tests.Containers
                 {
                     for (var z = 'A'; z < 'A' + cx; z++)
                     {
-                        _trie0.Add($"{i}{j}{z}", 0);
+                        _trie0.Add(_($"{i}{j}{z}"), 0);
                     }
                 }
             }
@@ -478,13 +585,21 @@ namespace Abacaxi.Tests.Containers
                 {
                     for (var z = 'A'; z < 'A' + cx; z++)
                     {
-                        var removed = _trie0.Remove($"{i}{j}{z}");
+                        var removed = _trie0.Remove(_($"{i}{j}{z}"));
                         Assert.IsTrue(removed);
                     }
                 }
             }
 
             Assert.AreEqual(0, _trie0.Count);
+        }
+
+        [Test]
+        public void Trie_TakesIntoAccountTheComparer()
+        {
+            var trie = new Trie<string, int>(StringComparer.OrdinalIgnoreCase) {{new[] {"A"}, 1}};
+
+            Assert.IsTrue(trie.Contains(new[] {"a"}));
         }
     }
 }
