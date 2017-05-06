@@ -43,6 +43,8 @@ namespace Abacaxi.Containers
         private static readonly IEqualityComparer<TValue> ValueDefaultComparer =
             EqualityComparer<TValue>.Default;
 
+        private static readonly TElement[] EmptyElementArray = {};
+
         private readonly IEqualityComparer<TElement> _comparer;
         private int _ver;
         private Node _root;
@@ -128,32 +130,7 @@ namespace Abacaxi.Containers
         /// <exception cref="InvalidOperationException">Collection has been modified while enumerating.</exception>
         public IEnumerator<KeyValuePair<TElement[], TValue>> GetEnumerator()
         {
-            var stack = new Stack<KeyValuePair<TElement[], Node>>();
-            stack.Push(new KeyValuePair<TElement[], Node>(new TElement[] {}, _root));
-
-            var ver = _ver;
-            while (stack.Count > 0)
-            {
-                if (ver != _ver)
-                {
-                    throw new InvalidOperationException("Collection has been modified while enumerating.");
-                }
-
-                var c = stack.Pop();
-                if (c.Value.IsTerminal)
-                {
-                    yield return new KeyValuePair<TElement[], TValue>(c.Key, c.Value.Value);
-                }
-
-                foreach (var n in c.Value.Children)
-                {
-                    var combo = new TElement[c.Key.Length + 1];
-                    c.Key.CopyTo(combo, 0);
-                    combo[combo.Length - 1] = n.Key;
-
-                    stack.Push(new KeyValuePair<TElement[], Node>(combo, n.Value));
-                }
-            }
+            return Query(EmptyElementArray).GetEnumerator();
         }
 
         /// <summary>
@@ -187,11 +164,7 @@ namespace Abacaxi.Containers
 
                     foreach (var n in c.Value.Children)
                     {
-                        var combo = new TElement[c.Key.Length + 1];
-                        c.Key.CopyTo(combo, 0);
-                        combo[combo.Length - 1] = n.Key;
-
-                        stack.Push(new KeyValuePair<TElement[], Node>(combo, n.Value));
+                        stack.Push(new KeyValuePair<TElement[], Node>(c.Key.Append(n.Key), n.Value));
                     }
                 }
             }

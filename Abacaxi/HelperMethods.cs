@@ -116,5 +116,101 @@ namespace Abacaxi
 
             return result;
         }
+
+        /// <summary>
+        /// Adds a new key/valuer pair or updates an existing one.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="dict">The dictionary.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="updateFunc">The value update function.</param>
+        /// <returns><c>true</c> if the a new key/value pair was added; otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="dict"/> or <paramref name="updateFunc"/> are <c>null</c>.</exception>
+        public static bool AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value,
+            Func<TValue, TValue> updateFunc)
+        {
+            Validate.ArgumentNotNull(nameof(dict), dict);
+            Validate.ArgumentNotNull(nameof(updateFunc), updateFunc);
+
+            if (dict.TryGetValue(key, out TValue existing))
+            {
+                dict[key] = updateFunc(existing);
+                return false;
+            }
+
+            dict.Add(key, value);
+            return true;
+        }
+
+        public static T[] Append<T>(this T[] array, T item1)
+        {
+            var length = array?.Length + 1 ?? 1;
+            Array.Resize(ref array, length);
+            array[length - 1] = item1;
+
+            return array;
+        }
+
+        public static T[] Append<T>(this T[] array, T item1, T item2)
+        {
+            var length = array?.Length + 2 ?? 2;
+            Array.Resize(ref array, length);
+            array[length - 2] = item1;
+            array[length - 1] = item2;
+
+            return array;
+        }
+
+        public static T[] Append<T>(this T[] array, T item1, T item2, T item3)
+        {
+            var length = array?.Length + 3 ?? 3;
+            Array.Resize(ref array, length);
+            array[length - 3] = item1;
+            array[length - 2] = item2;
+            array[length - 1] = item3;
+
+            return array;
+        }
+
+        public static T[] Append<T>(this T[] array, T item1, T item2, T item3, T item4)
+        {
+            var length = array?.Length + 4 ?? 4;
+            Array.Resize(ref array, length);
+            array[length - 4] = item1;
+            array[length - 3] = item2;
+            array[length - 2] = item3;
+            array[length - 1] = item4;
+
+            return array;
+        }
+
+        public static T[] Append<T>(this T[] array, T item1, T item2, T item3, T item4, T item5)
+        {
+            var length = array?.Length + 5 ?? 5;
+            Array.Resize(ref array, length);
+            array[length - 5] = item1;
+            array[length - 4] = item2;
+            array[length - 3] = item3;
+            array[length - 2] = item4;
+            array[length - 1] = item5;
+
+            return array;
+        }
+
+        public static T[] Append<T>(this T[] array, params T[] items)
+        {
+            var il = array?.Length ?? 0;
+            var al = items.Length;
+
+            Array.Resize(ref array, il + al);
+            for (var i = 0; i < al; i++)
+            {
+                array[il + i] = items[i];
+            }
+
+            return array;
+        }
     }
 }

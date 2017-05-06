@@ -13,12 +13,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Linq;
-
 namespace Abacaxi.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using NUnit.Framework;
 
     [TestFixture]
@@ -102,6 +101,7 @@ namespace Abacaxi.Tests
         [Test]
         public void AsList_ReturnsEmptyList_ForEmptyCollection()
         {
+            // ReSharper disable once CollectionNeverUpdated.Local
             var coll = new HashSet<int>();
             var asList = coll.AsList();
 
@@ -164,6 +164,147 @@ namespace Abacaxi.Tests
             var freq = list.GetItemFrequencies(StringComparer.OrdinalIgnoreCase);
 
             Assert.AreEqual(2, freq["a"]);
+        }
+
+        [Test]
+        public void AddOrUpdate_ThrowsException_IfDictIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((Dictionary<int, int>)null).AddOrUpdate(1, 1, i => i));
+        }
+
+        [Test]
+        public void AddOrUpdate_ThrowsException_IfUpdateFuncIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Dictionary<int, int>().AddOrUpdate(1, 1, null));
+        }
+
+        [Test]
+        public void AddOrUpdate_ReturnsTrue_IfKeyValueIsAdded()
+        {
+            var dict = new Dictionary<string, int>();
+            Assert.IsTrue(dict.AddOrUpdate("key", 1, i => i));
+        }
+
+        [Test]
+        public void AddOrUpdate_ReturnsFalse_IfKeyValueIsUpdated()
+        {
+            var dict = new Dictionary<string, int> {{"key", 1}};
+            Assert.IsFalse(dict.AddOrUpdate("key", 1, i => i));
+        }
+
+        [Test]
+        public void AddOrUpdate_AddsTheKeyValue_IfTheKeyIsNotFound()
+        {
+            var dict = new Dictionary<string, int>();
+            dict.AddOrUpdate("key", 1, i => i);
+
+            Assert.IsTrue(dict.TryGetValue("key", out int value));
+            Assert.AreEqual(1, value);
+        }
+
+        [Test]
+        public void AddOrUpdate_UpdatesTheValue_IfTheKeyIsFound()
+        {
+            var dict = new Dictionary<string, int> {{"key", 1}};
+            dict.AddOrUpdate("key", 2, i => -1);
+
+            Assert.IsTrue(dict.TryGetValue("key", out int value));
+            Assert.AreEqual(-1, value);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForNullArray_AndOneElement()
+        {
+            var array = ((int[]) null).Append(1);
+
+            TestHelper.AssertSequence(array, 1);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForNullArray_AndTwoElements()
+        {
+            var array = ((int[])null).Append(1, 2);
+
+            TestHelper.AssertSequence(array, 1, 2);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForNullArray_AndThreeElements()
+        {
+            var array = ((int[])null).Append(1, 2, 3);
+
+            TestHelper.AssertSequence(array, 1, 2, 3);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForNullArray_AndFourElements()
+        {
+            var array = ((int[])null).Append(1, 2, 3, 4);
+
+            TestHelper.AssertSequence(array, 1, 2, 3, 4);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForNullArray_AndFiveElements()
+        {
+            var array = ((int[])null).Append(1, 2, 3, 4, 5);
+
+            TestHelper.AssertSequence(array, 1, 2, 3, 4, 5);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForNullArray_AndSixElements()
+        {
+            var array = ((int[])null).Append(1, 2, 3, 4, 5, 6);
+
+            TestHelper.AssertSequence(array, 1, 2, 3, 4, 5, 6);
+        }
+        [Test]
+        public void Append_CreatesNewArray_ForFullArray_AndOneElement()
+        {
+            var array = new[] {-2, -1, 0}.Append(1);
+
+            TestHelper.AssertSequence(array, -2, -1, 0, 1);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForFullArray_AndTwoElements()
+        {
+            var array = new[] { -2, -1, 0 }.Append(1, 2);
+
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForFullArray_AndThreeElements()
+        {
+            var array = new[] { -2, -1, 0 }.Append(1, 2, 3);
+
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForFullArray_AndFourElements()
+        {
+            var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4);
+
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForFullArray_AndFiveElements()
+        {
+            var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4, 5);
+
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4, 5);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForFullArray_AndSixElements()
+        {
+            var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4, 5, 6);
+
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4, 5, 6);
         }
     }
 }
