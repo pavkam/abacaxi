@@ -87,5 +87,13 @@ namespace Abacaxi.Containers
             }
             return hashCode;
         }
+
+        /// <summary>
+        /// Gets the default equality comparer for the given array type.
+        /// </summary>
+        /// <value>
+        /// The default equality comparer.
+        /// </value>
+        public static IEqualityComparer<TElement[]> Default { get; } = new ArrayEqualityComparer<TElement>(EqualityComparer<TElement>.Default);
     }
 }

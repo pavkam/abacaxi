@@ -37,6 +37,7 @@
     <Compile Include="Combinatorics\Combinatorics.Tests.PartitionInteger.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.FindBestSetCoverage.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateAllSubsetCombinations.cs" />
+    <Compile Include="Containers\ArrayEqualityComparerTests.cs" />
     <Compile Include="Containers\TrieTests.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
