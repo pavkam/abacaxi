@@ -30,7 +30,7 @@ namespace Abacaxi.Containers
 
         private readonly IComparer<T> _comparer;
         private T[] _array;
-        private int _count, _ver;
+        private int _ver;
 
         private void SiftDown(IList<T> array, int length, int pi)
         {
@@ -125,9 +125,9 @@ namespace Abacaxi.Containers
             _array = new T[local.Length < DefaultArraySize ? DefaultArraySize : local.Length];
 
             Array.Copy(local, _array, local.Length);
-            _count = local.Length;
+            Count = local.Length;
 
-            BuildHeap(_array, _count);
+            BuildHeap(_array, Count);
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Abacaxi.Containers
         {
             get
             {
-                if (_count == 0)
+                if (Count == 0)
                 {
                     throw new InvalidOperationException("The heap is empty.");
                 }
@@ -153,7 +153,7 @@ namespace Abacaxi.Containers
         /// <summary>
         /// Gets the number of elements contained in the <see cref="Heap{T}" />.
         /// </summary>
-        public int Count => _count;
+        public int Count { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="Heap{T}" /> is read-only.
@@ -166,16 +166,16 @@ namespace Abacaxi.Containers
         /// <param name="item">The object to add to the <see cref="Heap{T}" />.</param>
         public void Add(T item)
         {
-            if (_count == _array.Length)
+            if (Count == _array.Length)
             {
-                Array.Resize(ref _array, _count * 2);
+                Array.Resize(ref _array, Count * 2);
             }
 
-            _array[_count] = item;
-            SiftUp(_array, _count);
+            _array[Count] = item;
+            SiftUp(_array, Count);
 
             _ver++;
-            _count++;
+            Count++;
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Abacaxi.Containers
         /// </summary>
         public void Clear()
         {
-            _count = 0;
+            Count = 0;
             _ver++;
         }
 
@@ -196,7 +196,7 @@ namespace Abacaxi.Containers
         /// </returns>
         public bool Contains(T item)
         {
-            for (var i = 0; i < _count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_comparer.Compare(_array[i], item) == 0)
                 {
@@ -220,12 +220,12 @@ namespace Abacaxi.Containers
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
             Validate.ArgumentLessThanOrEqualTo(nameof(arrayIndex), Count, array.Length - arrayIndex);
 
-            if (_count == 0)
+            if (Count == 0)
             {
                 return;
             }
 
-            var count = _count;
+            var count = Count;
             var local = new T[count];
             Array.Copy(_array, local, count);
 
@@ -250,13 +250,13 @@ namespace Abacaxi.Containers
         /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
-            if (_count == 0)
+            if (Count == 0)
             {
                 yield break;
             }
 
             var startVer = _ver;
-            var count = _count;
+            var count = Count;
             var local = new T[count];
             Array.Copy(_array, local, count);
 
@@ -287,13 +287,13 @@ namespace Abacaxi.Containers
         /// </returns>
         public bool Remove(T item)
         {
-            for (var i = 0; i < _count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (_comparer.Compare(_array[i], item) == 0)
                 {
-                    if (i < _count - 1)
+                    if (i < Count - 1)
                     {
-                        _array[i] = _array[_count - 1];
+                        _array[i] = _array[Count - 1];
 
                         var pi = (i % 2 == 1) ? (i - 1) / 2 : (i - 2) / 2;
                         if (pi >= 0 && _comparer.Compare(_array[pi], _array[i]) < 0)
@@ -302,11 +302,11 @@ namespace Abacaxi.Containers
                         }
                         else
                         {
-                            SiftDown(_array, _count - 1, i);
+                            SiftDown(_array, Count - 1, i);
                         }
                     }
 
-                    _count--;
+                    Count--;
                     _ver++;
                     return true;
                 }
@@ -322,19 +322,19 @@ namespace Abacaxi.Containers
         /// <exception cref="InvalidOperationException">The heap is empty.</exception>
         public T RemoveTop()
         {
-            if (_count == 0)
+            if (Count == 0)
             {
                 throw new InvalidOperationException("The heap is empty.");
             }
 
             var result = _array[0];
-            if (_count > 1)
+            if (Count > 1)
             {
-                _array[0] = _array[_count - 1];
-                SiftDown(_array, _count - 1, 0);
+                _array[0] = _array[Count - 1];
+                SiftDown(_array, Count - 1, 0);
             }
 
-            _count--;
+            Count--;
             _ver++;
 
             return result;

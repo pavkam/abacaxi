@@ -15,28 +15,29 @@
 
 namespace Abacaxi.Practice.Graphs
 {
+
     using System;
     using System.Collections.Generic;
     using Abacaxi.Graphs;
+    using Containers;
 
     /// <summary>
     /// A graph composed by a number of strings (representing vertices) and connected by edges signifying potential one-letter transformations.
     /// </summary>
     public sealed class StringNeighborhoodGraph : Graph<string>
     {
-        private readonly IDictionary<string, ISet<string>> _neighborhoods;
+        private readonly Trie<char, ISet<string>> _neighborhoods;
         private readonly ISet<string> _vertices;
 
-        private static IEnumerable<string> GetAllStringPatterns(string s)
+        private static IEnumerable<char[]> GetAllStringPatterns(string s)
         {
             var ca = (s ?? string.Empty).ToCharArray();
-            var result = new string[ca.Length];
+            var result = new char[ca.Length][];
             for (var i = 0; i < ca.Length; i++)
             {
-                var temp = ca[i];
-                ca[i] = '\0';
-                result[i] = new string(ca);
-                ca[i] = temp;
+                result[i] = new char[ca.Length];
+                Array.Copy(ca, result[i], ca.Length);
+                result[i][i] = '\0';
             }
 
             return result;
@@ -67,7 +68,7 @@ namespace Abacaxi.Practice.Graphs
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
-            _neighborhoods = new Dictionary<string, ISet<string>>();
+            _neighborhoods = new Trie<char, ISet<string>>();
             _vertices = new HashSet<string>();
             foreach (var item in sequence)
             {
@@ -114,11 +115,15 @@ namespace Abacaxi.Practice.Graphs
 
             foreach (var pattern in GetAllStringPatterns(vertex))
             {
-                foreach (var neighbor in _neighborhoods[pattern])
+                // ReSharper disable once CollectionNeverUpdated.Local
+                if (_neighborhoods.TryGetValue(pattern, out ISet<string> neighbors))
                 {
-                    if (neighbor != vertex)
+                    foreach (var neighbor in neighbors)
                     {
-                        yield return new Edge<string>(vertex, neighbor);
+                        if (neighbor != vertex)
+                        {
+                            yield return new Edge<string>(vertex, neighbor);
+                        }
                     }
                 }
             }
