@@ -144,6 +144,13 @@ namespace Abacaxi
             return true;
         }
 
+        /// <summary>
+        /// Appends the specified <paramref name="item1"/> to an array <paramref name="array"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <param name="array">The array.</param>
+        /// <param name="item1">The item to append to array.</param>
+        /// <returns>A new array consisting <paramref name="array"/> and appended <paramref name="item1"/>.</returns>
         public static T[] Append<T>(this T[] array, T item1)
         {
             var length = array?.Length + 1 ?? 1;
@@ -153,6 +160,14 @@ namespace Abacaxi
             return array;
         }
 
+        /// <summary>
+        /// Appends the specified items to an array <paramref name="array"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <param name="array">The array.</param>
+        /// <param name="item1">The first item to append to array.</param>
+        /// <param name="item2">The second item to append to array.</param>
+        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
         public static T[] Append<T>(this T[] array, T item1, T item2)
         {
             var length = array?.Length + 2 ?? 2;
@@ -163,6 +178,15 @@ namespace Abacaxi
             return array;
         }
 
+        /// <summary>
+        /// Appends the specified items to an array <paramref name="array"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <param name="array">The array.</param>
+        /// <param name="item1">The first item to append to array.</param>
+        /// <param name="item2">The second item to append to array.</param>
+        /// <param name="item3">The third item to append to array.</param>
+        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
         public static T[] Append<T>(this T[] array, T item1, T item2, T item3)
         {
             var length = array?.Length + 3 ?? 3;
@@ -174,6 +198,16 @@ namespace Abacaxi
             return array;
         }
 
+        /// <summary>
+        /// Appends the specified items to an array <paramref name="array"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <param name="array">The array.</param>
+        /// <param name="item1">The first item to append to array.</param>
+        /// <param name="item2">The second item to append to array.</param>
+        /// <param name="item3">The third item to append to array.</param>
+        /// <param name="item4">The fourth item to append to array.</param>
+        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
         public static T[] Append<T>(this T[] array, T item1, T item2, T item3, T item4)
         {
             var length = array?.Length + 4 ?? 4;
@@ -186,6 +220,17 @@ namespace Abacaxi
             return array;
         }
 
+        /// <summary>
+        /// Appends the specified items to an array <paramref name="array"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <param name="array">The array.</param>
+        /// <param name="item1">The first item to append to array.</param>
+        /// <param name="item2">The second item to append to array.</param>
+        /// <param name="item3">The third item to append to array.</param>
+        /// <param name="item4">The fourth item to append to array.</param>
+        /// <param name="item5">The fifth item to append to array.</param>
+        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
         public static T[] Append<T>(this T[] array, T item1, T item2, T item3, T item4, T item5)
         {
             var length = array?.Length + 5 ?? 5;
@@ -199,6 +244,13 @@ namespace Abacaxi
             return array;
         }
 
+        /// <summary>
+        /// Appends the specified <paramref name="items"/> to an array <paramref name="array"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <param name="array">The array.</param>
+        /// <param name="items">The items to append to the array.</param>
+        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
         public static T[] Append<T>(this T[] array, params T[] items)
         {
             var il = array?.Length ?? 0;
