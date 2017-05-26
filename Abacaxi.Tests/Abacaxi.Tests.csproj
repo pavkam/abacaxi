@@ -74,6 +74,7 @@
     <Compile Include="Combinatorics\Combinatorics.Tests.FindSubsetsWithEqualAggregateValue.cs" />
     <Compile Include="Sequence\Sequence.Tests.HeapSort.cs" />
     <Compile Include="Sequence\Sequence.Tests.Interleave.cs" />
+    <Compile Include="Sequence\Sequence.Tests,RandomSample.cs" />
     <Compile Include="Sequence\Sequence.Tests.ShellSort.cs" />
     <Compile Include="Sequence\Sequence.Tests.QuickSort.cs" />
     <Compile Include="Sequence\Sequence.Tests.GnomeSort.cs" />

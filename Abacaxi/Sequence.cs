@@ -588,7 +588,7 @@ namespace Abacaxi
                     yield return currentList.ToArray();
                     if (stack.Count == 0)
                     {
-                        throw new InvalidOperationException($"There are no blocks open to be closed.");
+                        throw new InvalidOperationException("There are no blocks open to be closed.");
                     }
 
                     var previousList = stack.Pop();
@@ -803,7 +803,7 @@ namespace Abacaxi
 
             var start = startIndex;
             var end = startIndex + length - 1;
-            var direction = @ascending ? 1 : -1;
+            var direction = ascending ? 1 : -1;
 
             while (start <= end)
             {
@@ -1170,6 +1170,49 @@ namespace Abacaxi
                     sequence[j + gap] = temp;
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns a random sample of a given sequence of elements.
+        /// </summary>
+        /// <typeparam name="T">Thetype of elements in the <paramref name="sequence"/>.</typeparam>
+        /// <param name="sequence">The sequence of elements.</param>
+        /// <param name="sampleLength">Length of the sample to be selected.</param>
+        /// <returns>A random sequence of elements from <paramref name="sequence"/>.</returns>
+        public static T[] RandomSample<T>(this IEnumerable<T> sequence, int sampleLength)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentGreaterThanZero(nameof(sampleLength), sampleLength);
+
+            var random = new Random();
+            var sample = new T[sampleLength];
+            var i = 0;
+
+            using (var enumerator = sequence.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    if (i < sampleLength)
+                    {
+                        sample[i++] = enumerator.Current;
+                    }
+                    else
+                    {
+                        var j = random.Next(i - 1);
+                        if (j < sampleLength)
+                        {
+                            sample[j] = enumerator.Current;
+                        }
+                    }
+                }
+            }
+
+            if (i < sampleLength)
+            {
+                Array.Resize(ref sample, i);
+            }
+
+            return sample;
         }
     }
 }
