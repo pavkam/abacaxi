@@ -18,6 +18,8 @@ namespace Abacaxi
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Diagnostics;
+    using Costs;
 
     /// <summary>
     /// Class implements multiple algorithms that deals with combinatorial problems.
@@ -33,6 +35,69 @@ namespace Abacaxi
             {
                 ItemIndex = itemIndex;
                 SetIndex = setIndex;
+            }
+        }
+
+        private sealed class RecursiveFindSubsetPairingWithLowestCostContext<TCost> where TCost : struct
+        {
+            public int[] Indices;
+            public int[] BestCombination;
+            public IAccountant<TCost> Accountant;
+            public TCost? LowestCostSoFar;
+            public Func<int, int, TCost> CalculatePairCost;
+        }
+
+        private sealed class Pair<T>
+        {
+            public T Item1;
+            public T Item2;
+        }
+
+        private static void RecursiveFindSubsetPairingWithLowestCost<TCost>(
+            RecursiveFindSubsetPairingWithLowestCostContext<TCost> context,
+            int i,
+            int set,
+            TCost currentCost) where TCost : struct
+        {
+            Debug.Assert(context != null);
+
+            if (context.LowestCostSoFar.HasValue && context.Accountant.Compare(currentCost, context.LowestCostSoFar.Value) >= 0)
+            {
+                return;
+            }
+
+            if (i == context.Indices.Length)
+            {
+                context.LowestCostSoFar = currentCost;
+                context.BestCombination = new int[context.Indices.Length];
+                Array.Copy(context.Indices, context.BestCombination, context.Indices.Length);
+
+                return;
+            }
+
+            if (context.Indices[i] > 0)
+            {
+                RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set, currentCost);
+            }
+            else
+            {
+                for (var ni = i + 1; ni < context.Indices.Length; ni++)
+                {
+                    if (context.Indices[ni] == 0)
+                    {
+                        context.Indices[i] = set;
+                        context.Indices[ni] = set;
+
+                        var pairCost = context.CalculatePairCost(i, ni);
+                        var newCost = context.Accountant.Add(currentCost, pairCost);
+
+                        RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set + 1, newCost);
+
+                        context.Indices[ni] = 0;
+                    }
+                }
+
+                context.Indices[i] = 0;
             }
         }
 
@@ -267,50 +332,57 @@ namespace Abacaxi
             }
         }
 
-        public static IEnumerable<T[][]> EvaluateSubSetCon<T>(this IList<T> sequence, int subsets)
+        /// <summary>
+        /// Finds all pairs of items from a given <paramref name="sequence"/> whose total combination cost is mininum.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the sequence.</typeparam>
+        /// <typeparam name="TCost">The type of the cost associated with each pair of items.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="evaluateCostOfPairFunc">The function used to evaluate costs of pairs.</param>
+        /// <param name="accountant">The cost accountant class.</param>
+        /// <returns>A sequence of pairs wich lowest overall cost.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluateCostOfPairFunc"/> or <paramref name="accountant"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence"/> is not even.</exception>
+        public static Tuple<T, T>[] FindSubsetPairingWithLowestCost<T, TCost>(
+            this IList<T> sequence,
+            Func<T, T, TCost> evaluateCostOfPairFunc,
+            IAccountant<TCost> accountant) where TCost : struct
         {
-            Validate.ArgumentNotNull(nameof(sequence), sequence);
-            Validate.ArgumentGreaterThanZero(nameof(subsets), subsets);
+            Validate.CollectionArgumentsHasEvenNumberOfElements(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(evaluateCostOfPairFunc), evaluateCostOfPairFunc);
+            Validate.ArgumentNotNull(nameof(accountant), accountant);
 
             if (sequence.Count == 0)
             {
-                yield break;
+                return new Tuple<T, T>[0];
             }
 
-            var resultSets = new List<T>[subsets];
-            for (var i = 0; i < resultSets.Length; i++)
+            var context = new RecursiveFindSubsetPairingWithLowestCostContext<TCost>
             {
-                resultSets[i] = new List<T>();
-            }
+                Accountant = accountant,
+                CalculatePairCost = (l, r) => evaluateCostOfPairFunc(sequence[l], sequence[r]),
+                Indices = new int[sequence.Count]
+            };
 
-            var stack = new Stack<Step>();
-            stack.Push(new Step(0, 0));
+            RecursiveFindSubsetPairingWithLowestCost(context, 0, 1, accountant.Zero);
 
-            while (stack.Count > 0)
+            var sets = new Pair<T>[sequence.Count / 2];
+            for (var i = 0; i < context.BestCombination.Length; i++)
             {
-                var step = stack.Pop();
+                var setIndex = context.BestCombination[i] - 1;
+                Debug.Assert(setIndex >= 0);
 
-                if (step.SetIndex > 0)
+                if (sets[setIndex] == null)
                 {
-                    resultSets[step.SetIndex - 1].RemoveAt(resultSets[step.SetIndex - 1].Count - 1);
+                    sets[setIndex] = new Pair<T> {Item1 = sequence[i]};
                 }
-                if (step.SetIndex < subsets)
+                else
                 {
-                    resultSets[step.SetIndex].Add(sequence[step.ItemIndex]);
-
-                    stack.Push(new Step(step.ItemIndex, step.SetIndex + 1));
-
-                    if (step.ItemIndex == sequence.Count - 1)
-                    {
-                        yield return resultSets.Select(s => s.ToArray()).ToArray();
-                    }
-                    else
-                    {
-                        stack.Push(new Step(step.ItemIndex + 1, 0));
-                    }
+                    sets[setIndex].Item2 = sequence[i];
                 }
             }
+
+            return sets.Select(s => Tuple.Create(s.Item1, s.Item2)).ToArray();
         }
-
     }
 }

@@ -34,6 +34,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Combinatorics\Combinatorics.Tests.FindSubsetPairingWithLowestCost.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.GetIntegerPartitions.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.FindBestSetCoverage.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateAllSubsetCombinations.cs" />

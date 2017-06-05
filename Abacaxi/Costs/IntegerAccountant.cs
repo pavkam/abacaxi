@@ -13,11 +13,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Costs
 {
     /// <summary>
     /// Class implements the <see cref="IAccountant{T}"/> interface for <c>int</c>-based costs.
     /// </summary>
+    [SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global")]
     public class IntegerAccountant : IAccountant<int>
     {
         /// <summary>

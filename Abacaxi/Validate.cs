@@ -125,5 +125,16 @@ namespace Abacaxi
                 throw new ArgumentOutOfRangeException($"The combination of start index ({startIndex}) and length ({length}) must be less of equal to {sequence.Count}");
             }
         }
+
+        public static void CollectionArgumentsHasEvenNumberOfElements<T>(string sequenceArgName, ICollection<T> sequence)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(sequenceArgName), $"Argument {nameof(sequenceArgName)} cannot be null or empty.");
+
+            ArgumentNotNull(nameof(sequence), sequence);
+            if (sequence.Count % 2 != 0)
+            {
+                throw new ArgumentException($"The sequence {sequenceArgName} is expected to have an even number of elements.", sequenceArgName);
+            }
+        }
     }
 }
