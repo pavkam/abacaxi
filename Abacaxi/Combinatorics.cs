@@ -357,10 +357,26 @@ namespace Abacaxi
                 return new Tuple<T, T>[0];
             }
 
+            var cache = new TCost?[sequence.Count, sequence.Count];
+
             var context = new RecursiveFindSubsetPairingWithLowestCostContext<TCost>
             {
                 Accountant = accountant,
-                CalculatePairCost = (l, r) => evaluateCostOfPairFunc(sequence[l], sequence[r]),
+                CalculatePairCost = (l, r) =>
+                {
+                    Debug.Assert(l >= 0 && l < sequence.Count);
+                    Debug.Assert(r >= 0 && r < sequence.Count);
+                    Debug.Assert(l != r);
+
+                    if (cache[l, r] == null)
+                    {
+                        cache[l, r] = evaluateCostOfPairFunc(sequence[l], sequence[r]);
+                        cache[r, l] = cache[l, r];
+                    }
+
+                    Debug.Assert(cache[l, r].HasValue);
+                    return cache[l, r].Value;
+                },
                 Indices = new int[sequence.Count]
             };
 
