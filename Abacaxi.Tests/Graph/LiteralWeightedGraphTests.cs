@@ -55,14 +55,6 @@ namespace Abacaxi.Tests.Graph
             Assert.Throws<FormatException>(() => new LiteralWeightedGraph(relationships, true));
         }
 
-        [TestCase("A>1>B,A>1>B")]
-        [TestCase("A>2>B,A>3>B")]
-        [TestCase("A<4<B,A-5-B")]
-        public void Ctor_ThrowsException_ForInvalidRelationships(string relationships)
-        {
-            Assert.Throws<InvalidOperationException>(() => new LiteralWeightedGraph(relationships, true));
-        }
-
         [TestCase("A>1>B")]
         [TestCase("A<1<B")]
         public void Ctor_ThrowsException_ForInvalidEdgesInUndirectedGraph(string relationships)

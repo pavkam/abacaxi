@@ -41,7 +41,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="number">The input number.</param>
         /// <returns>A sequence of combinations.</returns>
-        public static IEnumerable<int[]> PartitionInteger(this int number)
+        public static IEnumerable<int[]> GetIntegerPartitions(this int number)
         {
             if (number != 0)
             {
@@ -266,5 +266,51 @@ namespace Abacaxi
                 yield return bestSet;
             }
         }
+
+        public static IEnumerable<T[][]> EvaluateSubSetCon<T>(this IList<T> sequence, int subsets)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentGreaterThanZero(nameof(subsets), subsets);
+
+            if (sequence.Count == 0)
+            {
+                yield break;
+            }
+
+            var resultSets = new List<T>[subsets];
+            for (var i = 0; i < resultSets.Length; i++)
+            {
+                resultSets[i] = new List<T>();
+            }
+
+            var stack = new Stack<Step>();
+            stack.Push(new Step(0, 0));
+
+            while (stack.Count > 0)
+            {
+                var step = stack.Pop();
+
+                if (step.SetIndex > 0)
+                {
+                    resultSets[step.SetIndex - 1].RemoveAt(resultSets[step.SetIndex - 1].Count - 1);
+                }
+                if (step.SetIndex < subsets)
+                {
+                    resultSets[step.SetIndex].Add(sequence[step.ItemIndex]);
+
+                    stack.Push(new Step(step.ItemIndex, step.SetIndex + 1));
+
+                    if (step.ItemIndex == sequence.Count - 1)
+                    {
+                        yield return resultSets.Select(s => s.ToArray()).ToArray();
+                    }
+                    else
+                    {
+                        stack.Push(new Step(step.ItemIndex + 1, 0));
+                    }
+                }
+            }
+        }
+
     }
 }

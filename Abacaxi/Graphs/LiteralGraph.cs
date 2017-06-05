@@ -61,10 +61,7 @@ namespace Abacaxi.Graphs
                 _vertices.Add(to, toFromSet);
             }
 
-            if (!fromToSet.Add(to))
-            {
-                throw new InvalidOperationException($"Vertex '{from}' already contains an edge to vertex '{to}'.");
-            }
+            fromToSet.Add(to);
         }
 
         private void AddVertices(char from, char to, char relation)

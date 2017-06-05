@@ -34,7 +34,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Combinatorics\Combinatorics.Tests.PartitionInteger.cs" />
+    <Compile Include="Combinatorics\Combinatorics.Tests.GetIntegerPartitions.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.FindBestSetCoverage.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateAllSubsetCombinations.cs" />
     <Compile Include="Containers\ArrayEqualityComparerTests.cs" />
@@ -42,6 +42,7 @@
     <Compile Include="Containers\TrieTests.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
+    <Compile Include="Costs\IntegerAccountantTests.cs" />
     <Compile Include="Graph\StringNeighborhoodGraphTests.cs" />
     <Compile Include="Graph\Graph.Tests.FindCheapestPath.cs" />
     <Compile Include="Graph\Graph.Tests.VerifyIsBipartite.cs" />

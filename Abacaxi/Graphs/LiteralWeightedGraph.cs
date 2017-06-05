@@ -60,11 +60,6 @@ namespace Abacaxi.Graphs
                 toFromSet = new Dictionary<char, int>();
                 _vertices.Add(to, toFromSet);
             }
-            
-            if (fromToSet.ContainsKey(to))
-            {
-                throw new InvalidOperationException($"Vertex '{from}' already contains an edge to vertex '{to}'.");
-            }
 
             fromToSet.Add(to, weight);
         }
