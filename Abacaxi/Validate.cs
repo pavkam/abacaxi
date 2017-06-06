@@ -13,13 +13,17 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi
 {
     using System;
     using System.Diagnostics;
     using System.Collections.Generic;
-    using Graphs;
 
+    [SuppressMessage("ReSharper", "UnusedParameter.Global")]
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     internal static class Validate
     {
         public static void ArgumentDifferentThan(string argumentName, int value, int bound)
@@ -38,7 +42,23 @@ namespace Abacaxi
                 throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than {bound}.");
         }
 
+        public static void ArgumentGreaterThan(string argumentName, double value, double bound)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value <= bound)
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than {bound}.");
+        }
+
         public static void ArgumentLessThan(string argumentName, int value, int bound)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value >= bound)
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be less than {bound}.");
+        }
+
+        public static void ArgumentLessThan(string argumentName, double value, double bound)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
 
@@ -54,6 +74,14 @@ namespace Abacaxi
                 throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be less than or equal to {bound}.");
         }
 
+        public static void ArgumentLessThanOrEqualTo(string argumentName, double value, double bound)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value > bound)
+                throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be less than or equal to {bound}.");
+        }
+
         public static void ArgumentGreaterThanOrEqualTo(string argumentName, int value, int bound)
         {
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
@@ -61,8 +89,6 @@ namespace Abacaxi
             if (value < bound)
                 throw new ArgumentOutOfRangeException(argumentName, $"Argument {argumentName} must be greater than or equal to {bound}.");
         }
-
-
 
         public static void ArgumentDifferentThanZero(string argumentName, int value)
         {
@@ -75,6 +101,11 @@ namespace Abacaxi
         }
 
         public static void ArgumentGreaterThanZero(string argumentName, int value)
+        {
+            ArgumentGreaterThan(argumentName, value, 0);
+        }
+
+        public static void ArgumentGreaterThanZero(string argumentName, double value)
         {
             ArgumentGreaterThan(argumentName, value, 0);
         }
@@ -92,8 +123,7 @@ namespace Abacaxi
             Debug.Assert(!string.IsNullOrEmpty(argumentName), $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             ArgumentNotNull(argumentName, sequence);
-            var collection = sequence as ICollection<T>;
-            if (collection != null)
+            if (sequence is ICollection<T> collection)
             {
                 if (collection.Count == 0)
                     throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
@@ -110,9 +140,13 @@ namespace Abacaxi
                 return;
             }
 
-            var enumerator = sequence.GetEnumerator();
-            if (!enumerator.MoveNext())
-                throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
+            using (var enumerator = sequence.GetEnumerator())
+            {
+                if (!enumerator.MoveNext())
+                {
+                    throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
+                }
+            }
         }
 
         public static void CollectionArgumentsInBounds<T>(string sequenceArgName, ICollection<T> sequence, int startIndex, int length)

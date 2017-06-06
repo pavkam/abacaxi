@@ -19,7 +19,6 @@ namespace Abacaxi
     using System.Collections.Generic;
     using System.Linq;
     using System.Diagnostics;
-    using Costs;
 
     /// <summary>
     /// Class implements multiple algorithms that deals with combinatorial problems.
@@ -38,13 +37,12 @@ namespace Abacaxi
             }
         }
 
-        private sealed class RecursiveFindSubsetPairingWithLowestCostContext<TCost> where TCost : struct
+        private sealed class RecursiveFindSubsetPairingWithLowestCostContext
         {
             public int[] Indices;
             public int[] BestCombination;
-            public IAccountant<TCost> Accountant;
-            public TCost? LowestCostSoFar;
-            public Func<int, int, TCost> CalculatePairCost;
+            public double? LowestCostSoFar;
+            public Func<int, int, double> CalculatePairCost;
         }
 
         private sealed class Pair<T>
@@ -53,15 +51,15 @@ namespace Abacaxi
             public T Item2;
         }
 
-        private static void RecursiveFindSubsetPairingWithLowestCost<TCost>(
-            RecursiveFindSubsetPairingWithLowestCostContext<TCost> context,
+        private static void RecursiveFindSubsetPairingWithLowestCost(
+            RecursiveFindSubsetPairingWithLowestCostContext context,
             int i,
             int set,
-            TCost currentCost) where TCost : struct
+            double currentCost)
         {
             Debug.Assert(context != null);
 
-            if (context.LowestCostSoFar.HasValue && context.Accountant.Compare(currentCost, context.LowestCostSoFar.Value) >= 0)
+            if (context.LowestCostSoFar.HasValue && currentCost >= context.LowestCostSoFar.Value)
             {
                 return;
             }
@@ -89,7 +87,7 @@ namespace Abacaxi
                         context.Indices[ni] = set;
 
                         var pairCost = context.CalculatePairCost(i, ni);
-                        var newCost = context.Accountant.Add(currentCost, pairCost);
+                        var newCost = currentCost + pairCost;
 
                         RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set + 1, newCost);
 
@@ -336,51 +334,37 @@ namespace Abacaxi
         /// Finds all pairs of items from a given <paramref name="sequence"/> whose total combination cost is mininum.
         /// </summary>
         /// <typeparam name="T">The type of items in the sequence.</typeparam>
-        /// <typeparam name="TCost">The type of the cost associated with each pair of items.</typeparam>
         /// <param name="sequence">The input sequence.</param>
         /// <param name="evaluateCostOfPairFunc">The function used to evaluate costs of pairs.</param>
-        /// <param name="accountant">The cost accountant class.</param>
         /// <returns>A sequence of pairs wich lowest overall cost.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluateCostOfPairFunc"/> or <paramref name="accountant"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluateCostOfPairFunc"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence"/> is not even.</exception>
-        public static Tuple<T, T>[] FindSubsetPairingWithLowestCost<T, TCost>(
+        public static Tuple<T, T>[] FindSubsetPairingWithLowestCost<T>(
             this IList<T> sequence,
-            Func<T, T, TCost> evaluateCostOfPairFunc,
-            IAccountant<TCost> accountant) where TCost : struct
+            Func<T, T, double> evaluateCostOfPairFunc)
         {
             Validate.CollectionArgumentsHasEvenNumberOfElements(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(evaluateCostOfPairFunc), evaluateCostOfPairFunc);
-            Validate.ArgumentNotNull(nameof(accountant), accountant);
 
             if (sequence.Count == 0)
             {
                 return new Tuple<T, T>[0];
             }
 
-            var cache = new TCost?[sequence.Count, sequence.Count];
-
-            var context = new RecursiveFindSubsetPairingWithLowestCostContext<TCost>
+            var context = new RecursiveFindSubsetPairingWithLowestCostContext
             {
-                Accountant = accountant,
                 CalculatePairCost = (l, r) =>
                 {
                     Debug.Assert(l >= 0 && l < sequence.Count);
                     Debug.Assert(r >= 0 && r < sequence.Count);
                     Debug.Assert(l != r);
 
-                    if (cache[l, r] == null)
-                    {
-                        cache[l, r] = evaluateCostOfPairFunc(sequence[l], sequence[r]);
-                        cache[r, l] = cache[l, r];
-                    }
-
-                    Debug.Assert(cache[l, r].HasValue);
-                    return cache[l, r].Value;
+                    return evaluateCostOfPairFunc(sequence[l], sequence[r]);
                 },
                 Indices = new int[sequence.Count]
             };
 
-            RecursiveFindSubsetPairingWithLowestCost(context, 0, 1, accountant.Zero);
+            RecursiveFindSubsetPairingWithLowestCost(context, 0, 1, 0);
 
             var sets = new Pair<T>[sequence.Count / 2];
             for (var i = 0; i < context.BestCombination.Length; i++)
@@ -399,6 +383,47 @@ namespace Abacaxi
             }
 
             return sets.Select(s => Tuple.Create(s.Item1, s.Item2)).ToArray();
+        }
+
+        /// <summary>
+        /// Finds all pairs of items from a given <paramref name="sequence" /> whose total combination cost is mininum.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the sequence.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="evaluateCostOfPairFunc">The function used to evaluate costs of pairs.</param>
+        /// <param name="iterations">The heuristics iteration (the higher the value, the better the results, but slower execution).</param>
+        /// <returns>
+        /// A sequence of pairs wich lowest overall cost.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> or <paramref name="evaluateCostOfPairFunc" /> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence" /> is not even.</exception>
+        public static Tuple<T, T>[] ApproximateSubsetPairingWithLowestCost<T>(
+            this IList<T> sequence,
+            Func<T, T, double> evaluateCostOfPairFunc,
+            int iterations = 100000)
+        {
+            Validate.CollectionArgumentsHasEvenNumberOfElements(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(evaluateCostOfPairFunc), evaluateCostOfPairFunc);
+            Validate.ArgumentGreaterThanZero(nameof(iterations), iterations);
+
+            if (sequence.Count == 0)
+            {
+                return new Tuple<T, T>[0];
+            }
+
+            var steps = (int)Math.Sqrt(iterations);
+            var result = Heuristics.ApplySimulatedAnnealing(sequence, 2, pair =>
+            {
+                Debug.Assert(pair != null && pair.Length == 2);
+                return evaluateCostOfPairFunc(pair[0], pair[1]);
+            }, 
+            new Heuristics.SimulatedAnnealingParams(coolingSteps: steps, iterationsPerCoolingStep: steps));
+
+            return result.Select(pair =>
+            {
+                Debug.Assert(pair != null && pair.Length == 2);
+                return Tuple.Create(pair[0], pair[1]);
+            }).ToArray();
         }
     }
 }
