@@ -188,54 +188,6 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void AddWeights_ThrowsException_IfLeftIsLessThanZero()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new LiteralWeightedGraph("", true).AddWeights(-1, 0));
-        }
-
-        [Test]
-        public void AddWeights_ThrowsException_IfRightIsLessThanZero()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new LiteralWeightedGraph("", true).AddWeights(0, -1));
-        }
-
-        [Test]
-        public void AddWeights_ReturnsTheSumOfWeights()
-        {
-            Assert.AreEqual(100, new LiteralWeightedGraph("", true).AddWeights(1, 99));
-        }
-
-        [Test]
-        public void CompareWeights_ThrowsException_IfLeftIsLessThanZero()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new LiteralWeightedGraph("", true).CompareWeights(-1, 0));
-        }
-
-        [Test]
-        public void CompareWeights_ThrowsException_IfRightIsLessThanZero()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new LiteralWeightedGraph("", true).CompareWeights(0, -1));
-        }
-
-        [Test]
-        public void CompareWeights_ReturnsNegativeIfLeftLessThanRight()
-        {
-            Assert.IsTrue(new LiteralWeightedGraph("", true).CompareWeights(0, 1) < 0);
-        }
-
-        [Test]
-        public void CompareWeights_ReturnsZeroIfLeftEqualsToRight()
-        {
-            Assert.IsTrue(new LiteralWeightedGraph("", true).CompareWeights(1, 1) == 0);
-        }
-
-        [Test]
-        public void CompareWeights_ReturnsPositiveIfLeftGreaterThanRight()
-        {
-            Assert.IsTrue(new LiteralWeightedGraph("", true).CompareWeights(1, 0) > 0);
-        }
-
-        [Test]
         public void GetPotentialWeight_ThrowsException_IfFromVertexNotPartOfGraph()
         {
             Assert.Throws<ArgumentException>(() => new LiteralWeightedGraph("A,B", true).GetPotentialWeight('Z', 'A'));

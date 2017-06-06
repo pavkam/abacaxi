@@ -13,29 +13,26 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
-using System.Diagnostics;
-using Abacaxi.Containers;
-
 namespace Abacaxi.Graphs
 {
     using System;
     using System.Linq;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using Containers;
 
     /// <summary>
     /// Describes a weighted graph class.
     /// </summary>
     /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
-    /// <typeparam name="TWeight">The type of edge weights.</typeparam>
-    public abstract class WeightedGraph<TVertex, TWeight> : Graph<TVertex>
+    public abstract class WeightedGraph<TVertex> : Graph<TVertex>
     {
         private sealed class PathNode
         {
             public TVertex Vertex;
             public PathNode Parent;
-            public TWeight TotalCostFromStart;
-            public TWeight PotentialCostToDestination;
+            public double TotalCostFromStart;
+            public double PotentialCostToDestination;
         }
 
         /// <summary>
@@ -54,7 +51,7 @@ namespace Abacaxi.Graphs
         /// <exception cref="InvalidOperationException">The <paramref name="vertex"/> is not part of this graph.</exception>
         public sealed override IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex)
         {
-            return GetEdgesAndWeights(vertex).Select(weightedEdge => new Edge<TVertex>(weightedEdge.FromVertex, weightedEdge.ToVertex));
+            return GetEdgesAndWeights(vertex);
         }
 
         /// <summary>
@@ -62,23 +59,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <param name="vertex">The vertex.</param>
         /// <returns>A sequence of edges connecting the <paramref name="vertex"/> to other vertices.</returns>
-        public abstract IEnumerable<WeightedEdge<TVertex, TWeight>> GetEdgesAndWeights(TVertex vertex);
-
-        /// <summary>
-        /// Adds two weights.
-        /// </summary>
-        /// <param name="left">The left weight.</param>
-        /// <param name="right">The right weight.</param>
-        /// <returns>The sum of two weights.</returns>
-        public abstract TWeight AddWeights(TWeight left, TWeight right);
-
-        /// <summary>
-        /// Compares two weights.
-        /// </summary>
-        /// <param name="left">The left weight.</param>
-        /// <param name="right">The right weight.</param>
-        /// <returns>The comparison result.</returns>
-        public abstract int CompareWeights(TWeight left, TWeight right);
+        public abstract IEnumerable<WeightedEdge<TVertex>> GetEdgesAndWeights(TVertex vertex);
 
         /// <summary>
         /// Gets the potential total weight connecting <paramref name="fromVertex"/> and <paramref name="toVertex"/> vertices.
@@ -86,7 +67,7 @@ namespace Abacaxi.Graphs
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The destination vertex.</param>
         /// <returns>The potential total cost.</returns>
-        public abstract TWeight GetPotentialWeight(TVertex fromVertex, TVertex toVertex);
+        public abstract double GetPotentialWeight(TVertex fromVertex, TVertex toVertex);
 
         /// <summary>
         /// Finds the cheapest path in a graph between two vertices <paramref name="fromVertex"/> and <paramref name="toVertex"/>
@@ -102,21 +83,21 @@ namespace Abacaxi.Graphs
                 Debug.Assert(a != null);
                 Debug.Assert(b != null);
 
-                return CompareWeights(a.PotentialCostToDestination, b.PotentialCostToDestination);
+                return a.PotentialCostToDestination.CompareTo(b.PotentialCostToDestination);
             });
             
             var startVertexNode = new PathNode
             {
                 Vertex = fromVertex,
-                TotalCostFromStart = default(TWeight),
+                TotalCostFromStart = 0,
                 PotentialCostToDestination =
-                    SupportsPotentialWeightEvaluation ? GetPotentialWeight(fromVertex, toVertex) : default(TWeight),
+                    SupportsPotentialWeightEvaluation ? GetPotentialWeight(fromVertex, toVertex) : 0,
             };
 
             var discoveredVertices = new Dictionary<TVertex, PathNode> {{fromVertex, startVertexNode}};
             var visitationQueue = new Heap<PathNode>(comparer) {startVertexNode};
             var foundAPath = false;
-            var cheapestCostSoFar = default(TWeight);
+            var cheapestCostSoFar = .0;
 
             while (visitationQueue.Count > 0)
             {
@@ -125,20 +106,20 @@ namespace Abacaxi.Graphs
 
                 if (Equals(vertexNode.Vertex, toVertex))
                 {
-                    if (!foundAPath || CompareWeights(cheapestCostSoFar, vertexNode.TotalCostFromStart) > 0)
+                    if (!foundAPath || cheapestCostSoFar > vertexNode.TotalCostFromStart)
                     {
                         foundAPath = true;
                         cheapestCostSoFar = vertexNode.TotalCostFromStart;
                     }
                 }
-                else if (foundAPath && CompareWeights(cheapestCostSoFar, vertexNode.TotalCostFromStart) < 0)
+                else if (foundAPath && cheapestCostSoFar < vertexNode.TotalCostFromStart)
                 {
                     continue;
                 }
 
                 foreach (var edge in GetEdgesAndWeights(vertexNode.Vertex))
                 {
-                    var costFromStartForThisPath = AddWeights(vertexNode.TotalCostFromStart, edge.Weight);
+                    var costFromStartForThisPath = vertexNode.TotalCostFromStart + edge.Weight;
 
                     if (!discoveredVertices.TryGetValue(edge.ToVertex, out PathNode discoveredNode))
                     {
@@ -149,7 +130,7 @@ namespace Abacaxi.Graphs
                             TotalCostFromStart = costFromStartForThisPath,
                             PotentialCostToDestination =
                                 SupportsPotentialWeightEvaluation
-                                    ? AddWeights(costFromStartForThisPath, GetPotentialWeight(edge.ToVertex, toVertex))
+                                    ? costFromStartForThisPath + GetPotentialWeight(edge.ToVertex, toVertex)
                                     : costFromStartForThisPath,
                         };
 
@@ -158,13 +139,13 @@ namespace Abacaxi.Graphs
                     }
                     else
                     {
-                        if (CompareWeights(costFromStartForThisPath, discoveredNode.TotalCostFromStart) < 0)
+                        if (costFromStartForThisPath < discoveredNode.TotalCostFromStart)
                         {
                             discoveredNode.TotalCostFromStart = costFromStartForThisPath;
                             discoveredNode.Parent = vertexNode;
                             discoveredNode.PotentialCostToDestination =
                                 SupportsPotentialWeightEvaluation
-                                    ? AddWeights(costFromStartForThisPath, GetPotentialWeight(discoveredNode.Vertex, toVertex))
+                                    ? costFromStartForThisPath + GetPotentialWeight(discoveredNode.Vertex, toVertex)
                                     : costFromStartForThisPath;
 
                             visitationQueue.Add(discoveredNode);

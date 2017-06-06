@@ -15,8 +15,6 @@
 
 namespace Abacaxi.Graphs
 {
-    using System;
-
     /// <summary>
     /// Defines a 2-D coordinate to be used when manipulating matrices.
     /// </summary>

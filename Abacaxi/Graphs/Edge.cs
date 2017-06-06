@@ -19,7 +19,7 @@ namespace Abacaxi.Graphs
     /// Defines an edge connecting two graph vertices.
     /// <typeparam name="TVertex">The type of the vertex.</typeparam>
     /// </summary>
-    public struct Edge<TVertex>
+    public class Edge<TVertex>
     {
         /// <summary>
         /// Gets the starting vertex.

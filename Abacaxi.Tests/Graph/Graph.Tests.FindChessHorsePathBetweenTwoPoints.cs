@@ -20,8 +20,6 @@ using Abacaxi.Practice.Graphs;
 
 namespace Abacaxi.Tests.Graph
 {
-    using System;
-    using System.Collections.Generic;
     using Graphs;
     using NUnit.Framework;
 

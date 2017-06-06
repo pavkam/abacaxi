@@ -24,18 +24,18 @@ namespace Abacaxi.Graphs
     /// A graph class used primarily for designing algorithms. Each vertex is a digit or letter and can be connected with other
     /// vertices in directed or undirected fashion.
     /// </summary>
-    public sealed class LiteralWeightedGraph : WeightedGraph<char, int>
+    public sealed class LiteralWeightedGraph : WeightedGraph<char>
     {
-        private readonly Dictionary<char, IDictionary<char, int>> _vertices;
+        private readonly Dictionary<char, IDictionary<char, double>> _vertices;
 
         private void AddVertex(char vertex)
         {
             Debug.Assert(char.IsLetterOrDigit(vertex));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(vertex, out IDictionary<char, int> set))
+            if (!_vertices.TryGetValue(vertex, out IDictionary<char, double> set))
             {
-                set = new Dictionary<char, int>();
+                set = new Dictionary<char, double>();
                 _vertices.Add(vertex, set);
             }
             else
@@ -50,14 +50,14 @@ namespace Abacaxi.Graphs
             Debug.Assert(char.IsLetterOrDigit(to));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(from, out IDictionary<char, int> fromToSet))
+            if (!_vertices.TryGetValue(from, out IDictionary<char, double> fromToSet))
             {
-                fromToSet = new Dictionary<char, int>();
+                fromToSet = new Dictionary<char, double>();
                 _vertices.Add(from, fromToSet);
             }
-            if (!_vertices.TryGetValue(to, out IDictionary<char, int> toFromSet))
+            if (!_vertices.TryGetValue(to, out IDictionary<char, double> toFromSet))
             {
-                toFromSet = new Dictionary<char, int>();
+                toFromSet = new Dictionary<char, double>();
                 _vertices.Add(to, toFromSet);
             }
 
@@ -271,7 +271,7 @@ namespace Abacaxi.Graphs
         {
             Validate.ArgumentNotNull(nameof(relationships), relationships);
 
-            _vertices = new Dictionary<char, IDictionary<char, int>>();
+            _vertices = new Dictionary<char, IDictionary<char, double>>();
 
             IsDirected = isDirected;
             Parse(relationships);
@@ -294,50 +294,11 @@ namespace Abacaxi.Graphs
         /// A sequence of edges connecting the <paramref name="vertex" /> to other vertices.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Thrown if the given <paramref name="vertex"/> if not part of the graph.</exception>
-        public override IEnumerable<WeightedEdge<char, int>> GetEdgesAndWeights(char vertex)
+        public override IEnumerable<WeightedEdge<char>> GetEdgesAndWeights(char vertex)
         {
             ValidateVertex(nameof(vertex), vertex);
 
-            return _vertices[vertex].Select(s => new WeightedEdge<char, int>(vertex, s.Key, s.Value));
-        }
-
-        /// <summary>
-        /// Aggregates two weights.
-        /// </summary>
-        /// <param name="left">The left weight.</param>
-        /// <param name="right">The right weight.</param>
-        /// <returns>
-        /// The sum of two weights. If the sum is greater than <see cref="int.MaxValue"/> the method returns <see cref="int.MaxValue"/>.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if either of <paramref name="left"/> or <paramref name="right"/> are less than zero.</exception>
-        public override int AddWeights(int left, int right)
-        {
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(left), left);
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(right), right);
-
-            if (left > int.MaxValue - right)
-            {
-                return int.MaxValue;
-            }
-
-            return left + right;
-        }
-
-        /// <summary>
-        /// Compares two weights.
-        /// </summary>
-        /// <param name="left">The left weight.</param>
-        /// <param name="right">The right weight.</param>
-        /// <returns>
-        /// The comparison result.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if either of <paramref name="left"/> or <paramref name="right"/> are less than zero.</exception>
-        public override int CompareWeights(int left, int right)
-        {
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(left), left);
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(right), right);
-
-            return left - right;
+            return _vertices[vertex].Select(s => new WeightedEdge<char>(vertex, s.Key, s.Value));
         }
 
         /// <summary>
@@ -348,7 +309,7 @@ namespace Abacaxi.Graphs
         /// <returns></returns>
         /// <exception cref="NotSupportedException">Always thrown.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if either of <paramref name="fromVertex"/> or <paramref name="fromVertex"/> are not part of this graph.</exception>
-        public override int GetPotentialWeight(char fromVertex, char toVertex)
+        public override double GetPotentialWeight(char fromVertex, char toVertex)
         {
             ValidateVertex(nameof(fromVertex), fromVertex);
             ValidateVertex(nameof(toVertex), toVertex);

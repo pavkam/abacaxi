@@ -16,7 +16,6 @@
 namespace Abacaxi.Tests.Containers
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
     using System.Collections;
     using Abacaxi.Containers;

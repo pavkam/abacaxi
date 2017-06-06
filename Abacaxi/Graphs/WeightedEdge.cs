@@ -15,65 +15,44 @@
 
 namespace Abacaxi.Graphs
 {
-    using System;
-
     /// <summary>
     /// Defines a weighted edge connecting two graph vertices.
     /// <typeparam name="TVertex">The type of the vertex.</typeparam>
-    /// <typeparam name="TWeight">The type of the weight.</typeparam>
     /// </summary>
-    public struct WeightedEdge<TVertex, TWeight>
+    public class WeightedEdge<TVertex> : Edge<TVertex>
     {
-        /// <summary>
-        /// Gets the starting vertex.
-        /// </summary>
-        /// <value>
-        /// From starting vertex.
-        /// </value>
-        public TVertex FromVertex { get; private set; }
-
-        /// <summary>
-        /// Gets the connected vertex.
-        /// </summary>
-        /// <value>
-        /// The connected vertex.
-        /// </value>
-        public TVertex ToVertex { get; private set; }
-
         /// <summary>
         /// Gets the edge's weight.
         /// </summary>
         /// <value>
         /// The edge's weight.
         /// </value>
-        public TWeight Weight { get; private set; }
+        public double Weight { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WeightedEdge{TVertex, TWeight}"/> struct.
+        /// Initializes a new instance of the <see cref="WeightedEdge{TVertex}"/> struct.
         /// </summary>
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The second vertex.</param>
         /// <param name="weight">The weight of the edge.</param>
-        public WeightedEdge(TVertex fromVertex, TVertex toVertex, TWeight weight)
+        public WeightedEdge(TVertex fromVertex, TVertex toVertex, double weight) : base(fromVertex, toVertex)
         {
-            FromVertex = fromVertex;
-            ToVertex = toVertex;
             Weight = weight;
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Object" />, is equal to this instance.
+        /// Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="Object" /> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="Object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is WeightedEdge<TVertex, TWeight>))
+            if (!(obj is WeightedEdge<TVertex>))
                 return false;
 
-            var co = (WeightedEdge<TVertex, TWeight>)obj;
+            var co = (WeightedEdge<TVertex>)obj;
             return
                 Equals(co.Weight, Weight) &&
                 Equals(co.FromVertex, FromVertex) &&
@@ -89,16 +68,16 @@ namespace Abacaxi.Graphs
         public override int GetHashCode()
         {
             return
-                (Weight != null ? Weight.GetHashCode() : 0) ^
+                Weight.GetHashCode() ^
                 (FromVertex != null ? FromVertex.GetHashCode() : 0) ^
                 (ToVertex != null ? ToVertex.GetHashCode() : 0);
         }
 
         /// <summary>
-        /// Returns a <see cref="String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString()
         {

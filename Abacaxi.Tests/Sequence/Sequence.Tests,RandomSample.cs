@@ -17,7 +17,6 @@ using System;
 
 namespace Abacaxi.Tests.Sequence
 {
-    using System.Collections.Generic;
     using NUnit.Framework;
 
     [TestFixture]
