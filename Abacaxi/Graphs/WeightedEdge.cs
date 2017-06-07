@@ -49,8 +49,10 @@ namespace Abacaxi.Graphs
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is WeightedEdge<TVertex>))
+            if (obj == null || obj.GetType() != GetType())
+            {
                 return false;
+            }
 
             var co = (WeightedEdge<TVertex>)obj;
             return
@@ -67,10 +69,11 @@ namespace Abacaxi.Graphs
         /// </returns>
         public override int GetHashCode()
         {
-            return
-                Weight.GetHashCode() ^
-                (FromVertex != null ? FromVertex.GetHashCode() : 0) ^
-                (ToVertex != null ? ToVertex.GetHashCode() : 0);
+            var hashCode = 17;
+            hashCode = hashCode * 23 + base.GetHashCode();
+            hashCode = hashCode * 23 + Weight.GetHashCode();
+
+            return hashCode;
         }
 
         /// <summary>

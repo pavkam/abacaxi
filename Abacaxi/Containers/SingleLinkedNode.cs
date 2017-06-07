@@ -27,7 +27,7 @@ namespace Abacaxi.Containers
         /// <summary>
         /// The node's value.
         /// </summary>
-        public T Value { get; private set; }
+        public T Value { get; }
 
         /// <summary>
         /// Next element in the list.

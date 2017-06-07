@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Graphs
 {
     using System;
@@ -25,6 +27,8 @@ namespace Abacaxi.Graphs
     /// Generic graph class. This class serves as an abstract base for all concrete implementations.
     /// </summary>
     /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
+    [SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global")]
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     public abstract class Graph<TVertex> : IEnumerable<TVertex>
     {
         private sealed class BfsNode : IBfsNode
@@ -223,7 +227,7 @@ namespace Abacaxi.Graphs
         /// <param name="handleVertexCompleted">The function called when a vertex is completed.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
-        public void TraverseBfs(TVertex startVertex, Predicate<IBfsNode> handleVertexCompleted)
+        public virtual void TraverseBfs(TVertex startVertex, Predicate<IBfsNode> handleVertexCompleted)
         {
             Validate.ArgumentNotNull(nameof(handleVertexCompleted), handleVertexCompleted);
 
@@ -277,7 +281,7 @@ namespace Abacaxi.Graphs
         /// <exception cref="ArgumentNullException">The <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handleCycle"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
-        public void TraverseDfs(TVertex startVertex, Predicate<IDfsNode> handleVertexVisited, 
+        public virtual void TraverseDfs(TVertex startVertex, Predicate<IDfsNode> handleVertexVisited, 
             Predicate<IDfsNode> handleVertexCompleted, Func<IDfsNode, IDfsNode, bool> handleCycle)
         {
             Validate.ArgumentNotNull(nameof(handleVertexVisited), handleVertexVisited);
@@ -300,7 +304,7 @@ namespace Abacaxi.Graphs
         /// <param name="applyColor">Color to apply to each vertex.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="applyColor"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
-        public void FillWithOneColor(TVertex startVertex, Action<TVertex> applyColor)
+        public virtual void FillWithOneColor(TVertex startVertex, Action<TVertex> applyColor)
         {
             Validate.ArgumentNotNull(nameof(applyColor), applyColor);
 
@@ -318,7 +322,7 @@ namespace Abacaxi.Graphs
         /// <param name="endVertex">The end vertex.</param>
         /// <returns>Returns a sequence of vertices in visitation order.</returns>
         /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
-        public IEnumerable<TVertex> FindShortestPath(TVertex startVertex, TVertex endVertex)
+        public virtual IEnumerable<TVertex> FindShortestPath(TVertex startVertex, TVertex endVertex)
         {
             IBfsNode solution = null;
             TraverseBfs(startVertex, node =>
@@ -350,10 +354,8 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of sub-graphs, each representing a connected component.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
-        public IEnumerable<Graph<TVertex>> GetComponents()
+        public virtual IEnumerable<Graph<TVertex>> GetComponents()
         {
-            RequireUndirectedGraph();
-
             var undiscoveredVertices = new HashSet<TVertex>(this);
 
             while (undiscoveredVertices.Count > 0)
@@ -378,7 +380,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of vertices sorted in topological order.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is undirected or contains one or more cycles.</exception>
-        public IEnumerable<TVertex> TopologicalSort()
+        public virtual IEnumerable<TVertex> TopologicalSort()
         {
             var outAdj = new Dictionary<TVertex, ISet<TVertex>>();
             var inAdj = new Dictionary<TVertex, ISet<TVertex>>();
@@ -441,7 +443,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of all articulation vertices.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
-        public IEnumerable<TVertex> FindAllArticulationVertices()
+        public virtual IEnumerable<TVertex> FindAllArticulationVertices()
         {
             RequireUndirectedGraph();
 
@@ -511,45 +513,121 @@ namespace Abacaxi.Graphs
         /// <summary>
         /// Verifies the current graph is bipartite.
         /// </summary>
-        /// <returns><c>true</c> if the graph is bipartite; otherwise, <c>false</c>.</returns>
+        /// <value>
+        ///   <c>true</c> if this instance is bipartite; otherwise, <c>false</c>.
+        /// </value>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
-        public bool VerifyIsBipartite()
+        public virtual bool IsBipartite
         {
-            RequireUndirectedGraph();
-
-            var remainingVertices = new HashSet<TVertex>(this);
-            var isBipartite = true;
-            while (remainingVertices.Count > 0 && isBipartite)
+            get
             {
-                var assignments = new Dictionary<TVertex, bool>();
-                TraverseDfs(remainingVertices.First(),
-                    node =>
-                    {
-                        remainingVertices.Remove(node.Vertex);
+                RequireUndirectedGraph();
 
-                        if (node.Parent == null)
+                var remainingVertices = new HashSet<TVertex>(this);
+                var isBipartite = true;
+                while (remainingVertices.Count > 0 && isBipartite)
+                {
+                    var assignments = new Dictionary<TVertex, bool>();
+                    TraverseDfs(remainingVertices.First(),
+                        node =>
                         {
-                            assignments.Add(node.Vertex, false);
-                        }
-                        else
-                        {
-                            assignments.Add(node.Vertex, !assignments[node.Parent.Vertex]);
-                        }
-                        return true;
-                    },
-                    node => true,
-                    (fromNode, toNode) =>
-                    {
-                        if (assignments[fromNode.Vertex] == assignments[toNode.Vertex])
-                        {
-                            isBipartite = false;
-                        }
+                            remainingVertices.Remove(node.Vertex);
 
-                        return isBipartite;
-                    });
+                            if (node.Parent == null)
+                            {
+                                assignments.Add(node.Vertex, false);
+                            }
+                            else
+                            {
+                                assignments.Add(node.Vertex, !assignments[node.Parent.Vertex]);
+                            }
+                            return true;
+                        },
+                        node => true,
+                        (fromNode, toNode) =>
+                        {
+                            if (assignments[fromNode.Vertex] == assignments[toNode.Vertex])
+                            {
+                                isBipartite = false;
+                            }
+
+                            return isBipartite;
+                        });
+                }
+
+                return isBipartite;
+            }
+        }
+
+        public virtual IEnumerable<VertexDescriptor<TVertex>> DescribeVertices()
+        {
+            var inDegrees = new Dictionary<TVertex, int>();
+            var outDegrees = new Dictionary<TVertex, int>();
+            var componentIndexes = new Dictionary<TVertex, int>();
+
+            var vertices = new HashSet<TVertex>(this);
+
+            foreach (var vertex in vertices)
+            {
+                var outEdgeCount = 0;
+                foreach (var edge in GetEdges(vertex))
+                {
+                    outEdgeCount++;
+                    inDegrees.AddOrUpdate(edge.ToVertex, 1, i => i + 1);
+                }
+
+                outDegrees.Add(vertex, outEdgeCount);
+                inDegrees.AddOrUpdate(vertex, 0, i => i);
             }
 
-            return isBipartite;
+            var componentIndex = 0;
+            while (vertices.Count > 0)
+            {
+                TraverseBfs(vertices.First(), node =>
+                {
+                    vertices.Remove(node.Vertex);
+                    // ReSharper disable once AccessToModifiedClosure
+                    componentIndexes.Add(node.Vertex, componentIndex);
+                    return true;
+                });
+
+                componentIndex++;
+            }
+
+            Debug.Assert(vertices.Count == 0);
+            Debug.Assert(componentIndexes.Count == inDegrees.Count && componentIndexes.Count == outDegrees.Count);
+
+            foreach (var ckvp in componentIndexes)
+            {
+                yield return new VertexDescriptor<TVertex>(ckvp.Key, ckvp.Value, inDegrees[ckvp.Key], outDegrees[ckvp.Key]);
+            }
+        }
+
+        public EulerianClassification EulerianClassification
+        {
+            get
+            {
+                var undiscoveredVertices = new HashSet<TVertex>(this);
+                if (undiscoveredVertices.Count == 0)
+                {
+                    return EulerianClassification.NonEulerian;
+                }
+
+                TraverseBfs(undiscoveredVertices.First(), node =>
+                {
+
+
+                    undiscoveredVertices.Remove(node.Vertex);
+                    return true;
+                });
+
+                if (undiscoveredVertices.Count != 0)
+                {
+                    return EulerianClassification.NonEulerian;
+                }
+
+                return EulerianClassification.NonEulerian;
+            }
         }
     }
 }

@@ -57,8 +57,10 @@ namespace Abacaxi.Graphs
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is Edge<TVertex>))
+            if (obj == null || obj.GetType() != GetType())
+            {
                 return false;
+            }
 
             var co = (Edge<TVertex>)obj;
             return

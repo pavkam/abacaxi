@@ -26,16 +26,16 @@ namespace Abacaxi.Graphs
     /// </summary>
     public sealed class LiteralGraph : Graph<char>
     {
-        private readonly Dictionary<char, ISet<char>> _vertices;
+        private readonly Dictionary<char, IList<char>> _vertices;
 
         private void AddVertex(char vertex)
         {
             Debug.Assert(char.IsLetterOrDigit(vertex));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(vertex, out ISet<char> set))
+            if (!_vertices.TryGetValue(vertex, out IList<char> set))
             {
-                set = new HashSet<char>();
+                set = new List<char>();
                 _vertices.Add(vertex, set);
             }
             else
@@ -50,14 +50,14 @@ namespace Abacaxi.Graphs
             Debug.Assert(char.IsLetterOrDigit(to));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(from, out ISet<char> fromToSet))
+            if (!_vertices.TryGetValue(from, out IList<char> fromToSet))
             {
-                fromToSet = new HashSet<char>();
+                fromToSet = new List<char>();
                 _vertices.Add(from, fromToSet);
             }
-            if (!_vertices.TryGetValue(to, out ISet<char> toFromSet))
+            if (!_vertices.TryGetValue(to, out IList<char> toFromSet))
             {
-                toFromSet = new HashSet<char>();
+                toFromSet = new List<char>();
                 _vertices.Add(to, toFromSet);
             }
 
@@ -208,7 +208,7 @@ namespace Abacaxi.Graphs
         {
             Validate.ArgumentNotNull(nameof(relationships), relationships);
 
-            _vertices = new Dictionary<char, ISet<char>>();
+            _vertices = new Dictionary<char, IList<char>>();
 
             IsDirected = isDirected;
             Parse(relationships);
@@ -234,7 +234,7 @@ namespace Abacaxi.Graphs
         public override IEnumerable<Edge<char>> GetEdges(char vertex)
         {
             // ReSharper disable once CollectionNeverUpdated.Local
-            if (!_vertices.TryGetValue(vertex, out ISet<char> list))
+            if (!_vertices.TryGetValue(vertex, out IList<char> list))
             {
                 throw new InvalidOperationException($"Vertex {vertex} is not part of this graph.");
             }

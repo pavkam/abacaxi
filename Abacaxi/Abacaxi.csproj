@@ -47,7 +47,9 @@
     <Compile Include="Containers\ArrayEqualityComparer.cs" />
     <Compile Include="Containers\Temporary.cs" />
     <Compile Include="Containers\Trie.cs" />
+    <Compile Include="Graphs\VertexDescriptor.cs" />
     <Compile Include="Graphs\Edge.cs" />
+    <Compile Include="Graphs\EulerianClassification.cs" />
     <Compile Include="Graphs\LiteralWeightedGraph.cs" />
     <Compile Include="Graphs\LiteralGraph.cs" />
     <Compile Include="HelperMethods.cs" />

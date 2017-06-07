@@ -13,38 +13,26 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable SuspiciousTypeConversion.Global
-
-namespace Abacaxi.Tests.Graph
+namespace Abacaxi.Graphs
 {
-    using System;
-    using Graphs;
-    using NUnit.Framework;
-
-    [TestFixture]
-    public class GraphVerifyIsBipartiteTests
+    /// <summary>
+    /// Defines the Eulerian classification of a graph
+    /// </summary>
+    public enum EulerianClassification
     {
-        [TestCase("", true)]
-        [TestCase("A", true)]
-        [TestCase("A,B", true)]
-        [TestCase("A-B,C", true)]
-        [TestCase("A-B", true)]
-        [TestCase("A-B,B-C", true)]
-        [TestCase("A-B,B-C,C-A", false)]
-        [TestCase("A-B,C-D", true)]
-        public void VerifyIsBipartite_ReturnsExpectedResult(string relationships, bool expected)
-        {
-            var graph = new LiteralGraph(relationships, false);
-            var actual = graph.VerifyIsBipartite();
+        /// <summary>
+        /// The graph is non-eulerian. There is no cycle or path.
+        /// </summary>
+        NonEulerian,
 
-            Assert.AreEqual(expected, actual);
-        }
+        /// <summary>
+        /// The graph is semi-eulerian, it contains a path but not a cycle.
+        /// </summary>
+        SemiEulerian,
 
-        [Test]
-        public void VerifyIsBipartite_ThrowsException_ForDirectedGraphs()
-        {
-            var graph = new LiteralGraph("A>B", true);
-            Assert.Throws<InvalidOperationException>(() => graph.VerifyIsBipartite());
-        }
+        /// <summary>
+        /// The graph contains an eulerian cycle.
+        /// </summary>
+        EulerianCycle
     }
 }

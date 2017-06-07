@@ -27,7 +27,7 @@ namespace Abacaxi.Tests.Graph
     public class LiteralGraphTests
     {
         [Test]
-        public void Ctor_ThrowsException_ForNullRelationships()
+        public void LiteralGraph_Ctor_ThrowsException_ForNullRelationships()
         {
             Assert.Throws<ArgumentNullException>(() => new LiteralGraph(null, true));
         }
@@ -37,38 +37,38 @@ namespace Abacaxi.Tests.Graph
         [TestCase("AA-B")]
         [TestCase("A-")]
         [TestCase("A-BA")]
-        public void Ctor_ThrowsException_ForInvalidFormat(string relationships)
+        public void LiteralGraph_Ctor_ThrowsException_ForInvalidFormat(string relationships)
         {
             Assert.Throws<FormatException>(() => new LiteralGraph(relationships, false));
         }
 
         [TestCase("A>B")]
         [TestCase("A<B")]
-        public void Ctor_ThrowsException_ForInvalidEdgesInUndirectedGraph(string relationships)
+        public void LiteralGraph_Ctor_ThrowsException_ForInvalidEdgesInUndirectedGraph(string relationships)
         {
             Assert.Throws<FormatException>(() => new LiteralGraph(relationships, false));
         }
 
         [Test]
-        public void Ctor_IgnoresLastComma_InRelationships()
+        public void LiteralGraph_Ctor_IgnoresLastComma_InRelationships()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("A-B,", true));
         }
 
         [Test]
-        public void Ctor_IgnoresWhitespaces_InRelationships()
+        public void LiteralGraph_Ctor_IgnoresWhitespaces_InRelationships()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("  A -     B   ,      ", true));
         }
 
         [Test]
-        public void Ctor_AcceptsASingleUnconnectedVertex()
+        public void LiteralGraph_Ctor_AcceptsASingleUnconnectedVertex()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("A", true));
         }
 
         [Test]
-        public void Ctor_AcceptsUnconnectedVertices()
+        public void LiteralGraph_Ctor_AcceptsUnconnectedVertices()
         {
             var graph = new LiteralGraph("A,B,C-D", true);
 
@@ -77,34 +77,34 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void Ctor_AcceptsEmptyRelationships()
+        public void LiteralGraph_Ctor_AcceptsEmptyRelationships()
         {
             var graph = new LiteralGraph("", false);
             TestHelper.AssertSequence(graph);
         }
 
         [Test]
-        public void Ctor_AcceptsLettersAndDigits()
+        public void LiteralGraph_Ctor_AcceptsLettersAndDigits()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("a-B,B-0", true));
         }
 
         [Test]
-        public void IsDirected_IsTrue_IfTrueSpecifiedAtConstruction()
+        public void LiteralGraph_IsDirected_IsTrue_IfTrueSpecifiedAtConstruction()
         {
             var graph = new LiteralGraph("A", true);
             Assert.IsTrue(graph.IsDirected);
         }
 
         [Test]
-        public void IsDirected_IsFalse_IfFalseSpecifiedAtConstruction()
+        public void LiteralGraph_IsDirected_IsFalse_IfFalseSpecifiedAtConstruction()
         {
             var graph = new LiteralGraph("A", false);
             Assert.IsFalse(graph.IsDirected);
         }
 
         [Test]
-        public void IsReadOnly_ReturnsTrue()
+        public void LiteralGraph_IsReadOnly_ReturnsTrue()
         {
             var graph = new LiteralGraph("A,B", false);
 
@@ -112,7 +112,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void Enumeration_ReturnsAllVertices()
+        public void LiteralGraph_Enumeration_ReturnsAllVertices()
         {
             var graph = new LiteralGraph("A>B,B-Z,K<T", true);
 
@@ -128,7 +128,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase('K', "")]
         [TestCase('T', "T>K,T>A")]
         [TestCase('Z', "Z>B")]
-        public void GetEdges_ReturnsAllEdges(char vertex, string expected)
+        public void LiteralGraph_GetEdges_ReturnsAllEdges(char vertex, string expected)
         {
             var graph = new LiteralGraph("A>B,B-Z,K<T,B>T,B>A,T>A", true);
 
@@ -136,6 +136,26 @@ namespace Abacaxi.Tests.Graph
             var result = string.Join(",", v);
 
             Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void LiteralGraph_Preserves_MultipleEdges_ForUndirectedGraps()
+        {
+            var graph = new LiteralGraph("A-A,A-B,A-B", true);
+            var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));
+            var edgesFromB = string.Join(",", graph.GetEdges('B').Select(s => s.FromVertex + ">" + s.ToVertex));
+
+            Assert.AreEqual("A>A,A>B,A>B", edgesFromA);
+            Assert.AreEqual("B>A,B>A", edgesFromB);
+        }
+
+        [Test]
+        public void LiteralGraph_Preserves_MultipleEdges_ForDirectedGraps()
+        {
+            var graph = new LiteralGraph("A>A,A>B,A>B", true);
+            var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));
+
+            Assert.AreEqual("A>A,A>B,A>B", edgesFromA);
         }
     }
 }

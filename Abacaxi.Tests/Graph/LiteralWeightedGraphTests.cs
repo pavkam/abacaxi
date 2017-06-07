@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ObjectCreationAsStatement
+using System.Diagnostics.CodeAnalysis;
 
 namespace Abacaxi.Tests.Graph
 {
@@ -27,7 +27,8 @@ namespace Abacaxi.Tests.Graph
     public class LiteralWeightedGraphTests
     {
         [Test]
-        public void Ctor_ThrowsException_ForNullRelationships()
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void LiteralWeightedGraph_Ctor_ThrowsException_ForNullRelationships()
         {
             Assert.Throws<ArgumentNullException>(() => new LiteralWeightedGraph(null, true));
         }
@@ -50,51 +51,57 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A>1<B")]
         [TestCase("A<1-B")]
         [TestCase("A<1>B")]
-        public void Ctor_ThrowsException_ForInvalidFormat(string relationships)
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void LiteralWeightedGraph_Ctor_ThrowsException_ForInvalidFormat(string relationships)
         {
             Assert.Throws<FormatException>(() => new LiteralWeightedGraph(relationships, true));
         }
 
         [TestCase("A>1>B")]
         [TestCase("A<1<B")]
-        public void Ctor_ThrowsException_ForInvalidEdgesInUndirectedGraph(string relationships)
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void LiteralWeightedGraph_Ctor_ThrowsException_ForInvalidEdgesInUndirectedGraph(string relationships)
         {
             Assert.Throws<FormatException>(() => new LiteralWeightedGraph(relationships, false));
         }
 
         [Test]
-        public void Ctor_IgnoresLastComma_InRelationships()
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void LiteralWeightedGraph_Ctor_IgnoresLastComma_InRelationships()
         {
             Assert.DoesNotThrow(() => new LiteralWeightedGraph("A-1-B,", true));
         }
 
         [Test]
-        public void Ctor_IgnoresWhitespaces_InRelationships()
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void LiteralWeightedGraph_Ctor_IgnoresWhitespaces_InRelationships()
         {
             Assert.DoesNotThrow(() => new LiteralWeightedGraph("  A -   4-  B   ,      ", true));
         }
 
         [Test]
-        public void Ctor_AcceptsMultiDigitWeights()
+        public void LiteralWeightedGraph_Ctor_AcceptsMultiDigitWeights()
         {
             var graph = new LiteralWeightedGraph("A-1234-B", false);
             Assert.AreEqual(1234, graph.GetEdgesAndWeights('A').Single().Weight);
         }
 
         [Test]
-        public void Ctor_AcceptsASingleUnconnectedVertex()
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void LiteralWeightedGraph_Ctor_AcceptsASingleUnconnectedVertex()
         {
             Assert.DoesNotThrow(() => new LiteralWeightedGraph("A", true));
         }
 
         [Test]
-        public void Ctor_AcceptsASingleUnconnectedVertex_WithFollowingComma()
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void LiteralWeightedGraph_Ctor_AcceptsASingleUnconnectedVertex_WithFollowingComma()
         {
             Assert.DoesNotThrow(() => new LiteralWeightedGraph("A,", true));
         }
 
         [Test]
-        public void Ctor_AcceptsUnconnectedVertices()
+        public void LiteralWeightedGraph_Ctor_AcceptsUnconnectedVertices()
         {
             var graph = new LiteralWeightedGraph("A,B,C-6-D", true);
 
@@ -103,34 +110,35 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void Ctor_AcceptsEmptyRelationships()
+        public void LiteralWeightedGraph_Ctor_AcceptsEmptyRelationships()
         {
             var graph = new LiteralWeightedGraph("", false);
             TestHelper.AssertSequence(graph);
         }
 
         [Test]
-        public void Ctor_AcceptsLettersAndDigits()
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void LiteralWeightedGraph_Ctor_AcceptsLettersAndDigits()
         {
             Assert.DoesNotThrow(() => new LiteralWeightedGraph("a-1-B,B-1-0", true));
         }
 
         [Test]
-        public void IsDirected_IsTrue_IfTrueSpecifiedAtConstruction()
+        public void LiteralWeightedGraph_IsDirected_IsTrue_IfTrueSpecifiedAtConstruction()
         {
             var graph = new LiteralWeightedGraph("A", true);
             Assert.IsTrue(graph.IsDirected);
         }
 
         [Test]
-        public void IsDirected_IsFalse_IfFalseSpecifiedAtConstruction()
+        public void LiteralWeightedGraph_IsDirected_IsFalse_IfFalseSpecifiedAtConstruction()
         {
             var graph = new LiteralWeightedGraph("A", false);
             Assert.IsFalse(graph.IsDirected);
         }
 
         [Test]
-        public void IsReadOnly_ReturnsTrue()
+        public void LiteralWeightedGraph_IsReadOnly_ReturnsTrue()
         {
             var graph = new LiteralWeightedGraph("A,B", false);
 
@@ -138,7 +146,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void Enumeration_ReturnsAllVertices()
+        public void LiteralWeightedGraph_Enumeration_ReturnsAllVertices()
         {
             var graph = new LiteralWeightedGraph("A>1>B,B-1-Z,K<1<T", true);
 
@@ -154,7 +162,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'K', "")]
         [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'T', "T3K,T6A")]
         [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'Z', "Z2B")]
-        public void GetEdgesAndWeights_ReturnsAllEdges(string relationships, char vertex, string expected)
+        public void LiteralWeightedGraph_GetEdgesAndWeights_ReturnsAllEdges(string relationships, char vertex, string expected)
         {
             var graph = new LiteralWeightedGraph(relationships, true);
 
@@ -169,7 +177,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'K', "")]
         [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'T', "TK,TA")]
         [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'Z', "ZB")]
-        public void GetEdges_ReturnsAllEdges(string relationships, char vertex, string expected)
+        public void LiteralWeightedGraph_GetEdges_ReturnsAllEdges(string relationships, char vertex, string expected)
         {
             var graph = new LiteralWeightedGraph(relationships, true);
 
@@ -180,7 +188,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void SupportsPotentialWeightEvaluation_ReturnsFalse()
+        public void LiteralWeightedGraph_SupportsPotentialWeightEvaluation_ReturnsFalse()
         {
             var graph = new LiteralWeightedGraph("", true);
 
@@ -188,21 +196,41 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetPotentialWeight_ThrowsException_IfFromVertexNotPartOfGraph()
+        public void LiteralWeightedGraph_GetPotentialWeight_ThrowsException_IfFromVertexNotPartOfGraph()
         {
             Assert.Throws<ArgumentException>(() => new LiteralWeightedGraph("A,B", true).GetPotentialWeight('Z', 'A'));
         }
 
         [Test]
-        public void GetPotentialWeight_ThrowsException_IfToVertexNotPartOfGraph()
+        public void LiteralWeightedGraph_GetPotentialWeight_ThrowsException_IfToVertexNotPartOfGraph()
         {
             Assert.Throws<ArgumentException>(() => new LiteralWeightedGraph("A,B", true).GetPotentialWeight('A', 'Z'));
         }
 
         [Test]
-        public void GetPotentialWeight_ThrowsException_Always()
+        public void LiteralWeightedGraph_GetPotentialWeight_ThrowsException_Always()
         {
             Assert.Throws<NotSupportedException>(() => new LiteralWeightedGraph("A,B", true).GetPotentialWeight('A', 'B'));
+        }
+
+        [Test]
+        public void LiteralWeightedGraph_Preserves_MultipleEdges_ForUndirectedGraps()
+        {
+            var graph = new LiteralWeightedGraph("A-1-A,A-1-B,A-1-B", true);
+            var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));
+            var edgesFromB = string.Join(",", graph.GetEdges('B').Select(s => s.FromVertex + ">" + s.ToVertex));
+
+            Assert.AreEqual("A>A,A>B,A>B", edgesFromA);
+            Assert.AreEqual("B>A,B>A", edgesFromB);
+        }
+
+        [Test]
+        public void LiteralWeightedGraph_Preserves_MultipleEdges_ForDirectedGraps()
+        {
+            var graph = new LiteralWeightedGraph("A>1>A,A>1>B,A>1>B", true);
+            var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));
+
+            Assert.AreEqual("A>A,A>B,A>B", edgesFromA);
         }
     }
 }

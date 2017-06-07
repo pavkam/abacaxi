@@ -15,42 +15,37 @@
 
 namespace Abacaxi.Tests.Graph
 {
-    using System.Linq;
     using Graphs;
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphGetComponentsTests
+    public class GraphDescribeVerticesTests
     {
         [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A-A", "A")]
-        [TestCase("A-A,A-A", "A")]
-        [TestCase("A-B,B-C,C-D", "A,B,C,D")]
-        [TestCase("A,B,C", "A;B;C")]
-        [TestCase("A-B,B-C,C-A,D-E", "A,B,C;D,E")]
-        public void GetComponents_ReturnsProperComponents_ForUndirectedGraphs(string relationships, string expected)
+        [TestCase("A", "0 => A (0) => 0")]
+        [TestCase("A-A", "1 => A (0) => 1")]
+        [TestCase("A-A,A-A", "2 => A (0) => 2")]
+        [TestCase("A-B,B-C,C-D", "1 => A (0) => 1; 2 => B (0) => 2; 2 => C (0) => 2; 1 => D (0) => 1")]
+        [TestCase("A,B,C", "0 => A (0) => 0; 0 => B (1) => 0; 0 => C (2) => 0")]
+        public void Graph_DescribeVertices_ReturnsExpectedDescriptions_ForUndirectedGraphs(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, false);
-            var result = string.Join(";",
-                graph.GetComponents().Select(component => string.Join(",", component)));
+            var result = string.Join("; ", graph.DescribeVertices());
 
             Assert.AreEqual(expected, result);
         }
 
         [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A>A", "A")]
-        [TestCase("A>A,A>A", "A")]
-        [TestCase("A>B,B-C,C>D", "A,B,C,D")]
-        [TestCase("A,B,C", "A;B;C")]
-        [TestCase("A-B,B-C,C-A,D-E", "A,B,C;D,E")]
-        [TestCase("A>B,C>D", "A,B;C,D")]
-        public void GetComponents_ReturnsProperComponents_ForDirectedGraphs(string relationships, string expected)
+        [TestCase("A", "0 => A (0) => 0")]
+        [TestCase("A>A", "1 => A (0) => 1")]
+        [TestCase("A>A,A>A", "2 => A (0) => 2")]
+        [TestCase("A,B,C", "0 => A (0) => 0; 0 => B (1) => 0; 0 => C (2) => 0")]
+        [TestCase("A>B,B-C,C>D", "0 => A (0) => 1; 2 => B (0) => 1; 1 => C (0) => 2; 1 => D (0) => 0")]
+        [TestCase("A>B,C>D", "0 => A (0) => 1; 1 => B (0) => 0; 0 => C (1) => 1; 1 => D (1) => 0")]
+        public void Graph_DescribeVertices_ReturnsExpectedDescriptions_ForDirectedGraphs(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
-            var result = string.Join(";",
-                graph.GetComponents().Select(component => string.Join(",", component)));
+            var result = string.Join("; ", graph.DescribeVertices());
 
             Assert.AreEqual(expected, result);
         }

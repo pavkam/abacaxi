@@ -15,44 +15,37 @@
 
 namespace Abacaxi.Tests.Graph
 {
-    using System.Linq;
+    using System;
     using Graphs;
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphGetComponentsTests
+    public class GraphIsBipartiteTests
     {
-        [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A-A", "A")]
-        [TestCase("A-A,A-A", "A")]
-        [TestCase("A-B,B-C,C-D", "A,B,C,D")]
-        [TestCase("A,B,C", "A;B;C")]
-        [TestCase("A-B,B-C,C-A,D-E", "A,B,C;D,E")]
-        public void GetComponents_ReturnsProperComponents_ForUndirectedGraphs(string relationships, string expected)
+        [TestCase("", true)]
+        [TestCase("A", true)]
+        [TestCase("A,B", true)]
+        [TestCase("A-B,C", true)]
+        [TestCase("A-B", true)]
+        [TestCase("A-B,B-C", true)]
+        [TestCase("A-B,B-C,C-A", false)]
+        [TestCase("A-B,C-D", true)]
+        public void VerifyIsBipartite_ReturnsExpectedResult(string relationships, bool expected)
         {
             var graph = new LiteralGraph(relationships, false);
-            var result = string.Join(";",
-                graph.GetComponents().Select(component => string.Join(",", component)));
+            var actual = graph.IsBipartite;
 
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A>A", "A")]
-        [TestCase("A>A,A>A", "A")]
-        [TestCase("A>B,B-C,C>D", "A,B,C,D")]
-        [TestCase("A,B,C", "A;B;C")]
-        [TestCase("A-B,B-C,C-A,D-E", "A,B,C;D,E")]
-        [TestCase("A>B,C>D", "A,B;C,D")]
-        public void GetComponents_ReturnsProperComponents_ForDirectedGraphs(string relationships, string expected)
+        [Test]
+        public void VerifyIsBipartite_ThrowsException_ForDirectedGraphs()
         {
-            var graph = new LiteralGraph(relationships, true);
-            var result = string.Join(";",
-                graph.GetComponents().Select(component => string.Join(",", component)));
-
-            Assert.AreEqual(expected, result);
+            var graph = new LiteralGraph("A>B", true);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var dummy = graph.IsBipartite;
+            });
         }
     }
 }

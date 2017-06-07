@@ -16,65 +16,60 @@
 namespace Abacaxi.Graphs
 {
     /// <summary>
-    /// Defines a 2-D coordinate to be used when manipulating matrices.
+    /// Class used to describe a vertex in the context of a graph.
     /// </summary>
-    public struct Cell
+    public class VertexDescriptor<TVertex>
     {
         /// <summary>
-        /// Gets the X coordinate.
+        /// Gets the vertex.
         /// </summary>
         /// <value>
-        /// The X coordinate.
+        /// The vertex.
         /// </value>
-        public int X { get; }
+        public TVertex Vertex { get; }
 
         /// <summary>
-        /// Gets the Y coordinate.
+        /// Gets the in-degree of the <see cref="Vertex"/>.
         /// </summary>
         /// <value>
-        /// The Y coordinate.
+        /// The in-degree.
         /// </value>
-        public int Y { get; }
+        public int InDegree { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Cell"/> struct.
+        /// Gets the out-degree of the <see cref="Vertex"/>.
         /// </summary>
-        /// <param name="x">The X coordinate.</param>
-        /// <param name="y">The Y coordinate.</param>
-        public Cell(int x, int y)
-        {
-
-            X = x;
-            Y = y;
-        }
+        /// <value>
+        /// The out degree.
+        /// </value>
+        public int OutDegree { get; }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" />, is equal to this instance.
+        /// Gets the index of the component that contains the <see cref="Vertex"/>.
         /// </summary>
-        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
-        /// </returns>
-        public override bool Equals(object obj)
-        {
-            if (obj == null || obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            var co = (Cell)obj;
-            return co.X == X && co.Y == Y; 
-        }
+        /// <value>
+        /// The component index.
+        /// </value>
+        public int ComponentIndex { get; }
 
         /// <summary>
-        /// Returns a hash code for this instance.
+        /// Initializes a new instance of the <see cref="VertexDescriptor{TVertex}" /> struct.
         /// </summary>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
-        /// </returns>
-        public override int GetHashCode()
+        /// <param name="vertex">The vertex.</param>
+        /// <param name="componentIndex">Index of the component.</param>
+        /// <param name="inDegree">The in-degree.</param>
+        /// <param name="outDegree">The out-degree.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="componentIndex"/> or <paramref name="inDegree"/> or <paramref name="outDegree"/> are less than zero.</exception>
+        public VertexDescriptor(TVertex vertex, int componentIndex, int inDegree, int outDegree)
         {
-            return X.GetHashCode() ^ Y.GetHashCode();
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(componentIndex), componentIndex);
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(inDegree), inDegree);
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(outDegree), outDegree);
+
+            Vertex = vertex;
+            InDegree = inDegree;
+            OutDegree = outDegree;
+            ComponentIndex = componentIndex;
         }
 
         /// <summary>
@@ -85,7 +80,7 @@ namespace Abacaxi.Graphs
         /// </returns>
         public override string ToString()
         {
-            return $"({X}, {Y})";
+            return $"{InDegree} => {Vertex} ({ComponentIndex}) => {OutDegree}";
         }
     }
 }
