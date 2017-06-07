@@ -76,7 +76,11 @@ namespace Abacaxi.Graphs
                     break;
                 case '-':
                     AddVertices(from, to);
-                    AddVertices(to, from);
+
+                    if (to != from)
+                    {
+                        AddVertices(to, from);
+                    }
                     break;
                 default:
                     Debug.Fail("Unexpected relation character.");

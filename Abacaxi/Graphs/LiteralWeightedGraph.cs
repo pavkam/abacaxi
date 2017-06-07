@@ -26,16 +26,16 @@ namespace Abacaxi.Graphs
     /// </summary>
     public sealed class LiteralWeightedGraph : WeightedGraph<char>
     {
-        private readonly Dictionary<char, IDictionary<char, double>> _vertices;
+        private readonly Dictionary<char, IList<KeyValuePair<char, double>>> _vertices;
 
         private void AddVertex(char vertex)
         {
             Debug.Assert(char.IsLetterOrDigit(vertex));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(vertex, out IDictionary<char, double> set))
+            if (!_vertices.TryGetValue(vertex, out IList<KeyValuePair<char, double>> set))
             {
-                set = new Dictionary<char, double>();
+                set = new List<KeyValuePair<char, double>>();
                 _vertices.Add(vertex, set);
             }
             else
@@ -50,18 +50,18 @@ namespace Abacaxi.Graphs
             Debug.Assert(char.IsLetterOrDigit(to));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(from, out IDictionary<char, double> fromToSet))
+            if (!_vertices.TryGetValue(from, out IList<KeyValuePair<char, double>> fromToSet))
             {
-                fromToSet = new Dictionary<char, double>();
+                fromToSet = new List<KeyValuePair<char, double>>();
                 _vertices.Add(from, fromToSet);
             }
-            if (!_vertices.TryGetValue(to, out IDictionary<char, double> toFromSet))
+            if (!_vertices.TryGetValue(to, out IList<KeyValuePair<char, double>> toFromSet))
             {
-                toFromSet = new Dictionary<char, double>();
+                toFromSet = new List<KeyValuePair<char, double>>();
                 _vertices.Add(to, toFromSet);
             }
 
-            fromToSet.Add(to, weight);
+            fromToSet.Add(new KeyValuePair<char, double>(to, weight));
         }
 
         private void AddVertices(char from, char to, char relation, int weight)
@@ -78,7 +78,11 @@ namespace Abacaxi.Graphs
                     break;
                 case '-':
                     AddVertices(from, to, weight);
-                    AddVertices(to, from, weight);
+
+                    if (to != from)
+                    {
+                        AddVertices(to, from, weight);
+                    }
                     break;
                 default:
                     Debug.Fail("Unexpected relation character.");
@@ -271,7 +275,7 @@ namespace Abacaxi.Graphs
         {
             Validate.ArgumentNotNull(nameof(relationships), relationships);
 
-            _vertices = new Dictionary<char, IDictionary<char, double>>();
+            _vertices = new Dictionary<char, IList<KeyValuePair<char, double>>>();
 
             IsDirected = isDirected;
             Parse(relationships);
