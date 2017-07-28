@@ -54,7 +54,8 @@
     <Compile Include="Graphs\EulerianClassification.cs" />
     <Compile Include="Graphs\LiteralWeightedGraph.cs" />
     <Compile Include="Graphs\LiteralGraph.cs" />
-    <Compile Include="HelperMethods.cs" />
+    <Compile Include="StringHelperMethods.cs" />
+    <Compile Include="SequenceHelperMethods.cs" />
     <Compile Include="Heuristics.cs" />
     <Compile Include="Sequence.cs" />
     <Compile Include="Containers\Heap.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Graphs\MazeGraph.cs" />
     <Compile Include="Graphs\Graph.cs" />
     <Compile Include="Containers\SingleLinkedNode.cs" />
+    <Compile Include="StringListWrapper.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Integer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

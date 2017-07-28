@@ -23,7 +23,7 @@ namespace Abacaxi.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public sealed class HelperMethodsTests
+    public sealed class SequenceHelperMethodsTests
     {
         [Test]
         public void ToSet_ThrowsException_IfSequenceIsNull1()

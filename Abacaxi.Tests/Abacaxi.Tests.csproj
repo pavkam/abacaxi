@@ -67,7 +67,8 @@
     <Compile Include="Graph\CellTests.cs" />
     <Compile Include="Integer\Integer.Tests.EnumerateFibonacciNumbers.cs" />
     <Compile Include="Integer\Integer.Tests.Divide.cs" />
-    <Compile Include="HelperMethodsTests.cs" />
+    <Compile Include="StringHelperMethodsTests.cs" />
+    <Compile Include="SequenceHelperMethodsTests.cs" />
     <Compile Include="Sequence\Sequence.Tests.ContainsSubsetWithAggregatedValue.cs" />
     <Compile Include="Sequence\Sequence.Tests.GetLongestCommonSubSequence.cs" />
     <Compile Include="Sequence\Sequence.Tests.Diff.cs" />

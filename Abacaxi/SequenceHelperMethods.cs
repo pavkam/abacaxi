@@ -20,9 +20,9 @@ namespace Abacaxi
     using System.Linq;
 
     /// <summary>
-    /// Implements a number of helper methods useable across the library (and beyond!).
+    /// Implements a number of sequence-related helper methods useable across the library (and beyond!).
     /// </summary>
-    public static class HelperMethods
+    public static class SequenceHelperMethods
     {
         /// <summary>
         /// Converts a sequence to a set.
