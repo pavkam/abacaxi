@@ -264,5 +264,22 @@ namespace Abacaxi
 
             return array;
         }
+
+        /// <summary>
+        /// Interprets a list as an index-value pair sequence.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the list.</typeparam>
+        /// <param name="list">The list to convert to a key-value sequence.</param>
+        /// <returns>The resulting sequence.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="list"/> is <c>null</c>.</exception>
+        public static IEnumerable<KeyValuePair<int, T>> AsIndexedEnumerable<T>(this IList<T> list)
+        {
+            Validate.ArgumentNotNull(nameof(list), list);
+
+            for (var i = 0; i < list.Count; i++)
+            {
+                yield return new KeyValuePair<int, T>(i, list[i]);
+            }
+        }
     }
 }

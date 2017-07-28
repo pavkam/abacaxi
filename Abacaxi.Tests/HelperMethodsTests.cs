@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Tests
 {
     using System;
@@ -305,6 +307,33 @@ namespace Abacaxi.Tests
             var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4, 5, 6);
 
             TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4, 5, 6);
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        public void AsIndexedEnumerable_ThrowsException_ForNullList()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ((int[]) null).AsIndexedEnumerable().ToArray());
+        }
+
+        [Test]
+        public void AsIndexedEnumerable_ReturnsNothing_ForEmptyList()
+        {
+            var result = new int[] { }.AsIndexedEnumerable();
+
+            TestHelper.AssertSequence(result);
+        }
+
+        [Test]
+        public void AsIndexedEnumerable_ReturnsTheExpectedList()
+        {
+            var result = new[] { "a", "b", "c" }.AsIndexedEnumerable();
+
+            TestHelper.AssertSequence(result,
+                new KeyValuePair<int, string>(0, "a"),
+                new KeyValuePair<int, string>(1, "b"),
+                new KeyValuePair<int, string>(2, "c"));
         }
     }
 }
