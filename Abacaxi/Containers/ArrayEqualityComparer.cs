@@ -15,6 +15,7 @@
 
 namespace Abacaxi.Containers
 {
+    using System.Linq;
     using System.Collections.Generic;
 
     /// <summary>
@@ -29,7 +30,7 @@ namespace Abacaxi.Containers
         /// Initializes a new instance of the <see cref="ArrayEqualityComparer{TElement}"/> class.
         /// </summary>
         /// <param name="elementComparer">The element comparer.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="elementComparer"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="elementComparer"/> is <c>null</c>.</exception>
         public ArrayEqualityComparer(IEqualityComparer<TElement> elementComparer)
         {
             Validate.ArgumentNotNull(nameof(elementComparer), elementComparer);
@@ -54,15 +55,7 @@ namespace Abacaxi.Containers
                 return false;
             }
 
-            for (var i = 0; i < array1.Length; i++)
-            {
-                if (!_elementComparer.Equals(array1[i], array2[i]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return !array1.Where((t, i) => !_elementComparer.Equals(t, array2[i])).Any();
         }
 
         /// <summary>
@@ -80,6 +73,8 @@ namespace Abacaxi.Containers
             }
 
             var hashCode = array.Length;
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
             for (var i = 0; i < array.Length; ++i)
             {
                 hashCode = unchecked(hashCode * 314159 + _elementComparer.GetHashCode(array[i]));

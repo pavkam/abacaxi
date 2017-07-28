@@ -26,6 +26,7 @@ namespace Abacaxi
     /// </summary>
     public static class Sequence
     {
+
         private const double CombSortShrinkFactor = 1.3;
         private const double ShellSortShrinkFactor = 2.2;
 
@@ -237,6 +238,112 @@ namespace Abacaxi
             MergeSortSegments(sequence, middle + 1, hi, comparer);
 
             MergeSegments(sequence, lo, middle, middle + 1, hi, comparer);
+        }
+
+        private struct EditChoice
+        {
+            public const int Cancel = -1;
+            public const int Match = 0;
+            public const int Insert = 1;
+            public const int Delete = 2;
+
+            public int Operation;
+            public double Cost;
+        }
+
+        private static Edit<T>[] GetEditDistance<T>(
+            this IList<T> sequence, 
+            IList<T> resultSequence,
+            Func<int, EditChoice> initRowCellFunc,
+            Func<int, EditChoice> initColumnCellFunc,
+            Func<T, T, double> evalMatchCostFunc,
+            Func<T, double> evalInsertCostFunc,
+            Func<T, double> evalDeleteCostFunc)
+        {
+            Debug.Assert(sequence != null);
+            Debug.Assert(resultSequence != null);
+            Debug.Assert(evalMatchCostFunc != null);
+            Debug.Assert(evalInsertCostFunc != null);
+            Debug.Assert(evalDeleteCostFunc != null);
+
+            var matrix = new EditChoice[sequence.Count + 1, resultSequence.Count + 1];
+            for (var i = 0; i < Math.Max(sequence.Count, resultSequence.Count) + 1; i++)
+            {
+                if (i <= sequence.Count)
+                    matrix[i, 0] = initColumnCellFunc(i);
+                if (i <= resultSequence.Count)
+                    matrix[0, i] = initRowCellFunc(i);
+            }
+
+            var opr = new double[3];
+            for (var i1 = 1; i1 <= sequence.Count; i1++)
+            {
+                for (var i2 = 1; i2 <= resultSequence.Count; i2++)
+                {
+                    opr[EditChoice.Match] = matrix[i1 - 1, i2 - 1].Cost +
+                                            evalMatchCostFunc(sequence[i1 - 1], resultSequence[i2 - 1]);
+                    opr[EditChoice.Delete] = matrix[i1 - 1, i2].Cost + evalDeleteCostFunc(sequence[i1 - 1]);
+                    opr[EditChoice.Insert] = matrix[i1, i2 - 1].Cost + evalInsertCostFunc(resultSequence[i2 - 1]);
+
+                    var minCostOperation = -1;
+                    var minCost = opr[EditChoice.Match];
+
+                    for (var op = EditChoice.Match; op <= EditChoice.Delete; op++)
+                    {
+                        if (minCostOperation == -1 || opr[op] < minCost)
+                        {
+                            minCost = opr[op];
+                            minCostOperation = op;
+                        }
+                    }
+
+                    matrix[i1, i2] = new EditChoice
+                    {
+                        Cost = minCost,
+                        Operation = minCostOperation,
+                    };
+                }
+            }
+
+            var path = new List<Edit<T>>();
+            var pi1 = sequence.Count;
+            var pi2 = resultSequence.Count;
+            for (;;)
+            {
+                var ceds = matrix[pi1, pi2];
+                if (ceds.Operation == EditChoice.Cancel)
+                {
+                    break;
+                }
+
+                Edit<T> edit;
+                switch (ceds.Operation)
+                {
+                    case EditChoice.Match:
+                        var actualEdit = Equals(sequence[pi1 - 1], resultSequence[pi2 - 1])
+                            ? EditOperation.Match
+                            : EditOperation.Substitute;
+                        edit = new Edit<T>(actualEdit, resultSequence[pi2 - 1]);
+                        pi1--;
+                        pi2--;
+                        break;
+                    case EditChoice.Insert:
+                        edit = new Edit<T>(EditOperation.Insert, resultSequence[pi2 - 1]);
+                        pi2--;
+                        break;
+                    case EditChoice.Delete:
+                        edit = new Edit<T>(EditOperation.Delete, sequence[pi1 - 1]);
+                        pi1--;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                path.Add(edit);
+            }
+
+            path.Reverse();
+            return path.ToArray();
         }
 
 
@@ -1179,6 +1286,8 @@ namespace Abacaxi
         /// <param name="sequence">The sequence of elements.</param>
         /// <param name="sampleLength">Length of the sample to be selected.</param>
         /// <returns>A random sequence of elements from <paramref name="sequence"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="sampleLength"/> is less than one.</exception>
         public static T[] RandomSample<T>(this IEnumerable<T> sequence, int sampleLength)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -1213,6 +1322,82 @@ namespace Abacaxi
             }
 
             return sample;
+        }
+
+        /// <summary>
+        /// Evaluates the edit distance between two given sequences <paramref name="sequence"/> and <paramref name="resultSequence"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in both sequences.</typeparam>
+        /// <param name="sequence">The sequence to compare to.</param>
+        /// <param name="resultSequence">The sequence to compare with.</param>
+        /// <returns>A sequence of "edits" applied to the original <paramref name="sequence"/> to obtain the <paramref name="resultSequence"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="resultSequence"/> are <c>null</c>.</exception>
+        public static Edit<T>[] Diff<T>(this IList<T> sequence, IList<T> resultSequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(resultSequence), resultSequence);
+
+            return GetEditDistance(sequence, resultSequence,
+                row =>
+                {
+                    Debug.Assert(row >= 0 && row <= resultSequence.Count);
+                    return new EditChoice
+                    {
+                        Operation = row > 0 ? EditChoice.Insert : EditChoice.Cancel,
+                        Cost = row,
+                    };
+                },
+                column =>
+                {
+                    Debug.Assert(column >= 0 && column <= sequence.Count);
+                    return new EditChoice
+                    {
+                        Operation = column > 0 ? EditChoice.Delete : EditChoice.Cancel,
+                        Cost = column,
+                    };
+                },
+                (l, r) => Equals(l, r) ? 0 : 1,
+                i => 1,
+                d => 1
+            );
+        }
+
+        /// <summary>
+        /// Gets the longest common sub-sequence shared by <paramref name="sequence"/> and <paramref name="otherSequence"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in both sequences.</typeparam>
+        /// <param name="sequence">The sequence to compare to.</param>
+        /// <param name="otherSequence">The sequence to compare with.</param>
+        /// <returns>The longest common sub-sequence shared by both sequences.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="otherSequence"/> are <c>null</c>.</exception>
+        public static T[] GetLongestCommonSubSequence<T>(this IList<T> sequence, IList<T> otherSequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(otherSequence), otherSequence);
+
+            return GetEditDistance(sequence, otherSequence,
+                row =>
+                {
+                    Debug.Assert(row >= 0 && row <= otherSequence.Count);
+                    return new EditChoice
+                    {
+                        Operation = row > 0 ? EditChoice.Insert : EditChoice.Cancel,
+                        Cost = row,
+                    };
+                },
+                column =>
+                {
+                    Debug.Assert(column >= 0 && column <= sequence.Count);
+                    return new EditChoice
+                    {
+                        Operation = column > 0 ? EditChoice.Delete : EditChoice.Cancel,
+                        Cost = column,
+                    };
+                },
+                (l, r) => Equals(l, r) ? 0 : double.PositiveInfinity,
+                i => 1,
+                d => 1
+            ).Where(p => p.Operation == EditOperation.Match).Select(s => s.Item).ToArray();
         }
     }
 }

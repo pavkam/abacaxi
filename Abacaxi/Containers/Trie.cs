@@ -190,10 +190,7 @@ namespace Abacaxi.Containers
         /// <exception cref="ArgumentNullException">The <paramref name="key"/> is <c>null</c>.</exception>
         public void Add(TElement[] key, TValue value)
         {
-            AddOrUpdate(key, value, i =>
-            {
-                throw new ArgumentException($"Key \"{key}\" has already been inserted into the collection.");
-            });
+            AddOrUpdate(key, value, i => throw new ArgumentException($"Key \"{key}\" has already been inserted into the collection."));
         }
 
         /// <summary>

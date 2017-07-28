@@ -23,7 +23,7 @@ namespace Abacaxi.Tests.Sequence
     using System.Collections.Generic;
 
     [TestFixture]
-    public class SequenceFindDuplicates
+    public class SequenceFindDuplicatesTests
     {
         [Test]
         public void GenericFindDuplicates_ThowsException_ForNullSequence()

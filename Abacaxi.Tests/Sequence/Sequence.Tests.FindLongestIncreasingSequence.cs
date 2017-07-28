@@ -22,7 +22,7 @@ namespace Abacaxi.Tests.Sequence
     using System.Collections.Generic;
 
     [TestFixture]
-    public class FindLongestIncreasingSequence
+    public class FindLongestIncreasingSequenceTests
     {
         [Test]
         public void FindLongestIncreasingSequence_ThrowsException_ForNullSequence()

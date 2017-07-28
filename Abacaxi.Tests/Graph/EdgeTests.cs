@@ -15,7 +15,7 @@
 
 namespace Abacaxi.Tests.Graph
 {
-    using Abacaxi.Graphs;
+    using Graphs;
     using NUnit.Framework;
 
     [TestFixture]
@@ -42,7 +42,7 @@ namespace Abacaxi.Tests.Graph
         {
             var edge = new Edge<string>("from", "to");
 
-            Assert.AreEqual($"from >==> to", edge.ToString());
+            Assert.AreEqual("from >==> to", edge.ToString());
         }
 
         [Test]

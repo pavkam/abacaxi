@@ -15,17 +15,39 @@
 
 namespace Abacaxi.Tests.Sequence
 {
-    using System.Collections.Generic;
+    using System;
     using NUnit.Framework;
 
     [TestFixture]
-    public sealed class SequenceGnomeSortTests : SequenceSortingAlgorithmTests
+    public class SequenceGetLongestCommonSubSequenceTests
     {
-        protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
+        [Test]
+        public void GetLongestCommonSubSequence_ThowsException_ForNullSequence()
         {
-            array.GnomeSort(startIndex, length, comparer);
+            Assert.Throws<ArgumentNullException>(() =>
+                Abacaxi.Sequence.GetLongestCommonSubSequence(null, new char[] {}));
         }
 
-        protected override bool IsStable => true;
+        [Test]
+        public void GetLongestCommonSubSequence_ThowsException_ForNullOtherSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new char[] { }.GetLongestCommonSubSequence(null));
+        }
+
+        [TestCase("", "", "")]
+        [TestCase("a", "a", "a")]
+        [TestCase("a", "b", "")]
+        [TestCase("", "a", "")]
+        [TestCase("a", "", "")]
+        [TestCase("ab", "a", "a")]
+        [TestCase("a", "ab", "a")]
+        [TestCase("ab", "ba", "b")]
+        [TestCase("hello my dear friend", "Hello you fiend!", "ello y fiend")]
+        public void GetLongestCommonSubSequence_ReturnsExpectedSequence(string s1, string s2, string expected)
+        {
+            var actual = new string(s1.ToCharArray().GetLongestCommonSubSequence(s2.ToCharArray()));
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

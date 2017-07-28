@@ -559,6 +559,10 @@ namespace Abacaxi.Graphs
             }
         }
 
+        /// <summary>
+        /// Describes the vertices of graph (degrees and components).
+        /// </summary>
+        /// <returns>A list of vertex descriptions.</returns>
         public virtual IEnumerable<VertexDescriptor<TVertex>> DescribeVertices()
         {
             var inDegrees = new Dictionary<TVertex, int>();
@@ -600,33 +604,6 @@ namespace Abacaxi.Graphs
             foreach (var ckvp in componentIndexes)
             {
                 yield return new VertexDescriptor<TVertex>(ckvp.Key, ckvp.Value, inDegrees[ckvp.Key], outDegrees[ckvp.Key]);
-            }
-        }
-
-        public EulerianClassification EulerianClassification
-        {
-            get
-            {
-                var undiscoveredVertices = new HashSet<TVertex>(this);
-                if (undiscoveredVertices.Count == 0)
-                {
-                    return EulerianClassification.NonEulerian;
-                }
-
-                TraverseBfs(undiscoveredVertices.First(), node =>
-                {
-
-
-                    undiscoveredVertices.Remove(node.Vertex);
-                    return true;
-                });
-
-                if (undiscoveredVertices.Count != 0)
-                {
-                    return EulerianClassification.NonEulerian;
-                }
-
-                return EulerianClassification.NonEulerian;
             }
         }
     }

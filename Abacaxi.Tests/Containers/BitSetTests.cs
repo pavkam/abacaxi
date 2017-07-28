@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Tests.Containers
 {
     using System;
@@ -22,6 +24,9 @@ namespace Abacaxi.Tests.Containers
     using NUnit.Framework;
 
     [TestFixture]
+    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+    [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+    [SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
     public class BitSetTests
     {
         private BitSet _one;
@@ -606,7 +611,7 @@ namespace Abacaxi.Tests.Containers
             {
                 _three.Add(-1);
                 _three.Add(0);
-                foreach (var i in _three)
+                foreach (var _ in _three)
                 {
                     _three.Add(1);
                 }
@@ -618,7 +623,7 @@ namespace Abacaxi.Tests.Containers
         {
             Assert.Throws<InvalidOperationException>(() =>
             {
-                foreach (var i in _full)
+                foreach (var _ in _full)
                 {
                     _full.Clear();
                 }

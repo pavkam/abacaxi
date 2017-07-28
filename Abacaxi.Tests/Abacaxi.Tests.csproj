@@ -69,6 +69,8 @@
     <Compile Include="Integer\Integer.Tests.Divide.cs" />
     <Compile Include="HelperMethodsTests.cs" />
     <Compile Include="Sequence\Sequence.Tests.ContainsSubsetWithAggregatedValue.cs" />
+    <Compile Include="Sequence\Sequence.Tests.GetLongestCommonSubSequence.cs" />
+    <Compile Include="Sequence\Sequence.Tests.Diff.cs" />
     <Compile Include="Sequence\Sequence.Tests.FindLongestIncreasingSequence.cs" />
     <Compile Include="Sequence\Sequence.Tests.FindSubsetWithClosestAggregatedValue.cs" />
     <Compile Include="Combinatorics\Combinatorics.Tests.EvaluateIntegerPartitionCombinations.cs" />

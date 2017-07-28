@@ -15,8 +15,6 @@
 
 namespace Abacaxi.Graphs
 {
-    using System;
-    using System.Linq;
     using System.Collections.Generic;
     using System.Diagnostics;
     using Containers;
@@ -48,7 +46,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <param name="vertex">The vertex to get the edges for.</param>
         /// <returns>A sequence of edges connected to the given <param name="vertex"/></returns>
-        /// <exception cref="InvalidOperationException">The <paramref name="vertex"/> is not part of this graph.</exception>
+        /// <exception cref="System.InvalidOperationException">The <paramref name="vertex"/> is not part of this graph.</exception>
         public sealed override IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex)
         {
             return GetEdgesAndWeights(vertex);
@@ -75,7 +73,7 @@ namespace Abacaxi.Graphs
         /// <param name="fromVertex">The start vertex.</param>
         /// <param name="toVertex">The end vertex.</param>
         /// <returns>A sequence of vertices that yield the shortest path. Returns an empty sequence if no path available.</returns>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="fromVertex"/> is not part of teh graph.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name="fromVertex"/> is not part of teh graph.</exception>
         public IEnumerable<TVertex> FindCheapestPath(TVertex fromVertex, TVertex toVertex)
         {
             var comparer = Comparer<PathNode>.Create((a, b) =>

@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Tests.Containers
 {
     using System;
@@ -22,6 +24,9 @@ namespace Abacaxi.Tests.Containers
     using NUnit.Framework;
 
     [TestFixture]
+    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+    [SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
+    [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public class HeapTests
     {
         private Heap<int> _empty;
@@ -357,7 +362,7 @@ namespace Abacaxi.Tests.Containers
         {
             Assert.Throws<InvalidOperationException>(() =>
             {
-                foreach (var x in _three)
+                foreach (var _ in _three)
                 {
                     _three.Add(4);
                 }
@@ -369,7 +374,7 @@ namespace Abacaxi.Tests.Containers
         {
             Assert.Throws<InvalidOperationException>(() =>
             {
-                foreach (var x in _three)
+                foreach (var _ in _three)
                 {
                     _three.Remove(1);
                 }
@@ -381,7 +386,7 @@ namespace Abacaxi.Tests.Containers
         {
             Assert.Throws<InvalidOperationException>(() =>
             {
-                foreach (var x in _three)
+                foreach (var _ in _three)
                 {
                     _three.RemoveTop();
                 }
@@ -393,7 +398,7 @@ namespace Abacaxi.Tests.Containers
         {
             Assert.Throws<InvalidOperationException>(() =>
             {
-                foreach (var x in _three)
+                foreach (var _ in _three)
                 {
                     _three.Clear();
                 }
@@ -446,10 +451,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Heap_TakesComparerIntoAccount()
         {
-            var comparer = Comparer<int>.Create((a, b) =>
-            {
-                return b - a;
-            });
+            var comparer = Comparer<int>.Create((a, b) => b - a);
 
             var heap = new Heap<int>(new[] { 10, 8, 1 }, comparer);
 

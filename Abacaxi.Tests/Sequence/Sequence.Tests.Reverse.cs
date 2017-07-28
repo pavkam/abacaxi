@@ -59,7 +59,7 @@ namespace Abacaxi.Tests.Sequence
         [Test]
         public void Reverse_DoesNothing_ForZeroLength()
         {
-            var array = new int[] { 1, 2 };
+            var array = new[] { 1, 2 };
             array.Reverse(1, 0);
 
             Assert.AreEqual(new[] { 1, 2 }, array);
@@ -77,7 +77,7 @@ namespace Abacaxi.Tests.Sequence
         [Test]
         public void Reverse_Reverses_AnEvenLengthArray()
         {
-            var array = new int[] { 1, 2, 3, 4 };
+            var array = new[] { 1, 2, 3, 4 };
             array.Reverse(0, 4);
 
             Assert.AreEqual(new[] { 4, 3, 2, 1 }, array);
@@ -86,7 +86,7 @@ namespace Abacaxi.Tests.Sequence
         [Test]
         public void Reverse_Reverses_AnOddLengthArray()
         {
-            var array = new int[] { 1, 2, 3, 4, 5 };
+            var array = new[] { 1, 2, 3, 4, 5 };
             array.Reverse(0, 5);
 
             Assert.AreEqual(new[] { 5, 4, 3, 2, 1 }, array);
@@ -95,7 +95,7 @@ namespace Abacaxi.Tests.Sequence
         [Test]
         public void Reverse_Reverses_ASegmentOfTheArray()
         {
-            var array = new int[] { 1, 2, 3, 4, 5 };
+            var array = new[] { 1, 2, 3, 4, 5 };
             array.Reverse(0, 2);
 
             Assert.AreEqual(new[] { 2, 1, 3, 4, 5 }, array);

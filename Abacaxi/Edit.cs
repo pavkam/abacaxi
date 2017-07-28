@@ -13,19 +13,17 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Sequence
+namespace Abacaxi
 {
-    using System.Collections.Generic;
-    using NUnit.Framework;
-
-    [TestFixture]
-    public sealed class SequenceGnomeSortTests : SequenceSortingAlgorithmTests
+    public struct Edit<T>
     {
-        protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
-        {
-            array.GnomeSort(startIndex, length, comparer);
-        }
+        public EditOperation Operation { get; }
+        public T Item { get; }
 
-        protected override bool IsStable => true;
+        public Edit(EditOperation operation, T item)
+        {
+            Operation = operation;
+            Item = item;
+        }
     }
 }

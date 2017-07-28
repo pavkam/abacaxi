@@ -13,11 +13,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable SuspiciousTypeConversion.Global
+using System.Diagnostics.CodeAnalysis;
 
 namespace Abacaxi.Tests.Graph
 {
-    using Abacaxi.Graphs;
+    using Graphs;
     using NUnit.Framework;
 
     [TestFixture]
@@ -44,7 +44,7 @@ namespace Abacaxi.Tests.Graph
         {
             var coords = new Cell(11, 22);
 
-            Assert.AreEqual($"(11, 22)", coords.ToString());
+            Assert.AreEqual("(11, 22)", coords.ToString());
         }
 
         [Test]
@@ -66,6 +66,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonCoordinateObject()
         {
             var c1 = new Cell(10, 22);
