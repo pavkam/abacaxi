@@ -147,7 +147,7 @@ namespace Abacaxi
             return pi;
         }
 
-        private static void QuickSortRecurse<T>(IList<T> sequence, int lo, int hi, IComparer<T> comparer)
+        private static void QuickSortRecursive<T>(IList<T> sequence, int lo, int hi, IComparer<T> comparer)
         {
             Debug.Assert(sequence != null);
             Debug.Assert(lo >= 0);
@@ -169,11 +169,11 @@ namespace Abacaxi
                 var pivotIndex = PartitionSegment(sequence, lo, hi, comparer);
                 if (pivotIndex - lo > 1)
                 {
-                    QuickSortRecurse(sequence, lo, pivotIndex - 1, comparer);
+                    QuickSortRecursive(sequence, lo, pivotIndex - 1, comparer);
                 }
                 if (hi - pivotIndex > 1)
                 {
-                    QuickSortRecurse(sequence, pivotIndex + 1, hi, comparer);
+                    QuickSortRecursive(sequence, pivotIndex + 1, hi, comparer);
                 }
             }
         }
@@ -313,6 +313,7 @@ namespace Abacaxi
             var pi2 = resultSequence.Count;
             for (;;)
             {
+                // ReSharper disable once IdentifierTypo
                 var ceds = matrix[pi1, pi2];
                 if (ceds.Operation == EditChoice.Cancel)
                 {
@@ -355,7 +356,7 @@ namespace Abacaxi
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to verify.</param>
-        /// <param name="comparer">The comparer used to comapare the elements in the sequence.</param>
+        /// <param name="comparer">The comparer used to compare the elements in the sequence.</param>
         /// <returns>The longest increasing sequence.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="comparer"/> is <c>null</c>.</exception>
@@ -365,6 +366,7 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
+            // ReSharper disable once IdentifierTypo
             var dyna = new List<Tuple<T, int, int>>();
             var li = -1;
             var lm = 0;
@@ -1235,7 +1237,7 @@ namespace Abacaxi
 
             if (length >= 2)
             {
-                QuickSortRecurse(sequence, startIndex, startIndex + length - 1, comparer);
+                QuickSortRecursive(sequence, startIndex, startIndex + length - 1, comparer);
             }
         }
 
@@ -1419,7 +1421,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Evaluates the appearace frequency for each item in a <paramref name="sequence"/>.
+        /// Evaluates the appearance frequency for each item in a <paramref name="sequence"/>.
         /// </summary>
         /// <typeparam name="T">The type of items in the sequence </typeparam>
         /// <param name="sequence">The sequence.</param>
@@ -1782,6 +1784,7 @@ namespace Abacaxi
         /// <returns>
         /// A <see cref="string"/> that contains all the elements of the <paramref name="sequence"/>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> or <paramref name="separator"/> are <c>null</c>.</exception>
         public static string ToString<T, TResult>(
             [NotNull] this IEnumerable<T> sequence, 
             [NotNull] Func<T, TResult> selector,
@@ -1815,6 +1818,7 @@ namespace Abacaxi
         /// <returns>
         /// A <see cref="string"/> that contains all the elements of the <paramref name="sequence"/>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="separator"/> are <c>null</c>.</exception>
         public static string ToString<T>(
             [NotNull] this IEnumerable<T> sequence,
             [NotNull] string separator)
@@ -1836,6 +1840,17 @@ namespace Abacaxi
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Finds the object that has a given minimum <typeparamref name="TKey"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
+        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector"/>.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="selector">The selector that return the key to compare.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>The item that has the minimum key.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="sequence"/> is empty and <typeparamref name="T"/> is a value type.</exception>
         [CanBeNull]
         public static T Min<T, TKey>(
             [NotNull] this IEnumerable<T> sequence, 
@@ -1881,6 +1896,17 @@ namespace Abacaxi
             return item;
         }
 
+        /// <summary>
+        /// Finds the object that has a given minimum <typeparamref name="TKey"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
+        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector"/>.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="selector">The selector that return the key to compare.</param>
+        /// <remarks>The default comparer is used to compare values of type <typeparamref name="TKey"/>.</remarks>
+        /// <returns>The item that has the minimum key.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> are <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="sequence"/> is empty and <typeparamref name="T"/> is a value type.</exception>
         [CanBeNull]
         public static T Min<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
@@ -1889,6 +1915,17 @@ namespace Abacaxi
             return Min(sequence, selector, Comparer<TKey>.Default);
         }
 
+        /// <summary>
+        /// Finds the object that has a given maximum <typeparamref name="TKey"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
+        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector"/>.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="selector">The selector that return the key to compare.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>The item that has the maximum key.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="sequence"/> is empty and <typeparamref name="T"/> is a value type.</exception>
         [CanBeNull]
         public static T Max<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
@@ -1934,6 +1971,17 @@ namespace Abacaxi
             return item;
         }
 
+        /// <summary>
+        /// Finds the object that has a given maximum <typeparamref name="TKey"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
+        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector"/>.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="selector">The selector that return the key to compare.</param>
+        /// <remarks>The default comparer is used to compare values of type <typeparamref name="TKey"/>.</remarks>
+        /// <returns>The item that has the maximum key.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> are <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="sequence"/> is empty and <typeparamref name="T"/> is a value type.</exception>
         [CanBeNull]
         public static T Max<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,

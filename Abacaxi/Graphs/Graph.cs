@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Graphs
 {
     using System;
@@ -28,6 +30,7 @@ namespace Abacaxi.Graphs
     /// </summary>
     /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
     [PublicAPI]
+    [SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global")]
     public abstract class Graph<TVertex> : IEnumerable<TVertex>
     {
         private sealed class BfsNode : IBfsNode
@@ -600,6 +603,7 @@ namespace Abacaxi.Graphs
             Debug.Assert(vertices.Count == 0);
             Debug.Assert(componentIndexes.Count == inDegrees.Count && componentIndexes.Count == outDegrees.Count);
 
+            // ReSharper disable once IdentifierTypo
             foreach (var ckvp in componentIndexes)
             {
                 yield return new VertexDescriptor<TVertex>(ckvp.Key, ckvp.Value, inDegrees[ckvp.Key], outDegrees[ckvp.Key]);

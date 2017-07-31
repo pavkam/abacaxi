@@ -29,7 +29,7 @@ namespace Abacaxi
         /// <summary>
         /// Returns a random sample of a given sequence of elements.
         /// </summary>
-        /// <typeparam name="T">Thetype of elements in the <paramref name="sequence" />.</typeparam>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
         /// <param name="random">The random instance to use for sampling.</param>
         /// <param name="sequence">The sequence of elements.</param>
         /// <param name="sampleSize">Length of the sample to be selected.</param>

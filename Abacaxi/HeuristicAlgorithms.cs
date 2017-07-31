@@ -23,13 +23,13 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Defines a set of algorithms useful during heuristical search for solutions.
+    /// Defines a set of algorithms useful during heuristic search for solutions.
     /// </summary>
     [PublicAPI]
-    internal static class HeuristicalAlgorithms
+    internal static class HeuristicAlgorithms
     {
         /// <summary>
-        /// Class that holds the required properties for <see cref="HeuristicalAlgorithms.ApplySimulatedAnnealing{TInput,TSolution}"/> method.
+        /// Class that holds the required properties for <see cref="HeuristicAlgorithms.ApplySimulatedAnnealing{TInput,TSolution}"/> method.
         /// </summary>
         public class SimulatedAnnealingParams
         {
@@ -105,7 +105,7 @@ namespace Abacaxi
         /// <typeparam name="TInput">The type of the input data.</typeparam>
         /// <typeparam name="TSolution">The type of the solution.</typeparam>
         /// <param name="problemInput">The problem input.</param>
-        /// <param name="problemInputLenght">The problem input lenght.</param>
+        /// <param name="problemInputLength">The problem input length.</param>
         /// <param name="evaluateInitialSolutionFunc">Function used to evaluate initial complete solution.</param>
         /// <param name="solutionTransitionFunc">Function used to transition solution.</param>
         /// <param name="evaluateSolutionCostFunc">Function used to evaluate the full cost of a solution.</param>
@@ -115,10 +115,10 @@ namespace Abacaxi
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="problemInput" /> or <paramref name="evaluateInitialSolutionFunc" /> or 
         /// <paramref name="solutionTransitionFunc" /> or <paramref name="evaluateSolutionCostFunc" /> or <paramref name="algorithmParams" /> are null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="problemInputLenght"/> is less than or equal to zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="problemInputLength"/> is less than or equal to zero.</exception>
         public static TSolution ApplySimulatedAnnealing<TInput, TSolution>(
             TInput problemInput,
-            int problemInputLenght,
+            int problemInputLength,
             Func<TInput, TSolution> evaluateInitialSolutionFunc,
             Func<TSolution, TInput, int, int, double> solutionTransitionFunc,
             Func<TSolution, double> evaluateSolutionCostFunc,
@@ -126,7 +126,7 @@ namespace Abacaxi
         {
             Validate.ArgumentNotNull(nameof(problemInput), problemInput);
             Validate.ArgumentNotNull(nameof(evaluateInitialSolutionFunc), evaluateInitialSolutionFunc);
-            Validate.ArgumentGreaterThanZero(nameof(problemInputLenght), problemInputLenght);
+            Validate.ArgumentGreaterThanZero(nameof(problemInputLength), problemInputLength);
             Validate.ArgumentNotNull(nameof(solutionTransitionFunc), solutionTransitionFunc);
             Validate.ArgumentNotNull(nameof(evaluateSolutionCostFunc), evaluateSolutionCostFunc);
             Validate.ArgumentNotNull(nameof(algorithmParams), algorithmParams);
@@ -145,8 +145,8 @@ namespace Abacaxi
 
                 for (var j = 0; j < algorithmParams.IterationsPerCoolingStep; j++)
                 {
-                    var i1 = random.Next(problemInputLenght);
-                    var i2 = random.Next(problemInputLenght);
+                    var i1 = random.Next(problemInputLength);
+                    var i2 = random.Next(problemInputLength);
                     var flip = random.NextDouble();
 
                     var delta = solutionTransitionFunc(solution, problemInput, i1, i2);

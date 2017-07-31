@@ -334,12 +334,12 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds all pairs of items from a given <paramref name="sequence"/> whose total combination cost is mininum.
+        /// Finds all pairs of items from a given <paramref name="sequence"/> whose total combination cost is minimum.
         /// </summary>
         /// <typeparam name="T">The type of items in the sequence.</typeparam>
         /// <param name="sequence">The input sequence.</param>
         /// <param name="evaluateCostOfPairFunc">The function used to evaluate costs of pairs.</param>
-        /// <returns>A sequence of pairs wich lowest overall cost.</returns>
+        /// <returns>A sequence of pairs which lowest overall cost.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluateCostOfPairFunc"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence"/> is not even.</exception>
         public static Tuple<T, T>[] FindSubsetPairingWithLowestCost<T>(
@@ -389,14 +389,14 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds all pairs of items from a given <paramref name="sequence" /> whose total combination cost is mininum.
+        /// Finds all pairs of items from a given <paramref name="sequence" /> whose total combination cost is minimum.
         /// </summary>
         /// <typeparam name="T">The type of items in the sequence.</typeparam>
         /// <param name="sequence">The input sequence.</param>
         /// <param name="evaluateCostOfPairFunc">The function used to evaluate costs of pairs.</param>
         /// <param name="iterations">The heuristics iteration (the higher the value, the better the results, but slower execution).</param>
         /// <returns>
-        /// A sequence of pairs wich lowest overall cost.
+        /// A sequence of pairs which lowest overall cost.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> or <paramref name="evaluateCostOfPairFunc" /> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence" /> is not even.</exception>
@@ -415,12 +415,12 @@ namespace Abacaxi
             }
 
             var steps = (int)Math.Sqrt(iterations);
-            var result = HeuristicalAlgorithms.ApplySimulatedAnnealing(sequence, 2, pair =>
+            var result = HeuristicAlgorithms.ApplySimulatedAnnealing(sequence, 2, pair =>
             {
                 Debug.Assert(pair != null && pair.Length == 2);
                 return evaluateCostOfPairFunc(pair[0], pair[1]);
             }, 
-            new HeuristicalAlgorithms.SimulatedAnnealingParams(coolingSteps: steps, iterationsPerCoolingStep: steps));
+            new HeuristicAlgorithms.SimulatedAnnealingParams(coolingSteps: steps, iterationsPerCoolingStep: steps));
 
             return result.Select(pair =>
             {

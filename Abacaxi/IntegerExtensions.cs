@@ -21,7 +21,7 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Helper class that defines a number of methods useful in integer/algorithmical manipulations.
+    /// Helper class that defines a number of methods useful in integer/algorithmic manipulations.
     /// </summary>
     [PublicAPI]
     public static class IntegerExtensions

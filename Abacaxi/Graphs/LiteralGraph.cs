@@ -96,6 +96,7 @@ namespace Abacaxi.Graphs
         {
             Debug.Assert(relationships != null);
 
+            // ReSharper disable once IdentifierTypo
             var rels = new HashSet<char> { '-' };
             if (IsDirected)
             {
