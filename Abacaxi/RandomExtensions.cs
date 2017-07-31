@@ -86,5 +86,29 @@ namespace Abacaxi
             return
                 random.Next(2) == 1;
         }
+
+        public static T NextItem<T>(this Random random, IList<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(random), random);
+            Validate.SequenceArgumentNotEmpty(nameof(sequence), sequence);
+
+            return sequence[random.Next(sequence.Count)];
+        }
+
+        public static T NextItem<T>(this Random random, T item1, T item2, params T[] others)
+        {
+            Validate.ArgumentNotNull(nameof(random), random);
+
+            var next = random.Next(others.Length + 2);
+            switch (next)
+            {
+                case 0:
+                    return item1;
+                case 1:
+                    return item2;
+                default:
+                    return others[next - 2];
+            }
+        }
     }
 }

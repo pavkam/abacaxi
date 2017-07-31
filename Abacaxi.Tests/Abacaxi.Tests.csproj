@@ -44,6 +44,7 @@
     <Compile Include="Containers\TrieTests.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
+    <Compile Include="RandomExtensions\NextItemTests.cs" />
     <Compile Include="RandomExtensions\NextBoolTests.cs" />
     <Compile Include="SequenceExtensions\AddOrUpdateTests.cs" />
     <Compile Include="SequenceExtensions\AppendTests.cs" />

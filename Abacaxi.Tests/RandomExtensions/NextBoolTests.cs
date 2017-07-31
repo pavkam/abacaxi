@@ -47,7 +47,7 @@ namespace Abacaxi.Tests.RandomExtensions
             }
 
             var ratio = t / (double) (t + f);
-            Assert.IsTrue(ratio > .4 && ratio < .6);
+            Assert.IsTrue(ratio > .35 && ratio < .65);
         }
     }
 }
