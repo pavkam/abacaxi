@@ -33,21 +33,15 @@ namespace Abacaxi.Tests.RandomExtensions
         [Test]
         public void NextBool_ReturnsARandomSample()
         {
-            var t = 0;
-            var f = 0;
+            var set = new[] { true, false }.ToSet();
 
             for (var i = 0; i < 100; i++)
             {
-                if (_random.NextBool())
-                    t++;
-                else
-                {
-                    f++;
-                }
+                var r = _random.NextBool();
+                set.Remove(r);
             }
 
-            var ratio = t / (double) (t + f);
-            Assert.IsTrue(ratio > .35 && ratio < .65);
+            Assert.AreEqual(0, set.Count);
         }
     }
 }

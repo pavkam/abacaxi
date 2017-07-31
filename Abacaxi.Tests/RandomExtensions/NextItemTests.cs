@@ -39,7 +39,6 @@ namespace Abacaxi.Tests.RandomExtensions
                 _random.NextItem<int>(null));
         }
 
-
         [Test]
         public void NextItem1_ThrowsException_IfSequenceIsEmpty()
         {
@@ -50,29 +49,18 @@ namespace Abacaxi.Tests.RandomExtensions
         [Test]
         public void NextItem1_ReturnsARandomSample()
         {
-            var t = 0;
-            var f = 0;
+            var all = Enumerable.Range(0, 100).AsList();
+            var set = all.ToSet();
 
-            var items = Enumerable.Range(0, 100).AsList();
-
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 10000 && set.Count > 0; i++)
             {
-                var r = _random.NextItem(items);
-                Assert.IsTrue(items.Contains(r));
-
-                if (r % 2 == 0)
-                    t++;
-                else
-                {
-                    f++;
-                }
+                var r = _random.NextItem(all);
+                Assert.IsTrue(all.Contains(r));
+                set.Remove(r);
             }
 
-            var ratio = t / (double) (t + f);
-            Assert.IsTrue(ratio > .4 && ratio < .6);
+            Assert.AreEqual(0, set.Count);
         }
-
-
 
         [Test]
         public void NextItem2_ThrowsException_IfRandomIsNull()
@@ -84,45 +72,34 @@ namespace Abacaxi.Tests.RandomExtensions
         [Test]
         public void NextItem2_ReturnsARandomSample_ForTwoItems()
         {
-            var i1 = 0;
-            var i2 = 0;
+            var all = new[] {100, 200};
+            var set = all.ToSet();
+
             for (var i = 0; i < 100; i++)
             {
-                var r = _random.NextItem(100, 200);
-                if (r == 100)
-                    i1++;
-                if (r== 200)
-                    i2++;
+                var r = _random.NextItem(all[0], all[1]);
+                Assert.IsTrue(all.Contains(r));
+                set.Remove(r);
             }
 
-            var ratio = i1 / (double)(i1 + i2);
-            Assert.IsTrue(ratio > .35 && ratio < .65);
+            Assert.AreEqual(0, set.Count);
         }
 
         [Test]
         public void NextItem2_ReturnsARandomSample()
         {
-            var t = 0;
-            var f = 0;
-
             var all = Enumerable.Range(0, 100).AsList();
             var items = all.Skip(2).ToArray();
+            var set = all.ToSet();
 
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 10000 && set.Count > 0; i++)
             {
                 var r = _random.NextItem(all[0], all[1], items);
                 Assert.IsTrue(all.Contains(r));
-
-                if (r % 2 == 0)
-                    t++;
-                else
-                {
-                    f++;
-                }
+                set.Remove(r);
             }
 
-            var ratio = t / (double)(t + f);
-            Assert.IsTrue(ratio > .35 && ratio < .65);
+            Assert.AreEqual(0, set.Count);
         }
 
     }
