@@ -13,15 +13,12 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
-using System;
-
 namespace Abacaxi
 {
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Represents an unique "edit" step in a sequence transformation. See <seealso cref="Sequence.Diff{T}"/> for more details.
+    /// Represents an unique "edit" step in a sequence transformation. See <seealso cref="SequenceExtensions.Diff{T}"/> for more details.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [PublicAPI]

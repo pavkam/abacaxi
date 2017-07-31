@@ -13,34 +13,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi
+namespace Abacaxi.Tests.ObjectExtensions
 {
-    using JetBrains.Annotations;
+    using NUnit.Framework;
 
-    /// <summary>
-    /// Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}"/> method.
-    /// </summary>
-    [PublicAPI]
-    public enum EditOperation
+    [TestFixture]
+    public sealed class IsAnyOfTests
     {
-        /// <summary>
-        /// Items from both sequences match at given location.
-        /// </summary>
-        Match = '=',
+        [Test]
+        public void IsAnyOf_ReturnsFalse_IfTheValue_NotInTheList()
+        {
+            var actual = 1.IsAnyOf(2, 3, 4);
 
-        /// <summary>
-        /// An item from a given location in the original sequence is substituted with an item in the result sequence.
-        /// </summary>
-        Substitute = '#',
+            Assert.IsFalse(actual);
+        }
 
-        /// <summary>
-        /// An item is inserted into the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Insert = '+',
+        [Test]
+        public void IsAnyOf_ReturnsTrue_IfTheValue_IsInTheList()
+        {
+            var actual = 1.IsAnyOf(2, 3, 4, 1);
 
-        /// <summary>
-        /// An item is removed from the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Delete = '-',
+            Assert.IsTrue(actual);
+        }
     }
 }

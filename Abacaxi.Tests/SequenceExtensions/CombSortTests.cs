@@ -13,34 +13,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi
+namespace Abacaxi.Tests.SequenceExtensions
 {
-    using JetBrains.Annotations;
+    using System.Collections.Generic;
+    using NUnit.Framework;
 
-    /// <summary>
-    /// Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}"/> method.
-    /// </summary>
-    [PublicAPI]
-    public enum EditOperation
+    [TestFixture]
+    public sealed class CombSortTestsBase : SortingAlgorithmTestsBase
     {
-        /// <summary>
-        /// Items from both sequences match at given location.
-        /// </summary>
-        Match = '=',
+        protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
+        {
+            array.CombSort(startIndex, length, comparer);
+        }
 
-        /// <summary>
-        /// An item from a given location in the original sequence is substituted with an item in the result sequence.
-        /// </summary>
-        Substitute = '#',
-
-        /// <summary>
-        /// An item is inserted into the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Insert = '+',
-
-        /// <summary>
-        /// An item is removed from the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Delete = '-',
+        protected override bool IsStable => false;
     }
 }

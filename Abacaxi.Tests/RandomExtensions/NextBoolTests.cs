@@ -13,34 +13,41 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi
+namespace Abacaxi.Tests.RandomExtensions
 {
-    using JetBrains.Annotations;
+    using System;
+    using NUnit.Framework;
 
-    /// <summary>
-    /// Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}"/> method.
-    /// </summary>
-    [PublicAPI]
-    public enum EditOperation
+    [TestFixture]
+    public sealed class NextBoolTests
     {
-        /// <summary>
-        /// Items from both sequences match at given location.
-        /// </summary>
-        Match = '=',
+        private readonly Random _random = new Random();
 
-        /// <summary>
-        /// An item from a given location in the original sequence is substituted with an item in the result sequence.
-        /// </summary>
-        Substitute = '#',
+        [Test]
+        public void NextBool_ThrowsException_IfRandomIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                    ((Random)null).NextBool());
+        }
 
-        /// <summary>
-        /// An item is inserted into the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Insert = '+',
+        [Test]
+        public void NextBool_ReturnsARandomSample()
+        {
+            var t = 0;
+            var f = 0;
 
-        /// <summary>
-        /// An item is removed from the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Delete = '-',
+            for (var i = 0; i < 100; i++)
+            {
+                if (_random.NextBool())
+                    t++;
+                else
+                {
+                    f++;
+                }
+            }
+
+            var ratio = t / (double) (t + f);
+            Assert.IsTrue(ratio > .4 && ratio < .6);
+        }
     }
 }

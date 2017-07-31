@@ -15,32 +15,26 @@
 
 namespace Abacaxi
 {
+    using System.Collections.Generic;
+    using Internal;
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}"/> method.
+    /// Extension method for the <see cref="string"/> data type.
     /// </summary>
     [PublicAPI]
-    public enum EditOperation
+    public static class StringExtensions
     {
         /// <summary>
-        /// Items from both sequences match at given location.
+        /// Treats a given string as a list of characters.
         /// </summary>
-        Match = '=',
-
-        /// <summary>
-        /// An item from a given location in the original sequence is substituted with an item in the result sequence.
-        /// </summary>
-        Substitute = '#',
-
-        /// <summary>
-        /// An item is inserted into the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Insert = '+',
-
-        /// <summary>
-        /// An item is removed from the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Delete = '-',
+        /// <param name="s">The string.</param>
+        /// <returns>A wrapping list.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        public static IList<char> AsList(this string s)
+        {
+            Validate.ArgumentNotNull(nameof(s), s);
+            return new StringListWrapper(s);
+        }
     }
 }

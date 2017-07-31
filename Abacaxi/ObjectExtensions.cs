@@ -18,29 +18,34 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}"/> method.
+    /// Implements a number of object-related helper methods useable across the library (and beyond!).
     /// </summary>
     [PublicAPI]
-    public enum EditOperation
+    public static class ObjectExtensions
     {
         /// <summary>
-        /// Items from both sequences match at given location.
+        /// Determines whether <paramref name="value"/> is equal to any of the given candidates.
         /// </summary>
-        Match = '=',
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="value">The value.</param>
+        /// <param name="candidates">The candidates to check against.</param>
+        /// <returns>
+        ///   <c>true</c> if the value is contained in the given candidate list; otherwise, <c>false</c>.
+        /// </returns>
+        [ContractAnnotation("candidates:null => halt")]
+        public static bool IsAnyOf<T>(this T value, [NotNull] params T[] candidates)
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var i = 0; i < candidates.Length; i++)
+            {
+                if (Equals(value, candidates[i]))
+                {
+                    return true;
+                }
+            }
 
-        /// <summary>
-        /// An item from a given location in the original sequence is substituted with an item in the result sequence.
-        /// </summary>
-        Substitute = '#',
-
-        /// <summary>
-        /// An item is inserted into the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Insert = '+',
-
-        /// <summary>
-        /// An item is removed from the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Delete = '-',
+            return false;
+        }
     }
 }

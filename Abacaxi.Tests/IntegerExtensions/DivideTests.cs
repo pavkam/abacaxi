@@ -13,34 +13,34 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi
+namespace Abacaxi.Tests.IntegerExtensions
 {
-    using JetBrains.Annotations;
+    using System;
+    using NUnit.Framework;
+    using Practice;
 
-    /// <summary>
-    /// Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}"/> method.
-    /// </summary>
-    [PublicAPI]
-    public enum EditOperation
+    [TestFixture]
+    public class DivideTests
     {
-        /// <summary>
-        /// Items from both sequences match at given location.
-        /// </summary>
-        Match = '=',
+        [Test]
+        public void Divide_ThrowsException_ForZeroDivisor()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                1.Divide(0));
+        }
 
-        /// <summary>
-        /// An item from a given location in the original sequence is substituted with an item in the result sequence.
-        /// </summary>
-        Substitute = '#',
-
-        /// <summary>
-        /// An item is inserted into the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Insert = '+',
-
-        /// <summary>
-        /// An item is removed from the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Delete = '-',
+        [TestCase(0, 1, 0)]
+        [TestCase(1, 1, 1)]
+        [TestCase(2, 1, 2)]
+        [TestCase(10, 2, 5)]
+        [TestCase(100, 3, 33)]
+        [TestCase(-10, 2, -5)]
+        [TestCase(-10, -2, 5)]
+        [TestCase(10, -2, -5)]
+        public void Divide_ReturnsCorrectResult(int x, int y, int expected)
+        {
+            var result = x.Divide(y);
+            Assert.AreEqual(expected, result);
+        }
     }
 }

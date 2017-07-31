@@ -40,7 +40,7 @@
   <ItemGroup>
     <Compile Include="Graphs\StringNeighborhoodGraph.cs" />
     <Compile Include="Graphs\ChessHorsePathGraph.cs" />
-    <Compile Include="Integer.cs" />
+    <Compile Include="IntegerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

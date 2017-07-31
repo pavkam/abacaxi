@@ -29,6 +29,7 @@ namespace Abacaxi.Tests.Containers
         public void Ctor_ThrowsException_IfCompareIsNull()
         {
             // ReSharper disable once ObjectCreationAsStatement
+            // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Throws<ArgumentNullException>(() => new ArrayEqualityComparer<int>(null));
         }
 

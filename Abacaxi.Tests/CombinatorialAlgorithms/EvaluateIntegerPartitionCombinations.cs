@@ -13,34 +13,34 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi
+namespace Abacaxi.Tests.CombinatorialAlgorithms
 {
-    using JetBrains.Annotations;
+    using NUnit.Framework;
 
-    /// <summary>
-    /// Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}"/> method.
-    /// </summary>
-    [PublicAPI]
-    public enum EditOperation
+    [TestFixture]
+    public class GetIntegerPartitionCombinationsTests
     {
-        /// <summary>
-        /// Items from both sequences match at given location.
-        /// </summary>
-        Match = '=',
+        [TestCase(0, 0)]
+        [TestCase(1, 1)]
+        [TestCase(2, 2)]
+        [TestCase(3, 3)]
+        [TestCase(4, 5)]
+        [TestCase(5, 7)]
+        public void EvaluateIntegerPartitionCombinations_ReturnsValidCount_ForPositiveNumber(int number, int expected)
+        {
+            var result = number.EvaluateIntegerPartitionCombinations();
+            Assert.AreEqual(expected, result);
+        }
 
-        /// <summary>
-        /// An item from a given location in the original sequence is substituted with an item in the result sequence.
-        /// </summary>
-        Substitute = '#',
-
-        /// <summary>
-        /// An item is inserted into the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Insert = '+',
-
-        /// <summary>
-        /// An item is removed from the original sequence at a given location to match the result sequence.
-        /// </summary>
-        Delete = '-',
+        [TestCase(-1, 1)]
+        [TestCase(-2, 2)]
+        [TestCase(-3, 3)]
+        [TestCase(-4, 5)]
+        [TestCase(-5, 7)]
+        public void EvaluateIntegerPartitionCombinations_ReturnsValidCount_ForNegativeNumber(int number, int expected)
+        {
+            var result = number.EvaluateIntegerPartitionCombinations();
+            Assert.AreEqual(expected, result);
+        }
     }
 }

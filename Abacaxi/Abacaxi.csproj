@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregator.cs" />
-    <Compile Include="Combinatorics.cs" />
+    <Compile Include="CombinatorialAlgorithms.cs" />
     <Compile Include="Containers\ArrayEqualityComparer.cs" />
     <Compile Include="Containers\Temporary.cs" />
     <Compile Include="Containers\Trie.cs" />
@@ -54,9 +54,11 @@
     <Compile Include="Graphs\LiteralWeightedGraph.cs" />
     <Compile Include="Graphs\LiteralGraph.cs" />
     <Compile Include="Internal\JetBrainsAnnotations.cs" />
-    <Compile Include="Value.cs" />
-    <Compile Include="Heuristics.cs" />
-    <Compile Include="Sequence.cs" />
+    <Compile Include="RandomExtensions.cs" />
+    <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="HeuristicalAlgorithms.cs" />
+    <Compile Include="SequenceExtensions.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="Containers\Heap.cs" />
     <Compile Include="Containers\BitSet.cs" />
     <Compile Include="Graphs\SubGraph.cs" />
@@ -68,7 +70,7 @@
     <Compile Include="Containers\SingleLinkedNode.cs" />
     <Compile Include="Internal\StringListWrapper.cs" />
     <Compile Include="Internal\Validate.cs" />
-    <Compile Include="Integer.cs" />
+    <Compile Include="IntegerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
