@@ -34,13 +34,13 @@ namespace Abacaxi.Tests
         [Test]
         public void ToSet_ThrowsException_IfSequenceIsNull2()
         {
-            Assert.Throws<ArgumentNullException>(() => ((int[])null).ToSet());
+            Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToSet());
         }
 
         [Test]
         public void ToSet_ThrowsException_IfEqualityComparerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.ToSet(null));
+            Assert.Throws<ArgumentNullException>(() => new[] {1}.ToSet(null));
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Abacaxi.Tests
         [Test]
         public void ToSet_ReturnsAValidSet2()
         {
-            var set = new[] { 1, 1, 2, 3 }.ToSet(EqualityComparer<int>.Default);
+            var set = new[] {1, 1, 2, 3}.ToSet(EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(set, 1, 2, 3);
         }
@@ -62,7 +62,7 @@ namespace Abacaxi.Tests
         [Test]
         public void ToSet_UsesTheEqualityComparer()
         {
-            var set = new[] { "a", "A", "b", "c" }.ToSet(StringComparer.OrdinalIgnoreCase);
+            var set = new[] {"a", "A", "b", "c"}.ToSet(StringComparer.OrdinalIgnoreCase);
 
             TestHelper.AssertSequence(set, "a", "b", "c");
         }
@@ -70,7 +70,7 @@ namespace Abacaxi.Tests
         [Test]
         public void AsList_ThrowsException_IfSequenceIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => ((int[])null).AsList());
+            Assert.Throws<ArgumentNullException>(() => ((int[]) null).AsList());
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace Abacaxi.Tests
         [Test]
         public void AsList_ReturnsANewList_FromACollection()
         {
-            var coll = new[] { 1, 2, 3 }.ToSet();
+            var coll = new[] {1, 2, 3}.ToSet();
             var asList = coll.AsList();
 
             TestHelper.AssertSequence(asList, 1, 2, 3);
@@ -114,7 +114,7 @@ namespace Abacaxi.Tests
         public void AsList_ReturnsANewList_ForAString()
         {
             const string s = "123";
-            var asList = s.AsList();
+            var asList = SequenceHelperMethods.AsList(s);
 
             TestHelper.AssertSequence(asList, '1', '2', '3');
         }
@@ -131,26 +131,27 @@ namespace Abacaxi.Tests
         [Test]
         public void GetItemFrequencies_ThrowsException_IfSequenceIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => ((int[])null).GetItemFrequencies(EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(
+                () => ((int[]) null).GetItemFrequencies(EqualityComparer<int>.Default));
         }
 
         [Test]
         public void GetItemFrequencies_ThrowsException_IfEqualityComparerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.ToSet(null));
+            Assert.Throws<ArgumentNullException>(() => new[] {1}.ToSet(null));
         }
 
         [Test]
         public void GetItemFrequencies_ReturnsEmptyDictionary_ForEmptySequence()
         {
-            var list = new int[] {};
+            var list = new int[] { };
             TestHelper.AssertSequence(list.GetItemFrequencies(EqualityComparer<int>.Default));
         }
 
         [Test]
         public void GetItemFrequencies_ReturnsValidItems()
         {
-            var list = new[] { 10, 1, 10, 10, 2, 2 };
+            var list = new[] {10, 1, 10, 10, 2, 2};
             var freq = list.GetItemFrequencies(EqualityComparer<int>.Default);
 
             Assert.AreEqual(3, freq.Count);
@@ -162,7 +163,7 @@ namespace Abacaxi.Tests
         [Test]
         public void GetItemFrequencies_UsesTheEqualityComparer()
         {
-            var list = new[] { "a", "A" };
+            var list = new[] {"a", "A"};
             var freq = list.GetItemFrequencies(StringComparer.OrdinalIgnoreCase);
 
             Assert.AreEqual(2, freq["a"]);
@@ -171,7 +172,7 @@ namespace Abacaxi.Tests
         [Test]
         public void AddOrUpdate_ThrowsException_IfDictIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => ((Dictionary<int, int>)null).AddOrUpdate(1, 1, i => i));
+            Assert.Throws<ArgumentNullException>(() => ((Dictionary<int, int>) null).AddOrUpdate(1, 1, i => i));
         }
 
         [Test]
@@ -225,7 +226,7 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForNullArray_AndTwoElements()
         {
-            var array = ((int[])null).Append(1, 2);
+            var array = ((int[]) null).Append(1, 2);
 
             TestHelper.AssertSequence(array, 1, 2);
         }
@@ -233,7 +234,7 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForNullArray_AndThreeElements()
         {
-            var array = ((int[])null).Append(1, 2, 3);
+            var array = ((int[]) null).Append(1, 2, 3);
 
             TestHelper.AssertSequence(array, 1, 2, 3);
         }
@@ -241,7 +242,7 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForNullArray_AndFourElements()
         {
-            var array = ((int[])null).Append(1, 2, 3, 4);
+            var array = ((int[]) null).Append(1, 2, 3, 4);
 
             TestHelper.AssertSequence(array, 1, 2, 3, 4);
         }
@@ -249,7 +250,7 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForNullArray_AndFiveElements()
         {
-            var array = ((int[])null).Append(1, 2, 3, 4, 5);
+            var array = ((int[]) null).Append(1, 2, 3, 4, 5);
 
             TestHelper.AssertSequence(array, 1, 2, 3, 4, 5);
         }
@@ -257,10 +258,11 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForNullArray_AndSixElements()
         {
-            var array = ((int[])null).Append(1, 2, 3, 4, 5, 6);
+            var array = ((int[]) null).Append(1, 2, 3, 4, 5, 6);
 
             TestHelper.AssertSequence(array, 1, 2, 3, 4, 5, 6);
         }
+
         [Test]
         public void Append_CreatesNewArray_ForFullArray_AndOneElement()
         {
@@ -272,7 +274,7 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForFullArray_AndTwoElements()
         {
-            var array = new[] { -2, -1, 0 }.Append(1, 2);
+            var array = new[] {-2, -1, 0}.Append(1, 2);
 
             TestHelper.AssertSequence(array, -2, -1, 0, 1, 2);
         }
@@ -280,7 +282,7 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForFullArray_AndThreeElements()
         {
-            var array = new[] { -2, -1, 0 }.Append(1, 2, 3);
+            var array = new[] {-2, -1, 0}.Append(1, 2, 3);
 
             TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3);
         }
@@ -288,7 +290,7 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForFullArray_AndFourElements()
         {
-            var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4);
+            var array = new[] {-2, -1, 0}.Append(1, 2, 3, 4);
 
             TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4);
         }
@@ -296,7 +298,7 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForFullArray_AndFiveElements()
         {
-            var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4, 5);
+            var array = new[] {-2, -1, 0}.Append(1, 2, 3, 4, 5);
 
             TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4, 5);
         }
@@ -304,21 +306,21 @@ namespace Abacaxi.Tests
         [Test]
         public void Append_CreatesNewArray_ForFullArray_AndSixElements()
         {
-            var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4, 5, 6);
+            var array = new[] {-2, -1, 0}.Append(1, 2, 3, 4, 5, 6);
 
             TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4, 5, 6);
         }
 
         [Test]
         [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void AsIndexedEnumerable_ThrowsException_ForNullList()
+        public void AsIndexedEnumerable_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 ((int[]) null).AsIndexedEnumerable().ToArray());
         }
 
         [Test]
-        public void AsIndexedEnumerable_ReturnsNothing_ForEmptyList()
+        public void AsIndexedEnumerable_ReturnsNothing_ForEmptySequence()
         {
             var result = new int[] { }.AsIndexedEnumerable();
 
@@ -326,14 +328,125 @@ namespace Abacaxi.Tests
         }
 
         [Test]
-        public void AsIndexedEnumerable_ReturnsTheExpectedList()
+        public void AsIndexedEnumerable_ReturnsTheExpected_ForAList()
         {
-            var result = new[] { "a", "b", "c" }.AsIndexedEnumerable();
+            var result = new List<string> {"a", "b", "c"}.AsIndexedEnumerable();
 
             TestHelper.AssertSequence(result,
                 new KeyValuePair<int, string>(0, "a"),
                 new KeyValuePair<int, string>(1, "b"),
                 new KeyValuePair<int, string>(2, "c"));
+        }
+
+        [Test]
+        public void AsIndexedEnumerable_ReturnsTheExpected_ForAnEnumerable()
+        {
+            var result = new[] {"a", "b", "c"}.Where(p => true).AsIndexedEnumerable();
+
+            TestHelper.AssertSequence(result,
+                new KeyValuePair<int, string>(0, "a"),
+                new KeyValuePair<int, string>(1, "b"),
+                new KeyValuePair<int, string>(2, "c"));
+        }
+
+        [Test]
+        public void ToList1_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList(i => i));
+        }
+
+        [Test]
+        public void ToList1_ThrowsException_ForNullSelector()
+        {
+            Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int>) null));
+        }
+
+        [Test]
+        public void ToList1_SelectsExpectedItems_ForAList()
+        {
+            var actual = new List<string> {"1", "2", "3"}.ToList(int.Parse);
+
+            TestHelper.AssertSequence(actual, 1, 2, 3);
+        }
+
+        [Test]
+        public void ToList1_SelectsExpectedItems_ForEnumerable()
+        {
+            var actual = new List<string> {"1", "2", "3"}.Where(p => true).ToList(int.Parse);
+
+            TestHelper.AssertSequence(actual, 1, 2, 3);
+        }
+
+        [Test]
+        public void ToList2_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList((n, i) => i));
+        }
+
+        [Test]
+        public void ToList2_ThrowsException_ForNullSelector()
+        {
+            Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int, int>) null));
+        }
+
+        [Test]
+        public void ToList2_SelectsExpectedItems_ForAList()
+        {
+            var actual = new List<string> {"a", "b", "c"}.ToList((s, i) => $"{i}:{s}");
+
+            TestHelper.AssertSequence(actual, "0:a", "1:b", "2:c");
+        }
+
+        [Test]
+        public void ToList2_SelectsExpectedItems_ForEnumerable()
+        {
+            var actual = new List<string> {"a", "b", "c"}.Where(p => true).ToList((s, i) => $"{i}:{s}");
+
+            TestHelper.AssertSequence(actual, "0:a", "1:b", "2:c");
+        }
+
+        [Test]
+        public void Partition_ThrowsException_ForNullSequence()
+        {
+            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+            Assert.Throws<ArgumentNullException>(() => ((int[]) null).Partition(1).ToArray());
+        }
+
+        [Test]
+        public void Partition_ThrowsException_ForSizeLessThanOne()
+        {
+            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+            Assert.Throws<ArgumentOutOfRangeException>(() => new[] {1}.Partition(0).ToArray());
+        }
+
+        [Test]
+        public void Partition_ReturnsNothing_ForEmptySequence()
+        {
+            var actual = new string[] { }.Partition(1);
+
+            TestHelper.AssertSequence(actual);
+        }
+
+        [Test]
+        public void Partition_ReturnsSingleArray_ForSizeOfOne()
+        {
+            var actual = "Alex".Partition(1);
+
+            TestHelper.AssertSequence(actual,
+                new[] {'A'},
+                new[] {'l'},
+                new[] {'e'},
+                new[] {'x'});
+        }
+
+        [Test]
+        public void Partition_ReturnsFullArraysAndASpill_IfOneExists()
+        {
+            var actual = "Alex".Partition(3);
+
+            TestHelper.AssertSequence(actual,
+                new[] {'A', 'l', 'e'},
+                new[] {'x'});
         }
     }
 }

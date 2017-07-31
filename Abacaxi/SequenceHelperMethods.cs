@@ -77,12 +77,10 @@ namespace Abacaxi
 
                 return result;
             }
-            if (sequence is IEnumerable<char> asCharSeq)
+            var seqAsString = sequence as string;
+            if (seqAsString != null)
             {
-                if (asCharSeq is string asString)
-                {
-                    return asString.ToCharArray() as IList<T>;
-                }
+                return (IList<T>)seqAsString.AsList();
             }
 
             return sequence.ToArray();
@@ -269,16 +267,144 @@ namespace Abacaxi
         /// Interprets a list as an index-value pair sequence.
         /// </summary>
         /// <typeparam name="T">The type of elements in the list.</typeparam>
-        /// <param name="list">The list to convert to a key-value sequence.</param>
+        /// <param name="sequence">The sequence to convert to an index-value sequence.</param>
         /// <returns>The resulting sequence.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="list"/> is <c>null</c>.</exception>
-        public static IEnumerable<KeyValuePair<int, T>> AsIndexedEnumerable<T>(this IList<T> list)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        public static IEnumerable<KeyValuePair<int, T>> AsIndexedEnumerable<T>(this IEnumerable<T> sequence)
         {
-            Validate.ArgumentNotNull(nameof(list), list);
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
 
-            for (var i = 0; i < list.Count; i++)
+            if (sequence is IList<T> list)
             {
-                yield return new KeyValuePair<int, T>(i, list[i]);
+                for (var i = 0; i < list.Count; i++)
+                {
+                    yield return new KeyValuePair<int, T>(i, list[i]);
+                }
+            }
+            else
+            {
+                var index = 0;
+                foreach (var item in sequence)
+                {
+                    yield return new KeyValuePair<int, T>(index++, item);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Converts a given sequence to a list by applying a <paramref name="selector"/> to each element of the <paramref name="sequence"/>.
+        /// </summary>
+        /// <typeparam name="T">/The type of elements in the sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the resulting elements.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="selector">The selector function.</param>
+        /// <returns>A new list which contains the selected values.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="sequence"/> are <c>null</c>.</exception>
+        public static List<TResult> ToList<T, TResult>(this IEnumerable<T> sequence, Func<T, TResult> selector)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(selector), selector);
+
+            List<TResult> result;
+            if (sequence is IList<T> list)
+            {
+                result = new List<TResult>(list.Count);
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var i = 0; i < list.Count; i++)
+                {
+                    result.Add(selector(list[i]));
+                }
+            }
+            else
+            {
+                result = new List<TResult>();
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                foreach(var item in sequence)
+                {
+                    result.Add(selector(item));
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts a given sequence to a list by applying a <paramref name="selector"/> to each element of the <paramref name="sequence"/>.
+        /// </summary>
+        /// <typeparam name="T">/The type of elements in the sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the resulting elements.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="selector">The selector function.</param>
+        /// <remarks>The second argument to <paramref name="selector"/> is the index of the element in the original <paramref name="sequence"/>.</remarks>
+        /// <returns>A new list which contains the selected values.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="sequence"/> are <c>null</c>.</exception>
+        public static List<TResult> ToList<T, TResult>(this IEnumerable<T> sequence, Func<T, int, TResult> selector)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(selector), selector);
+
+            List<TResult> result;
+            if (sequence is IList<T> list)
+            {
+                result = new List<TResult>(list.Count);
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var i = 0; i < list.Count; i++)
+                {
+                    result.Add(selector(list[i], i));
+                }
+            }
+            else
+            {
+                result = new List<TResult>();
+                var index = 0;
+
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                foreach (var item in sequence)
+                {
+                    result.Add(selector(item, index++));
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Partitions a specified <paramref name="sequence"/> into chunks of given <paramref name="size"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the input sequence.</typeparam>
+        /// <param name="sequence">The sequence to partition.</param>
+        /// <param name="size">The size of each partition.</param>
+        /// <returns>A sequence of partitioned items. Each partition is of the specified <paramref name="size"/> (or less, if no elements are left).</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size"/> is less than one.</exception>
+        public static IEnumerable<T[]> Partition<T>(this IEnumerable<T> sequence, int size)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentGreaterThanZero(nameof(size), size);
+
+            var temp = new T[size];
+            var count = 0;
+            foreach (var item in sequence)
+            {
+                temp[count++] = item;
+                if (count == size)
+                {
+                    count = 0;
+                    var res = new T[size];
+                    Array.Copy(temp, res, size);
+
+                    yield return res;
+                }
+            }
+
+            if (count > 0)
+            {
+                var res = new T[count];
+                Array.Copy(temp, res, count);
+
+                yield return res;
             }
         }
     }
