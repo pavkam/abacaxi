@@ -48,6 +48,8 @@
     <Compile Include="RandomExtensions\NextBoolTests.cs" />
     <Compile Include="SequenceExtensions\AddOrUpdateTests.cs" />
     <Compile Include="SequenceExtensions\AppendTests.cs" />
+    <Compile Include="SequenceExtensions\ToStringTests.cs" />
+    <Compile Include="SequenceExtensions\IsNullOrEmptyTests.cs" />
     <Compile Include="SequenceExtensions\EmptyIfNullTests.cs" />
     <Compile Include="SequenceExtensions\PartitionTests.cs" />
     <Compile Include="SequenceExtensions\ToListTests.cs" />

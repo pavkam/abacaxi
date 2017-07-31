@@ -13,30 +13,32 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.StringExtensions
+namespace Abacaxi.Tests.SequenceExtensions
 {
-    using System;
     using NUnit.Framework;
 
     [TestFixture]
-    public sealed class ReverseTests
+    public class IsNullOrEmptyTests
     {
         [Test]
-        public void Reverse_ThrowsException_IfStringIsNull()
+        public void IsNullOrEmpty_ReturnsTrue_IfSequenceIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => ((string)null).Reverse());
+            var actual = ((int[]) null).IsNullOrEmpty();
+            Assert.IsTrue(actual);
         }
 
-        [TestCase("", "")]
-        [TestCase("1", "1")]
-        [TestCase("Hello World", "dlroW olleH")]
-        [TestCase("Les Misérables", "selbarésiM seL")]
-        [TestCase("This is: 🀜", "🀜 :si sihT")]
-        public void Reverse_ReversesTheString_AsExpected(string input, string expected)
+        [Test]
+        public void IsNullOrEmpty_ReturnsTrue_IfSequenceIsEmpty()
         {
-            var actual = input.Reverse();
+            var actual = new int[]{}.IsNullOrEmpty();
+            Assert.IsTrue(actual);
+        }
 
-            Assert.AreEqual(expected, actual);
+        [Test]
+        public void IsNullOrEmpty_ReturnsFalse_IfSequenceIsNotEmpty()
+        {
+            var actual = new[] { 1 }.IsNullOrEmpty();
+            Assert.IsFalse(actual);
         }
     }
 }

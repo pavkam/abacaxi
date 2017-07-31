@@ -13,7 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 namespace Abacaxi
 {
     using System;
@@ -23,6 +22,7 @@ namespace Abacaxi
     using Internal;
     using Containers;
     using JetBrains.Annotations;
+    using System.Text;
 
     /// <summary>
     /// Class provides a large number of algorithms to use on sequences.
@@ -1754,6 +1754,86 @@ namespace Abacaxi
         public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence)
         {
             return sequence ?? Enumerable.Empty<T>();
+        }
+
+        /// <summary>
+        /// Determines whether the given <paramref name="sequence"/> is null or empty.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <returns>
+        ///   <c>true</c> if the sequence is null or empty; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> sequence)
+        {
+            return
+                sequence == null ||
+                !sequence.Any();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="string" /> that represents this sequence of elements.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the result of the selector.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="selector">The result selector.</param>
+        /// <param name="separator">The separator used between selected items.</param>
+        /// <returns>
+        /// A <see cref="string"/> that contains all the elements of the <paramref name="sequence"/>.
+        /// </returns>
+        public static string ToString<T, TResult>(
+            [NotNull] this IEnumerable<T> sequence, 
+            [NotNull] Func<T, TResult> selector,
+            [NotNull] string separator)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(selector), selector);
+            Validate.ArgumentNotNull(nameof(separator), separator);
+
+            var sb = new StringBuilder();
+            foreach (var item in sequence)
+            {
+                var selected = selector(item);
+                if (sb.Length > 0)
+                {
+                    sb.Append(separator);
+                }
+
+                sb.Append(selected);
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="string" /> that represents this sequence of elements.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="separator">The separator used between selected items.</param>
+        /// <returns>
+        /// A <see cref="string"/> that contains all the elements of the <paramref name="sequence"/>.
+        /// </returns>
+        public static string ToString<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] string separator)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(separator), separator);
+
+            var sb = new StringBuilder();
+            foreach (var item in sequence)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Append(separator);
+                }
+
+                sb.Append(item);
+            }
+
+            return sb.ToString();
         }
     }
 }
