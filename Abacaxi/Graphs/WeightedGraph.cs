@@ -18,11 +18,13 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using System.Diagnostics;
     using Containers;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Describes a weighted graph class.
     /// </summary>
     /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
+    [PublicAPI]
     public abstract class WeightedGraph<TVertex> : Graph<TVertex>
     {
         private sealed class PathNode

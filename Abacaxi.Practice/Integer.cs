@@ -17,6 +17,7 @@ namespace Abacaxi.Practice
 {
     using System;
     using System.Collections.Generic;
+    using Internal;
 
     /// <summary>
     /// Class that only contains practice algorithms related to integers.

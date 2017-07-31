@@ -17,12 +17,15 @@ namespace Abacaxi.Graphs
 {
     using System;
     using System.Collections.Generic;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Implements a "connected component" of a graph, basically a sub-graph. This implementation uses the original graph
     /// to obtain the edges but only reports the edges which stay within the given set of vertices.
     /// </summary>
     /// <typeparam name="TVertex">The type of the vertex.</typeparam>
+    [PublicAPI]
     public class SubGraph<TVertex> : Graph<TVertex>
     {
         private readonly Graph<TVertex> _graph;

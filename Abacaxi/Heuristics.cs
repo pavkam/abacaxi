@@ -19,10 +19,13 @@ namespace Abacaxi
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Defines a set of algorithms useful during heuristical search for solutions.
     /// </summary>
+    [PublicAPI]
     internal static class Heuristics
     {
         /// <summary>

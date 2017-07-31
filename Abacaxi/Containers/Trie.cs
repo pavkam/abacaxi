@@ -19,12 +19,15 @@ namespace Abacaxi.Containers
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Class implements a "trie" data structure, perfectly suited for fast string matching.
     /// </summary>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     /// <typeparam name="TElement">The element of array keys.</typeparam>
+    [PublicAPI]
     public sealed class Trie<TElement, TValue> : ICollection<KeyValuePair<TElement[], TValue>>, IReadOnlyCollection<KeyValuePair<TElement[], TValue>>
     {
         private class Node

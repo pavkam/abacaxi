@@ -15,25 +15,37 @@
 
 namespace Abacaxi
 {
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     /// <summary>
-    /// Implements a number of string-related helper methods useable across the library (and beyond!).
+    /// Implements a number of object-related helper methods useable across the library (and beyond!).
     /// </summary>
-    public static class StringHelperMethods
+    [PublicAPI]
+    public static class Value
     {
         /// <summary>
-        /// Treats a given string as a list of characters.
+        /// Determines whether <paramref name="value"/> is equal to any of the given candidates.
         /// </summary>
-        /// <param name="s">The string.</param>
-        /// <returns>A wrapping list.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
-        [SuppressMessage("ReSharper", "ReturnTypeCanBeEnumerable.Global")]
-        public static IList<char> AsList(this string s)
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="value">The value.</param>
+        /// <param name="candidates">The candidates to check against.</param>
+        /// <returns>
+        ///   <c>true</c> if the value is contained in the given candidate list; otherwise, <c>false</c>.
+        /// </returns>
+        [ContractAnnotation("candidates:null => halt")]
+        public static bool IsAnyOf<T>(this T value, [NotNull] params T[] candidates)
         {
-            Validate.ArgumentNotNull(nameof(s), s);
-            return new StringListWrapper(s);
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var i = 0; i < candidates.Length; i++)
+            {
+                if (Equals(value, candidates[i]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

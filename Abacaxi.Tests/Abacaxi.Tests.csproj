@@ -67,8 +67,8 @@
     <Compile Include="Graph\CellTests.cs" />
     <Compile Include="Integer\Integer.Tests.EnumerateFibonacciNumbers.cs" />
     <Compile Include="Integer\Integer.Tests.Divide.cs" />
-    <Compile Include="StringHelperMethodsTests.cs" />
-    <Compile Include="SequenceHelperMethodsTests.cs" />
+    <Compile Include="Sequence\EditTests.cs" />
+    <Compile Include="Sequence\Sequence.Tests.cs" />
     <Compile Include="Sequence\Sequence.Tests.ContainsSubsetWithAggregatedValue.cs" />
     <Compile Include="Sequence\Sequence.Tests.GetLongestCommonSubSequence.cs" />
     <Compile Include="Sequence\Sequence.Tests.Diff.cs" />
@@ -82,7 +82,7 @@
     <Compile Include="Combinatorics\Combinatorics.Tests.FindSubsetsWithEqualAggregateValue.cs" />
     <Compile Include="Sequence\Sequence.Tests.HeapSort.cs" />
     <Compile Include="Sequence\Sequence.Tests.Interleave.cs" />
-    <Compile Include="Sequence\Sequence.Tests,RandomSample.cs" />
+    <Compile Include="Sequence\Sequence.Tests.RandomSample.cs" />
     <Compile Include="Sequence\Sequence.Tests.ShellSort.cs" />
     <Compile Include="Sequence\Sequence.Tests.QuickSort.cs" />
     <Compile Include="Sequence\Sequence.Tests.GnomeSort.cs" />
@@ -103,6 +103,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Integer\Integer.Tests.Zip.cs" />
     <Compile Include="Sequence\Sequence.Tests.Repeat.cs" />
+    <Compile Include="Value\Value.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

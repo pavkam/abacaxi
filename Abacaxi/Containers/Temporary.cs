@@ -15,14 +15,15 @@
 
 namespace Abacaxi.Containers
 {
-    using System.Diagnostics.CodeAnalysis;
     using System;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Class that hold a temporary value for a give resource.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    [PublicAPI]
     public sealed class Temporary<T>
     {
         private readonly object _lock = new object();

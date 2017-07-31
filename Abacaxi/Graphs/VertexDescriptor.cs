@@ -15,9 +15,13 @@
 
 namespace Abacaxi.Graphs
 {
+    using Internal;
+    using JetBrains.Annotations;
+
     /// <summary>
     /// Class used to describe a vertex in the context of a graph.
     /// </summary>
+    [PublicAPI]
     public class VertexDescriptor<TVertex>
     {
         /// <summary>

@@ -15,9 +15,12 @@
 
 namespace Abacaxi.Graphs
 {
+    using JetBrains.Annotations;
+
     /// <summary>
     /// Defines a 2-D coordinate to be used when manipulating matrices.
     /// </summary>
+    [PublicAPI]
     public struct Cell
     {
         /// <summary>

@@ -17,7 +17,13 @@ namespace Abacaxi
 {
     using System;
     using System.Collections.Generic;
+    using Internal;
+    using JetBrains.Annotations;
 
+    /// <summary>
+    /// Helper class that defines a number of methods useful in integer/algorithmical manipulations.
+    /// </summary>
+    [PublicAPI]
     public static class Integer
     {
         private static int GetIterationLimit(int number)

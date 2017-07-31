@@ -20,19 +20,23 @@ namespace Abacaxi.Containers
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Class implements the heap data structure, most commonly known as the "priority queue".
     /// </summary>
+    [PublicAPI]
     public sealed class Heap<T> : ICollection<T>
     {
         private const int DefaultArraySize = 32;
 
+        [NotNull]
         private readonly IComparer<T> _comparer;
         private T[] _array;
         private int _ver;
 
-        private void SiftDown(IList<T> array, int length, int pi)
+        private void SiftDown([NotNull] IList<T> array, int length, int pi)
         {
             Debug.Assert(length <= array.Count);
             Debug.Assert(pi >= 0 && pi < length);
@@ -66,7 +70,7 @@ namespace Abacaxi.Containers
 
         }
 
-        private void SiftUp(IList<T> array, int ci)
+        private void SiftUp([NotNull] IList<T> array, int ci)
         {
             while (ci > 0)
             {
@@ -86,7 +90,7 @@ namespace Abacaxi.Containers
             }
         }
 
-        private void BuildHeap(IList<T> array, int length)
+        private void BuildHeap([NotNull] IList<T> array, int length)
         {
             Debug.Assert(length <= array.Count);
              
@@ -101,7 +105,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="comparer">The comparer.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer"/> is <c>null</c>.</exception>
-        public Heap(IComparer<T> comparer)
+        public Heap([NotNull] IComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
@@ -115,7 +119,7 @@ namespace Abacaxi.Containers
         /// <param name="collection">The collection to add to the container..</param>
         /// <param name="comparer">The comparer.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer"/> or <paramref name="collection"/> is <c>null</c>.</exception>
-        public Heap(IEnumerable<T> collection, IComparer<T> comparer)
+        public Heap([NotNull] IEnumerable<T> collection, [NotNull] IComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(collection), collection);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -214,7 +218,7 @@ namespace Abacaxi.Containers
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="array"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if there is not enough space in the <paramref name="array"/>.</exception>
-        public void CopyTo(T[] array, int arrayIndex)
+        public void CopyTo([NotNull] T[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
@@ -248,6 +252,7 @@ namespace Abacaxi.Containers
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
+        [NotNull]
         public IEnumerator<T> GetEnumerator()
         {
             if (Count == 0)
@@ -346,6 +351,7 @@ namespace Abacaxi.Containers
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
+        [NotNull]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

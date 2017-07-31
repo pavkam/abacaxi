@@ -13,17 +13,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
-namespace Abacaxi.Tests
+namespace Abacaxi.Tests.Sequence
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public sealed class SequenceHelperMethodsTests
+    public sealed class SequenceTests
     {
         [Test]
         public void ToSet_ThrowsException_IfSequenceIsNull1()
@@ -114,7 +113,7 @@ namespace Abacaxi.Tests
         public void AsList_ReturnsANewList_ForAString()
         {
             const string s = "123";
-            var asList = SequenceHelperMethods.AsList(s);
+            var asList = ((IEnumerable<char>)s).AsList();
 
             TestHelper.AssertSequence(asList, '1', '2', '3');
         }
@@ -447,6 +446,125 @@ namespace Abacaxi.Tests
             TestHelper.AssertSequence(actual,
                 new[] {'A', 'l', 'e'},
                 new[] {'x'});
+        }
+
+        [Test]
+        public void AsList_ThrowsException_IfStringIsNull1()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((string)null).AsList());
+        }
+
+        [TestCase("", "")]
+        [TestCase("a", "a")]
+        [TestCase("abc", "a,b,c")]
+        public void AsList_GetEnumerator_ReturnsTheExpectedSequence(string s, string expected)
+        {
+            var actual = string.Join(",", s.AsList());
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void AsList_ThenAdd_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list.Add('a'));
+        }
+
+        [Test]
+        public void AsList_ThenClear_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list.Clear());
+        }
+
+        [Test]
+        public void AsList_ThenRemove_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list.Remove('t'));
+        }
+
+        [Test]
+        public void AsList_ThenInsert_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list.Insert(0, 't'));
+        }
+
+        [Test]
+        public void AsList_ThenRemoveAt_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list.RemoveAt(0));
+        }
+
+        [Test]
+        public void AsList_ThenIndexer_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list[0] = 'a');
+        }
+
+        [Test]
+        public void AsList_ThenContains_ReturnsExpectedIndex()
+        {
+            var list = "test".AsList();
+            Assert.AreEqual(1, list.IndexOf('e'));
+        }
+
+        [Test]
+        public void AsList_ThenCount_ReturnsExpectedLength()
+        {
+            var list = "test".AsList();
+            Assert.AreEqual(4, list.Count);
+        }
+
+        [Test]
+        public void AsList_ThenIsReadOnly_ReturnsTrue()
+        {
+            var list = "test".AsList();
+            Assert.IsTrue(list.IsReadOnly);
+        }
+
+        [Test]
+        public void AsList_ThenIndexOf_ReturnsTheExpectedIndex()
+        {
+            var list = "test".AsList();
+            Assert.AreEqual(2, list.IndexOf('s'));
+        }
+
+        [Test]
+        public void AsList_ThenThis_ReturnsTheExpectedElement()
+        {
+            var list = "test".AsList();
+            Assert.AreEqual('s', list[2]);
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void AsList_ThenCopyTo_ThrowsException_IfArrayIsNull()
+        {
+            var list = "test".AsList();
+            Assert.Throws<ArgumentNullException>(() => list.CopyTo(null, 0));
+        }
+
+        [Test]
+        public void AsList_ThenCopyTo_ThrowsException_IfArrayIsTooSmall()
+        {
+            var list = "test".AsList();
+            var a = new char[3];
+            Assert.Throws<ArgumentOutOfRangeException>(() => list.CopyTo(a, 0));
+        }
+
+        [Test]
+        public void AsList_ThenCopyTo_CopiesTheElements()
+        {
+            var list = "test".AsList();
+            var a = new char[4];
+            list.CopyTo(a, 0);
+
+            var actual = string.Join(",", a);
+            Assert.AreEqual("t,e,s,t", actual);
         }
     }
 }

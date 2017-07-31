@@ -20,12 +20,16 @@ namespace Abacaxi.Containers
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Class implements an integer set internally represented by a bit array. Provides O(1) access times.
     /// </summary>
+    [PublicAPI]
     public sealed class BitSet : ISet<int>
     {
+        [NotNull]
         private const int BitsPerChunk = sizeof(int) * 8;
 
         private int[] _chunks;
@@ -55,7 +59,7 @@ namespace Abacaxi.Containers
             _max = max;
 
             var bitCount = Math.Abs(max - min) + 1;
-            var chunkCount = (bitCount / BitsPerChunk) + ((bitCount % BitsPerChunk) > 0 ? 1 : 0);
+            var chunkCount = bitCount / BitsPerChunk + (bitCount % BitsPerChunk > 0 ? 1 : 0);
             _chunks = new int[chunkCount]; 
         }
 
@@ -87,8 +91,7 @@ namespace Abacaxi.Containers
             Validate.ArgumentGreaterThanOrEqualTo(nameof(item), item, _min);
             Validate.ArgumentLessThanOrEqualTo(nameof(item), item, _max);
 
-            int chunk, mask;
-            LocateItem(item, out chunk, out mask);
+            LocateItem(item, out int chunk, out int mask);
 
             if ((_chunks[chunk] & mask) != 0)
                 return false;
@@ -104,7 +107,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="other">The collection of items to remove from the set.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public void ExceptWith(IEnumerable<int> other)
+        public void ExceptWith([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
@@ -120,7 +123,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="other">The collection to compare to the current set.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public void IntersectWith(IEnumerable<int> other)
+        public void IntersectWith([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
@@ -130,9 +133,7 @@ namespace Abacaxi.Containers
             {
                 if (Contains(item))
                 {
-                    int mask;
-                    int chunk;
-                    LocateItem(item, out chunk, out mask);
+                    LocateItem(item, out int chunk, out int mask);
 
                     inner[chunk] |= mask;
                     count++;
@@ -152,7 +153,7 @@ namespace Abacaxi.Containers
         /// true if the current set is a proper subset of <paramref name="other" />; otherwise, false.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public bool IsProperSubsetOf(IEnumerable<int> other)
+        public bool IsProperSubsetOf([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
@@ -170,6 +171,7 @@ namespace Abacaxi.Containers
                 }
             }
 
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var i = 0; i < _chunks.Length; i++)
             {
                 if (_chunks[i] != inner._chunks[i])
@@ -189,7 +191,7 @@ namespace Abacaxi.Containers
         /// true if the current set is a proper superset of <paramref name="other" />; otherwise, false.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public bool IsProperSupersetOf(IEnumerable<int> other)
+        public bool IsProperSupersetOf([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
@@ -215,7 +217,7 @@ namespace Abacaxi.Containers
         /// true if the current set is a subset of <paramref name="other" />; otherwise, false.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public bool IsSubsetOf(IEnumerable<int> other)
+        public bool IsSubsetOf([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
@@ -228,6 +230,7 @@ namespace Abacaxi.Containers
                 }
             }
 
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var i = 0; i < _chunks.Length; i++)
             {
                 if (_chunks[i] != inner._chunks[i])
@@ -247,19 +250,11 @@ namespace Abacaxi.Containers
         /// true if the current set is a superset of <paramref name="other" />; otherwise, false.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public bool IsSupersetOf(IEnumerable<int> other)
+        public bool IsSupersetOf([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
-            foreach (var item in other)
-            {
-                if (!Contains(item))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return other.All(Contains);
         }
 
         /// <summary>
@@ -270,7 +265,7 @@ namespace Abacaxi.Containers
         /// true if the current set and <paramref name="other" /> share at least one common element; otherwise, false.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public bool Overlaps(IEnumerable<int> other)
+        public bool Overlaps([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
@@ -296,7 +291,7 @@ namespace Abacaxi.Containers
         /// true if the current set is equal to <paramref name="other" />; otherwise, false.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public bool SetEquals(IEnumerable<int> other)
+        public bool SetEquals([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
@@ -307,8 +302,7 @@ namespace Abacaxi.Containers
             {
                 if (Contains(item))
                 {
-                    int chunk, mask;
-                    LocateItem(item, out chunk, out mask);
+                    LocateItem(item, out int chunk, out int mask);
 
                     copy[chunk] &= ~mask;
                 }
@@ -326,7 +320,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="other">The collection to compare to the current set.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public void SymmetricExceptWith(IEnumerable<int> other)
+        public void SymmetricExceptWith([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
@@ -360,7 +354,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="other">The collection to compare to the current set.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is <c>null</c>.</exception>
-        public void UnionWith(IEnumerable<int> other)
+        public void UnionWith([NotNull] IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
 
@@ -404,8 +398,7 @@ namespace Abacaxi.Containers
         {
             if (item >= _min && item <= _max)
             {
-                int chunk, mask;
-                LocateItem(item, out chunk, out mask);
+                LocateItem(item, out int chunk, out int mask);
 
                 return (_chunks[chunk] & mask) != 0;
             }
@@ -420,7 +413,7 @@ namespace Abacaxi.Containers
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="array"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the destination <paramref name="array"/> does not have enough space to hold the contents of the set.</exception>
-        public void CopyTo(int[] array, int arrayIndex)
+        public void CopyTo([NotNull] int[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
@@ -455,9 +448,7 @@ namespace Abacaxi.Containers
         {
             if (item >= _min && item <= _max)
             {
-                int chunk;
-                int mask;
-                LocateItem(item, out chunk, out mask);
+                LocateItem(item, out int chunk, out int mask);
 
                 if ((_chunks[chunk] & mask) != 0)
                 {

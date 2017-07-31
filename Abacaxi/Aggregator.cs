@@ -15,6 +15,8 @@
 
 namespace Abacaxi
 {
+    using JetBrains.Annotations;
+
     /// <summary>
     /// Defines a function that aggregates two values of a given type.
     /// </summary>
@@ -22,5 +24,6 @@ namespace Abacaxi
     /// <param name="a">The first value.</param>
     /// <param name="b">The second value.</param>
     /// <returns>The aggregated value.</returns>
+    [PublicAPI]
     public delegate T Aggregator<T>(T a, T b);
 }

@@ -18,6 +18,7 @@ namespace Abacaxi.Practice.Graphs
     using System;
     using System.Collections.Generic;
     using Abacaxi.Graphs;
+    using Internal;
 
     /// <summary>
     /// A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped movements).

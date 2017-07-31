@@ -15,11 +15,32 @@
 
 namespace Abacaxi
 {
+    using JetBrains.Annotations;
+
+    /// <summary>
+    /// Defines the allowed set of edit operations used by the <seealso cref="Sequence.Diff{T}"/> method.
+    /// </summary>
+    [PublicAPI]
     public enum EditOperation
     {
-        Match,
-        Substitute,
-        Insert,
-        Delete,
+        /// <summary>
+        /// Items from both sequences match at given location.
+        /// </summary>
+        Match = '=',
+
+        /// <summary>
+        /// An item from a given location in the original sequence is substituted with an item in the result sequence.
+        /// </summary>
+        Substitute = '#',
+
+        /// <summary>
+        /// An item is inserted into the original sequence at a given location to match the result sequence.
+        /// </summary>
+        Insert = '+',
+
+        /// <summary>
+        /// An item is removed from the original sequence at a given location to match the result sequence.
+        /// </summary>
+        Delete = '-',
     }
 }

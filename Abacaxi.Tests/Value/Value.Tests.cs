@@ -13,26 +13,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Graphs
+namespace Abacaxi.Tests.Value
 {
-    /// <summary>
-    /// Defines the Eulerian classification of a graph
-    /// </summary>
-    public enum EulerianClassification
+    using NUnit.Framework;
+
+    [TestFixture]
+    public sealed class ValueTests
     {
-        /// <summary>
-        /// The graph is non-eulerian. There is no cycle or path.
-        /// </summary>
-        NonEulerian,
+        [Test]
+        public void IsAnyOf_ReturnsFalse_IfTheValue_NotInTheList()
+        {
+            var actual = 1.IsAnyOf(2, 3, 4);
 
-        /// <summary>
-        /// The graph is semi-eulerian, it contains a path but not a cycle.
-        /// </summary>
-        SemiEulerian,
+            Assert.IsFalse(actual);
+        }
 
-        /// <summary>
-        /// The graph contains an eulerian cycle.
-        /// </summary>
-        EulerianCycle
+        [Test]
+        public void IsAnyOf_ReturnsTrue_IfTheValue_IsInTheList()
+        {
+            var actual = 1.IsAnyOf(2, 3, 4, 1);
+
+            Assert.IsTrue(actual);
+        }
     }
 }

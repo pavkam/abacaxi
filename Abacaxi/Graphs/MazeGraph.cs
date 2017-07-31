@@ -17,10 +17,13 @@ namespace Abacaxi.Graphs
 {
     using System;
     using System.Collections.Generic;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// A maze-structured graph.
     /// </summary>
+    [PublicAPI]
     public sealed class MazeGraph : Graph<Cell>
     {
         private readonly bool[,] _matrix;

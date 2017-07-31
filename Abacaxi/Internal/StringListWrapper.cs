@@ -13,39 +13,44 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi
+namespace Abacaxi.Internal
 {
     using System;
     using System.Collections;
     using System.Diagnostics;
     using System.Collections.Generic;
+    using JetBrains.Annotations;
 
     internal sealed class StringListWrapper : IList<char>
     {
         private readonly string _s;
 
-        public StringListWrapper(string s)
+        public StringListWrapper([NotNull] string s)
         {
             Debug.Assert(s != null);
 
             _s = s;
         }
 
+        [NotNull]
         public IEnumerator<char> GetEnumerator()
         {
             return ((IEnumerable<char>) _s).GetEnumerator();
         }
 
+        [NotNull]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable<char>)_s).GetEnumerator();
         }
 
+        [ContractAnnotation("=> halt")]
         public void Add(char item)
         {
             throw new NotSupportedException();
         }
 
+        [ContractAnnotation("=> halt")]
         public void Clear()
         {
             throw new NotSupportedException();
@@ -56,11 +61,12 @@ namespace Abacaxi
             return _s.Contains(item.ToString());
         }
 
-        public void CopyTo(char[] array, int arrayIndex)
+        public void CopyTo([NotNull] char[] array, int arrayIndex)
         {
             _s.CopyTo(0, array, arrayIndex, _s.Length);
         }
 
+        [ContractAnnotation("=> halt")]
         public bool Remove(char item)
         {
             throw new NotSupportedException();
@@ -75,11 +81,13 @@ namespace Abacaxi
             return _s.IndexOf(item);
         }
 
+        [ContractAnnotation("=> halt")]
         public void Insert(int index, char item)
         {
             throw new NotSupportedException();
         }
 
+        [ContractAnnotation("=> halt")]
         public void RemoveAt(int index)
         {
             throw new NotSupportedException();
@@ -88,6 +96,7 @@ namespace Abacaxi
         public char this[int index]
         {
             get => _s[index];
+            [ContractAnnotation("=> halt")]
             set => throw new NotSupportedException();
         }
     }

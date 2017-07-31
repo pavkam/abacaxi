@@ -19,11 +19,14 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// A graph used mostly for designing algorithms. Each vertex is a digit or letter and each vertex can be connected
     /// in undirected or directed fashion to other vertices.
     /// </summary>
+    [PublicAPI]
     public sealed class LiteralGraph : Graph<char>
     {
         private readonly Dictionary<char, IList<char>> _vertices;

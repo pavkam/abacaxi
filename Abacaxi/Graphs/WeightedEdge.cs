@@ -15,10 +15,13 @@
 
 namespace Abacaxi.Graphs
 {
+    using JetBrains.Annotations;
+
     /// <summary>
     /// Defines a weighted edge connecting two graph vertices.
     /// <typeparam name="TVertex">The type of the vertex.</typeparam>
     /// </summary>
+    [PublicAPI]
     public class WeightedEdge<TVertex> : Edge<TVertex>
     {
         /// <summary>

@@ -13,8 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Graphs
 {
     using System;
@@ -22,13 +20,14 @@ namespace Abacaxi.Graphs
     using System.Diagnostics;
     using System.Linq;
     using System.Collections.Generic;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Generic graph class. This class serves as an abstract base for all concrete implementations.
     /// </summary>
     /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
-    [SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global")]
-    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+    [PublicAPI]
     public abstract class Graph<TVertex> : IEnumerable<TVertex>
     {
         private sealed class BfsNode : IBfsNode

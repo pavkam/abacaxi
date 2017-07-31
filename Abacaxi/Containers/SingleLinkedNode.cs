@@ -17,11 +17,14 @@ namespace Abacaxi.Containers
 {
     using System.Collections;
     using System.Collections.Generic;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Represents a linked list node.
     /// </summary>
     /// <typeparam name="T">The type of the value stored in the node.</typeparam>
+    [PublicAPI]
     public sealed class SingleLinkedNode<T> : IEnumerable<SingleLinkedNode<T>>
     {
         /// <summary>

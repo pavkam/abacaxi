@@ -19,11 +19,14 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// A graph class used primarily for designing algorithms. Each vertex is a digit or letter and can be connected with other
     /// vertices in directed or undirected fashion.
     /// </summary>
+    [PublicAPI]
     public sealed class LiteralWeightedGraph : WeightedGraph<char>
     {
         private readonly Dictionary<char, IList<KeyValuePair<char, double>>> _vertices;

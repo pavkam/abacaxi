@@ -19,10 +19,13 @@ namespace Abacaxi
     using System.Collections.Generic;
     using System.Linq;
     using System.Diagnostics;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Class implements multiple algorithms that deals with combinatorial problems.
     /// </summary>
+    [PublicAPI]
     public static class Combinatorics
     {
         private struct Step

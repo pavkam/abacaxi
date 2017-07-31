@@ -113,7 +113,7 @@ namespace Abacaxi.Tests.Combinatorics
 
         [TestCase(4, 100, 10, 0.01)]
         [TestCase(32, 100, 1000, 0.015)]
-        [TestCase(128, 100, 7000, 0.01)]
+        [TestCase(128, 100, 7000, 0.015)]
         [TestCase(1024, 50, 90000, 0.01)]
         [TestCase(4096, 25, 400000, 0.01)]
         [TestCase(4, 100, 10, 0.10)]

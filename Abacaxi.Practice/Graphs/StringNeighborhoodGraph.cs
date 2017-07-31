@@ -15,11 +15,11 @@
 
 namespace Abacaxi.Practice.Graphs
 {
-
     using System;
     using System.Collections.Generic;
     using Abacaxi.Graphs;
     using Containers;
+    using Internal;
 
     /// <summary>
     /// A graph composed by a number of strings (representing vertices) and connected by edges signifying potential one-letter transformations.

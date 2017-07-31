@@ -13,17 +13,21 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Containers
+ namespace Abacaxi.Containers
 {
     using System.Linq;
     using System.Collections.Generic;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// A class that provides array equality comparison (based on the array's elements).
     /// </summary>
     /// <typeparam name="TElement">The type of the elements in the arrays.</typeparam>
+    [PublicAPI]
     public sealed class ArrayEqualityComparer<TElement> : IEqualityComparer<TElement[]>
     {
+        [NotNull]
         private readonly IEqualityComparer<TElement> _elementComparer;
 
         /// <summary>
@@ -31,7 +35,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="elementComparer">The element comparer.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="elementComparer"/> is <c>null</c>.</exception>
-        public ArrayEqualityComparer(IEqualityComparer<TElement> elementComparer)
+        public ArrayEqualityComparer([NotNull] IEqualityComparer<TElement> elementComparer)
         {
             Validate.ArgumentNotNull(nameof(elementComparer), elementComparer);
 
@@ -44,7 +48,7 @@ namespace Abacaxi.Containers
         /// <param name="array1">The first array.</param>
         /// <param name="array2">The second array.</param>
         /// <returns><c>true</c> if the array contain the same elements; otherwise, <c>false</c>.</returns>
-        public bool Equals(TElement[] array1, TElement[] array2)
+        public bool Equals([CanBeNull] TElement[] array1, [CanBeNull] TElement[] array2)
         {
             if (array1 == null || array2 == null)
             {
@@ -65,7 +69,7 @@ namespace Abacaxi.Containers
         /// <returns>
         /// A hash code for the array instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public int GetHashCode(TElement[] array)
+        public int GetHashCode([CanBeNull] TElement[] array)
         {
             if (array == null)
             {
@@ -88,6 +92,7 @@ namespace Abacaxi.Containers
         /// <value>
         /// The default equality comparer.
         /// </value>
+        [NotNull]
         public static IEqualityComparer<TElement[]> Default { get; } = new ArrayEqualityComparer<TElement>(EqualityComparer<TElement>.Default);
     }
 }

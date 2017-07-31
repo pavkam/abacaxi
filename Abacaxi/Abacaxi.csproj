@@ -51,11 +51,10 @@
     <Compile Include="Edit.cs" />
     <Compile Include="Graphs\VertexDescriptor.cs" />
     <Compile Include="Graphs\Edge.cs" />
-    <Compile Include="Graphs\EulerianClassification.cs" />
     <Compile Include="Graphs\LiteralWeightedGraph.cs" />
     <Compile Include="Graphs\LiteralGraph.cs" />
-    <Compile Include="StringHelperMethods.cs" />
-    <Compile Include="SequenceHelperMethods.cs" />
+    <Compile Include="Internal\JetBrainsAnnotations.cs" />
+    <Compile Include="Value.cs" />
     <Compile Include="Heuristics.cs" />
     <Compile Include="Sequence.cs" />
     <Compile Include="Containers\Heap.cs" />
@@ -67,11 +66,12 @@
     <Compile Include="Graphs\MazeGraph.cs" />
     <Compile Include="Graphs\Graph.cs" />
     <Compile Include="Containers\SingleLinkedNode.cs" />
-    <Compile Include="StringListWrapper.cs" />
-    <Compile Include="Validate.cs" />
+    <Compile Include="Internal\StringListWrapper.cs" />
+    <Compile Include="Internal\Validate.cs" />
     <Compile Include="Integer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
