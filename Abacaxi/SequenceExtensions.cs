@@ -1602,6 +1602,7 @@ namespace Abacaxi
         /// <param name="sequence">The sequence to convert to an index-value sequence.</param>
         /// <returns>The resulting sequence.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        [NotNull]
         public static IEnumerable<KeyValuePair<int, T>> AsIndexedEnumerable<T>(this IEnumerable<T> sequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -1632,6 +1633,7 @@ namespace Abacaxi
         /// <param name="selector">The selector function.</param>
         /// <returns>A new list which contains the selected values.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="sequence"/> are <c>null</c>.</exception>
+        [NotNull]
         public static List<TResult> ToList<T, TResult>(this IEnumerable<T> sequence, Func<T, TResult> selector)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -1671,6 +1673,7 @@ namespace Abacaxi
         /// <remarks>The second argument to <paramref name="selector"/> is the index of the element in the original <paramref name="sequence"/>.</remarks>
         /// <returns>A new list which contains the selected values.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="sequence"/> are <c>null</c>.</exception>
+        [NotNull]
         public static List<TResult> ToList<T, TResult>(this IEnumerable<T> sequence, Func<T, int, TResult> selector)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -1711,6 +1714,7 @@ namespace Abacaxi
         /// <returns>A sequence of partitioned items. Each partition is of the specified <paramref name="size"/> (or less, if no elements are left).</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size"/> is less than one.</exception>
+        [NotNull]
         public static IEnumerable<T[]> Partition<T>(this IEnumerable<T> sequence, int size)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -1738,6 +1742,18 @@ namespace Abacaxi
 
                 yield return res;
             }
+        }
+
+        /// <summary>
+        /// Returns either the given <paramref name="sequence"/> or an empty one if <paramref name="sequence"/> is <c>null</c>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the given sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <returns>The original sequence or an empty one.</returns>
+        [NotNull]
+        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence)
+        {
+            return sequence ?? Enumerable.Empty<T>();
         }
     }
 }
