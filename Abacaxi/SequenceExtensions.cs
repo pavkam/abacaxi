@@ -1835,5 +1835,111 @@ namespace Abacaxi
 
             return sb.ToString();
         }
+
+        [CanBeNull]
+        public static T Min<T, TKey>(
+            [NotNull] this IEnumerable<T> sequence, 
+            [NotNull] Func<T, TKey> selector,
+            [NotNull] IComparer<TKey> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(selector), selector);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var item = default(T);
+            using(var enumerator = sequence.GetEnumerator())
+            {
+                TKey min;
+                if (enumerator.MoveNext())
+                {
+                    item = enumerator.Current;
+                    min = selector(item);
+                }
+                else
+                {
+                    if (item == null)
+                    {
+                        // ReSharper disable once ExpressionIsAlwaysNull
+                        return item;
+                    }
+                    throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
+                }
+
+                while (enumerator.MoveNext())
+                {
+                    var nextItem = enumerator.Current;
+                    var nextMin = selector(nextItem);
+
+                    if (nextMin != null && (min == null || comparer.Compare(min, nextMin) > 0))
+                    {
+                        min = nextMin;
+                        item = nextItem;
+                    }
+                }
+            }
+
+            return item;
+        }
+
+        [CanBeNull]
+        public static T Min<T, TKey>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] Func<T, TKey> selector)
+        {
+            return Min(sequence, selector, Comparer<TKey>.Default);
+        }
+
+        [CanBeNull]
+        public static T Max<T, TKey>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] Func<T, TKey> selector,
+            [NotNull] IComparer<TKey> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(selector), selector);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var item = default(T);
+            using (var enumerator = sequence.GetEnumerator())
+            {
+                TKey min;
+                if (enumerator.MoveNext())
+                {
+                    item = enumerator.Current;
+                    min = selector(item);
+                }
+                else
+                {
+                    if (item == null)
+                    {
+                        // ReSharper disable once ExpressionIsAlwaysNull
+                        return item;
+                    }
+                    throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
+                }
+
+                while (enumerator.MoveNext())
+                {
+                    var nextItem = enumerator.Current;
+                    var nextMin = selector(nextItem);
+
+                    if (nextMin != null && (min == null || comparer.Compare(min, nextMin) < 0))
+                    {
+                        min = nextMin;
+                        item = nextItem;
+                    }
+                }
+            }
+
+            return item;
+        }
+
+        [CanBeNull]
+        public static T Max<T, TKey>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] Func<T, TKey> selector)
+        {
+            return Max(sequence, selector, Comparer<TKey>.Default);
+        }
     }
 }
