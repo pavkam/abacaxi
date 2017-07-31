@@ -15,6 +15,9 @@
 
 namespace Abacaxi
 {
+    using System.Collections.Generic;
+    using System.Reflection;
+    using Internal;
     using JetBrains.Annotations;
 
     /// <summary>
@@ -46,6 +49,62 @@ namespace Abacaxi
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Inspects a given object and extract a set of key-value pairs. Each pair is a field/property/method and its associated value. The inspection
+        /// only considers public, non-static, non-generic and parameter-less members.
+        /// </summary>
+        /// <typeparam name="T">The type of object that is inspected.</typeparam>
+        /// <param name="value">The object.</param>
+        /// <param name="flags">The inspection flags. The default is <see cref="InspectionFlags.IncludeProperties"/>.</param>
+        /// <returns>A readonly dictionary containing all object's inspected members.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        [NotNull]
+        public static IReadOnlyDictionary<string, object> Inspect<T>([NotNull] this T value, InspectionFlags flags = InspectionFlags.IncludeProperties)
+        {
+            Validate.ArgumentNotNull(nameof(value), value);
+
+            var memberDict = new Dictionary<string, object>();
+            if (flags.HasFlag(InspectionFlags.IncludeFields))
+            {
+                foreach (var f in typeof(T).GetRuntimeFields())
+                {
+                    if (!f.IsSpecialName && f.IsPublic && !f.IsStatic)
+                    {
+                        memberDict[f.Name] = f.GetValue(value);
+                    }
+                }
+            }
+
+            if (flags.HasFlag(InspectionFlags.IncludeProperties))
+            {
+                foreach (var p in typeof(T).GetRuntimeProperties())
+                {
+                    if (!p.IsSpecialName && 
+                        p.GetIndexParameters().Length == 0 && 
+                        p.CanRead &&
+                        p.GetMethod.IsPublic &&
+                        !p.GetMethod.IsStatic)
+                    {
+                        memberDict[p.Name] = p.GetValue(value);
+                    }
+                }
+            }
+
+            if (flags.HasFlag(InspectionFlags.IncludeMethods))
+            {
+                foreach (var m in typeof(T).GetRuntimeMethods())
+                {
+                    if (!m.IsSpecialName && !m.IsGenericMethodDefinition && m.GetParameters().Length == 0 &&
+                        m.IsPublic && !m.IsConstructor && !m.IsAbstract && !m.IsStatic)
+                    {
+                        memberDict[m.Name] = m.Invoke(value, null);
+                    }
+                }
+            }
+
+            return memberDict;
         }
     }
 }

@@ -46,6 +46,8 @@
     <Compile Include="Containers\BitSetTests.cs" />
     <Compile Include="IO\HelperMemoryStream.cs" />
     <Compile Include="IO\BitWriterTests.cs" />
+    <Compile Include="ObjectExtensions\InspectMockObject.cs" />
+    <Compile Include="ObjectExtensions\InspectTests.cs" />
     <Compile Include="RandomExtensions\NextItemTests.cs" />
     <Compile Include="RandomExtensions\NextBoolTests.cs" />
     <Compile Include="SequenceExtensions\AddOrUpdateTests.cs" />

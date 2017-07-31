@@ -55,6 +55,7 @@
     <Compile Include="Graphs\Edge.cs" />
     <Compile Include="Graphs\LiteralWeightedGraph.cs" />
     <Compile Include="Graphs\LiteralGraph.cs" />
+    <Compile Include="InspectionFlags.cs" />
     <Compile Include="Internal\JetBrainsAnnotations.cs" />
     <Compile Include="IO\BitWriter.cs" />
     <Compile Include="RandomExtensions.cs" />
