@@ -88,7 +88,7 @@ namespace Abacaxi.Graphs
                     }
                     break;
                 default:
-                    Debug.Fail("Unexpected relation character.");
+                    Debug.Assert(false, "Unexpected relation character.");
                     break;
             }
         }

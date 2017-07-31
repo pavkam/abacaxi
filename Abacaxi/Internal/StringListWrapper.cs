@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Linq;
+
 namespace Abacaxi.Internal
 {
     using System;
@@ -35,13 +37,13 @@ namespace Abacaxi.Internal
         [NotNull]
         public IEnumerator<char> GetEnumerator()
         {
-            return ((IEnumerable<char>) _s).GetEnumerator();
+            return _s.Cast<char>().GetEnumerator();
         }
 
         [NotNull]
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<char>)_s).GetEnumerator();
+            return ((IEnumerable)_s).GetEnumerator();
         }
 
         [ContractAnnotation("=> halt")]

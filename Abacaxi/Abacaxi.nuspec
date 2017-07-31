@@ -14,7 +14,7 @@
     <copyright>Copyright Alexandru Ciobanu (alex+git@ciobanu.org) 2017</copyright>
     <tags>Algorithms Containers Learning</tags>
     <dependencies>
-      <group targetFramework="netstandard1.3">
+      <group targetFramework="netstandard1.1">
       </group>
     </dependencies>
   </metadata>
