@@ -19,6 +19,7 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using Internal;
     using JetBrains.Annotations;
+    using System.Diagnostics;
 
     /// <summary>
     /// A maze-structured graph.
@@ -33,6 +34,25 @@ namespace Abacaxi.Graphs
         private bool VertexExists(int x, int y)
         {
             return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY && _matrix[x, y];
+        }
+
+        [NotNull]
+        [ItemNotNull]
+        private IEnumerable<Edge<Cell>> GetEdgesIterate(Cell vertex)
+        {
+            Debug.Assert(VertexExists(vertex.X, vertex.Y));
+
+            for (var i = -1; i < 2; i += 2)
+            {
+                if (VertexExists(vertex.X + i, vertex.Y))
+                {
+                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y));
+                }
+                if (VertexExists(vertex.X, vertex.Y + i))
+                {
+                    yield return new Edge<Cell>(vertex, new Cell(vertex.X, vertex.Y + i));
+                }
+            }
         }
 
         /// <summary>
@@ -71,6 +91,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
+        [NotNull]
         public override IEnumerator<Cell> GetEnumerator()
         {
             for (var x = 0; x < _lengthX; x++)
@@ -93,6 +114,7 @@ namespace Abacaxi.Graphs
         /// A sequence of edges connected to the given <param name="vertex" />
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+        [NotNull]
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             if (!VertexExists(vertex.X, vertex.Y))
@@ -100,17 +122,7 @@ namespace Abacaxi.Graphs
                 throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", nameof(vertex));
             }
 
-            for (var i = -1; i < 2; i += 2)
-            {
-                if (VertexExists(vertex.X + i, vertex.Y))
-                {
-                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y));
-                }
-                if (VertexExists(vertex.X, vertex.Y + i))
-                {
-                    yield return new Edge<Cell>(vertex, new Cell(vertex.X, vertex.Y + i));
-                }
-            }
+            return GetEdgesIterate(vertex);
         }
     }
 }

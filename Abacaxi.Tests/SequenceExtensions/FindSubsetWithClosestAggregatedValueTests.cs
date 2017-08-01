@@ -16,7 +16,6 @@
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
-    using System.Linq;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
 
@@ -24,27 +23,28 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class FindSubsetWithClosestAggregatedValueTests
     {
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void FindSubsequenceWithClosestAggregatedValue_ThowsException_ForNullSequence()
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void FindSubsequenceWithClosestAggregatedValue_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).FindSubsetWithClosestAggregatedValue(1).ToArray());
+                ((int[])null).FindSubsetWithClosestAggregatedValue(1));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void FindSubsequenceWithClosestAggregatedValue_ThowsException_ForZeroTargedSum()
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        public void FindSubsequenceWithClosestAggregatedValue_ThrowsException_ForZeroTargetSum()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new int[] { }.FindSubsetWithClosestAggregatedValue(0).ToArray());
+                new int[] { }.FindSubsetWithClosestAggregatedValue(0));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void FindSubsequenceWithClosestAggregatedValue_ThowsException_ForNegativeNumberInSequence()
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        public void FindSubsequenceWithClosestAggregatedValue_ThrowsException_ForNegativeNumberInSequence()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { -1 }.FindSubsetWithClosestAggregatedValue(1).ToArray());
+                new[] { -1 }.FindSubsetWithClosestAggregatedValue(1));
         }
 
         [Test]

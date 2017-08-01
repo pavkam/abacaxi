@@ -13,14 +13,12 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.CombinatorialAlgorithms
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class FindSubsetsWithEqualAggregateValueTests
@@ -35,8 +33,7 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         public void FindSubsetsWithEqualAggregateValue_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[]) null).FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default,
-                    1).ToArray());
+                ((int[]) null).FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 1));
         }
 
         [Test]
@@ -44,7 +41,7 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         public void FindSubsetsWithEqualAggregateValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] {1}.FindSubsetsWithEqualAggregateValue(null, Comparer<int>.Default, 1).ToArray());
+                new[] {1}.FindSubsetsWithEqualAggregateValue(null, Comparer<int>.Default, 1));
         }
 
         [Test]
@@ -52,7 +49,7 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         public void FindSubsetsWithEqualAggregateValue_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] {1}.FindSubsetsWithEqualAggregateValue(IntegerAggregator, null, 1).ToArray());
+                new[] {1}.FindSubsetsWithEqualAggregateValue(IntegerAggregator, null, 1));
         }
 
         [Test]
@@ -60,8 +57,7 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         public void FindSubsetsWithEqualAggregateValue_ThrowsException_IsCountOfPartitionsLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] {1}.FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 0)
-                    .ToArray());
+                new[] {1}.FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 0));
         }
 
         [Test]

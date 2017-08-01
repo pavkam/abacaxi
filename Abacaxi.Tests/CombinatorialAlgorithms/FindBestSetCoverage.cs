@@ -13,32 +13,32 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-
-using System;
-
 namespace Abacaxi.Tests.CombinatorialAlgorithms
 {
+    using System;
     using System.Collections.Generic;
     using NUnit.Framework;
-    using System.Linq;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class FindMinimumNumberOfSetsWithFullCoverageTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void FindMinimumNumberOfSetsWithFullCoverage_ThrowsException_ForNullSets()
         {
             Assert.Throws<ArgumentNullException>(() => 
-                Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(null, EqualityComparer<int>.Default).ToArray());
+                Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(null, EqualityComparer<int>.Default));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void FindMinimumNumberOfSetsWithFullCoverage_ThrowsException_ForEqualityComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(new ISet<int>[] { }, null).ToArray());
+                Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(new ISet<int>[] { }, null));
         }
 
         [Test]

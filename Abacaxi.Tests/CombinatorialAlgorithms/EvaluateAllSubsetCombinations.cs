@@ -13,29 +13,29 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-
 namespace Abacaxi.Tests.CombinatorialAlgorithms
 {
     using System;
     using NUnit.Framework;
-    using System.Linq;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class EvaluateAllSubsetCombinationsTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void EvaluateAllSubsetCombinations_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[]) null).EvaluateAllSubsetCombinations(1).ToArray());
+                ((int[]) null).EvaluateAllSubsetCombinations(1));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void EvaluateAllSubsetCombinations_ThrowsException_ForSubsetsLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new int[] {}.EvaluateAllSubsetCombinations(0).ToArray());
+                new int[] {}.EvaluateAllSubsetCombinations(0));
         }
 
         [Test]

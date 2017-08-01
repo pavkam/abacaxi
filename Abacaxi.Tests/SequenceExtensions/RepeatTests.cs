@@ -56,6 +56,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.AreEqual("AA", result);
         }
 
+        [Test]
         public void Repeat_TriplesString_ForThreeRepetition()
         {
             var result = "A".Repeat(3);

@@ -19,6 +19,7 @@ namespace Abacaxi.Tests.ObjectExtensions
     using NUnit.Framework;
     using System.Linq;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class InspectTests
@@ -31,10 +32,10 @@ namespace Abacaxi.Tests.ObjectExtensions
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Inspect_ThrowsException_ForNullValue()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                 ((object) null).Inspect());
         }
 

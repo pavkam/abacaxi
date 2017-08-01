@@ -13,9 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-// ReSharper disable ObjectCreationAsStatement
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
@@ -24,17 +21,20 @@ namespace Abacaxi.Tests.Graph
     using Graphs;
     using NUnit.Framework;
     using Practice.Graphs;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class ChessHorsePathGraphTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_ForBoardWidthLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new ChessHorsePathGraph(0, 1));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_ForBoardHeightLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new ChessHorsePathGraph(1, 0));
@@ -58,10 +58,11 @@ namespace Abacaxi.Tests.Graph
         [TestCase(0, -1)]
         [TestCase(2, 0)]
         [TestCase(0, 3)]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForInvalidCell(int x, int y)
         {
             var graph = new ChessHorsePathGraph(2, 3);
-            Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(x, y)).ToArray());
+            Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(x, y)));
         }
 
         [TestCase(0, 0, "21,12")]

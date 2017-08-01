@@ -13,8 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
@@ -22,6 +20,7 @@ namespace Abacaxi.Tests.Graph
     using System.Linq;
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class LiteralWeightedGraphTests
@@ -214,7 +213,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void LiteralWeightedGraph_Preserves_MultipleEdges_ForUndirectedGraps()
+        public void LiteralWeightedGraph_Preserves_MultipleEdges_ForUndirectedGraphs()
         {
             var graph = new LiteralWeightedGraph("A-1-A,A-1-B,A-1-B", true);
             var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));
@@ -225,7 +224,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void LiteralWeightedGraph_Preserves_MultipleEdges_ForDirectedGraps()
+        public void LiteralWeightedGraph_Preserves_MultipleEdges_ForDirectedGraphs()
         {
             var graph = new LiteralWeightedGraph("A>1>A,A>1>B,A>1>B", true);
             var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));

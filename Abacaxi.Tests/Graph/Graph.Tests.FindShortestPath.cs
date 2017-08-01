@@ -13,24 +13,22 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable SuspiciousTypeConversion.Global
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
-    using System.Linq;
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class GraphFindShortestPathTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void FindShortestPath_ThrowsException_ForInvalidStartVertex()
         {
             var graph = new LiteralGraph("A>B", true);
-            Assert.Throws<InvalidOperationException>(() => graph.FindShortestPath('Z', 'A').ToArray());
+            Assert.Throws<InvalidOperationException>(() => graph.FindShortestPath('Z', 'A'));
         }
 
         [TestCase("A-B,A-C", 'A', 'B', "A,B")]

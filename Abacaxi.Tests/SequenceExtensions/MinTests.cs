@@ -18,36 +18,37 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System;
     using NUnit.Framework;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class MinTests
     {
         [Test]
-        public void Min1_ThowsException_ForNullSequence()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min1_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                 Abacaxi.SequenceExtensions.Min<string, string>(null, i => i, StringComparer.Ordinal));
         }
 
         [Test]
-        public void Min1_ThowsException_ForNullSelector()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min1_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                     new string[]{}.Min(null, StringComparer.Ordinal));
         }
 
         [Test]
-        public void Min1_ThowsException_ForNullComparer()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min1_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                     new string[] { }.Min(i => i, null));
         }
 
         [Test]
-        public void Min1_ThowsException_ForEmptyCollectionOfValueTypes()
+        public void Min1_ThrowsException_ForEmptyCollectionOfValueTypes()
         {
             Assert.Throws<InvalidOperationException>(() =>
                     new int[] { }.Min(i => i, Comparer<int>.Default));
@@ -82,23 +83,23 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void Min2_ThowsException_ForNullSequence()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min2_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                     Abacaxi.SequenceExtensions.Min<string, string>(null, i => i));
         }
 
         [Test]
-        public void Min2_ThowsException_ForNullSelector()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min2_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                     new string[] { }.Min<string, string>(null));
         }
 
         [Test]
-        public void Min2_ThowsException_ForEmptyCollectionOfValueTypes()
+        public void Min2_ThrowsException_ForEmptyCollectionOfValueTypes()
         {
             Assert.Throws<InvalidOperationException>(() =>
                 new int[] { }.Min(i => i));

@@ -13,8 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
@@ -24,21 +22,21 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class ContainsSubsetWithAggregatedValueTests
     {
         [Test]
-        public void ContainsSubsequenceWithAggregatedValue_ThowsException_ForNullSequence()
+        public void ContainsSubsequenceWithAggregatedValue_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 ((int[])null).ContainsSubsetWithAggregatedValue(1));
         }
 
         [Test]
-        public void ContainsSubsequenceWithAggregatedValue_ThowsException_ForZeroTargedSum()
+        public void ContainsSubsequenceWithAggregatedValue_ThrowsException_ForZeroTargetSum()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new int[] { }.ContainsSubsetWithAggregatedValue(0));
         }
 
         [Test]
-        public void ContainsSubsequenceWithAggregatedValue_ThowsException_ForNegativeNumberInSequence()
+        public void ContainsSubsequenceWithAggregatedValue_ThrowsException_ForNegativeNumberInSequence()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new[] { -1 }.ContainsSubsetWithAggregatedValue(1));

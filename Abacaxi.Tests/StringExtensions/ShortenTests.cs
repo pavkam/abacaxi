@@ -17,14 +17,15 @@ namespace Abacaxi.Tests.StringExtensions
 {
     using System;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class ShortenTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Shorten_ThrowsException_IfStringIsNull()
         {
-            // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Throws<ArgumentNullException>(() => ((string)null).Shorten(100));
         }
 

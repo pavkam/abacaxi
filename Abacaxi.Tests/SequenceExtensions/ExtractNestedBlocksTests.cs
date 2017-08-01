@@ -25,19 +25,21 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class ExtractNestedBlocksTests
     {
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ExtractNestedBlocks_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default).ToArray());
+                ((int[])null).ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ExtractNestedBlocks_ThrowsException_ForComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new int[] { }.ExtractNestedBlocks(1, 1, null).ToArray());
+                new int[] { }.ExtractNestedBlocks(1, 1, null));
         }
 
         [Test]

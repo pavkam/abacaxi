@@ -18,11 +18,13 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System;
     using System.Collections.Generic;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class GetItemFrequenciesTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetItemFrequencies_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(
@@ -30,9 +32,10 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetItemFrequencies_ThrowsException_IfEqualityComparerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new[] {1}.ToSet(null));
+            Assert.Throws<ArgumentNullException>(() => new[] {1}.GetItemFrequencies(null));
         }
 
         [Test]

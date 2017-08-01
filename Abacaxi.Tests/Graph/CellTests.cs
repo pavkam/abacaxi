@@ -83,7 +83,7 @@ namespace Abacaxi.Tests.Graph
 
 
         [Test]
-        public void GetHashcode_ReturnsEqualHashcodes_ForEqualCoordinates()
+        public void GetHashCode_ReturnsEqualHashCodes_ForEqualCoordinates()
         {
             var c1 = new Cell(11, 22);
             var c2 = new Cell(11, 22);
@@ -92,7 +92,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetHashcode_ReturnsDifferentHashcodes_ForDifferentCoordinates()
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentCoordinates()
         {
             var c1 = new Cell(10, 22);
             var c2 = new Cell(11, 22);

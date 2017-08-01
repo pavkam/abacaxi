@@ -13,13 +13,9 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable SuspiciousTypeConversion.Global
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
-    using System.Linq;
     using Graphs;
     using NUnit.Framework;
 
@@ -44,7 +40,7 @@ namespace Abacaxi.Tests.Graph
         public void FindAllArticulationVertices_ThrowsException_ForDirectedGraphs()
         {
             var graph = new LiteralGraph("A>B", true);
-            Assert.Throws<InvalidOperationException>(() => graph.FindAllArticulationVertices().ToArray());
+            Assert.Throws<InvalidOperationException>(() => graph.FindAllArticulationVertices());
         }
     }
 }

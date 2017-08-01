@@ -19,6 +19,7 @@ namespace Abacaxi.Tests.Containers
     using System.Collections.Generic;
     using Abacaxi.Containers;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class ArrayEqualityComparerTests
@@ -26,10 +27,10 @@ namespace Abacaxi.Tests.Containers
         private readonly ArrayEqualityComparer<int> _comparer = new ArrayEqualityComparer<int>(EqualityComparer<int>.Default);
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_IfCompareIsNull()
         {
-            // ReSharper disable once ObjectCreationAsStatement
-            // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Throws<ArgumentNullException>(() => new ArrayEqualityComparer<int>(null));
         }
 

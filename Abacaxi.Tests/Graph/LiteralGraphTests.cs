@@ -13,8 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ObjectCreationAsStatement
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
@@ -22,11 +20,13 @@ namespace Abacaxi.Tests.Graph
     using System.Linq;
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class LiteralGraphTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void LiteralGraph_Ctor_ThrowsException_ForNullRelationships()
         {
             Assert.Throws<ArgumentNullException>(() => new LiteralGraph(null, true));
@@ -37,6 +37,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("AA-B")]
         [TestCase("A-")]
         [TestCase("A-BA")]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void LiteralGraph_Ctor_ThrowsException_ForInvalidFormat(string relationships)
         {
             Assert.Throws<FormatException>(() => new LiteralGraph(relationships, false));
@@ -44,24 +45,28 @@ namespace Abacaxi.Tests.Graph
 
         [TestCase("A>B")]
         [TestCase("A<B")]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void LiteralGraph_Ctor_ThrowsException_ForInvalidEdgesInUndirectedGraph(string relationships)
         {
             Assert.Throws<FormatException>(() => new LiteralGraph(relationships, false));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void LiteralGraph_Ctor_IgnoresLastComma_InRelationships()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("A-B,", true));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void LiteralGraph_Ctor_IgnoresWhitespaces_InRelationships()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("  A -     B   ,      ", true));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void LiteralGraph_Ctor_AcceptsASingleUnconnectedVertex()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("A", true));
@@ -84,6 +89,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void LiteralGraph_Ctor_AcceptsLettersAndDigits()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("a-B,B-0", true));
@@ -139,7 +145,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void LiteralGraph_Preserves_MultipleEdges_ForUndirectedGraps()
+        public void LiteralGraph_Preserves_MultipleEdges_ForUndirectedGraphs()
         {
             var graph = new LiteralGraph("A-A,A-B,A-B", true);
             var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));
@@ -150,7 +156,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void LiteralGraph_Preserves_MultipleEdges_ForDirectedGraps()
+        public void LiteralGraph_Preserves_MultipleEdges_ForDirectedGraphs()
         {
             var graph = new LiteralGraph("A>A,A>B,A>B", true);
             var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));

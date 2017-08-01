@@ -13,11 +13,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Linq;
-
 namespace Abacaxi.Tests.RandomExtensions
 {
     using System;
+    using System.Linq;
     using NUnit.Framework;
 
     [TestFixture]

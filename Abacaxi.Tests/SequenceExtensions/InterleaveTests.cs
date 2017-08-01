@@ -25,27 +25,30 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class InterleaveTests
     {
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Interleave_ThrowsException_WhenComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.Interleave(null, new int[] { }).ToArray());
+                Abacaxi.SequenceExtensions.Interleave(null, new int[] { }));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Interleave_ThrowsException_WhenSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, null, new int[] { }).ToArray());
+                Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, null, new int[] { }));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Interleave_ThrowsException_WhenParamsIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, new int[] { }, null).ToArray());
+                Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, new int[] { }, null));
         }
 
         [Test]

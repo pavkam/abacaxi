@@ -16,6 +16,7 @@
 namespace Abacaxi.Tests
 {
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class EditTests
@@ -75,11 +76,11 @@ namespace Abacaxi.Tests
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonEditObject()
         {
             var e1 = new Edit<char>(EditOperation.Match, 'a');
 
-            // ReSharper disable once SuspiciousTypeConversion.Global
             Assert.IsFalse(e1.Equals(this));
         }
 
@@ -92,7 +93,7 @@ namespace Abacaxi.Tests
         }
 
         [Test]
-        public void GetHashcode_ReturnsEqualHashcodes_ForEqualEdits()
+        public void GetHashCode_ReturnsEqualHashCodes_ForEqualEdits()
         {
             var e1 = new Edit<char>(EditOperation.Match, 'a');
             var e2 = new Edit<char>(EditOperation.Match, 'a');
@@ -101,7 +102,7 @@ namespace Abacaxi.Tests
         }
 
         [Test]
-        public void GetHashcode_ReturnsDifferentHashcodes_ForDifferentOperations()
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentOperations()
         {
             var e1 = new Edit<char>(EditOperation.Match, 'a');
             var e2 = new Edit<char>(EditOperation.Insert, 'a');
@@ -110,7 +111,7 @@ namespace Abacaxi.Tests
         }
 
         [Test]
-        public void GetHashcode_ReturnsDifferentHashcodes_ForDifferentItems()
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentItems()
         {
             var e1 = new Edit<char>(EditOperation.Match, 'a');
             var e2 = new Edit<char>(EditOperation.Match, 'b');

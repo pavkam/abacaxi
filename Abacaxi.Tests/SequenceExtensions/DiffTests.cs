@@ -23,14 +23,14 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class DiffTests
     {
         [Test]
-        public void Diff_ThowsException_ForNullSequence()
+        public void Diff_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 Abacaxi.SequenceExtensions.Diff(null, new char[] {}));
         }
 
         [Test]
-        public void Diff_ThowsException_ForNullResultSequence()
+        public void Diff_ThrowsException_ForNullResultSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new char[] { }.Diff(null));
@@ -48,7 +48,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void Diff_ReturnsExpectedSequence(string s1, string s2, string expected)
         {
             var result = new StringBuilder();
-            foreach (var e in s1.ToCharArray().Diff(s2.ToCharArray()))
+            foreach (var e in s1.AsList().Diff(s2.AsList()))
             {
                 switch (e.Operation)
                 {

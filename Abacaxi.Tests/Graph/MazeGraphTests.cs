@@ -13,16 +13,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-// ReSharper disable ObjectCreationAsStatement
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class MazeGraphTests
@@ -61,6 +58,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_ForNullMatrix()
         {
             Assert.Throws<ArgumentNullException>(() => new MazeGraph(null));
@@ -90,19 +88,21 @@ namespace Abacaxi.Tests.Graph
         [TestCase(0, -1)]
         [TestCase(1, 0)]
         [TestCase(0, 1)]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForInvalidCell(int x, int y)
         {
             var graph = new MazeGraph(new[,] { { true } });
 
-            Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(x, y)).ToArray());
+            Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(x, y)));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForFalseCell()
         {
             var graph = new MazeGraph(new[,] { { false } });
 
-            Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(0, 0)).ToArray());
+            Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(0, 0)));
         }
 
         [TestCase("00", "10,01")]

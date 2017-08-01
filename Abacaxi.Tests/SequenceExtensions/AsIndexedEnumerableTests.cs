@@ -25,11 +25,12 @@ namespace Abacaxi.Tests.SequenceExtensions
     public sealed class AsIndexedEnumerableTests
     {
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AsIndexedEnumerable_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[]) null).AsIndexedEnumerable().ToArray());
+                ((int[]) null).AsIndexedEnumerable());
         }
 
         [Test]

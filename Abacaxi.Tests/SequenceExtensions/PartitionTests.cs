@@ -16,17 +16,17 @@
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
-    using System.Linq;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class PartitionTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void Partition_ThrowsException_ForSizeLessThanOne()
         {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            Assert.Throws<ArgumentOutOfRangeException>(() => new[] {1}.Partition(0).ToArray());
+            Assert.Throws<ArgumentOutOfRangeException>(() => new[] {1}.Partition(0));
         }
 
         [Test]

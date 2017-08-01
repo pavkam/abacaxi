@@ -13,34 +13,34 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
-using System.Threading;
-
 namespace Abacaxi.Tests.Containers
 {
     using System;
     using Abacaxi.Containers;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using System.Threading;
 
     [TestFixture]
-    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
     public class TemporaryTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_WhenValueFuncIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new Temporary<int>(null, 1));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_WhenValueLifespanMillisIsLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new Temporary<int>(() => 1, 0));
         }
 
         [Test]
-        public void Temporary_DoesNotInitializeTheValueImmediatelly()
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Temporary_DoesNotInitializeTheValueImmediately()
         {
             var called = false;
             new Temporary<int>(() =>

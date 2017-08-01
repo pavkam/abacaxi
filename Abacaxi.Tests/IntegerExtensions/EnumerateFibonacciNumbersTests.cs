@@ -16,18 +16,18 @@
 namespace Abacaxi.Tests.IntegerExtensions
 {
     using System;
-    using System.Linq;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class EnumerateFibonacciNumbersTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void EnumerateFibonacciNumbers_ThrowsException_ForNegativeCount()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-                Abacaxi.IntegerExtensions.EnumerateFibonacciNumbers(-1).ToArray());
+                Abacaxi.IntegerExtensions.EnumerateFibonacciNumbers(-1));
         }
 
         [Test]

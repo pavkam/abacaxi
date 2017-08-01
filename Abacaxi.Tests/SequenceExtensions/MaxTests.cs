@@ -18,36 +18,37 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System;
     using NUnit.Framework;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class MaxTests
     {
         [Test]
-        public void Max1_ThowsException_ForNullSequence()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Max1_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                 Abacaxi.SequenceExtensions.Max<string, string>(null, i => i, StringComparer.Ordinal));
         }
 
         [Test]
-        public void Max1_ThowsException_ForNullSelector()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Max1_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                     new string[]{}.Max(null, StringComparer.Ordinal));
         }
 
         [Test]
-        public void Max1_ThowsException_ForNullComparer()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Max1_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                     new string[] { }.Max(i => i, null));
         }
 
         [Test]
-        public void Max1_ThowsException_ForEmptyCollectionOfValueTypes()
+        public void Max1_ThrowsException_ForEmptyCollectionOfValueTypes()
         {
             Assert.Throws<InvalidOperationException>(() =>
                     new int[] { }.Max(i => i, Comparer<int>.Default));
@@ -61,7 +62,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void Max1_ReturnsTheFirstFoundItem_BasedOnHighetKey()
+        public void Max1_ReturnsTheFirstFoundItem_BasedOnHighestKey()
         {
             var result = new[] { "bb", "ccc", "a", "z" }.Max(i => i.Length, Comparer<int>.Default);
             Assert.AreEqual("ccc", result);
@@ -82,23 +83,23 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void Max2_ThowsException_ForNullSequence()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Max2_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                     Abacaxi.SequenceExtensions.Max<string, string>(null, i => i));
         }
 
         [Test]
-        public void Max2_ThowsException_ForNullSelector()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Max2_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                     new string[] { }.Max<string, string>(null));
         }
 
         [Test]
-        public void Max2_ThowsException_ForEmptyCollectionOfValueTypes()
+        public void Max2_ThrowsException_ForEmptyCollectionOfValueTypes()
         {
             Assert.Throws<InvalidOperationException>(() =>
                 new int[] { }.Max(i => i));

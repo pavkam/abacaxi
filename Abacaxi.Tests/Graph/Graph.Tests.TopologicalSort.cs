@@ -13,33 +13,33 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable SuspiciousTypeConversion.Global
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
     using System.Linq;
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class GraphTopologicalSortTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void TopologicalSort_ThrowsException_ForUndirectedGraph()
         {
             var graph = new LiteralGraph("A-B", false);
-            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort().ToArray());
+            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
         }
 
         [TestCase("A-B")]
         [TestCase("A>B,B>A")]
         [TestCase("A>B,B>C,C>A")]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void TopologicalSort_ThrowsException_ForDirectedGraphWith(string relationships)
         {
             var graph = new LiteralGraph(relationships, true);
-            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort().ToArray());
+            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
         }
 
         [TestCase("", "")]

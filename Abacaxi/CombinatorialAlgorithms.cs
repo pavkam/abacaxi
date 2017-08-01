@@ -28,80 +28,6 @@ namespace Abacaxi
     [PublicAPI]
     public static class CombinatorialAlgorithms
     {
-        private struct Step
-        {
-            public int ItemIndex { get; }
-            public int SetIndex { get; }
-
-            public Step(int itemIndex, int setIndex)
-            {
-                ItemIndex = itemIndex;
-                SetIndex = setIndex;
-            }
-        }
-
-        private sealed class RecursiveFindSubsetPairingWithLowestCostContext
-        {
-            public int[] Indices;
-            public int[] BestCombination;
-            public double? LowestCostSoFar;
-            public Func<int, int, double> CalculatePairCost;
-        }
-
-        private sealed class Pair<T>
-        {
-            public T Item1;
-            public T Item2;
-        }
-
-        private static void RecursiveFindSubsetPairingWithLowestCost(
-            RecursiveFindSubsetPairingWithLowestCostContext context,
-            int i,
-            int set,
-            double currentCost)
-        {
-            Debug.Assert(context != null);
-
-            if (context.LowestCostSoFar.HasValue && currentCost >= context.LowestCostSoFar.Value)
-            {
-                return;
-            }
-
-            if (i == context.Indices.Length)
-            {
-                context.LowestCostSoFar = currentCost;
-                context.BestCombination = new int[context.Indices.Length];
-                Array.Copy(context.Indices, context.BestCombination, context.Indices.Length);
-
-                return;
-            }
-
-            if (context.Indices[i] > 0)
-            {
-                RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set, currentCost);
-            }
-            else
-            {
-                for (var ni = i + 1; ni < context.Indices.Length; ni++)
-                {
-                    if (context.Indices[ni] == 0)
-                    {
-                        context.Indices[i] = set;
-                        context.Indices[ni] = set;
-
-                        var pairCost = context.CalculatePairCost(i, ni);
-                        var newCost = currentCost + pairCost;
-
-                        RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set + 1, newCost);
-
-                        context.Indices[ni] = 0;
-                    }
-                }
-
-                context.Indices[i] = 0;
-            }
-        }
-
         /// <summary>
         /// Partitions a given integer into all possible combinations of smaller integers.
         /// </summary>
@@ -188,6 +114,63 @@ namespace Abacaxi
             return solutions[number, number];
         }
 
+        private struct EvaluateAllSubsetCombinationsStep
+        {
+            public int ItemIndex { get; }
+            public int SetIndex { get; }
+
+            public EvaluateAllSubsetCombinationsStep(int itemIndex, int setIndex)
+            {
+                ItemIndex = itemIndex;
+                SetIndex = setIndex;
+            }
+        }
+
+        private static IEnumerable<T[][]> EvaluateAllSubsetCombinationsIterate<T>(IList<T> sequence, int subsets)
+        {
+            Debug.Assert(sequence != null);
+            Debug.Assert(subsets > 0);
+
+            if (sequence.Count == 0)
+            {
+                yield break;
+            }
+
+            var resultSets = new List<T>[subsets];
+            for (var i = 0; i < resultSets.Length; i++)
+            {
+                resultSets[i] = new List<T>();
+            }
+
+            var stack = new Stack<EvaluateAllSubsetCombinationsStep>();
+            stack.Push(new EvaluateAllSubsetCombinationsStep(0, 0));
+
+            while (stack.Count > 0)
+            {
+                var step = stack.Pop();
+
+                if (step.SetIndex > 0)
+                {
+                    resultSets[step.SetIndex - 1].RemoveAt(resultSets[step.SetIndex - 1].Count - 1);
+                }
+                if (step.SetIndex < subsets)
+                {
+                    resultSets[step.SetIndex].Add(sequence[step.ItemIndex]);
+
+                    stack.Push(new EvaluateAllSubsetCombinationsStep(step.ItemIndex, step.SetIndex + 1));
+
+                    if (step.ItemIndex == sequence.Count - 1)
+                    {
+                        yield return resultSets.Select(s => s.ToArray()).ToArray();
+                    }
+                    else
+                    {
+                        stack.Push(new EvaluateAllSubsetCombinationsStep(step.ItemIndex + 1, 0));
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Evaluates all combinations of items in <paramref name="sequence"/> divided into <paramref name="subsets"/>.
         /// </summary>
@@ -202,44 +185,7 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentGreaterThanZero(nameof(subsets), subsets);
 
-            if (sequence.Count == 0)
-            {
-                yield break;
-            }
-
-            var resultSets = new List<T>[subsets];
-            for (var i = 0; i < resultSets.Length; i++)
-            {
-                resultSets[i] = new List<T>();
-            }
-
-            var stack = new Stack<Step>();
-            stack.Push(new Step(0, 0));
-
-            while (stack.Count > 0)
-            {
-                var step = stack.Pop();
-
-                if (step.SetIndex > 0)
-                {
-                    resultSets[step.SetIndex - 1].RemoveAt(resultSets[step.SetIndex - 1].Count - 1);
-                }
-                if (step.SetIndex < subsets)
-                {
-                    resultSets[step.SetIndex].Add(sequence[step.ItemIndex]);
-
-                    stack.Push(new Step(step.ItemIndex, step.SetIndex + 1));
-
-                    if (step.ItemIndex == sequence.Count - 1)
-                    {
-                        yield return resultSets.Select(s => s.ToArray()).ToArray();
-                    }
-                    else
-                    {
-                        stack.Push(new Step(step.ItemIndex + 1, 0));
-                    }
-                }
-            }
+            return EvaluateAllSubsetCombinationsIterate(sequence, subsets);
         }
 
         /// <summary>
@@ -294,18 +240,14 @@ namespace Abacaxi
             return new T[][] {};
         }
 
-        /// <summary>
-        /// Finds the minimum number of sets that cover the full set of elements.
-        /// </summary>
-        /// <typeparam name="T">The type of elements in the set.</typeparam>
-        /// <param name="sets">The sets.</param>
-        /// <param name="comparer">The comparer.</param>
-        /// <returns>A sequence of selected sets whose union results in the full coverage.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sets"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
-        public static IEnumerable<ISet<T>> FindMinimumNumberOfSetsWithFullCoverage<T>(IEnumerable<ISet<T>> sets, IEqualityComparer<T> comparer)
+        [NotNull]
+        [ItemNotNull]
+        public static IEnumerable<ISet<T>> FindMinimumNumberOfSetsWithFullCoverageIterate<T>(
+            [NotNull] [ItemNotNull] IEnumerable<ISet<T>> sets,
+            [NotNull] IEqualityComparer<T> comparer)
         {
-            Validate.ArgumentNotNull(nameof(sets), sets);
-            Validate.ArgumentNotNull(nameof(comparer), comparer);
+            Debug.Assert(sets != null);
+            Debug.Assert(comparer != null);
 
             var copies = sets.ToSet();
             var superSet = new HashSet<T>(comparer);
@@ -331,6 +273,88 @@ namespace Abacaxi
                 copies.Remove(bestSet);
                 yield return bestSet;
             }
+        }
+
+        /// <summary>
+        /// Finds the minimum number of sets that cover the full set of elements.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the set.</typeparam>
+        /// <param name="sets">The sets.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns>A sequence of selected sets whose union results in the full coverage.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sets"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
+        [NotNull]
+        [ItemNotNull]
+        public static IEnumerable<ISet<T>> FindMinimumNumberOfSetsWithFullCoverage<T>(
+            [NotNull] [ItemNotNull] IEnumerable<ISet<T>> sets, 
+            [NotNull] IEqualityComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sets), sets);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            return FindMinimumNumberOfSetsWithFullCoverageIterate(sets, comparer);
+        }
+
+        private sealed class RecursiveFindSubsetPairingWithLowestCostContext
+        {
+            public int[] Indices;
+            public int[] BestCombination;
+            public double? LowestCostSoFar;
+            public Func<int, int, double> CalculatePairCost;
+        }
+
+        private static void RecursiveFindSubsetPairingWithLowestCost(
+            RecursiveFindSubsetPairingWithLowestCostContext context,
+            int i,
+            int set,
+            double currentCost)
+        {
+            Debug.Assert(context != null);
+
+            if (context.LowestCostSoFar.HasValue && currentCost >= context.LowestCostSoFar.Value)
+            {
+                return;
+            }
+
+            if (i == context.Indices.Length)
+            {
+                context.LowestCostSoFar = currentCost;
+                context.BestCombination = new int[context.Indices.Length];
+                Array.Copy(context.Indices, context.BestCombination, context.Indices.Length);
+
+                return;
+            }
+
+            if (context.Indices[i] > 0)
+            {
+                RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set, currentCost);
+            }
+            else
+            {
+                for (var ni = i + 1; ni < context.Indices.Length; ni++)
+                {
+                    if (context.Indices[ni] == 0)
+                    {
+                        context.Indices[i] = set;
+                        context.Indices[ni] = set;
+
+                        var pairCost = context.CalculatePairCost(i, ni);
+                        var newCost = currentCost + pairCost;
+
+                        RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set + 1, newCost);
+
+                        context.Indices[ni] = 0;
+                    }
+                }
+
+                context.Indices[i] = 0;
+            }
+        }
+
+        private sealed class RecursiveFindSubsetPairingWithLowestCostPair<T>
+        {
+            public T Item1;
+            public T Item2;
         }
 
         /// <summary>
@@ -369,7 +393,7 @@ namespace Abacaxi
 
             RecursiveFindSubsetPairingWithLowestCost(context, 0, 1, 0);
 
-            var sets = new Pair<T>[sequence.Count / 2];
+            var sets = new RecursiveFindSubsetPairingWithLowestCostPair<T>[sequence.Count / 2];
             for (var i = 0; i < context.BestCombination.Length; i++)
             {
                 var setIndex = context.BestCombination[i] - 1;
@@ -377,7 +401,7 @@ namespace Abacaxi
 
                 if (sets[setIndex] == null)
                 {
-                    sets[setIndex] = new Pair<T> {Item1 = sequence[i]};
+                    sets[setIndex] = new RecursiveFindSubsetPairingWithLowestCostPair<T> {Item1 = sequence[i]};
                 }
                 else
                 {

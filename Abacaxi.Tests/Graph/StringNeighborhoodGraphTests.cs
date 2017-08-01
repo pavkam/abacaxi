@@ -13,20 +13,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-// ReSharper disable ObjectCreationAsStatement
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
     using System.Linq;
     using NUnit.Framework;
     using Practice.Graphs;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class StringNeighborhoodGraphTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() => new StringNeighborhoodGraph(null));
@@ -57,19 +57,22 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetEdges_ThrowsException_ForNullVertex()
         {
             var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
 
-            Assert.Throws<ArgumentException>(() => graph.GetEdges(null).ToList());
+            Assert.Throws<ArgumentException>(() => graph.GetEdges(null));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForInvalidVertex()
         {
             var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
 
-            Assert.Throws<ArgumentException>(() => graph.GetEdges("z").ToList());
+            Assert.Throws<ArgumentException>(() => graph.GetEdges("z"));
         }
 
         [Test]

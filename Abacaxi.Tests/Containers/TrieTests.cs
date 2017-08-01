@@ -13,10 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ObjectCreationAsStatement
-// ReSharper disable CollectionNeverUpdated.Local
-// ReSharper disable AssignNullToNotNullAttribute
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+using System.Diagnostics.CodeAnalysis;
 
 namespace Abacaxi.Tests.Containers
 {
@@ -46,30 +43,35 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfEnumerableIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => new Trie<char, int>((IEnumerable<KeyValuePair<char[], int>>)null));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfEnumerableIsNull2()
         {
             Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(null, EqualityComparer<char>.Default));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfComparerIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => new Trie<char, int>((IEqualityComparer<char>)null));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfComparerIsNull2()
         {
             Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(new KeyValuePair<char[], int>[] { }, null));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfEnumerableContainsDupes()
         {
             var seq = new[]
@@ -82,6 +84,7 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfEnumerableContainsNullKey()
         {
             var seq = new[]
@@ -265,6 +268,7 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         public void Contains_ThrowsException_IfKeyIsNull2()
         {
             Assert.Throws<ArgumentNullException>(() => _trie0.Contains(new KeyValuePair<char[], int>(null, -1)));
@@ -416,6 +420,7 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void CopyTo_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() => _trie0.CopyTo(null, 0));
@@ -548,8 +553,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Count_IsEqualToTheNumberOfKeyValuesReturnedByEnumeration()
         {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            var enumerated = _trie5.Count();
+            var enumerated = _trie5.Count;
 
             Assert.AreEqual(enumerated, _trie5.Count);
         }

@@ -13,12 +13,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable SuspiciousTypeConversion.Global
-
 namespace Abacaxi.Tests.Graph
 {
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class WeightedEdgeTests
@@ -92,6 +91,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonEdgeObject()
         {
             var edge = new WeightedEdge<string>("from", "to", 99);
@@ -108,7 +108,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetHashcode_ReturnsEqualHashcodes_ForEqualComponents()
+        public void GetHashCode_ReturnsEqualHashCodes_ForEqualComponents()
         {
             var edge1 = new WeightedEdge<string>("from", "to", 99);
             var edge2 = new WeightedEdge<string>("from", "to", 99);
@@ -117,7 +117,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetHashcode_ReturnsDifferenHashcodes_ForDifferentFromVertex()
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentFromVertex()
         {
             var edge1 = new WeightedEdge<string>("from", "to", 99);
             var edge2 = new WeightedEdge<string>("from1", "to", 99);
@@ -126,7 +126,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetHashcode_ReturnsDifferenHashcodes_ForDifferentToVertex()
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentToVertex()
         {
             var edge1 = new WeightedEdge<string>("from", "to", 99);
             var edge2 = new WeightedEdge<string>("from", "to1", 99);
@@ -135,7 +135,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetHashcode_ReturnsDifferenHashcodes_ForDifferentWeight()
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentWeight()
         {
             var edge1 = new WeightedEdge<string>("from", "to", 99);
             var edge2 = new WeightedEdge<string>("from", "to", 991);

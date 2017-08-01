@@ -17,6 +17,7 @@ namespace Abacaxi.Tests.RandomExtensions
 {
     using System;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class SampleTests
@@ -24,18 +25,18 @@ namespace Abacaxi.Tests.RandomExtensions
         private readonly Random _random = new Random();
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Sample_ThrowsException_IfRandomIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                     ((Random)null).Sample(new[] { 1 }, 1));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Sample_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                // ReSharper disable once AssignNullToNotNullAttribute
                 _random.Sample<int>(null, 1));
         }
 

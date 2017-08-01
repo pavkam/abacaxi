@@ -13,8 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.Containers
 {
     using System;
@@ -22,6 +20,7 @@ namespace Abacaxi.Tests.Containers
     using System.Collections;
     using Abacaxi.Containers;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
@@ -144,7 +143,7 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Remove_ReturnsFalse_ForElementOutofBounds()
+        public void Remove_ReturnsFalse_ForElementOutOfBounds()
         {
             Assert.IsFalse(_one.Remove(-1));
         }
@@ -554,7 +553,7 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void SetEquals_ReturnsTrue_IfSameWithDupalicates()
+        public void SetEquals_ReturnsTrue_IfSameWithDuplicates()
         {
             Assert.IsTrue(_full.SetEquals(new[] { 3, 2, 1, 0, 0, 3 }));
         }
@@ -729,7 +728,7 @@ namespace Abacaxi.Tests.Containers
         [TestCase(33)]
         [TestCase(63)]
         [TestCase(64)]
-        public void Set_EnumeratesPropely(int count)
+        public void Set_EnumeratesProperly(int count)
         {
             var set = new BitSet(count);
             for (var i = 0; i < count; i++)
@@ -753,7 +752,7 @@ namespace Abacaxi.Tests.Containers
         [TestCase(33)]
         [TestCase(63)]
         [TestCase(64)]
-        public void Set_CopiestoArrayProperly(int count)
+        public void Set_CopiesToArrayProperly(int count)
         {
             var set = new BitSet(count);
             for (var i = 0; i < count; i++)

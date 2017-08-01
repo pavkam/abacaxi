@@ -13,8 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.IO
 {
     using System;
@@ -22,6 +20,7 @@ namespace Abacaxi.Tests.IO
     using System.Text;
     using Abacaxi.IO;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class BitWriterTests

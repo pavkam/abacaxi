@@ -18,11 +18,13 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System;
     using NUnit.Framework;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class FindLongestIncreasingSequenceTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void FindLongestIncreasingSequence_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -30,6 +32,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void FindLongestIncreasingSequence_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>

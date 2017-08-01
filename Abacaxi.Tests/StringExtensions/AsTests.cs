@@ -18,15 +18,16 @@ namespace Abacaxi.Tests.StringExtensions
     using System;
     using NUnit.Framework;
     using System.Globalization;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class AsTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void As1_ThrowsException_IfFormatProviderIsNull()
         {
             Assert.Throws<ArgumentNullException>(
-                // ReSharper disable once AssignNullToNotNullAttribute
                 () => "".As<int>(null));
         }
 

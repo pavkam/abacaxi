@@ -17,6 +17,7 @@ namespace Abacaxi.Tests.Graph
 {
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class EdgeTests
@@ -73,11 +74,11 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonEdgeObject()
         {
             var edge = new Edge<string>("from", "to");
 
-            // ReSharper disable once SuspiciousTypeConversion.Global
             Assert.IsFalse(edge.Equals(this));
         }
 
@@ -90,7 +91,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetHashcode_ReturnsEqualHashcodes_ForEqualComponents()
+        public void GetHashCode_ReturnsEqualHashCodes_ForEqualComponents()
         {
             var edge1 = new Edge<string>("from", "to");
             var edge2 = new Edge<string>("from", "to");
@@ -99,7 +100,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetHashcode_ReturnsDifferenHashcodes_ForDifferentFromVertex()
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentFromVertex()
         {
             var edge1 = new Edge<string>("from", "to");
             var edge2 = new Edge<string>("from1", "to");
@@ -108,7 +109,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void GetHashcode_ReturnsDifferenHashcodes_ForDifferentToVertex()
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentToVertex()
         {
             var edge1 = new Edge<string>("from", "to");
             var edge2 = new Edge<string>("from", "to1");

@@ -13,24 +13,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ObjectCreationAsStatement
-
 namespace Abacaxi.Tests.Graph
 {
     using System;
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class SubGraphTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_ForNullGraph()
         {
             Assert.Throws<ArgumentNullException>(() => new SubGraph<int>(null, new[] { 1 }));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_ForNullVerticesSequence()
         {
             Assert.Throws<ArgumentNullException>(() => new SubGraph<char>(new LiteralGraph("A-B", false), null));

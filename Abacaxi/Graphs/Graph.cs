@@ -324,7 +324,7 @@ namespace Abacaxi.Graphs
         /// <param name="endVertex">The end vertex.</param>
         /// <returns>Returns a sequence of vertices in visitation order.</returns>
         /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
-        public virtual IEnumerable<TVertex> FindShortestPath(TVertex startVertex, TVertex endVertex)
+        public virtual TVertex[] FindShortestPath(TVertex startVertex, TVertex endVertex)
         {
             IBfsNode solution = null;
             TraverseBfs(startVertex, node =>
@@ -345,10 +345,8 @@ namespace Abacaxi.Graphs
                 solution = solution.Parent;
             }
 
-            for (var i = result.Count - 1; i >= 0; i--)
-            {
-                yield return result[i];
-            }
+            result.Reverse();
+            return result.ToArray();
         }
 
         /// <summary>
@@ -382,7 +380,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of vertices sorted in topological order.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is undirected or contains one or more cycles.</exception>
-        public virtual IEnumerable<TVertex> TopologicalSort()
+        public virtual TVertex[] TopologicalSort()
         {
             var outAdj = new Dictionary<TVertex, ISet<TVertex>>();
             var inAdj = new Dictionary<TVertex, ISet<TVertex>>();
@@ -417,12 +415,13 @@ namespace Abacaxi.Graphs
                 nextQueue.Enqueue(v.Key);
             }
 
+            var result = new List<TVertex>();
             while (nextQueue.Count > 0)
             {
                 var next = nextQueue.Dequeue();
                 inAdj.Remove(next);
 
-                yield return next;
+                result.Add(next);
 
                 foreach (var d in outAdj[next])
                 {
@@ -438,6 +437,8 @@ namespace Abacaxi.Graphs
             {
                 throw new InvalidOperationException("Topological sorting not supported on cyclical graphs.");
             }
+
+            return result.ToArray();
         }
 
         /// <summary>

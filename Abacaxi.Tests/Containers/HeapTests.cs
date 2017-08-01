@@ -13,8 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.Containers
 {
     using System;
@@ -22,6 +20,7 @@ namespace Abacaxi.Tests.Containers
     using System.Collections;
     using Abacaxi.Containers;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]

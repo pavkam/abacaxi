@@ -13,15 +13,12 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable SuspiciousTypeConversion.Global
-
-using System.Linq;
-using Abacaxi.Practice.Graphs;
-
 namespace Abacaxi.Tests.Graph
 {
     using Graphs;
     using NUnit.Framework;
+    using System.Linq;
+    using Practice.Graphs;
 
     [TestFixture]
     public class GraphFindChessHorsePathBetweenTwoPointsTests

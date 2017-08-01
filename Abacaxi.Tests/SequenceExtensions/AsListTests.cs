@@ -19,11 +19,13 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Collections.Generic;
     using System.Linq;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class AsListTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AsList_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).AsList());
@@ -59,7 +61,6 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void AsList_ReturnsEmptyList_ForEmptyCollection()
         {
-            // ReSharper disable once CollectionNeverUpdated.Local
             var coll = new HashSet<int>();
             var asList = coll.AsList();
 
@@ -83,6 +84,5 @@ namespace Abacaxi.Tests.SequenceExtensions
 
             TestHelper.AssertSequence(asList, 1, 2, 3);
         }
-        
     }
 }

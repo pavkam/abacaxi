@@ -13,12 +13,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Linq;
+
 namespace Abacaxi.Practice.Graphs
 {
     using System;
     using System.Collections.Generic;
     using Abacaxi.Graphs;
     using Internal;
+    using System.Diagnostics;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped movements).
@@ -31,6 +35,28 @@ namespace Abacaxi.Practice.Graphs
         private bool VertexExists(int x, int y)
         {
             return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY;
+        }
+
+        [NotNull]
+        [ItemNotNull]
+        private IEnumerable<Edge<Cell>> GetEdgesIterate(Cell vertex)
+        {
+            Debug.Assert(VertexExists(vertex.X, vertex.Y));
+
+            for (var i = -2; i <= 2; i += 4)
+            {
+                for (var j = -1; j <= 1; j += 2)
+                {
+                    if (VertexExists(vertex.X + i, vertex.Y + j))
+                    {
+                        yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y + j));
+                    }
+                    if (VertexExists(vertex.X + j, vertex.Y + i))
+                    {
+                        yield return new Edge<Cell>(vertex, new Cell(vertex.X + j, vertex.Y + i));
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -68,6 +94,7 @@ namespace Abacaxi.Practice.Graphs
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
+        [NotNull]
         public override IEnumerator<Cell> GetEnumerator()
         {
             for (var x = 0; x < _lengthX; x++)
@@ -87,6 +114,8 @@ namespace Abacaxi.Practice.Graphs
         /// A sequence of edges connected to the given <param name="vertex" />
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+        [NotNull]
+        [ItemNotNull]
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             if (!VertexExists(vertex.X, vertex.Y))
@@ -94,20 +123,7 @@ namespace Abacaxi.Practice.Graphs
                 throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", nameof(vertex));
             }
 
-            for (var i = -2; i <= 2; i += 4)
-            {
-                for (var j = -1; j <= 1; j += 2)
-                {
-                    if (VertexExists(vertex.X + i, vertex.Y + j))
-                    {
-                        yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y + j));
-                    }
-                    if (VertexExists(vertex.X + j, vertex.Y + i))
-                    {
-                        yield return new Edge<Cell>(vertex, new Cell(vertex.X + j, vertex.Y + i));
-                    }
-                }
-            }
+            return GetEdgesIterate(vertex);
         }
 
         /// <summary>
@@ -116,7 +132,8 @@ namespace Abacaxi.Practice.Graphs
         /// <param name="startCell">The start cell.</param>
         /// <param name="endCell">The end cell.</param>
         /// <returns>The shortest path between any two arbitrary cells in space.</returns>
-        public static IEnumerable<Cell> FindChessHorsePathBetweenTwoPoints(Cell startCell, Cell endCell)
+        [NotNull]
+        public static Cell[] FindChessHorsePathBetweenTwoPoints(Cell startCell, Cell endCell)
         {
             const int padding = 2;
 
@@ -127,10 +144,12 @@ namespace Abacaxi.Practice.Graphs
             var deltaY = Math.Min(startCell.Y, endCell.Y) - padding;
 
             var board = new ChessHorsePathGraph(boardWidth, boardHeight);
-            foreach (var cell in board.FindShortestPath(new Cell(startCell.X - deltaX, startCell.Y - deltaY), new Cell(endCell.X - deltaX, endCell.Y - deltaY)))
-            {
-                yield return new Cell(cell.X + deltaX, cell.Y + deltaY);
-            }
+            var shortestPath = board.FindShortestPath(
+                    new Cell(startCell.X - deltaX, startCell.Y - deltaY),
+                    new Cell(endCell.X - deltaX, endCell.Y - deltaY))
+                .Select(cell => new Cell(cell.X + deltaX, cell.Y + deltaY)).ToArray();
+
+            return shortestPath;
         }
     }
 }

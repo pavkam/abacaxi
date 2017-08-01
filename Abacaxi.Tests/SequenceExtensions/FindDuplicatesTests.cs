@@ -13,51 +13,59 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Linq;
     using NUnit.Framework;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class FindDuplicatesTests
     {
         [Test]
-        public void GenericFindDuplicates_ThowsException_ForNullSequence()
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GenericFindDuplicates_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.FindDuplicates(null, EqualityComparer<int>.Default).ToArray());
+                Abacaxi.SequenceExtensions.FindDuplicates(null, EqualityComparer<int>.Default));
         }
 
         [Test]
-        public void GenericFindDuplicates_ThowsException_ForNullEqualityComparer()
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GenericFindDuplicates_ThrowsException_ForNullEqualityComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindDuplicates(null).ToArray());
+                new[] { 1 }.FindDuplicates(null));
         }
 
         [Test]
-        public void IntegerFindDuplicates_ThowsException_ForNullSequence()
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void IntegerFindDuplicates_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.FindDuplicates(null, 1, 1).ToArray());
+                Abacaxi.SequenceExtensions.FindDuplicates(null, 1, 1));
         }
 
         [Test]
-        public void IntegerFindDuplicates_ThowsException_ForMaxLessThanMin()
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        public void IntegerFindDuplicates_ThrowsException_ForMaxLessThanMin()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.FindDuplicates(1, 0).ToArray());
+                new[] { 1 }.FindDuplicates(1, 0));
         }
 
         [Test]
-        public void StringFindDuplicates_ThowsException_ForNullSequence()
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void StringFindDuplicates_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((string)null).FindDuplicates().ToArray());
+                ((string)null).FindDuplicates());
         }
 
         [Test]
@@ -101,7 +109,8 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void IntegerFindDuplicates_ThowsException_IfSequenceContainsElementsOutOfMinAndMax()
+        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        public void IntegerFindDuplicates_ThrowsException_IfSequenceContainsElementsOutOfMinAndMax()
         {
             Assert.Throws<InvalidOperationException>(() =>
                 new[] { 0, 1, -1 }.FindDuplicates(0, 1).ToArray());

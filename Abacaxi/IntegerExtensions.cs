@@ -19,6 +19,7 @@ namespace Abacaxi
     using System.Collections.Generic;
     using Internal;
     using JetBrains.Annotations;
+    using System.Diagnostics;
 
     /// <summary>
     /// Helper class that defines a number of methods useful in integer/algorithmic manipulations.
@@ -66,6 +67,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="number">The number to be decomposed.</param>
         /// <returns>A sequence of numbers.</returns>
+        [NotNull]
         public static IEnumerable<int> DeconstructIntoPowersOfTwo(this int number)
         {
             var sign = Math.Sign(number);
@@ -86,6 +88,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="number">The number to be dis-constructed into its prime factors.</param>
         /// <returns>A sequence of primes.</returns>
+        [NotNull]
         public static IEnumerable<int> DeconstructIntoPrimeFactors(this int number)
         {
             var sign = Math.Sign(number);
@@ -164,15 +167,10 @@ namespace Abacaxi
             return result;
         }
 
-        /// <summary>
-        /// Enumerates the first <param name="count"></param> Fibonacci numbers.
-        /// </summary>
-        /// <param name="count">The count of Fibonacci "numbers" to enumerate.</param>
-        /// <returns>The Fibonacci sequence.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count"/> is less than zero.</exception>
-        public static IEnumerable<int> EnumerateFibonacciNumbers(int count)
+        [NotNull]
+        private static IEnumerable<int> EnumerateFibonacciNumbersIterate(int count)
         {
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(count), count);
+            Debug.Assert(count >= 0);
 
             var b2 = 0;
             var b1 = 1;
@@ -196,6 +194,20 @@ namespace Abacaxi
                     yield return b;
                 }
             }
+        }
+
+        /// <summary>
+        /// Enumerates the first <param name="count"></param> Fibonacci numbers.
+        /// </summary>
+        /// <param name="count">The count of Fibonacci "numbers" to enumerate.</param>
+        /// <returns>The Fibonacci sequence.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count"/> is less than zero.</exception>
+        [NotNull]
+        public static IEnumerable<int> EnumerateFibonacciNumbers(int count)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(count), count);
+
+            return EnumerateFibonacciNumbersIterate(count);
         }
 
         /// <summary>

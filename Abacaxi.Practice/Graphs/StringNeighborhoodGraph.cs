@@ -20,6 +20,8 @@ namespace Abacaxi.Practice.Graphs
     using Abacaxi.Graphs;
     using Containers;
     using Internal;
+    using System.Diagnostics;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// A graph composed by a number of strings (representing vertices) and connected by edges signifying potential one-letter transformations.
@@ -29,6 +31,8 @@ namespace Abacaxi.Practice.Graphs
         private readonly Trie<char, ISet<string>> _neighborhoods;
         private readonly ISet<string> _vertices;
 
+        [NotNull]
+        [ItemNotNull]
         private static IEnumerable<char[]> GetAllStringPatterns(string s)
         {
             var ca = (s ?? string.Empty).ToCharArray();
@@ -41,6 +45,26 @@ namespace Abacaxi.Practice.Graphs
             }
 
             return result;
+        }
+
+        [NotNull]
+        private IEnumerable<Edge<string>> GetEdgesIterate([NotNull] string vertex)
+        {
+            Debug.Assert(vertex != null && _vertices.Contains(vertex));
+
+            foreach (var pattern in GetAllStringPatterns(vertex))
+            {
+                if (_neighborhoods.TryGetValue(pattern, out ISet<string> neighbors))
+                {
+                    foreach (var neighbor in neighbors)
+                    {
+                        if (neighbor != vertex)
+                        {
+                            yield return new Edge<string>(vertex, neighbor);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -64,7 +88,7 @@ namespace Abacaxi.Practice.Graphs
         /// </summary>
         /// <param name="sequence">The sequence of strings to build the graph upon.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        public StringNeighborhoodGraph(IEnumerable<string> sequence)
+        public StringNeighborhoodGraph([NotNull] [ItemNotNull] IEnumerable<string> sequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
@@ -93,6 +117,7 @@ namespace Abacaxi.Practice.Graphs
         /// <returns>
         /// A <see cref="IEnumerator{T}" /> that can be used to iterate through the collection.
         /// </returns>
+        [NotNull]
         public override IEnumerator<string> GetEnumerator()
         {
             return _vertices.GetEnumerator();
@@ -106,27 +131,16 @@ namespace Abacaxi.Practice.Graphs
         /// A sequence of edges connected to the given <param name="vertex" />
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
-        public override IEnumerable<Edge<string>> GetEdges(string vertex)
+        [NotNull]
+        [ItemNotNull]
+        public override IEnumerable<Edge<string>> GetEdges([NotNull] string vertex)
         {
             if (vertex == null || !_vertices.Contains(vertex))
             {
                 throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", nameof(vertex));
             }
 
-            foreach (var pattern in GetAllStringPatterns(vertex))
-            {
-                // ReSharper disable once CollectionNeverUpdated.Local
-                if (_neighborhoods.TryGetValue(pattern, out ISet<string> neighbors))
-                {
-                    foreach (var neighbor in neighbors)
-                    {
-                        if (neighbor != vertex)
-                        {
-                            yield return new Edge<string>(vertex, neighbor);
-                        }
-                    }
-                }
-            }
+            return GetEdgesIterate(vertex);
         }
     }
 }
