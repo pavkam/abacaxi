@@ -9,10 +9,10 @@
     <iconUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/40218-200.png</iconUrl>
     <projectUrl>https://github.com/pavkam/abacaxi</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A library with data structures and various algorithms.</description>
+    <description>A library with data structures, various algorithms and numerous extension methods.</description>
     <releaseNotes>Version 0.9 of Abacaxi. XML Documentation and Unit Test covered.</releaseNotes>
     <copyright>Copyright Alexandru Ciobanu (alex+git@ciobanu.org) 2017</copyright>
-    <tags>Algorithms Containers Learning</tags>
+    <tags>Algorithms Containers Learning Extensions</tags>
     <dependencies>
       <group targetFramework="netstandard1.1">
       </group>
