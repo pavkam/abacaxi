@@ -15,10 +15,12 @@
 
 namespace Abacaxi
 {
+    using System;
     using System.Collections.Generic;
     using System.Reflection;
     using Internal;
     using JetBrains.Annotations;
+    using System.Globalization;
 
     /// <summary>
     /// Implements a number of object-related helper methods useable across the library (and beyond!).
@@ -61,7 +63,8 @@ namespace Abacaxi
         /// <returns>A readonly dictionary containing all object's inspected members.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
         [NotNull]
-        public static IReadOnlyDictionary<string, object> Inspect<T>([NotNull] this T value, InspectionFlags flags = InspectionFlags.IncludeProperties)
+        public static IReadOnlyDictionary<string, object> Inspect<T>([NotNull] this T value,
+            InspectionFlags flags = InspectionFlags.IncludeProperties)
         {
             Validate.ArgumentNotNull(nameof(value), value);
 
@@ -81,8 +84,8 @@ namespace Abacaxi
             {
                 foreach (var p in typeof(T).GetRuntimeProperties())
                 {
-                    if (!p.IsSpecialName && 
-                        p.GetIndexParameters().Length == 0 && 
+                    if (!p.IsSpecialName &&
+                        p.GetIndexParameters().Length == 0 &&
                         p.CanRead &&
                         p.GetMethod.IsPublic &&
                         !p.GetMethod.IsStatic)
@@ -105,6 +108,144 @@ namespace Abacaxi
             }
 
             return memberDict;
+        }
+
+        /// <summary>
+        /// Tries the cast or convert a given <paramref name="object"/> to a value of type <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type to convert to.</typeparam>
+        /// <param name="object">The object to convert.</param>
+        /// <param name="formatProvider">The format provider.</param>
+        /// <param name="result">The resulting converted value.</param>
+        /// <returns><c>true</c> if the conversion succeeded; otherwise, <c>false</c>.</returns>
+        public static bool TryConvert<T>(this object @object, [NotNull] IFormatProvider formatProvider, out T result)
+        {
+            Validate.ArgumentNotNull(nameof(formatProvider), formatProvider);
+
+            /* nulls */
+            result = default(T);
+            if (@object == null)
+            {
+                return result == null;
+            }
+
+            /* Quick'n'dirty */
+            var toType = typeof(T);
+            var objType = @object.GetType();
+
+            if (objType == toType)
+            {
+                result = (T) @object;
+                return true;
+            }
+
+            var underlyingType = Nullable.GetUnderlyingType(toType);
+            if (underlyingType != null)
+            {
+                toType = underlyingType;
+            }
+            var toTypeInfo = toType.GetTypeInfo();
+            var objTypeInfo = objType.GetTypeInfo();
+
+            /* Enums */
+            if (toTypeInfo.IsEnum)
+            {
+                try
+                {
+                    result = (T) Enum.Parse(toType, @object.ToString());
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            /* Sub-class/interface */
+            if (toTypeInfo.IsAssignableFrom(objTypeInfo))
+            {
+                result = (T) @object;
+                return true;
+            }
+
+            if (toType == typeof(string))
+            {
+                if (@object is IFormattable formattable)
+                {
+                    result = (T) (object) formattable.ToString(null, formatProvider);
+                }
+                else
+                {
+                    result = (T) (object) @object.ToString();
+                }
+
+                return true;
+            }
+
+            /* Last resort */
+            try
+            {
+                result = (T) Convert.ChangeType(@object, toType, formatProvider);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Tries the cast or convert a given <paramref name="object"/> to a value of type <typeparamref name="T"/>.
+        /// This method uses <seealso cref="CultureInfo.InvariantCulture"/> for the conversion.
+        /// </summary>
+        /// <typeparam name="T">The type to convert to.</typeparam>
+        /// <param name="object">The object to convert.</param>
+        /// <param name="result">The resulting converted value.</param>
+        /// <returns><c>true</c> if the conversion succeeded; otherwise, <c>false</c>.</returns>
+        public static bool TryConvert<T>(this object @object, out T result)
+        {
+            return TryConvert(@object, CultureInfo.InvariantCulture, out result);
+        }
+
+        /// <summary>
+        /// Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
+        /// </summary>
+        /// <typeparam name="T">The type to convert to.</typeparam>
+        /// <param name="object">The value to convert.</param>
+        /// <param name="formatProvider">The format provider.</param>
+        /// <returns>
+        /// The converted value.
+        /// </returns>
+        /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="formatProvider" /> is <c>null</c>.</exception>
+        public static T As<T>([CanBeNull] this object @object, [NotNull] IFormatProvider formatProvider)
+        {
+            if (!TryConvert(@object, formatProvider, out T result))
+            {
+                throw new FormatException($"Failed to convert object \"{@object}\" to a value of type {typeof(T).Name}.");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
+        /// This method uses <seealso cref="CultureInfo.InvariantCulture"/> for the conversion.
+        /// </summary>
+        /// <typeparam name="T">The type to convert to.</typeparam>
+        /// <param name="object">The value to convert.</param>
+        /// <returns>
+        /// The converted value.
+        /// </returns>
+        /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
+        public static T As<T>([CanBeNull] this object @object)
+        {
+            if (!TryConvert(@object, out T result))
+            {
+                throw new FormatException($"Failed to convert object \"{@object}\" to a value of type {typeof(T).Name}.");
+            }
+
+            return result;
         }
     }
 }

@@ -18,17 +18,20 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System;
     using System.Collections.Generic;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class AddOrUpdateTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AddOrUpdate_ThrowsException_IfDictIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => ((Dictionary<int, int>) null).AddOrUpdate(1, 1, i => i));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AddOrUpdate_ThrowsException_IfUpdateFuncIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new Dictionary<int, int>().AddOrUpdate(1, 1, null));

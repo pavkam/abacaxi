@@ -19,17 +19,20 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Collections.Generic;
     using System.Linq;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class ToListTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToList1_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList(i => i));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToList1_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int>) null));
@@ -52,12 +55,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToList2_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList((n, i) => i));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToList2_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int, int>) null));

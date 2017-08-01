@@ -13,16 +13,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Text;
-
 namespace Abacaxi
 {
     using System.Collections.Generic;
     using Internal;
     using JetBrains.Annotations;
     using System.Globalization;
-    using System;
-    using System.Reflection;
+    using System.Text;
 
     /// <summary>
     /// Extension method for the <see cref="string"/> data type.
@@ -35,7 +32,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="s">The string.</param>
         /// <returns>A wrapping list.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
         public static IList<char> AsList(this string s)
         {
             Validate.ArgumentNotNull(nameof(s), s);
@@ -47,7 +44,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="s">The string to reverse.</param>
         /// <returns>The reserved string.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
         public static string Reverse(this string s)
         {
             Validate.ArgumentNotNull(nameof(s), s);
@@ -66,83 +63,14 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Tries to convert a given string to a given type <typeparamref name="T"/>.
-        /// </summary>
-        /// <typeparam name="T">The type to convert to.</typeparam>
-        /// <param name="s">The string.</param>
-        /// <param name="formatProvider">The format provider.</param>
-        /// <param name="result">The converted value, if succeeded.</param>
-        /// <returns><c>true</c> if the converts succeeded; <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="formatProvider"/> is <c>null</c>.</exception>
-        public static bool TryAs<T>([CanBeNull] this string s, [NotNull] IFormatProvider formatProvider, out T result) where T : struct
-        {
-            Validate.ArgumentNotNull(nameof(formatProvider), formatProvider);
-
-            var typeInfo = typeof(T).GetTypeInfo();
-            if (typeInfo.IsEnum)
-            {
-                return Enum.TryParse(s, true, out result);
-            }
-
-            try
-            {
-                result = (T)Convert.ChangeType(s, typeof(T), formatProvider);
-            }
-            catch
-            {
-                result = default(T);
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Converts a given string to a given type <typeparamref name="T"/>.
-        /// </summary>
-        /// <typeparam name="T">The type to convert to.</typeparam>
-        /// <param name="s">The string.</param>
-        /// <param name="formatProvider">The format provider.</param>
-        /// <returns>The converted value.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="formatProvider"/> is <c>null</c>.</exception>
-        /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
-        public static T As<T>([CanBeNull] this string s, [NotNull] IFormatProvider formatProvider) where T : struct
-        {
-            if (!TryAs(s, formatProvider, out T result))
-            {
-                throw new FormatException($"Failed to convert the string \"{s}\" into a value of type {typeof(T)}.");
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Converts a given string to a given type <typeparamref name="T"/>.
-        /// </summary>
-        /// <typeparam name="T">The type to convert to.</typeparam>
-        /// <param name="s">The string.</param>
-        /// <returns>The converted value.</returns>
-        /// <remarks>This method uses <see cref="CultureInfo.InvariantCulture"/> as its format provider.</remarks>
-        /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
-        public static T As<T>([CanBeNull] this string s) where T : struct
-        {
-            if (!TryAs(s, CultureInfo.InvariantCulture, out T result))
-            {
-                throw new FormatException($"Failed to convert the string \"{s}\" into a value of type {typeof(T)}.");
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Shortens the specified string up to a maximum length.
         /// </summary>
         /// <param name="s">The string.</param>
         /// <param name="maxLength">The maximum length of the output string.</param>
         /// <param name="ellipsis">The optional ellipsis string.</param>
         /// <returns>A string of a maximum of <paramref name="maxLength"/> character.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="maxLength"/> is less than one or the length of <paramref name="ellipsis"/>is greater than <paramref name="maxLength"/>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="maxLength"/> is less than one or the length of <paramref name="ellipsis"/>is greater than <paramref name="maxLength"/>.</exception>
         public static string Shorten([NotNull] this string s, int maxLength, [CanBeNull] string ellipsis = "...")
         {
             Validate.ArgumentNotNull(nameof(s), s);

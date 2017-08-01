@@ -17,11 +17,13 @@ namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class ContainsSubsetWithAggregatedValueTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ContainsSubsequenceWithAggregatedValue_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>

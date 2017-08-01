@@ -47,6 +47,8 @@
     <Compile Include="IO\HelperMemoryStream.cs" />
     <Compile Include="IO\BitWriterTests.cs" />
     <Compile Include="ObjectExtensions\InspectMockObject.cs" />
+    <Compile Include="ObjectExtensions\AsTests.cs" />
+    <Compile Include="ObjectExtensions\TryConvertTests.cs" />
     <Compile Include="ObjectExtensions\InspectTests.cs" />
     <Compile Include="RandomExtensions\NextItemTests.cs" />
     <Compile Include="RandomExtensions\NextBoolTests.cs" />
@@ -62,9 +64,7 @@
     <Compile Include="SequenceExtensions\GetItemFrequenciesTests.cs" />
     <Compile Include="SequenceExtensions\AsListTests.cs" />
     <Compile Include="SequenceExtensions\ToSetTests.cs" />
-    <Compile Include="StringExtensions\AsTests.cs" />
     <Compile Include="StringExtensions\ShortenTests.cs" />
-    <Compile Include="StringExtensions\TryAsTests.cs" />
     <Compile Include="StringExtensions\ReverseTests.cs" />
     <Compile Include="StringExtensions\AsListTests.cs" />
     <Compile Include="Graph\Graph.Tests.DescribeVertices.cs" />
