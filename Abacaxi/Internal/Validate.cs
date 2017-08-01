@@ -160,15 +160,6 @@ namespace Abacaxi.Internal
                 return;
             }
 
-            var @string = sequence as string;
-            if (@string != null)
-            {
-                if (@string.Length == 0)
-                    throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
-
-                return;
-            }
-
             using (var enumerator = sequence.GetEnumerator())
             {
                 if (!enumerator.MoveNext())

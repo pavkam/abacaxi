@@ -24,7 +24,7 @@ namespace Abacaxi.Tests.IO
         public override void Close()
         {
             base.Close();
-            this.IsClosed = true;
+            IsClosed = true;
         }
     }
 }

@@ -1411,12 +1411,7 @@ namespace Abacaxi
 
                 return result;
             }
-            var seqAsString = sequence as string;
-            if (seqAsString != null)
-            {
-                return (IList<T>)seqAsString.AsList();
-            }
-
+           
             return sequence.ToArray();
         }
 
