@@ -64,6 +64,7 @@
     <Compile Include="SequenceExtensions\AsListTests.cs" />
     <Compile Include="SequenceExtensions\ToSetTests.cs" />
     <Compile Include="StringExtensions\AsTests.cs" />
+    <Compile Include="StringExtensions\ShortenTests.cs" />
     <Compile Include="StringExtensions\TryAsTests.cs" />
     <Compile Include="StringExtensions\ReverseTests.cs" />
     <Compile Include="StringExtensions\AsListTests.cs" />

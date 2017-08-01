@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Text;
+
 namespace Abacaxi
 {
     using System.Collections.Generic;
@@ -130,6 +132,39 @@ namespace Abacaxi
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Shortens the specified string up to a maximum length.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <param name="maxLength">The maximum length of the output string.</param>
+        /// <param name="ellipsis">The optional ellipsis string.</param>
+        /// <returns>A string of a maximum of <paramref name="maxLength"/> character.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="maxLength"/> is less than one or the length of <paramref name="ellipsis"/>is greater than <paramref name="maxLength"/>.</exception>
+        public static string Shorten([NotNull] this string s, int maxLength, [CanBeNull] string ellipsis = "...")
+        {
+            Validate.ArgumentNotNull(nameof(s), s);
+            Validate.ArgumentGreaterThanZero(nameof(maxLength), maxLength);
+            if (ellipsis != null)
+            {
+                Validate.ArgumentLessThanOrEqualTo(nameof(ellipsis), ellipsis.Length, maxLength);
+            }
+
+            var length = s.Length;
+            if (length > maxLength)
+            {
+                length = maxLength;
+                if (!string.IsNullOrEmpty(ellipsis))
+                {
+                    length -= ellipsis.Length;
+                }
+
+                return new StringBuilder(s, 0, length, maxLength).Append(ellipsis).ToString();
+            }
+
+            return s;
         }
     }
 }
