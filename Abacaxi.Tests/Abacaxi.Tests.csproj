@@ -59,7 +59,6 @@
     <Compile Include="SequenceExtensions\EmptyIfNullTests.cs" />
     <Compile Include="SequenceExtensions\PartitionTests.cs" />
     <Compile Include="SequenceExtensions\ToListTests.cs" />
-    <Compile Include="SequenceExtensions\AsIndexedEnumerableTests.cs" />
     <Compile Include="SequenceExtensions\GetItemFrequenciesTests.cs" />
     <Compile Include="SequenceExtensions\AsListTests.cs" />
     <Compile Include="SequenceExtensions\ToSetTests.cs" />

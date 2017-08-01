@@ -1656,42 +1656,6 @@ namespace Abacaxi
             return array;
         }
 
-        [NotNull]
-        public static IEnumerable<KeyValuePair<int, T>> AsIndexedEnumerableIterate<T>([NotNull] this IEnumerable<T> sequence)
-        {
-            Debug.Assert(sequence != null );
-
-            if (sequence is IList<T> list)
-            {
-                for (var i = 0; i < list.Count; i++)
-                {
-                    yield return new KeyValuePair<int, T>(i, list[i]);
-                }
-            }
-            else
-            {
-                var index = 0;
-                foreach (var item in sequence)
-                {
-                    yield return new KeyValuePair<int, T>(index++, item);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Interprets a list as an index-value pair sequence.
-        /// </summary>
-        /// <typeparam name="T">The type of elements in the list.</typeparam>
-        /// <param name="sequence">The sequence to convert to an index-value sequence.</param>
-        /// <returns>The resulting sequence.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        [NotNull]
-        public static IEnumerable<KeyValuePair<int, T>> AsIndexedEnumerable<T>([NotNull] this IEnumerable<T> sequence)
-        {
-            Validate.ArgumentNotNull(nameof(sequence), sequence);
-            return AsIndexedEnumerableIterate(sequence);
-        }
-
         /// <summary>
         /// Converts a given sequence to a list by applying a <paramref name="selector"/> to each element of the <paramref name="sequence"/>.
         /// </summary>
