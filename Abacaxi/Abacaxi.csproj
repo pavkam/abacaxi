@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregator.cs" />
-    <Compile Include="SetCoverage.cs" />
+    <Compile Include="Set.cs" />
     <Compile Include="IntegerPartitions.cs" />
     <Compile Include="CombinatorialAlgorithms.cs" />
     <Compile Include="Containers\ArrayEqualityComparer.cs" />

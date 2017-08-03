@@ -13,61 +13,61 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.CombinatorialAlgorithms
+namespace Abacaxi.Tests.Set
 {
     using System;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class EvaluateAllSubsetCombinationsTests
+    public class EnumerateSubsetCombinationsTests
     {
         [Test]
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void EvaluateAllSubsetCombinations_ThrowsException_ForNullSequence()
+        public void EnumerateSubsetCombinations_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[]) null).EvaluateAllSubsetCombinations(1));
+                ((int[]) null).EnumerateSubsetCombinations(1));
         }
 
         [Test]
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void EvaluateAllSubsetCombinations_ThrowsException_ForSubsetsLessThanOne()
+        public void EnumerateSubsetCombinations_ThrowsException_ForSubsetsLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new int[] {}.EvaluateAllSubsetCombinations(0));
+                new int[] {}.EnumerateSubsetCombinations(0));
         }
 
         [Test]
-        public void EvaluateAllSubsetCombinations_ReturnsNothing_ForEmptySequence()
+        public void EnumerateSubsetCombinations_ReturnsNothing_ForEmptySequence()
         {
             TestHelper.AssertSequence(
-                new int[] { }.EvaluateAllSubsetCombinations(1)
+                new int[] { }.EnumerateSubsetCombinations(1)
                 );
         }
 
         [Test]
-        public void EvaluateAllSubsetCombinations_ReturnsOneCombination_ForOneElementAndOneSubset()
+        public void EnumerateSubsetCombinations_ReturnsOneCombination_ForOneElementAndOneSubset()
         {
             TestHelper.AssertSequence(
-                new[] { 10 }.EvaluateAllSubsetCombinations(1),
+                new[] { 10 }.EnumerateSubsetCombinations(1),
                 new[] { new[] { 10 } });
         }
 
         [Test]
-        public void EvaluateAllSubsetCombinations_ReturnsTwoCombinations_ForOneElementAndTwoSubsets()
+        public void EnumerateSubsetCombinations_ReturnsTwoCombinations_ForOneElementAndTwoSubsets()
         {
             TestHelper.AssertSequence(
-                new[] { 10 }.EvaluateAllSubsetCombinations(2),
+                new[] { 10 }.EnumerateSubsetCombinations(2),
                 new[] { new[] { 10 }, new int[] {} },
                 new[] { new int[] { }, new[] { 10 } });
         }
 
         [Test]
-        public void EvaluateAllSubsetCombinations_ReturnsFourCombinations_ForTwoElementAndTwoSubsets()
+        public void EnumerateSubsetCombinations_ReturnsFourCombinations_ForTwoElementAndTwoSubsets()
         {
             TestHelper.AssertSequence(
-                new[] {11, 19}.EvaluateAllSubsetCombinations(2),
+                new[] {11, 19}.EnumerateSubsetCombinations(2),
                 new[]
                 {
                     new[] {11, 19},
@@ -91,10 +91,10 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         }
 
         [Test]
-        public void EvaluateAllSubsetCombinations_DoesNotCareIfDuplicates()
+        public void EnumerateSubsetCombinations_DoesNotCareIfDuplicates()
         {
             TestHelper.AssertSequence(
-                new[] { 1, 1 }.EvaluateAllSubsetCombinations(2),
+                new[] { 1, 1 }.EnumerateSubsetCombinations(2),
                 new[]
                 {
                     new[] {1, 1},

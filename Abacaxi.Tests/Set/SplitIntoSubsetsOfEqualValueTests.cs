@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.CombinatorialAlgorithms
+namespace Abacaxi.Tests.Set
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class FindSubsetsWithEqualAggregateValueTests
+    public class SplitIntoSubsetsOfEqualValueTests
     {
         private static int IntegerAggregator(int a, int b)
         {
@@ -30,71 +30,71 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
 
         [Test]
         [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void FindSubsetsWithEqualAggregateValue_ThrowsException_IfSequenceIsNull()
+        public void SplitIntoSubsetsOfEqualValue_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[]) null).FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 1));
+                ((int[]) null).SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 1));
         }
 
         [Test]
         [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void FindSubsetsWithEqualAggregateValue_ThrowsException_IfAggregatorIsNull()
+        public void SplitIntoSubsetsOfEqualValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] {1}.FindSubsetsWithEqualAggregateValue(null, Comparer<int>.Default, 1));
+                new[] {1}.SplitIntoSubsetsOfEqualValue(null, Comparer<int>.Default, 1));
         }
 
         [Test]
         [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void FindSubsetsWithEqualAggregateValue_ThrowsException_IfComparerIsNull()
+        public void SplitIntoSubsetsOfEqualValue_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] {1}.FindSubsetsWithEqualAggregateValue(IntegerAggregator, null, 1));
+                new[] {1}.SplitIntoSubsetsOfEqualValue(IntegerAggregator, null, 1));
         }
 
         [Test]
         [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void FindSubsetsWithEqualAggregateValue_ThrowsException_IsCountOfPartitionsLessThanOne()
+        public void SplitIntoSubsetsOfEqualValue_ThrowsException_IsCountOfPartitionsLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] {1}.FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 0));
+                new[] {1}.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 0));
         }
 
         [Test]
-        public void FindSubsetsWithEqualAggregateValue_ReturnsNothing_ForEmptySequence()
+        public void SplitIntoSubsetsOfEqualValue_ReturnsNothing_ForEmptySequence()
         {
             var array = new int[] {};
             TestHelper.AssertSequence(
-                array.FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 1)
+                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 1)
             );
         }
 
         [Test]
-        public void FindSubsetsWithEqualAggregateValue_ReturnsEverything_IfOnlyOnePartition()
+        public void SplitIntoSubsetsOfEqualValue_ReturnsEverything_IfOnlyOnePartition()
         {
             var array = new[] {1, 2, 3, 4, 5};
             TestHelper.AssertSequence(
-                array.FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 1),
+                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 1),
                 new[] {1, 2, 3, 4, 5});
         }
 
         [Test]
-        public void FindSubsetsWithEqualAggregateValue_ReturnsTwoPartitions_IfPossible()
+        public void SplitIntoSubsetsOfEqualValue_ReturnsTwoPartitions_IfPossible()
         {
             var array = new[] {2, 1, 3, 2};
             TestHelper.AssertSequence(
-                array.FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 2),
+                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 2),
                 new[] {2, 2},
                 new[] {1, 3}
             );
         }
 
         [Test]
-        public void FindSubsetsWithEqualAggregateValue_ReturnsThreePartitions_IfPossible()
+        public void SplitIntoSubsetsOfEqualValue_ReturnsThreePartitions_IfPossible()
         {
             var array = new[] {2, 1, 3, 4, 5};
             TestHelper.AssertSequence(
-                array.FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 3),
+                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 3),
                 new[] {2, 3},
                 new[] {1, 4},
                 new[] {5}
@@ -102,20 +102,20 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         }
 
         [Test]
-        public void FindSubsetsWithEqualAggregateValue_ReturnsNothing_IfThreePartitionsNotPossible()
+        public void SplitIntoSubsetsOfEqualValue_ReturnsNothing_IfThreePartitionsNotPossible()
         {
             var array = new[] {2, 1, 3, 2, 5};
             TestHelper.AssertSequence(
-                array.FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 3)
+                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 3)
             );
         }
 
         [Test]
-        public void FindSubsetsWithEqualAggregateValue_ReturnsEmptyArrayAndAll_ForNegativeZeroing()
+        public void SplitIntoSubsetsOfEqualValue_ReturnsEmptyArrayAndAll_ForNegativeZeroing()
         {
             var array = new[] { -1, 1 };
             TestHelper.AssertSequence(
-                array.FindSubsetsWithEqualAggregateValue(IntegerAggregator, Comparer<int>.Default, 2),
+                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 2),
                 new[] { -1, 1 },
                 new int[] { }
             );

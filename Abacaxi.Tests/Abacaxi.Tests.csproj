@@ -37,8 +37,8 @@
     <Compile Include="CombinatorialAlgorithms\ApproximateSubsetPairingWithLowestCost.cs" />
     <Compile Include="CombinatorialAlgorithms\FindSubsetPairingWithLowestCost.cs" />
     <Compile Include="IntegerPartitions\EnumerateTests.cs" />
-    <Compile Include="SetCoverage\FindOptimalFullCoverageTests.cs" />
-    <Compile Include="CombinatorialAlgorithms\EvaluateAllSubsetCombinations.cs" />
+    <Compile Include="Set\GetOptimalFullCoverageTests.cs" />
+    <Compile Include="Set\EnumerateSubsetCombinationsTests.cs" />
     <Compile Include="Containers\ArrayEqualityComparerTests.cs" />
     <Compile Include="Containers\TemporaryTests.cs" />
     <Compile Include="Containers\TrieTests.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="IntegerExtensions\DeconstructIntoPowersOfTwoTests.cs" />
     <Compile Include="Containers\SingleLinkedNodeTests.cs" />
     <Compile Include="SequenceExtensions\MergeSortTests.cs" />
-    <Compile Include="CombinatorialAlgorithms\FindSubsetsWithEqualAggregateValue.cs" />
+    <Compile Include="Set\SplitIntoSubsetsOfEqualValueTests.cs" />
     <Compile Include="SequenceExtensions\HeapSortTests.cs" />
     <Compile Include="SequenceExtensions\InterleaveTests.cs" />
     <Compile Include="RandomExtensions\SampleTests.cs" />
