@@ -44,6 +44,7 @@
     <Compile Include="Containers\TrieTests.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
+    <Compile Include="GlobPatternTests.cs" />
     <Compile Include="IO\HelperMemoryStream.cs" />
     <Compile Include="IO\BitWriterTests.cs" />
     <Compile Include="ObjectExtensions\InspectMockObject.cs" />
@@ -64,6 +65,8 @@
     <Compile Include="SequenceExtensions\GetItemFrequenciesTests.cs" />
     <Compile Include="SequenceExtensions\AsListTests.cs" />
     <Compile Include="SequenceExtensions\ToSetTests.cs" />
+    <Compile Include="StringExtensions\LikeTests.cs" />
+    <Compile Include="StringExtensions\EscapeTests.cs" />
     <Compile Include="StringExtensions\ShortenTests.cs" />
     <Compile Include="StringExtensions\ReverseTests.cs" />
     <Compile Include="StringExtensions\AsListTests.cs" />

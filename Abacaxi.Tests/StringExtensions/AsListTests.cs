@@ -23,6 +23,7 @@ namespace Abacaxi.Tests.StringExtensions
     public sealed class AsListTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AsList_ThrowsException_IfStringIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => ((string)null).AsList());

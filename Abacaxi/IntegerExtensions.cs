@@ -150,7 +150,7 @@ namespace Abacaxi
         /// <param name="base">The base of the digits.</param>
         /// <returns>A number whose digits are taken from both <paramref name="x"/> and <paramref name="y"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="x"/> or <paramref name="y"/> are less than zero; or <paramref name="base"/> is less than two.</exception>
-        public static int Zip(int x, int y, int @base = 10)
+        public static int Zip(this int x, int y, int @base = 10)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(x), x);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(y), y);
@@ -203,7 +203,7 @@ namespace Abacaxi
         /// <returns>The Fibonacci sequence.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count"/> is less than zero.</exception>
         [NotNull]
-        public static IEnumerable<int> EnumerateFibonacciNumbers(int count)
+        public static IEnumerable<int> EnumerateFibonacciNumbers(this int count)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(count), count);
 
@@ -216,7 +216,7 @@ namespace Abacaxi
         /// <param name="number">The index of the Fibonacci number to calculate.</param>
         /// <returns>The Fibonacci number</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="number"/> is less than zero.</exception>
-        public static int GetFibonacciNumber(int number)
+        public static int GetFibonacciNumber(this int number)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(number), number);
 

@@ -51,6 +51,7 @@
     <Compile Include="Containers\Trie.cs" />
     <Compile Include="EditOperation.cs" />
     <Compile Include="Edit.cs" />
+    <Compile Include="GlobPattern.cs" />
     <Compile Include="Graphs\VertexDescriptor.cs" />
     <Compile Include="Graphs\Edge.cs" />
     <Compile Include="Graphs\LiteralWeightedGraph.cs" />

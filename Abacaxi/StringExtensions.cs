@@ -33,7 +33,8 @@ namespace Abacaxi
         /// <param name="s">The string.</param>
         /// <returns>A wrapping list.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
-        public static IList<char> AsList(this string s)
+        [NotNull]
+        public static IList<char> AsList([NotNull] this string s)
         {
             Validate.ArgumentNotNull(nameof(s), s);
             return new StringListWrapper(s);
@@ -45,6 +46,7 @@ namespace Abacaxi
         /// <param name="s">The string to reverse.</param>
         /// <returns>The reserved string.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        [NotNull]
         public static string Reverse(this string s)
         {
             Validate.ArgumentNotNull(nameof(s), s);
@@ -71,7 +73,7 @@ namespace Abacaxi
         /// <returns>A string of a maximum of <paramref name="maxLength"/> character.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="maxLength"/> is less than one or the length of <paramref name="ellipsis"/>is greater than <paramref name="maxLength"/>.</exception>
-        public static string Shorten([NotNull] this string s, int maxLength, [CanBeNull] string ellipsis = "...")
+        public static string Shorten([NotNull] this string s, int maxLength, [CanBeNull] string ellipsis = null)
         {
             Validate.ArgumentNotNull(nameof(s), s);
             Validate.ArgumentGreaterThanZero(nameof(maxLength), maxLength);
@@ -80,19 +82,122 @@ namespace Abacaxi
                 Validate.ArgumentLessThanOrEqualTo(nameof(ellipsis), ellipsis.Length, maxLength);
             }
 
-            var length = s.Length;
-            if (length > maxLength)
+            if (s.Length > maxLength)
             {
-                length = maxLength;
-                if (!string.IsNullOrEmpty(ellipsis))
+                var elpLength = ellipsis?.Length ?? 0;
+                var cutOffLen = 0; 
+                var enumerator = StringInfo.GetTextElementEnumerator(s);
+                while (enumerator.MoveNext())
                 {
-                    length -= ellipsis.Length;
+                    var expLength = enumerator.ElementIndex + elpLength;
+                    if (expLength <= maxLength)
+                    {
+                        cutOffLen = enumerator.ElementIndex;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
 
-                return new StringBuilder(s, 0, length, maxLength).Append(ellipsis).ToString();
+                var sb = new StringBuilder(s, 0, cutOffLen, maxLength);
+                if (ellipsis != null)
+                    sb.Append(ellipsis);
+
+                s = sb.ToString();
             }
 
             return s;
+        }
+
+        /// <summary>
+        /// Escapes the specified string.
+        /// </summary>
+        /// <remarks>
+        /// This method escapes the special characters and unicode escape characters.</remarks>
+        /// <param name="s">The string to escape.</param>
+        /// <returns>The escaped string.</returns>
+        public static string Escape([CanBeNull] this string s)
+        {
+            Validate.ArgumentNotNull(nameof(s), s);
+
+            var result = new StringBuilder(s.Length * 2);
+            var enumerator = StringInfo.GetTextElementEnumerator(s);
+            while (enumerator.MoveNext())
+            {
+                var segment = (string) enumerator.Current;
+
+                if (segment.Length == 1)
+                {
+                    var c = segment[0];
+                    switch (c)
+                    {
+                        case '\'':
+                            result.Append("\\'");
+                            break;
+                        case '"':
+                            result.Append("\\\"");
+                            break;
+                        case '\\':
+                            result.Append("\\\\");
+                            break;
+                        case '\0':
+                            result.Append("\\0");
+                            break;
+                        case '\a':
+                            result.Append("\\a");
+                            break;
+                        case '\b':
+                            result.Append("\\b");
+                            break;
+                        case '\f':
+                            result.Append("\\f");
+                            break;
+                        case '\n':
+                            result.Append("\\n");
+                            break;
+                        case '\r':
+                            result.Append("\\r");
+                            break;
+                        case '\t':
+                            result.Append("\\t");
+                            break;
+                        case '\v':
+                            result.Append("\\v");
+                            break;
+                        default:
+                            if (char.IsControl(c))
+                            {
+                                result.Append($"\\u{(int) segment[0]:x4}");
+                            }
+                            else
+                            {
+                                result.Append(c);
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    result.Append(segment);
+                }
+            }
+
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// Checks whether the given string matches the specified pattern.
+        /// </summary>
+        /// <param name="s">The string to check.</param>
+        /// <param name="pattern">The pattern.</param>
+        /// <param name="ignoreCase">If set to <c>true</c>, ignores the case.</param>
+        /// <returns><c>true</c> if the string matches the pattern; otherwise, <c>false</c>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> or <paramref name="pattern"/> are <c>null</c>.</exception>
+        public static bool Like([NotNull] this string s, [NotNull] string pattern, bool ignoreCase = true)
+        {
+            Validate.ArgumentNotNull(nameof(pattern), pattern);
+            return GlobPattern.GetPattern(pattern, ignoreCase).IsMatch(s);
         }
     }
 }

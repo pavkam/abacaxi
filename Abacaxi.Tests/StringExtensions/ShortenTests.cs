@@ -38,7 +38,7 @@ namespace Abacaxi.Tests.StringExtensions
         [Test]
         public void Shorten_ThrowsException_IfEllipsisLengthGreaterThanMaxLength()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => "".Shorten(2));
+            Assert.Throws<ArgumentOutOfRangeException>(() => "".Shorten(2, "..."));
         }
 
         [TestCase("", 1, null, "")]
@@ -54,6 +54,19 @@ namespace Abacaxi.Tests.StringExtensions
         {
             var actual = s.Shorten(l, e);
 
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase("Les Misérables", 7, "Les Mis")]
+        [TestCase("Les Misérables", 8, "Les Mis")]
+        [TestCase("Les Misérables", 9, "Les Misé")]
+        [TestCase("क्षि", 4, "क्षि")]
+        [TestCase("क्षि", 3, "क्")]
+        [TestCase("क्षि", 2, "क्")]
+        [TestCase("क्षि", 1, "")]
+        public void Shorten_TakesIntoAccount_MultiCharSequences(string s, int l, string expected)
+        {
+            var actual = s.Shorten(l);
             Assert.AreEqual(expected, actual);
         }
     }
