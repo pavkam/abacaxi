@@ -37,7 +37,7 @@
     <Compile Include="CombinatorialAlgorithms\ApproximateSubsetPairingWithLowestCost.cs" />
     <Compile Include="CombinatorialAlgorithms\FindSubsetPairingWithLowestCost.cs" />
     <Compile Include="IntegerPartitions\EnumerateTests.cs" />
-    <Compile Include="CombinatorialAlgorithms\FindBestSetCoverage.cs" />
+    <Compile Include="SetCoverage\FindOptimalFullCoverageTests.cs" />
     <Compile Include="CombinatorialAlgorithms\EvaluateAllSubsetCombinations.cs" />
     <Compile Include="Containers\ArrayEqualityComparerTests.cs" />
     <Compile Include="Containers\TemporaryTests.cs" />

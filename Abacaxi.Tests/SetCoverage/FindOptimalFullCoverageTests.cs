@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.CombinatorialAlgorithms
+namespace Abacaxi.Tests.SetCoverage
 {
     using System;
     using System.Collections.Generic;
@@ -21,88 +21,88 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class FindMinimumNumberOfSetsWithFullCoverageTests
+    public class FindOptimalFullCoverageTests
     {
         [Test]
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void FindMinimumNumberOfSetsWithFullCoverage_ThrowsException_ForNullSets()
+        public void FindOptimalFullCoverage_ThrowsException_ForNullSets()
         {
             Assert.Throws<ArgumentNullException>(() => 
-                Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(null, EqualityComparer<int>.Default));
+                Abacaxi.SetCoverage.FindOptimalFullCoverage(null, EqualityComparer<int>.Default));
         }
 
         [Test]
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void FindMinimumNumberOfSetsWithFullCoverage_ThrowsException_ForEqualityComparer()
+        public void FindOptimalFullCoverage_ThrowsException_ForEqualityComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(new ISet<int>[] { }, null));
+                Abacaxi.SetCoverage.FindOptimalFullCoverage(new ISet<int>[] { }, null));
         }
 
         [Test]
-        public void FindMinimumNumberOfSetsWithFullCoverage_ReturnsNothing_ForEmptySets()
+        public void FindOptimalFullCoverage_ReturnsNothing_ForEmptySets()
         {
-            var coverage = Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(new ISet<int>[] {}, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.SetCoverage.FindOptimalFullCoverage(new ISet<int>[] {}, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(coverage);
         }
 
         [Test]
-        public void FindMinimumNumberOfSetsWithFullCoverage_ReturnsSingleSet()
+        public void FindOptimalFullCoverage_ReturnsSingleSet()
         {
             var set = new HashSet<int> {1, 2, 3, 4};
-            var coverage = Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(new[] { set }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.SetCoverage.FindOptimalFullCoverage(new[] { set }, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(
                 coverage, set);
         }
 
         [Test]
-        public void FindMinimumNumberOfSetsWithFullCoverage_ReturnsIndividualSets_IfNoIntersectionFound()
+        public void FindOptimalFullCoverage_ReturnsIndividualSets_IfNoIntersectionFound()
         {
             var set1 = new HashSet<int> {1};
             var set2 = new HashSet<int> {2};
             var set3 = new HashSet<int> {3};
 
-            var coverage = Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(new[] { set1, set2, set3 }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.SetCoverage.FindOptimalFullCoverage(new[] { set1, set2, set3 }, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(
                 coverage, set1, set2, set3);
         }
 
         [Test]
-        public void FindMinimumNumberOfSetsWithFullCoverage_ReturnsBestChoiceOnly()
+        public void FindOptimalFullCoverage_ReturnsBestChoiceOnly()
         {
             var set1 = new HashSet<int> { 1, 2 };
             var set2 = new HashSet<int> { 2 };
 
-            var coverage = Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(new[] { set1, set2 }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.SetCoverage.FindOptimalFullCoverage(new[] { set1, set2 }, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(
                 coverage, set1);
         }
 
         [Test]
-        public void FindMinimumNumberOfSetsWithFullCoverage_ReturnsGreatestOneFirst()
+        public void FindOptimalFullCoverage_ReturnsGreatestOneFirst()
         {
             var set1 = new HashSet<int> { 1, 4 };
             var set2 = new HashSet<int> { 2, 3, 1 };
 
-            var coverage = Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(new[] { set1, set2 }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.SetCoverage.FindOptimalFullCoverage(new[] { set1, set2 }, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(coverage, set2, set1);
         }
 
         [Test]
-        public void FindMinimumNumberOfSetsWithFullCoverage_ReturnsTwoSets()
+        public void FindOptimalFullCoverage_ReturnsTwoSets()
         {
             var set1 = new HashSet<int> { 1, 2 };
             var set2 = new HashSet<int> { 2, 3 };
             var set3 = new HashSet<int> { 1, 3 };
 
-            var coverage = Abacaxi.CombinatorialAlgorithms.FindMinimumNumberOfSetsWithFullCoverage(new[] { set1, set2, set3 }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.SetCoverage.FindOptimalFullCoverage(new[] { set1, set2, set3 }, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(coverage, set1, set2);
         }
