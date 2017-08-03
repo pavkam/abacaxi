@@ -23,12 +23,11 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class implements multiple algorithms that deals with combinatorial problems.
+    /// Class implements algorithms used to pair items in sequences towards a given cost goal.
     /// </summary>
     [PublicAPI]
-    public static class CombinatorialAlgorithms
+    public static class Pairing
     {
-
         private sealed class RecursiveFindSubsetPairingWithLowestCostContext
         {
             public int[] Indices;
@@ -38,7 +37,7 @@ namespace Abacaxi
         }
 
         private static void RecursiveFindSubsetPairingWithLowestCost(
-            RecursiveFindSubsetPairingWithLowestCostContext context,
+            [NotNull] RecursiveFindSubsetPairingWithLowestCostContext context,
             int i,
             int set,
             double currentCost)
@@ -100,9 +99,9 @@ namespace Abacaxi
         /// <returns>A sequence of pairs which lowest overall cost.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluateCostOfPairFunc"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence"/> is not even.</exception>
-        public static Tuple<T, T>[] FindSubsetPairingWithLowestCost<T>(
-            this IList<T> sequence,
-            Func<T, T, double> evaluateCostOfPairFunc)
+        public static Tuple<T, T>[] GetWithMinimumCost<T>(
+            [NotNull] IList<T> sequence,
+            [NotNull] Func<T, T, double> evaluateCostOfPairFunc)
         {
             Validate.CollectionArgumentsHasEvenNumberOfElements(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(evaluateCostOfPairFunc), evaluateCostOfPairFunc);
@@ -158,9 +157,9 @@ namespace Abacaxi
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> or <paramref name="evaluateCostOfPairFunc" /> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence" /> is not even.</exception>
-        public static Tuple<T, T>[] ApproximateSubsetPairingWithLowestCost<T>(
-            this IList<T> sequence,
-            Func<T, T, double> evaluateCostOfPairFunc,
+        public static Tuple<T, T>[] GetWithApproximateMinimumCost<T>(
+            [NotNull] IList<T> sequence,
+            [NotNull] Func<T, T, double> evaluateCostOfPairFunc,
             int iterations = 100000)
         {
             Validate.CollectionArgumentsHasEvenNumberOfElements(nameof(sequence), sequence);
@@ -173,12 +172,12 @@ namespace Abacaxi
             }
 
             var steps = (int)Math.Sqrt(iterations);
-            var result = HeuristicAlgorithms.ApplySimulatedAnnealing(sequence, 2, pair =>
+            var result = SimulatedAnnealing.Evaluate(sequence, 2, pair =>
                 {
                     Debug.Assert(pair != null && pair.Length == 2);
                     return evaluateCostOfPairFunc(pair[0], pair[1]);
                 },
-                new HeuristicAlgorithms.SimulatedAnnealingParams(coolingSteps: steps, iterationsPerCoolingStep: steps));
+                new SimulatedAnnealing.AlgorithmParameters(coolingSteps: steps, iterationsPerCoolingStep: steps));
 
             return result.Select(pair =>
             {

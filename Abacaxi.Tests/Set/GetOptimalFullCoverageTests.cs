@@ -24,16 +24,14 @@ namespace Abacaxi.Tests.Set
     public class GetOptimalFullCoverageTests
     {
         [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetOptimalFullCoverage_ThrowsException_ForNullSets()
         {
-            Assert.Throws<ArgumentNullException>(() => 
+            Assert.Throws<ArgumentNullException>(() =>
                 Abacaxi.Set.GetOptimalFullCoverage(null, EqualityComparer<int>.Default));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetOptimalFullCoverage_ThrowsException_ForEqualityComparer()
         {
@@ -44,7 +42,7 @@ namespace Abacaxi.Tests.Set
         [Test]
         public void GetOptimalFullCoverage_ReturnsNothing_ForEmptySets()
         {
-            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new ISet<int>[] {}, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new ISet<int>[] { }, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(coverage);
         }
@@ -53,7 +51,7 @@ namespace Abacaxi.Tests.Set
         public void GetOptimalFullCoverage_ReturnsSingleSet()
         {
             var set = new HashSet<int> {1, 2, 3, 4};
-            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] { set }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] {set}, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(
                 coverage, set);
@@ -66,7 +64,7 @@ namespace Abacaxi.Tests.Set
             var set2 = new HashSet<int> {2};
             var set3 = new HashSet<int> {3};
 
-            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] { set1, set2, set3 }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] {set1, set2, set3}, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(
                 coverage, set1, set2, set3);
@@ -75,10 +73,10 @@ namespace Abacaxi.Tests.Set
         [Test]
         public void GetOptimalFullCoverage_ReturnsBestChoiceOnly()
         {
-            var set1 = new HashSet<int> { 1, 2 };
-            var set2 = new HashSet<int> { 2 };
+            var set1 = new HashSet<int> {1, 2};
+            var set2 = new HashSet<int> {2};
 
-            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] { set1, set2 }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] {set1, set2}, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(
                 coverage, set1);
@@ -87,10 +85,10 @@ namespace Abacaxi.Tests.Set
         [Test]
         public void GetOptimalFullCoverage_ReturnsGreatestOneFirst()
         {
-            var set1 = new HashSet<int> { 1, 4 };
-            var set2 = new HashSet<int> { 2, 3, 1 };
+            var set1 = new HashSet<int> {1, 4};
+            var set2 = new HashSet<int> {2, 3, 1};
 
-            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] { set1, set2 }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] {set1, set2}, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(coverage, set2, set1);
         }
@@ -98,11 +96,11 @@ namespace Abacaxi.Tests.Set
         [Test]
         public void GetOptimalFullCoverage_ReturnsTwoSets()
         {
-            var set1 = new HashSet<int> { 1, 2 };
-            var set2 = new HashSet<int> { 2, 3 };
-            var set3 = new HashSet<int> { 1, 3 };
+            var set1 = new HashSet<int> {1, 2};
+            var set2 = new HashSet<int> {2, 3};
+            var set3 = new HashSet<int> {1, 3};
 
-            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] { set1, set2, set3 }, EqualityComparer<int>.Default);
+            var coverage = Abacaxi.Set.GetOptimalFullCoverage(new[] {set1, set2, set3}, EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(coverage, set1, set2);
         }

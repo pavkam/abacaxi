@@ -47,7 +47,7 @@
     <Compile Include="Aggregator.cs" />
     <Compile Include="Set.cs" />
     <Compile Include="IntegerPartitions.cs" />
-    <Compile Include="CombinatorialAlgorithms.cs" />
+    <Compile Include="Pairing.cs" />
     <Compile Include="Containers\ArrayEqualityComparer.cs" />
     <Compile Include="Containers\Temporary.cs" />
     <Compile Include="Containers\Trie.cs" />
@@ -64,7 +64,7 @@
     <Compile Include="IO\BitWriter.cs" />
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="HeuristicAlgorithms.cs" />
+    <Compile Include="SimulatedAnnealing.cs" />
     <Compile Include="SequenceExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Containers\Heap.cs" />

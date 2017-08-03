@@ -34,8 +34,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CombinatorialAlgorithms\ApproximateSubsetPairingWithLowestCost.cs" />
-    <Compile Include="CombinatorialAlgorithms\FindSubsetPairingWithLowestCost.cs" />
+    <Compile Include="Pairing\GetWithApproximateMinimumCost.cs" />
+    <Compile Include="Pairing\GetWithMinimumCost.cs" />
     <Compile Include="IntegerPartitions\EnumerateTests.cs" />
     <Compile Include="Set\GetOptimalFullCoverageTests.cs" />
     <Compile Include="Set\EnumerateSubsetCombinationsTests.cs" />

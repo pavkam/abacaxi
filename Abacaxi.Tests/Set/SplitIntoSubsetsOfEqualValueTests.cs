@@ -29,43 +29,42 @@ namespace Abacaxi.Tests.Set
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void SplitIntoSubsetsOfEqualValue_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[]) null).SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 1));
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(null, IntegerAggregator, Comparer<int>.Default, 1));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void SplitIntoSubsetsOfEqualValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] {1}.SplitIntoSubsetsOfEqualValue(null, Comparer<int>.Default, 1));
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(new[] {1}, null, Comparer<int>.Default, 1));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void SplitIntoSubsetsOfEqualValue_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] {1}.SplitIntoSubsetsOfEqualValue(IntegerAggregator, null, 1));
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(new[] {1}, IntegerAggregator, null, 1));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         public void SplitIntoSubsetsOfEqualValue_ThrowsException_IsCountOfPartitionsLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] {1}.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 0));
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(new[] {1}, IntegerAggregator, Comparer<int>.Default, 0));
         }
 
         [Test]
         public void SplitIntoSubsetsOfEqualValue_ReturnsNothing_ForEmptySequence()
         {
-            var array = new int[] {};
+            var array = new int[] { };
             TestHelper.AssertSequence(
-                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 1)
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(array, IntegerAggregator, Comparer<int>.Default, 1)
             );
         }
 
@@ -74,7 +73,7 @@ namespace Abacaxi.Tests.Set
         {
             var array = new[] {1, 2, 3, 4, 5};
             TestHelper.AssertSequence(
-                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 1),
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(array, IntegerAggregator, Comparer<int>.Default, 1),
                 new[] {1, 2, 3, 4, 5});
         }
 
@@ -83,7 +82,7 @@ namespace Abacaxi.Tests.Set
         {
             var array = new[] {2, 1, 3, 2};
             TestHelper.AssertSequence(
-                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 2),
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(array, IntegerAggregator, Comparer<int>.Default, 2),
                 new[] {2, 2},
                 new[] {1, 3}
             );
@@ -94,7 +93,7 @@ namespace Abacaxi.Tests.Set
         {
             var array = new[] {2, 1, 3, 4, 5};
             TestHelper.AssertSequence(
-                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 3),
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(array, IntegerAggregator, Comparer<int>.Default, 3),
                 new[] {2, 3},
                 new[] {1, 4},
                 new[] {5}
@@ -106,17 +105,17 @@ namespace Abacaxi.Tests.Set
         {
             var array = new[] {2, 1, 3, 2, 5};
             TestHelper.AssertSequence(
-                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 3)
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(array, IntegerAggregator, Comparer<int>.Default, 3)
             );
         }
 
         [Test]
         public void SplitIntoSubsetsOfEqualValue_ReturnsEmptyArrayAndAll_ForNegativeZeroing()
         {
-            var array = new[] { -1, 1 };
+            var array = new[] {-1, 1};
             TestHelper.AssertSequence(
-                array.SplitIntoSubsetsOfEqualValue(IntegerAggregator, Comparer<int>.Default, 2),
-                new[] { -1, 1 },
+                Abacaxi.Set.SplitIntoSubsetsOfEqualValue(array, IntegerAggregator, Comparer<int>.Default, 2),
+                new[] {-1, 1},
                 new int[] { }
             );
         }

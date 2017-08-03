@@ -13,14 +13,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.CombinatorialAlgorithms
+namespace Abacaxi.Tests.Pairing
 {
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class FindSubsetPairingWithLowestCostTests
+    public class GetWithMinimumCost
     {
         private static double BanalCostOfPairsEvaluator(int l, int r)
         {
@@ -33,45 +34,47 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         }
 
         [Test]
-        public void FindSubsetPairingWithLowestCost_ThrowsException_ForNullSequence()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetWithMinimumCost_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(
-                () => ((int[])null).FindSubsetPairingWithLowestCost(BanalCostOfPairsEvaluator));
+                () => Abacaxi.Pairing.GetWithMinimumCost<int>(null, BanalCostOfPairsEvaluator));
         }
 
         [Test]
-        public void FindSubsetPairingWithLowestCost_ThrowsException_ForSequenceWithOddNumberOfElements()
+        public void GetWithMinimumCost_ThrowsException_ForSequenceWithOddNumberOfElements()
         {
             Assert.Throws<ArgumentException>(
-                () => new[] {1, 2, 3}.FindSubsetPairingWithLowestCost(BanalCostOfPairsEvaluator));
+                () => Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2, 3 }, BanalCostOfPairsEvaluator));
         }
 
         [Test]
-        public void FindSubsetPairingWithLowestCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetWithMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new[] {1, 2}.FindSubsetPairingWithLowestCost(null));
+                () => Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2 }, null));
         }
 
         [Test]
-        public void FindSubsetPairingWithLowestCost_ReturnsEmptyArray_ForEmptySequence()
+        public void GetWithMinimumCost_ReturnsEmptyArray_ForEmptySequence()
         {
-            var result = new int[] { }.FindSubsetPairingWithLowestCost(BanalCostOfPairsEvaluator);
+            var result = Abacaxi.Pairing.GetWithMinimumCost(new int[] { }, BanalCostOfPairsEvaluator);
             TestHelper.AssertSequence(result);
         }
 
         [Test]
-        public void FindSubsetPairingWithLowestCost_ReturnsOnePair_ForTwoElementSequence()
+        public void GetWithMinimumCost_ReturnsOnePair_ForTwoElementSequence()
         {
-            var result = new[] { 1, 2 }.FindSubsetPairingWithLowestCost(BanalCostOfPairsEvaluator);
+            var result = Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2 }, BanalCostOfPairsEvaluator);
             
             TestHelper.AssertSequence(result, Tuple.Create(1, 2));
         }
 
         [Test]
-        public void FindSubsetPairingWithLowestCost_ReturnsTwoPairs_ForFourElementSequence()
+        public void GetWithMinimumCost_ReturnsTwoPairs_ForFourElementSequence()
         {
-            var result = new[] { 4, 10, 2, 8 }.FindSubsetPairingWithLowestCost(BanalCostOfPairsEvaluator);
+            var result = Abacaxi.Pairing.GetWithMinimumCost(new[] { 4, 10, 2, 8 }, BanalCostOfPairsEvaluator);
 
             TestHelper.AssertSequence(result, 
                 Tuple.Create(4, 10), 
@@ -80,9 +83,9 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
 
 
         [Test]
-        public void FindSubsetPairingWithLowestCost_CreatesSets_UsingTheActualCost()
+        public void GetWithMinimumCost_CreatesSets_UsingTheActualCost()
         {
-            var result = new[] { 1, 2, 3, 8, 9, 12, 4, 6 }.FindSubsetPairingWithLowestCost(DistanceCostOfPairsEvaluator);
+            var result = Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2, 3, 8, 9, 12, 4, 6 }, DistanceCostOfPairsEvaluator);
 
             TestHelper.AssertSequence(result,
                 Tuple.Create(1, 2),
@@ -93,7 +96,7 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
 
         [TestCase(10)]
         [TestCase(20)]
-        public void FindSubsetPairingWithLowestCost_OperatesAsExpected_AtLargeInputs(int length)
+        public void GetWithMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
         {
             var random = new Random();
             var sequence = new List<int>();
@@ -105,7 +108,7 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
                 expected.AddOrUpdate(item, 1, e => e + 1);
             }
 
-            var result = sequence.FindSubsetPairingWithLowestCost(DistanceCostOfPairsEvaluator);
+            var result = Abacaxi.Pairing.GetWithMinimumCost(sequence, DistanceCostOfPairsEvaluator);
             foreach (var r in result)
             {
                 var x = new[] {r.Item1, r.Item2};

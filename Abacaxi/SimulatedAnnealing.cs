@@ -26,12 +26,12 @@ namespace Abacaxi
     /// Defines a set of algorithms useful during heuristic search for solutions.
     /// </summary>
     [PublicAPI]
-    internal static class HeuristicAlgorithms
+    internal static class SimulatedAnnealing
     {
         /// <summary>
-        /// Class that holds the required properties for <see cref="HeuristicAlgorithms.ApplySimulatedAnnealing{TInput,TSolution}"/> method.
+        /// Class that holds the required properties for <see cref="SimulatedAnnealing.Evaluate{TInput,TSolution}"/> method.
         /// </summary>
-        public class SimulatedAnnealingParams
+        public sealed class AlgorithmParameters
         {
             /// <summary>
             /// Gets number the cooling steps.
@@ -66,14 +66,14 @@ namespace Abacaxi
             public double CoolingAlpha { get; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SimulatedAnnealingParams"/> class.
+            /// Initializes a new instance of the <see cref="AlgorithmParameters"/> class.
             /// </summary>
             /// <param name="coolingSteps">The number cooling steps.</param>
             /// <param name="iterationsPerCoolingStep">The number of iterations per cooling step.</param>
             /// <param name="coolingAlpha">The cooling alpha constant.</param>
             /// <param name="initialTemperature">The initial temperature.</param>
             /// <exception cref="ArgumentOutOfRangeException">Thrown if any of the provided values are out of allowed range.</exception>
-            public SimulatedAnnealingParams(
+            public AlgorithmParameters(
                 int coolingSteps = 100,
                 int iterationsPerCoolingStep = 100,
                 double coolingAlpha = 0.99,
@@ -116,13 +116,13 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="problemInput" /> or <paramref name="evaluateInitialSolutionFunc" /> or 
         /// <paramref name="solutionTransitionFunc" /> or <paramref name="evaluateSolutionCostFunc" /> or <paramref name="algorithmParams" /> are null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="problemInputLength"/> is less than or equal to zero.</exception>
-        public static TSolution ApplySimulatedAnnealing<TInput, TSolution>(
+        public static TSolution Evaluate<TInput, TSolution>(
             TInput problemInput,
             int problemInputLength,
             Func<TInput, TSolution> evaluateInitialSolutionFunc,
             Func<TSolution, TInput, int, int, double> solutionTransitionFunc,
             Func<TSolution, double> evaluateSolutionCostFunc,
-            SimulatedAnnealingParams algorithmParams)
+            AlgorithmParameters algorithmParams)
         {
             Validate.ArgumentNotNull(nameof(problemInput), problemInput);
             Validate.ArgumentNotNull(nameof(evaluateInitialSolutionFunc), evaluateInitialSolutionFunc);
@@ -190,18 +190,18 @@ namespace Abacaxi
         /// <returns>A sequence of partitions whose total cost is the approximated minimum.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluatePartitionCostFunc"/> or <paramref name="algorithmParams"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="partitionLength"/> is less than one.</exception>
-        public static T[][] ApplySimulatedAnnealing<T>(
+        public static T[][] Evaluate<T>(
             IList<T> sequence, 
             int partitionLength, 
             Func<T[], double> evaluatePartitionCostFunc,
-            SimulatedAnnealingParams algorithmParams)
+            AlgorithmParameters algorithmParams)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(evaluatePartitionCostFunc), evaluatePartitionCostFunc);
             Validate.ArgumentNotNull(nameof(algorithmParams), algorithmParams);
             Validate.ArgumentGreaterThanZero(nameof(partitionLength), partitionLength);
 
-            var result = ApplySimulatedAnnealing(sequence, sequence.Count, input =>
+            var result = Evaluate(sequence, sequence.Count, input =>
                 {
                     Debug.Assert(input != null);
 

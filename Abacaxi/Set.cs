@@ -95,7 +95,9 @@ namespace Abacaxi
             }
         }
 
-        private static IEnumerable<T[][]> EvaluateAllSubsetCombinationsIterate<T>(IList<T> sequence, int subsets)
+        [NotNull]
+        [ItemNotNull]
+        private static IEnumerable<T[][]> EvaluateAllSubsetCombinationsIterate<T>([NotNull] IList<T> sequence, int subsets)
         {
             Debug.Assert(sequence != null);
             Debug.Assert(subsets > 0);
@@ -149,7 +151,9 @@ namespace Abacaxi
         /// <returns>All the combinations of subsets.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets"/> is less than one.</exception>
-        public static IEnumerable<T[][]> EnumerateSubsetCombinations<T>(this IList<T> sequence, int subsets)
+        [NotNull]
+        [ItemNotNull]
+        public static IEnumerable<T[][]> EnumerateSubsetCombinations<T>([NotNull] IList<T> sequence, int subsets)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentGreaterThanZero(nameof(subsets), subsets);
@@ -168,10 +172,12 @@ namespace Abacaxi
         /// <returns>The first sequence of subsets that have the same aggregated value.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="aggregator"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets"/> is less than one.</exception>
+        [NotNull]
+        [ItemNotNull]
         public static T[][] SplitIntoSubsetsOfEqualValue<T>(
-            this IList<T> sequence,
-            Aggregator<T> aggregator,
-            IComparer<T> comparer,
+            [NotNull] IList<T> sequence,
+            [NotNull] Aggregator<T> aggregator,
+            [NotNull] IComparer<T> comparer,
             int subsets)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
