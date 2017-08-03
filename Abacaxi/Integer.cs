@@ -24,7 +24,7 @@ namespace Abacaxi
     /// Helper class that defines a number of methods useful in integer/algorithmic manipulations.
     /// </summary>
     [PublicAPI]
-    public static class IntegerExtensions
+    public static class Integer
     {
         private static int GetIterationLimit(int number)
         {
@@ -67,7 +67,7 @@ namespace Abacaxi
         /// <param name="number">The number to be decomposed.</param>
         /// <returns>A sequence of numbers.</returns>
         [NotNull]
-        public static IEnumerable<int> DeconstructIntoPowersOfTwo(this int number)
+        public static IEnumerable<int> DeconstructIntoPowersOfTwo(int number)
         {
             var sign = Math.Sign(number);
 
@@ -88,7 +88,7 @@ namespace Abacaxi
         /// <param name="number">The number to be dis-constructed into its prime factors.</param>
         /// <returns>A sequence of primes.</returns>
         [NotNull]
-        public static IEnumerable<int> DeconstructIntoPrimeFactors(this int number)
+        public static IEnumerable<int> DeconstructIntoPrimeFactors(int number)
         {
             var sign = Math.Sign(number);
 
@@ -134,7 +134,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="number">The number to check.</param>
         /// <returns><c>true</c> if the number is prime; <c>false</c> otherwise.</returns>
-        public static bool IsPrime(this int number)
+        public static bool IsPrime(int number)
         {
             // ReSharper disable once GenericEnumeratorNotDisposed
             var enumerator = DeconstructIntoPrimeFactors(number).GetEnumerator();
@@ -149,7 +149,7 @@ namespace Abacaxi
         /// <param name="base">The base of the digits.</param>
         /// <returns>A number whose digits are taken from both <paramref name="x"/> and <paramref name="y"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="x"/> or <paramref name="y"/> are less than zero; or <paramref name="base"/> is less than two.</exception>
-        public static int Zip(this int x, int y, int @base = 10)
+        public static int Zip(int x, int y, int @base = 10)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(x), x);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(y), y);

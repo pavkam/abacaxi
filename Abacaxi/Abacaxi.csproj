@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregator.cs" />
+    <Compile Include="Sorting.cs" />
     <Compile Include="Set.cs" />
     <Compile Include="IntegerPartitions.cs" />
     <Compile Include="Pairing.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Containers\SingleLinkedNode.cs" />
     <Compile Include="Internal\StringListWrapper.cs" />
     <Compile Include="Internal\Validate.cs" />
-    <Compile Include="IntegerExtensions.cs" />
+    <Compile Include="Integer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

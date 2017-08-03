@@ -13,19 +13,40 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.Integer
 {
-    using System.Collections.Generic;
     using NUnit.Framework;
 
     [TestFixture]
-    public sealed class OddEvenSortTestsBase : SortingAlgorithmTestsBase
+    public class IsPrimeTests
     {
-        protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(13)]
+        [TestCase(239)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-3)]
+        [TestCase(-13)]
+        [TestCase(-239)]
+        public void IsPrime_ReturnsTrue(int number)
         {
-            array.OddEvenSort(startIndex, length, comparer);
+            var result = Abacaxi.Integer.IsPrime(number);
+            Assert.IsTrue(result);
         }
 
-        protected override bool IsStable => true;
+        [TestCase(4)]
+        [TestCase(8)]
+        [TestCase(144)]
+        [TestCase(-4)]
+        [TestCase(-8)]
+        [TestCase(-144)]
+        public void IsPrime_ReturnsFalse(int number)
+        {
+            var result = Abacaxi.Integer.IsPrime(number);
+            Assert.IsFalse(result);
+        }
     }
 }

@@ -97,7 +97,8 @@ namespace Abacaxi
 
         [NotNull]
         [ItemNotNull]
-        private static IEnumerable<T[][]> EvaluateAllSubsetCombinationsIterate<T>([NotNull] IList<T> sequence, int subsets)
+        private static IEnumerable<T[][]> EvaluateAllSubsetCombinationsIterate<T>([NotNull] IList<T> sequence,
+            int subsets)
         {
             Debug.Assert(sequence != null);
             Debug.Assert(subsets > 0);
@@ -191,7 +192,9 @@ namespace Abacaxi
                 var allEqual = true;
                 for (var i = 0; i < subsets; i++)
                 {
-                    var subsetSum = combo[i].Length == 0 ? default(T) : combo[i].Aggregate((current, item) => aggregator(current, item));
+                    var subsetSum = combo[i].Length == 0
+                        ? default(T)
+                        : combo[i].Aggregate((current, item) => aggregator(current, item));
                     if (i == 0)
                     {
                         firstSum = subsetSum;
@@ -213,6 +216,115 @@ namespace Abacaxi
             }
 
             return new T[][] { };
+        }
+
+        /// <summary>
+        /// Finds the <paramref name="sequence"/> of integers, which summed, return the closest sum to a given <paramref name="target"/>.
+        /// </summary>
+        /// <param name="sequence">The sequence of natural integers.</param>
+        /// <param name="target">The target sum to aim for.</param>
+        /// <returns>A sequence of found integers.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="target"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
+        [NotNull]
+        public static IEnumerable<int> GetSubsetWithNearValue(
+            [NotNull] IEnumerable<int> sequence,
+            int target)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentGreaterThanZero(nameof(target), target);
+
+            var elements = sequence.ToArray();
+            Array.Sort(elements);
+
+            if (elements.Length > 0)
+            {
+                Validate.ArgumentGreaterThanOrEqualToZero(nameof(sequence), elements[0]);
+            }
+
+            var solutions = new int[target + 1, elements.Length + 1];
+            for (var si = 1; si <= elements.Length; si++)
+            {
+                for (var wi = 0; wi <= target; wi++)
+                {
+                    var currentElement = elements[si - 1];
+                    if (currentElement > wi)
+                    {
+                        solutions[wi, si] = solutions[wi, si - 1];
+                    }
+                    else
+                    {
+                        solutions[wi, si] = Math.Max(
+                            currentElement + solutions[wi - currentElement, si - 1],
+                            solutions[wi, si - 1]);
+                    }
+                }
+            }
+
+            var rwi = target;
+            var rsi = elements.Length;
+            var result = new List<int>();
+            while (rsi > 0 && rwi > 0)
+            {
+                if (solutions[rwi, rsi] > solutions[rwi, rsi - 1])
+                {
+                    rwi -= elements[rsi - 1];
+                    result.Add(elements[rsi - 1]);
+                }
+
+                rsi--;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if the <paramref name="sequence"/> contains elements, which, summed, yield a given target <paramref name="target"/>.
+        /// </summary>
+        /// <param name="sequence">The sequence of natural integers.</param>
+        /// <param name="target">The sum to target for.</param>
+        /// <returns><c>true</c> if the condition is satisfied; <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="target"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
+        public static bool ContainsSubsetWithExactValue(
+            [NotNull] IEnumerable<int> sequence, 
+            int target)
+        {
+            return GetSubsetWithNearValue(sequence, target).Sum() == target;
+        }
+
+        /// <summary>
+        /// Finds the elements, which summed, yield the biggest sum.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
+        /// <param name="sequence">The sequence of elements.</param>
+        /// <param name="count">The count of elements to consider.</param>
+        /// <param name="aggregator">The aggregator function which sums elements.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns>An array of elements with the highest sum.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregator"/> or <paramref name="comparer"/> are null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="count"/> is greater than the number of elements in <paramref name="sequence"/>.</exception>
+        [NotNull]
+        public static T[] GetSubsetWithGreatestValue<T>(
+            [NotNull] IEnumerable<T> sequence,
+            int count,
+            [NotNull] Aggregator<T> aggregator, 
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(aggregator), aggregator);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+            Validate.ArgumentGreaterThanOrEqualTo(nameof(count), count, 1);
+
+            var array = sequence.ToArray();
+            Validate.ArgumentLessThanOrEqualTo(nameof(count), count, array.Length);
+
+            Sorting.QuickSort(array, 0, array.Length, comparer);
+
+            var result = new T[count];
+            Array.Copy(array, array.Length - count, result, 0, count);
+
+            return result;
         }
     }
 }

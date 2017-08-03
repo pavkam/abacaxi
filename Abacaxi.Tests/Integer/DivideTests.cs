@@ -13,53 +13,33 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.IntegerExtensions
+namespace Abacaxi.Tests.Integer
 {
     using System;
     using NUnit.Framework;
+    using Practice;
 
     [TestFixture]
-    public class ZipTests
+    public class DivideTests
     {
         [Test]
-        public void Zip_ThrowsException_ForNegativeX()
+        public void Divide_ThrowsException_ForZeroDivisor()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.IntegerExtensions.Zip(-1, 1, 2));
+                Integer.Divide(1, 0));
         }
 
-        [Test]
-        public void Zip_ThrowsException_ForNegativeY()
+        [TestCase(0, 1, 0)]
+        [TestCase(1, 1, 1)]
+        [TestCase(2, 1, 2)]
+        [TestCase(10, 2, 5)]
+        [TestCase(100, 3, 33)]
+        [TestCase(-10, 2, -5)]
+        [TestCase(-10, -2, 5)]
+        [TestCase(10, -2, -5)]
+        public void Divide_ReturnsCorrectResult(int x, int y, int expected)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.IntegerExtensions.Zip(1, -1, 2));
-        }
-
-        [Test]
-        public void Zip_ThrowsException_ForBaseOne()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.IntegerExtensions.Zip(1, 1, 1));
-        }
-
-        [TestCase(0, 0, 0)]
-        [TestCase(0, 1, 10)]
-        [TestCase(1, 0, 1)]
-        [TestCase(12, 3, 132)]
-        [TestCase(1, 23, 231)]
-        [TestCase(12, 34, 3142)]
-        public void Zip_ReturnsCorrectResult_IntBase10(int x, int y, int expected)
-        {
-            var result = Abacaxi.IntegerExtensions.Zip(x, y);
-            Assert.AreEqual(expected, result);
-        }
-
-        [TestCase(0xA, 0xBC, 0xBCA)]
-        [TestCase(0xAB, 0xC, 0xACB)]
-        [TestCase(0xAB, 0xCD, 0xCADB)]
-        public void Zip_ReturnsCorrectResult_IntBase16(int x, int y, int expected)
-        {
-            var result = Abacaxi.IntegerExtensions.Zip(x, y, 16);
+            var result = Integer.Divide(x, y);
             Assert.AreEqual(expected, result);
         }
     }

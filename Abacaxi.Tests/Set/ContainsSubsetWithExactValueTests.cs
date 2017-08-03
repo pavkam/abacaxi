@@ -13,48 +13,48 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.Set
 {
     using System;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class ContainsSubsetWithAggregatedValueTests
+    public class ContainsSubsetWithExactValueTests
     {
         [Test]
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ContainsSubsequenceWithAggregatedValue_ThrowsException_ForNullSequence()
+        public void ContainsSubsetWithExactValue_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).ContainsSubsetWithAggregatedValue(1));
+                Abacaxi.Set.ContainsSubsetWithExactValue(null, 1));
         }
 
         [Test]
-        public void ContainsSubsequenceWithAggregatedValue_ThrowsException_ForZeroTargetSum()
+        public void ContainsSubsetWithExactValue_ThrowsException_ForZeroTargetSum()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new int[] { }.ContainsSubsetWithAggregatedValue(0));
+                Abacaxi.Set.ContainsSubsetWithExactValue(new int[] {}, 0));
         }
 
         [Test]
-        public void ContainsSubsequenceWithAggregatedValue_ThrowsException_ForNegativeNumberInSequence()
+        public void ContainsSubsetWithExactValue_ThrowsException_ForNegativeNumberInSequence()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { -1 }.ContainsSubsetWithAggregatedValue(1));
+                Abacaxi.Set.ContainsSubsetWithExactValue(new[] { -1 }, 1));
         }
 
         [Test]
-        public void ContainsSubsequenceWithAggregatedValue_ReturnsFalse_WhenSumCannotBeCompleted()
+        public void ContainsSubsetWithExactValue_ReturnsFalse_WhenSumCannotBeCompleted()
         {
-            var result = new[] { 2 }.ContainsSubsetWithAggregatedValue(1);
+            var result = Abacaxi.Set.ContainsSubsetWithExactValue(new[] { 2 }, 1);
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void ContainsSubsequenceWithAggregatedValue_ReturnsFalse_ForEmptyArray()
+        public void ContainsSubsetWithExactValue_ReturnsFalse_ForEmptyArray()
         {
-            var result = new int[] { }.ContainsSubsetWithAggregatedValue(1);
+            var result = Abacaxi.Set.ContainsSubsetWithExactValue(new int[] { }, 1);
             Assert.IsFalse(result);
         }
 
@@ -73,18 +73,18 @@ namespace Abacaxi.Tests.SequenceExtensions
         [TestCase(13)]
         [TestCase(14)]
         [TestCase(15)]
-        public void ContainsSubsequenceWithAggregatedValue_ReturnsTrue_IfSumFound(int target)
+        public void ContainsSubsetWithExactValue_ReturnsTrue_IfSumFound(int target)
         {
-            var result = new[] { 1, 2, 3, 4, 5 }.ContainsSubsetWithAggregatedValue(target);
+            var result = Abacaxi.Set.ContainsSubsetWithExactValue(new[] { 1, 2, 3, 4, 5 }, target);
             Assert.IsTrue(result);
         }
 
         [TestCase(2)]
         [TestCase(14)]
         [TestCase(17)]
-        public void ContainsSubsequenceWithAggregatedValue_ReturnsFalse_IfSumNotFound(int target)
+        public void ContainsSubsetWithExactValue_ReturnsFalse_IfSumNotFound(int target)
         {
-            var result = new[] { 1, 3, 5, 7 }.ContainsSubsetWithAggregatedValue(target);
+            var result = Abacaxi.Set.ContainsSubsetWithExactValue(new[] { 1, 3, 5, 7 }, target);
             Assert.IsFalse(result);
         }
     }

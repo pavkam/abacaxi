@@ -36,7 +36,7 @@ namespace Abacaxi
         /// <returns>
         /// A random sequence of elements from <paramref name="sequence" />.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> or <paramref name="random"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="sampleSize" /> is less than one.</exception>
         public static T[] Sample<T>([NotNull] this Random random, [NotNull] IEnumerable<T> sequence, int sampleSize)
         {
@@ -79,7 +79,8 @@ namespace Abacaxi
         /// </summary>
         /// <param name="random">The random class instance.</param>
         /// <returns>The random boolean value.</returns>
-        public static bool NextBool(this Random random)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="random"/> is <c>null</c>.</exception>
+        public static bool NextBool([NotNull] this Random random)
         {
             Validate.ArgumentNotNull(nameof(random), random);
 
@@ -87,7 +88,16 @@ namespace Abacaxi
                 random.Next(2) == 1;
         }
 
-        public static T NextItem<T>(this Random random, IList<T> sequence)
+        /// <summary>
+        /// Returns a random item from a given <paramref name="sequence"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the sequence.</typeparam>
+        /// <param name="random">The random class instance.</param>
+        /// <param name="sequence">The sequence.</param>
+        /// <returns>A random element from the given <paramref name="sequence"/></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="random"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="sequence"/> is empty.</exception>
+        public static T NextItem<T>([NotNull] this Random random, [NotNull] IList<T> sequence)
         {
             Validate.ArgumentNotNull(nameof(random), random);
             Validate.SequenceArgumentNotEmpty(nameof(sequence), sequence);
@@ -95,7 +105,17 @@ namespace Abacaxi
             return sequence[random.Next(sequence.Count)];
         }
 
-        public static T NextItem<T>(this Random random, T item1, T item2, params T[] others)
+        /// <summary>
+        /// Returns a random item from the given items.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the given list.</typeparam>
+        /// <param name="random">The random class instance.</param>
+        /// <param name="item1">The first item to consider.</param>
+        /// <param name="item2">The second item to consider.</param>
+        /// <param name="others">The others (third and after).</param>
+        /// <returns>The randomly selected item.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="others"/> or <paramref name="random"/> are <c>null</c>.</exception>
+        public static T NextItem<T>([NotNull] this Random random, T item1, T item2, [NotNull] params T[] others)
         {
             Validate.ArgumentNotNull(nameof(random), random);
 

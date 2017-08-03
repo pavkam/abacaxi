@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.IntegerExtensions
+namespace Abacaxi.Tests.Integer
 {
     using NUnit.Framework;
     using System.Linq;
@@ -25,7 +25,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_Zero_ReturnsZero()
         {
             TestHelper.AssertSequence(
-                0.DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(0),
                 0);
         }
 
@@ -33,7 +33,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_One_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                1.DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(1),
                 1);
         }
 
@@ -41,7 +41,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_Two_ReturnsTwo()
         {
             TestHelper.AssertSequence(
-                2.DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(2),
                 2);
         }
 
@@ -49,7 +49,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_Three_ReturnsThree()
         {
             TestHelper.AssertSequence(
-                3.DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(3),
                 3);
         }
 
@@ -57,7 +57,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_Four_ReturnsTwoTwo()
         {
             TestHelper.AssertSequence(
-                4.DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(4),
                 2, 2);
         }
 
@@ -65,7 +65,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_Twenty_ReturnsTwoTwoFive()
         {
             TestHelper.AssertSequence(
-                20.DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(20),
                 2, 2, 5);
         }
 
@@ -74,7 +74,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_MinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                (-1).DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(-1),
                 -1);
         }
 
@@ -82,7 +82,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_MinusTwo_ReturnsMinusTwo()
         {
             TestHelper.AssertSequence(
-                (-2).DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(-2),
                 -2);
         }
 
@@ -90,7 +90,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_MinusThree_ReturnsMinusThree()
         {
             TestHelper.AssertSequence(
-                (-3).DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(-3),
                 -3);
         }
 
@@ -98,7 +98,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_MinusFour_ReturnsMinusOneMinusTwoMinusTwo()
         {
             TestHelper.AssertSequence(
-                (-4).DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(-4),
                 -2, -2, -1);
         }
 
@@ -106,7 +106,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPrimeFactors_MinusEight_ReturnsMinusTwoMinusTwoMinusTwo()
         {
             TestHelper.AssertSequence(
-                (-8).DeconstructIntoPrimeFactors(),
+                Abacaxi.Integer.DeconstructIntoPrimeFactors(-8),
                 -2, -2, -2);
         }
 
@@ -114,38 +114,9 @@ namespace Abacaxi.Tests.IntegerExtensions
         [TestCase(int.MinValue)]
         public void DeconstructIntoPrimeFactors__MultipliesToOriginal(int number)
         {
-            var mul = number.DeconstructIntoPrimeFactors().Aggregate((x, y) => x * y);
+            var mul = Abacaxi.Integer.DeconstructIntoPrimeFactors(number).Aggregate((x, y) => x * y);
 
             Assert.AreEqual(number, mul);
-        }
-
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(13)]
-        [TestCase(239)]
-        [TestCase(-1)]
-        [TestCase(-2)]
-        [TestCase(-3)]
-        [TestCase(-13)]
-        [TestCase(-239)]
-        public void IsPrime_ReturnsTrue(int number)
-        {
-            var result = number.IsPrime();
-            Assert.IsTrue(result);
-        }
-
-        [TestCase(4)]
-        [TestCase(8)]
-        [TestCase(144)]
-        [TestCase(-4)]
-        [TestCase(-8)]
-        [TestCase(-144)]
-        public void IsPrime_ReturnsFalse(int number)
-        {
-            var result = number.IsPrime();
-            Assert.IsFalse(result);
         }
     }
 }

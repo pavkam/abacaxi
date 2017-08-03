@@ -13,34 +13,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.IntegerExtensions
+namespace Abacaxi.Tests.Sorting
 {
-    using System;
+    using System.Collections.Generic;
     using NUnit.Framework;
-    using Practice;
 
     [TestFixture]
-    public class DivideTests
+    public sealed class HeapSortTestsBase : SortingAlgorithmTestsBase
     {
-        [Test]
-        public void Divide_ThrowsException_ForZeroDivisor()
+        protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                1.Divide(0));
+            Abacaxi.Sorting.HeapSort(array, startIndex, length, comparer);
         }
 
-        [TestCase(0, 1, 0)]
-        [TestCase(1, 1, 1)]
-        [TestCase(2, 1, 2)]
-        [TestCase(10, 2, 5)]
-        [TestCase(100, 3, 33)]
-        [TestCase(-10, 2, -5)]
-        [TestCase(-10, -2, 5)]
-        [TestCase(10, -2, -5)]
-        public void Divide_ReturnsCorrectResult(int x, int y, int expected)
-        {
-            var result = x.Divide(y);
-            Assert.AreEqual(expected, result);
-        }
+        protected override bool IsStable => false;
     }
 }

@@ -13,37 +13,54 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.RandomExtensions
+namespace Abacaxi.Tests.Integer
 {
     using System;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public sealed class NextBoolTests
+    public class ZipTests
     {
-        private readonly Random _random = new Random();
-
         [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void NextBool_ThrowsException_IfRandomIsNull()
+        public void Zip_ThrowsException_ForNegativeX()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                    ((Random)null).NextBool());
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Abacaxi.Integer.Zip(-1, 1, 2));
         }
 
         [Test]
-        public void NextBool_ReturnsARandomSample()
+        public void Zip_ThrowsException_ForNegativeY()
         {
-            var set = new[] { true, false }.ToSet();
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Abacaxi.Integer.Zip(1, -1, 2));
+        }
 
-            for (var i = 0; i < 100; i++)
-            {
-                var r = _random.NextBool();
-                set.Remove(r);
-            }
+        [Test]
+        public void Zip_ThrowsException_ForBaseOne()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Abacaxi.Integer.Zip(1, 1, 1));
+        }
 
-            Assert.AreEqual(0, set.Count);
+        [TestCase(0, 0, 0)]
+        [TestCase(0, 1, 10)]
+        [TestCase(1, 0, 1)]
+        [TestCase(12, 3, 132)]
+        [TestCase(1, 23, 231)]
+        [TestCase(12, 34, 3142)]
+        public void Zip_ReturnsCorrectResult_IntBase10(int x, int y, int expected)
+        {
+            var result = Abacaxi.Integer.Zip(x, y);
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestCase(0xA, 0xBC, 0xBCA)]
+        [TestCase(0xAB, 0xC, 0xACB)]
+        [TestCase(0xAB, 0xCD, 0xCADB)]
+        public void Zip_ReturnsCorrectResult_IntBase16(int x, int y, int expected)
+        {
+            var result = Abacaxi.Integer.Zip(x, y, 16);
+            Assert.AreEqual(expected, result);
         }
     }
 }

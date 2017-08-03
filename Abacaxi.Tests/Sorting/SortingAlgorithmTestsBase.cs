@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.Sorting
 {
     using System;
     using System.Collections.Generic;

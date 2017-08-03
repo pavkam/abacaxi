@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.Set
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class FindSubsetWithGreatestAggregatedValueTests
+    public class GetSubsetWithGreatestValueTests
     {
         private static int IntegerAggregator(int a, int b)
         {
@@ -30,56 +30,60 @@ namespace Abacaxi.Tests.SequenceExtensions
 
         [Test]
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void FindSubsetWithGreatestAggregatedValue_ThrowsException_IfSequenceIsNull()
+        public void GetSubsetWithGreatestValue_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).FindSubsetWithGreatestAggregatedValue(1, IntegerAggregator, Comparer<int>.Default));
+                Abacaxi.Set.GetSubsetWithGreatestValue(null, 1, IntegerAggregator, Comparer<int>.Default));
         }
 
         [Test]
-        public void FindSubsetWithGreatestAggregatedValue_ThrowsException_IfCountIsLessThanOne()
+        public void GetSubsetWithGreatestValue_ThrowsException_IfCountIsLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new int[] { }.FindSubsetWithGreatestAggregatedValue(0, IntegerAggregator, Comparer<int>.Default));
+                Abacaxi.Set.GetSubsetWithGreatestValue(new int[] { }, 0, IntegerAggregator,
+                    Comparer<int>.Default));
         }
 
         [Test]
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void FindSubsetWithGreatestAggregatedValue_ThrowsException_IfAggregatorIsNull()
+        public void GetSubsetWithGreatestValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindSubsetWithGreatestAggregatedValue(1, null, Comparer<int>.Default));
+                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {1}, 1, null, Comparer<int>.Default));
         }
 
         [Test]
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void FindSubsetWithGreatestAggregatedValue_ThrowsException_IfComparerIsNull()
+        public void GetSubsetWithGreatestValue_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindSubsetWithGreatestAggregatedValue(1, IntegerAggregator, null));
+                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {1}, 1, IntegerAggregator, null));
         }
 
         [Test]
-        public void FindSubsetWithGreatestAggregatedValue_ReturnsBiggestElement_ForCountOfOne()
+        public void GetSubsetWithGreatestValue_ReturnsBiggestElement_ForCountOfOne()
         {
             TestHelper.AssertSequence(
-                new[] { 1, 2, 3 }.FindSubsetWithGreatestAggregatedValue(1, IntegerAggregator, Comparer<int>.Default),
+                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {1, 2, 3}, 1, IntegerAggregator,
+                    Comparer<int>.Default),
                 3);
         }
 
         [Test]
-        public void FindSubsetWithGreatestAggregatedValue_ReturnsAllElements_ForCountOfThree()
+        public void GetSubsetWithGreatestValue_ReturnsAllElements_ForCountOfThree()
         {
             TestHelper.AssertSequence(
-                new[] { 3, 2, 1 }.FindSubsetWithGreatestAggregatedValue(3, IntegerAggregator, Comparer<int>.Default),
+                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {3, 2, 1}, 3, IntegerAggregator,
+                    Comparer<int>.Default),
                 1, 2, 3);
         }
 
         [Test]
-        public void FindSubsetWithGreatestAggregatedValue_ReturnsLastThreeElements()
+        public void GetSubsetWithGreatestValue_ReturnsLastThreeElements()
         {
             TestHelper.AssertSequence(
-                new[] { 100, 200, 1, 50, 70, 188 }.FindSubsetWithGreatestAggregatedValue(3, IntegerAggregator, Comparer<int>.Default),
+                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {100, 200, 1, 50, 70, 188}, 3,
+                    IntegerAggregator, Comparer<int>.Default),
                 100, 188, 200);
         }
     }

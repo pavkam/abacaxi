@@ -13,37 +13,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.RandomExtensions
+namespace Abacaxi.Tests.Sorting
 {
-    using System;
+    using System.Collections.Generic;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public sealed class NextBoolTests
+    public sealed class ShellSortTestsBase : SortingAlgorithmTestsBase
     {
-        private readonly Random _random = new Random();
-
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void NextBool_ThrowsException_IfRandomIsNull()
+        protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                    ((Random)null).NextBool());
+            Abacaxi.Sorting.ShellSort(array, startIndex, length, comparer);
         }
 
-        [Test]
-        public void NextBool_ReturnsARandomSample()
-        {
-            var set = new[] { true, false }.ToSet();
-
-            for (var i = 0; i < 100; i++)
-            {
-                var r = _random.NextBool();
-                set.Remove(r);
-            }
-
-            Assert.AreEqual(0, set.Count);
-        }
+        protected override bool IsStable => true;
     }
 }

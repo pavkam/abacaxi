@@ -150,7 +150,7 @@ namespace Abacaxi.Tests.Graph
             var graph = new LiteralWeightedGraph("A>1>B,B-1-Z,K<1<T", true);
 
             var v = graph.ToArray();
-            v.QuickSort(0, v.Length, Comparer<char>.Default);
+            Abacaxi.Sorting.QuickSort(v, 0, v.Length, Comparer<char>.Default);
 
             TestHelper.AssertSequence(v,
                 'A','B','K','T','Z');

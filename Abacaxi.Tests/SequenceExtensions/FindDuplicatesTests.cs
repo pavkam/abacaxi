@@ -115,22 +115,5 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.Throws<InvalidOperationException>(() =>
                 new[] { 0, 1, -1 }.FindDuplicates(0, 1).ToArray());
         }
-
-        [Test]
-        public void StringFindDuplicates_ReturnsNothing_ForDistinctElements()
-        {
-            TestHelper.AssertSequence(
-                "123456789\u5000\u5001".FindDuplicates());
-        }
-
-        [Test]
-        public void StringFindDuplicates_ReturnsDuplicates_ForDistinctElements()
-        {
-            TestHelper.AssertSequence(
-                "\u5000121312\u5000".FindDuplicates(),
-                new KeyValuePair<char, int>('1', 3),
-                new KeyValuePair<char, int>('2', 2),
-                new KeyValuePair<char, int>('\u5000', 2));
-        }
     }
 }

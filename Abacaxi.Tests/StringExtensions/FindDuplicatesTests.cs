@@ -13,19 +13,29 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.StringExtensions
 {
-    using System.Collections.Generic;
     using NUnit.Framework;
+    using System.Collections.Generic;
 
     [TestFixture]
-    public sealed class InsertionSortTestsBase : SortingAlgorithmTestsBase
+    public class FindDuplicatesTests
     {
-        protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
+        [Test]
+        public void StringFindDuplicates_ReturnsNothing_ForDistinctElements()
         {
-            array.InsertionSort(startIndex, length, comparer);
+            TestHelper.AssertSequence(
+                "123456789\u5000\u5001".FindDuplicates());
         }
 
-        protected override bool IsStable => true;
+        [Test]
+        public void StringFindDuplicates_ReturnsDuplicates_ForDistinctElements()
+        {
+            TestHelper.AssertSequence(
+                "\u5000121312\u5000".FindDuplicates(),
+                new KeyValuePair<char, int>('1', 3),
+                new KeyValuePair<char, int>('2', 2),
+                new KeyValuePair<char, int>('\u5000', 2));
+        }
     }
 }

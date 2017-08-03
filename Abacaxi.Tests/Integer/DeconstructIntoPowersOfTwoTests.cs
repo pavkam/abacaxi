@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.IntegerExtensions
+namespace Abacaxi.Tests.Integer
 {
     using NUnit.Framework;
     using System.Linq;
@@ -25,14 +25,14 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPowersOfTwo_Zero_ReturnsNothing()
         {
             TestHelper.AssertSequence(
-                0.DeconstructIntoPowersOfTwo());
+                Abacaxi.Integer.DeconstructIntoPowersOfTwo(0));
         }
 
         [Test]
         public void DeconstructIntoPowersOfTwo_One_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                1.DeconstructIntoPowersOfTwo(),
+                Abacaxi.Integer.DeconstructIntoPowersOfTwo(1),
                 1);
         }
 
@@ -40,7 +40,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPowersOfTwo_Two_ReturnsTwo()
         {
             TestHelper.AssertSequence(
-                2.DeconstructIntoPowersOfTwo(),
+                Abacaxi.Integer.DeconstructIntoPowersOfTwo(2),
                 2);
         }
 
@@ -48,7 +48,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPowersOfTwo_Three_ReturnsOneThenTwo()
         {
             TestHelper.AssertSequence(
-                3.DeconstructIntoPowersOfTwo(),
+                Abacaxi.Integer.DeconstructIntoPowersOfTwo(3),
                 1, 2);
         }
 
@@ -56,7 +56,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPowersOfTwo_Four_ReturnsFour()
         {
             TestHelper.AssertSequence(
-                4.DeconstructIntoPowersOfTwo(),
+                Abacaxi.Integer.DeconstructIntoPowersOfTwo(4),
                 4);
         }
 
@@ -65,7 +65,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPowersOfTwo_MinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                (-1).DeconstructIntoPowersOfTwo(),
+                Abacaxi.Integer.DeconstructIntoPowersOfTwo(-1),
                 -1);
         }
 
@@ -73,7 +73,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPowersOfTwo_MinusTwo_ReturnsMinusTwo()
         {
             TestHelper.AssertSequence(
-                (-2).DeconstructIntoPowersOfTwo(),
+                Abacaxi.Integer.DeconstructIntoPowersOfTwo(-2),
                 -2);
         }
 
@@ -81,7 +81,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPowersOfTwo_MinusThree_ReturnsMinusOneThenMinusTwo()
         {
             TestHelper.AssertSequence(
-                (-3).DeconstructIntoPowersOfTwo(),
+                Abacaxi.Integer.DeconstructIntoPowersOfTwo(-3),
                 -1, -2);
         }
 
@@ -89,7 +89,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         public void DeconstructIntoPowersOfTwo_Four_ReturnsMinusFour()
         {
             TestHelper.AssertSequence(
-                (-4).DeconstructIntoPowersOfTwo(),
+                Abacaxi.Integer.DeconstructIntoPowersOfTwo(-4),
                 -4);
         }
 
@@ -97,7 +97,7 @@ namespace Abacaxi.Tests.IntegerExtensions
         [TestCase(int.MinValue)]
         public void DeconstructIntoPowersOfTwo__SumsToOriginal(int number)
         {
-            var backSum = number.DeconstructIntoPowersOfTwo().Sum();
+            var backSum = Abacaxi.Integer.DeconstructIntoPowersOfTwo(number).Sum();
 
             Assert.AreEqual(number, backSum);
         }

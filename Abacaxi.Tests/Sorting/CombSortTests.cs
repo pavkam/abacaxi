@@ -13,19 +13,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.Sorting
 {
     using System.Collections.Generic;
     using NUnit.Framework;
 
     [TestFixture]
-    public sealed class CocktailShakerSortTestsBase : SortingAlgorithmTestsBase
+    public sealed class CombSortTestsBase : SortingAlgorithmTestsBase
     {
         protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
         {
-            array.CocktailShakerSort(startIndex, length, comparer);
+            Abacaxi.Sorting.CombSort(array, startIndex, length, comparer);
         }
 
-        protected override bool IsStable => true;
+        protected override bool IsStable => false;
     }
 }

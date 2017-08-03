@@ -22,7 +22,7 @@ namespace Abacaxi.Practice
     /// <summary>
     /// Class that only contains practice algorithms related to integers.
     /// </summary>
-    public static class IntegerExtensions
+    public static class Integer
     {
         /// <summary>
         /// Divides <paramref name="number"/> by <paramref name="divisor"/>.
@@ -31,7 +31,7 @@ namespace Abacaxi.Practice
         /// <param name="divisor">The divisor.</param>
         /// <returns>The result of division.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="divisor"/> is <c>0</c>.</exception>
-        public static int Divide(this int number, int divisor)
+        public static int Divide(int number, int divisor)
         {
             Validate.ArgumentDifferentThanZero(nameof(divisor), divisor);
 

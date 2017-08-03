@@ -13,11 +13,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+
+
 namespace Abacaxi.Tests.RandomExtensions
 {
     using System;
     using System.Linq;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class NextItemTests
@@ -25,6 +28,7 @@ namespace Abacaxi.Tests.RandomExtensions
         private readonly Random _random = new Random();
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void NextItem1_ThrowsException_IfRandomIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -32,6 +36,7 @@ namespace Abacaxi.Tests.RandomExtensions
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void NextItem1_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -62,6 +67,7 @@ namespace Abacaxi.Tests.RandomExtensions
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void NextItem2_ThrowsException_IfRandomIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>

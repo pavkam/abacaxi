@@ -13,6 +13,9 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System;
+using System.Linq;
+
 namespace Abacaxi
 {
     using System.Collections.Generic;
@@ -199,5 +202,46 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(pattern), pattern);
             return GlobPattern.GetPattern(pattern, ignoreCase).IsMatch(s);
         }
+
+        /// <summary>
+        /// Finds all duplicate characters in a given <paramref name="sequence"/>.
+        /// </summary>
+        /// <param name="sequence">The sequence to inspect.</param>
+        /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        [NotNull]
+        public static KeyValuePair<char, int>[] FindDuplicates([NotNull] this string sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            var asciiAppearances = new int[byte.MaxValue + 1];
+            var appearances = new Dictionary<char, int>();
+
+            foreach (var item in sequence)
+            {
+                if (item <= byte.MaxValue)
+                {
+                    asciiAppearances[item]++;
+                }
+                else
+                {
+                    if (!appearances.TryGetValue(item, out int count))
+                    {
+                        appearances.Add(item, 1);
+                    }
+                    else
+                    {
+                        appearances[item] = count + 1;
+                    }
+                }
+            }
+
+            return
+                asciiAppearances
+                    .Select((a, i) => new KeyValuePair<char, int>((char)i, a))
+                    .Concat(appearances)
+                    .Where(kvp => kvp.Value > 1).ToArray();
+        }
+
     }
 }
