@@ -36,7 +36,7 @@
   <ItemGroup>
     <Compile Include="CombinatorialAlgorithms\ApproximateSubsetPairingWithLowestCost.cs" />
     <Compile Include="CombinatorialAlgorithms\FindSubsetPairingWithLowestCost.cs" />
-    <Compile Include="CombinatorialAlgorithms\GetIntegerPartitions.cs" />
+    <Compile Include="IntegerPartitions\EnumerateTests.cs" />
     <Compile Include="CombinatorialAlgorithms\FindBestSetCoverage.cs" />
     <Compile Include="CombinatorialAlgorithms\EvaluateAllSubsetCombinations.cs" />
     <Compile Include="Containers\ArrayEqualityComparerTests.cs" />
@@ -44,6 +44,7 @@
     <Compile Include="Containers\TrieTests.cs" />
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
+    <Compile Include="FibonacciSequence\GetMemberTests.cs" />
     <Compile Include="GlobPatternTests.cs" />
     <Compile Include="IO\HelperMemoryStream.cs" />
     <Compile Include="IO\BitWriterTests.cs" />
@@ -91,7 +92,7 @@
     <Compile Include="Graph\EdgeTests.cs" />
     <Compile Include="Graph\MazeGraphTests.cs" />
     <Compile Include="Graph\CellTests.cs" />
-    <Compile Include="IntegerExtensions\EnumerateFibonacciNumbersTests.cs" />
+    <Compile Include="FibonacciSequence\EnumerateTests.cs" />
     <Compile Include="IntegerExtensions\DivideTests.cs" />
     <Compile Include="EditTests.cs" />
     <Compile Include="SequenceExtensions\ContainsSubsetWithAggregatedValueTests.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="SequenceExtensions\DiffTests.cs" />
     <Compile Include="SequenceExtensions\FindLongestIncreasingSequenceTests.cs" />
     <Compile Include="SequenceExtensions\FindSubsetWithClosestAggregatedValueTests.cs" />
-    <Compile Include="CombinatorialAlgorithms\EvaluateIntegerPartitionCombinations.cs" />
+    <Compile Include="IntegerPartitions\GetCountTests.cs" />
     <Compile Include="IntegerExtensions\DeconstructIntoPrimeFactorsTests.cs" />
     <Compile Include="IntegerExtensions\DeconstructIntoPowersOfTwoTests.cs" />
     <Compile Include="Containers\SingleLinkedNodeTests.cs" />

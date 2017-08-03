@@ -13,78 +13,60 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.IntegerExtensions
+namespace Abacaxi.Tests.FibonacciSequence
 {
     using System;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class EnumerateFibonacciNumbersTests
+    public class EnumerateTests
     {
         [Test]
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void EnumerateFibonacciNumbers_ThrowsException_ForNegativeCount()
+        public void Enumerate_ThrowsException_ForNegativeCount()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.IntegerExtensions.EnumerateFibonacciNumbers(-1));
+                Abacaxi.FibonacciSequence.Enumerate(-1));
         }
 
         [Test]
-        public void EnumerateFibonacciNumbers_ReturnsNothing_ForZeroCount()
+        public void Enumerate_ReturnsNothing_ForZeroCount()
         {
             TestHelper.AssertSequence(
-                Abacaxi.IntegerExtensions.EnumerateFibonacciNumbers(0));
+                Abacaxi.FibonacciSequence.Enumerate(0));
         }
 
         [Test]
-        public void EnumerateFibonacciNumbers_ReturnsCorrectSequence_ForCountOfOne()
+        public void Enumerate_ReturnsCorrectSequence_ForCountOfOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.IntegerExtensions.EnumerateFibonacciNumbers(1),
+                Abacaxi.FibonacciSequence.Enumerate(1),
                 0);
         }
 
         [Test]
-        public void EnumerateFibonacciNumbers_ReturnsCorrectSequence_ForCountOfTwo()
+        public void Enumerate_ReturnsCorrectSequence_ForCountOfTwo()
         {
             TestHelper.AssertSequence(
-                Abacaxi.IntegerExtensions.EnumerateFibonacciNumbers(2),
+                Abacaxi.FibonacciSequence.Enumerate(2),
                 0, 1);
         }
 
         [Test]
-        public void EnumerateFibonacciNumbers_ReturnsCorrectSequence_ForCountOfThree()
+        public void Enumerate_ReturnsCorrectSequence_ForCountOfThree()
         {
             TestHelper.AssertSequence(
-                Abacaxi.IntegerExtensions.EnumerateFibonacciNumbers(3),
+                Abacaxi.FibonacciSequence.Enumerate(3),
                 0, 1, 1);
         }
 
         [Test]
-        public void EnumerateFibonacciNumbers_ReturnsCorrectSequenc_ForLongCount()
+        public void Enumerate_ReturnsCorrectSequence_ForLongCount()
         {
             TestHelper.AssertSequence(
-                Abacaxi.IntegerExtensions.EnumerateFibonacciNumbers(21),
+                Abacaxi.FibonacciSequence.Enumerate(21),
                 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765);
-        }
-
-        [Test]
-        public void GetFibonacciNumber_ThrowsException_ForNegativeIndex()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.IntegerExtensions.GetFibonacciNumber(-1));
-        }
-
-        [Test]
-        public void GetFibonacciNumber_ReturnsCorrectNumber_ForGivenIndex()
-        {
-            var expected = new[] { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765 };
-            for (var i = 0; i < expected.Length; i++)
-            {
-                var result = Abacaxi.IntegerExtensions.GetFibonacciNumber(i);
-                Assert.AreEqual(expected[i], result);
-            }
         }
     }
 }

@@ -13,12 +13,12 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.CombinatorialAlgorithms
+namespace Abacaxi.Tests.IntegerPartitions
 {
     using NUnit.Framework;
 
     [TestFixture]
-    public class GetIntegerPartitionCombinationsTests
+    public class GetCountTests
     {
         [TestCase(0, 0)]
         [TestCase(1, 1)]
@@ -26,9 +26,9 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         [TestCase(3, 3)]
         [TestCase(4, 5)]
         [TestCase(5, 7)]
-        public void EvaluateIntegerPartitionCombinations_ReturnsValidCount_ForPositiveNumber(int number, int expected)
+        public void GetCount_ReturnsValidCount_ForPositiveNumber(int number, int expected)
         {
-            var result = number.EvaluateIntegerPartitionCombinations();
+            var result = Abacaxi.IntegerPartitions.GetCount(number);
             Assert.AreEqual(expected, result);
         }
 
@@ -37,9 +37,9 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         [TestCase(-3, 3)]
         [TestCase(-4, 5)]
         [TestCase(-5, 7)]
-        public void EvaluateIntegerPartitionCombinations_ReturnsValidCount_ForNegativeNumber(int number, int expected)
+        public void GetCount_ReturnsValidCount_ForNegativeNumber(int number, int expected)
         {
-            var result = number.EvaluateIntegerPartitionCombinations();
+            var result = Abacaxi.IntegerPartitions.GetCount(number);
             Assert.AreEqual(expected, result);
         }
     }

@@ -13,54 +13,54 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.CombinatorialAlgorithms
+namespace Abacaxi.Tests.IntegerPartitions
 {
     using NUnit.Framework;
     using System.Linq;
 
     [TestFixture]
-    public class GetIntegerPartitionsTests
+    public class EnumerateTests
     {
         [Test]
-        public void PartitionInteger_Zero_ReturnsNothing()
+        public void Enumerate_Zero_ReturnsNothing()
         {
             TestHelper.AssertSequence(
-                0.GetIntegerPartitions()
+                Abacaxi.IntegerPartitions.Enumerate(0)
                 );
         }
 
         [Test]
-        public void PartitionInteger_One_ReturnsOne()
+        public void Enumerate_One_ReturnsOne()
         {
             TestHelper.AssertSequence(
-                1.GetIntegerPartitions(),
+                Abacaxi.IntegerPartitions.Enumerate(1),
                 new[] { 1 });
         }
 
         [Test]
-        public void PartitionInteger_Two_ReturnsTwo_ThenOneOne()
+        public void Enumerate_Two_ReturnsTwo_ThenOneOne()
         {
             TestHelper.AssertSequence(
-                2.GetIntegerPartitions(),
+                Abacaxi.IntegerPartitions.Enumerate(2),
                 new[] { 2 },
                 new[] { 1, 1 });
         }
 
         [Test]
-        public void PartitionInteger_Three_ReturnsThree_ThenTwoOne_ThenOneOneOne()
+        public void Enumerate_Three_ReturnsThree_ThenTwoOne_ThenOneOneOne()
         {
             TestHelper.AssertSequence(
-                3.GetIntegerPartitions(),
+                Abacaxi.IntegerPartitions.Enumerate(3),
                 new[] { 3 },
                 new[] { 2, 1 },
                 new[] { 1, 1, 1 });
         }
 
         [Test]
-        public void PartitionInteger_Four_ReturnsFour_ThenThreeOne_ThenTwoTwo_ThenTwoOneOne_ThenOneOneOneOne()
+        public void Enumerate_Four_ReturnsFour_ThenThreeOne_ThenTwoTwo_ThenTwoOneOne_ThenOneOneOneOne()
         {
             TestHelper.AssertSequence(
-                4.GetIntegerPartitions(),
+                Abacaxi.IntegerPartitions.Enumerate(4),
                 new[] { 4 },
                 new[] { 3, 1 },
                 new[] { 2, 1, 1 },
@@ -69,37 +69,37 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
         }
 
         [Test]
-        public void PartitionInteger_MinusOne_ReturnsMinusOne()
+        public void Enumerate_MinusOne_ReturnsMinusOne()
         {
             TestHelper.AssertSequence(
-                (-1).GetIntegerPartitions(),
+                Abacaxi.IntegerPartitions.Enumerate(-1),
                 new[] { -1 });
         }
 
         [Test]
-        public void PartitionInteger_MinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
+        public void Enumerate_MinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                (-2).GetIntegerPartitions(),
+                Abacaxi.IntegerPartitions.Enumerate(-2),
                 new[] { -2 },
                 new[] { -1, -1 });
         }
 
         [Test]
-        public void PartitionInteger_MinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
+        public void Enumerate_MinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                (-3).GetIntegerPartitions(),
+                Abacaxi.IntegerPartitions.Enumerate(-3),
                 new[] { -3 },
                 new[] { -2, -1 },
                 new[] { -1, -1, -1 });
         }
 
         [Test]
-        public void PartitionInteger_MinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
+        public void Enumerate_MinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                (-4).GetIntegerPartitions(),
+                Abacaxi.IntegerPartitions.Enumerate(-4),
                 new[] { -4 },
                 new[] { -3, -1 },
                 new[] { -2, -1, -1 },
@@ -109,9 +109,9 @@ namespace Abacaxi.Tests.CombinatorialAlgorithms
 
         [TestCase(20)]
         [TestCase(-20)]
-        public void PartitionInteger_SumsToOriginal(int number)
+        public void Enumerate_SumsToOriginal(int number)
         {
-            foreach (var combo in number.GetIntegerPartitions())
+            foreach (var combo in Abacaxi.IntegerPartitions.Enumerate(number))
             {
                 var sum = combo.Sum();
                 Assert.AreEqual(number, sum);

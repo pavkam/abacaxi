@@ -28,92 +28,6 @@ namespace Abacaxi
     [PublicAPI]
     public static class CombinatorialAlgorithms
     {
-        /// <summary>
-        /// Partitions a given integer into all possible combinations of smaller integers.
-        /// </summary>
-        /// <param name="number">The input number.</param>
-        /// <returns>A sequence of combinations.</returns>
-        public static IEnumerable<int[]> GetIntegerPartitions(this int number)
-        {
-            if (number != 0)
-            {
-                var selection = new Stack<int>();
-                var numbers = new Stack<int>();
-                var i = 0;
-                var dontBreak = false;
-                var sign = Math.Sign(number);
-
-                for (;;)
-                {
-                    if (i == 0)
-                    {
-                        selection.Push(number);
-                        yield return selection.ToArray();
-                        selection.Pop();
-
-                        i = sign;
-                    }
-                    else if (i * sign > number / 2 * sign || dontBreak)
-                    {
-                        if (selection.Count == 0)
-                            break;
-
-                        number = numbers.Pop();
-                        i = selection.Pop() + sign;
-
-                        dontBreak = false;
-                    }
-                    else
-                    {
-                        selection.Push(i);
-                        numbers.Push(number);
-
-                        dontBreak = i * 2 == number;
-
-                        number = number - i;
-                        i = 0;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Calculates the count of partitions that a <paramref name="number"/> can be split into.
-        /// </summary>
-        /// <param name="number">The number to split.</param>
-        /// <returns>The partition count.</returns>
-        public static int EvaluateIntegerPartitionCombinations(this int number)
-        {
-            number = Math.Abs(number);
-
-            var solutions = new int[number + 1, number + 1];
-
-            for (var m = 0; m <= number; m++)
-            {
-                for (var n = 0; n <= number; n++)
-                {
-                    if (m == 0)
-                    {
-                        solutions[n, m] = 0;
-                    }
-                    else if (n == 0)
-                    {
-                        solutions[n, m] = 1;
-                    }
-                    else if (n - m < 0)
-                    {
-                        solutions[n, m] = solutions[n, m - 1];
-                    }
-                    else
-                    {
-                        solutions[n, m] = solutions[n - m, m] + solutions[n, m - 1];
-                    }
-                }
-            }
-
-            return solutions[number, number];
-        }
-
         private struct EvaluateAllSubsetCombinationsStep
         {
             public int ItemIndex { get; }
@@ -200,9 +114,9 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="aggregator"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets"/> is less than one.</exception>
         public static T[][] FindSubsetsWithEqualAggregateValue<T>(
-            this IList<T> sequence, 
-            Aggregator<T> aggregator, 
-            IComparer<T> comparer, 
+            this IList<T> sequence,
+            Aggregator<T> aggregator,
+            IComparer<T> comparer,
             int subsets)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -237,7 +151,7 @@ namespace Abacaxi
                 }
             }
 
-            return new T[][] {};
+            return new T[][] { };
         }
 
         [NotNull]
@@ -286,7 +200,7 @@ namespace Abacaxi
         [NotNull]
         [ItemNotNull]
         public static IEnumerable<ISet<T>> FindMinimumNumberOfSetsWithFullCoverage<T>(
-            [NotNull] [ItemNotNull] IEnumerable<ISet<T>> sets, 
+            [NotNull] [ItemNotNull] IEnumerable<ISet<T>> sets,
             [NotNull] IEqualityComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sets), sets);
@@ -401,7 +315,7 @@ namespace Abacaxi
 
                 if (sets[setIndex] == null)
                 {
-                    sets[setIndex] = new RecursiveFindSubsetPairingWithLowestCostPair<T> {Item1 = sequence[i]};
+                    sets[setIndex] = new RecursiveFindSubsetPairingWithLowestCostPair<T> { Item1 = sequence[i] };
                 }
                 else
                 {
@@ -440,11 +354,11 @@ namespace Abacaxi
 
             var steps = (int)Math.Sqrt(iterations);
             var result = HeuristicAlgorithms.ApplySimulatedAnnealing(sequence, 2, pair =>
-            {
-                Debug.Assert(pair != null && pair.Length == 2);
-                return evaluateCostOfPairFunc(pair[0], pair[1]);
-            }, 
-            new HeuristicAlgorithms.SimulatedAnnealingParams(coolingSteps: steps, iterationsPerCoolingStep: steps));
+                {
+                    Debug.Assert(pair != null && pair.Length == 2);
+                    return evaluateCostOfPairFunc(pair[0], pair[1]);
+                },
+                new HeuristicAlgorithms.SimulatedAnnealingParams(coolingSteps: steps, iterationsPerCoolingStep: steps));
 
             return result.Select(pair =>
             {

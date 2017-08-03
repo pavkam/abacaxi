@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregator.cs" />
+    <Compile Include="IntegerPartitions.cs" />
     <Compile Include="CombinatorialAlgorithms.cs" />
     <Compile Include="Containers\ArrayEqualityComparer.cs" />
     <Compile Include="Containers\Temporary.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Graphs\LiteralWeightedGraph.cs" />
     <Compile Include="Graphs\LiteralGraph.cs" />
     <Compile Include="InspectionFlags.cs" />
+    <Compile Include="FibonacciSequence.cs" />
     <Compile Include="Internal\JetBrainsAnnotations.cs" />
     <Compile Include="IO\BitWriter.cs" />
     <Compile Include="RandomExtensions.cs" />
