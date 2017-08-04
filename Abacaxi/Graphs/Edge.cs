@@ -16,6 +16,7 @@
 namespace Abacaxi.Graphs
 {
     using JetBrains.Annotations;
+    using Internal;
 
     /// <summary>
     /// Defines a weighted edge connecting two graph vertices.
@@ -49,16 +50,29 @@ namespace Abacaxi.Graphs
         public double Weight { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Edge{TVertex}"/> struct.
+        /// Gets the index of the edge.
+        /// </summary>
+        /// <value>
+        /// The index of the edge.
+        /// </value>
+        public int Index { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Edge{TVertex}" /> struct.
         /// </summary>
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The second vertex.</param>
         /// <param name="weight">The weight of the edge.</param>
-        public Edge(TVertex fromVertex, TVertex toVertex, double weight)
+        /// <param name="index">The index of the edge.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
+        public Edge(TVertex fromVertex, TVertex toVertex, double weight = 1.0, int index = -1)
         {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(weight), weight);
+
             FromVertex = fromVertex;
             ToVertex = toVertex;
             Weight = weight;
+            Index = index;
         }
 
         /// <summary>
@@ -78,6 +92,7 @@ namespace Abacaxi.Graphs
             var co = (Edge<TVertex>)obj;
             return
                 Equals(co.Weight, Weight) &&
+                Equals(co.Index, Index) &&
                 Equals(co.FromVertex, FromVertex) &&
                 Equals(co.ToVertex, ToVertex); 
         }
@@ -93,6 +108,7 @@ namespace Abacaxi.Graphs
             var hashCode = 17;
             hashCode = hashCode * 23 + ToVertex?.GetHashCode() ?? 0;
             hashCode = hashCode * 23 + FromVertex?.GetHashCode() ?? 0;
+            hashCode = hashCode * 23 + Index.GetHashCode();
             hashCode = hashCode * 23 + Weight.GetHashCode();
 
             return hashCode;
@@ -106,7 +122,10 @@ namespace Abacaxi.Graphs
         /// </returns>
         public override string ToString()
         {
-            return $"{FromVertex} >={Weight}=> {ToVertex}";
+            return
+                Index == -1
+                    ? $"{FromVertex} >={Weight}=> {ToVertex}"
+                    : $"{FromVertex} >={Weight}=> {ToVertex} ({Index})";
         }
     }
 }

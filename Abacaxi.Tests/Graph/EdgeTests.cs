@@ -47,7 +47,31 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void ToString_ReturnsValidValue()
+        public void Index_ReturnsValidValue()
+        {
+            var edge = new Edge<string>("from", "to", 99, 100);
+
+            Assert.AreEqual(100, edge.Index);
+        }
+
+        [Test]
+        public void Index_DefaultValue_IsMinusOne()
+        {
+            var edge = new Edge<string>("from", "to");
+
+            Assert.AreEqual(-1, edge.Index);
+        }
+
+        [Test]
+        public void Weight_DefaultValue_IsOne()
+        {
+            var edge = new Edge<string>("from", "to");
+
+            Assert.AreEqual(1, edge.Weight);
+        }
+
+        [Test]
+        public void ToString_ReturnsValidValue_WhenIndexNotSupplied()
         {
             var edge = new Edge<string>("from", "to", 99);
 
@@ -55,10 +79,18 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        public void ToString_ReturnsValidValue_WhenIndexSupplied()
+        {
+            var edge = new Edge<string>("from", "to", 99, 0);
+
+            Assert.AreEqual("from >=99=> to (0)", edge.ToString());
+        }
+
+        [Test]
         public void Equals_ReturnsTrue_ForEqualComponents()
         {
-            var edge1 = new Edge<string>("from", "to", 99);
-            var edge2 = new Edge<string>("from", "to", 99);
+            var edge1 = new Edge<string>("from", "to");
+            var edge2 = new Edge<string>("from", "to");
 
             Assert.IsTrue(edge1.Equals(edge2));
         }
@@ -66,8 +98,8 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void Equals_ReturnsFalse_ForDifferentFromVertex()
         {
-            var edge1 = new Edge<string>("from", "to", 99);
-            var edge2 = new Edge<string>("from1", "to", 99);
+            var edge1 = new Edge<string>("from", "to");
+            var edge2 = new Edge<string>("from1", "to");
 
             Assert.IsFalse(edge1.Equals(edge2));
         }
@@ -75,8 +107,8 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void Equals_ReturnsFalse_ForDifferentToVertex()
         {
-            var edge1 = new Edge<string>("from", "to", 99);
-            var edge2 = new Edge<string>("from", "to1", 99);
+            var edge1 = new Edge<string>("from", "to");
+            var edge2 = new Edge<string>("from", "to1");
 
             Assert.IsFalse(edge1.Equals(edge2));
         }
@@ -91,10 +123,19 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        public void Equals_ReturnsFalse_ForDifferentIndex()
+        {
+            var edge1 = new Edge<string>("from", "to", 99, 0);
+            var edge2 = new Edge<string>("from", "to", 99, 1);
+
+            Assert.IsFalse(edge1.Equals(edge2));
+        }
+
+        [Test]
         [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonEdgeObject()
         {
-            var edge = new Edge<string>("from", "to", 99);
+            var edge = new Edge<string>("from", "to");
 
             Assert.IsFalse(edge.Equals(this));
         }
@@ -102,7 +143,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void Equals_ReturnsFalse_ForNullObject()
         {
-            var edge = new Edge<string>("from", "to", 99);
+            var edge = new Edge<string>("from", "to");
 
             Assert.IsFalse(edge.Equals(null));
         }
@@ -110,8 +151,8 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void GetHashCode_ReturnsEqualHashCodes_ForEqualComponents()
         {
-            var edge1 = new Edge<string>("from", "to", 99);
-            var edge2 = new Edge<string>("from", "to", 99);
+            var edge1 = new Edge<string>("from", "to");
+            var edge2 = new Edge<string>("from", "to");
 
             Assert.AreEqual(edge1.GetHashCode(), edge2.GetHashCode());
         }
@@ -119,8 +160,8 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentFromVertex()
         {
-            var edge1 = new Edge<string>("from", "to", 99);
-            var edge2 = new Edge<string>("from1", "to", 99);
+            var edge1 = new Edge<string>("from", "to");
+            var edge2 = new Edge<string>("from1", "to");
 
             Assert.AreNotEqual(edge1.GetHashCode(), edge2.GetHashCode());
         }
@@ -128,8 +169,17 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentToVertex()
         {
-            var edge1 = new Edge<string>("from", "to", 99);
-            var edge2 = new Edge<string>("from", "to1", 99);
+            var edge1 = new Edge<string>("from", "to");
+            var edge2 = new Edge<string>("from", "to1");
+
+            Assert.AreNotEqual(edge1.GetHashCode(), edge2.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentIndex()
+        {
+            var edge1 = new Edge<string>("from", "to", 1, 0);
+            var edge2 = new Edge<string>("from", "to", 1, 1);
 
             Assert.AreNotEqual(edge1.GetHashCode(), edge2.GetHashCode());
         }

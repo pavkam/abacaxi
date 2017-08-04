@@ -26,6 +26,7 @@ namespace Abacaxi.Tests.Containers
     {
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_WhenValueFuncIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new Temporary<int>(null, 1));

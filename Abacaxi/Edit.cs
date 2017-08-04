@@ -91,10 +91,9 @@ namespace Abacaxi
         /// </returns>
         public override int GetHashCode()
         {
-            var hashCode = 
-                127 + 
-                23 * Operation.GetHashCode() + 
-                23 * (Item?.GetHashCode() ?? 0);
+            var hashCode = 17;
+            hashCode = hashCode * 23 + Operation.GetHashCode();
+            hashCode = hashCode * 23 + Item?.GetHashCode() ?? 0;
 
             return hashCode;
         }

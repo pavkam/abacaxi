@@ -62,7 +62,7 @@ namespace Abacaxi.Practice.Graphs
                     {
                         if (neighbor != vertex)
                         {
-                            yield return new Edge<string>(vertex, neighbor, 1);
+                            yield return new Edge<string>(vertex, neighbor);
                         }
                     }
                 }

@@ -19,6 +19,7 @@ namespace Abacaxi.Tests.Graph
     using System.Collections.Generic;
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class TraverseDfsTests
@@ -29,6 +30,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void TraverseDfs_ThrowsException_ForNullVisitationHandler()
         {
             var graph = new LiteralGraph("A>1>B", true);
@@ -37,6 +39,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void TraverseDfs_ThrowsException_ForNullCompletionHandler()
         {
             var graph = new LiteralGraph("A>1>B", true);
@@ -45,6 +48,7 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void TraverseDfs_ThrowsException_ForNullCycleHandler()
         {
             var graph = new LiteralGraph("A>1>B", true);

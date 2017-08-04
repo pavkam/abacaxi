@@ -19,11 +19,13 @@ namespace Abacaxi.Tests.Graph
     using System.Collections.Generic;
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class TraverseBfsTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void TraverseBfs_ThrowsException_ForNullCompletionHandler()
         {
             var graph = new LiteralGraph("A>1>B", true);

@@ -54,11 +54,11 @@ namespace Abacaxi.Graphs
             {
                 if (VertexExists(vertex.X + i, vertex.Y))
                 {
-                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y), 1);
+                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y));
                 }
                 if (VertexExists(vertex.X, vertex.Y + i))
                 {
-                    yield return new Edge<Cell>(vertex, new Cell(vertex.X, vertex.Y + i), 1);
+                    yield return new Edge<Cell>(vertex, new Cell(vertex.X, vertex.Y + i));
                 }
             }
         }
