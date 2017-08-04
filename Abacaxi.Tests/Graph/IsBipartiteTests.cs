@@ -18,31 +18,34 @@ namespace Abacaxi.Tests.Graph
     using System;
     using Graphs;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class GraphFindShortestPathTests
+    public class IsBipartiteTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void FindShortestPath_ThrowsException_ForInvalidStartVertex()
+        [TestCase("", true)]
+        [TestCase("A", true)]
+        [TestCase("A,B", true)]
+        [TestCase("A-1-B,C", true)]
+        [TestCase("A-1-B", true)]
+        [TestCase("A-1-B,B-1-C", true)]
+        [TestCase("A-1-B,B-1-C,C-1-A", false)]
+        [TestCase("A-1-B,C-1-D", true)]
+        public void VerifyIsBipartite_ReturnsExpectedResult(string relationships, bool expected)
         {
-            var graph = new LiteralGraph("A>B", true);
-            Assert.Throws<InvalidOperationException>(() => graph.FindShortestPath('Z', 'A'));
+            var graph = new LiteralGraph(relationships, false);
+            var actual = graph.IsBipartite;
+
+            Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("A-B,A-C", 'A', 'B', "A,B")]
-        [TestCase("A-B,B-C,C-D,D-A,B>D", 'D', 'B', "D,C,B")]
-        [TestCase("A-B,B-C,C-D,D-A,B>D", 'B', 'D', "B,D")]
-        [TestCase("A>B,A>C,C<F,F-E,E-D,D>B,D>C", 'A', 'E', "")]
-        [TestCase("A>B,A>C,C<F,F-E,E-D,D>B,D>C", 'E', 'Z', "")]
-        public void FindShortestPath_FillsExpectedVertices(
-            string relationships, char startVertex, char endVertex, string expected)
+        [Test]
+        public void VerifyIsBipartite_ThrowsException_ForDirectedGraphs()
         {
-            var graph = new LiteralGraph(relationships, true);
-            var seq = graph.FindShortestPath(startVertex, endVertex);
-
-            Assert.AreEqual(expected, string.Join(",", seq));
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var dummy = graph.IsBipartite;
+            });
         }
     }
 }

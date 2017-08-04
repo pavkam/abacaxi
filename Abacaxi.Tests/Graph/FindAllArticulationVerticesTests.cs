@@ -20,14 +20,14 @@ namespace Abacaxi.Tests.Graph
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphFindAllArticulationVerticesTests
+    public class FindAllArticulationVerticesTests
     {
         [TestCase("A", "")]
-        [TestCase("A-B", "")]
+        [TestCase("A-1-B", "")]
         [TestCase("A,B,C", "")]
-        [TestCase("A-B,A-C", "A")]
-        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", "E,B,A")]
-        [TestCase("A-B,B-D,D-F,F-A,F-Z,A-C,C-E,E-A,E-G,G-H,H-E", "F,E,A")]
+        [TestCase("A-1-B,A-1-C", "A")]
+        [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", "E,B,A")]
+        [TestCase("A-1-B,B-1-D,D-1-F,F-1-A,F-1-Z,A-1-C,C-1-E,E-1-A,E-1-G,G-1-H,H-1-E", "F,E,A")]
         public void FindAllArticulationVertices_FindsArticulationsForUndirectedGraphs(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, false);
@@ -39,7 +39,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void FindAllArticulationVertices_ThrowsException_ForDirectedGraphs()
         {
-            var graph = new LiteralGraph("A>B", true);
+            var graph = new LiteralGraph("A>1>B", true);
             Assert.Throws<InvalidOperationException>(() => graph.FindAllArticulationVertices());
         }
     }

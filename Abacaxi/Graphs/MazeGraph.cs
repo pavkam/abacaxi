@@ -36,6 +36,14 @@ namespace Abacaxi.Graphs
             return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY && _matrix[x, y];
         }
 
+        private void ValidateVertex([InvokerParameterName] string argumentName, Cell argumentValue)
+        {
+            if (!VertexExists(argumentValue.X, argumentValue.Y))
+            {
+                throw new ArgumentException($"Vertex '{argumentName}' is not part of this graph.", argumentName);
+            }
+        }
+
         [NotNull]
         [ItemNotNull]
         private IEnumerable<Edge<Cell>> GetEdgesIterate(Cell vertex)
@@ -46,11 +54,11 @@ namespace Abacaxi.Graphs
             {
                 if (VertexExists(vertex.X + i, vertex.Y))
                 {
-                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y));
+                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y), 1);
                 }
                 if (VertexExists(vertex.X, vertex.Y + i))
                 {
-                    yield return new Edge<Cell>(vertex, new Cell(vertex.X, vertex.Y + i));
+                    yield return new Edge<Cell>(vertex, new Cell(vertex.X, vertex.Y + i), 1);
                 }
             }
         }
@@ -72,11 +80,22 @@ namespace Abacaxi.Graphs
         public override bool IsReadOnly => false;
 
         /// <summary>
+        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+        /// </summary>
+        /// <remarks>
+        /// This graph implementation supports this potential weight evaluation based on cell proximity.
+        /// </remarks>
+        /// <value>
+        /// <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsPotentialWeightEvaluation => true;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MazeGraph"/> class.
         /// </summary>
         /// <param name="matrix">The backing two-dimensional array.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="matrix"/> is <c>null</c>.</exception>
-        public MazeGraph(bool[,] matrix)
+        public MazeGraph([NotNull] bool[,] matrix)
         {
             Validate.ArgumentNotNull(nameof(matrix), matrix);
 
@@ -89,7 +108,7 @@ namespace Abacaxi.Graphs
         /// Returns an enumerator that iterates all vertices in the graph.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        /// A <see cref="T:System.Collections.Generic.IEnumerator{T}" /> that can be used to iterate through the collection.
         /// </returns>
         [NotNull]
         public override IEnumerator<Cell> GetEnumerator()
@@ -106,6 +125,16 @@ namespace Abacaxi.Graphs
             }
         }
 
+        public override double GetPotentialWeight(Cell fromVertex, Cell toVertex)
+        {
+            ValidateVertex(nameof(fromVertex), fromVertex);
+            ValidateVertex(nameof(toVertex), toVertex);
+
+            return 
+                Math.Abs(toVertex.X - fromVertex.X) +
+                Math.Abs(toVertex.Y - fromVertex.Y);
+        }
+
         /// <summary>
         /// Gets the edges for a given <param name="vertex" />.
         /// </summary>
@@ -117,10 +146,7 @@ namespace Abacaxi.Graphs
         [NotNull]
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
-            if (!VertexExists(vertex.X, vertex.Y))
-            {
-                throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", nameof(vertex));
-            }
+            ValidateVertex(nameof(vertex), vertex);
 
             return GetEdgesIterate(vertex);
         }

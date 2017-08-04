@@ -28,7 +28,9 @@ namespace Abacaxi.Graphs
     [PublicAPI]
     public class SubGraph<TVertex> : Graph<TVertex>
     {
+        [NotNull]
         private readonly Graph<TVertex> _graph;
+        [NotNull]
         private readonly HashSet<TVertex> _vertices;
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace Abacaxi.Graphs
         /// <param name="vertices">The vertices that part of this sub-graph.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="vertices"/> are <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">Thrown if <paramref name="vertices"/> contains at least one vertex that is not contained in <paramref name="graph"/>.</exception>
-        public SubGraph(Graph<TVertex> graph, IEnumerable<TVertex> vertices)
+        public SubGraph([NotNull] Graph<TVertex> graph, [NotNull] IEnumerable<TVertex> vertices)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
             Validate.ArgumentNotNull(nameof(vertices), vertices);
@@ -50,6 +52,9 @@ namespace Abacaxi.Graphs
         /// <summary>
         /// Checks whether the sub-graph has directed edges.
         /// </summary>
+        /// <remarks>
+        /// This implementation uses the parent graph's <see cref="IsDirected"/> property.
+        /// </remarks>
         /// <value>
         ///     <c>true</c> if the sub-graph is directed; otherwise, <c>false</c> .
         /// </value>
@@ -58,10 +63,24 @@ namespace Abacaxi.Graphs
         /// <summary>
         /// Gets a value indicating whether this instance is read only.
         /// </summary>
+        /// <remarks>
+        /// This implementation uses the parent graph's <see cref="IsReadOnly"/> property.
+        /// </remarks>
         /// <value>
         /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
         /// </value>
         public override bool IsReadOnly => _graph.IsReadOnly;
+
+        /// <summary>
+        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+        /// </summary>
+        /// <remarks>
+        /// This implementation uses the parent graph's <see cref="SupportsPotentialWeightEvaluation"/> property.
+        /// </remarks>
+        /// <value>
+        /// <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsPotentialWeightEvaluation => _graph.SupportsPotentialWeightEvaluation;
 
         /// <summary>
         /// Returns an enumerator that iterates all vertices in the graph.
@@ -72,6 +91,23 @@ namespace Abacaxi.Graphs
         public override IEnumerator<TVertex> GetEnumerator()
         {
             return _vertices.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" /> vertices.
+        /// </summary>
+        /// <remarks>
+        /// This implementation uses the parent graph's <see cref="GetPotentialWeight"/> method.
+        /// </remarks>
+        /// <param name="fromVertex">The first vertex.</param>
+        /// <param name="toVertex">The destination vertex.</param>
+        /// <returns>
+        /// The potential total cost.
+        /// </returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override double GetPotentialWeight(TVertex fromVertex, TVertex toVertex)
+        {
+            return _graph.GetPotentialWeight(fromVertex, toVertex);
         }
 
         /// <summary>

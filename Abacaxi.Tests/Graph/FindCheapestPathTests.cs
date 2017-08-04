@@ -20,12 +20,12 @@ namespace Abacaxi.Tests.Graph
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphFindCheapestPathTests
+    public class FindCheapestPathTests
     {
         [Test]
         public void FindCheapestPath_ThrowsException_IfFromVertexIsInvalid()
         {
-            var graph = new LiteralWeightedGraph("A-1-B", false);
+            var graph = new LiteralGraph("A-1-B", false);
             Assert.Throws<ArgumentException>(() => graph.FindCheapestPath('Z', 'A'));
         }
 
@@ -37,7 +37,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("A-3-B,A-1-C,C-1-B", 'A', 'B', "A,C,B")]
         public void FindCheapestPath_FindsTheProperPath_ForUndirectedGraphs(string relationships, char from, char to, string expected)
         {
-            var graph = new LiteralWeightedGraph(relationships, false);
+            var graph = new LiteralGraph(relationships, false);
             var actual = string.Join(",", graph.FindCheapestPath(from, to));
 
             Assert.AreEqual(expected, actual);
@@ -54,7 +54,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("B>1>A", 'A', 'B', "")]
         public void FindCheapestPath_FindsTheProperPath_ForDirectedGraphs(string relationships, char from, char to, string expected)
         {
-            var graph = new LiteralWeightedGraph(relationships, true);
+            var graph = new LiteralGraph(relationships, true);
             var actual = string.Join(",", graph.FindCheapestPath(from, to));
 
             Assert.AreEqual(expected, actual);

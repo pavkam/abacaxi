@@ -59,8 +59,6 @@
     <Compile Include="Edit.cs" />
     <Compile Include="GlobPattern.cs" />
     <Compile Include="Graphs\VertexDescriptor.cs" />
-    <Compile Include="Graphs\Edge.cs" />
-    <Compile Include="Graphs\LiteralWeightedGraph.cs" />
     <Compile Include="Graphs\LiteralGraph.cs" />
     <Compile Include="InspectionFlags.cs" />
     <Compile Include="FibonacciSequence.cs" />
@@ -74,8 +72,7 @@
     <Compile Include="Containers\Heap.cs" />
     <Compile Include="Containers\BitSet.cs" />
     <Compile Include="Graphs\SubGraph.cs" />
-    <Compile Include="Graphs\WeightedEdge.cs" />
-    <Compile Include="Graphs\WeightedGraph.cs" />
+    <Compile Include="Graphs\Edge.cs" />
     <Compile Include="Graphs\Cell.cs" />
     <Compile Include="Graphs\MazeGraph.cs" />
     <Compile Include="Graphs\Graph.cs" />

@@ -28,13 +28,13 @@ namespace Abacaxi.Tests.Graph
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void TopologicalSort_ThrowsException_ForUndirectedGraph()
         {
-            var graph = new LiteralGraph("A-B", false);
+            var graph = new LiteralGraph("A-1-B", false);
             Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
         }
 
-        [TestCase("A-B")]
-        [TestCase("A>B,B>A")]
-        [TestCase("A>B,B>C,C>A")]
+        [TestCase("A-1-B")]
+        [TestCase("A>1>B,B>1>A")]
+        [TestCase("A>1>B,B>1>C,C>1>A")]
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void TopologicalSort_ThrowsException_ForDirectedGraphWith(string relationships)
         {
@@ -44,11 +44,11 @@ namespace Abacaxi.Tests.Graph
 
         [TestCase("", "")]
         [TestCase("A", "A")]
-        [TestCase("A>B", "A,B")]
-        [TestCase("A>B,B>C", "A,B,C")]
-        [TestCase("A>B,B>C,A>C", "A,B,C")]
-        [TestCase("A,B,C,C>D", "A,B,C,D")]
-        [TestCase("A>B,C>B,B>D,B>E,E>D,F", "A,C,F,B,E,D")]
+        [TestCase("A>1>B", "A,B")]
+        [TestCase("A>1>B,B>1>C", "A,B,C")]
+        [TestCase("A>1>B,B>1>C,A>1>C", "A,B,C")]
+        [TestCase("A,B,C,C>1>D", "A,B,C,D")]
+        [TestCase("A>1>B,C>1>B,B>1>D,B>1>E,E>1>D,F", "A,C,F,B,E,D")]
         public void TopologicalSort_AlignsTheVerticesAsExpected(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);

@@ -60,7 +60,7 @@ namespace Abacaxi.Practice.Graphs
                     {
                         if (neighbor != vertex)
                         {
-                            yield return new Edge<string>(vertex, neighbor);
+                            yield return new Edge<string>(vertex, neighbor, 1);
                         }
                     }
                 }
@@ -82,6 +82,18 @@ namespace Abacaxi.Practice.Graphs
         /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
         /// </value>
         public override bool IsReadOnly => true;
+
+        /// <summary>
+        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+        /// </summary>
+        /// <remarks>
+        /// This implementation always returns <c>false</c>.
+        /// </remarks>
+        /// <value>
+        /// <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsPotentialWeightEvaluation => false;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StringNeighborhoodGraph"/> class.
@@ -141,6 +153,23 @@ namespace Abacaxi.Practice.Graphs
             }
 
             return GetEdgesIterate(vertex);
+        }
+
+        /// <summary>
+        /// Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" /> vertices.
+        /// </summary>
+        /// <remarks>
+        /// This graph does not support potential weight evaluation.
+        /// </remarks>
+        /// <param name="fromVertex">The first vertex.</param>
+        /// <param name="toVertex">The destination vertex.</param>
+        /// <returns>
+        /// The potential total cost.
+        /// </returns>
+        /// <exception cref="NotImplementedException">Always thrown.</exception>
+        public override double GetPotentialWeight(string fromVertex, string toVertex)
+        {
+            throw new NotSupportedException("This graph does not support potential weight evaluation.");
         }
     }
 }

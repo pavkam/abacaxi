@@ -15,37 +15,25 @@
 
 namespace Abacaxi.Tests.Graph
 {
-    using System;
     using Graphs;
     using NUnit.Framework;
+    using System.Linq;
+    using Practice.Graphs;
 
     [TestFixture]
-    public class GraphIsBipartiteTests
+    public class FindChessHorsePathBetweenTwoPointsTests
     {
-        [TestCase("", true)]
-        [TestCase("A", true)]
-        [TestCase("A,B", true)]
-        [TestCase("A-B,C", true)]
-        [TestCase("A-B", true)]
-        [TestCase("A-B,B-C", true)]
-        [TestCase("A-B,B-C,C-A", false)]
-        [TestCase("A-B,C-D", true)]
-        public void VerifyIsBipartite_ReturnsExpectedResult(string relationships, bool expected)
+        [TestCase(0, 0, 0, 0, "0,0")]
+        [TestCase(0, 0, 1, 0, "0,0;-2,-1;0,-2;1,0")]
+        [TestCase(0, 0, 0, 1, "0,0;-1,-2;-2,0;0,1")]
+        [TestCase(0, 0, 1, 1, "0,0;2,-1;1,1")]
+        [TestCase(-5, -5, 10, 10, "-5,-5;-3,-4;-1,-3;1,-2;3,-1;5,0;6,2;7,4;8,6;9,8;10,10")]
+        public void FindChessHorsePathBetweenTwoPoints_FindsShortestPathBetweenTwoPoints(int sx, int sy, int ex, int ey, string expected)
         {
-            var graph = new LiteralGraph(relationships, false);
-            var actual = graph.IsBipartite;
+            var actual = string.Join(";", ChessHorsePathGraph.FindChessHorsePathBetweenTwoPoints(new Cell(sx, sy), new Cell(ex, ey))
+                .Select(s => $"{s.X},{s.Y}"));
 
             Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void VerifyIsBipartite_ThrowsException_ForDirectedGraphs()
-        {
-            var graph = new LiteralGraph("A>B", true);
-            Assert.Throws<InvalidOperationException>(() =>
-            {
-                var dummy = graph.IsBipartite;
-            });
         }
     }
 }

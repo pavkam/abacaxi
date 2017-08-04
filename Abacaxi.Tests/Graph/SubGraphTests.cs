@@ -34,15 +34,15 @@ namespace Abacaxi.Tests.Graph
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_ForNullVerticesSequence()
         {
-            Assert.Throws<ArgumentNullException>(() => new SubGraph<char>(new LiteralGraph("A-B", false), null));
+            Assert.Throws<ArgumentNullException>(() => new SubGraph<char>(new LiteralGraph("A-1-B", false), null));
         }
 
         [TestCase("A", 'A', "")]
-        [TestCase("AB", 'A', "A >==> B")]
-        [TestCase("ABC", 'B', "B >==> A, B >==> C")]
+        [TestCase("AB", 'A', "A >=1=> B")]
+        [TestCase("ABC", 'B', "B >=1=> A, B >=1=> C")]
         public void GetEdges_ReturnsOnlySuppliedVertices(string vertices, char vertex, string expected)
         {
-            var graph = new LiteralGraph("A-B,B-C,C-D,D-A,D<B", true);
+            var graph = new LiteralGraph("A-1-B,B-1-C,C-1-D,D-1-A,D<1<B", true);
             var sub = new SubGraph<char>(graph, vertices);
             var actual = string.Join(", ", sub.GetEdges(vertex));
 
@@ -54,7 +54,7 @@ namespace Abacaxi.Tests.Graph
         [TestCase("ABC", "A,B,C")]
         public void Enumeration_ReturnsOnlyIncludedVertices(string vertices, string expected)
         {
-            var graph = new LiteralGraph("A-B,B-C,C-D,D-A,D<B", true);
+            var graph = new LiteralGraph("A-1-B,B-1-C,C-1-D,D-1-A,D<1<B", true);
             var sub = new SubGraph<char>(graph, vertices);
             var actual = string.Join(",", sub);
 

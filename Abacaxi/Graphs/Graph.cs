@@ -14,6 +14,7 @@
  */
 
 using System.Diagnostics.CodeAnalysis;
+using Abacaxi.Containers;
 
 namespace Abacaxi.Graphs
 {
@@ -33,6 +34,14 @@ namespace Abacaxi.Graphs
     [SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global")]
     public abstract class Graph<TVertex> : IEnumerable<TVertex>
     {
+        private sealed class PathNode
+        {
+            public TVertex Vertex;
+            public PathNode Parent;
+            public double TotalCostFromStart;
+            public double PotentialCostToDestination;
+        }
+
         private sealed class BfsNode : IBfsNode
         {
             public TVertex Vertex { get; set; }
@@ -194,6 +203,22 @@ namespace Abacaxi.Graphs
         ///   <c>true</c> if this instance is read only; otherwise, <c>false</c>.
         /// </value>
         public abstract bool IsReadOnly { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public abstract bool SupportsPotentialWeightEvaluation { get; }
+
+        /// <summary>
+        /// Gets the potential total weight connecting <paramref name="fromVertex"/> and <paramref name="toVertex"/> vertices.
+        /// </summary>
+        /// <param name="fromVertex">The first vertex.</param>
+        /// <param name="toVertex">The destination vertex.</param>
+        /// <returns>The potential total cost.</returns>
+        public abstract double GetPotentialWeight(TVertex fromVertex, TVertex toVertex);
 
         /// <summary>
         /// Gets the edges for a given <param name="vertex"/>.
@@ -609,6 +634,107 @@ namespace Abacaxi.Graphs
             {
                 yield return new VertexDescriptor<TVertex>(ckvp.Key, ckvp.Value, inDegrees[ckvp.Key], outDegrees[ckvp.Key]);
             }
+        }
+
+        /// <summary>
+        /// Finds the cheapest path in a graph between two vertices <paramref name="fromVertex"/> and <paramref name="toVertex"/>
+        /// </summary>
+        /// <param name="fromVertex">The start vertex.</param>
+        /// <param name="toVertex">The end vertex.</param>
+        /// <returns>A sequence of vertices that yield the shortest path. Returns an empty sequence if no path available.</returns>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name="fromVertex"/> is not part of teh graph.</exception>
+        public IEnumerable<TVertex> FindCheapestPath(TVertex fromVertex, TVertex toVertex)
+        {
+            var comparer = Comparer<PathNode>.Create((a, b) =>
+            {
+                Debug.Assert(a != null);
+                Debug.Assert(b != null);
+
+                return a.PotentialCostToDestination.CompareTo(b.PotentialCostToDestination);
+            });
+
+            var startVertexNode = new PathNode
+            {
+                Vertex = fromVertex,
+                TotalCostFromStart = 0,
+                PotentialCostToDestination =
+                    SupportsPotentialWeightEvaluation ? GetPotentialWeight(fromVertex, toVertex) : 0,
+            };
+
+            var discoveredVertices = new Dictionary<TVertex, PathNode> { { fromVertex, startVertexNode } };
+            var visitationQueue = new Heap<PathNode>(comparer) { startVertexNode };
+            var foundAPath = false;
+            var cheapestCostSoFar = .0;
+
+            while (visitationQueue.Count > 0)
+            {
+                var vertexNode = visitationQueue.RemoveTop();
+                Debug.Assert(vertexNode != null && discoveredVertices.ContainsKey(vertexNode.Vertex));
+
+                if (Equals(vertexNode.Vertex, toVertex))
+                {
+                    if (!foundAPath || cheapestCostSoFar > vertexNode.TotalCostFromStart)
+                    {
+                        foundAPath = true;
+                        cheapestCostSoFar = vertexNode.TotalCostFromStart;
+                    }
+                }
+                else if (foundAPath && cheapestCostSoFar < vertexNode.TotalCostFromStart)
+                {
+                    continue;
+                }
+
+                foreach (var edge in GetEdges(vertexNode.Vertex))
+                {
+                    var costFromStartForThisPath = vertexNode.TotalCostFromStart + edge.Weight;
+
+                    if (!discoveredVertices.TryGetValue(edge.ToVertex, out PathNode discoveredNode))
+                    {
+                        discoveredNode = new PathNode
+                        {
+                            Vertex = edge.ToVertex,
+                            Parent = vertexNode,
+                            TotalCostFromStart = costFromStartForThisPath,
+                            PotentialCostToDestination =
+                                SupportsPotentialWeightEvaluation
+                                    ? costFromStartForThisPath + GetPotentialWeight(edge.ToVertex, toVertex)
+                                    : costFromStartForThisPath,
+                        };
+
+                        discoveredVertices.Add(discoveredNode.Vertex, discoveredNode);
+                        visitationQueue.Add(discoveredNode);
+                    }
+                    else
+                    {
+                        if (costFromStartForThisPath < discoveredNode.TotalCostFromStart)
+                        {
+                            discoveredNode.TotalCostFromStart = costFromStartForThisPath;
+                            discoveredNode.Parent = vertexNode;
+                            discoveredNode.PotentialCostToDestination =
+                                SupportsPotentialWeightEvaluation
+                                    ? costFromStartForThisPath + GetPotentialWeight(discoveredNode.Vertex, toVertex)
+                                    : costFromStartForThisPath;
+
+                            visitationQueue.Add(discoveredNode);
+                        }
+                    }
+                }
+            }
+
+            var result = new List<TVertex>();
+            if (foundAPath)
+            {
+                var node = discoveredVertices[toVertex];
+                do
+                {
+                    result.Add(node.Vertex);
+                    node = node.Parent;
+                } while (node != null);
+
+                result.Reverse();
+            }
+
+            return result;
         }
     }
 }

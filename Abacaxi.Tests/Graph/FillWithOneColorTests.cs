@@ -15,25 +15,42 @@
 
 namespace Abacaxi.Tests.Graph
 {
+    using System;
+    using System.Collections.Generic;
     using Graphs;
     using NUnit.Framework;
-    using System.Linq;
-    using Practice.Graphs;
 
     [TestFixture]
-    public class GraphFindChessHorsePathBetweenTwoPointsTests
+    public class FillWithOneColor
     {
-        [TestCase(0, 0, 0, 0, "0,0")]
-        [TestCase(0, 0, 1, 0, "0,0;-2,-1;0,-2;1,0")]
-        [TestCase(0, 0, 0, 1, "0,0;-1,-2;-2,0;0,1")]
-        [TestCase(0, 0, 1, 1, "0,0;2,-1;1,1")]
-        [TestCase(-5, -5, 10, 10, "-5,-5;-3,-4;-1,-3;1,-2;3,-1;5,0;6,2;7,4;8,6;9,8;10,10")]
-        public void FindChessHorsePathBetweenTwoPoints_FindsShortestPathBetweenTwoPoints(int sx, int sy, int ex, int ey, string expected)
+        [Test]
+        public void FillWithOneColor_ThrowsException_ForInvalidVertex()
         {
-            var actual = string.Join(";", ChessHorsePathGraph.FindChessHorsePathBetweenTwoPoints(new Cell(sx, sy), new Cell(ex, ey))
-                .Select(s => $"{s.X},{s.Y}"));
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<ArgumentException>(() => graph.FillWithOneColor('Z', v => { }));
+        }
 
-            Assert.AreEqual(expected, actual);
+        [Test]
+        public void FillWithOneColor_ThrowsException_ForNullApplyColor()
+        {
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<ArgumentNullException>(() => graph.FillWithOneColor('A', null));
+        }
+
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'A', "A,B,C")]
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'C', "C")]
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'D', "D,E,B,C,F")]
+        public void FillWithOneColor_FillsExpectedVertices(string relationships, char startVertex, string expected)
+        {
+            var graph = new LiteralGraph(relationships, true);
+            var result = new List<char>();
+
+            graph.FillWithOneColor(startVertex, vertex =>
+            {
+                result.Add(vertex);
+            });
+
+            Assert.AreEqual(expected, string.Join(",", result));
         }
     }
 }

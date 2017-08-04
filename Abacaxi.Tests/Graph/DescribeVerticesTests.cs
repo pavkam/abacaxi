@@ -19,13 +19,13 @@ namespace Abacaxi.Tests.Graph
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphDescribeVerticesTests
+    public class DescribeVerticesTests
     {
         [TestCase("", "")]
         [TestCase("A", "0 => A (0) => 0")]
-        [TestCase("A-A", "1 => A (0) => 1")]
-        [TestCase("A-A,A-A", "2 => A (0) => 2")]
-        [TestCase("A-B,B-C,C-D", "1 => A (0) => 1; 2 => B (0) => 2; 2 => C (0) => 2; 1 => D (0) => 1")]
+        [TestCase("A-1-A", "1 => A (0) => 1")]
+        [TestCase("A-1-A,A-1-A", "2 => A (0) => 2")]
+        [TestCase("A-1-B,B-1-C,C-1-D", "1 => A (0) => 1; 2 => B (0) => 2; 2 => C (0) => 2; 1 => D (0) => 1")]
         [TestCase("A,B,C", "0 => A (0) => 0; 0 => B (1) => 0; 0 => C (2) => 0")]
         public void Graph_DescribeVertices_ReturnsExpectedDescriptions_ForUndirectedGraphs(string relationships, string expected)
         {
@@ -37,11 +37,11 @@ namespace Abacaxi.Tests.Graph
 
         [TestCase("", "")]
         [TestCase("A", "0 => A (0) => 0")]
-        [TestCase("A>A", "1 => A (0) => 1")]
-        [TestCase("A>A,A>A", "2 => A (0) => 2")]
+        [TestCase("A>1>A", "1 => A (0) => 1")]
+        [TestCase("A>1>A,A>1>A", "2 => A (0) => 2")]
         [TestCase("A,B,C", "0 => A (0) => 0; 0 => B (1) => 0; 0 => C (2) => 0")]
-        [TestCase("A>B,B-C,C>D", "0 => A (0) => 1; 2 => B (0) => 1; 1 => C (0) => 2; 1 => D (0) => 0")]
-        [TestCase("A>B,C>D", "0 => A (0) => 1; 1 => B (0) => 0; 0 => C (1) => 1; 1 => D (1) => 0")]
+        [TestCase("A>1>B,B-1-C,C>1>D", "0 => A (0) => 1; 2 => B (0) => 1; 1 => C (0) => 2; 1 => D (0) => 0")]
+        [TestCase("A>1>B,C>1>D", "0 => A (0) => 1; 1 => B (0) => 0; 0 => C (1) => 1; 1 => D (1) => 0")]
         public void Graph_DescribeVertices_ReturnsExpectedDescriptions_ForDirectedGraphs(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);

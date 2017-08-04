@@ -23,22 +23,22 @@ namespace Abacaxi.Graphs
     using JetBrains.Annotations;
 
     /// <summary>
-    /// A graph used mostly for designing algorithms. Each vertex is a digit or letter and each vertex can be connected
-    /// in undirected or directed fashion to other vertices.
+    /// A graph class used primarily for designing algorithms. Each vertex is a digit or letter and can be connected with other
+    /// vertices in directed or undirected fashion.
     /// </summary>
     [PublicAPI]
     public sealed class LiteralGraph : Graph<char>
     {
-        private readonly Dictionary<char, IList<char>> _vertices;
+        private readonly Dictionary<char, IList<KeyValuePair<char, double>>> _vertices;
 
         private void AddVertex(char vertex)
         {
             Debug.Assert(char.IsLetterOrDigit(vertex));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(vertex, out IList<char> set))
+            if (!_vertices.TryGetValue(vertex, out IList<KeyValuePair<char, double>> set))
             {
-                set = new List<char>();
+                set = new List<KeyValuePair<char, double>>();
                 _vertices.Add(vertex, set);
             }
             else
@@ -47,42 +47,44 @@ namespace Abacaxi.Graphs
             }
         }
 
-        private void AddVertices(char from, char to)
+        private void AddVertices(char from, char to, int weight)
         {
             Debug.Assert(char.IsLetterOrDigit(from));
             Debug.Assert(char.IsLetterOrDigit(to));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(from, out IList<char> fromToSet))
+            if (!_vertices.TryGetValue(from, out IList<KeyValuePair<char, double>> fromToSet))
             {
-                fromToSet = new List<char>();
+                fromToSet = new List<KeyValuePair<char, double>>();
                 _vertices.Add(from, fromToSet);
             }
-            if (!_vertices.TryGetValue(to, out IList<char> toFromSet))
+            if (!_vertices.TryGetValue(to, out IList<KeyValuePair<char, double>> toFromSet))
             {
-                toFromSet = new List<char>();
+                toFromSet = new List<KeyValuePair<char, double>>();
                 _vertices.Add(to, toFromSet);
             }
 
-            fromToSet.Add(to);
+            fromToSet.Add(new KeyValuePair<char, double>(to, weight));
         }
 
-        private void AddVertices(char from, char to, char relation)
+        private void AddVertices(char from, char to, char relation, int weight)
         {
+            Debug.Assert(weight >= 0);
+
             switch (relation)
             {
                 case '>':
-                    AddVertices(from, to);
+                    AddVertices(from, to, weight);
                     break;
                 case '<':
-                    AddVertices(to, from);
+                    AddVertices(to, from, weight);
                     break;
                 case '-':
-                    AddVertices(from, to);
+                    AddVertices(from, to, weight);
 
                     if (to != from)
                     {
-                        AddVertices(to, from);
+                        AddVertices(to, from, weight);
                     }
                     break;
                 default:
@@ -91,13 +93,12 @@ namespace Abacaxi.Graphs
             }
         }
 
-
         private void Parse(string relationships)
         {
             Debug.Assert(relationships != null);
 
             // ReSharper disable once IdentifierTypo
-            var rels = new HashSet<char> { '-' };
+            var rels = new HashSet<char> {'-'};
             if (IsDirected)
             {
                 rels.Add('>');
@@ -106,27 +107,28 @@ namespace Abacaxi.Graphs
 
             var vertices = new char[2];
             var relation = '\0';
+            var cost = 0;
+
             var stage = 0;
             for (var i = 0; i < relationships.Length; i++)
             {
                 var c = relationships[i];
-
                 switch (stage)
                 {
-                    case 0: /* Expect char or whitespace. */
+                    case 0: /* Expect "from" vertex (or whitespace) */
                         if (char.IsWhiteSpace(c))
                         {
                             continue;
                         }
                         if (!char.IsLetterOrDigit(c))
                         {
-                            throw new FormatException($"Invalid character \"{c}\" found at position {i}. Expected a letter or digit.");
+                            throw new FormatException($"Invalid character '{c}' at position {i}. Expected letter or digit.");
                         }
 
                         vertices[0] = c;
                         stage = 1;
                         break;
-                    case 1: /* Expect relationship char or whitespace or comma */
+                    case 1: /* Expect relationship character or comma (or whitespace) */
                         if (char.IsWhiteSpace(c))
                         {
                             continue;
@@ -134,6 +136,7 @@ namespace Abacaxi.Graphs
                         if (c == ',')
                         {
                             AddVertex(vertices[0]);
+
                             stage = 0;
                             continue;
                         }
@@ -145,30 +148,80 @@ namespace Abacaxi.Graphs
                         relation = c;
                         stage = 2;
                         break;
-                    case 2: /* Expect char or whitespace. */
+                    case 2: /* Expect cost digit (or whitespace) */
+                        if (char.IsWhiteSpace(c))
+                        {
+                            continue;
+                        }
+                        if (!char.IsDigit(c))
+                        {
+                            throw new FormatException($"Invalid character '{c}' at position {i}. Expected a digit.");
+                        }
+
+                        cost = c - '0';
+                        stage = 3;
+                        break;
+                    case 3: /* Expect next cost digit or whitespace or relationship character */
+                        if (char.IsWhiteSpace(c))
+                        {
+                            stage = 4;
+                            continue;
+                        }
+                        if (rels.Contains(c))
+                        {
+                            if (c != relation)
+                            {
+                                throw new FormatException(
+                                    $"Invalid character '{c}' at position {i}. Expected '{relation}' relationship character.");
+                            }
+
+                            stage = 5;
+                            continue;
+                        }
+                        if (!char.IsDigit(c))
+                        {
+                            throw new FormatException($"Invalid character '{c}' at position {i}. Expected a digit.");
+                        }
+
+                        cost = cost * 10 + (c - '0');
+                        break;
+                    case 4: /* Expect relationship character or whitespace */
+                        if (char.IsWhiteSpace(c))
+                        {
+                            continue;
+                        }
+                        if (c != relation)
+                        {
+                            throw new FormatException(
+                                $"Invalid character '{c}' at position {i}. Expected '{relation}' relationship character.");
+                        }
+
+                        stage = 5;
+                        break;
+                    case 5: /* Expect "to" vertex (or whitespace) */
                         if (char.IsWhiteSpace(c))
                         {
                             continue;
                         }
                         if (!char.IsLetterOrDigit(c))
                         {
-                            throw new FormatException($"Invalid character \"{c}\" found at position {i}. Expected a letter or digit.");
+                            throw new FormatException($"Invalid character '{c}' at position {i}. Expected letter or digit.");
                         }
 
                         vertices[1] = c;
-                        stage = 3;
+                        stage = 6;
                         break;
-                    case 3: /* Expect comma or whitespace */
+                    case 6: /* Expect "," (or whitespace) */
                         if (char.IsWhiteSpace(c))
                         {
                             continue;
                         }
                         if (c != ',')
                         {
-                            throw new FormatException($"Invalid character \"{c}\" found at position {i}. Expected comma.");
+                            throw new FormatException($"Invalid character '{c}' at position {i}. Expected comma.");
                         }
 
-                        AddVertices(vertices[0], vertices[1], relation);
+                        AddVertices(vertices[0], vertices[1], relation, cost);
 
                         stage = 0;
                         break;
@@ -177,8 +230,8 @@ namespace Abacaxi.Graphs
 
             switch (stage)
             {
-                case 3:
-                    AddVertices(vertices[0], vertices[1], relation);
+                case 6:
+                    AddVertices(vertices[0], vertices[1], relation, cost);
                     break;
                 case 1:
                     AddVertex(vertices[0]);
@@ -187,6 +240,16 @@ namespace Abacaxi.Graphs
                     break;
                 default:
                     throw new FormatException("Unexpected end of relationships string.");
+            }
+        }
+
+        private void ValidateVertex(string paramName, char vertex)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(paramName));
+
+            if (!_vertices.ContainsKey(vertex))
+            {
+                throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", nameof(paramName));
             }
         }
 
@@ -216,7 +279,7 @@ namespace Abacaxi.Graphs
         {
             Validate.ArgumentNotNull(nameof(relationships), relationships);
 
-            _vertices = new Dictionary<char, IList<char>>();
+            _vertices = new Dictionary<char, IList<KeyValuePair<char, double>>>();
 
             IsDirected = isDirected;
             Parse(relationships);
@@ -232,22 +295,43 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Gets the edges for a given <param name="vertex" />.
+        /// Gets the edges of a given <paramref name="vertex" />.
         /// </summary>
-        /// <param name="vertex"></param>
+        /// <param name="vertex">The vertex.</param>
         /// <returns>
-        /// A sequence of edges connected to the given <param name="vertex" />
+        /// A sequence of edges connecting the <paramref name="vertex" /> to other vertices.
         /// </returns>
-        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if the given <paramref name="vertex"/> if not part of the graph.</exception>
         public override IEnumerable<Edge<char>> GetEdges(char vertex)
         {
-            // ReSharper disable once CollectionNeverUpdated.Local
-            if (!_vertices.TryGetValue(vertex, out IList<char> list))
-            {
-                throw new InvalidOperationException($"Vertex {vertex} is not part of this graph.");
-            }
+            ValidateVertex(nameof(vertex), vertex);
 
-            return list.Select(s => new Edge<char>(vertex, s));
+            return _vertices[vertex].Select(s => new Edge<char>(vertex, s.Key, s.Value));
         }
+
+        /// <summary>
+        /// Gets the potential weight.
+        /// </summary>
+        /// <param name="fromVertex">From vertex.</param>
+        /// <param name="toVertex">To vertex.</param>
+        /// <returns></returns>
+        /// <exception cref="NotSupportedException">Always thrown.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if either of <paramref name="fromVertex"/> or <paramref name="fromVertex"/> are not part of this graph.</exception>
+        public override double GetPotentialWeight(char fromVertex, char toVertex)
+        {
+            ValidateVertex(nameof(fromVertex), fromVertex);
+            ValidateVertex(nameof(toVertex), toVertex);
+
+            throw new NotSupportedException("This graph does not support potential weight calculation.");
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics). This
+        /// implementation always returns <c>false</c>.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsPotentialWeightEvaluation => false;
     }
 }

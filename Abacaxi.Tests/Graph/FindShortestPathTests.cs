@@ -15,44 +15,34 @@
 
 namespace Abacaxi.Tests.Graph
 {
-    using System.Linq;
+    using System;
     using Graphs;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class GraphGetComponentsTests
+    public class FindShortestPathTests
     {
-        [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A-A", "A")]
-        [TestCase("A-A,A-A", "A")]
-        [TestCase("A-B,B-C,C-D", "A,B,C,D")]
-        [TestCase("A,B,C", "A;B;C")]
-        [TestCase("A-B,B-C,C-A,D-E", "A,B,C;D,E")]
-        public void GetComponents_ReturnsProperComponents_ForUndirectedGraphs(string relationships, string expected)
+        [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        public void FindShortestPath_ThrowsException_ForInvalidStartVertex()
         {
-            var graph = new LiteralGraph(relationships, false);
-            var result = string.Join(";",
-                graph.GetComponents().Select(component => string.Join(",", component)));
-
-            Assert.AreEqual(expected, result);
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<ArgumentException>(() => graph.FindShortestPath('Z', 'A'));
         }
 
-        [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A>A", "A")]
-        [TestCase("A>A,A>A", "A")]
-        [TestCase("A>B,B-C,C>D", "A,B,C,D")]
-        [TestCase("A,B,C", "A;B;C")]
-        [TestCase("A-B,B-C,C-A,D-E", "A,B,C;D,E")]
-        [TestCase("A>B,C>D", "A,B;C,D")]
-        public void GetComponents_ReturnsProperComponents_ForDirectedGraphs(string relationships, string expected)
+        [TestCase("A-1-B,A-1-C", 'A', 'B', "A,B")]
+        [TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'D', 'B', "D,C,B")]
+        [TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'B', 'D', "B,D")]
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'A', 'E', "")]
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'E', 'Z', "")]
+        public void FindShortestPath_FillsExpectedVertices(
+            string relationships, char startVertex, char endVertex, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
-            var result = string.Join(";",
-                graph.GetComponents().Select(component => string.Join(",", component)));
+            var seq = graph.FindShortestPath(startVertex, endVertex);
 
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected, string.Join(",", seq));
         }
     }
 }

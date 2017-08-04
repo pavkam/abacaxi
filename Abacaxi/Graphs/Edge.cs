@@ -18,11 +18,11 @@ namespace Abacaxi.Graphs
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Defines an edge connecting two graph vertices.
+    /// Defines a weighted edge connecting two graph vertices.
     /// <typeparam name="TVertex">The type of the vertex.</typeparam>
     /// </summary>
     [PublicAPI]
-    public class Edge<TVertex>
+    public sealed class Edge<TVertex>
     {
         /// <summary>
         /// Gets the starting vertex.
@@ -41,14 +41,24 @@ namespace Abacaxi.Graphs
         public TVertex ToVertex { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Edge{TVertex}"/> structure.
+        /// Gets the edge's weight.
+        /// </summary>
+        /// <value>
+        /// The edge's weight.
+        /// </value>
+        public double Weight { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Edge{TVertex}"/> struct.
         /// </summary>
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The second vertex.</param>
-        public Edge(TVertex fromVertex, TVertex toVertex)
+        /// <param name="weight">The weight of the edge.</param>
+        public Edge(TVertex fromVertex, TVertex toVertex, double weight)
         {
             FromVertex = fromVertex;
             ToVertex = toVertex;
+            Weight = weight;
         }
 
         /// <summary>
@@ -67,8 +77,9 @@ namespace Abacaxi.Graphs
 
             var co = (Edge<TVertex>)obj;
             return
+                Equals(co.Weight, Weight) &&
                 Equals(co.FromVertex, FromVertex) &&
-                Equals(co.ToVertex, ToVertex);
+                Equals(co.ToVertex, ToVertex); 
         }
 
         /// <summary>
@@ -79,9 +90,12 @@ namespace Abacaxi.Graphs
         /// </returns>
         public override int GetHashCode()
         {
-            return
-                (FromVertex != null ? FromVertex.GetHashCode() : 0) ^
-                (ToVertex != null ? ToVertex.GetHashCode() : 0);
+            var hashCode = 17;
+            hashCode = hashCode * 23 + ToVertex?.GetHashCode() ?? 0;
+            hashCode = hashCode * 23 + FromVertex?.GetHashCode() ?? 0;
+            hashCode = hashCode * 23 + Weight.GetHashCode();
+
+            return hashCode;
         }
 
         /// <summary>
@@ -92,7 +106,7 @@ namespace Abacaxi.Graphs
         /// </returns>
         public override string ToString()
         {
-            return $"{FromVertex} >==> {ToVertex}";
+            return $"{FromVertex} >={Weight}=> {ToVertex}";
         }
     }
 }

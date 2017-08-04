@@ -26,7 +26,9 @@ namespace Abacaxi.Containers
     [PublicAPI]
     public sealed class Temporary<T>
     {
+        [NotNull]
         private readonly object _lock = new object();
+        [NotNull]
         private readonly Func<T> _valueFunc;
         private readonly int _valueTtl;
 
@@ -40,7 +42,7 @@ namespace Abacaxi.Containers
         /// <param name="valueLifespanMillis">The lifespan of the created resource (in milliseconds).</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="valueFunc"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="valueLifespanMillis"/> is less than one.</exception>
-        public Temporary(Func<T> valueFunc, int valueLifespanMillis)
+        public Temporary([NotNull] Func<T> valueFunc, int valueLifespanMillis)
         {
             Validate.ArgumentNotNull(nameof(valueFunc), valueFunc);
             Validate.ArgumentGreaterThanZero(nameof(valueLifespanMillis), valueLifespanMillis);

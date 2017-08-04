@@ -31,7 +31,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void TraverseDfs_ThrowsException_ForNullVisitationHandler()
         {
-            var graph = new LiteralGraph("A>B", true);
+            var graph = new LiteralGraph("A>1>B", true);
 
             Assert.Throws<ArgumentNullException>(() => graph.TraverseDfs('A', null, True,  (node, dfsNode) => true));
         }
@@ -39,7 +39,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void TraverseDfs_ThrowsException_ForNullCompletionHandler()
         {
-            var graph = new LiteralGraph("A>B", true);
+            var graph = new LiteralGraph("A>1>B", true);
 
             Assert.Throws<ArgumentNullException>(() => graph.TraverseDfs('A', True, null, (node, dfsNode) => true));
         }
@@ -47,7 +47,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void TraverseDfs_ThrowsException_ForNullCycleHandler()
         {
-            var graph = new LiteralGraph("A>B", true);
+            var graph = new LiteralGraph("A>1>B", true);
 
             Assert.Throws<ArgumentNullException>(() => graph.TraverseDfs('A', True, True, null));
         }
@@ -55,15 +55,15 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void TraverseDfs_ThrowsException_ForInvalidVertex()
         {
-            var graph = new LiteralGraph("A>B", true);
+            var graph = new LiteralGraph("A>1>B", true);
 
-            Assert.Throws<InvalidOperationException>(() => graph.TraverseDfs('Z', True, True, (node, dfsNode) => true));
+            Assert.Throws<ArgumentException>(() => graph.TraverseDfs('Z', True, True, (node, dfsNode) => true));
         }
 
-        [TestCase("A-B,A-C", "A>B,A>C,>A")]
-        [TestCase("A-B,C-D", "A>B,>A")]
-        [TestCase("A-B,A-D,B-C,C-D,C-E", "C>D,C>E,B>C,A>B,>A")]
-        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", "E>G,B>E,B>F,A>B,A>C,A>D,>A")]
+        [TestCase("A-1-B,A-1-C", "A>B,A>C,>A")]
+        [TestCase("A-1-B,C-1-D", "A>B,>A")]
+        [TestCase("A-1-B,A-1-D,B-1-C,C-1-D,C-1-E", "C>D,C>E,B>C,A>B,>A")]
+        [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", "E>G,B>E,B>F,A>B,A>C,A>D,>A")]
         public void TraverseDfs_ReturnsProperSequence_ForUndirectedGraph(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
@@ -79,10 +79,10 @@ namespace Abacaxi.Tests.Graph
             Assert.AreEqual(expected, string.Join(",", result));
         }
 
-        [TestCase("A>A", ">A")]
-        [TestCase("A>B,B>C,C>A", "B>C,A>B,>A")]
-        [TestCase("A>B,C>A,C>B", "A>B,>A")]
-        [TestCase("A>B,B>C,C>A,D>B,C>D", "C>D,B>C,A>B,>A")]
+        [TestCase("A>1>A", ">A")]
+        [TestCase("A>1>B,B>1>C,C>1>A", "B>C,A>B,>A")]
+        [TestCase("A>1>B,C>1>A,C>1>B", "A>B,>A")]
+        [TestCase("A>1>B,B>1>C,C>1>A,D>1>B,C>1>D", "C>D,B>C,A>B,>A")]
         public void TraverseDfs_ReturnsProperSequence_ForDirectedGraph(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
@@ -98,9 +98,9 @@ namespace Abacaxi.Tests.Graph
             Assert.AreEqual(expected, string.Join(",", result));
         }
 
-        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", 'A', "E>G,B>E,B>F,A>B,A>C,A>D,>A")]
-        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", 'D', "E>G,B>E,B>F,A>B,A>C,A>D,>A")]
-        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", 'E', "E>G,B>E,A>B,>A")]
+        [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", 'A', "E>G,B>E,B>F,A>B,A>C,A>D,>A")]
+        [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", 'D', "E>G,B>E,B>F,A>B,A>C,A>D,>A")]
+        [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", 'E', "E>G,B>E,A>B,>A")]
         public void TraverseDfs_ReturnsProperSequence_IfInterrupted(string relationships, char killVertex, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
@@ -116,15 +116,15 @@ namespace Abacaxi.Tests.Graph
             Assert.AreEqual(expected, string.Join(",", result));
         }
 
-        [TestCase("A-B,A-C", "B~A,C~A")]
-        [TestCase("A-B,C-D", "B~A")]
-        [TestCase("A-B,A-D,B-C,C-D,C-E", "B~A,C~B,D~A,D~C,E~C")]
-        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", "B~A,E~B,G~E,F~B,C~A,D~A")]
-        [TestCase("A>A", "A~A")]
-        [TestCase("A>B,B>C,C>A", "C~A")]
-        [TestCase("A>B,C>A,C>B", "")]
-        [TestCase("A>B,B>C,C>A,D>B,C>D", "C~A,D~B")]
-        [TestCase("A-B,B-C,C-D,D-A,B>D", "B~A,C~B,D~C,D~A")]
+        [TestCase("A-1-B,A-1-C", "B~A,C~A")]
+        [TestCase("A-1-B,C-1-D", "B~A")]
+        [TestCase("A-1-B,A-1-D,B-1-C,C-1-D,C-1-E", "B~A,C~B,D~A,D~C,E~C")]
+        [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", "B~A,E~B,G~E,F~B,C~A,D~A")]
+        [TestCase("A>1>A", "A~A")]
+        [TestCase("A>1>B,B>1>C,C>1>A", "C~A")]
+        [TestCase("A>1>B,C>1>A,C>1>B", "")]
+        [TestCase("A>1>B,B>1>C,C>1>A,D>1>B,C>1>D", "C~A,D~B")]
+        [TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", "B~A,C~B,D~C,D~A")]
         public void TraverseDfs_ReportsTheCycles_InDirectedGraphs(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
@@ -141,10 +141,10 @@ namespace Abacaxi.Tests.Graph
 
         [TestCase("A", "")]
         [TestCase("A,B,C", "")]
-        [TestCase("A-B,A-C", "")]
-        [TestCase("A-B,C-D", "")]
-        [TestCase("A-B,A-D,B-C,C-D,C-E", "D~A")]
-        [TestCase("A-B,A-C,A-D,B-E,B-F,E-G", "")]
+        [TestCase("A-1-B,A-1-C", "")]
+        [TestCase("A-1-B,C-1-D", "")]
+        [TestCase("A-1-B,A-1-D,B-1-C,C-1-D,C-1-E", "D~A")]
+        [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", "")]
         public void TraverseDfs_ReportsTheCycles_InUndirectedGraphs(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, false);
@@ -159,10 +159,10 @@ namespace Abacaxi.Tests.Graph
             Assert.AreEqual(expected, string.Join(",", result));
         }
 
-        [TestCase("A>A", 'A', ">A")]
-        [TestCase("A>B,B>C,C>A", 'A', "B>C,A>B,>A")]
-        [TestCase("A>B,B>C,C>A,D>B,C>D", 'A', "B>C,A>B,>A")]
-        [TestCase("A-B,B-C,C-D,D-A,B>D", 'B', "B>C,A>B,>A")]
+        [TestCase("A>1>A", 'A', ">A")]
+        [TestCase("A>1>B,B>1>C,C>1>A", 'A', "B>C,A>B,>A")]
+        [TestCase("A>1>B,B>1>C,C>1>A,D>1>B,C>1>D", 'A', "B>C,A>B,>A")]
+        [TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'B', "B>C,A>B,>A")]
         public void TraverseDfs_InterruptsOnCycle(string relationships, char killVertex, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
@@ -180,7 +180,7 @@ namespace Abacaxi.Tests.Graph
         }
 
 
-        [TestCase("A-B,B-D,D-F,F-A,F-Z,A-C,C-E,E-A,E-G,G-H,H-E", "Z4,F3,D2,B1,H12,G11,E10,C9,A0")]
+        [TestCase("A-1-B,B-1-D,D-1-F,F-1-A,F-1-Z,A-1-C,C-1-E,E-1-A,E-1-G,G-1-H,H-1-E", "Z4,F3,D2,B1,H12,G11,E10,C9,A0")]
         public void TraverseDfs_MarksNodesWithCorrectEntryTimes(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
@@ -196,7 +196,7 @@ namespace Abacaxi.Tests.Graph
             Assert.AreEqual(expected, string.Join(",", result));
         }
 
-        [TestCase("A-B,B-D,D-F,F-A,F-Z,A-C,C-E,E-A,E-G,G-H,H-E", "Z5,F6,D7,B8,H13,G14,E15,C16,A17")]
+        [TestCase("A-1-B,B-1-D,D-1-F,F-1-A,F-1-Z,A-1-C,C-1-E,E-1-A,E-1-G,G-1-H,H-1-E", "Z5,F6,D7,B8,H13,G14,E15,C16,A17")]
         public void TraverseDfs_MarksNodesWithCorrectExitTimes(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);

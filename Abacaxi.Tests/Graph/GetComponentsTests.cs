@@ -15,42 +15,44 @@
 
 namespace Abacaxi.Tests.Graph
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Linq;
     using Graphs;
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphFillWithOneColorTests
+    public class GetComponentsTests
     {
-        [Test]
-        public void FillWithOneColor_ThrowsException_ForInvalidVertex()
+        [TestCase("", "")]
+        [TestCase("A", "A")]
+        [TestCase("A-1-A", "A")]
+        [TestCase("A-1-A,A-1-A", "A")]
+        [TestCase("A-1-B,B-1-C,C-1-D", "A,B,C,D")]
+        [TestCase("A,B,C", "A;B;C")]
+        [TestCase("A-1-B,B-1-C,C-1-A,D-1-E", "A,B,C;D,E")]
+        public void GetComponents_ReturnsProperComponents_ForUndirectedGraphs(string relationships, string expected)
         {
-            var graph = new LiteralGraph("A>B", true);
-            Assert.Throws<InvalidOperationException>(() => graph.FillWithOneColor('Z', v => { }));
+            var graph = new LiteralGraph(relationships, false);
+            var result = string.Join(";",
+                graph.GetComponents().Select(component => string.Join(",", component)));
+
+            Assert.AreEqual(expected, result);
         }
 
-        [Test]
-        public void FillWithOneColor_ThrowsException_ForNullApplyColor()
-        {
-            var graph = new LiteralGraph("A>B", true);
-            Assert.Throws<ArgumentNullException>(() => graph.FillWithOneColor('A', null));
-        }
-
-        [TestCase("A>B,A>C,C<F,F-E,E-D,D>B,D>C", 'A', "A,B,C")]
-        [TestCase("A>B,A>C,C<F,F-E,E-D,D>B,D>C", 'C', "C")]
-        [TestCase("A>B,A>C,C<F,F-E,E-D,D>B,D>C", 'D', "D,E,B,C,F")]
-        public void FillWithOneColor_FillsExpectedVertices(string relationships, char startVertex, string expected)
+        [TestCase("", "")]
+        [TestCase("A", "A")]
+        [TestCase("A>1>A", "A")]
+        [TestCase("A>1>A,A>1>A", "A")]
+        [TestCase("A>1>B,B-1-C,C>1>D", "A,B,C,D")]
+        [TestCase("A,B,C", "A;B;C")]
+        [TestCase("A-1-B,B-1-C,C-1-A,D-1-E", "A,B,C;D,E")]
+        [TestCase("A>1>B,C>1>D", "A,B;C,D")]
+        public void GetComponents_ReturnsProperComponents_ForDirectedGraphs(string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
-            var result = new List<char>();
+            var result = string.Join(";",
+                graph.GetComponents().Select(component => string.Join(",", component)));
 
-            graph.FillWithOneColor(startVertex, vertex =>
-            {
-                result.Add(vertex);
-            });
-
-            Assert.AreEqual(expected, string.Join(",", result));
+            Assert.AreEqual(expected, result);
         }
     }
 }
