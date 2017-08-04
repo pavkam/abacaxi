@@ -98,6 +98,8 @@ namespace Abacaxi.Tests.Graph
             foreach (var edge in graph.GetEdges(cell))
             {
                 Assert.AreEqual(cell, edge.FromVertex);
+                Assert.AreEqual(1, edge.Weight);
+
                 result.Add($"{edge.ToVertex.X}{edge.ToVertex.Y}");
             }
             var actual = string.Join(",", result);
@@ -113,6 +115,35 @@ namespace Abacaxi.Tests.Graph
             var result = string.Join(",", graph.Select(s => $"{s.X}{s.Y}"));
 
             Assert.AreEqual(expected, result);
+        }
+
+
+        [Test]
+        public void SupportsPotentialWeightEvaluation_ReturnsFalse()
+        {
+            var graph = new ChessHorsePathGraph(10, 10);
+            Assert.IsFalse(graph.SupportsPotentialWeightEvaluation);
+        }
+
+        [Test]
+        public void GetPotentialWeight_ThrowsException_IfFromVertexNotPartOfGraph()
+        {
+            Assert.Throws<ArgumentException>(
+                () => new ChessHorsePathGraph(10, 10).GetPotentialWeight(new Cell(20, 20), new Cell(0, 0)));
+        }
+
+        [Test]
+        public void GetPotentialWeight_ThrowsException_IfToVertexNotPartOfGraph()
+        {
+            Assert.Throws<ArgumentException>(
+                () => new ChessHorsePathGraph(10, 10).GetPotentialWeight(new Cell(0, 0), new Cell(20, 20)));
+        }
+
+        [Test]
+        public void GetPotentialWeight_ThrowsException_Always()
+        {
+            Assert.Throws<NotSupportedException>(
+                () => new ChessHorsePathGraph(10, 10).GetPotentialWeight(new Cell(0, 0), new Cell(0, 0)));
         }
     }
 }

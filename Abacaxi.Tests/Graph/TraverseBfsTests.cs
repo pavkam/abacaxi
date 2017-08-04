@@ -21,7 +21,7 @@ namespace Abacaxi.Tests.Graph
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphTraverseBfsTests
+    public class TraverseBfsTests
     {
         [Test]
         public void TraverseBfs_ThrowsException_ForNullCompletionHandler()

@@ -37,6 +37,14 @@ namespace Abacaxi.Practice.Graphs
             return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY;
         }
 
+        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, Cell vertex)
+        {
+            if (!VertexExists(vertex.X, vertex.Y))
+            {
+                throw new ArgumentException($"Vertex '{vertex}' is not part of this sub-graph.", argumentName);
+            }
+        }
+
         [NotNull]
         [ItemNotNull]
         private IEnumerable<Edge<Cell>> GetEdgesIterate(Cell vertex)
@@ -131,6 +139,9 @@ namespace Abacaxi.Practice.Graphs
         /// <exception cref="NotImplementedException">Always thrown.</exception>
         public override double GetPotentialWeight(Cell fromVertex, Cell toVertex)
         {
+            ValidateVertex(nameof(fromVertex), fromVertex);
+            ValidateVertex(nameof(toVertex), toVertex);
+
             throw new NotSupportedException("This graph does not support potential weight evaluation.");
         }
 
@@ -146,10 +157,7 @@ namespace Abacaxi.Practice.Graphs
         [ItemNotNull]
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
-            if (!VertexExists(vertex.X, vertex.Y))
-            {
-                throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", nameof(vertex));
-            }
+            ValidateVertex(nameof(vertex), vertex);
 
             return GetEdgesIterate(vertex);
         }

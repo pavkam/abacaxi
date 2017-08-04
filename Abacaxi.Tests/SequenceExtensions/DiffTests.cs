@@ -41,10 +41,10 @@ namespace Abacaxi.Tests.SequenceExtensions
         [TestCase("a", "b", "*b")]
         [TestCase("", "a", "+a")]
         [TestCase("a", "", "-a")]
-        [TestCase("ab", "a", "=A-1-B")]
+        [TestCase("ab", "a", "=a-b")]
         [TestCase("a", "ab", "=a+b")]
         [TestCase("ab", "ba", "*b*a")]
-        [TestCase("hello my dear friend", "Hello you fiend!", "*H=e=l=l=o= -m=y- -D-1-E*o*u= =f-r=i=e=n=d+!")]
+        [TestCase("hello my dear friend", "Hello you fiend!", "*H=e=l=l=o= -m=y- -d-e*o*u= =f-r=i=e=n=d+!")]
         public void Diff_ReturnsExpectedSequence(string s1, string s2, string expected)
         {
             var result = new StringBuilder();

@@ -28,14 +28,16 @@ namespace Abacaxi.Practice.Graphs
     /// </summary>
     public sealed class StringNeighborhoodGraph : Graph<string>
     {
+        [NotNull]
         private readonly Trie<char, ISet<string>> _neighborhoods;
+        [NotNull]
         private readonly ISet<string> _vertices;
 
         [NotNull]
         [ItemNotNull]
-        private static IEnumerable<char[]> GetAllStringPatterns(string s)
+        private static IEnumerable<char[]> GetAllStringPatterns([NotNull] string s)
         {
-            var ca = (s ?? string.Empty).ToCharArray();
+            var ca = s.ToCharArray();
             var result = new char[ca.Length][];
             for (var i = 0; i < ca.Length; i++)
             {
@@ -64,6 +66,14 @@ namespace Abacaxi.Practice.Graphs
                         }
                     }
                 }
+            }
+        }
+
+        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, string vertex)
+        {
+            if (vertex == null || !_vertices.Contains(vertex))
+            {
+                throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", argumentName);
             }
         }
 
@@ -167,8 +177,11 @@ namespace Abacaxi.Practice.Graphs
         /// The potential total cost.
         /// </returns>
         /// <exception cref="NotImplementedException">Always thrown.</exception>
-        public override double GetPotentialWeight(string fromVertex, string toVertex)
+        public override double GetPotentialWeight([NotNull] string fromVertex, [NotNull] string toVertex)
         {
+            ValidateVertex(nameof(fromVertex), fromVertex);
+            ValidateVertex(nameof(toVertex), toVertex);
+
             throw new NotSupportedException("This graph does not support potential weight evaluation.");
         }
     }

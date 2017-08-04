@@ -21,7 +21,7 @@ namespace Abacaxi.Tests.Graph
     using NUnit.Framework;
 
     [TestFixture]
-    public class GraphTraverseDfsTests
+    public class TraverseDfsTests
     {
         private static bool True<T>(Graph<T>.IDfsNode node)
         {

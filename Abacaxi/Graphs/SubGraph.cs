@@ -19,6 +19,7 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using Internal;
     using JetBrains.Annotations;
+    using System.Diagnostics;
 
     /// <summary>
     /// Implements a "connected component" of a graph, basically a sub-graph. This implementation uses the original graph
@@ -32,6 +33,30 @@ namespace Abacaxi.Graphs
         private readonly Graph<TVertex> _graph;
         [NotNull]
         private readonly HashSet<TVertex> _vertices;
+
+        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, TVertex vertex)
+        {
+            if (!_vertices.Contains(vertex))
+            {
+                throw new ArgumentException($"Vertex '{vertex}' is not part of this sub-graph.", nameof(argumentName));
+            }
+        }
+
+        [NotNull]
+        [ItemNotNull]
+        private IEnumerable<Edge<TVertex>> GetEdgesIterate(TVertex vertex)
+        {
+            Debug.Assert(_vertices.Contains(vertex));
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var edge in _graph.GetEdges(vertex))
+            {
+                if (_vertices.Contains(edge.ToVertex))
+                {
+                    yield return edge;
+                }
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubGraph{TVertex}"/> class.
@@ -107,6 +132,9 @@ namespace Abacaxi.Graphs
         /// <exception cref="NotImplementedException"></exception>
         public override double GetPotentialWeight(TVertex fromVertex, TVertex toVertex)
         {
+            ValidateVertex(nameof(fromVertex), fromVertex);
+            ValidateVertex(nameof(toVertex), toVertex);
+
             return _graph.GetPotentialWeight(fromVertex, toVertex);
         }
 
@@ -120,18 +148,8 @@ namespace Abacaxi.Graphs
         /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
         public override IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex)
         {
-            if (!_vertices.Contains(vertex))
-            {
-                throw new ArgumentException($"Vertex '{vertex}' is not part of this sub-graph.", nameof(vertex));
-            }
-
-            foreach(var edge in _graph.GetEdges(vertex))
-            {
-                if (_vertices.Contains(edge.ToVertex))
-                {
-                    yield return edge;
-                }
-            }
+            ValidateVertex(nameof(vertex), vertex);
+            return GetEdgesIterate(vertex);
         }
     }
 }

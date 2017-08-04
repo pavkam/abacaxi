@@ -36,11 +36,11 @@ namespace Abacaxi.Graphs
             return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY && _matrix[x, y];
         }
 
-        private void ValidateVertex([InvokerParameterName] string argumentName, Cell argumentValue)
+        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, Cell vertex)
         {
-            if (!VertexExists(argumentValue.X, argumentValue.Y))
+            if (!VertexExists(vertex.X, vertex.Y))
             {
-                throw new ArgumentException($"Vertex '{argumentName}' is not part of this graph.", argumentName);
+                throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", argumentName);
             }
         }
 

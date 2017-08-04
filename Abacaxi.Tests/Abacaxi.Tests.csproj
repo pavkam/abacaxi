@@ -85,10 +85,10 @@
     <Compile Include="Graph\FindChessHorsePathBetweenTwoPointsTests.cs" />
     <Compile Include="Graph\FindShortestPathTests.cs" />
     <Compile Include="Graph\FillWithOneColorTests.cs" />
-    <Compile Include="Graph\Graph.Tests.TopologicalSort.cs" />
+    <Compile Include="Graph\TopologicalSortTests.cs" />
     <Compile Include="Graph\FindAllArticulationVerticesTests.cs" />
-    <Compile Include="Graph\Graph.Tests.TraverseDfs.cs" />
-    <Compile Include="Graph\Graph.Tests.TraverseBfs.cs" />
+    <Compile Include="Graph\TraverseDfsTests.cs" />
+    <Compile Include="Graph\TraverseBfsTests.cs" />
     <Compile Include="Graph\ChessHorsePathGraphTests.cs" />
     <Compile Include="Graph\LiteralGraphTests.cs" />
     <Compile Include="Graph\SubGraphTests.cs" />

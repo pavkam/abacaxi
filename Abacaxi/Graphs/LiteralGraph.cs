@@ -243,13 +243,11 @@ namespace Abacaxi.Graphs
             }
         }
 
-        private void ValidateVertex(string paramName, char vertex)
+        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, char vertex)
         {
-            Debug.Assert(!string.IsNullOrEmpty(paramName));
-
             if (!_vertices.ContainsKey(vertex))
             {
-                throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", nameof(paramName));
+                throw new ArgumentException($"Vertex '{vertex}' is not part of this graph.", argumentName);
             }
         }
 

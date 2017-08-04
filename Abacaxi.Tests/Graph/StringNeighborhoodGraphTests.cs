@@ -80,7 +80,16 @@ namespace Abacaxi.Tests.Graph
         {
             var graph = new StringNeighborhoodGraph(new[] { "a", "b" });
 
-            Assert.AreEqual("a", graph.GetEdges("a").Single().FromVertex);
+            Assert.IsTrue(graph.GetEdges("a").All(e => e.FromVertex == "a"));
+        }
+
+        [Test]
+        public void GetEdges_CorrectlyReports_Weight()
+        {
+            var graph = new StringNeighborhoodGraph(new[] { "a", "b" });
+
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            Assert.IsTrue(graph.GetEdges("a").All(e => e.Weight == 1));
         }
 
         [TestCase("a", "b,c")]
@@ -101,6 +110,34 @@ namespace Abacaxi.Tests.Graph
             
             TestHelper.AssertSequence(graph.FindShortestPath("aa", "17"),
                 "aa", "a6", "16", "17");
+        }
+
+        [Test]
+        public void SupportsPotentialWeightEvaluation_ReturnsFalse()
+        {
+            var graph = new StringNeighborhoodGraph(new[] {"a", "b", "c"});
+            Assert.IsFalse(graph.SupportsPotentialWeightEvaluation);
+        }
+
+        [Test]
+        public void GetPotentialWeight_ThrowsException_IfFromVertexNotPartOfGraph()
+        {
+            Assert.Throws<ArgumentException>(
+                () => new StringNeighborhoodGraph(new[] { "a", "b", "c" }).GetPotentialWeight("z", "a"));
+        }
+
+        [Test]
+        public void GetPotentialWeight_ThrowsException_IfToVertexNotPartOfGraph()
+        {
+            Assert.Throws<ArgumentException>(
+                () => new StringNeighborhoodGraph(new[] { "a", "b", "c" }).GetPotentialWeight("a", "z"));
+        }
+
+        [Test]
+        public void GetPotentialWeight_ThrowsException_Always()
+        {
+            Assert.Throws<NotSupportedException>(
+                () => new StringNeighborhoodGraph(new[] { "a", "b", "c" }).GetPotentialWeight("a", "b"));
         }
     }
 }

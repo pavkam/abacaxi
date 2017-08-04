@@ -22,7 +22,7 @@ namespace Abacaxi.Tests.Graph
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class GraphTopologicalSortTests
+    public class TopologicalSortTests
     {
         [Test]
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]

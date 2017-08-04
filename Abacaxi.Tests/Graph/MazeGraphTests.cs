@@ -24,15 +24,17 @@ namespace Abacaxi.Tests.Graph
     [TestFixture]
     public class MazeGraphTests
     {
-        private readonly bool[,] _m3X3 = {
-            { true, true, true },
-            { true, true, true },
-            { true, true, true },
+        private readonly bool[,] _m3X3 =
+        {
+            {true, true, true},
+            {true, true, true},
+            {true, true, true},
         };
 
-        private readonly bool[,] _m2X2 = {
-            { true, false },
-            { true, true },
+        private readonly bool[,] _m2X2 =
+        {
+            {true, false},
+            {true, true},
         };
 
         private static Cell Parse(string v)
@@ -59,6 +61,7 @@ namespace Abacaxi.Tests.Graph
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_ForNullMatrix()
         {
             Assert.Throws<ArgumentNullException>(() => new MazeGraph(null));
@@ -69,8 +72,8 @@ namespace Abacaxi.Tests.Graph
         {
             var graph = new MazeGraph(new[,]
             {
-                { true, false },
-                { true, true },
+                {true, false},
+                {true, true},
             });
 
             Assert.IsFalse(graph.IsDirected);
@@ -79,7 +82,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void IsReadOnly_ReturnsFalse()
         {
-            var graph = new MazeGraph(new[,] { { true } });
+            var graph = new MazeGraph(new[,] {{true}});
 
             Assert.IsFalse(graph.IsReadOnly);
         }
@@ -91,7 +94,7 @@ namespace Abacaxi.Tests.Graph
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForInvalidCell(int x, int y)
         {
-            var graph = new MazeGraph(new[,] { { true } });
+            var graph = new MazeGraph(new[,] {{true}});
 
             Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(x, y)));
         }
@@ -100,7 +103,7 @@ namespace Abacaxi.Tests.Graph
         [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForFalseCell()
         {
-            var graph = new MazeGraph(new[,] { { false } });
+            var graph = new MazeGraph(new[,] {{false}});
 
             Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(0, 0)));
         }
@@ -181,6 +184,24 @@ namespace Abacaxi.Tests.Graph
             }
 
             Assert.IsTrue(expectedCells.SetEquals(actualCells));
+        }
+
+        [Test]
+        public void SupportsPotentialWeightEvaluation_ReturnsTrue()
+        {
+            var graph = new MazeGraph(_m2X2);
+            Assert.IsTrue(graph.SupportsPotentialWeightEvaluation);
+        }
+
+        [TestCase(0, 0, 0, 0, 0)]
+        [TestCase(0, 0, 1, 0, 1)]
+        [TestCase(0, 0, 1, 1, 2)]
+        [TestCase(0, 0, 1, 2, 3)]
+        public void GetPotentialWeight_ReturnsCellDistance(int sx, int sy, int ex, int ey, double expected)
+        {
+            var graph = new MazeGraph(_m3X3);
+            var p = graph.GetPotentialWeight(new Cell(sx, sy), new Cell(ex, ey));
+            Assert.AreEqual(expected, p);
         }
     }
 }

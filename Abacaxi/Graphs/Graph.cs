@@ -13,9 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-using Abacaxi.Containers;
-
 namespace Abacaxi.Graphs
 {
     using System;
@@ -25,6 +22,8 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using Internal;
     using JetBrains.Annotations;
+    using System.Diagnostics.CodeAnalysis;
+    using Containers;
 
     /// <summary>
     /// Generic graph class. This class serves as an abstract base for all concrete implementations.
@@ -59,10 +58,10 @@ namespace Abacaxi.Graphs
         private bool TraverseDfs(
             DfsNode vertexNode,
             ref int time,
-            IDictionary<TVertex, DfsNode> visitedNodes,
-            Predicate<IDfsNode> handleVertexVisited,
-            Predicate<IDfsNode> handleVertexCompleted,
-            Func<IDfsNode, IDfsNode, bool> handleCycle)
+            [NotNull] IDictionary<TVertex, DfsNode> visitedNodes,
+            [NotNull] Predicate<IDfsNode> handleVertexVisited,
+            [NotNull] Predicate<IDfsNode> handleVertexCompleted,
+            [NotNull] Func<IDfsNode, IDfsNode, bool> handleCycle)
         {
             Debug.Assert(vertexNode != null);
             Debug.Assert(visitedNodes != null);
@@ -254,7 +253,7 @@ namespace Abacaxi.Graphs
         /// <param name="handleVertexCompleted">The function called when a vertex is completed.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
-        public virtual void TraverseBfs(TVertex startVertex, Predicate<IBfsNode> handleVertexCompleted)
+        public virtual void TraverseBfs([NotNull] TVertex startVertex, [NotNull] Predicate<IBfsNode> handleVertexCompleted)
         {
             Validate.ArgumentNotNull(nameof(handleVertexCompleted), handleVertexCompleted);
 
@@ -308,8 +307,8 @@ namespace Abacaxi.Graphs
         /// <exception cref="ArgumentNullException">The <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handleCycle"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
-        public virtual void TraverseDfs(TVertex startVertex, Predicate<IDfsNode> handleVertexVisited, 
-            Predicate<IDfsNode> handleVertexCompleted, Func<IDfsNode, IDfsNode, bool> handleCycle)
+        public virtual void TraverseDfs(TVertex startVertex, [NotNull] Predicate<IDfsNode> handleVertexVisited,
+            [NotNull] Predicate<IDfsNode> handleVertexCompleted, [NotNull] Func<IDfsNode, IDfsNode, bool> handleCycle)
         {
             Validate.ArgumentNotNull(nameof(handleVertexVisited), handleVertexVisited);
             Validate.ArgumentNotNull(nameof(handleVertexCompleted), handleVertexCompleted);
@@ -331,7 +330,7 @@ namespace Abacaxi.Graphs
         /// <param name="applyColor">Color to apply to each vertex.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="applyColor"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
-        public virtual void FillWithOneColor(TVertex startVertex, Action<TVertex> applyColor)
+        public virtual void FillWithOneColor(TVertex startVertex, [NotNull] Action<TVertex> applyColor)
         {
             Validate.ArgumentNotNull(nameof(applyColor), applyColor);
 
@@ -379,6 +378,8 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of sub-graphs, each representing a connected component.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
+        [NotNull]
+        [ItemNotNull]
         public virtual IEnumerable<Graph<TVertex>> GetComponents()
         {
             var undiscoveredVertices = new HashSet<TVertex>(this);
@@ -405,6 +406,8 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of vertices sorted in topological order.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is undirected or contains one or more cycles.</exception>
+        [NotNull]
+        [ItemNotNull]
         public virtual TVertex[] TopologicalSort()
         {
             var outAdj = new Dictionary<TVertex, ISet<TVertex>>();
@@ -471,6 +474,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of all articulation vertices.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
+        [NotNull]
         public virtual IEnumerable<TVertex> FindAllArticulationVertices()
         {
             RequireUndirectedGraph();
@@ -591,6 +595,7 @@ namespace Abacaxi.Graphs
         /// Describes the vertices of graph (degrees and components).
         /// </summary>
         /// <returns>A list of vertex descriptions.</returns>
+        [NotNull]
         public virtual IEnumerable<VertexDescriptor<TVertex>> DescribeVertices()
         {
             var inDegrees = new Dictionary<TVertex, int>();
@@ -643,6 +648,7 @@ namespace Abacaxi.Graphs
         /// <param name="toVertex">The end vertex.</param>
         /// <returns>A sequence of vertices that yield the shortest path. Returns an empty sequence if no path available.</returns>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name="fromVertex"/> is not part of teh graph.</exception>
+        [NotNull]
         public IEnumerable<TVertex> FindCheapestPath(TVertex fromVertex, TVertex toVertex)
         {
             var comparer = Comparer<PathNode>.Create((a, b) =>
