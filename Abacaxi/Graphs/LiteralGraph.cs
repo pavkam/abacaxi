@@ -18,7 +18,6 @@ namespace Abacaxi.Graphs
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
     using Internal;
     using JetBrains.Annotations;
 
@@ -29,21 +28,17 @@ namespace Abacaxi.Graphs
     [PublicAPI]
     public sealed class LiteralGraph : Graph<char>
     {
-        private readonly Dictionary<char, IList<KeyValuePair<char, double>>> _vertices;
+        private readonly Dictionary<char, ISet<Edge<char>>> _vertices;
 
         private void AddVertex(char vertex)
         {
             Debug.Assert(char.IsLetterOrDigit(vertex));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(vertex, out IList<KeyValuePair<char, double>> set))
+            if (!_vertices.TryGetValue(vertex, out ISet<Edge<char>> set))
             {
-                set = new List<KeyValuePair<char, double>>();
+                set = new HashSet<Edge<char>> ();
                 _vertices.Add(vertex, set);
-            }
-            else
-            {
-                throw new InvalidOperationException($"Vertex '{vertex}' has already been defined.");
             }
         }
 
@@ -53,18 +48,18 @@ namespace Abacaxi.Graphs
             Debug.Assert(char.IsLetterOrDigit(to));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(from, out IList<KeyValuePair<char, double>> fromToSet))
+            if (!_vertices.TryGetValue(from, out ISet<Edge<char>> fromToSet))
             {
-                fromToSet = new List<KeyValuePair<char, double>>();
+                fromToSet = new HashSet<Edge<char>>();
                 _vertices.Add(from, fromToSet);
             }
-            if (!_vertices.TryGetValue(to, out IList<KeyValuePair<char, double>> toFromSet))
+            if (!_vertices.TryGetValue(to, out ISet<Edge<char>> toFromSet))
             {
-                toFromSet = new List<KeyValuePair<char, double>>();
+                toFromSet = new HashSet<Edge<char>>();
                 _vertices.Add(to, toFromSet);
             }
 
-            fromToSet.Add(new KeyValuePair<char, double>(to, weight));
+            fromToSet.Add(new Edge<char>(from, to, weight));
         }
 
         private void AddVertices(char from, char to, char relation, int weight)
@@ -277,7 +272,7 @@ namespace Abacaxi.Graphs
         {
             Validate.ArgumentNotNull(nameof(relationships), relationships);
 
-            _vertices = new Dictionary<char, IList<KeyValuePair<char, double>>>();
+            _vertices = new Dictionary<char, ISet<Edge<char>>>();
 
             IsDirected = isDirected;
             Parse(relationships);
@@ -304,7 +299,7 @@ namespace Abacaxi.Graphs
         {
             ValidateVertex(nameof(vertex), vertex);
 
-            return _vertices[vertex].Select(s => new Edge<char>(vertex, s.Key, s.Value));
+            return _vertices[vertex];
         }
 
         /// <summary>

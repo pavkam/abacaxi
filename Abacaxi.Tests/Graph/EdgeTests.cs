@@ -47,22 +47,6 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void Index_ReturnsValidValue()
-        {
-            var edge = new Edge<string>("from", "to", 99, 100);
-
-            Assert.AreEqual(100, edge.Index);
-        }
-
-        [Test]
-        public void Index_DefaultValue_IsMinusOne()
-        {
-            var edge = new Edge<string>("from", "to");
-
-            Assert.AreEqual(-1, edge.Index);
-        }
-
-        [Test]
         public void Weight_DefaultValue_IsOne()
         {
             var edge = new Edge<string>("from", "to");
@@ -71,19 +55,11 @@ namespace Abacaxi.Tests.Graph
         }
 
         [Test]
-        public void ToString_ReturnsValidValue_WhenIndexNotSupplied()
+        public void ToString_ReturnsValidValue()
         {
             var edge = new Edge<string>("from", "to", 99);
 
             Assert.AreEqual("from >=99=> to", edge.ToString());
-        }
-
-        [Test]
-        public void ToString_ReturnsValidValue_WhenIndexSupplied()
-        {
-            var edge = new Edge<string>("from", "to", 99, 0);
-
-            Assert.AreEqual("from >=99=> to (0)", edge.ToString());
         }
 
         [Test]
@@ -118,15 +94,6 @@ namespace Abacaxi.Tests.Graph
         {
             var edge1 = new Edge<string>("from", "to", 99);
             var edge2 = new Edge<string>("from", "to", 991);
-
-            Assert.IsFalse(edge1.Equals(edge2));
-        }
-
-        [Test]
-        public void Equals_ReturnsFalse_ForDifferentIndex()
-        {
-            var edge1 = new Edge<string>("from", "to", 99, 0);
-            var edge2 = new Edge<string>("from", "to", 99, 1);
 
             Assert.IsFalse(edge1.Equals(edge2));
         }
@@ -171,15 +138,6 @@ namespace Abacaxi.Tests.Graph
         {
             var edge1 = new Edge<string>("from", "to");
             var edge2 = new Edge<string>("from", "to1");
-
-            Assert.AreNotEqual(edge1.GetHashCode(), edge2.GetHashCode());
-        }
-
-        [Test]
-        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentIndex()
-        {
-            var edge1 = new Edge<string>("from", "to", 1, 0);
-            var edge2 = new Edge<string>("from", "to", 1, 1);
 
             Assert.AreNotEqual(edge1.GetHashCode(), edge2.GetHashCode());
         }

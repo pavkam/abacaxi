@@ -215,7 +215,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void Preserves_MultipleEdges_ForUndirectedGraphs()
         {
-            var graph = new LiteralGraph("A-1-A,A-1-B,A-1-B", true);
+            var graph = new LiteralGraph("A-1-A,A-1-B,A-2-B", true);
             var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));
             var edgesFromB = string.Join(",", graph.GetEdges('B').Select(s => s.FromVertex + ">" + s.ToVertex));
 
@@ -226,7 +226,7 @@ namespace Abacaxi.Tests.Graph
         [Test]
         public void Preserves_MultipleEdges_ForDirectedGraphs()
         {
-            var graph = new LiteralGraph("A>1>A,A>1>B,A>1>B", true);
+            var graph = new LiteralGraph("A>1>A,A>2>B,A>1>B", true);
             var edgesFromA = string.Join(",", graph.GetEdges('A').Select(s => s.FromVertex + ">" + s.ToVertex));
 
             Assert.AreEqual("A>A,A>B,A>B", edgesFromA);
