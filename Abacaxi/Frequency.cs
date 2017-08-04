@@ -18,22 +18,14 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Represents an unique "edit" step in a sequence transformation. See <seealso cref="SequenceExtensions.Diff{T}"/> for more details.
+    /// Stores the number of times a certain item appears in a collection.
     /// </summary>
-    /// <typeparam name="T">The type of elements being edited.</typeparam>
+    /// <typeparam name="T">Te type of elements in collection.</typeparam>
     [PublicAPI]
-    public struct Edit<T>
+    public struct Frequency<T>
     {
         /// <summary>
-        /// Gets the edit operation type.
-        /// </summary>
-        /// <value>
-        /// The operation type.
-        /// </value>
-        public EditOperation Operation { get; }
-
-        /// <summary>
-        /// Gets the transformation item associated with the <see cref="Operation"/>.
+        /// Gets the item that is being counted.
         /// </summary>
         /// <value>
         /// The item.
@@ -41,13 +33,21 @@ namespace Abacaxi
         public T Item { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Edit{T}"/> struct.
+        /// Gets the number of appearances.
         /// </summary>
-        /// <param name="operation">The edit operation.</param>
-        /// <param name="item">The edit item.</param>
-        public Edit(EditOperation operation, T item)
+        /// <value>
+        /// The count.
+        /// </value>
+        public int Count { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Frequency{T}"/> struct.
+        /// </summary>
+        /// <param name="item">The item being counted.</param>
+        /// <param name="count">The number of appearances.</param>
+        public Frequency(T item, int count)
         {
-            Operation = operation;
+            Count = count;
             Item = item;
         }
 
@@ -66,10 +66,10 @@ namespace Abacaxi
             }
 
             // ReSharper disable once PossibleNullReferenceException
-            var e = (Edit<T>) obj;
+            var e = (Frequency<T>) obj;
             return
                 Equals(e.Item, Item) &&
-                Equals(e.Operation, Operation);
+                Equals(e.Count, Count);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Abacaxi
         /// </returns>
         public override string ToString()
         {
-            return $"{(char) Operation}{Item}";
+            return $"{Item} ({Count})";
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Abacaxi
         {
             var hashCode = 
                 127 + 
-                23 * Operation.GetHashCode() + 
+                23 * Count.GetHashCode() + 
                 23 * (Item?.GetHashCode() ?? 0);
 
             return hashCode;

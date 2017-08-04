@@ -298,31 +298,31 @@ namespace Abacaxi
         /// </summary>
         /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
         /// <param name="sequence">The sequence of elements.</param>
-        /// <param name="count">The count of elements to consider.</param>
+        /// <param name="size">The size of elements to consider.</param>
         /// <param name="aggregator">The aggregator function which sums elements.</param>
         /// <param name="comparer">The comparer.</param>
         /// <returns>An array of elements with the highest sum.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregator"/> or <paramref name="comparer"/> are null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="count"/> is greater than the number of elements in <paramref name="sequence"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="size"/> is greater than the number of elements in <paramref name="sequence"/>.</exception>
         [NotNull]
         public static T[] GetSubsetWithGreatestValue<T>(
             [NotNull] IEnumerable<T> sequence,
-            int count,
+            int size,
             [NotNull] Aggregator<T> aggregator, 
             [NotNull] IComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(aggregator), aggregator);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
-            Validate.ArgumentGreaterThanOrEqualTo(nameof(count), count, 1);
+            Validate.ArgumentGreaterThanOrEqualTo(nameof(size), size, 1);
 
             var array = sequence.ToArray();
-            Validate.ArgumentLessThanOrEqualTo(nameof(count), count, array.Length);
+            Validate.ArgumentLessThanOrEqualTo(nameof(size), size, array.Length);
 
             Sorting.QuickSort(array, 0, array.Length, comparer);
 
-            var result = new T[count];
-            Array.Copy(array, array.Length - count, result, 0, count);
+            var result = new T[size];
+            Array.Copy(array, array.Length - size, result, 0, size);
 
             return result;
         }

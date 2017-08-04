@@ -16,7 +16,6 @@
 namespace Abacaxi.Tests.StringExtensions
 {
     using NUnit.Framework;
-    using System.Collections.Generic;
 
     [TestFixture]
     public class FindDuplicatesTests
@@ -33,9 +32,9 @@ namespace Abacaxi.Tests.StringExtensions
         {
             TestHelper.AssertSequence(
                 "\u5000121312\u5000".FindDuplicates(),
-                new KeyValuePair<char, int>('1', 3),
-                new KeyValuePair<char, int>('2', 2),
-                new KeyValuePair<char, int>('\u5000', 2));
+                new Frequency<char>('1', 3),
+                new Frequency<char>('2', 2),
+                new Frequency<char>('\u5000', 2));
         }
     }
 }

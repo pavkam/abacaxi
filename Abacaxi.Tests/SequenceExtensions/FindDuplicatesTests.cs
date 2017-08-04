@@ -80,8 +80,8 @@ namespace Abacaxi.Tests.SequenceExtensions
         {
             TestHelper.AssertSequence(
                 "121312".FindDuplicates(EqualityComparer<char>.Default),
-                new KeyValuePair<char, int>('1', 3),
-                new KeyValuePair<char, int>('2', 2));
+                new Frequency<char>('1', 3),
+                new Frequency<char>('2', 2));
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         {
             TestHelper.AssertSequence(
                 new[] { "a", "A" }.FindDuplicates(StringComparer.InvariantCultureIgnoreCase),
-                new KeyValuePair<string, int>("a", 2));
+                new Frequency<string>("a", 2));
         }
 
         [Test]
@@ -104,8 +104,8 @@ namespace Abacaxi.Tests.SequenceExtensions
         {
             TestHelper.AssertSequence(
                 new[] { 1, 2, 1, 3, 1, 2 }.FindDuplicates(1, 3),
-                new KeyValuePair<int, int>(1, 3),
-                new KeyValuePair<int, int>(2, 2));
+                new Frequency<int>(1, 3),
+                new Frequency<int>(2, 2));
         }
 
         [Test]

@@ -256,7 +256,7 @@ namespace Abacaxi
         /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either the <paramref name="sequence"/> or the <paramref name="equalityComparer"/> are <c>null</c>.</exception>
         [NotNull]
-        public static KeyValuePair<T, int>[] FindDuplicates<T>(
+        public static Frequency<T>[] FindDuplicates<T>(
             [NotNull] this IEnumerable<T> sequence, [NotNull] IEqualityComparer<T> equalityComparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -275,7 +275,18 @@ namespace Abacaxi
                 }
             }
 
-            return appearances.Where(kvp => kvp.Value > 1).ToArray();
+            var result = new List<Frequency<T>>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var kvp in appearances)
+            {
+                if (kvp.Value > 1)
+                {
+                    result.Add(new Frequency<T>(kvp.Key, kvp.Value));
+                }
+            }
+
+            return result.ToArray();
         }
 
         /// <summary>
@@ -288,7 +299,7 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="maxInSequence"/> is less than <paramref name="minInSequence"/>.</exception>
         [NotNull]
-        public static KeyValuePair<int, int>[] FindDuplicates(
+        public static Frequency<int>[] FindDuplicates(
             [NotNull] this IEnumerable<int> sequence, int minInSequence, int maxInSequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -303,7 +314,16 @@ namespace Abacaxi
                 appearances[item - minInSequence]++;
             }
 
-            return appearances.Select((a, i) => new KeyValuePair<int, int>(i + minInSequence, a)).Where(kvp => kvp.Value > 1).ToArray();
+            var result = new List<Frequency<int>>();
+            for (var i = 0; i < appearances.Length; i++)
+            {
+                if (appearances[i] > 1)
+                {
+                    result.Add(new Frequency<int>(i + minInSequence, appearances[i]));
+                }
+            }
+
+            return result.ToArray();
         }
 
         [NotNull]

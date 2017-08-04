@@ -13,9 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
-using System.Linq;
-
 namespace Abacaxi
 {
     using System.Collections.Generic;
@@ -208,9 +205,9 @@ namespace Abacaxi
         /// </summary>
         /// <param name="sequence">The sequence to inspect.</param>
         /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         [NotNull]
-        public static KeyValuePair<char, int>[] FindDuplicates([NotNull] this string sequence)
+        public static Frequency<char>[] FindDuplicates([NotNull] this string sequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
@@ -236,11 +233,25 @@ namespace Abacaxi
                 }
             }
 
-            return
-                asciiAppearances
-                    .Select((a, i) => new KeyValuePair<char, int>((char)i, a))
-                    .Concat(appearances)
-                    .Where(kvp => kvp.Value > 1).ToArray();
+            var result = new List<Frequency<char>>();
+            for (var i = 0; i < asciiAppearances.Length; i++)
+            {
+                if (asciiAppearances[i] > 1)
+                {
+                    result.Add(new Frequency<char>((char)i, asciiAppearances[i]));
+                }
+            }
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var kvp in appearances)
+            {
+                if (kvp.Value > 1)
+                {
+                    result.Add(new Frequency<char>(kvp.Key, kvp.Value));
+                }
+            }
+
+            return result.ToArray();
         }
 
     }
