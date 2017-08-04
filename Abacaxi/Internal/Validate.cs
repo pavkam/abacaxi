@@ -113,6 +113,17 @@ namespace Abacaxi.Internal
                     $"Argument {argumentName} must be greater than or equal to {bound}.");
         }
 
+        public static void ArgumentGreaterThanOrEqualTo([NotNull] [InvokerParameterName] string argumentName, double value,
+            double bound)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+                $"Argument {nameof(argumentName)} cannot be null or empty.");
+
+            if (value < bound)
+                throw new ArgumentOutOfRangeException(argumentName,
+                    $"Argument {argumentName} must be greater than or equal to {bound}.");
+        }
+
         public static void ArgumentDifferentThanZero([NotNull] [InvokerParameterName] string argumentName, int value)
         {
             ArgumentDifferentThan(argumentName, value, 0);
@@ -120,6 +131,12 @@ namespace Abacaxi.Internal
 
         public static void ArgumentGreaterThanOrEqualToZero([NotNull] [InvokerParameterName] string argumentName,
             int value)
+        {
+            ArgumentGreaterThanOrEqualTo(argumentName, value, 0);
+        }
+
+        public static void ArgumentGreaterThanOrEqualToZero([NotNull] [InvokerParameterName] string argumentName,
+            double value)
         {
             ArgumentGreaterThanOrEqualTo(argumentName, value, 0);
         }

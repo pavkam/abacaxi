@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests
+namespace Abacaxi.Tests.StringExtensions
 {
     using System;
     using NUnit.Framework;

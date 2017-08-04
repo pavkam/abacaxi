@@ -34,8 +34,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FrequencyTests.cs" />
+    <Compile Include="Knapsack\KnapsackItemTests.cs" />
+    <Compile Include="SequenceExtensions\FrequencyTests.cs" />
     <Compile Include="Integer\IsPrimeTests.cs" />
+    <Compile Include="Knapsack\FillTests.cs" />
     <Compile Include="Pairing\GetWithApproximateMinimumCost.cs" />
     <Compile Include="Pairing\GetWithMinimumCost.cs" />
     <Compile Include="IntegerPartitions\EnumerateTests.cs" />
@@ -47,7 +49,7 @@
     <Compile Include="Containers\HeapTests.cs" />
     <Compile Include="Containers\BitSetTests.cs" />
     <Compile Include="FibonacciSequence\GetMemberTests.cs" />
-    <Compile Include="GlobPatternTests.cs" />
+    <Compile Include="StringExtensions\GlobPatternTests.cs" />
     <Compile Include="IO\HelperMemoryStream.cs" />
     <Compile Include="IO\BitWriterTests.cs" />
     <Compile Include="ObjectExtensions\InspectMockObject.cs" />
@@ -97,7 +99,7 @@
     <Compile Include="Graph\CellTests.cs" />
     <Compile Include="FibonacciSequence\EnumerateTests.cs" />
     <Compile Include="Integer\DivideTests.cs" />
-    <Compile Include="EditTests.cs" />
+    <Compile Include="SequenceExtensions\EditTests.cs" />
     <Compile Include="Set\ContainsSubsetWithExactValueTests.cs" />
     <Compile Include="SequenceExtensions\GetLongestCommonSubSequenceTests.cs" />
     <Compile Include="SequenceExtensions\DiffTests.cs" />

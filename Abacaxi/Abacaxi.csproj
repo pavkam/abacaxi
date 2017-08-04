@@ -45,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregator.cs" />
+    <Compile Include="KnapsackItem.cs" />
     <Compile Include="Frequency.cs" />
+    <Compile Include="Knapsack.cs" />
     <Compile Include="Sorting.cs" />
     <Compile Include="Set.cs" />
     <Compile Include="IntegerPartitions.cs" />
