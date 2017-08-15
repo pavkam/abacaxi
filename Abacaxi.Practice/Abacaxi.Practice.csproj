@@ -1,53 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ADCFD10B-65C7-4D15-A896-5533C3AFA923}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Abacaxi.Practice</RootNamespace>
-    <AssemblyName>Abacaxi.Practice</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>net45</TargetFramework>
+    <Version>0.9</Version>
+    <Authors>Alexandru Ciobanu (alex+git@ciobanu.org)</Authors>
+    <Company>Alexandru Ciobanu (alex+git@ciobanu.org)</Company>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/40218-200.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/pavkam/abacaxi</PackageProjectUrl>
+    <Description>An extension library for Abacaxi. This library only contains practice-related code (not useful).</Description>
+    <PackageReleaseNotes>Switch to .NET 4.5 as dependancy.</PackageReleaseNotes>
+    <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017</Copyright>
+    <PackageTags>Algorithms Containers Learning Extensions</PackageTags>
+    <AssemblyVersion>0.99.0.0</AssemblyVersion>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <FileVersion>0.99.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="project.json" />
-    <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Graphs\StringNeighborhoodGraph.cs" />
-    <Compile Include="Graphs\ChessHorsePathGraph.cs" />
-    <Compile Include="Integer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Abacaxi\Abacaxi.csproj">
-      <Project>{d17d48c6-b342-4dee-86b2-54f869f2d3a2}</Project>
-      <Name>Abacaxi</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

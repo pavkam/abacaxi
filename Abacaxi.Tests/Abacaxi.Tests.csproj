@@ -1,163 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8EDF4429-251A-416D-BB68-93F227191BCF}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Abacaxi.Tests</RootNamespace>
-    <AssemblyName>Abacaxi.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>net45</TargetFramework>
+    <Version>0.9</Version>
+    <Authors>Alexandru Ciobanu (alex+git@ciobanu.org)</Authors>
+    <Company>Alexandru Ciobanu (alex+git@ciobanu.org)</Company>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/40218-200.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/pavkam/abacaxi</PackageProjectUrl>
+    <Description>A library with data structures, various algorithms and numerous extension methods.</Description>
+    <PackageReleaseNotes>Switch to .NET 4.5 as a dependancy.</PackageReleaseNotes>
+    <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017</Copyright>
+    <PackageTags>Algorithms Containers Learning Extensions</PackageTags>
+    <AssemblyVersion>0.99.0.0</AssemblyVersion>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <FileVersion>0.99.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <PackageReference Include="NUnit" Version="3.7.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Knapsack\KnapsackItemTests.cs" />
-    <Compile Include="SequenceExtensions\FrequencyTests.cs" />
-    <Compile Include="Integer\IsPrimeTests.cs" />
-    <Compile Include="Knapsack\FillTests.cs" />
-    <Compile Include="Pairing\GetWithApproximateMinimumCost.cs" />
-    <Compile Include="Pairing\GetWithMinimumCost.cs" />
-    <Compile Include="IntegerPartitions\EnumerateTests.cs" />
-    <Compile Include="Set\GetOptimalFullCoverageTests.cs" />
-    <Compile Include="Set\EnumerateSubsetCombinationsTests.cs" />
-    <Compile Include="Containers\ArrayEqualityComparerTests.cs" />
-    <Compile Include="Containers\TemporaryTests.cs" />
-    <Compile Include="Containers\TrieTests.cs" />
-    <Compile Include="Containers\HeapTests.cs" />
-    <Compile Include="Containers\BitSetTests.cs" />
-    <Compile Include="FibonacciSequence\GetMemberTests.cs" />
-    <Compile Include="StringExtensions\GlobPatternTests.cs" />
-    <Compile Include="IO\HelperMemoryStream.cs" />
-    <Compile Include="IO\BitWriterTests.cs" />
-    <Compile Include="ObjectExtensions\InspectMockObject.cs" />
-    <Compile Include="ObjectExtensions\AsTests.cs" />
-    <Compile Include="ObjectExtensions\TryConvertTests.cs" />
-    <Compile Include="ObjectExtensions\InspectTests.cs" />
-    <Compile Include="RandomExtensions\NextItemTests.cs" />
-    <Compile Include="RandomExtensions\NextBoolTests.cs" />
-    <Compile Include="SequenceExtensions\AddOrUpdateTests.cs" />
-    <Compile Include="SequenceExtensions\AppendTests.cs" />
-    <Compile Include="SequenceExtensions\MaxTests.cs" />
-    <Compile Include="SequenceExtensions\MinTests.cs" />
-    <Compile Include="SequenceExtensions\ToStringTests.cs" />
-    <Compile Include="SequenceExtensions\IsNullOrEmptyTests.cs" />
-    <Compile Include="SequenceExtensions\EmptyIfNullTests.cs" />
-    <Compile Include="SequenceExtensions\PartitionTests.cs" />
-    <Compile Include="SequenceExtensions\ToListTests.cs" />
-    <Compile Include="SequenceExtensions\GetItemFrequenciesTests.cs" />
-    <Compile Include="SequenceExtensions\AsListTests.cs" />
-    <Compile Include="SequenceExtensions\ToSetTests.cs" />
-    <Compile Include="StringExtensions\FindDuplicatesTests.cs" />
-    <Compile Include="StringExtensions\LikeTests.cs" />
-    <Compile Include="StringExtensions\EscapeTests.cs" />
-    <Compile Include="StringExtensions\ShortenTests.cs" />
-    <Compile Include="StringExtensions\ReverseTests.cs" />
-    <Compile Include="StringExtensions\AsListTests.cs" />
-    <Compile Include="Graph\DescribeVerticesTests.cs" />
-    <Compile Include="Graph\VertexDescriptorTests.cs" />
-    <Compile Include="Graph\StringNeighborhoodGraphTests.cs" />
-    <Compile Include="Graph\FindCheapestPathTests.cs" />
-    <Compile Include="Graph\IsBipartiteTests.cs" />
-    <Compile Include="Graph\GetComponentsTests.cs" />
-    <Compile Include="Graph\FindChessHorsePathBetweenTwoPointsTests.cs" />
-    <Compile Include="Graph\FindShortestPathTests.cs" />
-    <Compile Include="Graph\FillWithOneColorTests.cs" />
-    <Compile Include="Graph\TopologicalSortTests.cs" />
-    <Compile Include="Graph\FindAllArticulationVerticesTests.cs" />
-    <Compile Include="Graph\TraverseDfsTests.cs" />
-    <Compile Include="Graph\TraverseBfsTests.cs" />
-    <Compile Include="Graph\ChessHorsePathGraphTests.cs" />
-    <Compile Include="Graph\LiteralGraphTests.cs" />
-    <Compile Include="Graph\SubGraphTests.cs" />
-    <Compile Include="Graph\EdgeTests.cs" />
-    <Compile Include="Graph\MazeGraphTests.cs" />
-    <Compile Include="Graph\CellTests.cs" />
-    <Compile Include="FibonacciSequence\EnumerateTests.cs" />
-    <Compile Include="Integer\DivideTests.cs" />
-    <Compile Include="SequenceExtensions\EditTests.cs" />
-    <Compile Include="Set\ContainsSubsetWithExactValueTests.cs" />
-    <Compile Include="SequenceExtensions\GetLongestCommonSubSequenceTests.cs" />
-    <Compile Include="SequenceExtensions\DiffTests.cs" />
-    <Compile Include="SequenceExtensions\FindLongestIncreasingSequenceTests.cs" />
-    <Compile Include="Set\GetSubsetWithNearValueTests.cs" />
-    <Compile Include="IntegerPartitions\GetCountTests.cs" />
-    <Compile Include="Integer\DeconstructIntoPrimeFactorsTests.cs" />
-    <Compile Include="Integer\DeconstructIntoPowersOfTwoTests.cs" />
-    <Compile Include="Containers\SingleLinkedNodeTests.cs" />
-    <Compile Include="Sorting\MergeSortTests.cs" />
-    <Compile Include="Set\SplitIntoSubsetsOfEqualValueTests.cs" />
-    <Compile Include="Sorting\HeapSortTests.cs" />
-    <Compile Include="SequenceExtensions\InterleaveTests.cs" />
-    <Compile Include="RandomExtensions\SampleTests.cs" />
-    <Compile Include="Sorting\ShellSortTests.cs" />
-    <Compile Include="Sorting\QuickSortTests.cs" />
-    <Compile Include="Sorting\GnomeSortTests.cs" />
-    <Compile Include="Sorting\CombSortTests.cs" />
-    <Compile Include="Sorting\OddEvenSortTests.cs" />
-    <Compile Include="Sorting\CocktailShakerSortTests.cs" />
-    <Compile Include="Sorting\InsertionSortTests.cs" />
-    <Compile Include="Sorting\BubbleSortTests.cs" />
-    <Compile Include="Sorting\SortingAlgorithmTestsBase.cs" />
-    <Compile Include="SequenceExtensions\ExtractNestedBlocksTests.cs" />
-    <Compile Include="SequenceExtensions\FindDuplicatesTests.cs" />
-    <Compile Include="SequenceExtensions\BinarySearchTests.cs" />
-    <Compile Include="SequenceExtensions\ReverseTests.cs" />
-    <Compile Include="SequenceExtensions\FindSubsequencesWithGivenAggregatedValueTests.cs" />
-    <Compile Include="Set\GetSubsetWithGreatestValueTests.cs" />
-    <Compile Include="SequenceExtensions\ContainsTwoElementsThatAggregateToTests.cs" />
-    <Compile Include="TestHelper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Integer\ZipTests.cs" />
-    <Compile Include="SequenceExtensions\RepeatTests.cs" />
-    <Compile Include="ObjectExtensions\IsAnyOfTests.cs" />
+    <ProjectReference Include="..\Abacaxi.Practice\Abacaxi.Practice.csproj" />
+    <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Abacaxi.Practice\Abacaxi.Practice.csproj">
-      <Project>{adcfd10b-65c7-4d15-a896-5533c3afa923}</Project>
-      <Name>Abacaxi.Practice</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Abacaxi\Abacaxi.csproj">
-      <Project>{d17d48c6-b342-4dee-86b2-54f869f2d3a2}</Project>
-      <Name>Abacaxi</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NUnit">
-      <Version>3.6.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
