@@ -30,7 +30,7 @@ namespace Abacaxi
     {
         [NotNull]
         [ItemNotNull]
-        public static IEnumerable<ISet<T>> FindMinimumNumberOfSetsWithFullCoverageIterate<T>(
+        private static IEnumerable<ISet<T>> FindMinimumNumberOfSetsWithFullCoverageIterate<T>(
             [NotNull] [ItemNotNull] IEnumerable<ISet<T>> sets,
             [NotNull] IEqualityComparer<T> comparer)
         {
@@ -57,9 +57,12 @@ namespace Abacaxi
                     }
                 }
 
-                superSet.ExceptWith(bestSet);
-                copies.Remove(bestSet);
-                yield return bestSet;
+                if (bestSet != null)
+                {
+                    superSet.ExceptWith(bestSet);
+                    copies.Remove(bestSet);
+                    yield return bestSet;
+                }
             }
         }
 

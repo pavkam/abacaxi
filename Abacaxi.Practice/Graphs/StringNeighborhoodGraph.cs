@@ -139,7 +139,6 @@ namespace Abacaxi.Practice.Graphs
         /// <returns>
         /// A <see cref="IEnumerator{T}" /> that can be used to iterate through the collection.
         /// </returns>
-        [NotNull]
         public override IEnumerator<string> GetEnumerator()
         {
             return _vertices.GetEnumerator();

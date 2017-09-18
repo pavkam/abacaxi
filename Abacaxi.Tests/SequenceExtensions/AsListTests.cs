@@ -61,10 +61,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void AsList_ReturnsEmptyList_ForEmptyCollection()
         {
-            var coll = new HashSet<int>();
-            var asList = coll.AsList();
-
-            TestHelper.AssertSequence(asList);
+            TestHelper.AssertSequence(new HashSet<int>().AsList());
         }
 
         [Test]

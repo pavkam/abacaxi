@@ -123,7 +123,7 @@ namespace Abacaxi.Tests.Graph
             var expectedEdges = new HashSet<Edge<Cell>>();
             foreach (var vertex in ParseList(to))
             {
-                expectedEdges.Add(new Edge<Cell>(fromVertex, vertex, 1));
+                expectedEdges.Add(new Edge<Cell>(fromVertex, vertex));
             }
 
             var graph = new MazeGraph(_m3X3);
@@ -145,7 +145,7 @@ namespace Abacaxi.Tests.Graph
             var expectedEdges = new HashSet<Edge<Cell>>();
             foreach (var vertex in ParseList(to))
             {
-                expectedEdges.Add(new Edge<Cell>(fromVertex, vertex, 1));
+                expectedEdges.Add(new Edge<Cell>(fromVertex, vertex));
             }
 
             var graph = new MazeGraph(_m2X2);
