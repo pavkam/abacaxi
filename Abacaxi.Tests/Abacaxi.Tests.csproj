@@ -16,7 +16,7 @@
     <FileVersion>0.99.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.7.1" />
+    <PackageReference Include="NUnit" Version="3.8.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Abacaxi.Practice\Abacaxi.Practice.csproj" />

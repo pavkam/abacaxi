@@ -45,6 +45,7 @@ namespace Abacaxi.Graphs
         {
             public TVertex Vertex { get; set; }
             public IBfsNode Parent { get; set; }
+            public Edge<TVertex> EntryEdge { get; set; }
         }
 
         private sealed class DfsNode : IDfsNode
@@ -135,6 +136,14 @@ namespace Abacaxi.Graphs
             /// The parent node.
             /// </value>
             IBfsNode Parent { get; }
+
+            /// <summary>
+            /// Gets the entry edge (the edge connecting <see cref="Parent"/> and <see cref="Vertex"/>.
+            /// </summary>
+            /// <value>
+            /// The entry edge.
+            /// </value>
+            Edge<TVertex> EntryEdge { get; }
         }
 
         /// <summary>
@@ -259,9 +268,8 @@ namespace Abacaxi.Graphs
 
             var inspectQueue = new Queue<BfsNode>();
             var discoveredSet = new HashSet<TVertex>();
-            var first = new BfsNode()
+            var first = new BfsNode
             {
-                Parent = null,
                 Vertex = startVertex,
             };
 
@@ -278,10 +286,11 @@ namespace Abacaxi.Graphs
                 {
                     if (!discoveredSet.Contains(edge.ToVertex))
                     {
-                        var connectedNode = new BfsNode()
+                        var connectedNode = new BfsNode
                         {
                             Parent = vertexNode,
                             Vertex = edge.ToVertex,
+                            EntryEdge = edge
                         };
 
                         discoveredSet.Add(edge.ToVertex);
@@ -694,7 +703,7 @@ namespace Abacaxi.Graphs
                 {
                     var costFromStartForThisPath = vertexNode.TotalCostFromStart + edge.Weight;
 
-                    if (!discoveredVertices.TryGetValue(edge.ToVertex, out PathNode discoveredNode))
+                    if (!discoveredVertices.TryGetValue(edge.ToVertex, out var discoveredNode))
                     {
                         discoveredNode = new PathNode
                         {
