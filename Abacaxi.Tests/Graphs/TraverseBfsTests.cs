@@ -47,7 +47,7 @@ namespace Abacaxi.Tests.Graphs
         [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", ">A,A>B,A>C,A>D,B>E,B>F,E>G")]
         public void TraverseBfs_ReturnsProperSequence_ForUndirectedGraph(string relationships, string expected)
         {
-            var graph = new LiteralGraph(relationships, true);
+            var graph = new LiteralGraph(relationships, false);
             var result = new List<string>();
 
             graph.TraverseBfs('A', node =>
@@ -92,6 +92,51 @@ namespace Abacaxi.Tests.Graphs
                 Assert.IsNotNull(node);
                 result.Add($"{node.Parent?.Vertex}>{node.Vertex}");
                 return node.Vertex != killVertex;
+            });
+
+            Assert.AreEqual(expected, string.Join(",", result));
+        }
+
+        [TestCase("A-1-B", "A >=1=> B")]
+        [TestCase("A-1-B,A-2-B", "A >=1=> B")]
+        [TestCase("A-1-B,A-2-B,B-1-C,A-5-C", "A >=1=> B,A >=5=> C")]
+        public void TraverseBfs_SelectsTheExpectedEdges_ForUndirectedGraph(string relationships, string expected)
+        {
+            var graph = new LiteralGraph(relationships, false);
+            var result = new List<string>();
+
+            graph.TraverseBfs('A', node =>
+            {
+                Assert.IsNotNull(node);
+                if (node.EntryEdge != null)
+                {
+                    result.Add($"{node.EntryEdge}");
+                }
+
+                return true;
+            });
+
+            Assert.AreEqual(expected, string.Join(",", result));
+        }
+
+        [TestCase("A>1>B", "A >=1=> B")]
+        [TestCase("A>1>B,A>2>B", "A >=1=> B")]
+        [TestCase("A>1>B,A>2>B,B>1>C,A>5>C", "A >=1=> B,A >=5=> C")]
+        [TestCase("A>1>B,A>2>B,B>1>C,A<5<C", "A >=1=> B,B >=1=> C")]
+        public void TraverseBfs_SelectsTheExpectedEdges_ForDirectedGraph(string relationships, string expected)
+        {
+            var graph = new LiteralGraph(relationships, true);
+            var result = new List<string>();
+            
+            graph.TraverseBfs('A', node =>
+            {
+                Assert.IsNotNull(node);
+                if (node.EntryEdge != null)
+                {
+                    result.Add($"{node.EntryEdge}");
+                }
+
+                return true;
             });
 
             Assert.AreEqual(expected, string.Join(",", result));
