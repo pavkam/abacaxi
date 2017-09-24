@@ -52,6 +52,7 @@ namespace Abacaxi.Graphs
         {
             public TVertex Vertex { get; set; }
             public IDfsNode Parent { get; set; }
+            public Edge<TVertex> EntryEdge { get; set; }
             public int EntryTime { get; set; }
             public int ExitTime { get; set; }
         }
@@ -87,12 +88,13 @@ namespace Abacaxi.Graphs
                     break;
                 }
 
-                if (!visitedNodes.TryGetValue(edge.ToVertex, out DfsNode visitedNode))
+                if (!visitedNodes.TryGetValue(edge.ToVertex, out var visitedNode))
                 {
-                    visitedNode = new DfsNode()
+                    visitedNode = new DfsNode
                     {
                         Parent = vertexNode,
                         Vertex = edge.ToVertex,
+                        EntryEdge = edge
                     };
 
                     breakRequested =
@@ -166,6 +168,14 @@ namespace Abacaxi.Graphs
             /// The parent node.
             /// </value>
             IDfsNode Parent { get; }
+
+            /// <summary>
+            /// Gets the entry edge (the edge connecting <see cref="Parent"/> and <see cref="Vertex"/>.
+            /// </summary>
+            /// <value>
+            /// The entry edge.
+            /// </value>
+            Edge<TVertex> EntryEdge { get; }
 
             /// <summary>
             /// Gets the vertex "entry time".
@@ -326,9 +336,9 @@ namespace Abacaxi.Graphs
             var discoveredSet = new Dictionary<TVertex, DfsNode>();
             var time = 0;
 
-            TraverseDfs(new DfsNode()
+            TraverseDfs(new DfsNode
             {
-                Vertex = startVertex,
+                Vertex = startVertex
             }, ref time, discoveredSet, handleVertexVisited, handleVertexCompleted, handleCycle);
         }
 
