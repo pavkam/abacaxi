@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Graph
+namespace Abacaxi.Tests.Graphs
 {
     using System;
     using System.Linq;
