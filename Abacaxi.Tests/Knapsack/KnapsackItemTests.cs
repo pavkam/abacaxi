@@ -61,7 +61,7 @@ namespace Abacaxi.Tests.Knapsack
         public void ToString_ReturnsValidValue()
         {
             var item = new KnapsackItem<char>('a', 1.2, 3);
-            Assert.AreEqual("a (1.20, 3)", item.ToString());
+            Assert.AreEqual($"a ({1.20:N2}, 3)", item.ToString());
         }
 
         [Test]

@@ -442,12 +442,15 @@ namespace Abacaxi.IO
         /// if method was called from finalizer.</param>
         private void Dispose(bool disposing)
         {
-            Flush();
-
-            if (!_leaveOpen && _stream != null)
+            if (_stream != null)
             {
-                _stream.Dispose();
-                _stream = null;
+                Flush();
+
+                if (!_leaveOpen)
+                {
+                    _stream.Dispose();
+                    _stream = null;
+                }
             }
         }
     }
