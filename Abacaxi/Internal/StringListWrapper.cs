@@ -34,13 +34,11 @@ namespace Abacaxi.Internal
             _s = s;
         }
 
-        [NotNull]
         public IEnumerator<char> GetEnumerator()
         {
             return _s.Cast<char>().GetEnumerator();
         }
 
-        [NotNull]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)_s).GetEnumerator();
@@ -63,7 +61,7 @@ namespace Abacaxi.Internal
             return _s.Contains(item.ToString());
         }
 
-        public void CopyTo([NotNull] char[] array, int arrayIndex)
+        public void CopyTo(char[] array, int arrayIndex)
         {
             _s.CopyTo(0, array, arrayIndex, _s.Length);
         }

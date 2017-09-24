@@ -48,7 +48,7 @@
         /// <param name="array1">The first array.</param>
         /// <param name="array2">The second array.</param>
         /// <returns><c>true</c> if the array contain the same elements; otherwise, <c>false</c>.</returns>
-        public bool Equals([CanBeNull] TElement[] array1, [CanBeNull] TElement[] array2)
+        public bool Equals(TElement[] array1, TElement[] array2)
         {
             if (array1 == null || array2 == null)
             {

@@ -218,7 +218,7 @@ namespace Abacaxi.Containers
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="array"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if there is not enough space in the <paramref name="array"/>.</exception>
-        public void CopyTo([NotNull] T[] array, int arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
@@ -252,7 +252,6 @@ namespace Abacaxi.Containers
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
-        [NotNull]
         public IEnumerator<T> GetEnumerator()
         {
             if (Count == 0)
@@ -351,7 +350,6 @@ namespace Abacaxi.Containers
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        [NotNull]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

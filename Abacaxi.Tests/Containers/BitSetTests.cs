@@ -650,6 +650,7 @@ namespace Abacaxi.Tests.Containers
 
             while (e.MoveNext())
             {
+                Assert.NotNull(e.Current);
                 list.Add((int)e.Current);
             }
 

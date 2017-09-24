@@ -57,7 +57,7 @@ namespace Abacaxi.Graphs
         public int ComponentIndex { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VertexDescriptor{TVertex}" /> struct.
+        /// Initializes a new instance of the <see cref="VertexDescriptor{TVertex}" /> structure.
         /// </summary>
         /// <param name="vertex">The vertex.</param>
         /// <param name="componentIndex">Index of the component.</param>
