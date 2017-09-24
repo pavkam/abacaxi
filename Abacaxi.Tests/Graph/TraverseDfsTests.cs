@@ -13,11 +13,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Graphs
+namespace Abacaxi.Tests.Graph
 {
     using System;
     using System.Collections.Generic;
-    using Abacaxi.Graphs;
+    using Graphs;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
 

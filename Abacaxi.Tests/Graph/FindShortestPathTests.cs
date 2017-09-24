@@ -13,27 +13,36 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Graphs
+namespace Abacaxi.Tests.Graph
 {
-    using Abacaxi.Graphs;
+    using System;
+    using Graphs;
     using NUnit.Framework;
-    using System.Linq;
-    using Practice.Graphs;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class FindChessHorsePathBetweenTwoPointsTests
+    public class FindShortestPathTests
     {
-        [TestCase(0, 0, 0, 0, "0,0")]
-        [TestCase(0, 0, 1, 0, "0,0;-2,-1;0,-2;1,0")]
-        [TestCase(0, 0, 0, 1, "0,0;-1,-2;-2,0;0,1")]
-        [TestCase(0, 0, 1, 1, "0,0;2,-1;1,1")]
-        [TestCase(-5, -5, 10, 10, "-5,-5;-3,-4;-1,-3;1,-2;3,-1;5,0;6,2;7,4;8,6;9,8;10,10")]
-        public void FindChessHorsePathBetweenTwoPoints_FindsShortestPathBetweenTwoPoints(int sx, int sy, int ex, int ey, string expected)
+        [Test]
+        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        public void FindShortestPath_ThrowsException_ForInvalidStartVertex()
         {
-            var actual = string.Join(";", ChessHorsePathGraph.FindChessHorsePathBetweenTwoPoints(new Cell(sx, sy), new Cell(ex, ey))
-                .Select(s => $"{s.X},{s.Y}"));
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<ArgumentException>(() => graph.FindShortestPath('Z', 'A'));
+        }
 
-            Assert.AreEqual(expected, actual);
+        [TestCase("A-1-B,A-1-C", 'A', 'B', "A,B")]
+        [TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'D', 'B', "D,C,B")]
+        [TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'B', 'D', "B,D")]
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'A', 'E', "")]
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'E', 'Z', "")]
+        public void FindShortestPath_FillsExpectedVertices(
+            string relationships, char startVertex, char endVertex, string expected)
+        {
+            var graph = new LiteralGraph(relationships, true);
+            var seq = graph.FindShortestPath(startVertex, endVertex);
+
+            Assert.AreEqual(expected, string.Join(",", seq));
         }
     }
 }

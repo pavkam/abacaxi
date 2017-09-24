@@ -13,49 +13,46 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Graphs
+namespace Abacaxi.Tests.Graph
 {
     using System;
-    using System.Linq;
-    using Abacaxi.Graphs;
+    using System.Collections.Generic;
+    using Graphs;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class TopologicalSortTests
+    public class FillWithOneColor
     {
         [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void TopologicalSort_ThrowsException_ForUndirectedGraph()
+        public void FillWithOneColor_ThrowsException_ForInvalidVertex()
         {
-            var graph = new LiteralGraph("A-1-B", false);
-            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<ArgumentException>(() => graph.FillWithOneColor('Z', v => { }));
         }
 
-        [TestCase("A-1-B")]
-        [TestCase("A>1>B,B>1>A")]
-        [TestCase("A>1>B,B>1>C,C>1>A")]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void TopologicalSort_ThrowsException_ForDirectedGraphWith(string relationships)
+        [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void FillWithOneColor_ThrowsException_ForNullApplyColor()
         {
-            var graph = new LiteralGraph(relationships, true);
-            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<ArgumentNullException>(() => graph.FillWithOneColor('A', null));
         }
 
-        [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A>1>B", "A,B")]
-        [TestCase("A>1>B,B>1>C", "A,B,C")]
-        [TestCase("A>1>B,B>1>C,A>1>C", "A,B,C")]
-        [TestCase("A,B,C,C>1>D", "A,B,C,D")]
-        [TestCase("A>1>B,C>1>B,B>1>D,B>1>E,E>1>D,F", "A,C,F,B,E,D")]
-        public void TopologicalSort_AlignsTheVerticesAsExpected(string relationships, string expected)
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'A', "A,B,C")]
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'C', "C")]
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'D', "D,E,B,C,F")]
+        public void FillWithOneColor_FillsExpectedVertices(string relationships, char startVertex, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
-            var result = graph.TopologicalSort().ToList();
-            var actual = string.Join(",", result);
+            var result = new List<char>();
 
-            Assert.AreEqual(expected, actual);
+            graph.FillWithOneColor(startVertex, vertex =>
+            {
+                result.Add(vertex);
+            });
+
+            Assert.AreEqual(expected, string.Join(",", result));
         }
     }
 }
