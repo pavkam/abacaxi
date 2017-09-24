@@ -57,7 +57,6 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
         public void Ctor_InitializesEmptyCollection1()
         {
             var heap = new Heap<int>(Comparer<int>.Default);
@@ -351,7 +350,6 @@ namespace Abacaxi.Tests.Containers
             var elements = new List<int>();
             while (enumerator.MoveNext())
             {
-                Assert.NotNull(enumerator.Current);
                 elements.Add((int)enumerator.Current);
             }
 

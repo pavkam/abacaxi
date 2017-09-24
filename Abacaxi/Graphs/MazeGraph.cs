@@ -110,6 +110,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator{T}" /> that can be used to iterate through the collection.
         /// </returns>
+        [NotNull]
         public override IEnumerator<Cell> GetEnumerator()
         {
             for (var x = 0; x < _lengthX; x++)
