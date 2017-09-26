@@ -269,7 +269,7 @@ namespace Abacaxi.Trees
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's value.</param>
         /// <exception cref="ArgumentException">Thrown if a node with the same <paramref name="key"/> is already present in the tree.</exception>
-        public void Add(TKey key, TValue value)
+        public virtual void Add(TKey key, TValue value)
         {
             Root = InsertRecursive(Root, key, value, true, false);
         }
@@ -281,7 +281,7 @@ namespace Abacaxi.Trees
         /// <exception cref="ArgumentException">Thrown if a node with the same key is already present in the tree.</exception>
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            Root = InsertRecursive(Root, item.Key, item.Value, true, false);
+            Add(item.Key, item.Value);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Abacaxi.Trees
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's new value.</param>
         /// <exception cref="ArgumentException">Thrown if no node found with the given <paramref name="key"/>.</exception>
-        public void Update(TKey key, TValue value)
+        public virtual void Update(TKey key, TValue value)
         {
             Root = InsertRecursive(Root, key, value, false, true);
         }
@@ -300,7 +300,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's new value.</param>
-        public void AddOrUpdate(TKey key, TValue value)
+        public virtual void AddOrUpdate(TKey key, TValue value)
         {
             Root = InsertRecursive(Root, key, value, true, true);
         }
@@ -310,7 +310,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <returns><c>true</c> if the node was removed; otherwise, <c>false</c>.</returns>
-        public bool Remove(TKey key)
+        public virtual bool Remove(TKey key)
         {
             var deleted = false;
             Root = DeleteNodeRecursive(Root, key, ref deleted);
@@ -361,7 +361,7 @@ namespace Abacaxi.Trees
         /// <param name="key">The key of the node.</param>
         /// <param name="value">The value of the node (if found).</param>
         /// <returns><c>true</c> if the node was found; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue(TKey key, out TValue value)
+        public virtual bool TryGetValue(TKey key, out TValue value)
         {
             var root = Root;
             while (root != null)
