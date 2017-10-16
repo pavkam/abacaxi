@@ -91,7 +91,7 @@ namespace Abacaxi.Containers
             Validate.ArgumentGreaterThanOrEqualTo(nameof(item), item, _min);
             Validate.ArgumentLessThanOrEqualTo(nameof(item), item, _max);
 
-            LocateItem(item, out int chunk, out int mask);
+            LocateItem(item, out var chunk, out var mask);
 
             if ((_chunks[chunk] & mask) != 0)
                 return false;
@@ -133,7 +133,7 @@ namespace Abacaxi.Containers
             {
                 if (Contains(item))
                 {
-                    LocateItem(item, out int chunk, out int mask);
+                    LocateItem(item, out var chunk, out var mask);
 
                     inner[chunk] |= mask;
                     count++;
@@ -302,7 +302,7 @@ namespace Abacaxi.Containers
             {
                 if (Contains(item))
                 {
-                    LocateItem(item, out int chunk, out int mask);
+                    LocateItem(item, out var chunk, out var mask);
 
                     copy[chunk] &= ~mask;
                 }
@@ -398,7 +398,7 @@ namespace Abacaxi.Containers
         {
             if (item >= _min && item <= _max)
             {
-                LocateItem(item, out int chunk, out int mask);
+                LocateItem(item, out var chunk, out var mask);
 
                 return (_chunks[chunk] & mask) != 0;
             }
@@ -448,7 +448,7 @@ namespace Abacaxi.Containers
         {
             if (item >= _min && item <= _max)
             {
-                LocateItem(item, out int chunk, out int mask);
+                LocateItem(item, out var chunk, out var mask);
 
                 if ((_chunks[chunk] & mask) != 0)
                 {

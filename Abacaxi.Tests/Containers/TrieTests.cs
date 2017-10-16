@@ -406,7 +406,7 @@ namespace Abacaxi.Tests.Containers
         {
             _trie0.AddOrUpdate(_("test"), 1, i => i);
 
-            Assert.IsTrue(_trie0.TryGetValue(_("test"), out int value));
+            Assert.IsTrue(_trie0.TryGetValue(_("test"), out var value));
             Assert.AreEqual(1, value);
         }
 
@@ -415,7 +415,7 @@ namespace Abacaxi.Tests.Containers
         {
             _trie5.AddOrUpdate(_("abc"), 1, i => -1);
 
-            Assert.IsTrue(_trie5.TryGetValue(_("abc"), out int value));
+            Assert.IsTrue(_trie5.TryGetValue(_("abc"), out var value));
             Assert.AreEqual(-1, value);
         }
 
@@ -527,25 +527,25 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void TryGetValue_ThrowsException_IfKeyIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _trie5.TryGetValue(null, out int dummy));
+            Assert.Throws<ArgumentNullException>(() => _trie5.TryGetValue(null, out var dummy));
         }
 
         [Test]
         public void TryGetValue_ReturnsFalse_IfTheKeyIsNotFound()
         {
-            Assert.IsFalse(_trie5.TryGetValue(_("cbz"), out int dummy));
+            Assert.IsFalse(_trie5.TryGetValue(_("cbz"), out var dummy));
         }
 
         [Test]
         public void TryGetValue_ReturnsTrue_IfTheKeyIsFound()
         {
-            Assert.IsTrue(_trie5.TryGetValue(_("cba"), out int dummy));
+            Assert.IsTrue(_trie5.TryGetValue(_("cba"), out var dummy));
         }
 
         [Test]
         public void TryGetValue_SetsTheOutputValue_IfTheKeyIsFound()
         {
-            _trie5.TryGetValue(_("cba"), out int output);
+            _trie5.TryGetValue(_("cba"), out var output);
 
             Assert.AreEqual(5, output);
         }

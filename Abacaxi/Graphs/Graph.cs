@@ -446,7 +446,7 @@ namespace Abacaxi.Graphs
                 {
                     outSet.Add(z.ToVertex);
 
-                    if (!inAdj.TryGetValue(z.ToVertex, out ISet<TVertex> inSet))
+                    if (!inAdj.TryGetValue(z.ToVertex, out var inSet))
                     {
                         inSet = new HashSet<TVertex>();
                         inAdj.Add(z.ToVertex, inSet);

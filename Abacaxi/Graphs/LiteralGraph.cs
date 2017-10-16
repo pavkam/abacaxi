@@ -35,7 +35,7 @@ namespace Abacaxi.Graphs
             Debug.Assert(char.IsLetterOrDigit(vertex));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(vertex, out ISet<Edge<char>> set))
+            if (!_vertices.TryGetValue(vertex, out var set))
             {
                 set = new HashSet<Edge<char>> ();
                 _vertices.Add(vertex, set);
@@ -48,12 +48,12 @@ namespace Abacaxi.Graphs
             Debug.Assert(char.IsLetterOrDigit(to));
             Debug.Assert(_vertices != null);
 
-            if (!_vertices.TryGetValue(from, out ISet<Edge<char>> fromToSet))
+            if (!_vertices.TryGetValue(from, out var fromToSet))
             {
                 fromToSet = new HashSet<Edge<char>>();
                 _vertices.Add(from, fromToSet);
             }
-            if (!_vertices.TryGetValue(to, out ISet<Edge<char>> toFromSet))
+            if (!_vertices.TryGetValue(to, out var toFromSet))
             {
                 toFromSet = new HashSet<Edge<char>>();
                 _vertices.Add(to, toFromSet);

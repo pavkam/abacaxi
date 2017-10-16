@@ -20,6 +20,7 @@ namespace Abacaxi
     using JetBrains.Annotations;
     using System.Globalization;
     using System.Text;
+    using System.Diagnostics;
 
     /// <summary>
     /// Extension method for the <see cref="string"/> data type.
@@ -85,7 +86,7 @@ namespace Abacaxi
             if (s.Length > maxLength)
             {
                 var elpLength = ellipsis?.Length ?? 0;
-                var cutOffLen = 0; 
+                var cutOffLen = 0;
                 var enumerator = StringInfo.GetTextElementEnumerator(s);
                 while (enumerator.MoveNext())
                 {
@@ -201,20 +202,20 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds all duplicate characters in a given <paramref name="sequence"/>.
+        /// Finds all duplicate characters in a given <paramref name="s"/>.
         /// </summary>
-        /// <param name="sequence">The sequence to inspect.</param>
-        /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <param name="s">The string to inspect.</param>
+        /// <returns>A s of element-appearances pairs of the detected duplicates.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
         [NotNull]
-        public static Frequency<char>[] FindDuplicates([NotNull] this string sequence)
+        public static Frequency<char>[] FindDuplicates([NotNull] this string s)
         {
-            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(s), s);
 
             var asciiAppearances = new int[byte.MaxValue + 1];
             var appearances = new Dictionary<char, int>();
 
-            foreach (var item in sequence)
+            foreach (var item in s)
             {
                 if (item <= byte.MaxValue)
                 {
@@ -222,7 +223,7 @@ namespace Abacaxi
                 }
                 else
                 {
-                    if (!appearances.TryGetValue(item, out int count))
+                    if (!appearances.TryGetValue(item, out var count))
                     {
                         appearances.Add(item, 1);
                     }
@@ -238,7 +239,7 @@ namespace Abacaxi
             {
                 if (asciiAppearances[i] > 1)
                 {
-                    result.Add(new Frequency<char>((char)i, asciiAppearances[i]));
+                    result.Add(new Frequency<char>((char) i, asciiAppearances[i]));
                 }
             }
 
@@ -254,5 +255,140 @@ namespace Abacaxi
             return result.ToArray();
         }
 
+        [NotNull]
+        [ItemNotNull]
+        private static IEnumerable<string> SplitIntoLinesIterate([NotNull] this string s)
+        {
+            Debug.Assert(s != null);
+
+            var si = 0;
+            var ci = 0;
+            while (ci < s.Length)
+            {
+                Debug.Assert(ci >= si);
+
+                if (s[ci] == '\n')
+                {
+                    if (ci == si)
+                    {
+                        yield return string.Empty;
+                    }
+                    else
+                    {
+                        if (ci > si && s[ci - 1] == '\r')
+                        {
+                            yield return s.Substring(si, ci - si - 1);
+                        }
+                        else
+                        {
+                            yield return s.Substring(si, ci - si);
+                        }
+                    }
+
+                    si = ++ci;
+                }
+                else
+                {
+                    ci++;
+                }
+            }
+
+            Debug.Assert(ci == s.Length);
+            if (si < ci)
+            {
+                yield return s.Substring(si, ci - si);
+            }
+            else
+            {
+                yield return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Splits a given string into separate lines (based on the presence of CRLF or LF sequences).
+        /// </summary>
+        /// <param name="s">The string to split.</param>
+        /// <returns>A sequence of strings, each representing an individual line in the string.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        [NotNull]
+        [ItemNotNull]
+        public static IEnumerable<string> SplitIntoLines([NotNull] this string s)
+        {
+            Validate.ArgumentNotNull(nameof(s), s);
+
+            return SplitIntoLinesIterate(s);
+        }
+
+        [NotNull]
+        private static IEnumerable<string> WordWrapIterate([NotNull] this string s, int lineLength)
+        {
+            Debug.Assert(s != null);
+            Debug.Assert(lineLength > 0);
+
+            foreach (var line in SplitIntoLinesIterate(s))
+            {
+                var si = 0;
+                while (si < line.Length)
+                {
+                    var lxi = -1;
+                    var i = si;
+                    for (; i - si < lineLength && i < line.Length; i++)
+                    {
+                        if (
+                            line[i] != '\r' &&
+                            (char.IsWhiteSpace(line, i) || char.IsPunctuation(line, i)))
+                        {
+                            lxi = i;
+                        }
+                    }
+
+                    if (i == line.Length)
+                    {
+                        yield return line.Substring(si, i - si);
+                        si = i;
+                    }
+                    else if (char.IsWhiteSpace(line, i) && lineLength > 1)
+                    {
+                        yield return line.Substring(si, lineLength);
+                        si += lineLength + 1;
+                    }
+                    else if (lxi > -1)
+                    {
+                        if (char.IsPunctuation(line, lxi))
+                        {
+                            yield return line.Substring(si, lxi - si + 1);
+                        }
+                        else
+                        {
+                            yield return line.Substring(si, lxi - si);
+                        }
+
+                        si = lxi + 1;
+                    }
+                    else
+                    {
+                        yield return line.Substring(si, lineLength);
+                        si += lineLength;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Wraps the specified string according to a given line length.
+        /// </summary>
+        /// <param name="s">The string to word wrap.</param>
+        /// <param name="lineLength">Length of the line.</param>
+        /// <returns>A sequence of lines containing the word wrapped string.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="lineLength"/> is less than one.</exception>
+        [NotNull]
+        public static IEnumerable<string> WordWrap([NotNull] this string s, int lineLength)
+        {
+            Validate.ArgumentNotNull(nameof(s), s);
+            Validate.ArgumentGreaterThanZero(nameof(lineLength), lineLength);
+
+            return WordWrapIterate(s, lineLength);
+        }
     }
 }

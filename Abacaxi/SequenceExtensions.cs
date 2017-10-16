@@ -265,7 +265,7 @@ namespace Abacaxi
             var appearances = new Dictionary<T, int>(equalityComparer);
             foreach (var item in sequence)
             {
-                if (!appearances.TryGetValue(item, out int count))
+                if (!appearances.TryGetValue(item, out var count))
                 {
                     appearances.Add(item, 1);
                 }
@@ -806,7 +806,7 @@ namespace Abacaxi
             var result = new Dictionary<T, int>(comparer);
             foreach (var item in sequence)
             {
-                if (!result.TryGetValue(item, out int frequency))
+                if (!result.TryGetValue(item, out var frequency))
                 {
                     result.Add(item, 1);
                 }
@@ -838,7 +838,7 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(dict), dict);
             Validate.ArgumentNotNull(nameof(updateFunc), updateFunc);
 
-            if (dict.TryGetValue(key, out TValue existing))
+            if (dict.TryGetValue(key, out var existing))
             {
                 dict[key] = updateFunc(existing);
                 return false;

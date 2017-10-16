@@ -58,7 +58,7 @@ namespace Abacaxi.Containers
 
             var i = 0;
             node = _root;
-            while (i < key.Count && node.Children.TryGetValue(key[i], out Node child))
+            while (i < key.Count && node.Children.TryGetValue(key[i], out var child))
             {
                 node = child;
                 i++;
@@ -146,7 +146,7 @@ namespace Abacaxi.Containers
         {
             Validate.ArgumentNotNull(nameof(prefix), prefix);
 
-            if (FlowDown(prefix, out Node root))
+            if (FlowDown(prefix, out var root))
             {
                 var stack = new Stack<KeyValuePair<TElement[], Node>>();
                 stack.Push(new KeyValuePair<TElement[], Node>(prefix, root));
@@ -211,7 +211,7 @@ namespace Abacaxi.Containers
 
             var i = 0;
             var node = _root;
-            while (i < key.Length && node.Children.TryGetValue(key[i], out Node child))
+            while (i < key.Length && node.Children.TryGetValue(key[i], out var child))
             {
                 node = child;
                 i++;
@@ -275,7 +275,7 @@ namespace Abacaxi.Containers
             Validate.ArgumentNotNull(nameof(item.Key), item.Key);
 
             return
-                FlowDown(item.Key, out Node node) &&
+                FlowDown(item.Key, out var node) &&
                 node.IsTerminal &&
                 ValueDefaultComparer.Equals(node.Value, item.Value);
         }
@@ -293,7 +293,7 @@ namespace Abacaxi.Containers
             Validate.ArgumentNotNull(nameof(key), key);
 
             return
-                FlowDown(key, out Node node) &&
+                FlowDown(key, out var node) &&
                 node.IsTerminal;
         }
 
@@ -340,7 +340,7 @@ namespace Abacaxi.Containers
             var i = 0;
             var node = _root;
             var path = new Stack<Node>();
-            while (i < key.Length && node.Children.TryGetValue(key[i], out Node child))
+            while (i < key.Length && node.Children.TryGetValue(key[i], out var child))
             {
                 path.Push(node);
 
@@ -383,7 +383,7 @@ namespace Abacaxi.Containers
             Validate.ArgumentNotNull(nameof(key), key);
 
             var success =
-                FlowDown(key, out Node node) && node.IsTerminal;
+                FlowDown(key, out var node) && node.IsTerminal;
             value = success ? node.Value : default(TValue);
 
             return success;

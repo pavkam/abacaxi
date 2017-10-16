@@ -56,7 +56,7 @@ namespace Abacaxi.Practice.Graphs
 
             foreach (var pattern in GetAllStringPatterns(vertex))
             {
-                if (_neighborhoods.TryGetValue(pattern, out ISet<string> neighbors))
+                if (_neighborhoods.TryGetValue(pattern, out var neighbors))
                 {
                     foreach (var neighbor in neighbors)
                     {
@@ -122,7 +122,7 @@ namespace Abacaxi.Practice.Graphs
 
                 foreach (var pattern in GetAllStringPatterns(item))
                 {
-                    if (!_neighborhoods.TryGetValue(pattern, out ISet<string> neighbors))
+                    if (!_neighborhoods.TryGetValue(pattern, out var neighbors))
                     {
                         neighbors = new HashSet<string>();
                         _neighborhoods.Add(pattern, neighbors);

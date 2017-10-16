@@ -98,7 +98,7 @@ namespace Abacaxi.Tests.Pairing
                 var x = new[] {r.Item1, r.Item2};
                 foreach (var item in x)
                 {
-                    Assert.IsTrue(expected.TryGetValue(item, out int appearances));
+                    Assert.IsTrue(expected.TryGetValue(item, out var appearances));
                     if (appearances == 1)
                     {
                         expected.Remove(item);

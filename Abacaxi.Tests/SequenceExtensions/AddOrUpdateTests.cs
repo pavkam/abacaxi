@@ -57,7 +57,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             var dict = new Dictionary<string, int>();
             dict.AddOrUpdate("key", 1, i => i);
 
-            Assert.IsTrue(dict.TryGetValue("key", out int value));
+            Assert.IsTrue(dict.TryGetValue("key", out var value));
             Assert.AreEqual(1, value);
         }
 
@@ -67,7 +67,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             var dict = new Dictionary<string, int> {{"key", 1}};
             dict.AddOrUpdate("key", 2, i => -1);
 
-            Assert.IsTrue(dict.TryGetValue("key", out int value));
+            Assert.IsTrue(dict.TryGetValue("key", out var value));
             Assert.AreEqual(-1, value);
         }
     }
