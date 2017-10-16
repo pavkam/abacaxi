@@ -28,6 +28,14 @@ namespace Abacaxi
     [PublicAPI]
     public static class StringExtensions
     {
+        [NotNull]
+        private static readonly IDictionary<char, char> SpecialDiacriticMappings = new
+            Dictionary<char, char>
+            {
+                {'ł', 'l'},
+                {'Ł', 'L'}
+            };
+
         /// <summary>
         /// Treats a given string as a list of characters.
         /// </summary>
@@ -389,6 +397,36 @@ namespace Abacaxi
             Validate.ArgumentGreaterThanZero(nameof(lineLength), lineLength);
 
             return WordWrapIterate(s, lineLength);
+        }
+
+        /// <summary>
+        /// Strips the diacritics from a given string, replacing the characters in question with equivalent non-diacritic ones.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>A string with stripped diacritics.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        public static string StripDiacritics([NotNull] this string s)
+        {
+            Validate.ArgumentNotNull(nameof(s), s);
+
+            var normalizedForm = s.Normalize(NormalizationForm.FormD);
+            var result = new StringBuilder();
+            foreach (var c in normalizedForm)
+            {
+                // ReSharper disable once SwitchStatementMissingSomeCases
+                switch (CharUnicodeInfo.GetUnicodeCategory(c))
+                {
+                    case UnicodeCategory.NonSpacingMark:
+                    case UnicodeCategory.SpacingCombiningMark:
+                    case UnicodeCategory.EnclosingMark:
+                        break;
+                    default:
+                        result.Append(SpecialDiacriticMappings.TryGetValue(c, out var folded) ? folded : c);
+                        break;
+                }
+            }
+
+            return result.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }
