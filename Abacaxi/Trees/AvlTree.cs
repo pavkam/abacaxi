@@ -50,13 +50,17 @@ namespace Abacaxi.Trees
             {
                 Root = right;
             }
-            else if (parent.RightChild == node)
-            {
-                parent.RightChild = right;
-            }
             else
             {
-                parent.LeftChild  = right;
+                Debug.Assert(parent != null);
+                if (parent.RightChild == node)
+                {
+                    parent.RightChild = right;
+                }
+                else
+                {
+                    parent.LeftChild = right;
+                }
             }
 
             right.Balance++;
@@ -89,13 +93,17 @@ namespace Abacaxi.Trees
             {
                 Root = left;
             }
-            else if (parent.LeftChild == node)
-            {
-                parent.LeftChild = left;
-            }
             else
             {
-                parent.RightChild = left;
+                Debug.Assert(parent != null);
+                if (parent.LeftChild == node)
+                {
+                    parent.LeftChild = left;
+                }
+                else
+                {
+                    parent.RightChild = left;
+                }
             }
 
             left.Balance--;
@@ -139,13 +147,17 @@ namespace Abacaxi.Trees
             {
                 Root = leftRight;
             }
-            else if (parent.LeftChild == node)
-            {
-                parent.LeftChild = leftRight;
-            }
             else
             {
-                parent.RightChild = leftRight;
+                Debug.Assert(parent != null);
+                if (parent.LeftChild == node)
+                {
+                    parent.LeftChild = leftRight;
+                }
+                else
+                {
+                    parent.RightChild = leftRight;
+                }
             }
 
             switch (leftRight.Balance)
@@ -205,13 +217,17 @@ namespace Abacaxi.Trees
             {
                 Root = rightLeft;
             }
-            else if (parent.RightChild == node)
-            {
-                parent.RightChild = rightLeft;
-            }
             else
             {
-                parent.LeftChild = rightLeft;
+                Debug.Assert(parent != null);
+                if (parent.RightChild == node)
+                {
+                    parent.RightChild = rightLeft;
+                }
+                else
+                {
+                    parent.LeftChild = rightLeft;
+                }
             }
 
             switch (rightLeft.Balance)
@@ -275,8 +291,8 @@ namespace Abacaxi.Trees
                 var node = Root;
                 while (node != null)
                 {
-                    var compare = Comparer.Compare(key, node.Key);
-                    if (compare < 0)
+                    var comparisonResult = Comparer.Compare(key, node.Key);
+                    if (comparisonResult < 0)
                     {
                         var left = node.LeftChild;
 
@@ -295,7 +311,7 @@ namespace Abacaxi.Trees
                         }
                         node = left;
                     }
-                    else if (compare > 0)
+                    else if (comparisonResult > 0)
                     {
                         var right = node.RightChild;
 
@@ -585,6 +601,7 @@ namespace Abacaxi.Trees
                             successor.LeftChild = left;
                             successor.Balance = node.Balance;
 
+                            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                             if (left != null)
                             {
                                 left.Parent = successor;
@@ -644,6 +661,7 @@ namespace Abacaxi.Trees
                             successor.RightChild = right;
                             right.Parent = successor;
 
+                            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                             if (left != null)
                             {
                                 left.Parent = successor;

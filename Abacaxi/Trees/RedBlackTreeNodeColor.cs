@@ -15,52 +15,19 @@
 
 namespace Abacaxi.Trees
 {
-    using JetBrains.Annotations;
-    using System.Diagnostics;
-
     /// <summary>
-    /// Class represents a node in a binary search tree (or any derivative balanced search tree).
+    /// Defines possible colors a red-black tree node can take.
     /// </summary>
-    /// <typeparam name="TKey">The type of the key.</typeparam>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    [PublicAPI]
-    [DebuggerDisplay("Key={Key}, Value={Value}")]
-    public class BinaryTreeNode<TKey, TValue>
+    public enum RedBlackTreeNodeColor
     {
         /// <summary>
-        /// Gets the key of the node.
+        /// The color red.
         /// </summary>
-        /// <value>
-        /// The key.
-        /// </value>
-        [CanBeNull]
-        public TKey Key { get; set; }
+        Red,
 
         /// <summary>
-        /// Gets the value of the node.
+        /// The color black.
         /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        [CanBeNull]
-        public TValue Value { get; set; }
-
-        /// <summary>
-        /// Gets the right child node.
-        /// </summary>
-        /// <value>
-        /// The right child node.
-        /// </value>
-        [CanBeNull]
-        public BinaryTreeNode<TKey, TValue> RightChild { get; set; }
-
-        /// <summary>
-        /// Gets the left child node.
-        /// </summary>
-        /// <value>
-        /// The left child node.
-        /// </value>
-        [CanBeNull]
-        public BinaryTreeNode<TKey, TValue> LeftChild { get; set; }
+        Black
     }
 }
