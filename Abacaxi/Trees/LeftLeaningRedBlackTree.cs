@@ -388,7 +388,7 @@ namespace Abacaxi.Trees
         public override bool Remove(TKey key)
         {
             var initialCount = Count;
-            if (null != Root)
+            if (Root != null)
             {
                 Root = RemoveRecursive(Root, key);
                 if (Root != null)
