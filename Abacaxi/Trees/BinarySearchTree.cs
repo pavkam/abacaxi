@@ -32,11 +32,29 @@ namespace Abacaxi.Trees
     {
         private int _ver;
 
+        /// <summary>
+        /// Gets the comparer used for ordering tree nodes' keys.
+        /// </summary>
+        /// <value>
+        /// The comparer.
+        /// </value>
         [NotNull]
         protected IComparer<TKey> Comparer { get; }
-        [CanBeNull]
-        internal BinaryTreeNode<TKey, TValue> Root { get; set; }
 
+        /// <summary>
+        /// Gets or sets the root tree node.
+        /// </summary>
+        /// <value>
+        /// The root tree node.
+        /// </value>
+        [CanBeNull]
+        protected BinaryTreeNode<TKey, TValue> Root { get; set; }
+
+        /// <summary>
+        /// Throws the standard "key not found" exception.
+        /// </summary>
+        /// <param name="argumentName">Name of the argument.</param>
+        /// <exception cref="ArgumentException">The tree does not contain a node with the given key.</exception>
         [ContractAnnotation("=> halt")]
         protected static void ThrowKeyNotFound([NotNull] string argumentName)
         {
@@ -44,6 +62,11 @@ namespace Abacaxi.Trees
             throw new ArgumentException("The tree does not contain a node with the given key.", argumentName);
         }
 
+        /// <summary>
+        /// Throws the standard "duplicate key found" exception.
+        /// </summary>
+        /// <param name="argumentName">Name of the argument.</param>
+        /// <exception cref="ArgumentException">The tree already contains a node with the given key.</exception>
         [ContractAnnotation("=> halt")]
         protected static void ThrowDuplicateKeyFound([NotNull] string argumentName)
         {
@@ -64,37 +87,31 @@ namespace Abacaxi.Trees
             [CanBeNull] BinaryTreeNode<TKey, TValue> root, 
             TKey key, 
             TValue value, 
-            bool allowAdd,
             bool allowUpdate)
         {
             if (root == null)
             {
-                if (allowAdd)
+                NotifyTreeChanged(1);
+                return new BinaryTreeNode<TKey, TValue>
                 {
-                    IncreaseVersion();
-                    Count++;
-                    return new BinaryTreeNode<TKey, TValue>
-                    {
-                        Key = key,
-                        Value = value,
-                    };
-                }
-                ThrowKeyNotFound(nameof(key));
+                    Key = key,
+                    Value = value,
+                };
             }
 
             var comparison = Comparer.Compare(key, root.Key);
 
             if (comparison < 0)
             {
-                root.LeftChild = InsertRecursive(root.LeftChild, key, value, allowAdd, allowUpdate);
+                root.LeftChild = InsertRecursive(root.LeftChild, key, value, allowUpdate);
             }
             else if (comparison > 0)
             {
-                root.RightChild = InsertRecursive(root.RightChild, key, value, allowAdd, allowUpdate);
+                root.RightChild = InsertRecursive(root.RightChild, key, value, allowUpdate);
             }
             else if (allowUpdate)
             {
-                IncreaseVersion();
+                NotifyTreeChanged(0);
                 root.Value = value;
             }
             else
@@ -125,12 +142,10 @@ namespace Abacaxi.Trees
             {
                 if (!deleted)
                 {
-                    Count--;
+                    NotifyTreeChanged(-1);
                     deleted = true;
                 }
                 
-                IncreaseVersion();
-
                 if (root.LeftChild == null)
                 {
                     return root.RightChild;
@@ -142,7 +157,9 @@ namespace Abacaxi.Trees
 
                 var successor = root.RightChild;
                 while (successor.LeftChild != null)
+                {
                     successor = successor.LeftChild;
+                }
 
                 root.Key = successor.Key;
                 root.Value = successor.Value;
@@ -239,9 +256,38 @@ namespace Abacaxi.Trees
         /// <summary>
         /// Increases the version of the tree. The version must be increased on each modification.
         /// </summary>
-        protected void IncreaseVersion()
+        protected void NotifyTreeChanged(int countDelta)
         {
+            Count += countDelta;
             _ver++;
+        }
+
+        /// <summary>
+        /// Looks up the node ky the given <paramref name="key"/>.
+        /// </summary>
+        /// <param name="key">The key of the node.</param>
+        /// <returns>The node, if found; otherwise, <c>null</c>.</returns>
+        public BinaryTreeNode<TKey, TValue> LookupNode(TKey key)
+        {
+            var node = Root;
+            while (node != null)
+            {
+                var comparison = Comparer.Compare(key, node.Key);
+                if (comparison < 0)
+                {
+                    node = node.LeftChild;
+                }
+                else if (comparison > 0)
+                {
+                    node = node.RightChild;
+                }
+                else
+                {
+                    return node;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -271,7 +317,7 @@ namespace Abacaxi.Trees
         /// <exception cref="ArgumentException">Thrown if a node with the same <paramref name="key"/> is already present in the tree.</exception>
         public virtual void Add(TKey key, TValue value)
         {
-            Root = InsertRecursive(Root, key, value, true, false);
+            Root = InsertRecursive(Root, key, value, false);
         }
 
         /// <summary>
@@ -290,9 +336,16 @@ namespace Abacaxi.Trees
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's new value.</param>
         /// <exception cref="ArgumentException">Thrown if no node found with the given <paramref name="key"/>.</exception>
-        public virtual void Update(TKey key, TValue value)
+        public void Update(TKey key, TValue value)
         {
-            Root = InsertRecursive(Root, key, value, false, true);
+            var node = LookupNode(key);
+            if (node == null)
+            {
+                ThrowKeyNotFound(nameof(key));
+            }
+
+            NotifyTreeChanged(0);
+            node.Value = value;
         }
 
         /// <summary>
@@ -302,7 +355,7 @@ namespace Abacaxi.Trees
         /// <param name="value">The node's new value.</param>
         public virtual void AddOrUpdate(TKey key, TValue value)
         {
-            Root = InsertRecursive(Root, key, value, true, true);
+            Root = InsertRecursive(Root, key, value, true);
         }
 
         /// <summary>
@@ -361,25 +414,13 @@ namespace Abacaxi.Trees
         /// <param name="key">The key of the node.</param>
         /// <param name="value">The value of the node (if found).</param>
         /// <returns><c>true</c> if the node was found; otherwise, <c>false</c>.</returns>
-        public virtual bool TryGetValue(TKey key, out TValue value)
+        public bool TryGetValue(TKey key, out TValue value)
         {
-            var root = Root;
-            while (root != null)
+            var node = LookupNode(key);
+            if (node != null)
             {
-                var comparison = Comparer.Compare(key, root.Key);
-                if (comparison < 0)
-                {
-                    root = root.LeftChild;
-                }
-                else if (comparison > 0)
-                {
-                    root = root.RightChild;
-                }
-                else
-                {
-                    value = root.Value;
-                    return true;
-                }
+                value = node.Value;
+                return true;
             }
 
             value = default(TValue);
@@ -391,8 +432,9 @@ namespace Abacaxi.Trees
         /// </summary>
         public void Clear()
         {
+            NotifyTreeChanged(0);
+
             Root = null;
-            IncreaseVersion();
             Count = 0;
         }
 

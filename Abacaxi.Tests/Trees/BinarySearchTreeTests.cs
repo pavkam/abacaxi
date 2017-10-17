@@ -13,9 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
 namespace Abacaxi.Tests.Trees
 {
     using System;
@@ -23,6 +20,8 @@ namespace Abacaxi.Tests.Trees
     using Abacaxi.Trees;
     using System.Collections.Generic;
     using System.Collections;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     [TestFixture]
     public class BinarySearchTreeTests
@@ -37,7 +36,7 @@ namespace Abacaxi.Tests.Trees
             return new BinarySearchTree<TKey, TValue>();
         }
 
-        private BinarySearchTree<int, int> CreateFilled()
+        protected BinarySearchTree<int, int> CreateFilled()
         {
             var tree = Create<int, int>(Comparer<int>.Default);
             tree.Add(5, 500);
@@ -98,7 +97,35 @@ namespace Abacaxi.Tests.Trees
         }
 
         [Test]
-        public void Add_WillKeepTheTreeBalanced()
+        public void Add_WillKeepTheTreeBalanced1()
+        {
+            var tree = Create<int, int>(Comparer<int>.Default);
+            tree.Add(1, 1);
+            tree.Add(2, 2);
+            tree.Add(3, 3);
+
+            TestHelper.AssertSequence(tree,
+                new KeyValuePair<int, int>(1, 1),
+                new KeyValuePair<int, int>(2, 2),
+                new KeyValuePair<int, int>(3, 3));
+        }
+
+        [Test]
+        public void Add_WillKeepTheTreeBalanced2()
+        {
+            var tree = Create<int, int>(Comparer<int>.Default);
+            tree.Add(3, 3);
+            tree.Add(2, 2);
+            tree.Add(1, 1);
+
+            TestHelper.AssertSequence(tree,
+                new KeyValuePair<int, int>(1, 1),
+                new KeyValuePair<int, int>(2, 2),
+                new KeyValuePair<int, int>(3, 3));
+        }
+
+        [Test]
+        public void Add_WillKeepTheTreeBalanced3()
         {
             var tree = CreateFilled();
 
@@ -548,7 +575,7 @@ namespace Abacaxi.Tests.Trees
         }
 
         [Test]
-        public void GetEnumerator_PostOrder_ReturnsElementsPostOrder()
+        public virtual void GetEnumerator_PostOrder_ReturnsElementsPostOrder()
         {
             var tree = CreateFilled();
 
@@ -574,7 +601,7 @@ namespace Abacaxi.Tests.Trees
         }
 
         [Test]
-        public void GetEnumerator_PreOrder_ReturnsElementsPreOrder()
+        public virtual void GetEnumerator_PreOrder_ReturnsElementsPreOrder()
         {
             var tree = CreateFilled();
 
