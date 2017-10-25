@@ -13,8 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Linq;
-
 namespace Abacaxi.Practice.Graphs
 {
     using System;
@@ -23,6 +21,7 @@ namespace Abacaxi.Practice.Graphs
     using Internal;
     using System.Diagnostics;
     using JetBrains.Annotations;
+    using System.Linq;
 
     /// <summary>
     /// A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped movements).
