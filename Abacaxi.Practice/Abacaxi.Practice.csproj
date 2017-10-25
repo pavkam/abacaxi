@@ -15,7 +15,19 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <FileVersion>0.99.0.0</FileVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\net45\Abacaxi.Practice.xml</DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors>NU1605</WarningsAsErrors>
+    <NoWarn />
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Vsxmd" Version="1.2.0" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="XCOPY /Y $(OutDir)*.md $(SolutionDir)" />
+  </Target>
 </Project>
