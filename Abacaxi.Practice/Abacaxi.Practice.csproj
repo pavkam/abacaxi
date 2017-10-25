@@ -22,12 +22,6 @@
     <NoWarn />
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Vsxmd" Version="1.2.0" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY /Y $(OutDir)*.md $(SolutionDir)" />
-  </Target>
 </Project>

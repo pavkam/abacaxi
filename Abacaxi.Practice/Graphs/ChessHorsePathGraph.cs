@@ -145,11 +145,11 @@ namespace Abacaxi.Practice.Graphs
         }
 
         /// <summary>
-        /// Gets the edges for a given <param name="vertex" />.
+        /// Gets the edges for a given <paramref name="vertex" />.
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns>
-        /// A sequence of edges connected to the given <param name="vertex" />
+        /// A sequence of edges connected to the given <paramref name="vertex" />
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
         [NotNull]

@@ -474,7 +474,7 @@ namespace Abacaxi.Trees
         public bool IsReadOnly => false;
 
         /// <summary>
-        /// Gets or sets the value of a node identified by <see cref="key"/>.
+        /// Gets or sets the value of a node identified by <paramref name="key"/>.
         /// </summary>
         /// <value>
         /// The value of the node.

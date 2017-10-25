@@ -239,10 +239,10 @@ namespace Abacaxi.Graphs
         public abstract double GetPotentialWeight(TVertex fromVertex, TVertex toVertex);
 
         /// <summary>
-        /// Gets the edges for a given <param name="vertex"/>.
+        /// Gets the edges for a given <paramref name="vertex"/>.
         /// </summary>
         /// <param name="vertex">The vertex to get the edges for.</param>
-        /// <returns>A sequence of edges connected to the given <param name="vertex"/></returns>
+        /// <returns>A sequence of edges connected to the given <paramref name="vertex"/></returns>
         /// <exception cref="ArgumentException">The <paramref name="vertex"/> is not part of this graph.</exception>
         public abstract IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex);
 

@@ -57,7 +57,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Enumerates the first <param name="count"></param> Fibonacci numbers.
+        /// Enumerates the first <paramref name="count" /> Fibonacci numbers.
         /// </summary>
         /// <param name="count">The count of Fibonacci "numbers" to enumerate.</param>
         /// <returns>The Fibonacci sequence.</returns>

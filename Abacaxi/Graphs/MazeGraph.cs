@@ -124,6 +124,14 @@ namespace Abacaxi.Graphs
             }
         }
 
+        /// <summary>
+        /// Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" /> vertices.
+        /// </summary>
+        /// <param name="fromVertex">The first vertex.</param>
+        /// <param name="toVertex">The destination vertex.</param>
+        /// <returns>
+        /// The potential total cost (calculated as the number of cell hops from <paramref name="fromVertex"/> to <paramref name="toVertex"/>).
+        /// </returns>
         public override double GetPotentialWeight(Cell fromVertex, Cell toVertex)
         {
             ValidateVertex(nameof(fromVertex), fromVertex);
@@ -135,11 +143,11 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Gets the edges for a given <param name="vertex" />.
+        /// Gets the edges for a given <paramref name="vertex" />.
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns>
-        /// A sequence of edges connected to the given <param name="vertex" />
+        /// A sequence of edges connected to the given <paramref name="vertex" />
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
         [NotNull]
