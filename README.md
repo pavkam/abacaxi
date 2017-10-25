@@ -4,8 +4,10 @@
 
 I'm building this library as a repository of algorithms, data structures and helper methods that make one's daily programming life easier (in .NET that is).
 
-Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is built against __.NET Standard 1.1 (compatible with .NET Framework 4.5).__
+Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is built against __.NET Framework 4.5.__
 
-At a later point I might even include some description of what's available! Until that time, you can browse the source code, maybe something interesting will pop up! 
-
-![Logo](https://github.com/pavkam/abacaxi/raw/master/40218-200.png "Project Logo")
+### The list of supported data structures, algorithms, and helper methods (so far!):
+| Entity | Description |
+| --- |:---:|
+| **Heap&lt;T&gt;** | Implements the **heap** data structure (also known as **priority queue**). See <https://en.wikipedia.org/wiki/Heap_(data_structure)> |
+| **BitSet** | Implements the standard **ISet&lt;int&gt;** data structure in an optimized form (using bit masks). See related material here: <https://en.wikipedia.org/wiki/Bit_array> |
