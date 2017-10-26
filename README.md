@@ -63,7 +63,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | RandomExtensions.Sample | A *random sampling* algorithm for a sequence of objects. See related material: <https://en.wikipedia.org/wiki/Reservoir_sampling> |
 | RandomExtensions.NextBool | An extension method that allows retrieving a *random boolean* value. |
 | RandomExtensions.NextItem | An extension method that allows retrieving a *random item* from a sequence of objects. |
-| SequenceExtensions.FindLongestIncreasingSequence |  |
+| SequenceExtensions. FindLongestIncreasingSequence |  |
 | SequenceExtensions. ContainsTwoElementsThatAggregateTo |  |
 | SequenceExtensions.FindDuplicates | *Finds duplicates* in a sequence of objects. A specialized and optimized version for integer sequences also provided. |
 | SequenceExtensions.ExtractNestedBlocks | An algorithm to allow *extracting nested* sub-sequences from a sequence (e.g. _"(a(b))"_ would return _"(b)"_ then _"(a(b))"_). |
