@@ -64,7 +64,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | RandomExtensions.NextBool | An extension method that allows retrieving a *random boolean* value. |
 | RandomExtensions.NextItem | An extension method that allows retrieving a *random item* from a sequence of objects. |
 | SequenceExtensions.FindLongestIncreasingSequence |  |
-| SequenceExtensions.ContainsTwoElementsThatAggregateTo |  |
+| SequenceExtensions. ContainsTwoElementsThatAggregateTo |  |
 | SequenceExtensions.FindDuplicates | *Finds duplicates* in a sequence of objects. A specialized and optimized version for integer sequences also provided. |
 | SequenceExtensions.ExtractNestedBlocks | An algorithm to allow *extracting nested* sub-sequences from a sequence (e.g. _"(a(b))"_ would return _"(b)"_ then _"(a(b))"_). |
 | SequenceExtensions. FindSubsequencesWithGivenAggregatedValue |  |
@@ -73,7 +73,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | SequenceExtensions.Repeat | Creates a sequence which is based on the original sequence *repeated a number of times*. |
 | SequenceExtensions.BinarySearch | Implements the standard *binary search* algorithm. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
 | SequenceExtensions.Diff | Implements the generic *edit distance* algorithm. See related material: <https://en.wikipedia.org/wiki/Edit_distance> |
-| SequenceExtensions.GetLongestCommonSubSequence |  |
+| SequenceExtensions. GetLongestCommonSubSequence |  |
 | SequenceExtensions.GetItemFrequencies |  |
 | SequenceExtensions.ToSet | Helper method to *convert a given sequence into a set*. |
 | SequenceExtensions.AsList | Helper method that *interprets a given sequence as a list*. If the sequence is already a list/array then the original object is returned; otherwise, the sequence is converted to an array. **This method may or may not create a new object and does not guarantee mutability of the result.** |
