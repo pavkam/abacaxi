@@ -33,7 +33,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 
 ### The list of implemented algorithms/helper methods:
 | Algorithm/Method | Description |
-| --- |:---:|
+| --- |:---|
 | SingleLinkedNode.FindMiddle | Algorithm to *find the middle* node of a singly-linked list using one pass only. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists> |
 | SingleLinkedNode.VerifyIfKnotted | Verifies if a singly-linked list *contains a knot (cycle)* using one pass only. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
 | SingleLinkedNode.Reverse | *Reverses* a singly-linked list using the recursive algorithm. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
@@ -67,7 +67,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | SequenceExtensions.ContainsTwoElementsThatAggregateTo |  |
 | SequenceExtensions.FindDuplicates | *Finds duplicates* in a sequence of objects. A specialized and optimized version for integer sequences also provided. |
 | SequenceExtensions.ExtractNestedBlocks | An algorithm to allow *extracting nested* sub-sequences from a sequence (e.g. _"(a(b))"_ would return _"(b)"_ then _"(a(b))"_). |
-| SequenceExtensions.FindSubsequencesWithGivenAggregatedValue |  |
+| SequenceExtensions. FindSubsequencesWithGivenAggregatedValue |  |
 | SequenceExtensions.Interleave | Creates a sequence which combines multiple *interleaved sequences* based on a given comparison. |
 | SequenceExtensions.Reverse | *Reverses* a sequence in place. |
 | SequenceExtensions.Repeat | Creates a sequence which is based on the original sequence *repeated a number of times*. |
@@ -101,11 +101,11 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | Sorting.OddEvenSort | Implements the standard *odd-even sort* algorithm. See related material: <https://en.wikipedia.org/wiki/Odd%E2%80%93even_sort> |
 | Sorting.QuickSort | Implements the standard *quicksort* algorithm. See related material: <https://en.wikipedia.org/wiki/Quicksort> |
 | Sorting.ShellSort | Implements the standard *shellsort* algorithm. See related material: <https://en.wikipedia.org/wiki/Shellsort> |
-| ObjectExtensions.IsAnyOf | Helper methods that allows checking if an object is *equal to any other object* in a sequence (think of *_x IN (o1, o2, o3) *). |
+| ObjectExtensions.IsAnyOf | Helper methods that allows checking if an object is *equal to any other object* in a sequence (think of *_x IN (o1, o2, o3)*). |
 | ObjectExtensions.Inspect | A simple helper method that allows *extracting fields/properties/methods* values from an object as a dictionary. |
 | ObjectExtensions.TryConvert | Tries to *convert* a given object to a given type. Uses different techniques to achieve this goal. |
 | ObjectExtensions.As | A simpler version of *TryConvert* that throws an exception if the conversion is not possible. |
-| StringExtensions.AsList | Returns a *wrapper IList&lt;char&gt;* object. Useful when using other algorithms that expect a list. **The returned list is read-only for obvious reasons. ** |
+| StringExtensions.AsList | Returns a *wrapper IList&lt;char&gt;* object. Useful when using other algorithms that expect a list. **The returned list is read-only for obvious reasons.** |
 | StringExtensions.Reverse | *Reverses* a string and returns the reversed version. |
 | StringExtensions.Shorten | *Shortens* a string to a given maximum length (considering Unicode surrogate-pairs, etc.). Allows for an optional "shortening indicator string" used at the end of the string (think *"This is a go..."*).  |
 | StringExtensions.Escape | Escapes a string using the standard "C" escape sequences (e.g. _"\n"_ for new line). |
