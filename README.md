@@ -8,7 +8,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 
 ### The list of core data structures:
 | Data structure | Description |
-| --- |:---:|
+| :--- | :--- |
 | `Heap` | Implements the *heap* data structure (also known as *priority queue*). Related material: <https://en.wikipedia.org/wiki/Heap_(data_structure)> |
 | `BitSet` | Implements the standard *ISet&lt;int&gt;* data structure in an optimized form (using bit masks). Related material: <https://en.wikipedia.org/wiki/Bit_array> |
 | `DisjointSet` | Also known as *union-find* or *merge-find* data structure. Related material: <https://en.wikipedia.org/wiki/Disjoint-set_data_structure> |
@@ -25,7 +25,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 
 ### The list of helper/additional classes:
 | Class | Description |
-| --- |:---:|
+| :--- | :--- |
 | `ArrayEqualityComparer` | Implements an equality comparer that is able to check two array for equality. The class is useful when using dictionaries/sets whose keys are arrays. |
 | `Temporary` | A class used to store a value for a specific amount of time. The value expires and has to be reloaded. **Multi-threaded** |
 | `BitWriter` | A specialized I/O class that implements the *Stream* base class. Allows for writing to a stream with bit granularity. |
@@ -33,7 +33,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 
 ### The list of implemented algorithms/helper methods:
 | Algorithm/Method | Description |
-| --- |:---|
+| :--- | :--- |
 | `SingleLinkedNode.FindMiddle` | Algorithm to *find the middle* node of a singly-linked list using one pass only. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists> |
 | `SingleLinkedNode.VerifyIfKnotted` | Verifies if a singly-linked list *contains a knot (cycle)* using one pass only. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
 | `SingleLinkedNode.Reverse` | *Reverses* a singly-linked list using the recursive algorithm. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
