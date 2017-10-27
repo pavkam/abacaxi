@@ -86,6 +86,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.ToString` | Utility method that replaces a common _"String.Join(..., ...Select(...))"_ LINQ pattern. |
 | `SequenceExtensions.Min` | Returns the element of a sequence with a given *selected minimum* (e.g. select the person object with the smallest age). |
 | `SequenceExtensions.Max` | Returns the element of a sequence with a given *selected maximum* (e.g. select the person object with the greatest age). |
+| `SequenceExtensions.Segment` | Returns a view of the original sequence bounded to a segment of the list. Useful when other methods do not allow specifying a start/length pair of arguments. |
 | `Set.EnumerateSubsetCombinations` |  |
 | `Set.SplitIntoSubsetsOfEqualValue` |  |
 | `Set.GetSubsetWithNearValue` |  |

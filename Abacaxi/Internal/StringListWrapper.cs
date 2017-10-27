@@ -13,18 +13,18 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Linq;
-
 namespace Abacaxi.Internal
 {
     using System;
     using System.Collections;
     using System.Diagnostics;
     using System.Collections.Generic;
+    using System.Linq;
     using JetBrains.Annotations;
 
     internal sealed class StringListWrapper : IList<char>
     {
+        [NotNull]
         private readonly string _s;
 
         public StringListWrapper([NotNull] string s)

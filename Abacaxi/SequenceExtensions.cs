@@ -1350,5 +1350,23 @@ namespace Abacaxi
         {
             return Max(sequence, selector, Comparer<TKey>.Default);
         }
+
+        /// <summary>
+        /// Obtains a dedicated view into a segment of a given list. The returned list is a wrapper object that
+        /// acts as an intermediary to the original one. All operations on the intermediary list will be applied to the original one.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="startIndex">The start index for the segment.</param>
+        /// <param name="length">The length of the segment.</param>
+        /// <returns>A new list that wraps the given segment.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        [NotNull]
+        public static IList<T> Segment<T>([NotNull] this IList<T> sequence, int startIndex, int length)
+        {
+            Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
+            return new ListViewWrapper<T>(sequence, startIndex, length);
+        }
     }
 }
