@@ -120,10 +120,9 @@ namespace Abacaxi.Internal
         {
             AssertSegmentStillValid();
 
-            var comparer = EqualityComparer<T>.Default;
             for (var i = 0; i < Count; i++)
             {
-                if (comparer.Equals(_sequence[_startIndex + i], item))
+                if (Equals(_sequence[_startIndex + i], item))
                 {
                     _sequence.RemoveAt(_startIndex + i);
                     Count--;
@@ -143,10 +142,9 @@ namespace Abacaxi.Internal
         {
             AssertSegmentStillValid();
 
-            var comparer = EqualityComparer<T>.Default;
             for (var i = 0; i < Count; i++)
             {
-                if (comparer.Equals(_sequence[_startIndex + i], item))
+                if (Equals(_sequence[_startIndex + i], item))
                 {
                     return i;
                 }
