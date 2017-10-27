@@ -44,6 +44,7 @@ namespace Abacaxi.Tests.Containers
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_IfEnumerableIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => new Trie<char, int>((IEnumerable<KeyValuePair<char[], int>>)null));
@@ -51,6 +52,7 @@ namespace Abacaxi.Tests.Containers
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_IfEnumerableIsNull2()
         {
             Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(null, EqualityComparer<char>.Default));
@@ -58,6 +60,7 @@ namespace Abacaxi.Tests.Containers
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_IfComparerIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => new Trie<char, int>((IEqualityComparer<char>)null));
@@ -65,6 +68,7 @@ namespace Abacaxi.Tests.Containers
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_IfComparerIsNull2()
         {
             Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(new KeyValuePair<char[], int>[] { }, null));
@@ -262,6 +266,7 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Contains_ThrowsException_IfKeyIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => _trie0.Contains(null));
@@ -304,6 +309,7 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Add_ThrowsException_IfKeyIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => _trie5.Add(null, -1));
@@ -362,12 +368,14 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AddOrUpdate_ThrowsException_IfKeyIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _trie5.AddOrUpdate(null, 1, i => i));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AddOrUpdate_ThrowsException_IfUpdateFuncIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _trie5.AddOrUpdate(_("a"), 1, null));
@@ -455,6 +463,7 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Remove_ThrowsException_IfKeyIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => _trie0.Remove(null));
@@ -525,6 +534,7 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void TryGetValue_ThrowsException_IfKeyIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _trie5.TryGetValue(null, out var dummy));

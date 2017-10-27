@@ -561,7 +561,7 @@ namespace Abacaxi
         /// <param name="length">The length of sequence to reverse.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void Reverse<T>(this IList<T> sequence, int startIndex, int length)
+        public static void Reverse<T>([NotNull] this IList<T> sequence, int startIndex, int length)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
 
@@ -582,7 +582,8 @@ namespace Abacaxi
         /// <returns>A new array.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="input"/> sequence is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value of <paramref name="repetitions"/> argument is less than <c>1</c>.</exception>
-        public static T[] Repeat<T>(this IEnumerable<T> input, int repetitions)
+        [NotNull]
+        public static T[] Repeat<T>([NotNull] this IEnumerable<T> input, int repetitions)
         {
             Validate.ArgumentNotNull(nameof(input), input);
             Validate.ArgumentGreaterThanZero(nameof(repetitions), repetitions);
@@ -624,7 +625,13 @@ namespace Abacaxi
         /// <returns>The index in the sequence where the <paramref name="item"/> was found; <c>-1</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static int BinarySearch<T>(this IList<T> sequence, int startIndex, int length, T item, IComparer<T> comparer, bool ascending = true)
+        public static int BinarySearch<T>(
+            [NotNull] this IList<T> sequence, 
+            int startIndex, 
+            int length, 
+            T item, 
+            [NotNull] IComparer<T> comparer, 
+            bool ascending = true)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -663,7 +670,8 @@ namespace Abacaxi
         /// <param name="resultSequence">The sequence to compare with.</param>
         /// <returns>A sequence of "edits" applied to the original <paramref name="sequence"/> to obtain the <paramref name="resultSequence"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="resultSequence"/> are <c>null</c>.</exception>
-        public static Edit<T>[] Diff<T>(this IList<T> sequence, IList<T> resultSequence)
+        [NotNull]
+        public static Edit<T>[] Diff<T>([NotNull] this IList<T> sequence, [NotNull] IList<T> resultSequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(resultSequence), resultSequence);
@@ -701,7 +709,8 @@ namespace Abacaxi
         /// <param name="otherSequence">The sequence to compare with.</param>
         /// <returns>The longest common sub-sequence shared by both sequences.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="otherSequence"/> are <c>null</c>.</exception>
-        public static T[] GetLongestCommonSubSequence<T>(this IList<T> sequence, IList<T> otherSequence)
+        [NotNull]
+        public static T[] GetLongestCommonSubSequence<T>([NotNull] this IList<T> sequence, [NotNull] IList<T> otherSequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(otherSequence), otherSequence);
@@ -739,7 +748,8 @@ namespace Abacaxi
         /// <param name="comparer">An equality comparer.</param>
         /// <returns>A new set containing the elements in <paramref name="sequence"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        public static ISet<T> ToSet<T>(this IEnumerable<T> sequence, IEqualityComparer<T> comparer)
+        [NotNull]
+        public static ISet<T> ToSet<T>([NotNull] this IEnumerable<T> sequence, [NotNull] IEqualityComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -754,7 +764,8 @@ namespace Abacaxi
         /// <param name="sequence">The sequence.</param>
         /// <returns>A new set containing the elements in <paramref name="sequence"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        public static ISet<T> ToSet<T>(this IEnumerable<T> sequence)
+        [NotNull]
+        public static ISet<T> ToSet<T>([NotNull] this IEnumerable<T> sequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
@@ -1146,6 +1157,7 @@ namespace Abacaxi
         /// A <see cref="string"/> that contains all the elements of the <paramref name="sequence"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> or <paramref name="separator"/> are <c>null</c>.</exception>
+        [NotNull]
         public static string ToString<T, TResult>(
             [NotNull] this IEnumerable<T> sequence, 
             [NotNull] Func<T, TResult> selector,
@@ -1180,6 +1192,7 @@ namespace Abacaxi
         /// A <see cref="string"/> that contains all the elements of the <paramref name="sequence"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="separator"/> are <c>null</c>.</exception>
+        [NotNull]
         public static string ToString<T>(
             [NotNull] this IEnumerable<T> sequence,
             [NotNull] string separator)

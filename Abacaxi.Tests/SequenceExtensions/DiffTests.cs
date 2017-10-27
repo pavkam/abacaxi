@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
@@ -23,6 +25,7 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class DiffTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Diff_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -30,6 +33,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Diff_ThrowsException_ForNullResultSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>

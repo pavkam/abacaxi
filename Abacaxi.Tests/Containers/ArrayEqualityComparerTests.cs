@@ -92,11 +92,11 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void GetHashCode_ReturnsZero_ForNullArray()
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        public void GetHashCode_ThrowsException_ForNullArray()
         {
-            var result = _comparer.GetHashCode(null);
-
-            Assert.AreEqual(0, result);
+            Assert.Throws<ArgumentNullException>(() => _comparer.GetHashCode(null));
         }
 
         [Test]

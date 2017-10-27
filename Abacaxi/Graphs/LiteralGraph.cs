@@ -28,6 +28,7 @@ namespace Abacaxi.Graphs
     [PublicAPI]
     public sealed class LiteralGraph : Graph<char>
     {
+        [NotNull]
         private readonly Dictionary<char, ISet<Edge<char>>> _vertices;
 
         private void AddVertex(char vertex)
@@ -88,7 +89,7 @@ namespace Abacaxi.Graphs
             }
         }
 
-        private void Parse(string relationships)
+        private void Parse([NotNull] string relationships)
         {
             Debug.Assert(relationships != null);
 
@@ -268,7 +269,7 @@ namespace Abacaxi.Graphs
         /// <param name="relationships">The vertex relationship definitions.</param>
         /// <param name="isDirected">Specifies whether the graph is directed.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="relationships"/> is <c>null</c>.</exception>
-        public LiteralGraph(string relationships, bool isDirected)
+        public LiteralGraph([NotNull] string relationships, bool isDirected)
         {
             Validate.ArgumentNotNull(nameof(relationships), relationships);
 

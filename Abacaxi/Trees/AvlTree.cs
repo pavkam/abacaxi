@@ -27,6 +27,7 @@ namespace Abacaxi.Trees
     [PublicAPI]
     public class AvlTree<TKey, TValue> : BinarySearchTree<TKey, TValue>
     {
+        [NotNull]
         private AvlTreeNode<TKey, TValue> RotateLeft([NotNull] AvlTreeNode<TKey, TValue> node)
         {
             Debug.Assert(node != null);
@@ -69,6 +70,7 @@ namespace Abacaxi.Trees
             return right;
         }
 
+        [NotNull]
         private AvlTreeNode<TKey, TValue> RotateRight([NotNull] AvlTreeNode<TKey, TValue> node)
         {
             Debug.Assert(node != null);
@@ -112,6 +114,7 @@ namespace Abacaxi.Trees
             return left;
         }
 
+        [NotNull]
         private AvlTreeNode<TKey, TValue> RotateLeftRight([NotNull] AvlTreeNode<TKey, TValue> node)
         {
             Debug.Assert(node != null);
@@ -181,6 +184,7 @@ namespace Abacaxi.Trees
             return leftRight;
         }
 
+        [NotNull]
         private AvlTreeNode<TKey, TValue> RotateRightLeft([NotNull] AvlTreeNode<TKey, TValue> node)
         {
             Debug.Assert(node != null);
@@ -465,6 +469,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <param name="key">The key of the node.</param>
         /// <returns>The node, if found; otherwise, <c>null</c>.</returns>
+        [CanBeNull]
         public new AvlTreeNode<TKey, TValue> LookupNode(TKey key)
         {
             var node = base.LookupNode(key);

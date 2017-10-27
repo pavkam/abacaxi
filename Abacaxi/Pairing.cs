@@ -30,10 +30,24 @@ namespace Abacaxi
     {
         private sealed class RecursiveFindSubsetPairingWithLowestCostContext
         {
-            public int[] Indices;
+            [NotNull]
+            public readonly int[] Indices;
+            [CanBeNull]
             public int[] BestCombination;
             public double? LowestCostSoFar;
-            public Func<int, int, double> CalculatePairCost;
+            [NotNull]
+            public readonly Func<int, int, double> CalculatePairCost;
+
+            public RecursiveFindSubsetPairingWithLowestCostContext(
+                [NotNull] int[] indices,
+                [NotNull] Func<int, int, double> calculatePairCost)
+            {
+                Debug.Assert(indices != null);
+                Debug.Assert(calculatePairCost != null);
+
+                Indices = indices;
+                CalculatePairCost = calculatePairCost;
+            }
         }
 
         private static void RecursiveFindSubsetPairingWithLowestCost(
@@ -60,6 +74,7 @@ namespace Abacaxi
 
             if (context.Indices[i] > 0)
             {
+                // ReSharper disable once TailRecursiveCall
                 RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set, currentCost);
             }
             else
@@ -99,6 +114,8 @@ namespace Abacaxi
         /// <returns>A sequence of pairs which lowest overall cost.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluateCostOfPairFunc"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence"/> is not even.</exception>
+        [NotNull]
+        [ItemNotNull]
         public static Tuple<T, T>[] GetWithMinimumCost<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Func<T, T, double> evaluateCostOfPairFunc)
@@ -111,20 +128,20 @@ namespace Abacaxi
                 return new Tuple<T, T>[0];
             }
 
-            var context = new RecursiveFindSubsetPairingWithLowestCostContext
-            {
-                CalculatePairCost = (l, r) =>
+            var context = new RecursiveFindSubsetPairingWithLowestCostContext(
+                new int[sequence.Count],
+                (l, r) =>
                 {
                     Debug.Assert(l >= 0 && l < sequence.Count);
                     Debug.Assert(r >= 0 && r < sequence.Count);
                     Debug.Assert(l != r);
 
                     return evaluateCostOfPairFunc(sequence[l], sequence[r]);
-                },
-                Indices = new int[sequence.Count]
-            };
+                }
+            );
 
             RecursiveFindSubsetPairingWithLowestCost(context, 0, 1, 0);
+            Debug.Assert(context.BestCombination != null);
 
             var sets = new RecursiveFindSubsetPairingWithLowestCostPair<T>[sequence.Count / 2];
             for (var i = 0; i < context.BestCombination.Length; i++)
@@ -157,6 +174,8 @@ namespace Abacaxi
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> or <paramref name="evaluateCostOfPairFunc" /> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence" /> is not even.</exception>
+        [NotNull]
+        [ItemNotNull]
         public static Tuple<T, T>[] GetWithApproximateMinimumCost<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Func<T, T, double> evaluateCostOfPairFunc,

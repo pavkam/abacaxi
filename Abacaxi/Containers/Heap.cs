@@ -33,6 +33,7 @@ namespace Abacaxi.Containers
 
         [NotNull]
         private readonly IComparer<T> _comparer;
+        [NotNull]
         private T[] _array;
         private int _ver;
 

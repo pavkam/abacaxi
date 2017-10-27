@@ -39,7 +39,11 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex" /> and <paramref name="length" /> is out of bounds.</exception>
         [NotNull]
-        public static int[] Construct<T>([NotNull] IList<T> sequence, int startIndex, int length, IEqualityComparer<T> comparer)
+        public static int[] Construct<T>(
+            [NotNull] IList<T> sequence,
+            int startIndex,
+            int length,
+            [NotNull] IEqualityComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -59,7 +63,8 @@ namespace Abacaxi
                     {
                         li = ri = i;
 
-                        while (ri < length && comparer.Equals(sequence[ri - li + startIndex], sequence[ri + startIndex]))
+                        while (ri < length &&
+                               comparer.Equals(sequence[ri - li + startIndex], sequence[ri + startIndex]))
                         {
                             ri++;
                         }
@@ -77,7 +82,8 @@ namespace Abacaxi
                         else
                         {
                             li = i;
-                            while (ri < length && comparer.Equals(sequence[ri - li + startIndex], sequence[ri + startIndex]))
+                            while (ri < length &&
+                                   comparer.Equals(sequence[ri - li + startIndex], sequence[ri + startIndex]))
                             {
                                 ri++;
                             }

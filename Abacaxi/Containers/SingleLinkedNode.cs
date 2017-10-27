@@ -17,6 +17,7 @@ namespace Abacaxi.Containers
 {
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -35,6 +36,7 @@ namespace Abacaxi.Containers
         /// <summary>
         /// Next element in the list.
         /// </summary>
+        [CanBeNull]
         public SingleLinkedNode<T> Next { get; set; }
 
         /// <summary>
@@ -51,7 +53,8 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="sequence">The sequence to convert into a linked list.</param>
         /// <returns>The first node in the list (head).</returns>
-        public static SingleLinkedNode<T> Create(IEnumerable<T> sequence)
+        [CanBeNull]
+        public static SingleLinkedNode<T> Create([NotNull] IEnumerable<T> sequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
@@ -78,7 +81,8 @@ namespace Abacaxi.Containers
         /// Find the middle node of a linked list.
         /// </summary>
         /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
-        /// <returns>The middle node; <c>null</c> if the list is empty.</returns>
+        /// <returns>The middle node.</returns>
+        [NotNull]
         public SingleLinkedNode<T> FindMiddle()
         {
             var one = this;
@@ -86,10 +90,13 @@ namespace Abacaxi.Containers
 
             while (two != null)
             {
+                Debug.Assert(one != null);
+
                 one = one.Next;
                 two = two.Next?.Next;
             }
 
+            Debug.Assert(one != null);
             return one;
         }
 
@@ -104,8 +111,10 @@ namespace Abacaxi.Containers
 
             while (two != null)
             {
+                Debug.Assert(one != null);
+
                 one = one.Next;
-                two = two.Next.Next;
+                two = two.Next?.Next;
 
                 if (two == one)
                 {
@@ -121,6 +130,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
         /// <returns>The new head of the linked list.</returns>
+        [NotNull]
         public SingleLinkedNode<T> Reverse()
         {
             var current = Next;

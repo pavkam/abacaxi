@@ -33,15 +33,21 @@ namespace Abacaxi.IO
         private const int BitsInWord = BitsInByte * BytesInWord;
         private const int Msb = BitsInWord - 1;
 
+        [NotNull]
         private readonly Encoding _encoding;
+        [CanBeNull]
         private Stream _stream;
         private readonly bool _leaveOpen;
         private uint _currentWord;
         private int _currentBitIndex;
+        [NotNull]
         private readonly byte[] _disassemblyBuffer;
+        [NotNull]
         private readonly byte[] _assemblyBuffer;
+        [NotNull]
         private readonly char[] _singleCharBuffer;
 
+        [NotNull]
         private byte[] DisassembleWord(uint word)
         {
             _disassemblyBuffer[0] = (byte)(word >> 24);
@@ -52,7 +58,7 @@ namespace Abacaxi.IO
             return _disassemblyBuffer;
         }
 
-        private static uint AssembleWord(byte[] bytes, int index)
+        private static uint AssembleWord([NotNull] byte[] bytes, int index)
         {
             Debug.Assert(bytes != null);
             Debug.Assert(index + BytesInWord <= bytes.Length);
@@ -90,11 +96,12 @@ namespace Abacaxi.IO
             }
         }
 
-        private void WriteToStream(byte[] bytes, int offset, int count)
+        private void WriteToStream([NotNull] byte[] bytes, int offset, int count)
         {
             Debug.Assert(bytes != null);
             Debug.Assert(offset >= 0 && offset < bytes.Length);
             Debug.Assert(count > 0 && offset + count <= bytes.Length);
+            Debug.Assert(_stream != null);
 
             _stream.Write(bytes, offset, count);
         }
@@ -127,10 +134,11 @@ namespace Abacaxi.IO
         /// <param name="leaveOpen">Forces this instance to leave the stream open.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="stream"/> or <paramref name="encoding"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="stream"/> is not writable.</exception>
-        public BitWriter(Stream stream, Encoding encoding, bool leaveOpen = false)
+        public BitWriter([NotNull] Stream stream, [NotNull] Encoding encoding, bool leaveOpen = false)
         {
             Validate.ArgumentNotNull(nameof(stream), stream);
             Validate.ArgumentNotNull(nameof(encoding), encoding);
+
             if (!stream.CanWrite)
             {
                 throw new ArgumentException("Stream is not writable.", nameof(stream));
@@ -177,7 +185,7 @@ namespace Abacaxi.IO
         /// <param name="count">The number of bytes to write.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count"/> or <paramref name="offset"/> are out of bounds.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="bytes"/> is <c>null</c>.</exception>
-        public void WriteBytes(byte[] bytes, int offset, int count)
+        public void WriteBytes([NotNull] byte[] bytes, int offset, int count)
         {
             Validate.CollectionArgumentsInBounds(nameof(bytes), bytes, offset, count);
 
@@ -225,7 +233,7 @@ namespace Abacaxi.IO
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count"/> is out of bounds.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="offset"/> is out of bounds.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="bytes"/> is <c>null</c>.</exception>
-        public void Write(byte[] bytes, int offset, int count)
+        public void Write([NotNull] byte[] bytes, int offset, int count)
         {
             Validate.CollectionArgumentsInBounds(nameof(bytes), bytes, offset, count);
 
@@ -242,7 +250,7 @@ namespace Abacaxi.IO
         /// </summary>
         /// <param name="bytes">The byte array.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="bytes"/> is <c>null</c>.</exception>
-        public void Write(byte[] bytes)
+        public void Write([NotNull] byte[] bytes)
         {
             Validate.ArgumentNotNull(nameof(bytes), bytes);
 
@@ -395,12 +403,9 @@ namespace Abacaxi.IO
         /// </summary>
         /// <param name="value">The value to encode.</param>
         /// <exception cref="ArgumentNullException">Thrown is the supplied string is <c>null</c>.</exception>
-        public void Write(string value)
+        public void Write([NotNull] string value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            Validate.ArgumentNotNull(nameof(value), value);
 
             var bytes = _encoding.GetBytes(value);
             Write(bytes, 0, bytes.Length);
@@ -448,6 +453,8 @@ namespace Abacaxi.IO
 
                 if (!_leaveOpen)
                 {
+                    Debug.Assert(_stream != null);
+
                     _stream.Dispose();
                     _stream = null;
                 }

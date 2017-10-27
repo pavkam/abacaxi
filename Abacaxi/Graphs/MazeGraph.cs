@@ -27,6 +27,7 @@ namespace Abacaxi.Graphs
     [PublicAPI]
     public sealed class MazeGraph : Graph<Cell>
     {
+        [NotNull]
         private readonly bool[,] _matrix;
         private readonly int _lengthX;
         private readonly int _lengthY;
@@ -150,7 +151,6 @@ namespace Abacaxi.Graphs
         /// A sequence of edges connected to the given <paramref name="vertex" />
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
-        [NotNull]
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             ValidateVertex(nameof(vertex), vertex);

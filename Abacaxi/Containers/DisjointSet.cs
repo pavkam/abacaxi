@@ -126,7 +126,7 @@ namespace Abacaxi.Containers
         /// <returns>The "set label" object that identifies the merged set.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="object"/>, 
         /// <paramref name="otherObjects"/>, or its contents, are <c>null</c>.</exception>
-        public T Merge([NotNull]T @object, [NotNull] [ItemNotNull] params T[] otherObjects)
+        public T Merge([NotNull]T @object, [NotNull] params T[] otherObjects)
         {
             Validate.ArgumentNotNull(nameof(@object), @object);
             Validate.ArgumentNotNull(nameof(otherObjects), otherObjects);

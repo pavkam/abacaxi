@@ -69,7 +69,7 @@ namespace Abacaxi.Practice.Graphs
             }
         }
 
-        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, string vertex)
+        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, [CanBeNull] string vertex)
         {
             if (vertex == null || !_vertices.Contains(vertex))
             {
@@ -152,9 +152,7 @@ namespace Abacaxi.Practice.Graphs
         /// A sequence of edges connected to the given <paramref name="vertex" />
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
-        [NotNull]
-        [ItemNotNull]
-        public override IEnumerable<Edge<string>> GetEdges([NotNull] string vertex)
+        public override IEnumerable<Edge<string>> GetEdges(string vertex)
         {
             if (vertex == null || !_vertices.Contains(vertex))
             {
@@ -176,7 +174,7 @@ namespace Abacaxi.Practice.Graphs
         /// The potential total cost.
         /// </returns>
         /// <exception cref="NotImplementedException">Always thrown.</exception>
-        public override double GetPotentialWeight([NotNull] string fromVertex, [NotNull] string toVertex)
+        public override double GetPotentialWeight(string fromVertex, string toVertex)
         {
             ValidateVertex(nameof(fromVertex), fromVertex);
             ValidateVertex(nameof(toVertex), toVertex);

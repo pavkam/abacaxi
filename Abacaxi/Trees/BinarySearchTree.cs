@@ -84,9 +84,9 @@ namespace Abacaxi.Trees
 
         [NotNull]
         private BinaryTreeNode<TKey, TValue> InsertRecursive(
-            [CanBeNull] BinaryTreeNode<TKey, TValue> root, 
-            TKey key, 
-            TValue value, 
+            [CanBeNull] BinaryTreeNode<TKey, TValue> root,
+            TKey key,
+            TValue value,
             bool allowUpdate)
         {
             if (root == null)
@@ -122,7 +122,9 @@ namespace Abacaxi.Trees
             return root;
         }
 
-        private BinaryTreeNode<TKey, TValue> DeleteNodeRecursive([CanBeNull] BinaryTreeNode<TKey, TValue> root, TKey key, ref bool deleted)
+        [CanBeNull]
+        private BinaryTreeNode<TKey, TValue> DeleteNodeRecursive(
+            [CanBeNull] BinaryTreeNode<TKey, TValue> root, TKey key, ref bool deleted)
         {
             if (root == null)
             {
@@ -145,7 +147,7 @@ namespace Abacaxi.Trees
                     NotifyTreeChanged(-1);
                     deleted = true;
                 }
-                
+
                 if (root.LeftChild == null)
                 {
                     return root.RightChild;
@@ -168,7 +170,9 @@ namespace Abacaxi.Trees
             return root;
         }
 
-        private IEnumerator<KeyValuePair<TKey, TValue>> GetInOrderEnumerator(BinaryTreeNode<TKey, TValue> current)
+        [NotNull]
+        private IEnumerator<KeyValuePair<TKey, TValue>> GetInOrderEnumerator(
+            [CanBeNull] BinaryTreeNode<TKey, TValue> current)
         {
             var stack = new Stack<BinaryTreeNode<TKey, TValue>>();
             var ver = _ver;
@@ -193,7 +197,9 @@ namespace Abacaxi.Trees
             CheckVersion(ver);
         }
 
-        private IEnumerator<KeyValuePair<TKey, TValue>> GetPreOrderEnumerator(BinaryTreeNode<TKey, TValue> current)
+        [NotNull]
+        private IEnumerator<KeyValuePair<TKey, TValue>> GetPreOrderEnumerator(
+            [CanBeNull] BinaryTreeNode<TKey, TValue> current)
         {
             var stack = new Stack<BinaryTreeNode<TKey, TValue>>();
             var ver = _ver;
@@ -218,11 +224,13 @@ namespace Abacaxi.Trees
             CheckVersion(ver);
         }
 
-        private IEnumerator<KeyValuePair<TKey, TValue>> GetPostOrderEnumerator(BinaryTreeNode<TKey, TValue> current)
+        [NotNull]
+        private IEnumerator<KeyValuePair<TKey, TValue>> GetPostOrderEnumerator(
+            [CanBeNull] BinaryTreeNode<TKey, TValue> current)
         {
             var stack = new Stack<BinaryTreeNode<TKey, TValue>>();
             var ver = _ver;
-            BinaryTreeNode<TKey, TValue> prev = null;
+            BinaryTreeNode<TKey, TValue> previous = null;
             do
             {
                 while (current != null)
@@ -234,13 +242,13 @@ namespace Abacaxi.Trees
                 while (current == null && stack.Count > 0)
                 {
                     current = stack.Peek();
-                    if (current.RightChild == null || current.RightChild == prev)
+                    if (current.RightChild == null || current.RightChild == previous)
                     {
                         CheckVersion(ver);
 
                         yield return new KeyValuePair<TKey, TValue>(current.Key, current.Value);
                         stack.Pop();
-                        prev = current;
+                        previous = current;
                         current = null;
                     }
                     else
@@ -267,6 +275,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <param name="key">The key of the node.</param>
         /// <returns>The node, if found; otherwise, <c>null</c>.</returns>
+        [CanBeNull]
         public BinaryTreeNode<TKey, TValue> LookupNode(TKey key)
         {
             var node = Root;
@@ -376,7 +385,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <remarks>
         /// This method is provided for compatibility with <see cref="ICollection{T}"/>. It is not recommended for normal use.
-        /// The values of nodes are compared using the default equality comprarer for that type.
+        /// The values of nodes are compared using the default equality comparer for that type.
         /// </remarks>
         /// <param name="item">The key/value pair to remove from the tree.</param>
         /// <returns>
@@ -399,7 +408,7 @@ namespace Abacaxi.Trees
         /// </returns>
         /// <remarks>
         /// This method is provided for compatibility with <see cref="ICollection{T}" />. It is not recommended for normal use.
-        /// The values of nodes are compared using the default equality comprarer for that type.
+        /// The values of nodes are compared using the default equality comparer for that type.
         /// </remarks>
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
@@ -503,6 +512,7 @@ namespace Abacaxi.Trees
         /// An enumerator that can be used to iterate through the tree.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="mode"/> is invalid.</exception>
+        [NotNull]
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator(TreeTraversalMode mode)
         {
             switch (mode)

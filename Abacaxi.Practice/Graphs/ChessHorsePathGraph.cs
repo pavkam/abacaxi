@@ -151,8 +151,6 @@ namespace Abacaxi.Practice.Graphs
         /// A sequence of edges connected to the given <paramref name="vertex" />
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
-        [NotNull]
-        [ItemNotNull]
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             ValidateVertex(nameof(vertex), vertex);

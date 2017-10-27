@@ -29,13 +29,13 @@ namespace Abacaxi.Graphs
     /// Generic graph class. This class serves as an abstract base for all concrete implementations.
     /// </summary>
     /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
-    [PublicAPI]
-    [SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global")]
+    [PublicAPI, SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global")]
     public abstract class Graph<TVertex> : IEnumerable<TVertex>
     {
         private sealed class PathNode
         {
             public TVertex Vertex;
+            [CanBeNull]
             public PathNode Parent;
             public double TotalCostFromStart;
             public double PotentialCostToDestination;
@@ -58,7 +58,7 @@ namespace Abacaxi.Graphs
         }
 
         private bool TraverseDfs(
-            DfsNode vertexNode,
+            [NotNull] DfsNode vertexNode,
             ref int time,
             [NotNull] IDictionary<TVertex, DfsNode> visitedNodes,
             [NotNull] Predicate<IDfsNode> handleVertexVisited,
@@ -137,6 +137,7 @@ namespace Abacaxi.Graphs
             /// <value>
             /// The parent node.
             /// </value>
+            [CanBeNull]
             IBfsNode Parent { get; }
 
             /// <summary>
@@ -145,6 +146,7 @@ namespace Abacaxi.Graphs
             /// <value>
             /// The entry edge.
             /// </value>
+            [CanBeNull]
             Edge<TVertex> EntryEdge { get; }
         }
 
@@ -167,6 +169,7 @@ namespace Abacaxi.Graphs
             /// <value>
             /// The parent node.
             /// </value>
+            [CanBeNull]
             IDfsNode Parent { get; }
 
             /// <summary>
@@ -175,6 +178,7 @@ namespace Abacaxi.Graphs
             /// <value>
             /// The entry edge.
             /// </value>
+            [CanBeNull]
             Edge<TVertex> EntryEdge { get; }
 
             /// <summary>
@@ -244,6 +248,7 @@ namespace Abacaxi.Graphs
         /// <param name="vertex">The vertex to get the edges for.</param>
         /// <returns>A sequence of edges connected to the given <paramref name="vertex"/></returns>
         /// <exception cref="ArgumentException">The <paramref name="vertex"/> is not part of this graph.</exception>
+        [NotNull, ItemNotNull]
         public abstract IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex);
 
         /// <summary>
@@ -367,6 +372,7 @@ namespace Abacaxi.Graphs
         /// <param name="endVertex">The end vertex.</param>
         /// <returns>Returns a sequence of vertices in visitation order.</returns>
         /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
+        [NotNull]
         public virtual TVertex[] FindShortestPath(TVertex startVertex, TVertex endVertex)
         {
             IBfsNode solution = null;
@@ -397,8 +403,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of sub-graphs, each representing a connected component.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull, ItemNotNull]
         public virtual IEnumerable<Graph<TVertex>> GetComponents()
         {
             var undiscoveredVertices = new HashSet<TVertex>(this);
@@ -426,7 +431,6 @@ namespace Abacaxi.Graphs
         /// <returns>A sequence of vertices sorted in topological order.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is undirected or contains one or more cycles.</exception>
         [NotNull]
-        [ItemNotNull]
         public virtual TVertex[] TopologicalSort()
         {
             var outAdj = new Dictionary<TVertex, ISet<TVertex>>();

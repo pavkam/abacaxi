@@ -29,10 +29,8 @@ namespace Abacaxi.Containers
     [PublicAPI]
     public sealed class BitSet : ISet<int>
     {
-        [NotNull]
-        private const int BitsPerChunk = sizeof(int) * 8;
-
-        private int[] _chunks;
+        [NotNull] private const int BitsPerChunk = sizeof(int) * 8;
+        [NotNull] private int[] _chunks;
         private readonly int _max;
         private readonly int _min;
         private int _ver;
@@ -60,7 +58,7 @@ namespace Abacaxi.Containers
 
             var bitCount = Math.Abs(max - min) + 1;
             var chunkCount = bitCount / BitsPerChunk + (bitCount % BitsPerChunk > 0 ? 1 : 0);
-            _chunks = new int[chunkCount]; 
+            _chunks = new int[chunkCount];
         }
 
         /// <summary>
@@ -478,7 +476,8 @@ namespace Abacaxi.Containers
                 {
                     if (_ver != startVer)
                     {
-                        throw new InvalidOperationException("The collection has been modified. Enumeration impossible.");
+                        throw new InvalidOperationException(
+                            "The collection has been modified. Enumeration impossible.");
                     }
 
                     if (bi > 0)

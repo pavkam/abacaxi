@@ -109,7 +109,8 @@ namespace Abacaxi
             }
         }
 
-        private static int PartitionSegment<T>([NotNull] IList<T> sequence, int lo, int hi, [NotNull] IComparer<T> comparer)
+        private static int PartitionSegment<T>([NotNull] IList<T> sequence, int lo, int hi,
+            [NotNull] IComparer<T> comparer)
         {
             Debug.Assert(sequence != null);
             Debug.Assert(lo >= 0);
@@ -144,7 +145,8 @@ namespace Abacaxi
             return pi;
         }
 
-        private static void QuickSortRecursive<T>([NotNull] IList<T> sequence, int lo, int hi, [NotNull] IComparer<T> comparer)
+        private static void QuickSortRecursive<T>([NotNull] IList<T> sequence, int lo, int hi,
+            [NotNull] IComparer<T> comparer)
         {
             Debug.Assert(sequence != null);
             Debug.Assert(lo >= 0);
@@ -220,7 +222,11 @@ namespace Abacaxi
             }
         }
 
-        private static void MergeSortSegments<T>([NotNull] IList<T> sequence, int lo, int hi, IComparer<T> comparer)
+        private static void MergeSortSegments<T>(
+            [NotNull] IList<T> sequence,
+            int lo,
+            int hi,
+            [NotNull] IComparer<T> comparer)
         {
             Debug.Assert(sequence != null);
             Debug.Assert(comparer != null);
@@ -250,7 +256,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void BubbleSort<T>([NotNull] IList<T> sequence, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        public static void BubbleSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -283,7 +290,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void CocktailShakerSort<T>([NotNull] IList<T> sequence, int startIndex, int length, IComparer<T> comparer)
+        public static void CocktailShakerSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -338,7 +346,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void CombSort<T>([NotNull] IList<T> sequence, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        public static void CombSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -347,7 +356,7 @@ namespace Abacaxi
             var finished = false;
             while (!finished)
             {
-                gap = (int)Math.Floor(gap / CombSortShrinkFactor);
+                gap = (int) Math.Floor(gap / CombSortShrinkFactor);
                 gap = gap < 1 ? 1 : gap;
 
                 finished = !(gap > 1);
@@ -376,7 +385,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void GnomeSort<T>([NotNull] IList<T> sequence, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        public static void GnomeSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -412,7 +422,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void HeapSort<T>([NotNull] IList<T> sequence, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        public static void HeapSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -436,7 +447,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void InsertionSort<T>([NotNull] IList<T> sequence, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        public static void InsertionSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -465,7 +477,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void MergeSort<T>([NotNull] IList<T> sequence, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        public static void MergeSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -486,7 +499,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void OddEvenSort<T>([NotNull] IList<T> sequence, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        public static void OddEvenSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -533,7 +547,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void QuickSort<T>([NotNull] IList<T> sequence, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        public static void QuickSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -554,7 +569,8 @@ namespace Abacaxi
         /// <param name="comparer">Comparer used in the search.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
-        public static void ShellSort<T>([NotNull] IList<T> sequence, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        public static void ShellSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -563,7 +579,7 @@ namespace Abacaxi
             var finished = false;
             while (!finished)
             {
-                gap = (int)Math.Floor(gap / ShellSortShrinkFactor);
+                gap = (int) Math.Floor(gap / ShellSortShrinkFactor);
                 if (gap < 1)
                 {
                     gap = 1;

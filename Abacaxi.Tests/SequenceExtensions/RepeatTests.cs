@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
@@ -22,6 +24,7 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class RepeatTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Repeat_ThrowsException_ForNullString()
         {
             Assert.Throws<ArgumentNullException>(() =>

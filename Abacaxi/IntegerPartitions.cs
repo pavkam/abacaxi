@@ -30,6 +30,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="number">The input number.</param>
         /// <returns>A sequence of combinations.</returns>
+        [NotNull]
         public static IEnumerable<int[]> Enumerate(int number)
         {
             if (number != 0)
@@ -37,7 +38,7 @@ namespace Abacaxi
                 var selection = new Stack<int>();
                 var numbers = new Stack<int>();
                 var i = 0;
-                var dontBreak = false;
+                var doNotBreak = false;
                 var sign = Math.Sign(number);
 
                 for (;;)
@@ -50,7 +51,7 @@ namespace Abacaxi
 
                         i = sign;
                     }
-                    else if (i * sign > number / 2 * sign || dontBreak)
+                    else if (i * sign > number / 2 * sign || doNotBreak)
                     {
                         if (selection.Count == 0)
                             break;
@@ -58,14 +59,14 @@ namespace Abacaxi
                         number = numbers.Pop();
                         i = selection.Pop() + sign;
 
-                        dontBreak = false;
+                        doNotBreak = false;
                     }
                     else
                     {
                         selection.Push(i);
                         numbers.Push(number);
 
-                        dontBreak = i * 2 == number;
+                        doNotBreak = i * 2 == number;
 
                         number = number - i;
                         i = 0;

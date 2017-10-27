@@ -69,12 +69,9 @@
         /// <returns>
         /// A hash code for the array instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public int GetHashCode([CanBeNull] TElement[] array)
+        public int GetHashCode(TElement[] array)
         {
-            if (array == null)
-            {
-                return 0;
-            }
+            Validate.ArgumentNotNull(nameof(array), array);
 
             var hashCode = array.Length;
             // ReSharper disable once LoopCanBeConvertedToQuery

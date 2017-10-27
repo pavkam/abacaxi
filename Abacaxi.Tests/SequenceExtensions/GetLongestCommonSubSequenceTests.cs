@@ -23,6 +23,7 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class GetLongestCommonSubSequenceTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetLongestCommonSubSequence_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -30,6 +31,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetLongestCommonSubSequence_ThrowsException_ForNullOtherSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>

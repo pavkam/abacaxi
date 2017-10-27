@@ -56,7 +56,7 @@ namespace Abacaxi
         /// <returns>The reserved string.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
         [NotNull]
-        public static string Reverse(this string s)
+        public static string Reverse([NotNull] this string s)
         {
             Validate.ArgumentNotNull(nameof(s), s);
 
@@ -82,6 +82,7 @@ namespace Abacaxi
         /// <returns>A string of a maximum of <paramref name="maxLength"/> character.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="maxLength"/> is less than one or the length of <paramref name="ellipsis"/>is greater than <paramref name="maxLength"/>.</exception>
+        [NotNull]
         public static string Shorten([NotNull] this string s, int maxLength, [CanBeNull] string ellipsis = null)
         {
             Validate.ArgumentNotNull(nameof(s), s);
@@ -126,6 +127,7 @@ namespace Abacaxi
         /// This method escapes the special characters and unicode escape characters.</remarks>
         /// <param name="s">The string to escape.</param>
         /// <returns>The escaped string.</returns>
+        [NotNull]
         public static string Escape([CanBeNull] this string s)
         {
             Validate.ArgumentNotNull(nameof(s), s);
@@ -405,6 +407,7 @@ namespace Abacaxi
         /// <param name="s">The string.</param>
         /// <returns>A string with stripped diacritics.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        [NotNull]
         public static string StripDiacritics([NotNull] this string s)
         {
             Validate.ArgumentNotNull(nameof(s), s);

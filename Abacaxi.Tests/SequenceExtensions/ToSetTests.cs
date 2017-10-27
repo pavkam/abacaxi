@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
@@ -23,18 +25,21 @@ namespace Abacaxi.Tests.SequenceExtensions
     public sealed class ToSetTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfSequenceIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToSet(EqualityComparer<int>.Default));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfSequenceIsNull2()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToSet());
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfEqualityComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new[] {1}.ToSet(null));

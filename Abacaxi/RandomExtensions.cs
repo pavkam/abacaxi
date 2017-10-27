@@ -38,6 +38,7 @@ namespace Abacaxi
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> or <paramref name="random"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="sampleSize" /> is less than one.</exception>
+        [NotNull]
         public static T[] Sample<T>([NotNull] this Random random, [NotNull] IEnumerable<T> sequence, int sampleSize)
         {
             Validate.ArgumentNotNull(nameof(random), random);

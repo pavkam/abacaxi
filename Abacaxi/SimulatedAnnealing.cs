@@ -95,8 +95,16 @@ namespace Abacaxi
 
         private sealed class Partition<T>
         {
-            public T[] Items;
+            [NotNull] public readonly T[] Items;
             public double Cost;
+
+            public Partition([NotNull] T[] items, double cost)
+            {
+                Debug.Assert(items != null);
+
+                Items = items;
+                Cost = cost;
+            }
         }
 
         /// <summary>
@@ -119,10 +127,10 @@ namespace Abacaxi
         public static TSolution Evaluate<TInput, TSolution>(
             TInput problemInput,
             int problemInputLength,
-            Func<TInput, TSolution> evaluateInitialSolutionFunc,
-            Func<TSolution, TInput, int, int, double> solutionTransitionFunc,
-            Func<TSolution, double> evaluateSolutionCostFunc,
-            AlgorithmParameters algorithmParams)
+            [NotNull] Func<TInput, TSolution> evaluateInitialSolutionFunc,
+            [NotNull] Func<TSolution, TInput, int, int, double> solutionTransitionFunc,
+            [NotNull] Func<TSolution, double> evaluateSolutionCostFunc,
+            [NotNull] AlgorithmParameters algorithmParams)
         {
             Validate.ArgumentNotNull(nameof(problemInput), problemInput);
             Validate.ArgumentNotNull(nameof(evaluateInitialSolutionFunc), evaluateInitialSolutionFunc);
@@ -190,11 +198,13 @@ namespace Abacaxi
         /// <returns>A sequence of partitions whose total cost is the approximated minimum.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluatePartitionCostFunc"/> or <paramref name="algorithmParams"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="partitionLength"/> is less than one.</exception>
+        [NotNull]
+        [ItemNotNull]
         public static T[][] Evaluate<T>(
-            IList<T> sequence, 
-            int partitionLength, 
-            Func<T[], double> evaluatePartitionCostFunc,
-            AlgorithmParameters algorithmParams)
+            [NotNull] IList<T> sequence,
+            int partitionLength,
+            [NotNull] Func<T[], double> evaluatePartitionCostFunc,
+            [NotNull] AlgorithmParameters algorithmParams)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(evaluatePartitionCostFunc), evaluatePartitionCostFunc);
@@ -217,11 +227,7 @@ namespace Abacaxi
                         partitions.Add(new T[remainder]);
                     }
 
-                    var array = partitions.Select(s => new Partition<T>
-                    {
-                        Cost = evaluatePartitionCostFunc(s),
-                        Items = s,
-                    }).ToArray();
+                    var array = partitions.Select(s => new Partition<T>(s, evaluatePartitionCostFunc(s))).ToArray();
 
                     for (var x = 0; x < input.Count; x++)
                     {

@@ -118,7 +118,7 @@ namespace Abacaxi
         /// <param name="formatProvider">The format provider.</param>
         /// <param name="result">The resulting converted value.</param>
         /// <returns><c>true</c> if the conversion succeeded; otherwise, <c>false</c>.</returns>
-        public static bool TryConvert<T>(this object @object, [NotNull] IFormatProvider formatProvider, out T result)
+        public static bool TryConvert<T>([CanBeNull] this object @object, [NotNull] IFormatProvider formatProvider, out T result)
         {
             Validate.ArgumentNotNull(nameof(formatProvider), formatProvider);
 
@@ -202,7 +202,7 @@ namespace Abacaxi
         /// <param name="object">The object to convert.</param>
         /// <param name="result">The resulting converted value.</param>
         /// <returns><c>true</c> if the conversion succeeded; otherwise, <c>false</c>.</returns>
-        public static bool TryConvert<T>(this object @object, out T result)
+        public static bool TryConvert<T>([CanBeNull] this object @object, out T result)
         {
             return TryConvert(@object, CultureInfo.InvariantCulture, out result);
         }

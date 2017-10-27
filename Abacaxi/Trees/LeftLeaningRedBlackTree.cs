@@ -316,6 +316,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <param name="key">The key of the node.</param>
         /// <returns>The node, if found; otherwise, <c>null</c>.</returns>
+        [CanBeNull]
         public new RedBlackTreeNode<TKey, TValue> LookupNode(TKey key)
         {
             var node = base.LookupNode(key);

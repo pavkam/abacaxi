@@ -28,31 +28,32 @@ namespace Abacaxi.Containers
     /// <typeparam name="TValue">The type of the value.</typeparam>
     /// <typeparam name="TElement">The element of array keys.</typeparam>
     [PublicAPI]
-    public sealed class Trie<TElement, TValue> : ICollection<KeyValuePair<TElement[], TValue>>, IReadOnlyCollection<KeyValuePair<TElement[], TValue>>
+    public sealed class Trie<TElement, TValue> : ICollection<KeyValuePair<TElement[], TValue>>,
+        IReadOnlyCollection<KeyValuePair<TElement[], TValue>>
     {
         private class Node
         {
             public bool IsTerminal;
             public TValue Value;
-            public readonly Dictionary<TElement, Node> Children;
+            [NotNull] public readonly Dictionary<TElement, Node> Children;
 
-            public Node(IEqualityComparer<TElement> comparer)
+            public Node([NotNull] IEqualityComparer<TElement> comparer)
             {
                 Debug.Assert(comparer != null);
                 Children = new Dictionary<TElement, Node>(comparer);
             }
         }
 
-        private static readonly IEqualityComparer<TValue> ValueDefaultComparer =
+        [NotNull] private static readonly IEqualityComparer<TValue> ValueDefaultComparer =
             EqualityComparer<TValue>.Default;
 
-        private static readonly TElement[] EmptyElementArray = {};
+        [NotNull] private static readonly TElement[] EmptyElementArray = { };
 
-        private readonly IEqualityComparer<TElement> _comparer;
+        [NotNull] private readonly IEqualityComparer<TElement> _comparer;
         private int _ver;
-        private Node _root;
+        [NotNull] private Node _root;
 
-        private bool FlowDown(IList<TElement> key, out Node node)
+        private bool FlowDown([NotNull] IList<TElement> key, [NotNull] out Node node)
         {
             Debug.Assert(key != null);
 
@@ -72,7 +73,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="comparer">The element comparer.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer"/> is <c>null</c>.</exception>
-        public Trie(IEqualityComparer<TElement> comparer)
+        public Trie([NotNull] IEqualityComparer<TElement> comparer)
         {
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
@@ -95,7 +96,9 @@ namespace Abacaxi.Containers
         /// <exception cref="ArgumentException">Thrown if the <paramref name="sequence"/> contains duplicate keys.</exception>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> contains <c>null</c> keys.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        public Trie(IEnumerable<KeyValuePair<TElement[], TValue>> sequence, IEqualityComparer<TElement> comparer) : this(comparer)
+        public Trie(
+            [NotNull] IEnumerable<KeyValuePair<TElement[], TValue>> sequence,
+            [NotNull] IEqualityComparer<TElement> comparer) : this(comparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
@@ -112,7 +115,9 @@ namespace Abacaxi.Containers
         /// <exception cref="ArgumentException">Thrown if the <paramref name="sequence"/> contains duplicate keys.</exception>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> contains <c>null</c> keys.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        public Trie(IEnumerable<KeyValuePair<TElement[], TValue>> sequence) : this(sequence, EqualityComparer<TElement>.Default)
+        public Trie(
+            [NotNull] IEnumerable<KeyValuePair<TElement[], TValue>> sequence) : this(sequence,
+            EqualityComparer<TElement>.Default)
         {
         }
 
@@ -142,7 +147,8 @@ namespace Abacaxi.Containers
         /// <param name="prefix">The prefix to query.</param>
         /// <returns>The sequence of all key/value pairs that share the given <paramref name="prefix"/>.</returns>
         /// <exception cref="InvalidOperationException">Collection has been modified while enumerating.</exception>
-        public IEnumerable<KeyValuePair<TElement[], TValue>> Query(TElement[] prefix)
+        [NotNull]
+        public IEnumerable<KeyValuePair<TElement[], TValue>> Query([NotNull] TElement[] prefix)
         {
             Validate.ArgumentNotNull(nameof(prefix), prefix);
 
@@ -191,9 +197,10 @@ namespace Abacaxi.Containers
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key"/> is already present in the collection.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="key"/> is <c>null</c>.</exception>
-        public void Add(TElement[] key, TValue value)
+        public void Add([NotNull] TElement[] key, TValue value)
         {
-            AddOrUpdate(key, value, i => throw new ArgumentException($"Key \"{key}\" has already been inserted into the collection."));
+            AddOrUpdate(key, value,
+                i => throw new ArgumentException($"Key \"{key}\" has already been inserted into the collection."));
         }
 
         /// <summary>
@@ -204,7 +211,7 @@ namespace Abacaxi.Containers
         /// <param name="updateFunc">The update function.</param>
         /// <returns><c>true</c> if the key/value was added; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> or <paramref name="updateFunc"/> are <c>null</c>.</exception>
-        public bool AddOrUpdate(TElement[] key, TValue value, Func<TValue, TValue> updateFunc)
+        public bool AddOrUpdate([NotNull] TElement[] key, TValue value, [NotNull] Func<TValue, TValue> updateFunc)
         {
             Validate.ArgumentNotNull(nameof(key), key);
             Validate.ArgumentNotNull(nameof(updateFunc), updateFunc);
@@ -288,7 +295,7 @@ namespace Abacaxi.Containers
         ///   <c>true</c> if the <see cref="Trie{TElement,TValue}"/> contains the specified key; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="key"/> is <c>null</c>.</exception>
-        public bool Contains(TElement[] key)
+        public bool Contains([NotNull] TElement[] key)
         {
             Validate.ArgumentNotNull(nameof(key), key);
 
@@ -324,7 +331,7 @@ namespace Abacaxi.Containers
         {
             Validate.ArgumentNotNull(nameof(item.Key), item.Key);
 
-            return ((ICollection<KeyValuePair<TElement[], TValue>>)this).Contains(item) && Remove(item.Key);
+            return ((ICollection<KeyValuePair<TElement[], TValue>>) this).Contains(item) && Remove(item.Key);
         }
 
         /// <summary>
@@ -333,7 +340,7 @@ namespace Abacaxi.Containers
         /// <param name="key">The key to remove.</param>
         /// <returns><c>true</c> if the key was found and removed; <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="key"/> is <c>null</c>.</exception>
-        public bool Remove(TElement[] key)
+        public bool Remove([NotNull] TElement[] key)
         {
             Validate.ArgumentNotNull(nameof(key), key);
 
@@ -353,7 +360,7 @@ namespace Abacaxi.Containers
                 node.IsTerminal = false;
 
                 while (
-                    !node.IsTerminal && 
+                    !node.IsTerminal &&
                     node.Children.Count == 0 &&
                     path.Count > 0)
                 {
@@ -378,7 +385,7 @@ namespace Abacaxi.Containers
         /// <param name="key">The key.</param>
         /// <param name="value">The output value.</param>
         /// <returns><c>true</c> if the key was found; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue(TElement[] key, out TValue value)
+        public bool TryGetValue([NotNull] TElement[] key, out TValue value)
         {
             Validate.ArgumentNotNull(nameof(key), key);
 
