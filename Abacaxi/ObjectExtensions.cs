@@ -247,5 +247,21 @@ namespace Abacaxi
 
             return result;
         }
+
+        /// <summary>
+        /// Maps the input <paramref name="object"/> to a resulting output. Mostly useful for
+        /// continuations of anonymous types.
+        /// </summary>
+        /// <typeparam name="T">The type of input object.</typeparam>
+        /// <typeparam name="TMapped">The type of the resulting object.</typeparam>
+        /// <param name="object">The object.</param>
+        /// <param name="mapFunc">The mapping function.</param>
+        /// <returns>The result of the mapping.</returns>
+        [CanBeNull]
+        public static TMapped Map<T, TMapped>(this T @object, [NotNull] Func<T, TMapped> mapFunc)
+        {
+            Validate.ArgumentNotNull(nameof(mapFunc), mapFunc);
+            return mapFunc(@object);
+        }
     }
 }
