@@ -22,6 +22,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `StringNeighborhoodGraph` | A specialized graph implementation used to solve the *Word Ladder* problem. Related material: <https://en.wikipedia.org/wiki/Word_ladder> |
 | `MazeGraph` | A specialized base class for other graphs that use a two-dimensional integer board (think, a rat's maze). All standard graph algorithms can be applied to such a graph. |
 | `LiteralGraph` | A specialized graph used mainly in testing the graph-related algorithms. |
+| `Mash` | The Swiss army knife of collections. In essence, a tree-like dictionary which can have other sub-dictionaries as children and store a list of items as leaves. Employs some techniques to avoid wasting unnecessary memory. |
 
 ### The list of helper/additional classes:
 | Class | Description |
