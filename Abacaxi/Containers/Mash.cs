@@ -31,7 +31,7 @@ namespace Abacaxi.Containers
     public sealed class Mash<TKey, TValue> : IList<TValue>
     {
         [Flags]
-        private enum StorageState
+        private enum StorageState : byte
         {
             HasOneChildInATuple = 1,
             HasTwoChildrenInKeyValuePairArray = 2,
@@ -48,7 +48,7 @@ namespace Abacaxi.Containers
         }
 
         [NotNull] private readonly IEqualityComparer<TKey> _equalityComparer;
-        [CanBeNull] private object _children;
+        [CanBeNull] private object _childrenObj;
         [CanBeNull] private object _valueObj;
         private StorageState _state;
         private int _ver;
@@ -98,14 +98,15 @@ namespace Abacaxi.Containers
                 switch (_state & StorageState.ChildrenMask)
                 {
                     case 0:
+                        Debug.Assert(_childrenObj == null);
                         _state = _state & StorageState.ValueMask | StorageState.HasOneChildInATuple;
                         var subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _children = Tuple.Create(key, subMash);
+                        _childrenObj = Tuple.Create(key, subMash);
                         return subMash;
 
                     case StorageState.HasOneChildInATuple:
-                        Debug.Assert(_children is Tuple<TKey, Mash<TKey, TValue>>);
-                        var tuple = (Tuple<TKey, Mash<TKey, TValue>>) _children;
+                        Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
+                        var tuple = (Tuple<TKey, Mash<TKey, TValue>>) _childrenObj;
                         if (_equalityComparer.Equals(tuple.Item1, key))
                         {
                             return tuple.Item2;
@@ -113,7 +114,7 @@ namespace Abacaxi.Containers
 
                         _state = _state & StorageState.ValueMask | StorageState.HasTwoChildrenInKeyValuePairArray;
                         subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _children = new[]
+                        _childrenObj = new[]
                         {
                             new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
                             new KeyValuePair<TKey, Mash<TKey, TValue>>(tuple.Item1, tuple.Item2),
@@ -121,8 +122,8 @@ namespace Abacaxi.Containers
 
                         return subMash;
                     case StorageState.HasTwoChildrenInKeyValuePairArray:
-                        Debug.Assert(_children is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        var array2 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _children;
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        var array2 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
                         Debug.Assert(array2.Length == 2);
 
                         if (_equalityComparer.Equals(array2[0].Key, key))
@@ -136,7 +137,7 @@ namespace Abacaxi.Containers
 
                         _state = _state & StorageState.ValueMask | StorageState.HasThreeChildrenInKeyValuePairArray;
                         subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _children = new[]
+                        _childrenObj = new[]
                         {
                             new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
                             array2[0],
@@ -145,8 +146,8 @@ namespace Abacaxi.Containers
 
                         return subMash;
                     case StorageState.HasThreeChildrenInKeyValuePairArray:
-                        Debug.Assert(_children is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        var array3 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _children;
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        var array3 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
                         Debug.Assert(array3.Length == 3);
 
                         if (_equalityComparer.Equals(array3[0].Key, key))
@@ -164,7 +165,7 @@ namespace Abacaxi.Containers
 
                         _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
                         subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _children = new[]
+                        _childrenObj = new[]
                         {
                             new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
                             array3[0],
@@ -174,8 +175,8 @@ namespace Abacaxi.Containers
 
                         return subMash;
                     case StorageState.HasFourChildrenInKeyValuePairArray:
-                        Debug.Assert(_children is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        var array4 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _children;
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        var array4 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
                         Debug.Assert(array4.Length == 4);
 
                         if (_equalityComparer.Equals(array4[0].Key, key))
@@ -197,7 +198,7 @@ namespace Abacaxi.Containers
 
                         _state = _state & StorageState.ValueMask | StorageState.HasFiveChildrenInKeyValuePairArray;
                         subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _children = new[]
+                        _childrenObj = new[]
                         {
                             new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
                             array4[0],
@@ -208,8 +209,8 @@ namespace Abacaxi.Containers
 
                         return subMash;
                     case StorageState.HasFiveChildrenInKeyValuePairArray:
-                        Debug.Assert(_children is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        var array5 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _children;
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        var array5 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
                         Debug.Assert(array5.Length == 5);
 
                         if (_equalityComparer.Equals(array5[0].Key, key))
@@ -235,20 +236,20 @@ namespace Abacaxi.Containers
 
                         _state = _state & StorageState.ValueMask | StorageState.HasManyChildrenInAHashTable;
                         subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _children = new[]
+                        _childrenObj = new Dictionary<TKey, Mash<TKey, TValue>>
                         {
-                            new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
-                            array5[0],
-                            array5[1],
-                            array5[2],
-                            array5[3],
-                            array5[4]
+                            { array5[0].Key, array5[0].Value },
+                            { array5[1].Key, array5[1].Value },
+                            { array5[2].Key, array5[2].Value },
+                            { array5[3].Key, array5[3].Value },
+                            { array5[4].Key, array5[4].Value },
+                            { key, subMash }
                         };
-
+                        
                         return subMash;
                     case StorageState.HasManyChildrenInAHashTable:
-                        Debug.Assert(_children is IDictionary<TKey, Mash<TKey, TValue>>);
-                        var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _children;
+                        Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
+                        var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _childrenObj;
                         Debug.Assert(dict.Count > 5);
 
                         if (!dict.TryGetValue(key, out subMash))
@@ -279,20 +280,26 @@ namespace Abacaxi.Containers
                 switch (_state & StorageState.ChildrenMask)
                 {
                     case 0:
+                        Debug.Assert(_childrenObj == null);
                         return 0;
                     case StorageState.HasOneChildInATuple:
+                        Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
                         return 1;
                     case StorageState.HasTwoChildrenInKeyValuePairArray:
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                         return 2;
                     case StorageState.HasThreeChildrenInKeyValuePairArray:
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                         return 3;
                     case StorageState.HasFourChildrenInKeyValuePairArray:
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                         return 4;
                     case StorageState.HasFiveChildrenInKeyValuePairArray:
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                         return 5;
                     case StorageState.HasManyChildrenInAHashTable:
-                        Debug.Assert(_children is IDictionary<TKey, Mash<TKey, TValue>>);
-                        var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _children;
+                        Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
+                        var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _childrenObj;
                         Debug.Assert(dict.Count > 5);
                         return dict.Count;
                     default:
@@ -986,15 +993,15 @@ namespace Abacaxi.Containers
                         break;
                     case StorageState.ValueIsOneObject:
                         Debug.Assert(_valueObj == null || _valueObj is TValue);
-                        return (TValue)_valueObj;
+                        return (TValue) _valueObj;
                     case StorageState.ValuesInTwoElementArray:
                         Debug.Assert(_valueObj is TValue[]);
-                        var array = (TValue[])_valueObj;
+                        var array = (TValue[]) _valueObj;
                         Debug.Assert(array.Length == 2);
                         return array[0];
                     case StorageState.ValuesInList:
                         Debug.Assert(_valueObj is IList<TValue>);
-                        var list = (IList<TValue>)_valueObj;
+                        var list = (IList<TValue>) _valueObj;
                         Debug.Assert(list.Count > 2);
                         return list[0];
                     default:
@@ -1022,14 +1029,14 @@ namespace Abacaxi.Containers
                         break;
                     case StorageState.ValuesInTwoElementArray:
                         Debug.Assert(_valueObj is TValue[]);
-                        var array = (TValue[])_valueObj;
+                        var array = (TValue[]) _valueObj;
                         Debug.Assert(array.Length == 2);
                         _ver++;
                         array[0] = value;
                         break;
                     case StorageState.ValuesInList:
                         Debug.Assert(_valueObj is IList<TValue>);
-                        var list = (IList<TValue>)_valueObj;
+                        var list = (IList<TValue>) _valueObj;
                         Debug.Assert(list.Count > 2);
                         _ver++;
                         list[0] = value;
