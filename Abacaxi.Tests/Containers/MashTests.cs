@@ -116,6 +116,14 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        public void GetChild_IsTheSameAs_MashIndexer_Getter()
+        {
+            var mash = new Mash<string, int>();
+            Assert.AreSame(mash["a"], mash.GetChild("a"));
+            Assert.AreSame(mash.GetChild("b"), mash["b"]);
+        }
+
+        [Test]
         public void ChildCount_IsZero_NewMash()
         {
             var mash = new Mash<string, int>();

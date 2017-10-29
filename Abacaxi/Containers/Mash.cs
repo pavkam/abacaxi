@@ -79,239 +79,6 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets the child <see cref="Mash{TKey, TValue}"/> with the specified key.
-        /// </summary>
-        /// <value>
-        /// The child <see cref="Mash{TKey, TValue}"/> associated with the given key.
-        /// </value>
-        /// <param name="key">The key.</param>
-        /// <returns>The child <see cref="Mash{TKey,TValue}"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
-        [NotNull]
-        public Mash<TKey, TValue> this[[NotNull] TKey key]
-        {
-            get
-            {
-                Validate.ArgumentNotNull(nameof(key), key);
-
-                // ReSharper disable once SwitchStatementMissingSomeCases
-                switch (_state & StorageState.ChildrenMask)
-                {
-                    case 0:
-                        Debug.Assert(_childrenObj == null);
-                        _state = _state & StorageState.ValueMask | StorageState.HasOneChildInATuple;
-                        var subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _childrenObj = Tuple.Create(key, subMash);
-                        return subMash;
-
-                    case StorageState.HasOneChildInATuple:
-                        Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
-                        var tuple = (Tuple<TKey, Mash<TKey, TValue>>) _childrenObj;
-                        if (_equalityComparer.Equals(tuple.Item1, key))
-                        {
-                            return tuple.Item2;
-                        }
-
-                        _state = _state & StorageState.ValueMask | StorageState.HasTwoChildrenInKeyValuePairArray;
-                        subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _childrenObj = new[]
-                        {
-                            new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
-                            new KeyValuePair<TKey, Mash<TKey, TValue>>(tuple.Item1, tuple.Item2),
-                        };
-
-                        return subMash;
-                    case StorageState.HasTwoChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        var array2 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                        Debug.Assert(array2.Length == 2);
-
-                        if (_equalityComparer.Equals(array2[0].Key, key))
-                        {
-                            return array2[0].Value;
-                        }
-                        if (_equalityComparer.Equals(array2[1].Key, key))
-                        {
-                            return array2[1].Value;
-                        }
-
-                        _state = _state & StorageState.ValueMask | StorageState.HasThreeChildrenInKeyValuePairArray;
-                        subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _childrenObj = new[]
-                        {
-                            new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
-                            array2[0],
-                            array2[1]
-                        };
-
-                        return subMash;
-                    case StorageState.HasThreeChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        var array3 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                        Debug.Assert(array3.Length == 3);
-
-                        if (_equalityComparer.Equals(array3[0].Key, key))
-                        {
-                            return array3[0].Value;
-                        }
-                        if (_equalityComparer.Equals(array3[1].Key, key))
-                        {
-                            return array3[1].Value;
-                        }
-                        if (_equalityComparer.Equals(array3[2].Key, key))
-                        {
-                            return array3[2].Value;
-                        }
-
-                        _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
-                        subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _childrenObj = new[]
-                        {
-                            new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
-                            array3[0],
-                            array3[1],
-                            array3[2]
-                        };
-
-                        return subMash;
-                    case StorageState.HasFourChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        var array4 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                        Debug.Assert(array4.Length == 4);
-
-                        if (_equalityComparer.Equals(array4[0].Key, key))
-                        {
-                            return array4[0].Value;
-                        }
-                        if (_equalityComparer.Equals(array4[1].Key, key))
-                        {
-                            return array4[1].Value;
-                        }
-                        if (_equalityComparer.Equals(array4[2].Key, key))
-                        {
-                            return array4[2].Value;
-                        }
-                        if (_equalityComparer.Equals(array4[3].Key, key))
-                        {
-                            return array4[3].Value;
-                        }
-
-                        _state = _state & StorageState.ValueMask | StorageState.HasFiveChildrenInKeyValuePairArray;
-                        subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _childrenObj = new[]
-                        {
-                            new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
-                            array4[0],
-                            array4[1],
-                            array4[2],
-                            array4[3]
-                        };
-
-                        return subMash;
-                    case StorageState.HasFiveChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        var array5 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                        Debug.Assert(array5.Length == 5);
-
-                        if (_equalityComparer.Equals(array5[0].Key, key))
-                        {
-                            return array5[0].Value;
-                        }
-                        if (_equalityComparer.Equals(array5[1].Key, key))
-                        {
-                            return array5[1].Value;
-                        }
-                        if (_equalityComparer.Equals(array5[2].Key, key))
-                        {
-                            return array5[2].Value;
-                        }
-                        if (_equalityComparer.Equals(array5[3].Key, key))
-                        {
-                            return array5[3].Value;
-                        }
-                        if (_equalityComparer.Equals(array5[4].Key, key))
-                        {
-                            return array5[4].Value;
-                        }
-
-                        _state = _state & StorageState.ValueMask | StorageState.HasManyChildrenInAHashTable;
-                        subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        _childrenObj = new Dictionary<TKey, Mash<TKey, TValue>>
-                        {
-                            { array5[0].Key, array5[0].Value },
-                            { array5[1].Key, array5[1].Value },
-                            { array5[2].Key, array5[2].Value },
-                            { array5[3].Key, array5[3].Value },
-                            { array5[4].Key, array5[4].Value },
-                            { key, subMash }
-                        };
-                        
-                        return subMash;
-                    case StorageState.HasManyChildrenInAHashTable:
-                        Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
-                        var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _childrenObj;
-                        Debug.Assert(dict.Count > 5);
-
-                        if (!dict.TryGetValue(key, out subMash))
-                        {
-                            subMash = new Mash<TKey, TValue>(_equalityComparer);
-                            dict.Add(key, subMash);
-                        }
-
-                        return subMash;
-                }
-
-                Debug.Fail($"Invalid mash state detected: {_state}.");
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the count of child <see cref="Mash{TKey,TValue}"/>s stored by this instance.
-        /// </summary>
-        /// <value>
-        /// The count of child <see cref="Mash{TKey,TValue}"/>s.
-        /// </value>
-        public int ChildCount
-        {
-            get
-            {
-                // ReSharper disable once SwitchStatementMissingSomeCases
-                switch (_state & StorageState.ChildrenMask)
-                {
-                    case 0:
-                        Debug.Assert(_childrenObj == null);
-                        return 0;
-                    case StorageState.HasOneChildInATuple:
-                        Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
-                        return 1;
-                    case StorageState.HasTwoChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        return 2;
-                    case StorageState.HasThreeChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        return 3;
-                    case StorageState.HasFourChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        return 4;
-                    case StorageState.HasFiveChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        return 5;
-                    case StorageState.HasManyChildrenInAHashTable:
-                        Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
-                        var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _childrenObj;
-                        Debug.Assert(dict.Count > 5);
-                        return dict.Count;
-                    default:
-                        Debug.Fail($"Invalid mash state detected: {_state}.");
-                        break;
-                }
-
-                return 0;
-            }
-        }
-
-        /// <summary>
         /// Returns an enumerator that iterates through the values stored in this <see cref="Mash{TKey,TValue}"/>.
         /// </summary>
         /// <returns>
@@ -1045,6 +812,248 @@ namespace Abacaxi.Containers
                         Debug.Fail($"Invalid mash state detected: {_state}.");
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets the child <see cref="Mash{TKey, TValue}"/> with the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>The child <see cref="Mash{TKey,TValue}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        [NotNull]
+        public Mash<TKey, TValue> GetChild([NotNull] TKey key)
+        {
+            Validate.ArgumentNotNull(nameof(key), key);
+
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            switch (_state & StorageState.ChildrenMask)
+            {
+                case 0:
+                    Debug.Assert(_childrenObj == null);
+                    _state = _state & StorageState.ValueMask | StorageState.HasOneChildInATuple;
+                    var subMash = new Mash<TKey, TValue>(_equalityComparer);
+                    _childrenObj = Tuple.Create(key, subMash);
+                    return subMash;
+
+                case StorageState.HasOneChildInATuple:
+                    Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
+                    var tuple = (Tuple<TKey, Mash<TKey, TValue>>) _childrenObj;
+                    if (_equalityComparer.Equals(tuple.Item1, key))
+                    {
+                        return tuple.Item2;
+                    }
+
+                    _state = _state & StorageState.ValueMask | StorageState.HasTwoChildrenInKeyValuePairArray;
+                    subMash = new Mash<TKey, TValue>(_equalityComparer);
+                    _childrenObj = new[]
+                    {
+                        new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
+                        new KeyValuePair<TKey, Mash<TKey, TValue>>(tuple.Item1, tuple.Item2),
+                    };
+
+                    return subMash;
+                case StorageState.HasTwoChildrenInKeyValuePairArray:
+                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    var array2 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
+                    Debug.Assert(array2.Length == 2);
+
+                    if (_equalityComparer.Equals(array2[0].Key, key))
+                    {
+                        return array2[0].Value;
+                    }
+                    if (_equalityComparer.Equals(array2[1].Key, key))
+                    {
+                        return array2[1].Value;
+                    }
+
+                    _state = _state & StorageState.ValueMask | StorageState.HasThreeChildrenInKeyValuePairArray;
+                    subMash = new Mash<TKey, TValue>(_equalityComparer);
+                    _childrenObj = new[]
+                    {
+                        new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
+                        array2[0],
+                        array2[1]
+                    };
+
+                    return subMash;
+                case StorageState.HasThreeChildrenInKeyValuePairArray:
+                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    var array3 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
+                    Debug.Assert(array3.Length == 3);
+
+                    if (_equalityComparer.Equals(array3[0].Key, key))
+                    {
+                        return array3[0].Value;
+                    }
+                    if (_equalityComparer.Equals(array3[1].Key, key))
+                    {
+                        return array3[1].Value;
+                    }
+                    if (_equalityComparer.Equals(array3[2].Key, key))
+                    {
+                        return array3[2].Value;
+                    }
+
+                    _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
+                    subMash = new Mash<TKey, TValue>(_equalityComparer);
+                    _childrenObj = new[]
+                    {
+                        new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
+                        array3[0],
+                        array3[1],
+                        array3[2]
+                    };
+
+                    return subMash;
+                case StorageState.HasFourChildrenInKeyValuePairArray:
+                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    var array4 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
+                    Debug.Assert(array4.Length == 4);
+
+                    if (_equalityComparer.Equals(array4[0].Key, key))
+                    {
+                        return array4[0].Value;
+                    }
+                    if (_equalityComparer.Equals(array4[1].Key, key))
+                    {
+                        return array4[1].Value;
+                    }
+                    if (_equalityComparer.Equals(array4[2].Key, key))
+                    {
+                        return array4[2].Value;
+                    }
+                    if (_equalityComparer.Equals(array4[3].Key, key))
+                    {
+                        return array4[3].Value;
+                    }
+
+                    _state = _state & StorageState.ValueMask | StorageState.HasFiveChildrenInKeyValuePairArray;
+                    subMash = new Mash<TKey, TValue>(_equalityComparer);
+                    _childrenObj = new[]
+                    {
+                        new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
+                        array4[0],
+                        array4[1],
+                        array4[2],
+                        array4[3]
+                    };
+
+                    return subMash;
+                case StorageState.HasFiveChildrenInKeyValuePairArray:
+                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    var array5 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
+                    Debug.Assert(array5.Length == 5);
+
+                    if (_equalityComparer.Equals(array5[0].Key, key))
+                    {
+                        return array5[0].Value;
+                    }
+                    if (_equalityComparer.Equals(array5[1].Key, key))
+                    {
+                        return array5[1].Value;
+                    }
+                    if (_equalityComparer.Equals(array5[2].Key, key))
+                    {
+                        return array5[2].Value;
+                    }
+                    if (_equalityComparer.Equals(array5[3].Key, key))
+                    {
+                        return array5[3].Value;
+                    }
+                    if (_equalityComparer.Equals(array5[4].Key, key))
+                    {
+                        return array5[4].Value;
+                    }
+
+                    _state = _state & StorageState.ValueMask | StorageState.HasManyChildrenInAHashTable;
+                    subMash = new Mash<TKey, TValue>(_equalityComparer);
+                    _childrenObj = new Dictionary<TKey, Mash<TKey, TValue>>
+                    {
+                        {array5[0].Key, array5[0].Value},
+                        {array5[1].Key, array5[1].Value},
+                        {array5[2].Key, array5[2].Value},
+                        {array5[3].Key, array5[3].Value},
+                        {array5[4].Key, array5[4].Value},
+                        {key, subMash}
+                    };
+
+                    return subMash;
+                case StorageState.HasManyChildrenInAHashTable:
+                    Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
+                    var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _childrenObj;
+                    Debug.Assert(dict.Count > 5);
+
+                    if (!dict.TryGetValue(key, out subMash))
+                    {
+                        subMash = new Mash<TKey, TValue>(_equalityComparer);
+                        dict.Add(key, subMash);
+                    }
+
+                    return subMash;
+            }
+
+            Debug.Fail($"Invalid mash state detected: {_state}.");
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the child <see cref="Mash{TKey, TValue}"/> with the specified key.
+        /// </summary>
+        /// <value>
+        /// The child <see cref="Mash{TKey, TValue}"/> associated with the given key.
+        /// </value>
+        /// <remarks>
+        /// This indexer is equivalent to <see cref="GetChild"/> method.
+        /// </remarks>
+        /// <param name="key">The key.</param>
+        /// <returns>The child <see cref="Mash{TKey,TValue}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        [NotNull]
+        public Mash<TKey, TValue> this[[NotNull] TKey key] => GetChild(key);
+
+        /// <summary>
+        /// Gets the count of child <see cref="Mash{TKey,TValue}"/>s stored by this instance.
+        /// </summary>
+        /// <value>
+        /// The count of child <see cref="Mash{TKey,TValue}"/>s.
+        /// </value>
+        public int ChildCount
+        {
+            get
+            {
+                // ReSharper disable once SwitchStatementMissingSomeCases
+                switch (_state & StorageState.ChildrenMask)
+                {
+                    case 0:
+                        Debug.Assert(_childrenObj == null);
+                        return 0;
+                    case StorageState.HasOneChildInATuple:
+                        Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
+                        return 1;
+                    case StorageState.HasTwoChildrenInKeyValuePairArray:
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        return 2;
+                    case StorageState.HasThreeChildrenInKeyValuePairArray:
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        return 3;
+                    case StorageState.HasFourChildrenInKeyValuePairArray:
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        return 4;
+                    case StorageState.HasFiveChildrenInKeyValuePairArray:
+                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        return 5;
+                    case StorageState.HasManyChildrenInAHashTable:
+                        Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
+                        var dict = (IDictionary<TKey, Mash<TKey, TValue>>)_childrenObj;
+                        Debug.Assert(dict.Count > 5);
+                        return dict.Count;
+                    default:
+                        Debug.Fail($"Invalid mash state detected: {_state}.");
+                        break;
+                }
+
+                return 0;
             }
         }
     }
