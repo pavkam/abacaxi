@@ -206,9 +206,9 @@ namespace Abacaxi
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregator"/> or <paramref name="comparer"/> are null.</exception>
         public static bool ContainsTwoElementsThatAggregateTo<T>(
-            [NotNull] this IEnumerable<T> sequence, 
-            [NotNull] Aggregator<T> aggregator, 
-            [NotNull] IComparer<T> comparer, 
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] Aggregator<T> aggregator,
+            [NotNull] IComparer<T> comparer,
             T target)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -309,7 +309,8 @@ namespace Abacaxi
             foreach (var item in sequence)
             {
                 if (item < minInSequence || item > maxInSequence)
-                    throw new InvalidOperationException($"The sequence of integers contains element {item} which is outside of the given {minInSequence}..{maxInSequence} range.");
+                    throw new InvalidOperationException(
+                        $"The sequence of integers contains element {item} which is outside of the given {minInSequence}..{maxInSequence} range.");
 
                 appearances[item - minInSequence]++;
             }
@@ -369,7 +370,8 @@ namespace Abacaxi
 
             if (stack.Count > 0)
             {
-                throw new InvalidOperationException($"There are {stack.Count} number of blocks that have not been closed.");
+                throw new InvalidOperationException(
+                    $"There are {stack.Count} number of blocks that have not been closed.");
             }
 
             if (currentList.Count > 0)
@@ -392,8 +394,8 @@ namespace Abacaxi
         [NotNull]
         [ItemNotNull]
         public static IEnumerable<T[]> ExtractNestedBlocks<T>(
-            [NotNull] this IEnumerable<T> sequence, 
-            T openBracket, 
+            [NotNull] this IEnumerable<T> sequence,
+            T openBracket,
             T closeBracket,
             [NotNull] IEqualityComparer<T> comparer)
         {
@@ -476,7 +478,7 @@ namespace Abacaxi
             [NotNull] this IList<T> sequence,
             [NotNull] Aggregator<T> aggregator,
             [NotNull] Aggregator<T> disaggregator,
-            [NotNull] IComparer<T> comparer, 
+            [NotNull] IComparer<T> comparer,
             T target)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -484,7 +486,8 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(disaggregator), disaggregator);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
-            return FindSubsequencesWithGivenAggregatedValueIterate(sequence, aggregator, disaggregator, comparer, target);
+            return FindSubsequencesWithGivenAggregatedValueIterate(sequence, aggregator, disaggregator, comparer,
+                target);
         }
 
         [NotNull]
@@ -541,8 +544,8 @@ namespace Abacaxi
         /// <exception cref="InvalidOperationException">Thrown if one or more sequences contain unsorted items.</exception>
         [NotNull]
         public static IEnumerable<T> Interleave<T>(
-            [NotNull] IComparer<T> comparer, 
-            [NotNull] IEnumerable<T> sequence, 
+            [NotNull] IComparer<T> comparer,
+            [NotNull] IEnumerable<T> sequence,
             [NotNull] [ItemNotNull] params IEnumerable<T>[] sequences)
         {
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -626,11 +629,11 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
         public static int BinarySearch<T>(
-            [NotNull] this IList<T> sequence, 
-            int startIndex, 
-            int length, 
-            T item, 
-            [NotNull] IComparer<T> comparer, 
+            [NotNull] this IList<T> sequence,
+            int startIndex,
+            int length,
+            T item,
+            [NotNull] IComparer<T> comparer,
             bool ascending = true)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
@@ -710,7 +713,8 @@ namespace Abacaxi
         /// <returns>The longest common sub-sequence shared by both sequences.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="otherSequence"/> are <c>null</c>.</exception>
         [NotNull]
-        public static T[] GetLongestCommonSubSequence<T>([NotNull] this IList<T> sequence, [NotNull] IList<T> otherSequence)
+        public static T[] GetLongestCommonSubSequence<T>([NotNull] this IList<T> sequence,
+            [NotNull] IList<T> otherSequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(otherSequence), otherSequence);
@@ -796,7 +800,7 @@ namespace Abacaxi
 
                 return result;
             }
-           
+
             return sequence.ToArray();
         }
 
@@ -809,7 +813,8 @@ namespace Abacaxi
         /// <returns>A new dictionary where each key is an item form the <paramref name="sequence"/> and associated values are the frequencies.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         [NotNull]
-        public static IDictionary<T, int> GetItemFrequencies<T>([NotNull] this IEnumerable<T> sequence, [NotNull] IEqualityComparer<T> comparer)
+        public static IDictionary<T, int> GetItemFrequencies<T>([NotNull] this IEnumerable<T> sequence,
+            [NotNull] IEqualityComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -842,7 +847,7 @@ namespace Abacaxi
         /// <returns><c>true</c> if the a new key/value pair was added; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="dict"/> or <paramref name="updateFunc"/> are <c>null</c>.</exception>
         public static bool AddOrUpdate<TKey, TValue>(
-            [NotNull] this IDictionary<TKey, TValue> dict, 
+            [NotNull] this IDictionary<TKey, TValue> dict,
             TKey key, TValue value,
             [NotNull] Func<TValue, TValue> updateFunc)
         {
@@ -996,7 +1001,8 @@ namespace Abacaxi
         /// <returns>A new list which contains the selected values.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="sequence"/> are <c>null</c>.</exception>
         [NotNull]
-        public static List<TResult> ToList<T, TResult>([NotNull] this IEnumerable<T> sequence, [NotNull] Func<T, TResult> selector)
+        public static List<TResult> ToList<T, TResult>([NotNull] this IEnumerable<T> sequence,
+            [NotNull] Func<T, TResult> selector)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(selector), selector);
@@ -1036,7 +1042,8 @@ namespace Abacaxi
         /// <returns>A new list which contains the selected values.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="sequence"/> are <c>null</c>.</exception>
         [NotNull]
-        public static List<TResult> ToList<T, TResult>([NotNull] this IEnumerable<T> sequence, [NotNull] Func<T, int, TResult> selector)
+        public static List<TResult> ToList<T, TResult>([NotNull] this IEnumerable<T> sequence,
+            [NotNull] Func<T, int, TResult> selector)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(selector), selector);
@@ -1159,7 +1166,7 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> or <paramref name="separator"/> are <c>null</c>.</exception>
         [NotNull]
         public static string ToString<T, TResult>(
-            [NotNull] this IEnumerable<T> sequence, 
+            [NotNull] this IEnumerable<T> sequence,
             [NotNull] Func<T, TResult> selector,
             [NotNull] string separator)
         {
@@ -1227,7 +1234,7 @@ namespace Abacaxi
         /// <exception cref="InvalidOperationException">Thrown if the <paramref name="sequence"/> is empty and <typeparamref name="T"/> is a value type.</exception>
         [CanBeNull]
         public static T Min<T, TKey>(
-            [NotNull] this IEnumerable<T> sequence, 
+            [NotNull] this IEnumerable<T> sequence,
             [NotNull] Func<T, TKey> selector,
             [NotNull] IComparer<TKey> comparer)
         {
@@ -1236,7 +1243,7 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
             var item = default(T);
-            using(var enumerator = sequence.GetEnumerator())
+            using (var enumerator = sequence.GetEnumerator())
             {
                 TKey min;
                 if (enumerator.MoveNext())

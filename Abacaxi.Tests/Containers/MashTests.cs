@@ -116,63 +116,63 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void GetChild_IsTheSameAs_MashIndexer_Getter()
+        public void GetLinked_IsTheSameAs_MashIndexer_Getter()
         {
             var mash = new Mash<string, int>();
-            Assert.AreSame(mash["a"], mash.GetChild("a"));
-            Assert.AreSame(mash.GetChild("b"), mash["b"]);
+            Assert.AreSame(mash["a"], mash.GetLinked("a"));
+            Assert.AreSame(mash.GetLinked("b"), mash["b"]);
         }
 
         [Test]
-        public void ChildCount_IsZero_NewMash()
+        public void LinkedCount_IsZero_NewMash()
         {
             var mash = new Mash<string, int>();
-            Assert.AreEqual(0, mash.ChildCount);
+            Assert.AreEqual(0, mash.LinkedCount);
         }
 
         [Test]
         [SuppressMessage("ReSharper", "UnusedVariable")]
-        public void ChildCount_IsIncremented_WhenASubMashIsAccessed()
+        public void LinkedCount_IsIncremented_WhenASubMashIsAccessed()
         {
             var mash = new Mash<string, int>();
             var sub = mash["A"];
-            Assert.AreEqual(1, mash.ChildCount);
+            Assert.AreEqual(1, mash.LinkedCount);
         }
 
         [Test]
         [SuppressMessage("ReSharper", "NotAccessedVariable")]
         [SuppressMessage("ReSharper", "RedundantAssignment")]
-        public void ChildCount_IsNotIncremented_WhenExistingSubMashIsAccessed()
+        public void LinkedCount_IsNotIncremented_WhenExistingSubMashIsAccessed()
         {
             var mash = new Mash<string, int>();
             var sub = mash["A"];
             sub = mash["A"];
 
-            Assert.AreEqual(1, mash.ChildCount);
+            Assert.AreEqual(1, mash.LinkedCount);
         }
 
         [Test]
         [SuppressMessage("ReSharper", "UnusedVariable")]
-        public void ChildCount_IsProperlyTranslatedInternalState()
+        public void LinkedCount_IsProperlyTranslatedInternalState()
         {
             var mash = new Mash<string, int>();
             var sub1 = mash["1"];
-            Assert.AreEqual(1, mash.ChildCount);
+            Assert.AreEqual(1, mash.LinkedCount);
 
             var sub2 = mash["2"];
-            Assert.AreEqual(2, mash.ChildCount);
+            Assert.AreEqual(2, mash.LinkedCount);
 
             var sub3 = mash["3"];
-            Assert.AreEqual(3, mash.ChildCount);
+            Assert.AreEqual(3, mash.LinkedCount);
 
             var sub4 = mash["4"];
-            Assert.AreEqual(4, mash.ChildCount);
+            Assert.AreEqual(4, mash.LinkedCount);
 
             var sub5 = mash["5"];
-            Assert.AreEqual(5, mash.ChildCount);
+            Assert.AreEqual(5, mash.LinkedCount);
 
             var sub6 = mash["6"];
-            Assert.AreEqual(6, mash.ChildCount);
+            Assert.AreEqual(6, mash.LinkedCount);
         }
 
         [Test]
@@ -232,9 +232,9 @@ namespace Abacaxi.Tests.Containers
         public void Implicit_GetEnumerator_FunctionsAsExpected()
         {
             var result = new List<int>();
-            foreach (var i in (IEnumerable)_threeMash)
+            foreach (var i in (IEnumerable) _threeMash)
             {
-                result.Add((int)i);
+                result.Add((int) i);
             }
 
             TestHelper.AssertSequence(result, 1, 2, 3);
@@ -828,6 +828,364 @@ namespace Abacaxi.Tests.Containers
         {
             _threeMash.Value = 10;
             TestHelper.AssertSequence(_threeMash, 10, 2, 3);
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Link_ThrowsException_IfKeyIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _emptyMash.Link(null, _threeMash));
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Link_ThrowsException_IfMashIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _emptyMash.Link("a", null));
+        }
+
+        [Test]
+        public void Link_AddsTheMash_IfNew()
+        {
+            _emptyMash.Link("a", _threeMash);
+
+            Assert.AreSame(_threeMash, _emptyMash["a"]);
+        }
+
+        [Test]
+        public void Link_IncrementsLinkedCount_IfAdded()
+        {
+            _emptyMash.Link("a", _threeMash);
+
+            Assert.AreEqual(1, _emptyMash.LinkedCount);
+        }
+
+        [Test]
+        public void Link_DoesNotIncrementLinkedCount_IfReplaced()
+        {
+            _emptyMash.Link("a", _threeMash);
+            _emptyMash.Link("a", _twoMash);
+
+            Assert.AreEqual(1, _emptyMash.LinkedCount);
+        }
+
+        [Test]
+        public void Link_ReplacesTheMash_IfExists()
+        {
+            _emptyMash.Link("a", _threeMash);
+            _emptyMash.Link("a", _twoMash);
+
+            Assert.AreSame(_twoMash, _emptyMash["a"]);
+        }
+
+        [Test]
+        public void Link_MaintainsState_OnAdd()
+        {
+            var mash = new Mash<string, int>();
+            var m1 = new Mash<string, int>();
+            var m2 = new Mash<string, int>();
+            var m3 = new Mash<string, int>();
+            var m4 = new Mash<string, int>();
+            var m5 = new Mash<string, int>();
+            var m6 = new Mash<string, int>();
+
+            mash.Link("1", m1);
+            Assert.AreSame(m1, mash["1"]);
+
+            mash.Link("2", m2);
+            Assert.AreSame(m1, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+
+            mash.Link("3", m3);
+            Assert.AreSame(m1, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+
+            mash.Link("4", m4);
+            Assert.AreSame(m1, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+
+            mash.Link("5", m5);
+            Assert.AreSame(m1, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+
+            mash.Link("6", m6);
+            Assert.AreSame(m1, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+            Assert.AreSame(m6, mash["6"]);
+        }
+
+        [Test]
+        public void Link_MaintainsState_OnReplace_1()
+        {
+            var mash = new Mash<string, int>();
+            var m1 = new Mash<string, int>();
+            var shunt = new Mash<string, int>();
+
+            mash.Link("1", m1);
+            mash.Link("1", shunt);
+            Assert.AreSame(shunt, mash["1"]);
+        }
+
+        [Test]
+        public void Link_MaintainsState_OnReplace_2()
+        {
+            var mash = new Mash<string, int>();
+            var m1 = new Mash<string, int>();
+            var m2 = new Mash<string, int>();
+            var shunt = new Mash<string, int>();
+
+            mash.Link("1", m1);
+            mash.Link("2", m2);
+            mash.Link("1", shunt);
+            Assert.AreSame(shunt, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+            mash.Link("2", shunt);
+            Assert.AreSame(shunt, mash["2"]);
+        }
+
+        [Test]
+        public void Link_MaintainsState_OnReplace_3()
+        {
+            var mash = new Mash<string, int>();
+            var m1 = new Mash<string, int>();
+            var m2 = new Mash<string, int>();
+            var m3 = new Mash<string, int>();
+            var shunt = new Mash<string, int>();
+
+            mash.Link("1", m1);
+            mash.Link("2", m2);
+            mash.Link("3", m3);
+            mash.Link("1", shunt);
+            Assert.AreSame(shunt, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            mash.Link("2", shunt);
+            Assert.AreSame(shunt, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m3, mash["3"]);
+            mash.Link("3", shunt);
+            Assert.AreSame(shunt, mash["3"]);
+        }
+
+        [Test]
+        public void Link_MaintainsState_OnReplace_4()
+        {
+            var mash = new Mash<string, int>();
+            var m1 = new Mash<string, int>();
+            var m2 = new Mash<string, int>();
+            var m3 = new Mash<string, int>();
+            var m4 = new Mash<string, int>();
+            var shunt = new Mash<string, int>();
+
+            mash.Link("1", m1);
+            mash.Link("2", m2);
+            mash.Link("3", m3);
+            mash.Link("4", m4);
+            mash.Link("1", shunt);
+            Assert.AreSame(shunt, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            mash.Link("2", shunt);
+            Assert.AreSame(shunt, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            mash.Link("3", shunt);
+            Assert.AreSame(shunt, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            mash.Link("4", shunt);
+            Assert.AreSame(shunt, mash["4"]);
+        }
+
+        [Test]
+        public void Link_MaintainsState_OnReplace_5()
+        {
+            var mash = new Mash<string, int>();
+            var m1 = new Mash<string, int>();
+            var m2 = new Mash<string, int>();
+            var m3 = new Mash<string, int>();
+            var m4 = new Mash<string, int>();
+            var m5 = new Mash<string, int>();
+            var shunt = new Mash<string, int>();
+
+            mash.Link("1", m1);
+            mash.Link("2", m2);
+            mash.Link("3", m3);
+            mash.Link("4", m4);
+            mash.Link("5", m5);
+            mash.Link("1", shunt);
+            Assert.AreSame(shunt, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+            mash.Link("2", shunt);
+            Assert.AreSame(shunt, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+            mash.Link("3", shunt);
+            Assert.AreSame(shunt, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+            mash.Link("4", shunt);
+            Assert.AreSame(shunt, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+            mash.Link("5", shunt);
+            Assert.AreSame(shunt, mash["5"]);
+        }
+
+        [Test]
+        public void Link_MaintainsState_OnReplace_6()
+        {
+            var mash = new Mash<string, int>();
+            var m1 = new Mash<string, int>();
+            var m2 = new Mash<string, int>();
+            var m3 = new Mash<string, int>();
+            var m4 = new Mash<string, int>();
+            var m5 = new Mash<string, int>();
+            var m6 = new Mash<string, int>();
+            var shunt = new Mash<string, int>();
+
+            mash.Link("1", m1);
+            mash.Link("2", m2);
+            mash.Link("3", m3);
+            mash.Link("4", m4);
+            mash.Link("5", m5);
+            mash.Link("6", m6);
+            mash.Link("1", shunt);
+            Assert.AreSame(shunt, mash["1"]);
+            Assert.AreSame(m2, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+            Assert.AreSame(m6, mash["6"]);
+            mash.Link("2", shunt);
+            Assert.AreSame(shunt, mash["2"]);
+            Assert.AreSame(m3, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+            Assert.AreSame(m6, mash["6"]);
+            mash.Link("3", shunt);
+            Assert.AreSame(shunt, mash["3"]);
+            Assert.AreSame(m4, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+            Assert.AreSame(m6, mash["6"]);
+            mash.Link("4", shunt);
+            Assert.AreSame(shunt, mash["4"]);
+            Assert.AreSame(m5, mash["5"]);
+            Assert.AreSame(m6, mash["6"]);
+            mash.Link("5", shunt);
+            Assert.AreSame(shunt, mash["5"]);
+            Assert.AreSame(m6, mash["6"]);
+            mash.Link("6", shunt);
+            Assert.AreSame(shunt, mash["6"]);
+        }
+
+
+
+
+        [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Unlink_ThrowsException_IfKeyIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _emptyMash.Unlink(null));
+        }
+
+        [Test]
+        public void Unlink_ReturnsFalse_IfNothingRemoved()
+        {
+            _emptyMash.Link("a", _threeMash);
+
+            Assert.IsFalse(_emptyMash.Unlink("b"));
+        }
+
+        [Test]
+        public void Unlink_ReturnsTrue_IfRemoved()
+        {
+            _emptyMash.Link("a", _threeMash);
+
+            Assert.IsTrue(_emptyMash.Unlink("a"));
+        }
+
+        [Test]
+        public void Unlink_DecrementsLinkedCount_IfRemoved()
+        {
+            _emptyMash.Link("a", _threeMash);
+            _emptyMash.Unlink("a");
+
+            Assert.AreEqual(0, _emptyMash.LinkedCount);
+        }
+
+        [Test]
+        public void Unlink_DoesNotDecrementLinkedCount_IfNotRemoved()
+        {
+            _emptyMash.Link("a", _threeMash);
+            _emptyMash.Unlink("b");
+
+            Assert.AreEqual(1, _emptyMash.LinkedCount);
+        }
+
+        [Test]
+        public void Unlink_ActuallyRemovesTheItem()
+        {
+            _emptyMash.Link("a", _threeMash);
+            _emptyMash.Unlink("a");
+
+            Assert.AreNotSame(_threeMash, _emptyMash["a"]);
+        }
+
+        [TestCase(0, 6)]
+        [TestCase(1, 6)]
+        [TestCase(2, 6)]
+        [TestCase(3, 6)]
+        [TestCase(4, 6)]
+        [TestCase(5, 6)]
+        [TestCase(0, 5)]
+        [TestCase(1, 5)]
+        [TestCase(2, 5)]
+        [TestCase(3, 5)]
+        [TestCase(4, 5)]
+        [TestCase(0, 4)]
+        [TestCase(1, 4)]
+        [TestCase(2, 4)]
+        [TestCase(3, 4)]
+        [TestCase(0, 3)]
+        [TestCase(1, 3)]
+        [TestCase(2, 3)]
+        [TestCase(0, 2)]
+        [TestCase(1, 2)]
+        [TestCase(0, 1)]
+        public void Unlink_RemovesTheExpectedElement(int index, int count)
+        {
+            var mash = new Mash<int, string>();
+            var ms = new Mash<int, string>[count];
+            for (var i = 0; i < count; i++)
+            {
+                ms[i] = new Mash<int, string>();
+                mash.Link(i, ms[i]);
+            }
+
+            mash.Unlink(index);
+
+            for (var i = 0; i < count; i++)
+            {
+                if (i != index)
+                {
+                    Assert.AreSame(ms[i], mash.GetLinked(i));
+                }
+            }
+
+            Assert.AreNotSame(ms[index], mash.GetLinked(index));
         }
     }
 }
