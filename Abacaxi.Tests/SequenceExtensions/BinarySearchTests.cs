@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
@@ -23,6 +25,7 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class BinarySearchTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void BinarySearch_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -58,6 +61,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void BinarySearch_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>

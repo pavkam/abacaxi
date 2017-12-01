@@ -27,6 +27,7 @@ namespace Abacaxi.Tests.Graphs
     {
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_ForNullRelationships()
         {
             Assert.Throws<ArgumentNullException>(() => new LiteralGraph(null, true));

@@ -23,6 +23,7 @@ namespace Abacaxi.Tests.StringExtensions
     public sealed class ReverseTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Reverse_ThrowsException_IfStringIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => ((string)null).Reverse());

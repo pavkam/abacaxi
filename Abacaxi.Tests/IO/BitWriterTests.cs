@@ -54,6 +54,7 @@ namespace Abacaxi.Tests.IO
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Expect_Constructor_ThrowsException_ForNullStream()
         {
             Assert.Throws<ArgumentNullException>(() => new BitWriter(null, Encoding.Default));
@@ -69,6 +70,7 @@ namespace Abacaxi.Tests.IO
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Expect_Constructor_ThrowsException_ForNullEncoding()
         {
             var readOnlyStream = new MemoryStream(new byte[] { }, false);
@@ -294,6 +296,7 @@ namespace Abacaxi.Tests.IO
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Expect_WriteBytes1_ThrowsException_IfBytesIsNull()
         {
             Encode(Encoding.UTF8, bitEncoder =>
@@ -359,6 +362,7 @@ namespace Abacaxi.Tests.IO
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Expect_WriteBytes2_ThrowsException_IfBytesIsNull()
         {
             Encode(Encoding.UTF8, bitEncoder =>
@@ -735,6 +739,7 @@ namespace Abacaxi.Tests.IO
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Expect_WriteString_ThrowsException_ForNullValue()
         {
             Encode(Encoding.UTF8, bitEncoder =>
