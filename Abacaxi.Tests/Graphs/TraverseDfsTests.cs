@@ -215,5 +215,48 @@ namespace Abacaxi.Tests.Graphs
 
             Assert.AreEqual(expected, string.Join(",", result));
         }
+
+
+
+        [TestCase("A-1-B,A-1-C", "(),A >=1=> B,A >=1=> C")]
+        [TestCase("A-1-B,C-1-D", "(),A >=1=> B")]
+        [TestCase("A-1-B,A-1-D,B-1-C,C-1-D,C-1-E", "(),A >=1=> B,B >=1=> C,C >=1=> D,C >=1=> E")]
+        [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", "(),A >=1=> B,B >=1=> E,E >=1=> G,B >=1=> F,A >=1=> C,A >=1=> D")]
+        public void TraverseDfs_SelectsTheExpectedEdges_ForUndirectedGraph(string relationships, string expected)
+        {
+            var graph = new LiteralGraph(relationships, true);
+            var result = new List<string>();
+
+            graph.TraverseDfs('A', node =>
+            {
+                Assert.IsNotNull(node);
+                result.Add(node.EntryEdge != null ? $"{node.EntryEdge}" : "()");
+                return true;
+            }, True, (from, to) => true);
+
+            var actual = string.Join(",", result);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase("A>1>A", "()")]
+        [TestCase("A>1>B,B>1>C,C>1>A", "(),A >=1=> B,B >=1=> C")]
+        [TestCase("A>1>B,C>1>A,C>1>B", "(),A >=1=> B")]
+        [TestCase("A>1>B,B>1>C,C>1>A,D>1>B,C>1>D", "(),A >=1=> B,B >=1=> C,C >=1=> D")]
+        public void TraverseDfs_SelectsTheExpectedEdges_ForDirectedGraph(string relationships, string expected)
+        {
+            var graph = new LiteralGraph(relationships, true);
+            var result = new List<string>();
+
+            graph.TraverseDfs('A', node =>
+            {
+                Assert.IsNotNull(node);
+                result.Add(node.EntryEdge != null ? $"{node.EntryEdge}" : "()");
+                return true;
+            }, True, (from, to) => true);
+
+            var actual = string.Join(",", result);
+            Assert.AreEqual(expected, actual);
+        }
+
     }
 }
