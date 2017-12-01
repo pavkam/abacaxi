@@ -63,7 +63,7 @@ namespace Abacaxi.Tests.Graphs
         {
             var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
 
-            Assert.Throws<ArgumentException>(() => graph.GetEdges(null));
+            Assert.Throws<ArgumentNullException>(() => graph.GetEdges(null));
         }
 
         [Test]

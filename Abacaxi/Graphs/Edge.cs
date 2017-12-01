@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System;
+
 namespace Abacaxi.Graphs
 {
     using JetBrains.Annotations;
@@ -31,6 +33,7 @@ namespace Abacaxi.Graphs
         /// <value>
         /// From starting vertex.
         /// </value>
+        [NotNull]
         public TVertex FromVertex { get; }
 
         /// <summary>
@@ -39,6 +42,7 @@ namespace Abacaxi.Graphs
         /// <value>
         /// The connected vertex.
         /// </value>
+        [NotNull]
         public TVertex ToVertex { get; }
 
         /// <summary>
@@ -55,9 +59,12 @@ namespace Abacaxi.Graphs
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The second vertex.</param>
         /// <param name="weight">The weight of the edge.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
-        public Edge(TVertex fromVertex, TVertex toVertex, double weight = 1.0)
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="weight"/> is less than zero.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="fromVertex"/> or <paramref name="toVertex"/> is <c>null</c>.</exception>
+        public Edge([NotNull] TVertex fromVertex, [NotNull] TVertex toVertex, double weight = 1.0)
         {
+            Validate.ArgumentNotNull(nameof(fromVertex), fromVertex);
+            Validate.ArgumentNotNull(nameof(toVertex), toVertex);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(weight), weight);
 
             FromVertex = fromVertex;
@@ -95,8 +102,8 @@ namespace Abacaxi.Graphs
         public override int GetHashCode()
         {
             var hashCode = 17;
-            hashCode = hashCode * 23 + ToVertex?.GetHashCode() ?? 0;
-            hashCode = hashCode * 23 + FromVertex?.GetHashCode() ?? 0;
+            hashCode = hashCode * 23 + ToVertex.GetHashCode();
+            hashCode = hashCode * 23 + FromVertex.GetHashCode();
             hashCode = hashCode * 23 + Weight.GetHashCode();
 
             return hashCode;

@@ -261,7 +261,7 @@ namespace Abacaxi.Graphs
         /// <value>
         /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
         /// </value>
-        public override bool IsReadOnly => true;
+        public override bool IsReadOnly { get; } = true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LiteralGraph"/> class.

@@ -306,5 +306,63 @@ namespace Abacaxi.Tests.Containers
                 Assert.Throws<InvalidOperationException>(() => enumerator.MoveNext());
             }
         }
+
+        [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void CheckAndMerge_ThrowsException_IfObject1IsNull()
+        {
+            var set = new DisjointSet<string>();
+            Assert.Throws<ArgumentNullException>(() => set.CheckAndMerge(null, "o2"));
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void CheckAndMerge_ThrowsException_IfObject2IsNull()
+        {
+            var set = new DisjointSet<string>();
+            Assert.Throws<ArgumentNullException>(() => set.CheckAndMerge("o1", null));
+        }
+
+        [Test]
+        public void CheckAndMerge_ReturnsTrue_IfBothObjectsAreInTheSameSet()
+        {
+            var set = new DisjointSet<string>();
+            set.Merge("1", "2");
+
+            Assert.IsTrue(set.CheckAndMerge("1", "2"));
+        }
+
+        [Test]
+        public void CheckAndMerge_ReturnsFalse_IfBothObjectsAreInDifferentSets()
+        {
+            var set = new DisjointSet<string>();
+            set.Merge("1");
+            set.Merge("2");
+
+            Assert.IsFalse(set.CheckAndMerge("1", "2"));
+        }
+
+        [Test]
+        public void CheckAndMerge_MergesTheSets_IfRequired()
+        {
+            var set = new DisjointSet<string>();
+            set.CheckAndMerge("1", "2");
+
+            Assert.AreSame(set["1"], set["2"]);
+        }
+
+        [Test]
+        public void CheckAndMerge_SelectsTheHeaviestSet_ForMerging()
+        {
+            var set = new DisjointSet<string>();
+            var expectedRoot = set.Merge("1", "2");
+            set.Merge("3");
+
+            set.CheckAndMerge("2", "3");
+
+            Assert.AreSame(expectedRoot, set["1"]);
+            Assert.AreSame(expectedRoot, set["2"]);
+            Assert.AreSame(expectedRoot, set["3"]);
+        }
     }
 }

@@ -36,6 +36,7 @@ namespace Abacaxi.Graphs
 
         private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, TVertex vertex)
         {
+            Validate.ArgumentNotNull(argumentName, vertex);
             if (!_vertices.Contains(vertex))
             {
                 throw new ArgumentException($"Vertex '{vertex}' is not part of this sub-graph.", nameof(argumentName));
@@ -44,8 +45,9 @@ namespace Abacaxi.Graphs
 
         [NotNull]
         [ItemNotNull]
-        private IEnumerable<Edge<TVertex>> GetEdgesIterate(TVertex vertex)
+        private IEnumerable<Edge<TVertex>> GetEdgesIterate([NotNull] TVertex vertex)
         {
+            Debug.Assert(vertex != null);
             Debug.Assert(_vertices.Contains(vertex));
 
             // ReSharper disable once LoopCanBeConvertedToQuery
@@ -65,7 +67,7 @@ namespace Abacaxi.Graphs
         /// <param name="vertices">The vertices that part of this sub-graph.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="vertices"/> are <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">Thrown if <paramref name="vertices"/> contains at least one vertex that is not contained in <paramref name="graph"/>.</exception>
-        public SubGraph([NotNull] Graph<TVertex> graph, [NotNull] IEnumerable<TVertex> vertices)
+        public SubGraph([NotNull] Graph<TVertex> graph, [NotNull, ItemNotNull] IEnumerable<TVertex> vertices)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
             Validate.ArgumentNotNull(nameof(vertices), vertices);

@@ -35,8 +35,7 @@ namespace Abacaxi.Graphs
         private sealed class PathNode
         {
             public TVertex Vertex;
-            [CanBeNull]
-            public PathNode Parent;
+            [CanBeNull] public PathNode Parent;
             public double TotalCostFromStart;
             public double PotentialCostToDestination;
         }
@@ -56,6 +55,17 @@ namespace Abacaxi.Graphs
             public int EntryTime { get; set; }
             public int ExitTime { get; set; }
         }
+
+        private static int CompareEdgesByWeight(Edge<TVertex> a, Edge<TVertex> b)
+        {
+            Debug.Assert(a != null);
+            Debug.Assert(b != null);
+
+            return a.Weight.CompareTo(a.Weight);
+        }
+
+        private static IComparer<Edge<TVertex>> _edgesByWeightComparer =
+            Comparer<Edge<TVertex>>.Create(CompareEdgesByWeight);
 
         private bool TraverseDfs(
             [NotNull] DfsNode vertexNode,
@@ -98,9 +108,11 @@ namespace Abacaxi.Graphs
                     };
 
                     breakRequested =
-                        !TraverseDfs(visitedNode, ref time, visitedNodes, handleVertexVisited, handleVertexCompleted, handleCycle);
+                        !TraverseDfs(visitedNode, ref time, visitedNodes, handleVertexVisited, handleVertexCompleted,
+                            handleCycle);
                 }
-                else if ((IsDirected || visitedNode != vertexNode.Parent) && visitedNode.EntryTime <= vertexNode.EntryTime)
+                else if ((IsDirected || visitedNode != vertexNode.Parent) &&
+                         visitedNode.EntryTime <= vertexNode.EntryTime)
                 {
                     if (!handleCycle(vertexNode, visitedNode))
                     {
@@ -129,6 +141,7 @@ namespace Abacaxi.Graphs
             /// <value>
             /// The vertex.
             /// </value>
+            [NotNull]
             TVertex Vertex { get; }
 
             /// <summary>
@@ -161,6 +174,7 @@ namespace Abacaxi.Graphs
             /// <value>
             /// The vertex.
             /// </value>
+            [NotNull]
             TVertex Vertex { get; }
 
             /// <summary>
@@ -240,16 +254,18 @@ namespace Abacaxi.Graphs
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The destination vertex.</param>
         /// <returns>The potential total cost.</returns>
-        public abstract double GetPotentialWeight(TVertex fromVertex, TVertex toVertex);
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="fromVertex"/> or <paramref name="toVertex"/> is <c>null</c>.</exception>
+        public abstract double GetPotentialWeight([NotNull] TVertex fromVertex, [NotNull] TVertex toVertex);
 
         /// <summary>
         /// Gets the edges for a given <paramref name="vertex"/>.
         /// </summary>
         /// <param name="vertex">The vertex to get the edges for.</param>
         /// <returns>A sequence of edges connected to the given <paramref name="vertex"/></returns>
-        /// <exception cref="ArgumentException">The <paramref name="vertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="vertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vertex"/> is <c>null</c>.</exception>
         [NotNull, ItemNotNull]
-        public abstract IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex);
+        public abstract IEnumerable<Edge<TVertex>> GetEdges([NotNull] TVertex vertex);
 
         /// <summary>
         /// Returns an enumerator that iterates all vertices in the graph.
@@ -275,10 +291,12 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="handleVertexCompleted">The function called when a vertex is completed.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
-        public virtual void TraverseBfs([NotNull] TVertex startVertex, [NotNull] Predicate<IBfsNode> handleVertexCompleted)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="startVertex"/> or <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
+        public virtual void TraverseBfs([NotNull] TVertex startVertex,
+            [NotNull] Predicate<IBfsNode> handleVertexCompleted)
         {
+            Validate.ArgumentNotNull(nameof(startVertex), startVertex);
             Validate.ArgumentNotNull(nameof(handleVertexCompleted), handleVertexCompleted);
 
             var inspectQueue = new Queue<BfsNode>();
@@ -327,13 +345,14 @@ namespace Abacaxi.Graphs
         /// <param name="handleVertexVisited">The function called when a vertex is being visited.</param>
         /// <param name="handleVertexCompleted">The function called when a vertex is completed.</param>
         /// <param name="handleCycle">The function called when a cycle is identified.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="handleVertexVisited"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handleCycle"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="handleVertexVisited"/>, <paramref name="handleVertexCompleted"/>, 
+        /// <paramref name="handleCycle"/> or <paramref name="startVertex"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
-        public virtual void TraverseDfs(TVertex startVertex, [NotNull] Predicate<IDfsNode> handleVertexVisited,
+        public virtual void TraverseDfs([NotNull] TVertex startVertex,
+            [NotNull] Predicate<IDfsNode> handleVertexVisited,
             [NotNull] Predicate<IDfsNode> handleVertexCompleted, [NotNull] Func<IDfsNode, IDfsNode, bool> handleCycle)
         {
+            Validate.ArgumentNotNull(nameof(startVertex), startVertex);
             Validate.ArgumentNotNull(nameof(handleVertexVisited), handleVertexVisited);
             Validate.ArgumentNotNull(nameof(handleVertexCompleted), handleVertexCompleted);
             Validate.ArgumentNotNull(nameof(handleCycle), handleCycle);
@@ -352,10 +371,11 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="applyColor">Color to apply to each vertex.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="applyColor"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="applyColor"/> or <paramref name="startVertex"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
-        public virtual void FillWithOneColor(TVertex startVertex, [NotNull] Action<TVertex> applyColor)
+        public virtual void FillWithOneColor([NotNull] TVertex startVertex, [NotNull] Action<TVertex> applyColor)
         {
+            Validate.ArgumentNotNull(nameof(startVertex), startVertex);
             Validate.ArgumentNotNull(nameof(applyColor), applyColor);
 
             TraverseBfs(startVertex, node =>
@@ -371,10 +391,14 @@ namespace Abacaxi.Graphs
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="endVertex">The end vertex.</param>
         /// <returns>Returns a sequence of vertices in visitation order.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="startVertex"/> or <paramref name="endVertex"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
         [NotNull]
         public virtual TVertex[] FindShortestPath(TVertex startVertex, TVertex endVertex)
         {
+            Validate.ArgumentNotNull(nameof(startVertex), startVertex);
+            Validate.ArgumentNotNull(nameof(endVertex), endVertex);
+
             IBfsNode solution = null;
             TraverseBfs(startVertex, node =>
             {
@@ -430,7 +454,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of vertices sorted in topological order.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is undirected or contains one or more cycles.</exception>
-        [NotNull]
+        [NotNull, ItemNotNull]
         public virtual TVertex[] TopologicalSort()
         {
             var outAdj = new Dictionary<TVertex, ISet<TVertex>>();
@@ -497,7 +521,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of all articulation vertices.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
-        [NotNull]
+        [NotNull, ItemNotNull]
         public virtual IEnumerable<TVertex> FindAllArticulationVertices()
         {
             RequireUndirectedGraph();
@@ -618,7 +642,7 @@ namespace Abacaxi.Graphs
         /// Describes the vertices of graph (degrees and components).
         /// </summary>
         /// <returns>A list of vertex descriptions.</returns>
-        [NotNull]
+        [NotNull, ItemNotNull]
         public virtual IEnumerable<VertexDescriptor<TVertex>> DescribeVertices()
         {
             var inDegrees = new Dictionary<TVertex, int>();
@@ -660,20 +684,25 @@ namespace Abacaxi.Graphs
             // ReSharper disable once IdentifierTypo
             foreach (var ckvp in componentIndexes)
             {
-                yield return new VertexDescriptor<TVertex>(ckvp.Key, ckvp.Value, inDegrees[ckvp.Key], outDegrees[ckvp.Key]);
+                yield return new VertexDescriptor<TVertex>(ckvp.Key, ckvp.Value, inDegrees[ckvp.Key],
+                    outDegrees[ckvp.Key]);
             }
         }
 
         /// <summary>
-        /// Finds the cheapest path in a graph between two vertices <paramref name="fromVertex"/> and <paramref name="toVertex"/>
+        /// Finds the cheapest path in a graph between two vertices <paramref name="startVertex"/> and <paramref name="endVertex"/>
         /// </summary>
-        /// <param name="fromVertex">The start vertex.</param>
-        /// <param name="toVertex">The end vertex.</param>
+        /// <param name="startVertex">The start vertex.</param>
+        /// <param name="endVertex">The end vertex.</param>
         /// <returns>A sequence of vertices that yield the shortest path. Returns an empty sequence if no path available.</returns>
-        /// <exception cref="System.ArgumentException">Thrown if <paramref name="fromVertex"/> is not part of teh graph.</exception>
-        [NotNull]
-        public IEnumerable<TVertex> FindCheapestPath(TVertex fromVertex, TVertex toVertex)
+        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of teh graph.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="startVertex"/> or <paramref name="endVertex"/> is <c>null</c>.</exception>
+        [NotNull, ItemNotNull]
+        public IEnumerable<TVertex> FindCheapestPath([NotNull] TVertex startVertex, [NotNull] TVertex endVertex)
         {
+            Validate.ArgumentNotNull(nameof(startVertex), startVertex);
+            Validate.ArgumentNotNull(nameof(endVertex), endVertex);
+
             var comparer = Comparer<PathNode>.Create((a, b) =>
             {
                 Debug.Assert(a != null);
@@ -684,14 +713,14 @@ namespace Abacaxi.Graphs
 
             var startVertexNode = new PathNode
             {
-                Vertex = fromVertex,
+                Vertex = startVertex,
                 TotalCostFromStart = 0,
                 PotentialCostToDestination =
-                    SupportsPotentialWeightEvaluation ? GetPotentialWeight(fromVertex, toVertex) : 0,
+                    SupportsPotentialWeightEvaluation ? GetPotentialWeight(startVertex, endVertex) : 0,
             };
 
-            var discoveredVertices = new Dictionary<TVertex, PathNode> { { fromVertex, startVertexNode } };
-            var visitationQueue = new Heap<PathNode>(comparer) { startVertexNode };
+            var discoveredVertices = new Dictionary<TVertex, PathNode> {{startVertex, startVertexNode}};
+            var visitationQueue = new Heap<PathNode>(comparer) {startVertexNode};
             var foundAPath = false;
             var cheapestCostSoFar = .0;
 
@@ -700,7 +729,7 @@ namespace Abacaxi.Graphs
                 var vertexNode = visitationQueue.RemoveTop();
                 Debug.Assert(vertexNode != null && discoveredVertices.ContainsKey(vertexNode.Vertex));
 
-                if (Equals(vertexNode.Vertex, toVertex))
+                if (Equals(vertexNode.Vertex, endVertex))
                 {
                     if (!foundAPath || cheapestCostSoFar > vertexNode.TotalCostFromStart)
                     {
@@ -726,7 +755,7 @@ namespace Abacaxi.Graphs
                             TotalCostFromStart = costFromStartForThisPath,
                             PotentialCostToDestination =
                                 SupportsPotentialWeightEvaluation
-                                    ? costFromStartForThisPath + GetPotentialWeight(edge.ToVertex, toVertex)
+                                    ? costFromStartForThisPath + GetPotentialWeight(edge.ToVertex, endVertex)
                                     : costFromStartForThisPath,
                         };
 
@@ -741,7 +770,7 @@ namespace Abacaxi.Graphs
                             discoveredNode.Parent = vertexNode;
                             discoveredNode.PotentialCostToDestination =
                                 SupportsPotentialWeightEvaluation
-                                    ? costFromStartForThisPath + GetPotentialWeight(discoveredNode.Vertex, toVertex)
+                                    ? costFromStartForThisPath + GetPotentialWeight(discoveredNode.Vertex, endVertex)
                                     : costFromStartForThisPath;
 
                             visitationQueue.Add(discoveredNode);
@@ -753,7 +782,7 @@ namespace Abacaxi.Graphs
             var result = new List<TVertex>();
             if (foundAPath)
             {
-                var node = discoveredVertices[toVertex];
+                var node = discoveredVertices[endVertex];
                 do
                 {
                     result.Add(node.Vertex);

@@ -34,10 +34,8 @@ namespace Abacaxi.Containers
             public T Parent;
         }
 
-        [NotNull]
-        private readonly IEqualityComparer<T> _comparer;
-        [NotNull]
-        private readonly IDictionary<T, Node> _nodes;
+        [NotNull] private readonly IEqualityComparer<T> _comparer;
+        [NotNull] private readonly IDictionary<T, Node> _nodes;
 
         [NotNull]
         private Node GetRootNodeRecursive([NotNull] T @object)
@@ -126,7 +124,7 @@ namespace Abacaxi.Containers
         /// <returns>The "set label" object that identifies the merged set.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="object"/>, 
         /// <paramref name="otherObjects"/>, or its contents, are <c>null</c>.</exception>
-        public T Merge([NotNull]T @object, [NotNull] params T[] otherObjects)
+        public T Merge([NotNull] T @object, [NotNull] params T[] otherObjects)
         {
             Validate.ArgumentNotNull(nameof(@object), @object);
             Validate.ArgumentNotNull(nameof(otherObjects), otherObjects);
@@ -163,6 +161,40 @@ namespace Abacaxi.Containers
             }
 
             return heaviest.Parent;
+        }
+
+        /// <summary>
+        /// Checks whether two objects are in the same sub-set. If the objects are in different sub-sets, they are merged.
+        /// </summary>
+        /// <param name="object1">The first object.</param>
+        /// <param name="object2">The second object.</param>
+        /// <returns><c>true</c> if the objects are in the same set already; otherwise, <c>false</c>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="object1"/> or <paramref name="object2"/> is <c>null</c>.</exception>
+        public bool CheckAndMerge([NotNull] T object1, [NotNull] T object2)
+        {
+            Validate.ArgumentNotNull(nameof(object1), object1);
+            Validate.ArgumentNotNull(nameof(object2), object2);
+
+            var root1 = GetRootNode(object1);
+            var root2 = GetRootNode(object2);
+
+            if (!_comparer.Equals(root1.Parent, root2.Parent))
+            {
+                if (root1.Rank > root2.Rank)
+                {
+                    root1.Rank += root2.Rank;
+                    root2.Parent = root1.Parent;
+                }
+                else 
+                {
+                    root2.Rank += root1.Rank;
+                    root1.Parent = root2.Parent;
+                }
+
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

@@ -15,6 +15,7 @@
 
 namespace Abacaxi.Tests.Graphs
 {
+    using System;
     using Abacaxi.Graphs;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
@@ -22,6 +23,29 @@ namespace Abacaxi.Tests.Graphs
     [TestFixture]
     public class EdgeTests
     {
+        [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Ctor_ThrowsException_NullFromVertex()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Edge<string>(null, "hello"));
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Ctor_ThrowsException_NullToVertex()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Edge<string>("hello", null));
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Ctor_ThrowsException_IfWeightIsLessThanZero()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Edge<string>("1", "2", -1));
+        }
+
         [Test]
         public void FromVertex_ReturnsValidValue()
         {

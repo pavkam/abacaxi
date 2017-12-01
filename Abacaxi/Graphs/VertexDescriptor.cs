@@ -15,6 +15,7 @@
 
 namespace Abacaxi.Graphs
 {
+    using System;
     using Internal;
     using JetBrains.Annotations;
 
@@ -63,9 +64,12 @@ namespace Abacaxi.Graphs
         /// <param name="componentIndex">Index of the component.</param>
         /// <param name="inDegree">The in-degree.</param>
         /// <param name="outDegree">The out-degree.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="componentIndex"/> or <paramref name="inDegree"/> or <paramref name="outDegree"/> are less than zero.</exception>
-        public VertexDescriptor(TVertex vertex, int componentIndex, int inDegree, int outDegree)
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="componentIndex"/> or 
+        /// <paramref name="inDegree"/> or <paramref name="outDegree"/> are less than zero.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vertex"/> is <c>null</c>.</exception>
+        public VertexDescriptor([NotNull] TVertex vertex, int componentIndex, int inDegree, int outDegree)
         {
+            Validate.ArgumentNotNull(nameof(vertex), vertex);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(componentIndex), componentIndex);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(inDegree), inDegree);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(outDegree), outDegree);
