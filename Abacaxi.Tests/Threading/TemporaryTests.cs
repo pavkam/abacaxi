@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -13,13 +13,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.Containers
+namespace Abacaxi.Tests.Threading
 {
     using System;
-    using Abacaxi.Containers;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading;
+    using Abacaxi.Threading;
+    using NUnit.Framework;
 
     [TestFixture]
     public class TemporaryTests

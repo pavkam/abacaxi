@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Containers
+namespace Abacaxi.Threading
 {
     using System;
     using Internal;
@@ -26,10 +26,8 @@ namespace Abacaxi.Containers
     [PublicAPI]
     public sealed class Temporary<T>
     {
-        [NotNull]
-        private readonly object _lock = new object();
-        [NotNull]
-        private readonly Func<T> _valueFunc;
+        [NotNull] private readonly object _lock = new object();
+        [NotNull] private readonly Func<T> _valueFunc;
         private readonly int _valueTtl;
 
         private T _value;
