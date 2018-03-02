@@ -76,5 +76,21 @@ namespace Abacaxi.Threading
                 return _value;
             }
         }
+
+        /// <summary>
+        /// Invalidates current resource value managed by this <see cref="Temporary{T}"/>.
+        /// </summary>
+        /// <remarks>The resource will be refreshed the next time <see cref="Value"/> property is accessed.</remarks>
+        public void Invalidate()
+        {
+            lock (_lock)
+            {
+                var now = DateTime.Now;
+                if (_valueExpiryDateTime >= now)
+                {
+                    _valueExpiryDateTime = now.AddMilliseconds(-1);
+                }
+            }
+        }
     }
 }
