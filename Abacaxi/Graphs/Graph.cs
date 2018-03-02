@@ -42,21 +42,47 @@ namespace Abacaxi.Graphs
 
         private sealed class BfsNode : IBfsNode
         {
-            public TVertex Vertex { get; set; }
+            public TVertex Vertex { get; }
             public IBfsNode Parent { get; set; }
-            public Edge<TVertex> EntryEdge { get; set; }
+            public Edge<TVertex> EntryEdge { get; }
+
+            public BfsNode([NotNull] TVertex vertex)
+            {
+                Debug.Assert(vertex != null);
+                Vertex = vertex;
+            }
+
+            public BfsNode([NotNull] Edge<TVertex> entryEdge)
+            {
+                Debug.Assert(entryEdge != null);
+                Vertex = entryEdge.ToVertex;
+                EntryEdge = entryEdge;
+            }
         }
 
         private sealed class DfsNode : IDfsNode
         {
-            public TVertex Vertex { get; set; }
+            public TVertex Vertex { get; }
             public IDfsNode Parent { get; set; }
-            public Edge<TVertex> EntryEdge { get; set; }
+            public Edge<TVertex> EntryEdge { get; }
             public int EntryTime { get; set; }
             public int ExitTime { get; set; }
+
+            public DfsNode([NotNull] TVertex vertex)
+            {
+                Debug.Assert(vertex != null);
+                Vertex = vertex;
+            }
+
+            public DfsNode([NotNull] Edge<TVertex> entryEdge)
+            {
+                Debug.Assert(entryEdge != null);
+                Vertex = entryEdge.ToVertex;
+                EntryEdge = entryEdge;
+            }
         }
 
-        private static int CompareEdgesByWeight(Edge<TVertex> a, Edge<TVertex> b)
+        private static int CompareEdgesByWeight([NotNull] Edge<TVertex> a, [NotNull] Edge<TVertex> b)
         {
             Debug.Assert(a != null);
             Debug.Assert(b != null);
@@ -64,7 +90,7 @@ namespace Abacaxi.Graphs
             return a.Weight.CompareTo(a.Weight);
         }
 
-        private static IComparer<Edge<TVertex>> _edgesByWeightComparer =
+        [NotNull] private static IComparer<Edge<TVertex>> _edgesByWeightComparer =
             Comparer<Edge<TVertex>>.Create(CompareEdgesByWeight);
 
         private bool TraverseDfs(
@@ -100,11 +126,9 @@ namespace Abacaxi.Graphs
 
                 if (!visitedNodes.TryGetValue(edge.ToVertex, out var visitedNode))
                 {
-                    visitedNode = new DfsNode
+                    visitedNode = new DfsNode(edge)
                     {
                         Parent = vertexNode,
-                        Vertex = edge.ToVertex,
-                        EntryEdge = edge
                     };
 
                     breakRequested =
@@ -301,10 +325,7 @@ namespace Abacaxi.Graphs
 
             var inspectQueue = new Queue<BfsNode>();
             var discoveredSet = new HashSet<TVertex>();
-            var first = new BfsNode
-            {
-                Vertex = startVertex,
-            };
+            var first = new BfsNode(startVertex);
 
             inspectQueue.Enqueue(first);
             discoveredSet.Add(first.Vertex);
@@ -319,11 +340,9 @@ namespace Abacaxi.Graphs
                 {
                     if (!discoveredSet.Contains(edge.ToVertex))
                     {
-                        var connectedNode = new BfsNode
+                        var connectedNode = new BfsNode(edge)
                         {
-                            Parent = vertexNode,
-                            Vertex = edge.ToVertex,
-                            EntryEdge = edge
+                            Parent = vertexNode
                         };
 
                         discoveredSet.Add(edge.ToVertex);
@@ -360,10 +379,8 @@ namespace Abacaxi.Graphs
             var discoveredSet = new Dictionary<TVertex, DfsNode>();
             var time = 0;
 
-            TraverseDfs(new DfsNode
-            {
-                Vertex = startVertex
-            }, ref time, discoveredSet, handleVertexVisited, handleVertexCompleted, handleCycle);
+            TraverseDfs(new DfsNode(startVertex), ref time, discoveredSet, handleVertexVisited, handleVertexCompleted,
+                handleCycle);
         }
 
         /// <summary>
@@ -454,7 +471,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of vertices sorted in topological order.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is undirected or contains one or more cycles.</exception>
-        [NotNull, ItemNotNull]
+        [NotNull]
         public virtual TVertex[] TopologicalSort()
         {
             var outAdj = new Dictionary<TVertex, ISet<TVertex>>();
@@ -521,7 +538,7 @@ namespace Abacaxi.Graphs
         /// </summary>
         /// <returns>A sequence of all articulation vertices.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
-        [NotNull, ItemNotNull]
+        [NotNull]
         public virtual IEnumerable<TVertex> FindAllArticulationVertices()
         {
             RequireUndirectedGraph();
@@ -697,7 +714,7 @@ namespace Abacaxi.Graphs
         /// <returns>A sequence of vertices that yield the shortest path. Returns an empty sequence if no path available.</returns>
         /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of teh graph.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="startVertex"/> or <paramref name="endVertex"/> is <c>null</c>.</exception>
-        [NotNull, ItemNotNull]
+        [NotNull]
         public IEnumerable<TVertex> FindCheapestPath([NotNull] TVertex startVertex, [NotNull] TVertex endVertex)
         {
             Validate.ArgumentNotNull(nameof(startVertex), startVertex);

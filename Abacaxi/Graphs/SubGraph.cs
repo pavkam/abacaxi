@@ -67,7 +67,7 @@ namespace Abacaxi.Graphs
         /// <param name="vertices">The vertices that part of this sub-graph.</param>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="vertices"/> are <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">Thrown if <paramref name="vertices"/> contains at least one vertex that is not contained in <paramref name="graph"/>.</exception>
-        public SubGraph([NotNull] Graph<TVertex> graph, [NotNull, ItemNotNull] IEnumerable<TVertex> vertices)
+        public SubGraph([NotNull] Graph<TVertex> graph, [NotNull] IEnumerable<TVertex> vertices)
         {
             Validate.ArgumentNotNull(nameof(graph), graph);
             Validate.ArgumentNotNull(nameof(vertices), vertices);

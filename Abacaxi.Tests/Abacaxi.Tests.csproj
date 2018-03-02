@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-    <Version>0.9</Version>
+    <Version>0.99</Version>
     <Authors>Alexandru Ciobanu (alex+git@ciobanu.org)</Authors>
     <Company>Alexandru Ciobanu (alex+git@ciobanu.org)</Company>
     <PackageLicenseUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/LICENSE</PackageLicenseUrl>
@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://github.com/pavkam/abacaxi</PackageProjectUrl>
     <Description>A library with data structures, various algorithms and numerous extension methods.</Description>
     <PackageReleaseNotes>Switch to .NET 4.5 as a dependancy.</PackageReleaseNotes>
-    <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017</Copyright>
+    <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017-2018</Copyright>
     <PackageTags>Algorithms Containers Learning Extensions</PackageTags>
     <AssemblyVersion>0.99.0.0</AssemblyVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
