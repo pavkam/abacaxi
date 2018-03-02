@@ -28,10 +28,12 @@ namespace Abacaxi.Threading
     {
         [NotNull] private readonly object _lock = new object();
         [NotNull] private readonly Func<T> _valueFunc;
-        private readonly int _valueTtl;
+        private readonly int _valueTtlMillis;
 
         private T _value;
-        private DateTime _valueExpiryDateTime;
+        private long _expiresAtTicks;
+
+        private long CurrentTicks => DateTime.Now.Ticks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Temporary{T}"/> class.
@@ -45,8 +47,7 @@ namespace Abacaxi.Threading
             Validate.ArgumentNotNull(nameof(valueFunc), valueFunc);
             Validate.ArgumentGreaterThanZero(nameof(valueLifespanMillis), valueLifespanMillis);
 
-            _valueTtl = valueLifespanMillis;
-            _valueExpiryDateTime = DateTime.MinValue;
+            _valueTtlMillis = valueLifespanMillis;
             _valueFunc = valueFunc;
         }
 
@@ -60,14 +61,13 @@ namespace Abacaxi.Threading
         {
             get
             {
-                var now = DateTime.Now;
-                if (_valueExpiryDateTime < now)
+                if (_expiresAtTicks < CurrentTicks)
                 {
                     lock (_lock)
                     {
-                        if (_valueExpiryDateTime < now)
+                        if (_expiresAtTicks < CurrentTicks)
                         {
-                            _valueExpiryDateTime = now.AddMilliseconds(_valueTtl);
+                            _expiresAtTicks = CurrentTicks + _valueTtlMillis * TimeSpan.TicksPerMillisecond;
                             _value = _valueFunc();
                         }
                     }
@@ -78,18 +78,14 @@ namespace Abacaxi.Threading
         }
 
         /// <summary>
-        /// Invalidates current resource value managed by this <see cref="Temporary{T}"/>.
+        /// Expires current resource value managed by this <see cref="Temporary{T}"/>.
         /// </summary>
         /// <remarks>The resource will be refreshed the next time <see cref="Value"/> property is accessed.</remarks>
-        public void Invalidate()
+        public void Expire()
         {
             lock (_lock)
             {
-                var now = DateTime.Now;
-                if (_valueExpiryDateTime >= now)
-                {
-                    _valueExpiryDateTime = now.AddMilliseconds(-1);
-                }
+                _expiresAtTicks = 0;
             }
         }
     }

@@ -92,7 +92,7 @@ namespace Abacaxi.Tests.Threading
         [Test]
         [SuppressMessage("ReSharper", "NotAccessedVariable")]
         [SuppressMessage("ReSharper", "RedundantAssignment")]
-        public void Temporary_InvalidateWillExpireTheResource()
+        public void Temporary_ExpireWillExpireTheResource()
         {
             var called = 0;
             var temp = new Temporary<int>(() =>
@@ -102,7 +102,7 @@ namespace Abacaxi.Tests.Threading
             }, 1000);
 
             var x = temp.Value;
-            temp.Invalidate();
+            temp.Expire();
             x = temp.Value;
 
             Assert.IsTrue(called == 2);
