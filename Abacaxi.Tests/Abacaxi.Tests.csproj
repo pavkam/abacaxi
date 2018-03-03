@@ -1,19 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
-    <Version>0.99</Version>
+    <TargetFramework>net462</TargetFramework>
+    <Version>1.0</Version>
     <Authors>Alexandru Ciobanu (alex+git@ciobanu.org)</Authors>
     <Company>Alexandru Ciobanu (alex+git@ciobanu.org)</Company>
     <PackageLicenseUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/LICENSE</PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/40218-200.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/pavkam/abacaxi</PackageProjectUrl>
     <Description>A library with data structures, various algorithms and numerous extension methods.</Description>
-    <PackageReleaseNotes>Switch to .NET 4.5 as a dependancy.</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017-2018</Copyright>
     <PackageTags>Algorithms Containers Learning Extensions</PackageTags>
-    <AssemblyVersion>0.99.0.0</AssemblyVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <FileVersion>0.99.0.0</FileVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <RepositoryUrl>https://github.com/pavkam/abacaxi</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0-preview-20170914-09" />

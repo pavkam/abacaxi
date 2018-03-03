@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abacaxi", "Abacaxi\Abacaxi.csproj", "{D17D48C6-B342-4DEE-86B2-54F869F2D3A2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abacaxi.Tests", "Abacaxi.Tests\Abacaxi.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abacaxi.Tests", "Abacaxi.Tests\Abacaxi.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA960A00-F5C7-4299-8C52-41F254607F5E}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,7 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abacaxi.Practice", "Abacaxi.Practice\Abacaxi.Practice.csproj", "{ADCFD10B-65C7-4D15-A896-5533C3AFA923}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abacaxi.Practice", "Abacaxi.Practice\Abacaxi.Practice.csproj", "{ADCFD10B-65C7-4D15-A896-5533C3AFA923}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abacaxi", "Abacaxi\Abacaxi.csproj", "{762A124B-8058-4BBE-94C0-1F1EA7453F4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,11 +22,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D17D48C6-B342-4DEE-86B2-54F869F2D3A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D17D48C6-B342-4DEE-86B2-54F869F2D3A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D17D48C6-B342-4DEE-86B2-54F869F2D3A2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{D17D48C6-B342-4DEE-86B2-54F869F2D3A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D17D48C6-B342-4DEE-86B2-54F869F2D3A2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -36,8 +31,15 @@ Global
 		{ADCFD10B-65C7-4D15-A896-5533C3AFA923}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADCFD10B-65C7-4D15-A896-5533C3AFA923}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADCFD10B-65C7-4D15-A896-5533C3AFA923}.Release|Any CPU.Build.0 = Release|Any CPU
+		{762A124B-8058-4BBE-94C0-1F1EA7453F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{762A124B-8058-4BBE-94C0-1F1EA7453F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{762A124B-8058-4BBE-94C0-1F1EA7453F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{762A124B-8058-4BBE-94C0-1F1EA7453F4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {33479AE1-5460-497F-9027-595C9E5C747E}
 	EndGlobalSection
 EndGlobal
