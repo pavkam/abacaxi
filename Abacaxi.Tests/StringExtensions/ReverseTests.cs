@@ -18,6 +18,7 @@ namespace Abacaxi.Tests.StringExtensions
     using System;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
     public sealed class ReverseTests
@@ -29,7 +30,7 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [TestCase("", ""),TestCase("1", "1"),TestCase("Hello World", "dlroW olleH"),TestCase("Les Misérables", "selbarésiM seL"),TestCase("This is: 🀜", "🀜 :si sihT"),SuppressMessage("ReSharper", "StringLiteralTypo")]
-        public void Reverse_ReversesTheString_AsExpected(string input, string expected)
+        public void Reverse_ReversesTheString_AsExpected([NotNull] string input, string expected)
         {
             var actual = input.Reverse();
 

@@ -18,9 +18,10 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class GetLongestCommonSubSequenceTests
+    public sealed class GetLongestCommonSubSequenceTests
     {
         [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetLongestCommonSubSequence_ThrowsException_ForNullSequence()
@@ -37,7 +38,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [TestCase("", "", ""),TestCase("a", "a", "a"),TestCase("a", "b", ""),TestCase("", "a", ""),TestCase("a", "", ""),TestCase("ab", "a", "a"),TestCase("a", "ab", "a"),TestCase("ab", "ba", "b"),TestCase("hello my dear friend", "Hello you fiend!", "ello y fiend"),SuppressMessage("ReSharper", "StringLiteralTypo")]
-        public void GetLongestCommonSubSequence_ReturnsExpectedSequence(string s1, string s2, string expected)
+        public void GetLongestCommonSubSequence_ReturnsExpectedSequence([NotNull] string s1, [NotNull] string s2, string expected)
         {
             var actual = new string(s1.ToCharArray().GetLongestCommonSubSequence(s2.ToCharArray()));
             Assert.AreEqual(expected, actual);

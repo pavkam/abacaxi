@@ -94,7 +94,7 @@ namespace Abacaxi.Containers
         private void BuildHeap([NotNull] IList<T> array, int length)
         {
             Debug.Assert(length <= array.Count);
-             
+
             for (var ci = 1; ci < length; ci++)
             {
                 SiftUp(array, ci);
@@ -111,7 +111,7 @@ namespace Abacaxi.Containers
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
             _comparer = comparer;
-            _array = new T[DefaultArraySize]; 
+            _array = new T[DefaultArraySize];
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace Abacaxi.Containers
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="array"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if there is not enough space in the <paramref name="array"/>.</exception>
-        public void CopyTo(T[] array, int arrayIndex)
+        public void CopyTo([NotNull] T[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
@@ -273,6 +273,7 @@ namespace Abacaxi.Containers
                 }
 
                 yield return local[0];
+
                 if (count > 1)
                 {
                     local[0] = local[count - 1];
@@ -294,27 +295,29 @@ namespace Abacaxi.Containers
         {
             for (var i = 0; i < Count; i++)
             {
-                if (_comparer.Compare(_array[i], item) == 0)
+                if (_comparer.Compare(_array[i], item) != 0)
                 {
-                    if (i < Count - 1)
-                    {
-                        _array[i] = _array[Count - 1];
-
-                        var pi = (i % 2 == 1) ? (i - 1) / 2 : (i - 2) / 2;
-                        if (pi >= 0 && _comparer.Compare(_array[pi], _array[i]) < 0)
-                        {
-                            SiftUp(_array, i);
-                        }
-                        else
-                        {
-                            SiftDown(_array, Count - 1, i);
-                        }
-                    }
-
-                    Count--;
-                    _ver++;
-                    return true;
+                    continue;
                 }
+
+                if (i < Count - 1)
+                {
+                    _array[i] = _array[Count - 1];
+
+                    var pi = (i % 2 == 1) ? (i - 1) / 2 : (i - 2) / 2;
+                    if (pi >= 0 && _comparer.Compare(_array[pi], _array[i]) < 0)
+                    {
+                        SiftUp(_array, i);
+                    }
+                    else
+                    {
+                        SiftDown(_array, Count - 1, i);
+                    }
+                }
+
+                Count--;
+                _ver++;
+                return true;
             }
 
             return false;
@@ -351,9 +354,6 @@ namespace Abacaxi.Containers
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

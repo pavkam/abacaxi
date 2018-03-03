@@ -21,17 +21,11 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class FindSubsequencesWithGivenAggregatedValueTests
+    public sealed class FindSubsequencesWithGivenAggregatedValueTests
     {
-        private static int IntegerAggregator(int a, int b)
-        {
-            return a + b;
-        }
+        private static int IntegerAggregator(int a, int b) => a + b;
 
-        private static int IntegerDisaggregator(int a, int b)
-        {
-            return a - b;
-        }
+        private static int IntegerDisaggregator(int a, int b) => a - b;
 
         [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfSequenceIsNull()

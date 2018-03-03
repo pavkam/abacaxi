@@ -21,12 +21,9 @@ namespace Abacaxi.Tests.Set
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class SplitIntoSubsetsOfEqualValueTests
+    public sealed class SplitIntoSubsetsOfEqualValueTests
     {
-        private static int IntegerAggregator(int a, int b)
-        {
-            return a + b;
-        }
+        private static int IntegerAggregator(int a, int b) => a + b;
 
         [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void SplitIntoSubsetsOfEqualValue_ThrowsException_IfSequenceIsNull()

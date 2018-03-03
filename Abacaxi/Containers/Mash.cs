@@ -26,8 +26,7 @@ namespace Abacaxi.Containers
     /// Class implements a Dictionary of Dictionaries plus List and such. Serves as a Swiss army knife container that can
     /// be used to store anything.
     /// </summary>
-    [PublicAPI]
-    [DebuggerDisplay("Count = {" + nameof(Count) + "} Children = {" + nameof(LinkedCount) + "}")]
+    [PublicAPI, DebuggerDisplay("Count = {" + nameof(Count) + "} Children = {" + nameof(LinkedCount) + "}")]
     public sealed class Mash<TKey, TValue> : IList<TValue>
     {
         [Flags]
@@ -105,6 +104,7 @@ namespace Abacaxi.Containers
                         ThrowCollectionChangedDuringEnumeration();
                     }
                     yield return (TValue) _valueObj;
+
                     break;
                 case StorageState.ValuesInTwoElementArray:
                     Debug.Assert(_valueObj is TValue[]);
@@ -115,6 +115,7 @@ namespace Abacaxi.Containers
                         ThrowCollectionChangedDuringEnumeration();
                     }
                     yield return array[0];
+
                     if (ver != _ver)
                     {
                         ThrowCollectionChangedDuringEnumeration();
@@ -166,7 +167,7 @@ namespace Abacaxi.Containers
                     Debug.Assert(_valueObj == null);
 
                     _ver++;
-                    _state = _state & StorageState.ChildrenMask | StorageState.ValueIsOneObject;
+                    _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
                     _valueObj = item;
 
                     break;
@@ -174,7 +175,7 @@ namespace Abacaxi.Containers
                     Debug.Assert(_valueObj == null || _valueObj is TValue);
 
                     _ver++;
-                    _state = _state & StorageState.ChildrenMask | StorageState.ValuesInTwoElementArray;
+                    _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInTwoElementArray;
                     _valueObj = new[]
                     {
                         (TValue) _valueObj,
@@ -188,7 +189,7 @@ namespace Abacaxi.Containers
                     Debug.Assert(array.Length == 2);
 
                     _ver++;
-                    _state = _state & StorageState.ChildrenMask | StorageState.ValuesInList;
+                    _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInList;
                     _valueObj = new List<TValue>
                     {
                         array[0],
@@ -243,7 +244,7 @@ namespace Abacaxi.Containers
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="array"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the destination <paramref name="array"/> does not have enough 
         /// space to hold the contents of the set.</exception>
-        public void CopyTo(TValue[] array, int arrayIndex)
+        public void CopyTo([NotNull] TValue[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
@@ -301,15 +302,16 @@ namespace Abacaxi.Containers
                     return false;
                 case StorageState.ValueIsOneObject:
                     Debug.Assert(_valueObj == null || _valueObj is TValue);
-                    if (Equals((TValue) _valueObj, item))
+                    if (!Equals((TValue) _valueObj, item))
                     {
-                        _ver++;
-                        _state = _state & StorageState.ChildrenMask;
-                        _valueObj = null;
-
-                        return true;
+                        return false;
                     }
-                    return false;
+
+                    _ver++;
+                    _state = _state & StorageState.ChildrenMask;
+                    _valueObj = null;
+
+                    return true;
                 case StorageState.ValuesInTwoElementArray:
                     Debug.Assert(_valueObj is TValue[]);
                     var array = (TValue[]) _valueObj;
@@ -317,7 +319,7 @@ namespace Abacaxi.Containers
                     if (Equals(array[0], item))
                     {
                         _ver++;
-                        _state = _state & StorageState.ChildrenMask | StorageState.ValueIsOneObject;
+                        _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
                         _valueObj = array[1];
 
                         return true;
@@ -325,7 +327,7 @@ namespace Abacaxi.Containers
                     if (Equals(array[1], item))
                     {
                         _ver++;
-                        _state = _state & StorageState.ChildrenMask | StorageState.ValueIsOneObject;
+                        _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
                         _valueObj = array[0];
 
                         return true;
@@ -342,7 +344,7 @@ namespace Abacaxi.Containers
                         _ver++;
                         if (list.Count == 2)
                         {
-                            _state = _state & StorageState.ChildrenMask | StorageState.ValuesInTwoElementArray;
+                            _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInTwoElementArray;
                             _valueObj = new[]
                             {
                                 list[0],
@@ -468,7 +470,7 @@ namespace Abacaxi.Containers
                     Validate.ArgumentLessThanOrEqualTo(nameof(index), index, 0);
 
                     _ver++;
-                    _state = _state & StorageState.ChildrenMask | StorageState.ValueIsOneObject;
+                    _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
                     _valueObj = item;
 
                     break;
@@ -478,7 +480,7 @@ namespace Abacaxi.Containers
                     Validate.ArgumentLessThanOrEqualTo(nameof(index), index, 1);
 
                     _ver++;
-                    _state = _state & StorageState.ChildrenMask | StorageState.ValuesInTwoElementArray;
+                    _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInTwoElementArray;
 
                     if (index == 0)
                     {
@@ -507,7 +509,7 @@ namespace Abacaxi.Containers
                     Validate.ArgumentLessThanOrEqualTo(nameof(index), index, 2);
 
                     _ver++;
-                    _state = _state & StorageState.ChildrenMask | StorageState.ValuesInList;
+                    _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInList;
 
                     switch (index)
                     {
@@ -591,7 +593,7 @@ namespace Abacaxi.Containers
                     Validate.ArgumentLessThan(nameof(index), index, 2);
 
                     _ver++;
-                    _state = _state & StorageState.ChildrenMask | StorageState.ValueIsOneObject;
+                    _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
 
                     switch (index)
                     {
@@ -618,7 +620,7 @@ namespace Abacaxi.Containers
 
                     if (list.Count == 2)
                     {
-                        _state = _state & StorageState.ChildrenMask | StorageState.ValuesInTwoElementArray;
+                        _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInTwoElementArray;
                         _valueObj = new[]
                         {
                             list[0],
@@ -786,7 +788,7 @@ namespace Abacaxi.Containers
                     case 0:
                         Debug.Assert(_valueObj == null);
                         _ver++;
-                        _state = _state & StorageState.ChildrenMask | StorageState.ValueIsOneObject;
+                        _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
                         _valueObj = value;
                         break;
                     case StorageState.ValueIsOneObject:
@@ -835,7 +837,7 @@ namespace Abacaxi.Containers
             {
                 case 0:
                     Debug.Assert(_childrenObj == null);
-                    _state = _state & StorageState.ValueMask | StorageState.HasOneChildInATuple;
+                    _state = (_state & StorageState.ValueMask) | StorageState.HasOneChildInATuple;
                     var subMash = new Mash<TKey, TValue>(_equalityComparer);
                     _childrenObj = Tuple.Create(key, subMash);
                     return subMash;
@@ -848,7 +850,7 @@ namespace Abacaxi.Containers
                         return tuple.Item2;
                     }
 
-                    _state = _state & StorageState.ValueMask | StorageState.HasTwoChildrenInKeyValuePairArray;
+                    _state = (_state & StorageState.ValueMask) | StorageState.HasTwoChildrenInKeyValuePairArray;
                     subMash = new Mash<TKey, TValue>(_equalityComparer);
                     _childrenObj = new[]
                     {
@@ -871,7 +873,7 @@ namespace Abacaxi.Containers
                         return array2[1].Value;
                     }
 
-                    _state = _state & StorageState.ValueMask | StorageState.HasThreeChildrenInKeyValuePairArray;
+                    _state = (_state & StorageState.ValueMask) | StorageState.HasThreeChildrenInKeyValuePairArray;
                     subMash = new Mash<TKey, TValue>(_equalityComparer);
                     _childrenObj = new[]
                     {
@@ -899,7 +901,7 @@ namespace Abacaxi.Containers
                         return array3[2].Value;
                     }
 
-                    _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
+                    _state = (_state & StorageState.ValueMask) | StorageState.HasFourChildrenInKeyValuePairArray;
                     subMash = new Mash<TKey, TValue>(_equalityComparer);
                     _childrenObj = new[]
                     {
@@ -932,7 +934,7 @@ namespace Abacaxi.Containers
                         return array4[3].Value;
                     }
 
-                    _state = _state & StorageState.ValueMask | StorageState.HasFiveChildrenInKeyValuePairArray;
+                    _state = (_state & StorageState.ValueMask) | StorageState.HasFiveChildrenInKeyValuePairArray;
                     subMash = new Mash<TKey, TValue>(_equalityComparer);
                     _childrenObj = new[]
                     {
@@ -970,7 +972,7 @@ namespace Abacaxi.Containers
                         return array5[4].Value;
                     }
 
-                    _state = _state & StorageState.ValueMask | StorageState.HasManyChildrenInAHashTable;
+                    _state = (_state & StorageState.ValueMask) | StorageState.HasManyChildrenInAHashTable;
                     subMash = new Mash<TKey, TValue>(_equalityComparer);
                     _childrenObj = new Dictionary<TKey, Mash<TKey, TValue>>
                     {
@@ -1016,7 +1018,7 @@ namespace Abacaxi.Containers
             {
                 case 0:
                     Debug.Assert(_childrenObj == null);
-                    _state = _state & StorageState.ValueMask | StorageState.HasOneChildInATuple;
+                    _state = (_state & StorageState.ValueMask) | StorageState.HasOneChildInATuple;
                     _childrenObj = Tuple.Create(key, mash);
                     break;
 
@@ -1029,7 +1031,7 @@ namespace Abacaxi.Containers
                     }
                     else
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasTwoChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasTwoChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             new KeyValuePair<TKey, Mash<TKey, TValue>>(key, mash),
@@ -1054,7 +1056,7 @@ namespace Abacaxi.Containers
                     }
                     else
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasThreeChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasThreeChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             mashKvp,
@@ -1084,7 +1086,7 @@ namespace Abacaxi.Containers
                     }
                     else
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasFourChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             mashKvp,
@@ -1119,7 +1121,7 @@ namespace Abacaxi.Containers
                     }
                     else
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasFiveChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasFiveChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             mashKvp,
@@ -1158,7 +1160,7 @@ namespace Abacaxi.Containers
                     }
                     else
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasManyChildrenInAHashTable;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasManyChildrenInAHashTable;
                         _childrenObj = new Dictionary<TKey, Mash<TKey, TValue>>
                         {
                             {array5[0].Key, array5[0].Value},
@@ -1219,13 +1221,13 @@ namespace Abacaxi.Containers
 
                     if (_equalityComparer.Equals(array2[0].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasOneChildInATuple;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasOneChildInATuple;
                         _childrenObj = Tuple.Create(array2[1].Key, array2[1].Value);
                         return true;
                     }
                     else if (_equalityComparer.Equals(array2[1].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasOneChildInATuple;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasOneChildInATuple;
                         _childrenObj = Tuple.Create(array2[0].Key, array2[0].Value);
                         return true;
                     }
@@ -1239,7 +1241,7 @@ namespace Abacaxi.Containers
 
                     if (_equalityComparer.Equals(array3[0].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasTwoChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasTwoChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array3[1],
@@ -1250,7 +1252,7 @@ namespace Abacaxi.Containers
                     }
                     else if (_equalityComparer.Equals(array3[1].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasTwoChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasTwoChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array3[0],
@@ -1261,7 +1263,7 @@ namespace Abacaxi.Containers
                     }
                     else if (_equalityComparer.Equals(array3[2].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasTwoChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasTwoChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array3[0],
@@ -1279,7 +1281,7 @@ namespace Abacaxi.Containers
 
                     if (_equalityComparer.Equals(array4[0].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasThreeChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasThreeChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array4[1],
@@ -1291,7 +1293,7 @@ namespace Abacaxi.Containers
                     }
                     else if (_equalityComparer.Equals(array4[1].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasThreeChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasThreeChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array4[0],
@@ -1303,7 +1305,7 @@ namespace Abacaxi.Containers
                     }
                     else if (_equalityComparer.Equals(array4[2].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasThreeChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasThreeChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array4[0],
@@ -1315,7 +1317,7 @@ namespace Abacaxi.Containers
                     }
                     else if (_equalityComparer.Equals(array4[3].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasThreeChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasThreeChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array4[0],
@@ -1334,7 +1336,7 @@ namespace Abacaxi.Containers
 
                     if (_equalityComparer.Equals(array5[0].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasFourChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array5[1],
@@ -1347,7 +1349,7 @@ namespace Abacaxi.Containers
                     }
                     else if (_equalityComparer.Equals(array5[1].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasFourChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array5[0],
@@ -1360,7 +1362,7 @@ namespace Abacaxi.Containers
                     }
                     else if (_equalityComparer.Equals(array5[2].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasFourChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array5[0],
@@ -1373,7 +1375,7 @@ namespace Abacaxi.Containers
                     }
                     else if (_equalityComparer.Equals(array5[3].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasFourChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array5[0],
@@ -1386,7 +1388,7 @@ namespace Abacaxi.Containers
                     }
                     else if (_equalityComparer.Equals(array5[4].Key, key))
                     {
-                        _state = _state & StorageState.ValueMask | StorageState.HasFourChildrenInKeyValuePairArray;
+                        _state = (_state & StorageState.ValueMask) | StorageState.HasFourChildrenInKeyValuePairArray;
                         _childrenObj = new[]
                         {
                             array5[0],

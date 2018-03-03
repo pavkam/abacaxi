@@ -18,6 +18,7 @@ namespace Abacaxi.Tests.StringExtensions
     using System;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
     public sealed class ShortenTests
@@ -41,7 +42,7 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [TestCase("", 1, null, ""),TestCase("1", 1, null, "1"),TestCase("12", 1, null, "1"),TestCase("12345", 5, null, "12345"),TestCase("1234567890", 5, "?", "1234?"),TestCase("1234567890", 5, "...", "12..."),TestCase("12345", 3, "...", "..."),TestCase("1", 1, "?", "1"),TestCase("12", 1, "?", "?")]
-        public void Shorten_ReturnsExpectedString(string s, int l, string e, string expected)
+        public void Shorten_ReturnsExpectedString([NotNull] string s, int l, string e, string expected)
         {
             var actual = s.Shorten(l, e);
 
@@ -49,7 +50,7 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [TestCase("Les Misérables", 7, "Les Mis"),TestCase("Les Misérables", 8, "Les Mis"),TestCase("Les Misérables", 9, "Les Misé"),TestCase("क्षि", 4, "क्षि"),TestCase("क्षि", 3, "क्"),TestCase("क्षि", 2, "क्"),TestCase("क्षि", 1, "")]
-        public void Shorten_TakesIntoAccount_MultiCharSequences(string s, int l, string expected)
+        public void Shorten_TakesIntoAccount_MultiCharSequences([NotNull] string s, int l, string expected)
         {
             var actual = s.Shorten(l);
             Assert.AreEqual(expected, actual);

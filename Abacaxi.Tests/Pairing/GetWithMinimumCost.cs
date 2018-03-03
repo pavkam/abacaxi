@@ -21,17 +21,11 @@ namespace Abacaxi.Tests.Pairing
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class GetWithMinimumCost
+    public sealed class GetWithMinimumCost
     {
-        private static double BanalCostOfPairsEvaluator(int l, int r)
-        {
-            return l + r;
-        }
+        private static double BanalCostOfPairsEvaluator(int l, int r) => l + r;
 
-        private static double DistanceCostOfPairsEvaluator(int l, int r)
-        {
-            return Math.Abs(l - r);
-        }
+        private static double DistanceCostOfPairsEvaluator(int l, int r) => Math.Abs(l - r);
 
         [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetWithMinimumCost_ThrowsException_ForNullSequence()

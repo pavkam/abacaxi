@@ -13,36 +13,36 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.StringExtensions
 {
     using System;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
     public sealed class LikeTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Like_ThrowsException_IfStringIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => ((string)null).Like(""));
+            Assert.Throws<ArgumentNullException>(() => ((string) null).Like(""));
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Like_ThrowsException_IfPatternIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => "".Like(null));
         }
 
-        [TestCase("a", "A", true, true),TestCase("a", "a", false, true),TestCase("a", "A", false, false)]
-        public void Like_TakesIntoAccountCasing(string s, string p, bool i, bool expected)
+        [TestCase("a", "A", true, true), TestCase("a", "a", false, true), TestCase("a", "A", false, false)]
+        public void Like_TakesIntoAccountCasing([NotNull] string s, [NotNull] string p, bool i, bool expected)
         {
             Assert.AreEqual(expected, s.Like(p, i));
         }
 
-        [TestCase("a", "A"),TestCase("a*b*c", "abc"),TestCase("a?b?c", "aoboc")]
-        public void Like_MatchesTheExpectedString(string p, string s)
+        [TestCase("a", "A"), TestCase("a*b*c", "abc"), TestCase("a?b?c", "aoboc")]
+        public void Like_MatchesTheExpectedString([NotNull] string p, [NotNull] string s)
         {
             Assert.IsTrue(s.Like(p));
         }

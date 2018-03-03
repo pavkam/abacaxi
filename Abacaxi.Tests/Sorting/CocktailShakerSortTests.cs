@@ -17,11 +17,12 @@ namespace Abacaxi.Tests.Sorting
 {
     using System.Collections.Generic;
     using NUnit.Framework;
+    using JetBrains.Annotations;
 
     [TestFixture]
     public sealed class CocktailShakerSortTestsBase : SortingAlgorithmTestsBase
     {
-        protected override void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer)
+        protected override void Sort<T>([NotNull] T[] array, int startIndex, int length, [NotNull] IComparer<T> comparer)
         {
             Abacaxi.Sorting.CocktailShakerSort(array, startIndex, length, comparer);
         }

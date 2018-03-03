@@ -18,6 +18,7 @@ namespace Abacaxi.Tests.StringExtensions
     using System;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
     public sealed class StripDiacriticsTests
@@ -29,7 +30,7 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [TestCase("", ""),TestCase("ł", "l"),TestCase("Ł", "L"),TestCase("Café", "Cafe"),TestCase("Gebärden", "Gebarden")]
-        public void StripDiacritics_ReturnsTheExpectedResult(string a, string e)
+        public void StripDiacritics_ReturnsTheExpectedResult([NotNull] string a, string e)
         {
             Assert.AreEqual(e, a.StripDiacritics());
         }

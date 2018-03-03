@@ -22,20 +22,19 @@ namespace Abacaxi.Tests.Trees
     using System.Collections;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using JetBrains.Annotations;
 
     [TestFixture]
     public class BinarySearchTreeTests
     {
-        protected virtual BinarySearchTree<TKey, TValue> Create<TKey, TValue>(IComparer<TKey> comparer)
-        {
-            return new BinarySearchTree<TKey, TValue>(comparer);
-        }
+        [NotNull]
+        protected virtual BinarySearchTree<TKey, TValue> Create<TKey, TValue>([NotNull] IComparer<TKey> comparer) =>
+            new BinarySearchTree<TKey, TValue>(comparer);
 
-        protected virtual BinarySearchTree<TKey, TValue> Create<TKey, TValue>()
-        {
-            return new BinarySearchTree<TKey, TValue>();
-        }
+        [NotNull]
+        protected virtual BinarySearchTree<TKey, TValue> Create<TKey, TValue>() => new BinarySearchTree<TKey, TValue>();
 
+        [NotNull]
         protected BinarySearchTree<int, int> CreateFilled()
         {
             var tree = Create<int, int>(Comparer<int>.Default);
@@ -52,10 +51,10 @@ namespace Abacaxi.Tests.Trees
             return tree;
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_IfComparerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => Create<int,int>(null));
+            Assert.Throws<ArgumentNullException>(() => Create<int, int>(null));
         }
 
         [Test]
@@ -510,7 +509,7 @@ namespace Abacaxi.Tests.Trees
             var result = new List<KeyValuePair<int, int>>();
             foreach (var x in (IEnumerable) tree)
             {
-                result.Add((KeyValuePair<int, int>)x);
+                result.Add((KeyValuePair<int, int>) x);
             }
 
             TestHelper.AssertSequence(result,
@@ -626,7 +625,8 @@ namespace Abacaxi.Tests.Trees
                 new KeyValuePair<int, int>(9, 900));
         }
 
-        [TestCase(TreeTraversalMode.InOrder),TestCase(TreeTraversalMode.PostOrder),TestCase(TreeTraversalMode.PreOrder)]
+        [TestCase(TreeTraversalMode.InOrder), TestCase(TreeTraversalMode.PostOrder),
+         TestCase(TreeTraversalMode.PreOrder)]
         public void Enumeration_ThrowsExceptionOnAdd(TreeTraversalMode mode)
         {
             var tree = Create<int, int>();
@@ -639,7 +639,8 @@ namespace Abacaxi.Tests.Trees
             }
         }
 
-        [TestCase(TreeTraversalMode.InOrder),TestCase(TreeTraversalMode.PostOrder),TestCase(TreeTraversalMode.PreOrder)]
+        [TestCase(TreeTraversalMode.InOrder), TestCase(TreeTraversalMode.PostOrder),
+         TestCase(TreeTraversalMode.PreOrder)]
         public void Enumeration_ThrowsExceptionOnUpdate(TreeTraversalMode mode)
         {
             var tree = Create<int, int>();
@@ -652,7 +653,8 @@ namespace Abacaxi.Tests.Trees
             }
         }
 
-        [TestCase(TreeTraversalMode.InOrder),TestCase(TreeTraversalMode.PostOrder),TestCase(TreeTraversalMode.PreOrder)]
+        [TestCase(TreeTraversalMode.InOrder), TestCase(TreeTraversalMode.PostOrder),
+         TestCase(TreeTraversalMode.PreOrder)]
         public void Enumeration_ThrowsExceptionOnRemove(TreeTraversalMode mode)
         {
             var tree = Create<int, int>();
@@ -665,7 +667,8 @@ namespace Abacaxi.Tests.Trees
             }
         }
 
-        [TestCase(TreeTraversalMode.InOrder),TestCase(TreeTraversalMode.PostOrder),TestCase(TreeTraversalMode.PreOrder)]
+        [TestCase(TreeTraversalMode.InOrder), TestCase(TreeTraversalMode.PostOrder),
+         TestCase(TreeTraversalMode.PreOrder)]
         public void Enumeration_ThrowsExceptionOnClear(TreeTraversalMode mode)
         {
             var tree = Create<int, int>();
@@ -679,7 +682,7 @@ namespace Abacaxi.Tests.Trees
         }
 
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void CopyTo_ThrowsException_ForNullArray()
         {
             var tree = Create<int, int>();

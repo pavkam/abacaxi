@@ -19,6 +19,7 @@ namespace Abacaxi.Tests.ZArray
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using System.Collections.Generic;
+    using JetBrains.Annotations;
 
     [TestFixture]
     public sealed class ConstructTests
@@ -84,7 +85,7 @@ namespace Abacaxi.Tests.ZArray
         }
 
         [TestCase("0123456789", 0, 10),TestCase("0", 0, 1),TestCase("abc", 1, 2)]
-        public void Construct_ReturnsAnArrayOfTheSameLengthAsInput(string s, int start, int length)
+        public void Construct_ReturnsAnArrayOfTheSameLengthAsInput([NotNull] string s, int start, int length)
         {
             var sequence = s.AsList();
             var z = Abacaxi.ZArray.Construct(sequence, start, length, EqualityComparer<char>.Default);
@@ -93,7 +94,7 @@ namespace Abacaxi.Tests.ZArray
         }
 
         [TestCase("0123456789", 0, 10),TestCase("0", 0, 1),TestCase("abc", 1, 2)]
-        public void Construct_ReturnsTheLengthOfArrayAsElementZero(string s, int start, int length)
+        public void Construct_ReturnsTheLengthOfArrayAsElementZero([NotNull] string s, int start, int length)
         {
             var sequence = s.AsList();
             var z = Abacaxi.ZArray.Construct(sequence, start, length, EqualityComparer<char>.Default);

@@ -13,16 +13,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Text;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class DiffTests
+    public sealed class DiffTests
     {
         [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Diff_ThrowsException_ForNullSequence()
@@ -39,7 +39,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [TestCase("", "", ""),TestCase("a", "a", "=a"),TestCase("a", "b", "*b"),TestCase("", "a", "+a"),TestCase("a", "", "-a"),TestCase("ab", "a", "=a-b"),TestCase("a", "ab", "=a+b"),TestCase("ab", "ba", "*b*a"),TestCase("hello my dear friend", "Hello you fiend!", "*H=e=l=l=o= -m=y- -d-e*o*u= =f-r=i=e=n=d+!")]
-        public void Diff_ReturnsExpectedSequence(string s1, string s2, string expected)
+        public void Diff_ReturnsExpectedSequence([NotNull] string s1, [NotNull] string s2, string expected)
         {
             var result = new StringBuilder();
             foreach (var e in s1.AsList().Diff(s2.AsList()))

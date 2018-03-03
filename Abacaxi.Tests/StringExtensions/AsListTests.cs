@@ -18,6 +18,7 @@ namespace Abacaxi.Tests.StringExtensions
     using System;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
     public sealed class AsListTests
@@ -29,7 +30,7 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [TestCase("", ""),TestCase("a", "a"),TestCase("abc", "a,b,c")]
-        public void AsList_GetEnumerator_ReturnsTheExpectedSequence(string s, string expected)
+        public void AsList_GetEnumerator_ReturnsTheExpectedSequence([NotNull] string s, string expected)
         {
             var actual = string.Join(",", s.AsList());
             Assert.AreEqual(expected, actual);

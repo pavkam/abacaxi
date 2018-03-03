@@ -21,12 +21,9 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class ContainsTwoElementsThatAggregateToTests
+    public sealed class ContainsTwoElementsThatAggregateToTests
     {
-        private static int IntegerAggregator(int a, int b)
-        {
-            return a + b;
-        }
+        private static int IntegerAggregator(int a, int b) => a + b;
 
         [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ContainsTwoElementsThatAggregateTo_ThrowsException_IfSequenceIsNull()

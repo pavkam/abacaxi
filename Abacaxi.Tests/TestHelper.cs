@@ -18,10 +18,11 @@ namespace Abacaxi.Tests
     using NUnit.Framework;
     using System.Collections.Generic;
     using System.Linq;
+    using JetBrains.Annotations;
 
     internal static class TestHelper
     {
-        public static void AssertSequence<T>(IEnumerable<T> sequence, params T[] expected)
+        public static void AssertSequence<T>([NotNull] IEnumerable<T> sequence, [NotNull] params T[] expected)
         {
             Assert.NotNull(sequence, "The sequence is null.");
 
@@ -34,7 +35,7 @@ namespace Abacaxi.Tests
             }
         }
 
-        public static void AssertSequence<T>(IEnumerable<IEnumerable<T>> sequence, params T[][] expected)
+        public static void AssertSequence<T>([NotNull] IEnumerable<IEnumerable<T>> sequence, [NotNull] params T[][] expected)
         {
             Assert.NotNull(sequence);
 
@@ -47,7 +48,7 @@ namespace Abacaxi.Tests
             }
         }
 
-        public static void AssertSequence<T>(IEnumerable<T[][]> sequence, params T[][][] expected)
+        public static void AssertSequence<T>([NotNull] IEnumerable<T[][]> sequence, [NotNull] params T[][][] expected)
         {
             Assert.NotNull(sequence);
 

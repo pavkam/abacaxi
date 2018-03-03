@@ -26,10 +26,7 @@ namespace Abacaxi.Tests.ObjectExtensions
     {
         private static readonly InspectMockObject Mock = new InspectMockObject();
 
-        private static KeyValuePair<string, object> Kvp(string key, object value)
-        {
-            return new KeyValuePair<string, object>(key, value);
-        }
+        private static KeyValuePair<string, object> Kvp(string key, object value) => new KeyValuePair<string, object>(key, value);
 
         [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Inspect_ThrowsException_ForNullValue()

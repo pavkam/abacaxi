@@ -18,19 +18,17 @@ namespace Abacaxi.Tests.Trees
     using NUnit.Framework;
     using Abacaxi.Trees;
     using System.Collections.Generic;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class AvlTreeTests : BinarySearchTreeTests
+    public sealed class AvlTreeTests : BinarySearchTreeTests
     {
-        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>(IComparer<TKey> comparer)
-        {
-            return new AvlTree<TKey, TValue>(comparer);
-        }
+        [NotNull]
+        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>([NotNull] IComparer<TKey> comparer) =>
+            new AvlTree<TKey, TValue>(comparer);
 
-        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>()
-        {
-            return new AvlTree<TKey, TValue>();
-        }
+        [NotNull]
+        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>() => new AvlTree<TKey, TValue>();
 
         [Test]
         public override void GetEnumerator_PostOrder_ReturnsElementsPostOrder()
@@ -83,6 +81,5 @@ namespace Abacaxi.Tests.Trees
                 new KeyValuePair<int, int>(8, 800),
                 new KeyValuePair<int, int>(9, 900));
         }
-
     }
 }

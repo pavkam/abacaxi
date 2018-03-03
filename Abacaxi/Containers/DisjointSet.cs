@@ -44,15 +44,16 @@ namespace Abacaxi.Containers
             Debug.Assert(_nodes.ContainsKey(@object));
 
             var node = _nodes[@object];
-            if (!_comparer.Equals(@object, node.Parent))
+            if (_comparer.Equals(@object, node.Parent))
             {
-                var parentNode = GetRootNodeRecursive(node.Parent);
-                node.Parent = parentNode.Parent;
-
-                return parentNode;
+                return node;
             }
 
-            return node;
+            var parentNode = GetRootNodeRecursive(node.Parent);
+            node.Parent = parentNode.Parent;
+
+            return parentNode;
+
         }
 
         [NotNull]
@@ -60,19 +61,20 @@ namespace Abacaxi.Containers
         {
             Debug.Assert(@object != null);
 
-            if (!_nodes.TryGetValue(@object, out var node))
+            if (_nodes.TryGetValue(@object, out var node))
             {
-                node = new Node
-                {
-                    Parent = @object,
-                    Rank = 1
-                };
-
-                _nodes.Add(@object, node);
-                return node;
+                return GetRootNodeRecursive(@object);
             }
 
-            return GetRootNodeRecursive(@object);
+            node = new Node
+            {
+                Parent = @object,
+                Rank = 1
+            };
+
+            _nodes.Add(@object, node);
+            return node;
+
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace Abacaxi.Containers
 
         /// <summary>
         /// Gets the root object (called label) that identifies the sub-set that contains this <paramref name="object"/>.
-        /// If <paramref name="object"/> is not stored in this <see cref="DisjointSet{T}"/>, it is added into its own set and 
+        /// If <paramref name="object"/> is not stored in this <see cref="DisjointSet{T}"/>, it is added into its own set and
         /// the return value is itself.
         /// </summary>
         /// <value>
@@ -122,7 +124,7 @@ namespace Abacaxi.Containers
         /// <param name="object">The first object.</param>
         /// <param name="otherObjects">The other objects.</param>
         /// <returns>The "set label" object that identifies the merged set.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="object"/>, 
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="object"/>,
         /// <paramref name="otherObjects"/>, or its contents, are <c>null</c>.</exception>
         public T Merge([NotNull] T @object, [NotNull] params T[] otherObjects)
         {
@@ -134,30 +136,34 @@ namespace Abacaxi.Containers
             Debug.Assert(roots[0] != null);
             var heaviest = roots[0];
 
-            if (otherObjects.Length > 0)
+            if (otherObjects.Length <= 0)
             {
-                for (var i = 0; i < otherObjects.Length; i++)
+                return heaviest.Parent;
+            }
+
+            for (var i = 0; i < otherObjects.Length; i++)
+            {
+                Validate.ArgumentNotNull(nameof(otherObjects), otherObjects[i]);
+
+                var root = GetRootNode(otherObjects[i]);
+                roots[i + 1] = root;
+
+                Debug.Assert(heaviest != null);
+                if (root.Rank > heaviest.Rank)
                 {
-                    Validate.ArgumentNotNull(nameof(otherObjects), otherObjects[i]);
+                    heaviest = root;
+                }
+            }
 
-                    var root = GetRootNode(otherObjects[i]);
-                    roots[i + 1] = root;
-
-                    Debug.Assert(heaviest != null);
-                    if (root.Rank > heaviest.Rank)
-                    {
-                        heaviest = root;
-                    }
+            foreach (var r in roots)
+            {
+                if (_comparer.Equals(r.Parent, heaviest.Parent))
+                {
+                    continue;
                 }
 
-                foreach (var r in roots)
-                {
-                    if (!_comparer.Equals(r.Parent, heaviest.Parent))
-                    {
-                        heaviest.Rank += r.Rank;
-                        r.Parent = heaviest.Parent;
-                    }
-                }
+                heaviest.Rank += r.Rank;
+                r.Parent = heaviest.Parent;
             }
 
             return heaviest.Parent;
@@ -178,23 +184,24 @@ namespace Abacaxi.Containers
             var root1 = GetRootNode(object1);
             var root2 = GetRootNode(object2);
 
-            if (!_comparer.Equals(root1.Parent, root2.Parent))
+            if (_comparer.Equals(root1.Parent, root2.Parent))
             {
-                if (root1.Rank > root2.Rank)
-                {
-                    root1.Rank += root2.Rank;
-                    root2.Parent = root1.Parent;
-                }
-                else 
-                {
-                    root2.Rank += root1.Rank;
-                    root1.Parent = root2.Parent;
-                }
-
-                return false;
+                return true;
             }
 
-            return true;
+            if (root1.Rank > root2.Rank)
+            {
+                root1.Rank += root2.Rank;
+                root2.Parent = root1.Parent;
+            }
+            else
+            {
+                root2.Rank += root1.Rank;
+                root1.Parent = root2.Parent;
+            }
+
+            return false;
+
         }
 
         /// <summary>
@@ -203,10 +210,7 @@ namespace Abacaxi.Containers
         /// <returns>
         /// An enumerator that can be used to iterate through the set.
         /// </returns>
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _nodes.Keys.GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => _nodes.Keys.GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates through the set.
@@ -214,9 +218,6 @@ namespace Abacaxi.Containers
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the set.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

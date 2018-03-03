@@ -18,6 +18,7 @@ namespace Abacaxi.Tests.StringExtensions
     using System;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
     public sealed class WordWrapTests
@@ -41,7 +42,7 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [TestCase("a", 1),TestCase("abc", 10),TestCase("abc def", 50)]
-        public void WordWrap_ReturnsWholeString_IfLineLengthEqualOrLongerThanStringLength(string s, int l)
+        public void WordWrap_ReturnsWholeString_IfLineLengthEqualOrLongerThanStringLength([NotNull] string s, int l)
         {
             TestHelper.AssertSequence(s.WordWrap(l), s);
         }
