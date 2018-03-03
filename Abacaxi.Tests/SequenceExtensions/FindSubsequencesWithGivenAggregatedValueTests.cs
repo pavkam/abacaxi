@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -33,36 +33,28 @@ namespace Abacaxi.Tests.SequenceExtensions
             return a - b;
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 ((int[])null).FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, 1));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new[] { 1 }.FindSubsequencesWithGivenAggregatedValue(null, IntegerDisaggregator, Comparer<int>.Default, 1));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfDisaggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new[] { 1 }.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, null, Comparer<int>.Default, 1));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>

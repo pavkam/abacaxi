@@ -27,6 +27,9 @@
     <DocumentationFile>bin\Release\netstandard2.0\Abacaxi.Practice.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />
   </ItemGroup>
 </Project>

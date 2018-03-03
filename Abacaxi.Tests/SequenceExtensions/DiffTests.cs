@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -24,31 +24,21 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public class DiffTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Diff_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 Abacaxi.SequenceExtensions.Diff(null, new char[] {}));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Diff_ThrowsException_ForNullResultSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new char[] { }.Diff(null));
         }
 
-        [TestCase("", "", "")]
-        [TestCase("a", "a", "=a")]
-        [TestCase("a", "b", "*b")]
-        [TestCase("", "a", "+a")]
-        [TestCase("a", "", "-a")]
-        [TestCase("ab", "a", "=a-b")]
-        [TestCase("a", "ab", "=a+b")]
-        [TestCase("ab", "ba", "*b*a")]
-        [TestCase("hello my dear friend", "Hello you fiend!", "*H=e=l=l=o= -m=y- -d-e*o*u= =f-r=i=e=n=d+!")]
+        [TestCase("", "", ""),TestCase("a", "a", "=a"),TestCase("a", "b", "*b"),TestCase("", "a", "+a"),TestCase("a", "", "-a"),TestCase("ab", "a", "=a-b"),TestCase("a", "ab", "=a+b"),TestCase("ab", "ba", "*b*a"),TestCase("hello my dear friend", "Hello you fiend!", "*H=e=l=l=o= -m=y- -d-e*o*u= =f-r=i=e=n=d+!")]
         public void Diff_ReturnsExpectedSequence(string s1, string s2, string expected)
         {
             var result = new StringBuilder();

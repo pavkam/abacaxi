@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -22,8 +22,7 @@ namespace Abacaxi.Tests.StringExtensions
     [TestFixture]
     public sealed class ShortenTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Shorten_ThrowsException_IfStringIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => ((string)null).Shorten(100));
@@ -41,15 +40,7 @@ namespace Abacaxi.Tests.StringExtensions
             Assert.Throws<ArgumentOutOfRangeException>(() => "".Shorten(2, "..."));
         }
 
-        [TestCase("", 1, null, "")]
-        [TestCase("1", 1, null, "1")]
-        [TestCase("12", 1, null, "1")]
-        [TestCase("12345", 5, null, "12345")]
-        [TestCase("1234567890", 5, "?", "1234?")]
-        [TestCase("1234567890", 5, "...", "12...")]
-        [TestCase("12345", 3, "...", "...")]
-        [TestCase("1", 1, "?", "1")]
-        [TestCase("12", 1, "?", "?")]
+        [TestCase("", 1, null, ""),TestCase("1", 1, null, "1"),TestCase("12", 1, null, "1"),TestCase("12345", 5, null, "12345"),TestCase("1234567890", 5, "?", "1234?"),TestCase("1234567890", 5, "...", "12..."),TestCase("12345", 3, "...", "..."),TestCase("1", 1, "?", "1"),TestCase("12", 1, "?", "?")]
         public void Shorten_ReturnsExpectedString(string s, int l, string e, string expected)
         {
             var actual = s.Shorten(l, e);
@@ -57,13 +48,7 @@ namespace Abacaxi.Tests.StringExtensions
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("Les Misérables", 7, "Les Mis")]
-        [TestCase("Les Misérables", 8, "Les Mis")]
-        [TestCase("Les Misérables", 9, "Les Misé")]
-        [TestCase("क्षि", 4, "क्षि")]
-        [TestCase("क्षि", 3, "क्")]
-        [TestCase("क्षि", 2, "क्")]
-        [TestCase("क्षि", 1, "")]
+        [TestCase("Les Misérables", 7, "Les Mis"),TestCase("Les Misérables", 8, "Les Mis"),TestCase("Les Misérables", 9, "Les Misé"),TestCase("क्षि", 4, "क्षि"),TestCase("क्षि", 3, "क्"),TestCase("क्षि", 2, "क्"),TestCase("क्षि", 1, "")]
         public void Shorten_TakesIntoAccount_MultiCharSequences(string s, int l, string expected)
         {
             var actual = s.Shorten(l);

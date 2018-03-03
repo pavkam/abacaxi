@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -31,12 +31,9 @@ namespace Abacaxi.Practice.Graphs
         private readonly int _lengthX;
         private readonly int _lengthY;
 
-        private bool VertexExists(int x, int y)
-        {
-            return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY;
-        }
+        private bool VertexExists(int x, int y) => x >= 0 && x < _lengthX && y >= 0 && y < _lengthY;
 
-        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, Cell vertex)
+        private void ValidateVertex([InvokerParameterName,NotNull]  string argumentName, Cell vertex)
         {
             if (!VertexExists(vertex.X, vertex.Y))
             {
@@ -44,8 +41,7 @@ namespace Abacaxi.Practice.Graphs
             }
         }
 
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         private IEnumerable<Edge<Cell>> GetEdgesIterate(Cell vertex)
         {
             Debug.Assert(VertexExists(vertex.X, vertex.Y));
@@ -101,7 +97,7 @@ namespace Abacaxi.Practice.Graphs
             Validate.ArgumentGreaterThanZero(nameof(boardHeight), boardHeight);
 
             _lengthX = boardWidth;
-            _lengthY = boardHeight; 
+            _lengthY = boardHeight;
         }
 
         /// <summary>

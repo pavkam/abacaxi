@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -23,8 +23,7 @@ namespace Abacaxi.Tests.Containers
     using System.Linq;
     using System.Diagnostics.CodeAnalysis;
 
-    [TestFixture]
-    [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
+    [TestFixture,SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     public class MashTests
     {
         private Mash<string, int> _emptyMash;
@@ -41,9 +40,7 @@ namespace Abacaxi.Tests.Containers
             _threeMash = new Mash<string, int> {1, 2, 3};
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfEqualityComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new Mash<string, int>(null));
@@ -130,8 +127,7 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(0, mash.LinkedCount);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "UnusedVariable")]
+        [Test,SuppressMessage("ReSharper", "UnusedVariable")]
         public void LinkedCount_IsIncremented_WhenASubMashIsAccessed()
         {
             var mash = new Mash<string, int>();
@@ -139,9 +135,7 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(1, mash.LinkedCount);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "NotAccessedVariable")]
-        [SuppressMessage("ReSharper", "RedundantAssignment")]
+        [Test,SuppressMessage("ReSharper", "NotAccessedVariable"),SuppressMessage("ReSharper", "RedundantAssignment")]
         public void LinkedCount_IsNotIncremented_WhenExistingSubMashIsAccessed()
         {
             var mash = new Mash<string, int>();
@@ -151,8 +145,7 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(1, mash.LinkedCount);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "UnusedVariable")]
+        [Test,SuppressMessage("ReSharper", "UnusedVariable")]
         public void LinkedCount_IsProperlyTranslatedInternalState()
         {
             var mash = new Mash<string, int>();
@@ -175,8 +168,7 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(6, mash.LinkedCount);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         public void GetEnumerator_ReturnsNothing_ForEmpty()
         {
             var result = new List<int>();
@@ -188,8 +180,7 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(result);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         public void GetEnumerator_ReturnsElements_ForOne()
         {
             var result = new List<int>();
@@ -201,8 +192,7 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(result, 1);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         public void GetEnumerator_ReturnsElements_ForTwo()
         {
             var result = new List<int>();
@@ -214,8 +204,7 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(result, 1, 2);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         public void GetEnumerator_ReturnsElements_ForThree()
         {
             var result = new List<int>();
@@ -227,8 +216,7 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(result, 1, 2, 3);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         public void Implicit_GetEnumerator_FunctionsAsExpected()
         {
             var result = new List<int>();
@@ -288,35 +276,28 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(0, false)]
-        [TestCase(1, true)]
+        [TestCase(0, false),TestCase(1, true)]
         public void Contains_ReturnsExpectedResult_ForOne(int i, bool expected)
         {
             var actual = _oneMash.Contains(i);
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(0, false)]
-        [TestCase(1, true)]
-        [TestCase(2, true)]
+        [TestCase(0, false),TestCase(1, true),TestCase(2, true)]
         public void Contains_ReturnsExpectedResult_ForTwo(int i, bool expected)
         {
             var actual = _twoMash.Contains(i);
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(0, false)]
-        [TestCase(1, true)]
-        [TestCase(2, true)]
-        [TestCase(3, true)]
+        [TestCase(0, false),TestCase(1, true),TestCase(2, true),TestCase(3, true)]
         public void Contains_ReturnsExpectedResult_ForThree(int i, bool expected)
         {
             var actual = _threeMash.Contains(i);
             Assert.AreEqual(expected, actual);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void CopyTo_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() => _oneMash.CopyTo(null, 0));
@@ -457,56 +438,46 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(0, -1)]
-        [TestCase(1, 0)]
+        [TestCase(0, -1),TestCase(1, 0)]
         public void IndexOf_ReturnsExpectedResult_ForOne(int i, int expected)
         {
             var actual = _oneMash.IndexOf(i);
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(0, -1)]
-        [TestCase(1, 0)]
-        [TestCase(2, 1)]
+        [TestCase(0, -1),TestCase(1, 0),TestCase(2, 1)]
         public void IndexOf_ReturnsExpectedResult_ForTwo(int i, int expected)
         {
             var actual = _twoMash.IndexOf(i);
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(0, -1)]
-        [TestCase(1, 0)]
-        [TestCase(2, 1)]
-        [TestCase(3, 2)]
+        [TestCase(0, -1),TestCase(1, 0),TestCase(2, 1),TestCase(3, 2)]
         public void IndexOf_ReturnsExpectedResult_ForThree(int i, int expected)
         {
             var actual = _threeMash.IndexOf(i);
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(-1)]
-        [TestCase(1)]
+        [TestCase(-1),TestCase(1)]
         public void Insert_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _emptyMash.Insert(index, 0));
         }
 
-        [TestCase(-1)]
-        [TestCase(2)]
+        [TestCase(-1),TestCase(2)]
         public void Insert_ThrowsException_IfIndexOutOfRange_ForOne(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _oneMash.Insert(index, 0));
         }
 
-        [TestCase(-1)]
-        [TestCase(3)]
+        [TestCase(-1),TestCase(3)]
         public void Insert_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _twoMash.Insert(index, 0));
         }
 
-        [TestCase(-1)]
-        [TestCase(4)]
+        [TestCase(-1),TestCase(4)]
         public void Insert_ThrowsException_IfIndexOutOfRange_ForThree(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _threeMash.Insert(index, 0));
@@ -579,29 +550,25 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(1, _emptyMash.Count);
         }
 
-        [TestCase(-1)]
-        [TestCase(1)]
+        [TestCase(-1),TestCase(1)]
         public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _emptyMash.RemoveAt(index));
         }
 
-        [TestCase(-1)]
-        [TestCase(2)]
+        [TestCase(-1),TestCase(2)]
         public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForOne(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _oneMash.RemoveAt(index));
         }
 
-        [TestCase(-1)]
-        [TestCase(3)]
+        [TestCase(-1),TestCase(3)]
         public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _twoMash.RemoveAt(index));
         }
 
-        [TestCase(-1)]
-        [TestCase(4)]
+        [TestCase(-1),TestCase(4)]
         public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForThree(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _threeMash.RemoveAt(index));
@@ -660,29 +627,25 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(_threeMash);
         }
 
-        [TestCase(-1)]
-        [TestCase(1)]
+        [TestCase(-1),TestCase(1)]
         public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _emptyMash[index]));
         }
 
-        [TestCase(-1)]
-        [TestCase(2)]
+        [TestCase(-1),TestCase(2)]
         public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForOne(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _oneMash[index]));
         }
 
-        [TestCase(-1)]
-        [TestCase(3)]
+        [TestCase(-1),TestCase(3)]
         public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _twoMash[index]));
         }
 
-        [TestCase(-1)]
-        [TestCase(4)]
+        [TestCase(-1),TestCase(4)]
         public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForThree(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _threeMash[index]));
@@ -695,46 +658,39 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(all[index], _oneMash[index]);
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase(0),TestCase(1)]
         public void Indexer_Getter_ReturnsTheExpectedValue_ForTwo(int index)
         {
             var all = _twoMash.ToArray();
             Assert.AreEqual(all[index], _twoMash[index]);
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
+        [TestCase(0),TestCase(1),TestCase(2)]
         public void Indexer_Getter_ReturnsTheExpectedValue_ForThree(int index)
         {
             var all = _threeMash.ToArray();
             Assert.AreEqual(all[index], _threeMash[index]);
         }
 
-        [TestCase(-1)]
-        [TestCase(1)]
+        [TestCase(-1),TestCase(1)]
         public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _emptyMash[index] = 1);
         }
 
-        [TestCase(-1)]
-        [TestCase(2)]
+        [TestCase(-1),TestCase(2)]
         public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForOne(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _oneMash[index] = 1);
         }
 
-        [TestCase(-1)]
-        [TestCase(3)]
+        [TestCase(-1),TestCase(3)]
         public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _twoMash[index] = 1);
         }
 
-        [TestCase(-1)]
-        [TestCase(4)]
+        [TestCase(-1),TestCase(4)]
         public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForThree(int index)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _threeMash[index] = 1);
@@ -749,8 +705,7 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(_oneMash, all);
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase(0),TestCase(1)]
         public void Indexer_Setter_SetsTheExpectedValue_ForTwo(int index)
         {
             var all = _twoMash.ToArray();
@@ -759,9 +714,7 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(_twoMash, all);
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
+        [TestCase(0),TestCase(1),TestCase(2)]
         public void Indexer_Setter_SetsTheExpectedValue_ForThree(int index)
         {
             var all = _threeMash.ToArray();
@@ -830,15 +783,13 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(_threeMash, 10, 2, 3);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Link_ThrowsException_IfKeyIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _emptyMash.Link(null, _threeMash));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Link_ThrowsException_IfMashIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _emptyMash.Link("a", null));
@@ -1094,8 +1045,7 @@ namespace Abacaxi.Tests.Containers
 
 
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Unlink_ThrowsException_IfKeyIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _emptyMash.Unlink(null));
@@ -1144,27 +1094,7 @@ namespace Abacaxi.Tests.Containers
             Assert.AreNotSame(_threeMash, _emptyMash["a"]);
         }
 
-        [TestCase(0, 6)]
-        [TestCase(1, 6)]
-        [TestCase(2, 6)]
-        [TestCase(3, 6)]
-        [TestCase(4, 6)]
-        [TestCase(5, 6)]
-        [TestCase(0, 5)]
-        [TestCase(1, 5)]
-        [TestCase(2, 5)]
-        [TestCase(3, 5)]
-        [TestCase(4, 5)]
-        [TestCase(0, 4)]
-        [TestCase(1, 4)]
-        [TestCase(2, 4)]
-        [TestCase(3, 4)]
-        [TestCase(0, 3)]
-        [TestCase(1, 3)]
-        [TestCase(2, 3)]
-        [TestCase(0, 2)]
-        [TestCase(1, 2)]
-        [TestCase(0, 1)]
+        [TestCase(0, 6),TestCase(1, 6),TestCase(2, 6),TestCase(3, 6),TestCase(4, 6),TestCase(5, 6),TestCase(0, 5),TestCase(1, 5),TestCase(2, 5),TestCase(3, 5),TestCase(4, 5),TestCase(0, 4),TestCase(1, 4),TestCase(2, 4),TestCase(3, 4),TestCase(0, 3),TestCase(1, 3),TestCase(2, 3),TestCase(0, 2),TestCase(1, 2),TestCase(0, 1)]
         public void Unlink_RemovesTheExpectedElement(int index, int count)
         {
             var mash = new Mash<int, string>();

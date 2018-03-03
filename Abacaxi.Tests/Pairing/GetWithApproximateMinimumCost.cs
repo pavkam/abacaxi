@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -29,8 +29,7 @@ namespace Abacaxi.Tests.Pairing
             return Math.Abs(l - r);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetWithApproximateMinimumCost_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(
@@ -44,8 +43,7 @@ namespace Abacaxi.Tests.Pairing
                 () => Abacaxi.Pairing.GetWithApproximateMinimumCost(new[] { 1, 2, 3 }, DistanceCostOfPairsEvaluator));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetWithApproximateMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
         {
             Assert.Throws<ArgumentNullException>(
@@ -70,16 +68,12 @@ namespace Abacaxi.Tests.Pairing
         public void GetWithApproximateMinimumCost_ReturnsOnePair_ForTwoElementSequence()
         {
             var result = Abacaxi.Pairing.GetWithApproximateMinimumCost(new[] { 1, 2 }, DistanceCostOfPairsEvaluator);
-            
+
             Assert.AreEqual(1, result.Length);
             Assert.IsTrue(result[0].Equals(Tuple.Create(1, 2)) || result[0].Equals(Tuple.Create(2, 1)));
         }
 
-        [TestCase(10)]
-        [TestCase(20)]
-        [TestCase(100)]
-        [TestCase(1000)]
-        [Parallelizable]
+        [TestCase(10),TestCase(20),TestCase(100),TestCase(1000),Parallelizable]
         public void GetWithApproximateMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
         {
             var random = new Random();
@@ -113,17 +107,7 @@ namespace Abacaxi.Tests.Pairing
             Assert.AreEqual(0, expected.Count);
         }
 
-        [TestCase(4, 100, 10, 0.01)]
-        [TestCase(32, 100, 1000, 0.025)]
-        [TestCase(128, 100, 7000, 0.015)]
-        [TestCase(1024, 50, 90000, 0.01)]
-        [TestCase(4096, 25, 400000, 0.01)]
-        [TestCase(4, 100, 10, 0.10)]
-        [TestCase(32, 100, 350, 0.11)]
-        [TestCase(128, 100, 1500, 0.10)]
-        [TestCase(1024, 50, 9000, 0.10)]
-        [TestCase(4096, 25, 35000, 0.10)]
-        [Parallelizable]
+        [TestCase(4, 100, 10, 0.01),TestCase(32, 100, 1000, 0.025),TestCase(128, 100, 7000, 0.015),TestCase(1024, 50, 90000, 0.01),TestCase(4096, 25, 400000, 0.01),TestCase(4, 100, 10, 0.10),TestCase(32, 100, 350, 0.11),TestCase(128, 100, 1500, 0.10),TestCase(1024, 50, 9000, 0.10),TestCase(4096, 25, 35000, 0.10),Parallelizable]
         public void GetWithApproximateMinimumCost_ApproximatesAtExpectedError(int length, int samples, int iterations, double expectedMaxError)
         {
             var totalError = .0;

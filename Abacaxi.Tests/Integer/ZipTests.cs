@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -42,21 +42,14 @@ namespace Abacaxi.Tests.Integer
                 Abacaxi.Integer.Zip(1, 1, 1));
         }
 
-        [TestCase(0, 0, 0)]
-        [TestCase(0, 1, 10)]
-        [TestCase(1, 0, 1)]
-        [TestCase(12, 3, 132)]
-        [TestCase(1, 23, 231)]
-        [TestCase(12, 34, 3142)]
+        [TestCase(0, 0, 0),TestCase(0, 1, 10),TestCase(1, 0, 1),TestCase(12, 3, 132),TestCase(1, 23, 231),TestCase(12, 34, 3142)]
         public void Zip_ReturnsCorrectResult_IntBase10(int x, int y, int expected)
         {
             var result = Abacaxi.Integer.Zip(x, y);
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase(0xA, 0xBC, 0xBCA)]
-        [TestCase(0xAB, 0xC, 0xACB)]
-        [TestCase(0xAB, 0xCD, 0xCADB)]
+        [TestCase(0xA, 0xBC, 0xBCA),TestCase(0xAB, 0xC, 0xACB),TestCase(0xAB, 0xCD, 0xCADB)]
         public void Zip_ReturnsCorrectResult_IntBase16(int x, int y, int expected)
         {
             var result = Abacaxi.Integer.Zip(x, y, 16);

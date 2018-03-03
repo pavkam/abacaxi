@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -31,8 +31,7 @@ namespace Abacaxi.Practice.Graphs
         [NotNull] private readonly Trie<char, ISet<string>> _neighborhoods;
         [NotNull] private readonly ISet<string> _vertices;
 
-        [NotNull]
-        [ItemNotNull]
+        [NotNull, ItemNotNull]
         private static IEnumerable<char[]> GetAllStringPatterns([NotNull] string s)
         {
             var ca = s.ToCharArray();
@@ -47,7 +46,7 @@ namespace Abacaxi.Practice.Graphs
             return result;
         }
 
-        [NotNull]
+        [NotNull, ItemNotNull]
         private IEnumerable<Edge<string>> GetEdgesIterate([NotNull] string vertex)
         {
             Debug.Assert(vertex != null);
@@ -70,7 +69,7 @@ namespace Abacaxi.Practice.Graphs
             }
         }
 
-        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, [CanBeNull] string vertex)
+        private void ValidateVertex([InvokerParameterName, NotNull]  string argumentName, [CanBeNull] string vertex)
         {
             Validate.ArgumentNotNull(argumentName, vertex);
             if (!_vertices.Contains(vertex))
@@ -112,7 +111,7 @@ namespace Abacaxi.Practice.Graphs
         /// </summary>
         /// <param name="sequence">The sequence of strings to build the graph upon.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        public StringNeighborhoodGraph([NotNull] [ItemNotNull] IEnumerable<string> sequence)
+        public StringNeighborhoodGraph([NotNull, ItemNotNull]  IEnumerable<string> sequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
@@ -141,10 +140,7 @@ namespace Abacaxi.Practice.Graphs
         /// <returns>
         /// A <see cref="IEnumerator{T}" /> that can be used to iterate through the collection.
         /// </returns>
-        public override IEnumerator<string> GetEnumerator()
-        {
-            return _vertices.GetEnumerator();
-        }
+        public override IEnumerator<string> GetEnumerator() => _vertices.GetEnumerator();
 
         /// <summary>
         /// Gets the edges for a given <paramref name="vertex" />.

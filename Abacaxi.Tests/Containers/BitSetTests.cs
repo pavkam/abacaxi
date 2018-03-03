@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -22,10 +22,7 @@ namespace Abacaxi.Tests.Containers
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
 
-    [TestFixture]
-    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-    [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-    [SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
+    [TestFixture,SuppressMessage("ReSharper", "ObjectCreationAsStatement"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
     public class BitSetTests
     {
         private BitSet _one;
@@ -277,15 +274,15 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void SymmetricExceptWith_ThrowsException_TryingToAddElementLessThanMin()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
-            _full.SymmetricExceptWith(new[] { 0, -1 }));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                _full.SymmetricExceptWith(new[] { 0, -1 }));
         }
 
         [Test]
         public void SymmetricExceptWith_ThrowsException_TryingToAddElementGreaterThanMax()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-            _full.SymmetricExceptWith(new[] { 0, 4 }));
+                _full.SymmetricExceptWith(new[] { 0, 4 }));
         }
 
         [Test]
@@ -326,14 +323,14 @@ namespace Abacaxi.Tests.Containers
         public void UnionWith_ThrowsException_TryingToAddElementLessThanMin()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-            _full.UnionWith(new[] { 0, -1 }));
+                _full.UnionWith(new[] { 0, -1 }));
         }
 
         [Test]
         public void UnionWith_ThrowsException_TryingToAddElementGreaterThanMax()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-            _full.UnionWith(new[] { 0, 4 }));
+                _full.UnionWith(new[] { 0, 4 }));
         }
 
         [Test]
@@ -699,13 +696,7 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(0, array[0]);
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(31)]
-        [TestCase(32)]
-        [TestCase(33)]
-        [TestCase(63)]
-        [TestCase(64)]
+        [TestCase(1),TestCase(2),TestCase(31),TestCase(32),TestCase(33),TestCase(63),TestCase(64)]
         public void Set_IsFilled_Properly(int count)
         {
             var set = new BitSet(count);
@@ -722,13 +713,7 @@ namespace Abacaxi.Tests.Containers
             }
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(31)]
-        [TestCase(32)]
-        [TestCase(33)]
-        [TestCase(63)]
-        [TestCase(64)]
+        [TestCase(1),TestCase(2),TestCase(31),TestCase(32),TestCase(33),TestCase(63),TestCase(64)]
         public void Set_EnumeratesProperly(int count)
         {
             var set = new BitSet(count);
@@ -746,13 +731,7 @@ namespace Abacaxi.Tests.Containers
             set.SetEquals(list);
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(31)]
-        [TestCase(32)]
-        [TestCase(33)]
-        [TestCase(63)]
-        [TestCase(64)]
+        [TestCase(1),TestCase(2),TestCase(31),TestCase(32),TestCase(33),TestCase(63),TestCase(64)]
         public void Set_CopiesToArrayProperly(int count)
         {
             var set = new BitSet(count);

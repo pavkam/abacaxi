@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -18,19 +18,15 @@ namespace Abacaxi.Tests.Graphs
     using System;
     using Abacaxi.Graphs;
     using NUnit.Framework;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class IsBipartiteTests
+    public sealed class IsBipartiteTests
     {
-        [TestCase("", true)]
-        [TestCase("A", true)]
-        [TestCase("A,B", true)]
-        [TestCase("A-1-B,C", true)]
-        [TestCase("A-1-B", true)]
-        [TestCase("A-1-B,B-1-C", true)]
-        [TestCase("A-1-B,B-1-C,C-1-A", false)]
-        [TestCase("A-1-B,C-1-D", true)]
-        public void VerifyIsBipartite_ReturnsExpectedResult(string relationships, bool expected)
+        [TestCase("", true), TestCase("A", true), TestCase("A,B", true), TestCase("A-1-B,C", true),
+         TestCase("A-1-B", true), TestCase("A-1-B,B-1-C", true), TestCase("A-1-B,B-1-C,C-1-A", false),
+         TestCase("A-1-B,C-1-D", true)]
+        public void VerifyIsBipartite_ReturnsExpectedResult([NotNull] string relationships, bool expected)
         {
             var graph = new LiteralGraph(relationships, false);
             var actual = graph.IsBipartite;

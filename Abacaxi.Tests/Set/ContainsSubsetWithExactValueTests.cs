@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -22,8 +22,7 @@ namespace Abacaxi.Tests.Set
     [TestFixture]
     public class ContainsSubsetWithExactValueTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ContainsSubsetWithExactValue_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -58,30 +57,14 @@ namespace Abacaxi.Tests.Set
             Assert.IsFalse(result);
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(4)]
-        [TestCase(5)]
-        [TestCase(6)]
-        [TestCase(7)]
-        [TestCase(8)]
-        [TestCase(9)]
-        [TestCase(10)]
-        [TestCase(11)]
-        [TestCase(12)]
-        [TestCase(13)]
-        [TestCase(14)]
-        [TestCase(15)]
+        [TestCase(1),TestCase(2),TestCase(3),TestCase(4),TestCase(5),TestCase(6),TestCase(7),TestCase(8),TestCase(9),TestCase(10),TestCase(11),TestCase(12),TestCase(13),TestCase(14),TestCase(15)]
         public void ContainsSubsetWithExactValue_ReturnsTrue_IfSumFound(int target)
         {
             var result = Abacaxi.Set.ContainsSubsetWithExactValue(new[] { 1, 2, 3, 4, 5 }, target);
             Assert.IsTrue(result);
         }
 
-        [TestCase(2)]
-        [TestCase(14)]
-        [TestCase(17)]
+        [TestCase(2),TestCase(14),TestCase(17)]
         public void ContainsSubsetWithExactValue_ReturnsFalse_IfSumNotFound(int target)
         {
             var result = Abacaxi.Set.ContainsSubsetWithExactValue(new[] { 1, 3, 5, 7 }, target);

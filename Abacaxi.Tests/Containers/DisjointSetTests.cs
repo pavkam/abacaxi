@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -13,7 +13,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Linq;
 
 namespace Abacaxi.Tests.Containers
 {
@@ -21,13 +20,13 @@ namespace Abacaxi.Tests.Containers
     using Abacaxi.Containers;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     [TestFixture]
     public class DisjointSetTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_WhenComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new DisjointSet<int>(null));
@@ -44,7 +43,7 @@ namespace Abacaxi.Tests.Containers
         {
             var set = new DisjointSet<string>(StringComparer.OrdinalIgnoreCase);
             set.Merge("test");
-            
+
             Assert.AreEqual("test", set["TEST"]);
         }
 
@@ -57,8 +56,7 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual("TEST", set["TEST"]);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Indexer_ThrowsException_IfObjectIsNull()
         {
             var set = new DisjointSet<string>();
@@ -157,25 +155,22 @@ namespace Abacaxi.Tests.Containers
             Assert.AreNotEqual(set["a"], set["b"]);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Merge_ThrowsException_IfObjectIsNull()
         {
             var set = new DisjointSet<string>();
             Assert.Throws<ArgumentNullException>(() => set.Merge(null));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "RedundantCast")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "RedundantCast")]
         public void Merge_ThrowsException_IfOtherObjectsIsNull()
         {
             var set = new DisjointSet<string>();
-            Assert.Throws<ArgumentNullException>(() => set.Merge("a", (string[])null));
+            Assert.Throws<ArgumentNullException>(() => set.Merge("a", (string[]) null));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Merge_ThrowsException_IfOneOfOtherObjectsIsNull()
         {
             var set = new DisjointSet<string>();
@@ -307,16 +302,14 @@ namespace Abacaxi.Tests.Containers
             }
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void CheckAndMerge_ThrowsException_IfObject1IsNull()
         {
             var set = new DisjointSet<string>();
             Assert.Throws<ArgumentNullException>(() => set.CheckAndMerge(null, "o2"));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void CheckAndMerge_ThrowsException_IfObject2IsNull()
         {
             var set = new DisjointSet<string>();

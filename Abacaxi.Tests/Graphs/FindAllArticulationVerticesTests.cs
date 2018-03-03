@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -13,22 +13,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+
 namespace Abacaxi.Tests.Graphs
 {
     using System;
     using Abacaxi.Graphs;
     using NUnit.Framework;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class FindAllArticulationVerticesTests
+    public sealed class FindAllArticulationVerticesTests
     {
-        [TestCase("A", "")]
-        [TestCase("A-1-B", "")]
-        [TestCase("A,B,C", "")]
-        [TestCase("A-1-B,A-1-C", "A")]
-        [TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", "E,B,A")]
-        [TestCase("A-1-B,B-1-D,D-1-F,F-1-A,F-1-Z,A-1-C,C-1-E,E-1-A,E-1-G,G-1-H,H-1-E", "F,E,A")]
-        public void FindAllArticulationVertices_FindsArticulationsForUndirectedGraphs(string relationships, string expected)
+        [TestCase("A", ""),TestCase("A-1-B", ""),TestCase("A,B,C", ""),TestCase("A-1-B,A-1-C", "A"),TestCase("A-1-B,A-1-C,A-1-D,B-1-E,B-1-F,E-1-G", "E,B,A"),TestCase("A-1-B,B-1-D,D-1-F,F-1-A,F-1-Z,A-1-C,C-1-E,E-1-A,E-1-G,G-1-H,H-1-E", "F,E,A")]
+        public void FindAllArticulationVertices_FindsArticulationsForUndirectedGraphs([NotNull] string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, false);
             var actual = string.Join(",", graph.FindAllArticulationVertices());

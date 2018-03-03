@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -25,22 +25,19 @@ namespace Abacaxi.Tests.Graphs
     {
         private readonly VertexDescriptor<string> _descriptor = new VertexDescriptor<string>("VERTEX", 10, 1, 2);
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void VertexDescriptor_ctor_ThrowsException_ForNegativeComponentIndex()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new VertexDescriptor<string>("V", -1, 0, 0));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void VertexDescriptor_ctor_ThrowsException_ForNegativeInDegree()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new VertexDescriptor<string>("V", 0, -1, 0));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void VertexDescriptor_ctor_ThrowsException_ForNegativeOutDegree()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new VertexDescriptor<string>("V", 0, 0, -1));

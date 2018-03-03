@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -22,8 +22,7 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public sealed class PartitionTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void Partition_ThrowsException_ForSizeLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new[] {1}.Partition(0));
@@ -58,6 +57,6 @@ namespace Abacaxi.Tests.SequenceExtensions
                 new[] {'A', 'l', 'e'},
                 new[] {'x'});
         }
-        
+
     }
 }

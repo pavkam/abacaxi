@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -22,10 +22,7 @@ namespace Abacaxi.Tests.Containers
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
 
-    [TestFixture]
-    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-    [SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
-    [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+    [TestFixture,SuppressMessage("ReSharper", "ObjectCreationAsStatement"),SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public class HeapTests
     {
         private Heap<int> _empty;
@@ -56,8 +53,7 @@ namespace Abacaxi.Tests.Containers
             Assert.Throws<ArgumentNullException>(() => new Heap<int>(null, Comparer<int>.Default));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
+        [Test,SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
         public void Ctor_InitializesEmptyCollection1()
         {
             var heap = new Heap<int>(Comparer<int>.Default);
@@ -142,7 +138,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Top_ThrowsException_ForEmptyHeap()
         {
-            Assert.Throws<InvalidOperationException>(() => { Assert.AreEqual(0, _empty.Top); });
+            Assert.Throws<InvalidOperationException>(() => Assert.AreEqual(0, _empty.Top));
         }
 
         [Test]

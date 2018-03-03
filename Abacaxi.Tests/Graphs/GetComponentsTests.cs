@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -18,18 +18,16 @@ namespace Abacaxi.Tests.Graphs
     using System.Linq;
     using Abacaxi.Graphs;
     using NUnit.Framework;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class GetComponentsTests
+    public sealed class GetComponentsTests
     {
-        [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A-1-A", "A")]
-        [TestCase("A-1-A,A-1-A", "A")]
-        [TestCase("A-1-B,B-1-C,C-1-D", "A,B,C,D")]
-        [TestCase("A,B,C", "A;B;C")]
-        [TestCase("A-1-B,B-1-C,C-1-A,D-1-E", "A,B,C;D,E")]
-        public void GetComponents_ReturnsProperComponents_ForUndirectedGraphs(string relationships, string expected)
+        [TestCase("", ""), TestCase("A", "A"), TestCase("A-1-A", "A"), TestCase("A-1-A,A-1-A", "A"),
+         TestCase("A-1-B,B-1-C,C-1-D", "A,B,C,D"), TestCase("A,B,C", "A;B;C"),
+         TestCase("A-1-B,B-1-C,C-1-A,D-1-E", "A,B,C;D,E")]
+        public void GetComponents_ReturnsProperComponents_ForUndirectedGraphs([NotNull] string relationships,
+            string expected)
         {
             var graph = new LiteralGraph(relationships, false);
             var result = string.Join(";",
@@ -38,15 +36,10 @@ namespace Abacaxi.Tests.Graphs
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A>1>A", "A")]
-        [TestCase("A>1>A,A>1>A", "A")]
-        [TestCase("A>1>B,B-1-C,C>1>D", "A,B,C,D")]
-        [TestCase("A,B,C", "A;B;C")]
-        [TestCase("A-1-B,B-1-C,C-1-A,D-1-E", "A,B,C;D,E")]
-        [TestCase("A>1>B,C>1>D", "A,B;C,D")]
-        public void GetComponents_ReturnsProperComponents_ForDirectedGraphs(string relationships, string expected)
+        [TestCase("", ""), TestCase("A", "A"), TestCase("A>1>A", "A"), TestCase("A>1>A,A>1>A", "A"),
+         TestCase("A>1>B,B-1-C,C>1>D", "A,B,C,D"), TestCase("A,B,C", "A;B;C"),
+         TestCase("A-1-B,B-1-C,C-1-A,D-1-E", "A,B,C;D,E"), TestCase("A>1>B,C>1>D", "A,B;C,D")]
+        public void GetComponents_ReturnsProperComponents_ForDirectedGraphs([NotNull] string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
             var result = string.Join(";",

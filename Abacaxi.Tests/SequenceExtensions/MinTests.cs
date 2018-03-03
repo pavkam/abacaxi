@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -23,28 +23,25 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public class MinTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Min1_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 Abacaxi.SequenceExtensions.Min<string, string>(null, i => i, StringComparer.Ordinal));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Min1_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                    new string[]{}.Min(null, StringComparer.Ordinal));
+                new string[]{}.Min(null, StringComparer.Ordinal));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Min1_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                    new string[] { }.Min(i => i, null));
+                new string[] { }.Min(i => i, null));
         }
 
         [Test]
@@ -82,20 +79,18 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.AreEqual(1, result);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Min2_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                    Abacaxi.SequenceExtensions.Min<string, string>(null, i => i));
+                Abacaxi.SequenceExtensions.Min<string, string>(null, i => i));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Min2_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                    new string[] { }.Min<string, string>(null));
+                new string[] { }.Min<string, string>(null));
         }
 
         [Test]

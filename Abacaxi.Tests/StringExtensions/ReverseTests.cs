@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -22,19 +22,13 @@ namespace Abacaxi.Tests.StringExtensions
     [TestFixture]
     public sealed class ReverseTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Reverse_ThrowsException_IfStringIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => ((string)null).Reverse());
         }
 
-        [TestCase("", "")]
-        [TestCase("1", "1")]
-        [TestCase("Hello World", "dlroW olleH")]
-        [TestCase("Les Misérables", "selbarésiM seL")]
-        [TestCase("This is: 🀜", "🀜 :si sihT")]
-        [SuppressMessage("ReSharper", "StringLiteralTypo")]
+        [TestCase("", ""),TestCase("1", "1"),TestCase("Hello World", "dlroW olleH"),TestCase("Les Misérables", "selbarésiM seL"),TestCase("This is: 🀜", "🀜 :si sihT"),SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void Reverse_ReversesTheString_AsExpected(string input, string expected)
         {
             var actual = input.Reverse();

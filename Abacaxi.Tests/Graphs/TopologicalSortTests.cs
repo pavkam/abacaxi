@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -20,36 +20,27 @@ namespace Abacaxi.Tests.Graphs
     using Abacaxi.Graphs;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class TopologicalSortTests
+    public sealed class TopologicalSortTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void TopologicalSort_ThrowsException_ForUndirectedGraph()
         {
             var graph = new LiteralGraph("A-1-B", false);
             Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
         }
 
-        [TestCase("A-1-B")]
-        [TestCase("A>1>B,B>1>A")]
-        [TestCase("A>1>B,B>1>C,C>1>A")]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void TopologicalSort_ThrowsException_ForDirectedGraphWith(string relationships)
+        [TestCase("A-1-B"),TestCase("A>1>B,B>1>A"),TestCase("A>1>B,B>1>C,C>1>A"),SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        public void TopologicalSort_ThrowsException_ForDirectedGraphWith([NotNull] string relationships)
         {
             var graph = new LiteralGraph(relationships, true);
             Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
         }
 
-        [TestCase("", "")]
-        [TestCase("A", "A")]
-        [TestCase("A>1>B", "A,B")]
-        [TestCase("A>1>B,B>1>C", "A,B,C")]
-        [TestCase("A>1>B,B>1>C,A>1>C", "A,B,C")]
-        [TestCase("A,B,C,C>1>D", "A,B,C,D")]
-        [TestCase("A>1>B,C>1>B,B>1>D,B>1>E,E>1>D,F", "A,C,F,B,E,D")]
-        public void TopologicalSort_AlignsTheVerticesAsExpected(string relationships, string expected)
+        [TestCase("", ""),TestCase("A", "A"),TestCase("A>1>B", "A,B"),TestCase("A>1>B,B>1>C", "A,B,C"),TestCase("A>1>B,B>1>C,A>1>C", "A,B,C"),TestCase("A,B,C,C>1>D", "A,B,C,D"),TestCase("A>1>B,C>1>B,B>1>D,B>1>E,E>1>D,F", "A,C,F,B,E,D")]
+        public void TopologicalSort_AlignsTheVerticesAsExpected([NotNull] string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
             var result = graph.TopologicalSort().ToList();

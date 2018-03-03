@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -33,8 +33,7 @@ namespace Abacaxi.Tests.Pairing
             return Math.Abs(l - r);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetWithMinimumCost_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(
@@ -48,8 +47,7 @@ namespace Abacaxi.Tests.Pairing
                 () => Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2, 3 }, BanalCostOfPairsEvaluator));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetWithMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
         {
             Assert.Throws<ArgumentNullException>(
@@ -67,7 +65,7 @@ namespace Abacaxi.Tests.Pairing
         public void GetWithMinimumCost_ReturnsOnePair_ForTwoElementSequence()
         {
             var result = Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2 }, BanalCostOfPairsEvaluator);
-            
+
             TestHelper.AssertSequence(result, Tuple.Create(1, 2));
         }
 
@@ -76,8 +74,8 @@ namespace Abacaxi.Tests.Pairing
         {
             var result = Abacaxi.Pairing.GetWithMinimumCost(new[] { 4, 10, 2, 8 }, BanalCostOfPairsEvaluator);
 
-            TestHelper.AssertSequence(result, 
-                Tuple.Create(4, 10), 
+            TestHelper.AssertSequence(result,
+                Tuple.Create(4, 10),
                 Tuple.Create(2, 8));
         }
 
@@ -94,8 +92,7 @@ namespace Abacaxi.Tests.Pairing
                 Tuple.Create(9, 12));
         }
 
-        [TestCase(10)]
-        [TestCase(20)]
+        [TestCase(10),TestCase(20)]
         public void GetWithMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
         {
             var random = new Random();

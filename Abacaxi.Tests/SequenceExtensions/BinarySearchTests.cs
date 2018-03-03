@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -24,14 +24,13 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public class BinarySearchTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void BinarySearch_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 ((int[])null).BinarySearch(1, 1, 0, Comparer<int>.Default));
         }
-        
+
         [Test]
         public void BinarySearch_ThrowsException_ForNegativeStartIndex()
         {
@@ -60,8 +59,7 @@ namespace Abacaxi.Tests.SequenceExtensions
                 new[] { 1 }.BinarySearch(1, 1, 0, Comparer<int>.Default));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void BinarySearch_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -110,26 +108,14 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.AreEqual(1, result);
         }
 
-        [TestCase(0, -1)]
-        [TestCase(1, 0)]
-        [TestCase(2, 1)]
-        [TestCase(3, 2)]
-        [TestCase(4, 3)]
-        [TestCase(5, 4)]
-        [TestCase(6, -1)]
+        [TestCase(0, -1),TestCase(1, 0),TestCase(2, 1),TestCase(3, 2),TestCase(4, 3),TestCase(5, 4),TestCase(6, -1)]
         public void BinarySearch_ReturnsValidIndex_ForAscSortedArray(int element, int expectedIndex)
         {
             var result = new[] { 1, 2, 3, 4, 5 }.BinarySearch(0, 5, element, Comparer<int>.Default);
             Assert.AreEqual(expectedIndex, result);
         }
 
-        [TestCase(0, -1)]
-        [TestCase(1, 4)]
-        [TestCase(2, 3)]
-        [TestCase(3, 2)]
-        [TestCase(4, 1)]
-        [TestCase(5, 0)]
-        [TestCase(6, -1)]
+        [TestCase(0, -1),TestCase(1, 4),TestCase(2, 3),TestCase(3, 2),TestCase(4, 1),TestCase(5, 0),TestCase(6, -1)]
         public void BinarySearch_ReturnsValidIndex_ForDescSortedArray(int element, int expectedIndex)
         {
             var result = new[] { 5, 4, 3, 2, 1 }.BinarySearch(0, 5, element, Comparer<int>.Default, false);

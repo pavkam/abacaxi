@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -24,35 +24,28 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public class InterleaveTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Interleave_ThrowsException_WhenComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 Abacaxi.SequenceExtensions.Interleave(null, new int[] { }));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Interleave_ThrowsException_WhenSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, null, new int[] { }));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Interleave_ThrowsException_WhenParamsIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, new int[] { }, null));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [Test,SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         public void Interleave_ThrowsException_WhenStreamIsUnsorted()
         {
             Assert.Throws<InvalidOperationException>(() =>

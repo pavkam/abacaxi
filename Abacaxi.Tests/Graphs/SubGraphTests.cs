@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -19,28 +19,24 @@ namespace Abacaxi.Tests.Graphs
     using Abacaxi.Graphs;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class SubGraphTests
+    public sealed class SubGraphTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_ForNullGraph()
         {
             Assert.Throws<ArgumentNullException>(() => new SubGraph<int>(null, new[] { 1 }));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_ForNullVerticesSequence()
         {
             Assert.Throws<ArgumentNullException>(() => new SubGraph<char>(new LiteralGraph("A-1-B", false), null));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_IfVertexNotPartOfSubGraph()
         {
             var graph = new LiteralGraph("A-1-B,B-1-C,C-1-D,D-1-A,D<1<B", true);
@@ -49,10 +45,8 @@ namespace Abacaxi.Tests.Graphs
             Assert.Throws<ArgumentException>(() => sub.GetEdges('C'));
         }
 
-        [TestCase("A", 'A', "")]
-        [TestCase("AB", 'A', "A >=1=> B")]
-        [TestCase("ABC", 'B', "B >=1=> A, B >=2=> C")]
-        public void GetEdges_ReturnsOnlySuppliedVertices(string vertices, char vertex, string expected)
+        [TestCase("A", 'A', ""),TestCase("AB", 'A', "A >=1=> B"),TestCase("ABC", 'B', "B >=1=> A, B >=2=> C")]
+        public void GetEdges_ReturnsOnlySuppliedVertices([NotNull] string vertices, char vertex, string expected)
         {
             var graph = new LiteralGraph("A-1-B,B-2-C,C-3-D,D-4-A,D<5<B", true);
             var sub = new SubGraph<char>(graph, vertices);
@@ -61,10 +55,8 @@ namespace Abacaxi.Tests.Graphs
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("A", "A")]
-        [TestCase("AB", "A,B")]
-        [TestCase("ABC", "A,B,C")]
-        public void Enumeration_ReturnsOnlyIncludedVertices(string vertices, string expected)
+        [TestCase("A", "A"),TestCase("AB", "A,B"),TestCase("ABC", "A,B,C")]
+        public void Enumeration_ReturnsOnlyIncludedVertices([NotNull] string vertices, string expected)
         {
             var graph = new LiteralGraph("A-1-B,B-1-C,C-1-D,D-1-A,D<1<B", true);
             var sub = new SubGraph<char>(graph, vertices);
@@ -136,8 +128,7 @@ namespace Abacaxi.Tests.Graphs
             Assert.Throws<NotSupportedException>(() => sub.GetPotentialWeight('A', 'B'));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetPotentialWeight_ThrowsException_IfVerticesNotPartOfSubGraph()
         {
             var graph = new LiteralGraph("A-1-B,B-1-C,C-1-D,D-1-A,D<1<B", true);

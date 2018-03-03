@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -20,29 +20,14 @@ namespace Abacaxi.Tests.Integer
     [TestFixture]
     public class IsPrimeTests
     {
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(13)]
-        [TestCase(239)]
-        [TestCase(-1)]
-        [TestCase(-2)]
-        [TestCase(-3)]
-        [TestCase(-13)]
-        [TestCase(-239)]
+        [TestCase(0),TestCase(1),TestCase(2),TestCase(3),TestCase(13),TestCase(239),TestCase(-1),TestCase(-2),TestCase(-3),TestCase(-13),TestCase(-239)]
         public void IsPrime_ReturnsTrue(int number)
         {
             var result = Abacaxi.Integer.IsPrime(number);
             Assert.IsTrue(result);
         }
 
-        [TestCase(4)]
-        [TestCase(8)]
-        [TestCase(144)]
-        [TestCase(-4)]
-        [TestCase(-8)]
-        [TestCase(-144)]
+        [TestCase(4),TestCase(8),TestCase(144),TestCase(-4),TestCase(-8),TestCase(-144)]
         public void IsPrime_ReturnsFalse(int number)
         {
             var result = Abacaxi.Integer.IsPrime(number);

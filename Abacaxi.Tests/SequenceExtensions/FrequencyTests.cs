@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -72,8 +72,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.IsFalse(e1.Equals(e2));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+        [Test,SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonFrequencyObject()
         {
             var e1 = new Frequency<char>('a', 1);

@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -82,7 +82,7 @@ namespace Abacaxi.Tests.Trees
             tree["test"] = 1;
             tree["TEST"] = 100;
 
-            TestHelper.AssertSequence(tree, 
+            TestHelper.AssertSequence(tree,
                 new KeyValuePair<string, int>("test", 1),
                 new KeyValuePair<string, int>("TEST", 100));
         }
@@ -129,7 +129,7 @@ namespace Abacaxi.Tests.Trees
         {
             var tree = CreateFilled();
 
-            TestHelper.AssertSequence(tree, 
+            TestHelper.AssertSequence(tree,
                 new KeyValuePair<int, int>(1, 100),
                 new KeyValuePair<int, int>(2, 200),
                 new KeyValuePair<int, int>(3, 300),
@@ -158,7 +158,7 @@ namespace Abacaxi.Tests.Trees
 
             TestHelper.AssertSequence(tree, new KeyValuePair<int, int>(1, 100));
         }
-        
+
         [Test]
         public void ICollection_Add_ThrowsException_IfKeyDuplicate()
         {
@@ -185,7 +185,7 @@ namespace Abacaxi.Tests.Trees
             tree.Add(2, 200);
             tree.Update(2, 222);
 
-            TestHelper.AssertSequence(tree, 
+            TestHelper.AssertSequence(tree,
                 new KeyValuePair<int, int>(1, 100),
                 new KeyValuePair<int, int>(2, 222));
         }
@@ -626,9 +626,7 @@ namespace Abacaxi.Tests.Trees
                 new KeyValuePair<int, int>(9, 900));
         }
 
-        [TestCase(TreeTraversalMode.InOrder)]
-        [TestCase(TreeTraversalMode.PostOrder)]
-        [TestCase(TreeTraversalMode.PreOrder)]
+        [TestCase(TreeTraversalMode.InOrder),TestCase(TreeTraversalMode.PostOrder),TestCase(TreeTraversalMode.PreOrder)]
         public void Enumeration_ThrowsExceptionOnAdd(TreeTraversalMode mode)
         {
             var tree = Create<int, int>();
@@ -641,9 +639,7 @@ namespace Abacaxi.Tests.Trees
             }
         }
 
-        [TestCase(TreeTraversalMode.InOrder)]
-        [TestCase(TreeTraversalMode.PostOrder)]
-        [TestCase(TreeTraversalMode.PreOrder)]
+        [TestCase(TreeTraversalMode.InOrder),TestCase(TreeTraversalMode.PostOrder),TestCase(TreeTraversalMode.PreOrder)]
         public void Enumeration_ThrowsExceptionOnUpdate(TreeTraversalMode mode)
         {
             var tree = Create<int, int>();
@@ -656,9 +652,7 @@ namespace Abacaxi.Tests.Trees
             }
         }
 
-        [TestCase(TreeTraversalMode.InOrder)]
-        [TestCase(TreeTraversalMode.PostOrder)]
-        [TestCase(TreeTraversalMode.PreOrder)]
+        [TestCase(TreeTraversalMode.InOrder),TestCase(TreeTraversalMode.PostOrder),TestCase(TreeTraversalMode.PreOrder)]
         public void Enumeration_ThrowsExceptionOnRemove(TreeTraversalMode mode)
         {
             var tree = Create<int, int>();
@@ -671,9 +665,7 @@ namespace Abacaxi.Tests.Trees
             }
         }
 
-        [TestCase(TreeTraversalMode.InOrder)]
-        [TestCase(TreeTraversalMode.PostOrder)]
-        [TestCase(TreeTraversalMode.PreOrder)]
+        [TestCase(TreeTraversalMode.InOrder),TestCase(TreeTraversalMode.PostOrder),TestCase(TreeTraversalMode.PreOrder)]
         public void Enumeration_ThrowsExceptionOnClear(TreeTraversalMode mode)
         {
             var tree = Create<int, int>();
@@ -687,8 +679,7 @@ namespace Abacaxi.Tests.Trees
         }
 
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void CopyTo_ThrowsException_ForNullArray()
         {
             var tree = Create<int, int>();
@@ -735,9 +726,9 @@ namespace Abacaxi.Tests.Trees
             var array = new KeyValuePair<int, int>[3];
 
             tree.CopyTo(array, 0);
-            TestHelper.AssertSequence(array, 
-                new KeyValuePair<int, int>(1, 1), 
-                new KeyValuePair<int, int>(2, 2), 
+            TestHelper.AssertSequence(array,
+                new KeyValuePair<int, int>(1, 1),
+                new KeyValuePair<int, int>(2, 2),
                 new KeyValuePair<int, int>(3, 3));
         }
 

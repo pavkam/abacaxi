@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -23,24 +23,19 @@ namespace Abacaxi.Tests.Graphs
     [TestFixture]
     public class EdgeTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_NullFromVertex()
         {
             Assert.Throws<ArgumentNullException>(() => new Edge<string>(null, "hello"));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_NullToVertex()
         {
             Assert.Throws<ArgumentNullException>(() => new Edge<string>("hello", null));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfWeightIsLessThanZero()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new Edge<string>("1", "2", -1));
@@ -122,8 +117,7 @@ namespace Abacaxi.Tests.Graphs
             Assert.IsFalse(edge1.Equals(edge2));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+        [Test,SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonEdgeObject()
         {
             var edge = new Edge<string>("from", "to");

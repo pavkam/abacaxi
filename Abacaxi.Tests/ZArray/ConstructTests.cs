@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -23,14 +23,13 @@ namespace Abacaxi.Tests.ZArray
     [TestFixture]
     public sealed class ConstructTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Construct_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 Abacaxi.ZArray.Construct(null, 1, 1, EqualityComparer<int>.Default));
         }
-        
+
         [Test]
         public void Construct_ThrowsException_ForNegativeStartIndex()
         {
@@ -59,8 +58,7 @@ namespace Abacaxi.Tests.ZArray
                 Abacaxi.ZArray.Construct(new[] { 1 }, 1, 1, EqualityComparer<int>.Default));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Construct_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -85,9 +83,7 @@ namespace Abacaxi.Tests.ZArray
             Assert.AreEqual(new int[] { }, array);
         }
 
-        [TestCase("0123456789", 0, 10)]
-        [TestCase("0", 0, 1)]
-        [TestCase("abc", 1, 2)]
+        [TestCase("0123456789", 0, 10),TestCase("0", 0, 1),TestCase("abc", 1, 2)]
         public void Construct_ReturnsAnArrayOfTheSameLengthAsInput(string s, int start, int length)
         {
             var sequence = s.AsList();
@@ -96,9 +92,7 @@ namespace Abacaxi.Tests.ZArray
             Assert.AreEqual(z.Length, length);
         }
 
-        [TestCase("0123456789", 0, 10)]
-        [TestCase("0", 0, 1)]
-        [TestCase("abc", 1, 2)]
+        [TestCase("0123456789", 0, 10),TestCase("0", 0, 1),TestCase("abc", 1, 2)]
         public void Construct_ReturnsTheLengthOfArrayAsElementZero(string s, int start, int length)
         {
             var sequence = s.AsList();

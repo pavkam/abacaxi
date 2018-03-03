@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -23,11 +23,7 @@ namespace Abacaxi.Tests.Graphs
     [TestFixture]
     public class FindChessHorsePathBetweenTwoPointsTests
     {
-        [TestCase(0, 0, 0, 0, "0,0")]
-        [TestCase(0, 0, 1, 0, "0,0;-2,-1;0,-2;1,0")]
-        [TestCase(0, 0, 0, 1, "0,0;-1,-2;-2,0;0,1")]
-        [TestCase(0, 0, 1, 1, "0,0;2,-1;1,1")]
-        [TestCase(-5, -5, 10, 10, "-5,-5;-3,-4;-1,-3;1,-2;3,-1;5,0;6,2;7,4;8,6;9,8;10,10")]
+        [TestCase(0, 0, 0, 0, "0,0"),TestCase(0, 0, 1, 0, "0,0;-2,-1;0,-2;1,0"),TestCase(0, 0, 0, 1, "0,0;-1,-2;-2,0;0,1"),TestCase(0, 0, 1, 1, "0,0;2,-1;1,1"),TestCase(-5, -5, 10, 10, "-5,-5;-3,-4;-1,-3;1,-2;3,-1;5,0;6,2;7,4;8,6;9,8;10,10")]
         public void FindChessHorsePathBetweenTwoPoints_FindsShortestPathBetweenTwoPoints(int sx, int sy, int ex, int ey, string expected)
         {
             var actual = string.Join(";", ChessHorsePathGraph.FindChessHorsePathBetweenTwoPoints(new Cell(sx, sy), new Cell(ex, ey))

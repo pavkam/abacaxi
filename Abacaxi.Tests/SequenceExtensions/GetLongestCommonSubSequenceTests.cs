@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -22,32 +22,21 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public class GetLongestCommonSubSequenceTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetLongestCommonSubSequence_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 Abacaxi.SequenceExtensions.GetLongestCommonSubSequence(null, new char[] {}));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetLongestCommonSubSequence_ThrowsException_ForNullOtherSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new char[] { }.GetLongestCommonSubSequence(null));
         }
 
-        [TestCase("", "", "")]
-        [TestCase("a", "a", "a")]
-        [TestCase("a", "b", "")]
-        [TestCase("", "a", "")]
-        [TestCase("a", "", "")]
-        [TestCase("ab", "a", "a")]
-        [TestCase("a", "ab", "a")]
-        [TestCase("ab", "ba", "b")]
-        [TestCase("hello my dear friend", "Hello you fiend!", "ello y fiend")]
-        [SuppressMessage("ReSharper", "StringLiteralTypo")]
+        [TestCase("", "", ""),TestCase("a", "a", "a"),TestCase("a", "b", ""),TestCase("", "a", ""),TestCase("a", "", ""),TestCase("ab", "a", "a"),TestCase("a", "ab", "a"),TestCase("ab", "ba", "b"),TestCase("hello my dear friend", "Hello you fiend!", "ello y fiend"),SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void GetLongestCommonSubSequence_ReturnsExpectedSequence(string s1, string s2, string expected)
         {
             var actual = new string(s1.ToCharArray().GetLongestCommonSubSequence(s2.ToCharArray()));

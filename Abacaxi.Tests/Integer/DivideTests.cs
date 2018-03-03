@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -29,14 +29,7 @@ namespace Abacaxi.Tests.Integer
                 Integer.Divide(1, 0));
         }
 
-        [TestCase(0, 1, 0)]
-        [TestCase(1, 1, 1)]
-        [TestCase(2, 1, 2)]
-        [TestCase(10, 2, 5)]
-        [TestCase(100, 3, 33)]
-        [TestCase(-10, 2, -5)]
-        [TestCase(-10, -2, 5)]
-        [TestCase(10, -2, -5)]
+        [TestCase(0, 1, 0),TestCase(1, 1, 1),TestCase(2, 1, 2),TestCase(10, 2, 5),TestCase(100, 3, 33),TestCase(-10, 2, -5),TestCase(-10, -2, 5),TestCase(10, -2, -5)]
         public void Divide_ReturnsCorrectResult(int x, int y, int expected)
         {
             var result = Integer.Divide(x, y);

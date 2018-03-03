@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -26,9 +26,7 @@ namespace Abacaxi.Tests.Containers
     {
         private readonly ArrayEqualityComparer<int> _comparer = new ArrayEqualityComparer<int>(EqualityComparer<int>.Default);
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_IfCompareIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new ArrayEqualityComparer<int>(null));
@@ -91,9 +89,7 @@ namespace Abacaxi.Tests.Containers
             Assert.IsFalse(result);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         public void GetHashCode_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() => _comparer.GetHashCode(null));

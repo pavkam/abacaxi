@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -23,31 +23,25 @@ namespace Abacaxi.Tests.StringExtensions
     [TestFixture]
     public sealed class LikeTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Like_ThrowsException_IfStringIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => ((string)null).Like(""));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Like_ThrowsException_IfPatternIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => "".Like(null));
         }
 
-        [TestCase("a", "A", true, true)]
-        [TestCase("a", "a", false, true)]
-        [TestCase("a", "A", false, false)]
+        [TestCase("a", "A", true, true),TestCase("a", "a", false, true),TestCase("a", "A", false, false)]
         public void Like_TakesIntoAccountCasing(string s, string p, bool i, bool expected)
         {
             Assert.AreEqual(expected, s.Like(p, i));
         }
 
-        [TestCase("a", "A")]
-        [TestCase("a*b*c", "abc")]
-        [TestCase("a?b?c", "aoboc")]
+        [TestCase("a", "A"),TestCase("a*b*c", "abc"),TestCase("a?b?c", "aoboc")]
         public void Like_MatchesTheExpectedString(string p, string s)
         {
             Assert.IsTrue(s.Like(p));

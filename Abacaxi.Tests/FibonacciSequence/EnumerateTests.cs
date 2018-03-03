@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -17,13 +17,11 @@ namespace Abacaxi.Tests.FibonacciSequence
 {
     using System;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
-    public class EnumerateTests
+    public sealed class EnumerateTests
     {
         [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void Enumerate_ThrowsException_ForNegativeCount()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>

@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -23,16 +23,14 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public sealed class GetItemFrequenciesTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetItemFrequencies_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(
                 () => ((int[]) null).GetItemFrequencies(EqualityComparer<int>.Default));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetItemFrequencies_ThrowsException_IfEqualityComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new[] {1}.GetItemFrequencies(null));

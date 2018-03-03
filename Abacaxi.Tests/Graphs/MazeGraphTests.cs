@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -12,6 +12,8 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+using JetBrains.Annotations;
 
 namespace Abacaxi.Tests.Graphs
 {
@@ -37,7 +39,7 @@ namespace Abacaxi.Tests.Graphs
             {true, true},
         };
 
-        private static Cell Parse(string v)
+        private static Cell Parse([NotNull] string v)
         {
             Assert.NotNull(v);
             Assert.AreEqual(2, v.Length);
@@ -49,7 +51,7 @@ namespace Abacaxi.Tests.Graphs
             return new Cell(x, y);
         }
 
-        private static IEnumerable<Cell> ParseList(string v)
+        private static IEnumerable<Cell> ParseList([NotNull] string v)
         {
             Assert.NotNull(v);
             var split = v.Split(',');
@@ -59,9 +61,8 @@ namespace Abacaxi.Tests.Graphs
             }
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_ForNullMatrix()
         {
             Assert.Throws<ArgumentNullException>(() => new MazeGraph(null));
@@ -87,11 +88,8 @@ namespace Abacaxi.Tests.Graphs
             Assert.IsFalse(graph.IsReadOnly);
         }
 
-        [TestCase(-1, 0)]
-        [TestCase(0, -1)]
-        [TestCase(1, 0)]
-        [TestCase(0, 1)]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [TestCase(-1, 0), TestCase(0, -1), TestCase(1, 0), TestCase(0, 1),
+         SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForInvalidCell(int x, int y)
         {
             var graph = new MazeGraph(new[,] {{true}});
@@ -99,8 +97,7 @@ namespace Abacaxi.Tests.Graphs
             Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(x, y)));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForFalseCell()
         {
             var graph = new MazeGraph(new[,] {{false}});
@@ -108,16 +105,10 @@ namespace Abacaxi.Tests.Graphs
             Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(0, 0)));
         }
 
-        [TestCase("00", "10,01")]
-        [TestCase("10", "00,11,20")]
-        [TestCase("20", "10,21")]
-        [TestCase("01", "00,11,02")]
-        [TestCase("11", "10,01,21,12")]
-        [TestCase("21", "20,11,22")]
-        [TestCase("02", "01,12")]
-        [TestCase("12", "11,02,22")]
-        [TestCase("22", "21,12")]
-        public void GetEdges_ReturnsAllValidEdgesIn3x3_ForVertex(string from, string to)
+        [TestCase("00", "10,01"), TestCase("10", "00,11,20"), TestCase("20", "10,21"), TestCase("01", "00,11,02"),
+         TestCase("11", "10,01,21,12"), TestCase("21", "20,11,22"), TestCase("02", "01,12"), TestCase("12", "11,02,22"),
+         TestCase("22", "21,12")]
+        public void GetEdges_ReturnsAllValidEdgesIn3x3_ForVertex([NotNull] string from, [NotNull] string to)
         {
             var fromVertex = Parse(from);
             var expectedEdges = new HashSet<Edge<Cell>>();
@@ -136,10 +127,8 @@ namespace Abacaxi.Tests.Graphs
             Assert.IsTrue(expectedEdges.SetEquals(actualEdges));
         }
 
-        [TestCase("00", "10")]
-        [TestCase("10", "00,11")]
-        [TestCase("11", "10")]
-        public void GetEdges_ReturnsAllValidEdgesIn2x2_ForVertex(string from, string to)
+        [TestCase("00", "10"), TestCase("10", "00,11"), TestCase("11", "10")]
+        public void GetEdges_ReturnsAllValidEdgesIn2x2_ForVertex([NotNull] string from, [NotNull] string to)
         {
             var fromVertex = Parse(from);
             var expectedEdges = new HashSet<Edge<Cell>>();
@@ -168,7 +157,7 @@ namespace Abacaxi.Tests.Graphs
         }
 
         [TestCase("00,10,11")]
-        public void Enumeration_ReturnsOnlyTrueCells(string cells)
+        public void Enumeration_ReturnsOnlyTrueCells([NotNull] string cells)
         {
             var expectedCells = new HashSet<Cell>();
             foreach (var vertex in ParseList(cells))
@@ -193,10 +182,7 @@ namespace Abacaxi.Tests.Graphs
             Assert.IsTrue(graph.SupportsPotentialWeightEvaluation);
         }
 
-        [TestCase(0, 0, 0, 0, 0)]
-        [TestCase(0, 0, 1, 0, 1)]
-        [TestCase(0, 0, 1, 1, 2)]
-        [TestCase(0, 0, 1, 2, 3)]
+        [TestCase(0, 0, 0, 0, 0), TestCase(0, 0, 1, 0, 1), TestCase(0, 0, 1, 1, 2), TestCase(0, 0, 1, 2, 3)]
         public void GetPotentialWeight_ReturnsCellDistance(int sx, int sy, int ex, int ey, double expected)
         {
             var graph = new MazeGraph(_m3X3);

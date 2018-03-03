@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -21,59 +21,36 @@ namespace Abacaxi.Tests.Graphs
     using Abacaxi.Graphs;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class LiteralGraphTests
+    public sealed class LiteralGraphTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_ForNullRelationships()
         {
             Assert.Throws<ArgumentNullException>(() => new LiteralGraph(null, true));
         }
 
-        [TestCase(".")]
-        [TestCase("A.")]
-        [TestCase("AA-1-B")]
-        [TestCase("A-")]
-        [TestCase("A-5 5-B")]
-        [TestCase("A-1-BA")]
-        [TestCase("A<BA")]
-        [TestCase("A-<B")]
-        [TestCase("A-B")]
-        [TestCase("A>B")]
-        [TestCase("A<B")]
-        [TestCase("A-1B")]
-        [TestCase("A-1>B")]
-        [TestCase("A-1<B")]
-        [TestCase("A>1-B")]
-        [TestCase("A>1<B")]
-        [TestCase("A<1-B")]
-        [TestCase("A<1>B")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [TestCase("."),TestCase("A."),TestCase("AA-1-B"),TestCase("A-"),TestCase("A-5 5-B"),TestCase("A-1-BA"),TestCase("A<BA"),TestCase("A-<B"),TestCase("A-B"),TestCase("A>B"),TestCase("A<B"),TestCase("A-1B"),TestCase("A-1>B"),TestCase("A-1<B"),TestCase("A>1-B"),TestCase("A>1<B"),TestCase("A<1-B"),TestCase("A<1>B"),SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_ForInvalidFormat(string relationships)
         {
             Assert.Throws<FormatException>(() => new LiteralGraph(relationships, true));
         }
 
-        [TestCase("A>1>B")]
-        [TestCase("A<1<B")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [TestCase("A>1>B"),TestCase("A<1<B"),SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_ForInvalidEdgesInUndirectedGraph(string relationships)
         {
             Assert.Throws<FormatException>(() => new LiteralGraph(relationships, false));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_IgnoresLastComma_InRelationships()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("A-1-B,", true));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_IgnoresWhitespaces_InRelationships()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("  A -   4-  B   ,      ", true));
@@ -86,15 +63,13 @@ namespace Abacaxi.Tests.Graphs
             Assert.AreEqual(1234, graph.GetEdges('A').Single().Weight);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_AcceptsASingleUnconnectedVertex()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("A", true));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_AcceptsASingleUnconnectedVertex_WithFollowingComma()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("A,", true));
@@ -116,8 +91,7 @@ namespace Abacaxi.Tests.Graphs
             TestHelper.AssertSequence(graph);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_AcceptsLettersAndDigits()
         {
             Assert.DoesNotThrow(() => new LiteralGraph("a-1-B,B-1-0", true));
@@ -157,12 +131,8 @@ namespace Abacaxi.Tests.Graphs
                 'A','B','K','T','Z');
         }
 
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'A', "A1B")]
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'B', "B2Z,B4T,B5A")]
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'K', "")]
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'T', "T3K,T6A")]
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'Z', "Z2B")]
-        public void GetEdgesAndWeights_ReturnsAllEdges(string relationships, char vertex, string expected)
+        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'A', "A1B"),TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'B', "B2Z,B4T,B5A"),TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'K', ""),TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'T', "T3K,T6A"),TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'Z', "Z2B")]
+        public void GetEdgesAndWeights_ReturnsAllEdges([NotNull] string relationships, char vertex, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
 
@@ -172,12 +142,8 @@ namespace Abacaxi.Tests.Graphs
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'A', "AB")]
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'B', "BZ,BT,BA")]
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'K', "")]
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'T', "TK,TA")]
-        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'Z', "ZB")]
-        public void GetEdges_ReturnsAllEdges(string relationships, char vertex, string expected)
+        [TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'A', "AB"),TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'B', "BZ,BT,BA"),TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'K', ""),TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'T', "TK,TA"),TestCase("A>1>B,B-2-Z,K<3<T,B>4>T,B>5>A,T>6>A", 'Z', "ZB")]
+        public void GetEdges_ReturnsAllEdges([NotNull] string relationships, char vertex, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
 

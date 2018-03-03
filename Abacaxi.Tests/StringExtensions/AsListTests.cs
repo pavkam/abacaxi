@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -22,16 +22,13 @@ namespace Abacaxi.Tests.StringExtensions
     [TestFixture]
     public sealed class AsListTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AsList_ThrowsException_IfStringIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => ((string)null).AsList());
         }
 
-        [TestCase("", "")]
-        [TestCase("a", "a")]
-        [TestCase("abc", "a,b,c")]
+        [TestCase("", ""),TestCase("a", "a"),TestCase("abc", "a,b,c")]
         public void AsList_GetEnumerator_ReturnsTheExpectedSequence(string s, string expected)
         {
             var actual = string.Join(",", s.AsList());
@@ -115,8 +112,7 @@ namespace Abacaxi.Tests.StringExtensions
             Assert.AreEqual('s', list[2]);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AsList_ThenCopyTo_ThrowsException_IfArrayIsNull()
         {
             var list = "test".AsList();

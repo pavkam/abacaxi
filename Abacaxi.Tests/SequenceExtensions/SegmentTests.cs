@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -44,8 +44,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             original.RemoveAt(4);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Segment_ThrowsException_IfSequenceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[])null).Segment(0, 1));
@@ -613,8 +612,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.AreEqual(4, segment.Count);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Segment_CopyTo_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() => _middle.CopyTo(null, 0));
@@ -665,8 +663,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.AreEqual(0, array[0]);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [Test,SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         public void Segment_GetEnumerator_ThrowsException_IfBroken()
         {
             Assert.Throws<InvalidOperationException>(() => _broken.GetEnumerator().MoveNext());
@@ -690,8 +687,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.Throws<InvalidOperationException>(() => _broken.Clear());
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [Test,SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         public void Segment_Contains_ThrowsException_IfBroken()
         {
             Assert.Throws<InvalidOperationException>(() => _broken.Contains(100));
@@ -709,8 +705,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.Throws<InvalidOperationException>(() => _broken.Remove(100));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        [Test,SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         public void Segment_IndexOf_ThrowsException_IfBroken()
         {
             Assert.Throws<InvalidOperationException>(() => _broken.IndexOf(100));

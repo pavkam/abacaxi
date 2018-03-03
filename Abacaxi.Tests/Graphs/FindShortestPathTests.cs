@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -19,25 +19,24 @@ namespace Abacaxi.Tests.Graphs
     using Abacaxi.Graphs;
     using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class FindShortestPathTests
+    public sealed class FindShortestPathTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void FindShortestPath_ThrowsException_ForInvalidStartVertex()
         {
             var graph = new LiteralGraph("A>1>B", true);
             Assert.Throws<ArgumentException>(() => graph.FindShortestPath('Z', 'A'));
         }
 
-        [TestCase("A-1-B,A-1-C", 'A', 'B', "A,B")]
-        [TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'D', 'B', "D,C,B")]
-        [TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'B', 'D', "B,D")]
-        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'A', 'E', "")]
-        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'E', 'Z', "")]
+        [TestCase("A-1-B,A-1-C", 'A', 'B', "A,B"), TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'D', 'B', "D,C,B"),
+         TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'B', 'D', "B,D"),
+         TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'A', 'E', ""),
+         TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'E', 'Z', "")]
         public void FindShortestPath_FillsExpectedVertices(
-            string relationships, char startVertex, char endVertex, string expected)
+            [NotNull] string relationships, char startVertex, char endVertex, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
             var seq = graph.FindShortestPath(startVertex, endVertex);

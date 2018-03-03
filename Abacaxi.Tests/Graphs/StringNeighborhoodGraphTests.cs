@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using JetBrains.Annotations;
+
 namespace Abacaxi.Tests.Graphs
 {
     using System;
@@ -24,9 +26,7 @@ namespace Abacaxi.Tests.Graphs
     [TestFixture]
     public class StringNeighborhoodGraphTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() => new StringNeighborhoodGraph(null));
@@ -56,9 +56,7 @@ namespace Abacaxi.Tests.Graphs
             TestHelper.AssertSequence(graph, "a", "b", "c");
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetEdges_ThrowsException_ForNullVertex()
         {
             var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
@@ -66,8 +64,7 @@ namespace Abacaxi.Tests.Graphs
             Assert.Throws<ArgumentNullException>(() => graph.GetEdges(null));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForInvalidVertex()
         {
             var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
@@ -92,10 +89,8 @@ namespace Abacaxi.Tests.Graphs
             Assert.IsTrue(graph.GetEdges("a").All(e => e.Weight == 1));
         }
 
-        [TestCase("a", "b,c")]
-        [TestCase("b", "a,c")]
-        [TestCase("c", "a,b")]
-        public void GetEdges_ProperlyJoinsSingleLetterStrings(string vertex, string expected)
+        [TestCase("a", "b,c"),TestCase("b", "a,c"),TestCase("c", "a,b")]
+        public void GetEdges_ProperlyJoinsSingleLetterStrings([NotNull] string vertex, string expected)
         {
             var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
             var actual = string.Join(",", graph.GetEdges(vertex).Select(s => s.ToVertex));
@@ -107,7 +102,7 @@ namespace Abacaxi.Tests.Graphs
         public void FindShortestPath_WillTraverseTheGraphInExpectedOrder()
         {
             var graph = new StringNeighborhoodGraph(new[] { "aa", "za", "zz", "zb", "ib", "i7", "17", "a6", "16" });
-            
+
             TestHelper.AssertSequence(graph.FindShortestPath("aa", "17"),
                 "aa", "a6", "16", "17");
         }

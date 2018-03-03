@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -18,9 +18,10 @@ namespace Abacaxi.Tests.Graphs
     using System;
     using Abacaxi.Graphs;
     using NUnit.Framework;
+    using JetBrains.Annotations;
 
     [TestFixture]
-    public class FindCheapestPathTests
+    public sealed class FindCheapestPathTests
     {
         [Test]
         public void FindCheapestPath_ThrowsException_IfFromVertexIsInvalid()
@@ -29,13 +30,8 @@ namespace Abacaxi.Tests.Graphs
             Assert.Throws<ArgumentException>(() => graph.FindCheapestPath('Z', 'A'));
         }
 
-        [TestCase("A", 'A', 'A', "A")]
-        [TestCase("A-1-B", 'A', 'A', "A")]
-        [TestCase("A,B", 'A', 'A', "A")]
-        [TestCase("A,B", 'A', 'B', "")]
-        [TestCase("A-1-B", 'A', 'B', "A,B")]
-        [TestCase("A-3-B,A-1-C,C-1-B", 'A', 'B', "A,C,B")]
-        public void FindCheapestPath_FindsTheProperPath_ForUndirectedGraphs(string relationships, char from, char to, string expected)
+        [TestCase("A", 'A', 'A', "A"),TestCase("A-1-B", 'A', 'A', "A"),TestCase("A,B", 'A', 'A', "A"),TestCase("A,B", 'A', 'B', ""),TestCase("A-1-B", 'A', 'B', "A,B"),TestCase("A-3-B,A-1-C,C-1-B", 'A', 'B', "A,C,B")]
+        public void FindCheapestPath_FindsTheProperPath_ForUndirectedGraphs([NotNull] string relationships, char from, char to, string expected)
         {
             var graph = new LiteralGraph(relationships, false);
             var actual = string.Join(",", graph.FindCheapestPath(from, to));
@@ -43,16 +39,8 @@ namespace Abacaxi.Tests.Graphs
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("A", 'A', 'A', "A")]
-        [TestCase("A-1-B", 'A', 'A', "A")]
-        [TestCase("A,B", 'A', 'A', "A")]
-        [TestCase("A,B", 'A', 'B', "")]
-        [TestCase("A-1-B", 'A', 'B', "A,B")]
-        [TestCase("A-3-B,A-1-C,C-1-B", 'A', 'B', "A,C,B")]
-        [TestCase("A<1<B,A>5>C,C>5>B", 'A', 'B', "A,C,B")]
-        [TestCase("A>1>B", 'A', 'B', "A,B")]
-        [TestCase("B>1>A", 'A', 'B', "")]
-        public void FindCheapestPath_FindsTheProperPath_ForDirectedGraphs(string relationships, char from, char to, string expected)
+        [TestCase("A", 'A', 'A', "A"),TestCase("A-1-B", 'A', 'A', "A"),TestCase("A,B", 'A', 'A', "A"),TestCase("A,B", 'A', 'B', ""),TestCase("A-1-B", 'A', 'B', "A,B"),TestCase("A-3-B,A-1-C,C-1-B", 'A', 'B', "A,C,B"),TestCase("A<1<B,A>5>C,C>5>B", 'A', 'B', "A,C,B"),TestCase("A>1>B", 'A', 'B', "A,B"),TestCase("B>1>A", 'A', 'B', "")]
+        public void FindCheapestPath_FindsTheProperPath_ForDirectedGraphs([NotNull] string relationships, char from, char to, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
             var actual = string.Join(",", graph.FindCheapestPath(from, to));

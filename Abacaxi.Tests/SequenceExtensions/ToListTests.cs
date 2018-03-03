@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -24,15 +24,13 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public sealed class ToListTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToList1_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList(i => i));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToList1_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int>) null));
@@ -54,15 +52,13 @@ namespace Abacaxi.Tests.SequenceExtensions
             TestHelper.AssertSequence(actual, 1, 2, 3);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToList2_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList((n, i) => i));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToList2_ThrowsException_ForNullSelector()
         {
             Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int, int>) null));

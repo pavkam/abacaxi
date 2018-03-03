@@ -1,4 +1,4 @@
-﻿/* Copyright 2017 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -27,22 +27,7 @@ namespace Abacaxi.Tests.StringExtensions
             Assert.Throws<ArgumentNullException>(() => ((string)null).Escape());
         }
 
-        [TestCase("", "")]
-        [TestCase("this string should not be escaped!", "this string should not be escaped!")]
-        [TestCase("'", "\\'")]
-        [TestCase("\"", "\\\"")]
-        [TestCase("\\", "\\\\")]
-        [TestCase("\0", "\\0")]
-        [TestCase("\a", "\\a")]
-        [TestCase("\b", "\\b")]
-        [TestCase("\f", "\\f")]
-        [TestCase("\n", "\\n")]
-        [TestCase("\r", "\\r")]
-        [TestCase("\t", "\\t")]
-        [TestCase("\u0001", "\\u0001")]
-        [TestCase("\u009f", "\\u009f")]
-        [TestCase("Les Misérables", "Les Misérables")]
-        [TestCase("क्षि", "क्षि")]
+        [TestCase("", ""),TestCase("this string should not be escaped!", "this string should not be escaped!"),TestCase("'", "\\'"),TestCase("\"", "\\\""),TestCase("\\", "\\\\"),TestCase("\0", "\\0"),TestCase("\a", "\\a"),TestCase("\b", "\\b"),TestCase("\f", "\\f"),TestCase("\n", "\\n"),TestCase("\r", "\\r"),TestCase("\t", "\\t"),TestCase("\u0001", "\\u0001"),TestCase("\u009f", "\\u009f"),TestCase("Les Misérables", "Les Misérables"),TestCase("क्षि", "क्षि")]
         public void Escape_ReturnsTheExpectedString(string input, string expected)
         {
             var actual = input.Escape();
