@@ -64,7 +64,9 @@ namespace Abacaxi.Practice
             }
 
             if (neg)
+            {
                 result = -result;
+            }
 
             return result;
         }

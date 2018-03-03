@@ -92,7 +92,9 @@ namespace Abacaxi.Containers
             LocateItem(item, out var chunk, out var mask);
 
             if ((_chunks[chunk] & mask) != 0)
+            {
                 return false;
+            }
 
             _chunks[chunk] |= mask;
             Count++;

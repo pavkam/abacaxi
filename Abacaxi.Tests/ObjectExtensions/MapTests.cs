@@ -32,6 +32,7 @@ namespace Abacaxi.Tests.ObjectExtensions
 
         [Test]
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [SuppressMessage("ReSharper", "UnthrowableException")]
         public void Map_ThrowsException_IfMapFuncThrowsIt()
         {
             Assert.Throws<InvalidProgramException>(() =>

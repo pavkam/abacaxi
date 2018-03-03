@@ -167,6 +167,7 @@ namespace Abacaxi.Trees
                 root.Value = successor.Value;
                 root.RightChild = DeleteNodeRecursive(root.RightChild, successor.Key, ref deleted);
             }
+
             return root;
         }
 
@@ -184,14 +185,17 @@ namespace Abacaxi.Trees
                     current = current.LeftChild;
                 }
 
-                if (stack.Count > 0)
+                if (stack.Count <= 0)
                 {
-                    current = stack.Pop();
-                    CheckVersion(ver);
-
-                    yield return new KeyValuePair<TKey, TValue>(current.Key, current.Value);
-                    current = current.RightChild;
+                    continue;
                 }
+
+                current = stack.Pop();
+                CheckVersion(ver);
+
+                yield return new KeyValuePair<TKey, TValue>(current.Key, current.Value);
+
+                current = current.RightChild;
             } while (stack.Count > 0 || current != null);
 
             CheckVersion(ver);
@@ -211,14 +215,17 @@ namespace Abacaxi.Trees
                     CheckVersion(ver);
 
                     yield return new KeyValuePair<TKey, TValue>(current.Key, current.Value);
+
                     current = current.LeftChild;
                 }
 
-                if (stack.Count > 0)
+                if (stack.Count <= 0)
                 {
-                    current = stack.Pop();
-                    current = current.RightChild;
+                    continue;
                 }
+
+                current = stack.Pop();
+                current = current.RightChild;
             } while (stack.Count > 0 || current != null);
 
             CheckVersion(ver);
@@ -247,6 +254,7 @@ namespace Abacaxi.Trees
                         CheckVersion(ver);
 
                         yield return new KeyValuePair<TKey, TValue>(current.Key, current.Value);
+
                         stack.Pop();
                         previous = current;
                         current = null;
@@ -391,13 +399,10 @@ namespace Abacaxi.Trees
         /// <returns>
         /// <c>true</c> if the node was successfully removed; otherwise, false.
         /// </returns>
-        public bool Remove(KeyValuePair<TKey, TValue> item)
-        {
-            return
-                TryGetValue(item.Key, out var value) &&
-                EqualityComparer<TValue>.Default.Equals(value, item.Value) &&
-                Remove(item.Key);
-        }
+        public bool Remove(KeyValuePair<TKey, TValue> item) =>
+            TryGetValue(item.Key, out var value) &&
+            EqualityComparer<TValue>.Default.Equals(value, item.Value) &&
+            Remove(item.Key);
 
         /// <summary>
         /// Determines whether the tree contains the given key/value node.
@@ -410,12 +415,9 @@ namespace Abacaxi.Trees
         /// This method is provided for compatibility with <see cref="ICollection{T}" />. It is not recommended for normal use.
         /// The values of nodes are compared using the default equality comparer for that type.
         /// </remarks>
-        public bool Contains(KeyValuePair<TKey, TValue> item)
-        {
-            return
-                TryGetValue(item.Key, out var value) &&
-                EqualityComparer<TValue>.Default.Equals(value, item.Value);
-        }
+        public bool Contains(KeyValuePair<TKey, TValue> item) =>
+            TryGetValue(item.Key, out var value) &&
+            EqualityComparer<TValue>.Default.Equals(value, item.Value);
 
         /// <summary>
         /// Tries the get value of the node identified by the given <paramref name="key"/>.
@@ -423,7 +425,7 @@ namespace Abacaxi.Trees
         /// <param name="key">The key of the node.</param>
         /// <param name="value">The value of the node (if found).</param>
         /// <returns><c>true</c> if the node was found; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue(TKey key, out TValue value)
+        public bool TryGetValue(TKey key, [CanBeNull] out TValue value)
         {
             var node = LookupNode(key);
             if (node != null)
@@ -491,6 +493,7 @@ namespace Abacaxi.Trees
         /// <param name="key">The key of the node.</param>
         /// <returns>The value of the node identified by the <paramref name="key"/>.</returns>
         /// <exception cref="ArgumentException">Thrown if the tree does not contain any node identified by the <paramref name="key"/>.</exception>
+        [CanBeNull]
         public TValue this[TKey key]
         {
             get

@@ -28,10 +28,8 @@ namespace Abacaxi.Practice.Graphs
     /// </summary>
     public sealed class StringNeighborhoodGraph : Graph<string>
     {
-        [NotNull]
-        private readonly Trie<char, ISet<string>> _neighborhoods;
-        [NotNull]
-        private readonly ISet<string> _vertices;
+        [NotNull] private readonly Trie<char, ISet<string>> _neighborhoods;
+        [NotNull] private readonly ISet<string> _vertices;
 
         [NotNull]
         [ItemNotNull]
@@ -52,18 +50,21 @@ namespace Abacaxi.Practice.Graphs
         [NotNull]
         private IEnumerable<Edge<string>> GetEdgesIterate([NotNull] string vertex)
         {
-            Debug.Assert(vertex != null && _vertices.Contains(vertex));
+            Debug.Assert(vertex != null);
+            Debug.Assert(_vertices.Contains(vertex));
 
             foreach (var pattern in GetAllStringPatterns(vertex))
             {
-                if (_neighborhoods.TryGetValue(pattern, out var neighbors))
+                if (!_neighborhoods.TryGetValue(pattern, out var neighbors))
                 {
-                    foreach (var neighbor in neighbors)
+                    continue;
+                }
+
+                foreach (var neighbor in neighbors)
+                {
+                    if (neighbor != vertex)
                     {
-                        if (neighbor != vertex)
-                        {
-                            yield return new Edge<string>(vertex, neighbor);
-                        }
+                        yield return new Edge<string>(vertex, neighbor);
                     }
                 }
             }

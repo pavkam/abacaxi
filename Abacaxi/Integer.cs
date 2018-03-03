@@ -75,7 +75,9 @@ namespace Abacaxi
             while (number != 0)
             {
                 if (number % 2 != 0)
+                {
                     yield return sign * power;
+                }
 
                 power *= 2;
                 number /= 2;
@@ -125,7 +127,9 @@ namespace Abacaxi
                 }
 
                 if (sign == -1 && factors % 2 == 0)
+                {
                     yield return sign;
+                }
             }
         }
 

@@ -54,7 +54,9 @@ namespace Abacaxi
                     else if (i * sign > number / 2 * sign || doNotBreak)
                     {
                         if (selection.Count == 0)
+                        {
                             break;
+                        }
 
                         number = numbers.Pop();
                         i = selection.Pop() + sign;
@@ -87,25 +89,23 @@ namespace Abacaxi
             var solutions = new int[number + 1, number + 1];
 
             for (var m = 0; m <= number; m++)
+            for (var n = 0; n <= number; n++)
             {
-                for (var n = 0; n <= number; n++)
+                if (m == 0)
                 {
-                    if (m == 0)
-                    {
-                        solutions[n, m] = 0;
-                    }
-                    else if (n == 0)
-                    {
-                        solutions[n, m] = 1;
-                    }
-                    else if (n - m < 0)
-                    {
-                        solutions[n, m] = solutions[n, m - 1];
-                    }
-                    else
-                    {
-                        solutions[n, m] = solutions[n - m, m] + solutions[n, m - 1];
-                    }
+                    solutions[n, m] = 0;
+                }
+                else if (n == 0)
+                {
+                    solutions[n, m] = 1;
+                }
+                else if (n - m < 0)
+                {
+                    solutions[n, m] = solutions[n, m - 1];
+                }
+                else
+                {
+                    solutions[n, m] = solutions[n - m, m] + solutions[n, m - 1];
                 }
             }
 

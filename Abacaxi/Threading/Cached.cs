@@ -38,24 +38,29 @@ namespace Abacaxi.Threading
         [CanBeNull]
         private T GetInternal([CanBeNull] Func<T> valueRefreshFunc = null)
         {
-            if (_expiresAtTicks < CurrentTicks)
+            if (_expiresAtTicks >= CurrentTicks)
             {
-                lock (_lock)
-                {
-                    if (_expiresAtTicks < CurrentTicks)
-                    {
-                        var selectedFunc = valueRefreshFunc ?? _valueRefreshFunc;
-                        if (selectedFunc == null)
-                        {
-                            throw new InvalidOperationException(
-                                "No value refresh function has been supplied when this object was created.");
-                        }
-
-                        _value = selectedFunc();
-                        _expiresAtTicks = CurrentTicks + _valueTtlMillis * TimeSpan.TicksPerMillisecond;
-                    }
-                }
+                return _value;
             }
+
+            lock (_lock)
+            {
+                if (_expiresAtTicks >= CurrentTicks)
+                {
+                    return _value;
+                }
+
+                var selectedFunc = valueRefreshFunc ?? _valueRefreshFunc;
+                if (selectedFunc == null)
+                {
+                    throw new InvalidOperationException(
+                        "No value refresh function has been supplied when this object was created.");
+                }
+
+                _value = selectedFunc();
+                _expiresAtTicks = CurrentTicks + _valueTtlMillis * TimeSpan.TicksPerMillisecond;
+            }
+
             return _value;
         }
 
@@ -91,6 +96,7 @@ namespace Abacaxi.Threading
         /// <value>
         /// The cached value.
         /// </value>
+        [CanBeNull]
         public T Value => GetInternal();
 
         /// <summary>

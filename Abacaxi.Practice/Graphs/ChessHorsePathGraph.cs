@@ -51,17 +51,15 @@ namespace Abacaxi.Practice.Graphs
             Debug.Assert(VertexExists(vertex.X, vertex.Y));
 
             for (var i = -2; i <= 2; i += 4)
+            for (var j = -1; j <= 1; j += 2)
             {
-                for (var j = -1; j <= 1; j += 2)
+                if (VertexExists(vertex.X + i, vertex.Y + j))
                 {
-                    if (VertexExists(vertex.X + i, vertex.Y + j))
-                    {
-                        yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y + j));
-                    }
-                    if (VertexExists(vertex.X + j, vertex.Y + i))
-                    {
-                        yield return new Edge<Cell>(vertex, new Cell(vertex.X + j, vertex.Y + i));
-                    }
+                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y + j));
+                }
+                if (VertexExists(vertex.X + j, vertex.Y + i))
+                {
+                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + j, vertex.Y + i));
                 }
             }
         }
@@ -115,11 +113,9 @@ namespace Abacaxi.Practice.Graphs
         public override IEnumerator<Cell> GetEnumerator()
         {
             for (var x = 0; x < _lengthX; x++)
+            for (var y = 0; y < _lengthY; y++)
             {
-                for (var y = 0; y < _lengthY; y++)
-                {
-                    yield return new Cell(x, y);
-                }
+                yield return new Cell(x, y);
             }
         }
 

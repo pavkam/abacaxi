@@ -114,13 +114,11 @@ namespace Abacaxi.Graphs
         public override IEnumerator<Cell> GetEnumerator()
         {
             for (var x = 0; x < _lengthX; x++)
+            for (var y = 0; y < _lengthY; y++)
             {
-                for (var y = 0; y < _lengthY; y++)
+                if (_matrix[x, y])
                 {
-                    if (_matrix[x, y])
-                    {
-                        yield return new Cell(x, y);
-                    }
+                    yield return new Cell(x, y);
                 }
             }
         }

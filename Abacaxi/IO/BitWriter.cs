@@ -191,7 +191,6 @@ namespace Abacaxi.IO
 
             if (count == 0)
             {
-                /* Do nothing. */
                 return;
             }
 

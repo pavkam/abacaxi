@@ -80,7 +80,7 @@ namespace Abacaxi.Graphs
 
                     if (to != from)
                     {
-                        AddVertices(to, from, weight);
+                        AddVertices(to, @from, weight);
                     }
                     break;
                 default:

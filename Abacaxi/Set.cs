@@ -247,20 +247,18 @@ namespace Abacaxi
 
             var solutions = new int[target + 1, elements.Length + 1];
             for (var si = 1; si <= elements.Length; si++)
+            for (var wi = 0; wi <= target; wi++)
             {
-                for (var wi = 0; wi <= target; wi++)
+                var currentElement = elements[si - 1];
+                if (currentElement > wi)
                 {
-                    var currentElement = elements[si - 1];
-                    if (currentElement > wi)
-                    {
-                        solutions[wi, si] = solutions[wi, si - 1];
-                    }
-                    else
-                    {
-                        solutions[wi, si] = Math.Max(
-                            currentElement + solutions[wi - currentElement, si - 1],
-                            solutions[wi, si - 1]);
-                    }
+                    solutions[wi, si] = solutions[wi, si - 1];
+                }
+                else
+                {
+                    solutions[wi, si] = Math.Max(
+                        currentElement + solutions[wi - currentElement, si - 1],
+                        solutions[wi, si - 1]);
                 }
             }
 

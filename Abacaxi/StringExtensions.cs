@@ -92,30 +92,34 @@ namespace Abacaxi
                 Validate.ArgumentLessThanOrEqualTo(nameof(ellipsis), ellipsis.Length, maxLength);
             }
 
-            if (s.Length > maxLength)
+            if (s.Length <= maxLength)
             {
-                var elpLength = ellipsis?.Length ?? 0;
-                var cutOffLen = 0;
-                var enumerator = StringInfo.GetTextElementEnumerator(s);
-                while (enumerator.MoveNext())
-                {
-                    var expLength = enumerator.ElementIndex + elpLength;
-                    if (expLength <= maxLength)
-                    {
-                        cutOffLen = enumerator.ElementIndex;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                var sb = new StringBuilder(s, 0, cutOffLen, maxLength);
-                if (ellipsis != null)
-                    sb.Append(ellipsis);
-
-                s = sb.ToString();
+                return s;
             }
+
+            var elpLength = ellipsis?.Length ?? 0;
+            var cutOffLen = 0;
+            var enumerator = StringInfo.GetTextElementEnumerator(s);
+            while (enumerator.MoveNext())
+            {
+                var expLength = enumerator.ElementIndex + elpLength;
+                if (expLength <= maxLength)
+                {
+                    cutOffLen = enumerator.ElementIndex;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            var sb = new StringBuilder(s, 0, cutOffLen, maxLength);
+            if (ellipsis != null)
+            {
+                sb.Append(ellipsis);
+            }
+
+            s = sb.ToString();
 
             return s;
         }
@@ -253,7 +257,6 @@ namespace Abacaxi
                 }
             }
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var kvp in appearances)
             {
                 if (kvp.Value > 1)
@@ -355,11 +358,13 @@ namespace Abacaxi
                     if (i == line.Length)
                     {
                         yield return line.Substring(si, i - si);
+
                         si = i;
                     }
                     else if (char.IsWhiteSpace(line, i) && lineLength > 1)
                     {
                         yield return line.Substring(si, lineLength);
+
                         si += lineLength + 1;
                     }
                     else if (lxi > -1)
@@ -378,6 +383,7 @@ namespace Abacaxi
                     else
                     {
                         yield return line.Substring(si, lineLength);
+
                         si += lineLength;
                     }
                 }
@@ -416,7 +422,6 @@ namespace Abacaxi
             var result = new StringBuilder();
             foreach (var c in normalizedForm)
             {
-                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (CharUnicodeInfo.GetUnicodeCategory(c))
                 {
                     case UnicodeCategory.NonSpacingMark:

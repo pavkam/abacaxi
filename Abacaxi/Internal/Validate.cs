@@ -36,8 +36,10 @@ namespace Abacaxi.Internal
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value == bound)
+            {
                 throw new ArgumentOutOfRangeException(argumentName,
                     $"Argument {argumentName} must be different from {bound}.");
+            }
         }
 
         public static void ArgumentGreaterThan(
@@ -49,8 +51,10 @@ namespace Abacaxi.Internal
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value <= bound)
+            {
                 throw new ArgumentOutOfRangeException(argumentName,
                     $"Argument {argumentName} must be greater than {bound}.");
+            }
         }
 
         public static void ArgumentGreaterThan(
@@ -62,8 +66,10 @@ namespace Abacaxi.Internal
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value <= bound)
+            {
                 throw new ArgumentOutOfRangeException(argumentName,
                     $"Argument {argumentName} must be greater than {bound}.");
+            }
         }
 
         public static void ArgumentLessThan(
@@ -75,8 +81,10 @@ namespace Abacaxi.Internal
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value >= bound)
+            {
                 throw new ArgumentOutOfRangeException(argumentName,
                     $"Argument {argumentName} must be less than {bound}.");
+            }
         }
 
         public static void ArgumentLessThan(
@@ -88,8 +96,10 @@ namespace Abacaxi.Internal
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value >= bound)
+            {
                 throw new ArgumentOutOfRangeException(argumentName,
                     $"Argument {argumentName} must be less than {bound}.");
+            }
         }
 
         public static void ArgumentLessThanOrEqualTo(
@@ -101,8 +111,10 @@ namespace Abacaxi.Internal
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value > bound)
+            {
                 throw new ArgumentOutOfRangeException(argumentName,
                     $"Argument {argumentName} must be less than or equal to {bound}.");
+            }
         }
 
         public static void ArgumentLessThanOrEqualTo(
@@ -114,8 +126,10 @@ namespace Abacaxi.Internal
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value > bound)
+            {
                 throw new ArgumentOutOfRangeException(argumentName,
                     $"Argument {argumentName} must be less than or equal to {bound}.");
+            }
         }
 
         public static void ArgumentGreaterThanOrEqualTo(
@@ -127,8 +141,10 @@ namespace Abacaxi.Internal
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value < bound)
+            {
                 throw new ArgumentOutOfRangeException(argumentName,
                     $"Argument {argumentName} must be greater than or equal to {bound}.");
+            }
         }
 
         public static void ArgumentGreaterThanOrEqualTo(
@@ -140,8 +156,10 @@ namespace Abacaxi.Internal
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value < bound)
+            {
                 throw new ArgumentOutOfRangeException(argumentName,
                     $"Argument {argumentName} must be greater than or equal to {bound}.");
+            }
         }
 
         public static void ArgumentDifferentThanZero([NotNull] [InvokerParameterName] string argumentName, int value)
@@ -195,7 +213,9 @@ namespace Abacaxi.Internal
             if (sequence is ICollection<T> collection)
             {
                 if (collection.Count == 0)
+                {
                     throw new ArgumentException($"Argument {argumentName} must not be empty.", argumentName);
+                }
 
                 return;
             }

@@ -48,18 +48,22 @@ namespace Abacaxi
 
             var m = new double[elements.Length + 1, knapsackWeight + 1];
             for (var i = 0; i <= elements.Length; i++)
+            for (var w = 0; w <= knapsackWeight; w++)
             {
-                for (var w = 0; w <= knapsackWeight; w++)
+                if (i == 0 || w == 0)
                 {
-                    if (i == 0 || w == 0)
-                        m[i, w] = 0;
+                    m[i, w] = 0;
+                }
+                else
+                {
+                    var ei1 = elements[i - 1];
+                    if (ei1.Weight <= w)
+                    {
+                        m[i, w] = Math.Max(ei1.Value + m[i - 1, w - ei1.Weight], m[i - 1, w]);
+                    }
                     else
                     {
-                        var ei1 = elements[i - 1];
-                        if (ei1.Weight <= w)
-                            m[i, w] = Math.Max(ei1.Value + m[i - 1, w - ei1.Weight], m[i - 1, w]);
-                        else
-                            m[i, w] = m[i - 1, w];
+                        m[i, w] = m[i - 1, w];
                     }
                 }
             }

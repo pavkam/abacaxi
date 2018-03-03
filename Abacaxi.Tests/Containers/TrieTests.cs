@@ -580,29 +580,21 @@ namespace Abacaxi.Tests.Containers
         public void Trie_StaysConsistent_ForLargeNumberOfElements(int cx)
         {
             for (var i = 'A'; i < 'A' + cx; i++)
+            for (var j = 'A'; j < 'A' + cx; j++)
+            for (var z = 'A'; z < 'A' + cx; z++)
             {
-                for (var j = 'A'; j < 'A' + cx; j++)
-                {
-                    for (var z = 'A'; z < 'A' + cx; z++)
-                    {
-                        _trie0.Add(_($"{i}{j}{z}"), 0);
-                    }
-                }
+                _trie0.Add(_($"{i}{j}{z}"), 0);
             }
 
             var ex = cx * cx * cx;
             Assert.AreEqual(ex, _trie0.Count);
 
             for (var i = 'A'; i < 'A' + cx; i++)
+            for (var j = 'A'; j < 'A' + cx; j++)
+            for (var z = 'A'; z < 'A' + cx; z++)
             {
-                for (var j = 'A'; j < 'A' + cx; j++)
-                {
-                    for (var z = 'A'; z < 'A' + cx; z++)
-                    {
-                        var removed = _trie0.Remove(_($"{i}{j}{z}"));
-                        Assert.IsTrue(removed);
-                    }
-                }
+                var removed = _trie0.Remove(_($"{i}{j}{z}"));
+                Assert.IsTrue(removed);
             }
 
             Assert.AreEqual(0, _trie0.Count);

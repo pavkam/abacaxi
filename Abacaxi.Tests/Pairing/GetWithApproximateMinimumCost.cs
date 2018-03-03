@@ -151,7 +151,9 @@ namespace Abacaxi.Tests.Pairing
 
                 var error = 1 - (maxCost - approxCost) / (maxCost - minCost);
                 if (double.IsNaN(error))
+                {
                     error = 0;
+                }
                 totalError += error;
             }
 

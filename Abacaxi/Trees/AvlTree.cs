@@ -13,6 +13,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System;
+
 namespace Abacaxi.Trees
 {
     using System.Diagnostics;
@@ -54,6 +56,7 @@ namespace Abacaxi.Trees
             else
             {
                 Debug.Assert(parent != null);
+
                 if (parent.RightChild == node)
                 {
                     parent.RightChild = right;
@@ -194,7 +197,7 @@ namespace Abacaxi.Trees
 
             var rightLeft = right.LeftChild;
             Debug.Assert(rightLeft != null);
-            
+
             var parent = node.Parent;
             var rightLeftLeft = rightLeft.LeftChild;
             var rightLeftRight = rightLeft.RightChild;
@@ -255,7 +258,9 @@ namespace Abacaxi.Trees
             return rightLeft;
         }
 
-        private static void Replace([NotNull] AvlTreeNode<TKey, TValue> target, [NotNull] AvlTreeNode<TKey, TValue> source)
+        private static void Replace(
+            [NotNull] AvlTreeNode<TKey, TValue> target,
+            [NotNull] AvlTreeNode<TKey, TValue> source)
         {
             Debug.Assert(target != null);
             Debug.Assert(source != null);
@@ -287,7 +292,8 @@ namespace Abacaxi.Trees
                 NotifyTreeChanged(1);
                 Root = new AvlTreeNode<TKey, TValue>
                 {
-                    Key = key, Value = value
+                    Key = key,
+                    Value = value
                 };
             }
             else
@@ -309,7 +315,7 @@ namespace Abacaxi.Trees
                                 Value = value,
                                 Parent = node
                             };
-                            
+
                             ReBalanceTreeAfterInsert(node, 1);
                             return;
                         }
@@ -328,7 +334,7 @@ namespace Abacaxi.Trees
                                 Value = value,
                                 Parent = node
                             };
-                            
+
                             ReBalanceTreeAfterInsert(node, -1);
                             return;
                         }
@@ -490,7 +496,7 @@ namespace Abacaxi.Trees
             get
             {
                 Debug.Assert(base.Root == null || base.Root is AvlTreeNode<TKey, TValue>);
-                return (AvlTreeNode<TKey, TValue>)base.Root;
+                return (AvlTreeNode<TKey, TValue>) base.Root;
             }
             set => base.Root = value;
         }
@@ -640,7 +646,7 @@ namespace Abacaxi.Trees
                             }
 
                             var parent = node.Parent;
-                            
+
                             var successorParent = successor.Parent;
                             Debug.Assert(successorParent != null);
 

@@ -61,39 +61,41 @@ namespace Abacaxi
             for (var i = 0; i < Math.Max(sequence.Count, resultSequence.Count) + 1; i++)
             {
                 if (i <= sequence.Count)
+                {
                     matrix[i, 0] = initColumnCellFunc(i);
+                }
                 if (i <= resultSequence.Count)
+                {
                     matrix[0, i] = initRowCellFunc(i);
+                }
             }
 
             var opr = new double[3];
             for (var i1 = 1; i1 <= sequence.Count; i1++)
+            for (var i2 = 1; i2 <= resultSequence.Count; i2++)
             {
-                for (var i2 = 1; i2 <= resultSequence.Count; i2++)
+                opr[EditChoice.Match] = matrix[i1 - 1, i2 - 1].Cost +
+                                        evalMatchCostFunc(sequence[i1 - 1], resultSequence[i2 - 1]);
+                opr[EditChoice.Delete] = matrix[i1 - 1, i2].Cost + evalDeleteCostFunc(sequence[i1 - 1]);
+                opr[EditChoice.Insert] = matrix[i1, i2 - 1].Cost + evalInsertCostFunc(resultSequence[i2 - 1]);
+
+                var minCostOperation = -1;
+                var minCost = opr[EditChoice.Match];
+
+                for (var op = EditChoice.Match; op <= EditChoice.Delete; op++)
                 {
-                    opr[EditChoice.Match] = matrix[i1 - 1, i2 - 1].Cost +
-                                            evalMatchCostFunc(sequence[i1 - 1], resultSequence[i2 - 1]);
-                    opr[EditChoice.Delete] = matrix[i1 - 1, i2].Cost + evalDeleteCostFunc(sequence[i1 - 1]);
-                    opr[EditChoice.Insert] = matrix[i1, i2 - 1].Cost + evalInsertCostFunc(resultSequence[i2 - 1]);
-
-                    var minCostOperation = -1;
-                    var minCost = opr[EditChoice.Match];
-
-                    for (var op = EditChoice.Match; op <= EditChoice.Delete; op++)
+                    if (minCostOperation == -1 || opr[op] < minCost)
                     {
-                        if (minCostOperation == -1 || opr[op] < minCost)
-                        {
-                            minCost = opr[op];
-                            minCostOperation = op;
-                        }
+                        minCost = opr[op];
+                        minCostOperation = op;
                     }
-
-                    matrix[i1, i2] = new EditChoice
-                    {
-                        Cost = minCost,
-                        Operation = minCostOperation,
-                    };
                 }
+
+                matrix[i1, i2] = new EditChoice
+                {
+                    Cost = minCost,
+                    Operation = minCostOperation,
+                };
             }
 
             var path = new List<Edit<T>>();
@@ -309,8 +311,10 @@ namespace Abacaxi
             foreach (var item in sequence)
             {
                 if (item < minInSequence || item > maxInSequence)
+                {
                     throw new InvalidOperationException(
                         $"The sequence of integers contains element {item} which is outside of the given {minInSequence}..{maxInSequence} range.");
+                }
 
                 appearances[item - minInSequence]++;
             }
@@ -1255,7 +1259,6 @@ namespace Abacaxi
                 {
                     if (item == null)
                     {
-                        // ReSharper disable once ExpressionIsAlwaysNull
                         return item;
                     }
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
@@ -1330,7 +1333,6 @@ namespace Abacaxi
                 {
                     if (item == null)
                     {
-                        // ReSharper disable once ExpressionIsAlwaysNull
                         return item;
                     }
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
