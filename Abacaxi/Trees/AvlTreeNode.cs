@@ -38,7 +38,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Assert.NotNull(base.RightChild == null ||  base.RightChild is AvlTreeNode<TKey, TValue>);
+                Assert.Condition(base.RightChild == null ||  base.RightChild is AvlTreeNode<TKey, TValue>);
                 return (AvlTreeNode<TKey, TValue>) base.RightChild;
             }
             set => base.RightChild = value;
@@ -55,7 +55,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Assert.NotNull(base.LeftChild == null || base.LeftChild is AvlTreeNode<TKey, TValue>);
+                Assert.Condition(base.LeftChild == null || base.LeftChild is AvlTreeNode<TKey, TValue>);
                 return (AvlTreeNode<TKey, TValue>)base.LeftChild;
             }
             set => base.LeftChild = value;

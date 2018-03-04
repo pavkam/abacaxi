@@ -31,8 +31,7 @@ namespace Abacaxi.Internal
             int value,
             int bound)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value == bound)
             {
@@ -46,8 +45,7 @@ namespace Abacaxi.Internal
             int value,
             int bound)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value <= bound)
             {
@@ -61,8 +59,7 @@ namespace Abacaxi.Internal
             double value,
             double bound)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value <= bound)
             {
@@ -76,8 +73,7 @@ namespace Abacaxi.Internal
             int value,
             int bound)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value >= bound)
             {
@@ -91,8 +87,7 @@ namespace Abacaxi.Internal
             double value,
             double bound)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value >= bound)
             {
@@ -106,8 +101,7 @@ namespace Abacaxi.Internal
             int value,
             int bound)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value > bound)
             {
@@ -121,8 +115,7 @@ namespace Abacaxi.Internal
             double value,
             double bound)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value > bound)
             {
@@ -136,8 +129,7 @@ namespace Abacaxi.Internal
             int value,
             int bound)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value < bound)
             {
@@ -151,8 +143,7 @@ namespace Abacaxi.Internal
             double value,
             double bound)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value < bound)
             {
@@ -192,8 +183,7 @@ namespace Abacaxi.Internal
         public static void ArgumentNotNull([NotNull,InvokerParameterName]  string argumentName,
             [CanBeNull] object value)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             if (value == null)
             {
@@ -205,8 +195,7 @@ namespace Abacaxi.Internal
         public static void SequenceArgumentNotEmpty<T>([NotNull,InvokerParameterName]  string argumentName,
             [CanBeNull] IEnumerable<T> sequence)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
-                $"Argument {nameof(argumentName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(argumentName));
 
             ArgumentNotNull(argumentName, sequence);
             if (sequence is ICollection<T> collection)
@@ -232,8 +221,7 @@ namespace Abacaxi.Internal
         public static void CollectionArgumentsInBounds<T>([NotNull,InvokerParameterName]  string sequenceArgName,
             [NotNull] ICollection<T> sequence, int startIndex, int length)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(sequenceArgName),
-                $"Argument {nameof(sequenceArgName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(sequenceArgName));
 
             ArgumentNotNull(nameof(sequence), sequence);
             if (startIndex < 0 || length < 0 || startIndex + length > sequence.Count)
@@ -247,8 +235,7 @@ namespace Abacaxi.Internal
         public static void CollectionArgumentsHasEvenNumberOfElements<T>(
             [NotNull,InvokerParameterName]  string sequenceArgName, [NotNull] ICollection<T> sequence)
         {
-            Assert.NotNull(!string.IsNullOrEmpty(sequenceArgName),
-                $"Argument {nameof(sequenceArgName)} cannot be null or empty.");
+            Assert.Condition(!string.IsNullOrEmpty(sequenceArgName));
 
             ArgumentNotNull(nameof(sequence), sequence);
             if (sequence.Count % 2 != 0)

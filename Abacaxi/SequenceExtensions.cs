@@ -693,7 +693,7 @@ namespace Abacaxi
             return GetEditDistance(sequence, resultSequence,
                 row =>
                 {
-                    Assert.NotNull(row >= 0 && row <= resultSequence.Count);
+                    Assert.Condition(row >= 0 && row <= resultSequence.Count);
                     return new EditChoice
                     {
                         Operation = row > 0 ? EditChoice.Insert : EditChoice.Cancel,
@@ -702,7 +702,7 @@ namespace Abacaxi
                 },
                 column =>
                 {
-                    Assert.NotNull(column >= 0 && column <= sequence.Count);
+                    Assert.Condition(column >= 0 && column <= sequence.Count);
                     return new EditChoice
                     {
                         Operation = column > 0 ? EditChoice.Delete : EditChoice.Cancel,
@@ -733,7 +733,7 @@ namespace Abacaxi
             return GetEditDistance(sequence, otherSequence,
                 row =>
                 {
-                    Assert.NotNull(row >= 0 && row <= otherSequence.Count);
+                    Assert.Condition(row >= 0 && row <= otherSequence.Count);
                     return new EditChoice
                     {
                         Operation = row > 0 ? EditChoice.Insert : EditChoice.Cancel,
@@ -742,7 +742,7 @@ namespace Abacaxi
                 },
                 column =>
                 {
-                    Assert.NotNull(column >= 0 && column <= sequence.Count);
+                    Assert.Condition(column >= 0 && column <= sequence.Count);
                     return new EditChoice
                     {
                         Operation = column > 0 ? EditChoice.Delete : EditChoice.Cancel,

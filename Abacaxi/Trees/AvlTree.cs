@@ -478,7 +478,7 @@ namespace Abacaxi.Trees
         public new AvlTreeNode<TKey, TValue> LookupNode(TKey key)
         {
             var node = base.LookupNode(key);
-            Assert.NotNull(node == null || node is AvlTreeNode<TKey, TValue>);
+            Assert.Condition(node == null || node is AvlTreeNode<TKey, TValue>);
 
             return (AvlTreeNode<TKey, TValue>) node;
         }
@@ -494,7 +494,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Assert.NotNull(base.Root == null || base.Root is AvlTreeNode<TKey, TValue>);
+                Assert.Condition(base.Root == null || base.Root is AvlTreeNode<TKey, TValue>);
                 return (AvlTreeNode<TKey, TValue>) base.Root;
             }
             set => base.Root = value;

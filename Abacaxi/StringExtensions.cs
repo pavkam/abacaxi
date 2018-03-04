@@ -276,7 +276,7 @@ namespace Abacaxi
             var ci = 0;
             while (ci < s.Length)
             {
-                Assert.NotNull(ci >= si);
+                Assert.Condition(ci >= si);
 
                 if (s[ci] == '\n')
                 {
@@ -304,7 +304,7 @@ namespace Abacaxi
                 }
             }
 
-            Assert.NotNull(ci == s.Length);
+            Assert.Condition(ci == s.Length);
             if (si < ci)
             {
                 yield return s.Substring(si, ci - si);

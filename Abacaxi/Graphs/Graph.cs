@@ -694,8 +694,8 @@ namespace Abacaxi.Graphs
                 componentIndex++;
             }
 
-            Assert.NotNull(vertices.Count == 0);
-            Assert.NotNull(componentIndexes.Count == inDegrees.Count && componentIndexes.Count == outDegrees.Count);
+            Assert.Condition(vertices.Count == 0);
+            Assert.Condition(componentIndexes.Count == inDegrees.Count && componentIndexes.Count == outDegrees.Count);
 
             // ReSharper disable once IdentifierTypo
             foreach (var ckvp in componentIndexes)

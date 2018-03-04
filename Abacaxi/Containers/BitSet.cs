@@ -36,7 +36,7 @@ namespace Abacaxi.Containers
 
         private void LocateItem(int item, out int chunk, out int mask)
         {
-            Assert.NotNull(item >= _min && item <= _max);
+            Assert.Condition(item >= _min && item <= _max);
 
             item -= _min;
             chunk = item / BitsPerChunk;

@@ -66,7 +66,7 @@ namespace Abacaxi.Graphs
 
         private void AddVertices(char from, char to, char relation, int weight)
         {
-            Assert.NotNull(weight >= 0);
+            Assert.Condition(weight >= 0);
 
             switch (relation)
             {

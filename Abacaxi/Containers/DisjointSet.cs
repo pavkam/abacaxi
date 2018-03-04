@@ -132,7 +132,7 @@ namespace Abacaxi.Containers
 
             var roots = new Node[otherObjects.Length + 1];
             roots[0] = GetRootNode(@object);
-            Assert.NotNull(roots[0] != null);
+            Assert.NotNull(roots[0]);
             var heaviest = roots[0];
 
             if (otherObjects.Length <= 0)

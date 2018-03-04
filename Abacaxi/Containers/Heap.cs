@@ -38,8 +38,8 @@ namespace Abacaxi.Containers
 
         private void SiftDown([NotNull] IList<T> array, int length, int pi)
         {
-            Assert.NotNull(length <= array.Count);
-            Assert.NotNull(pi >= 0 && pi < length);
+            Assert.Condition(length <= array.Count);
+            Assert.Condition(pi >= 0 && pi < length);
 
             while (pi < length)
             {
@@ -92,7 +92,7 @@ namespace Abacaxi.Containers
 
         private void BuildHeap([NotNull] IList<T> array, int length)
         {
-            Assert.NotNull(length <= array.Count);
+            Assert.Condition(length <= array.Count);
 
             for (var ci = 1; ci < length; ci++)
             {

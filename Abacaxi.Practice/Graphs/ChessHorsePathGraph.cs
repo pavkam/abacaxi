@@ -19,14 +19,13 @@ namespace Abacaxi.Practice.Graphs
     using System.Collections.Generic;
     using Abacaxi.Graphs;
     using Internal;
-    using System.Diagnostics;
     using JetBrains.Annotations;
     using System.Linq;
 
     /// <summary>
     /// A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped movements).
     /// </summary>
-    public class ChessHorsePathGraph : Graph<Cell>
+    public sealed class ChessHorsePathGraph : Graph<Cell>
     {
         private readonly int _lengthX;
         private readonly int _lengthY;
@@ -44,7 +43,7 @@ namespace Abacaxi.Practice.Graphs
         [NotNull,ItemNotNull]
         private IEnumerable<Edge<Cell>> GetEdgesIterate(Cell vertex)
         {
-            Debug.Assert(VertexExists(vertex.X, vertex.Y));
+            Assert.Condition(VertexExists(vertex.X, vertex.Y));
 
             for (var i = -2; i <= 2; i += 4)
             for (var j = -1; j <= 1; j += 2)

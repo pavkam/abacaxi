@@ -265,7 +265,7 @@ namespace Abacaxi
                 },
                 solution =>
                 {
-                    Assert.NotNull(solution != null);
+                    Assert.NotNull(solution);
                     return solution.Sum(s => s.Cost);
                 },
                 algorithmParams);

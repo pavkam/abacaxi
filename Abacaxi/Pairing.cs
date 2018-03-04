@@ -133,9 +133,9 @@ namespace Abacaxi
                 new int[sequence.Count],
                 (l, r) =>
                 {
-                    Assert.NotNull(l >= 0 && l < sequence.Count);
-                    Assert.NotNull(r >= 0 && r < sequence.Count);
-                    Assert.NotNull(l != r);
+                    Assert.Condition(l >= 0 && l < sequence.Count);
+                    Assert.Condition(r >= 0 && r < sequence.Count);
+                    Assert.Condition(l != r);
 
                     return evaluateCostOfPairFunc(sequence[l], sequence[r]);
                 }
@@ -148,7 +148,7 @@ namespace Abacaxi
             for (var i = 0; i < context.BestCombination.Length; i++)
             {
                 var setIndex = context.BestCombination[i] - 1;
-                Assert.NotNull(setIndex >= 0);
+                Assert.Condition(setIndex >= 0);
 
                 if (sets[setIndex] == null)
                 {

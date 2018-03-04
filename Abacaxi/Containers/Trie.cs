@@ -380,15 +380,16 @@ namespace Abacaxi.Containers
         /// Tries to get the value associated with the <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The key.</param>
-        /// <param name="value">The output value.</param>
+        /// <param name="result">The output value.</param>
         /// <returns><c>true</c> if the key was found; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue([NotNull] TElement[] key, [CanBeNull] out TValue value)
+        [ContractAnnotation("=> true, result:notnull; => false, result:null")]
+        public bool TryGetValue([NotNull] TElement[] key, [CanBeNull] out TValue result)
         {
             Validate.ArgumentNotNull(nameof(key), key);
 
             var success =
                 FlowDown(key, out var node) && node.IsTerminal;
-            value = success ? node.Value : default(TValue);
+            result = success ? node.Value : default(TValue);
 
             return success;
         }

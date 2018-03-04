@@ -277,7 +277,7 @@ namespace Abacaxi.Trees
 
                 if (Comparer.Compare(key, node.Key) == 0 && node.RightChild == null)
                 {
-                    Assert.NotNull(node.LeftChild == null);
+                    Assert.Condition(node.LeftChild == null);
 
                     NotifyTreeChanged(-1);
                     return null;
@@ -327,7 +327,7 @@ namespace Abacaxi.Trees
         public new RedBlackTreeNode<TKey, TValue> LookupNode(TKey key)
         {
             var node = base.LookupNode(key);
-            Assert.NotNull(node == null || node is RedBlackTreeNode<TKey, TValue>);
+            Assert.Condition(node == null || node is RedBlackTreeNode<TKey, TValue>);
 
             return (RedBlackTreeNode<TKey, TValue>) node;
         }
@@ -343,7 +343,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Assert.NotNull(base.Root == null || base.Root is RedBlackTreeNode<TKey, TValue>);
+                Assert.Condition(base.Root == null || base.Root is RedBlackTreeNode<TKey, TValue>);
                 return (RedBlackTreeNode<TKey, TValue>)base.Root;
             }
             set => base.Root = value;

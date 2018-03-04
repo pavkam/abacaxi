@@ -73,8 +73,8 @@ namespace Abacaxi.IO
 
         private void WriteBitsPartial(uint bits, int count)
         {
-            Assert.NotNull(count > 0 && count <= BitsInWord);
-            Assert.NotNull(count <= _currentBitIndex + 1);
+            Assert.Condition(count > 0 && count <= BitsInWord);
+            Assert.Condition(count <= _currentBitIndex + 1);
 
             /* Shift the bits to the most left, then to the right (to clear them for OR) */
             bits <<= Msb - count + 1;
@@ -84,7 +84,7 @@ namespace Abacaxi.IO
             _currentBitIndex -= count;
 
             /* If overloaded, flush the word and reset. */
-            Assert.NotNull(_currentBitIndex >= -1);
+            Assert.Condition(_currentBitIndex >= -1);
             if (_currentBitIndex != -1)
             {
                 return;
@@ -376,7 +376,7 @@ namespace Abacaxi.IO
             var repr = decimal.GetBits(value);
             var bytesInDecimal = repr.Length * sizeof(int);
 
-            Assert.NotNull(bytesInDecimal <= _assemblyBuffer.Length);
+            Assert.Condition(bytesInDecimal <= _assemblyBuffer.Length);
 
             Buffer.BlockCopy(repr, 0, _assemblyBuffer, 0, bytesInDecimal);
             WriteBytes(_assemblyBuffer, 0, bytesInDecimal);
