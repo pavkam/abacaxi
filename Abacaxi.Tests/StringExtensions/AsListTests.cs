@@ -21,7 +21,7 @@ namespace Abacaxi.Tests.StringExtensions
     using JetBrains.Annotations;
 
     [TestFixture]
-    public sealed class AsListTests
+    public sealed class AppendNotEmptyLineTests
     {
         [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AsList_ThrowsException_IfStringIsNull1()
