@@ -29,7 +29,7 @@ namespace Abacaxi.Internal
 
         public StringListWrapper([NotNull] string s)
         {
-            Debug.Assert(s != null);
+            Assert.NotNull(s != null);
 
             _s = s;
         }

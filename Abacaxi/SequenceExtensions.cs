@@ -18,7 +18,6 @@ namespace Abacaxi
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Diagnostics;
     using Internal;
     using Containers;
     using JetBrains.Annotations;
@@ -51,11 +50,11 @@ namespace Abacaxi
             [NotNull] Func<T, double> evalInsertCostFunc,
             [NotNull] Func<T, double> evalDeleteCostFunc)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(resultSequence != null);
-            Debug.Assert(evalMatchCostFunc != null);
-            Debug.Assert(evalInsertCostFunc != null);
-            Debug.Assert(evalDeleteCostFunc != null);
+            Assert.NotNull(sequence);
+            Assert.NotNull(resultSequence);
+            Assert.NotNull(evalMatchCostFunc);
+            Assert.NotNull(evalInsertCostFunc);
+            Assert.NotNull(evalDeleteCostFunc);
 
             var matrix = new EditChoice[sequence.Count + 1, resultSequence.Count + 1];
             for (var i = 0; i < Math.Max(sequence.Count, resultSequence.Count) + 1; i++)
@@ -84,11 +83,13 @@ namespace Abacaxi
 
                 for (var op = EditChoice.Match; op <= EditChoice.Delete; op++)
                 {
-                    if (minCostOperation == -1 || opr[op] < minCost)
+                    if (minCostOperation != -1 && !(opr[op] < minCost))
                     {
-                        minCost = opr[op];
-                        minCostOperation = op;
+                        continue;
                     }
+
+                    minCost = opr[op];
+                    minCostOperation = op;
                 }
 
                 matrix[i1, i2] = new EditChoice
@@ -103,7 +104,6 @@ namespace Abacaxi
             var pi2 = resultSequence.Count;
             for (;;)
             {
-                // ReSharper disable once IdentifierTypo
                 var ceds = matrix[pi1, pi2];
                 if (ceds.Operation == EditChoice.Cancel)
                 {
@@ -151,7 +151,8 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="comparer"/> is <c>null</c>.</exception>
         [NotNull]
-        public static IEnumerable<T> FindLongestIncreasingSequence<T>([NotNull] this IEnumerable<T> sequence,
+        public static IEnumerable<T> FindLongestIncreasingSequence<T>(
+            [NotNull] this IEnumerable<T> sequence,
             [NotNull] IComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -168,21 +169,25 @@ namespace Abacaxi
 
                 for (var i = dyna.Count - 1; i >= 0; i--)
                 {
-                    if (comparer.Compare(dyna[i].Item1, e) < 0 && (pi == -1 || pm < dyna[i].Item2))
+                    if (comparer.Compare(dyna[i].Item1, e) >= 0 || (pi != -1 && pm >= dyna[i].Item2))
                     {
-                        pi = i;
-                        pm = dyna[i].Item2;
+                        continue;
                     }
+
+                    pi = i;
+                    pm = dyna[i].Item2;
                 }
 
                 var nm = pm + 1;
                 dyna.Add(Tuple.Create(e, nm, pi));
 
-                if (lm < nm)
+                if (lm >= nm)
                 {
-                    lm = nm;
-                    li = dyna.Count - 1;
+                    continue;
                 }
+
+                lm = nm;
+                li = dyna.Count - 1;
             }
 
             var result = new T[lm];
@@ -279,7 +284,6 @@ namespace Abacaxi
 
             var result = new List<Frequency<T>>();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var kvp in appearances)
             {
                 if (kvp.Value > 1)
@@ -331,16 +335,15 @@ namespace Abacaxi
             return result.ToArray();
         }
 
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         private static IEnumerable<T[]> ExtractNestedBlocksIterate<T>(
             [NotNull] this IEnumerable<T> sequence,
             T openBracket,
             T closeBracket,
             [NotNull] IEqualityComparer<T> comparer)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(comparer != null);
+            Assert.NotNull(sequence);
+            Assert.NotNull(comparer);
 
             var stack = new Stack<List<T>>();
             var currentList = new List<T>();
@@ -356,6 +359,7 @@ namespace Abacaxi
                 else if (comparer.Equals(item, closeBracket))
                 {
                     yield return currentList.ToArray();
+
                     if (stack.Count == 0)
                     {
                         throw new InvalidOperationException("There are no blocks open to be closed.");
@@ -395,8 +399,7 @@ namespace Abacaxi
         /// <returns>The sequence of extracted groups, starting with the inner most ones.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">Throws if the number of open and close brackets do not match.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         public static IEnumerable<T[]> ExtractNestedBlocks<T>(
             [NotNull] this IEnumerable<T> sequence,
             T openBracket,
@@ -409,7 +412,7 @@ namespace Abacaxi
             return ExtractNestedBlocksIterate(sequence, openBracket, closeBracket, comparer);
         }
 
-        [NotNull]
+        [ItemNotNull, NotNull]
         private static IEnumerable<T[]> FindSubsequencesWithGivenAggregatedValueIterate<T>(
             [NotNull] this IList<T> sequence,
             [NotNull] Aggregator<T> aggregator,
@@ -417,10 +420,10 @@ namespace Abacaxi
             [NotNull] IComparer<T> comparer,
             T target)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(aggregator != null);
-            Debug.Assert(disaggregator != null);
-            Debug.Assert(comparer != null);
+            Assert.NotNull(sequence);
+            Assert.NotNull(aggregator);
+            Assert.NotNull(disaggregator);
+            Assert.NotNull(comparer);
 
             if (sequence.Count == 0)
             {
@@ -498,11 +501,11 @@ namespace Abacaxi
         private static IEnumerable<T> InterleaveIterate<T>(
             [NotNull] IComparer<T> comparer,
             [NotNull] IEnumerable<T> sequence,
-            [NotNull] [ItemNotNull] params IEnumerable<T>[] sequences)
+            [NotNull,ItemNotNull]  params IEnumerable<T>[] sequences)
         {
-            Debug.Assert(comparer != null);
-            Debug.Assert(sequence != null);
-            Debug.Assert(sequences != null);
+            Assert.NotNull(comparer);
+            Assert.NotNull(sequence);
+            Assert.NotNull(sequences);
 
             var innerComparer = Comparer<IEnumerator<T>>.Create((a, b) => comparer.Compare(a.Current, b.Current));
 
@@ -523,15 +526,17 @@ namespace Abacaxi
                 var c = top.Current;
                 yield return c;
 
-                if (top.MoveNext())
+                if (!top.MoveNext())
                 {
-                    if (comparer.Compare(top.Current, c) > 0)
-                    {
-                        throw new InvalidOperationException("One or more sequence contains unsorted items.");
-                    }
-
-                    heap.Add(top);
+                    continue;
                 }
+
+                if (comparer.Compare(top.Current, c) > 0)
+                {
+                    throw new InvalidOperationException("One or more sequence contains unsorted items.");
+                }
+
+                heap.Add(top);
             }
         }
 
@@ -550,7 +555,7 @@ namespace Abacaxi
         public static IEnumerable<T> Interleave<T>(
             [NotNull] IComparer<T> comparer,
             [NotNull] IEnumerable<T> sequence,
-            [NotNull] [ItemNotNull] params IEnumerable<T>[] sequences)
+            [NotNull,ItemNotNull]  params IEnumerable<T>[] sequences)
         {
             Validate.ArgumentNotNull(nameof(comparer), comparer);
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -608,12 +613,14 @@ namespace Abacaxi
                 }
 
                 repetitions >>= 1;
-                if (repetitions > 0)
+                if (repetitions <= 0)
                 {
-                    var currentLength = arrayInput.Length;
-                    Array.Resize(ref arrayInput, currentLength * 2);
-                    Array.Copy(arrayInput, 0, arrayInput, currentLength, currentLength);
+                    continue;
                 }
+
+                var currentLength = arrayInput.Length;
+                Array.Resize(ref arrayInput, currentLength * 2);
+                Array.Copy(arrayInput, 0, arrayInput, currentLength, currentLength);
             }
 
             return arrayOutput;
@@ -686,7 +693,7 @@ namespace Abacaxi
             return GetEditDistance(sequence, resultSequence,
                 row =>
                 {
-                    Debug.Assert(row >= 0 && row <= resultSequence.Count);
+                    Assert.NotNull(row >= 0 && row <= resultSequence.Count);
                     return new EditChoice
                     {
                         Operation = row > 0 ? EditChoice.Insert : EditChoice.Cancel,
@@ -695,7 +702,7 @@ namespace Abacaxi
                 },
                 column =>
                 {
-                    Debug.Assert(column >= 0 && column <= sequence.Count);
+                    Assert.NotNull(column >= 0 && column <= sequence.Count);
                     return new EditChoice
                     {
                         Operation = column > 0 ? EditChoice.Delete : EditChoice.Cancel,
@@ -726,7 +733,7 @@ namespace Abacaxi
             return GetEditDistance(sequence, otherSequence,
                 row =>
                 {
-                    Debug.Assert(row >= 0 && row <= otherSequence.Count);
+                    Assert.NotNull(row >= 0 && row <= otherSequence.Count);
                     return new EditChoice
                     {
                         Operation = row > 0 ? EditChoice.Insert : EditChoice.Cancel,
@@ -735,7 +742,7 @@ namespace Abacaxi
                 },
                 column =>
                 {
-                    Debug.Assert(column >= 0 && column <= sequence.Count);
+                    Assert.NotNull(column >= 0 && column <= sequence.Count);
                     return new EditChoice
                     {
                         Operation = column > 0 ? EditChoice.Delete : EditChoice.Cancel,
@@ -793,16 +800,15 @@ namespace Abacaxi
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
-            if (sequence is IList<T> asList)
+            switch (sequence)
             {
-                return asList;
-            }
-            if (sequence is ICollection<T> asCollection)
-            {
-                var result = new T[asCollection.Count];
-                asCollection.CopyTo(result, 0);
+                case IList<T> asList:
+                    return asList;
+                case ICollection<T> asCollection:
+                    var result = new T[asCollection.Count];
+                    asCollection.CopyTo(result, 0);
 
-                return result;
+                    return result;
             }
 
             return sequence.ToArray();
@@ -1078,36 +1084,38 @@ namespace Abacaxi
             return result;
         }
 
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         private static IEnumerable<T[]> PartitionIterate<T>([NotNull] this IEnumerable<T> sequence, int size)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(size > 0);
-            Validate.ArgumentGreaterThanZero(nameof(size), size);
+            Assert.NotNull(sequence);
+            Assert.Condition(size > 0);
 
             var temp = new T[size];
             var count = 0;
             foreach (var item in sequence)
             {
                 temp[count++] = item;
-                if (count == size)
+                if (count != size)
                 {
-                    count = 0;
-                    var res = new T[size];
-                    Array.Copy(temp, res, size);
-
-                    yield return res;
+                    continue;
                 }
-            }
 
-            if (count > 0)
-            {
-                var res = new T[count];
-                Array.Copy(temp, res, count);
+                count = 0;
+                var res = new T[size];
+                Array.Copy(temp, res, size);
 
                 yield return res;
             }
+
+            if (count <= 0)
+            {
+                yield break;
+            }
+
+            var rem = new T[count];
+            Array.Copy(temp, rem, count);
+
+            yield return rem;
         }
 
         /// <summary>
@@ -1119,8 +1127,7 @@ namespace Abacaxi
         /// <returns>A sequence of partitioned items. Each partition is of the specified <paramref name="size"/> (or less, if no elements are left).</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size"/> is less than one.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         public static IEnumerable<T[]> Partition<T>([NotNull] this IEnumerable<T> sequence, int size)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -1136,10 +1143,7 @@ namespace Abacaxi
         /// <param name="sequence">The sequence.</param>
         /// <returns>The original sequence or an empty one.</returns>
         [NotNull]
-        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence)
-        {
-            return sequence ?? Enumerable.Empty<T>();
-        }
+        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence) => sequence ?? Enumerable.Empty<T>();
 
         /// <summary>
         /// Determines whether the given <paramref name="sequence"/> is null or empty.
@@ -1149,12 +1153,8 @@ namespace Abacaxi
         /// <returns>
         ///   <c>true</c> if the sequence is null or empty; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> sequence)
-        {
-            return
-                sequence == null ||
-                !sequence.Any();
-        }
+        public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> sequence) =>
+            sequence?.Any() != true;
 
         /// <summary>
         /// Returns a <see cref="string" /> that represents this sequence of elements.
@@ -1259,7 +1259,7 @@ namespace Abacaxi
                 {
                     if (item == null)
                     {
-                        return item;
+                        return default(T);
                     }
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
                 }
@@ -1269,11 +1269,13 @@ namespace Abacaxi
                     var nextItem = enumerator.Current;
                     var nextMin = selector(nextItem);
 
-                    if (nextMin != null && (min == null || comparer.Compare(min, nextMin) > 0))
+                    if (nextMin == null || (min != null && comparer.Compare(min, nextMin) <= 0))
                     {
-                        min = nextMin;
-                        item = nextItem;
+                        continue;
                     }
+
+                    min = nextMin;
+                    item = nextItem;
                 }
             }
 
@@ -1294,10 +1296,7 @@ namespace Abacaxi
         [CanBeNull]
         public static T Min<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
-            [NotNull] Func<T, TKey> selector)
-        {
-            return Min(sequence, selector, Comparer<TKey>.Default);
-        }
+            [NotNull] Func<T, TKey> selector) => Min(sequence, selector, Comparer<TKey>.Default);
 
         /// <summary>
         /// Finds the object that has a given maximum <typeparamref name="TKey"/>.
@@ -1333,7 +1332,7 @@ namespace Abacaxi
                 {
                     if (item == null)
                     {
-                        return item;
+                        return default(T);
                     }
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
                 }
@@ -1343,11 +1342,13 @@ namespace Abacaxi
                     var nextItem = enumerator.Current;
                     var nextMin = selector(nextItem);
 
-                    if (nextMin != null && (min == null || comparer.Compare(min, nextMin) < 0))
+                    if (nextMin == null || (min != null && comparer.Compare(min, nextMin) >= 0))
                     {
-                        min = nextMin;
-                        item = nextItem;
+                        continue;
                     }
+
+                    min = nextMin;
+                    item = nextItem;
                 }
             }
 
@@ -1368,10 +1369,7 @@ namespace Abacaxi
         [CanBeNull]
         public static T Max<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
-            [NotNull] Func<T, TKey> selector)
-        {
-            return Max(sequence, selector, Comparer<TKey>.Default);
-        }
+            [NotNull] Func<T, TKey> selector) => Max(sequence, selector, Comparer<TKey>.Default);
 
         /// <summary>
         /// Obtains a dedicated view into a segment of a given list. The returned list is a wrapper object that

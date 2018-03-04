@@ -33,8 +33,8 @@ namespace Abacaxi.Graphs
 
         private void AddVertex(char vertex)
         {
-            Debug.Assert(char.IsLetterOrDigit(vertex));
-            Debug.Assert(_vertices != null);
+            Assert.NotNull(char.IsLetterOrDigit(vertex));
+            Assert.NotNull(_vertices != null);
 
             if (!_vertices.TryGetValue(vertex, out var set))
             {
@@ -45,9 +45,9 @@ namespace Abacaxi.Graphs
 
         private void AddVertices(char from, char to, int weight)
         {
-            Debug.Assert(char.IsLetterOrDigit(from));
-            Debug.Assert(char.IsLetterOrDigit(to));
-            Debug.Assert(_vertices != null);
+            Assert.NotNull(char.IsLetterOrDigit(from));
+            Assert.NotNull(char.IsLetterOrDigit(to));
+            Assert.NotNull(_vertices != null);
 
             if (!_vertices.TryGetValue(from, out var fromToSet))
             {
@@ -65,7 +65,7 @@ namespace Abacaxi.Graphs
 
         private void AddVertices(char from, char to, char relation, int weight)
         {
-            Debug.Assert(weight >= 0);
+            Assert.NotNull(weight >= 0);
 
             switch (relation)
             {
@@ -84,14 +84,14 @@ namespace Abacaxi.Graphs
                     }
                     break;
                 default:
-                    Debug.Assert(false, "Unexpected relation character.");
+                    Assert.NotNull(false, "Unexpected relation character.");
                     break;
             }
         }
 
         private void Parse([NotNull] string relationships)
         {
-            Debug.Assert(relationships != null);
+            Assert.NotNull(relationships != null);
 
             // ReSharper disable once IdentifierTypo
             var rels = new HashSet<char> {'-'};

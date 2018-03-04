@@ -19,7 +19,6 @@ namespace Abacaxi.Containers
     using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -39,8 +38,8 @@ namespace Abacaxi.Containers
 
         private void SiftDown([NotNull] IList<T> array, int length, int pi)
         {
-            Debug.Assert(length <= array.Count);
-            Debug.Assert(pi >= 0 && pi < length);
+            Assert.NotNull(length <= array.Count);
+            Assert.NotNull(pi >= 0 && pi < length);
 
             while (pi < length)
             {
@@ -93,7 +92,7 @@ namespace Abacaxi.Containers
 
         private void BuildHeap([NotNull] IList<T> array, int length)
         {
-            Debug.Assert(length <= array.Count);
+            Assert.NotNull(length <= array.Count);
 
             for (var ci = 1; ci < length; ci++)
             {

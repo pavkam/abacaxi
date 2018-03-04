@@ -21,18 +21,18 @@ namespace Abacaxi.Internal
     using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
 
-    [SuppressMessage("ReSharper", "UnusedParameter.Global")]
-    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
-    [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Global")]
+    [SuppressMessage("ReSharper", "UnusedParameter.Global"),
+     SuppressMessage("ReSharper", "MemberCanBePrivate.Global"),
+     SuppressMessage("ReSharper", "UnusedMember.Global"),
+     SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Global")]
     internal static class Validate
     {
         public static void ArgumentDifferentThan(
-            [NotNull] [InvokerParameterName] string argumentName, 
+            [NotNull,InvokerParameterName]  string argumentName,
             int value,
             int bound)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value == bound)
@@ -43,11 +43,11 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentGreaterThan(
-            [NotNull] [InvokerParameterName] string argumentName, 
+            [NotNull,InvokerParameterName]  string argumentName,
             int value,
             int bound)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value <= bound)
@@ -58,11 +58,11 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentGreaterThan(
-            [NotNull] [InvokerParameterName] string argumentName,
+            [NotNull,InvokerParameterName]  string argumentName,
             double value,
             double bound)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value <= bound)
@@ -73,11 +73,11 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentLessThan(
-            [NotNull] [InvokerParameterName] string argumentName, 
-            int value, 
+            [NotNull,InvokerParameterName]  string argumentName,
+            int value,
             int bound)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value >= bound)
@@ -88,11 +88,11 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentLessThan(
-            [NotNull] [InvokerParameterName] string argumentName,
+            [NotNull,InvokerParameterName]  string argumentName,
             double value,
             double bound)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value >= bound)
@@ -103,11 +103,11 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentLessThanOrEqualTo(
-            [NotNull] [InvokerParameterName] string argumentName, 
+            [NotNull,InvokerParameterName]  string argumentName,
             int value,
             int bound)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value > bound)
@@ -118,11 +118,11 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentLessThanOrEqualTo(
-            [NotNull] [InvokerParameterName] string argumentName, 
+            [NotNull,InvokerParameterName]  string argumentName,
             double value,
             double bound)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value > bound)
@@ -133,11 +133,11 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentGreaterThanOrEqualTo(
-            [NotNull] [InvokerParameterName] string argumentName, 
+            [NotNull,InvokerParameterName]  string argumentName,
             int value,
             int bound)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value < bound)
@@ -148,11 +148,11 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentGreaterThanOrEqualTo(
-            [NotNull] [InvokerParameterName] string argumentName,
+            [NotNull,InvokerParameterName]  string argumentName,
             double value,
             double bound)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value < bound)
@@ -162,38 +162,38 @@ namespace Abacaxi.Internal
             }
         }
 
-        public static void ArgumentDifferentThanZero([NotNull] [InvokerParameterName] string argumentName, int value)
+        public static void ArgumentDifferentThanZero([NotNull,InvokerParameterName]  string argumentName, int value)
         {
             ArgumentDifferentThan(argumentName, value, 0);
         }
 
-        public static void ArgumentGreaterThanOrEqualToZero([NotNull] [InvokerParameterName] string argumentName,
+        public static void ArgumentGreaterThanOrEqualToZero([NotNull,InvokerParameterName]  string argumentName,
             int value)
         {
             ArgumentGreaterThanOrEqualTo(argumentName, value, 0);
         }
 
-        public static void ArgumentGreaterThanOrEqualToZero([NotNull] [InvokerParameterName] string argumentName,
+        public static void ArgumentGreaterThanOrEqualToZero([NotNull,InvokerParameterName]  string argumentName,
             double value)
         {
             ArgumentGreaterThanOrEqualTo(argumentName, value, 0);
         }
 
-        public static void ArgumentGreaterThanZero([NotNull] [InvokerParameterName] string argumentName, int value)
+        public static void ArgumentGreaterThanZero([NotNull,InvokerParameterName]  string argumentName, int value)
         {
             ArgumentGreaterThan(argumentName, value, 0);
         }
 
-        public static void ArgumentGreaterThanZero([NotNull] [InvokerParameterName] string argumentName, double value)
+        public static void ArgumentGreaterThanZero([NotNull,InvokerParameterName]  string argumentName, double value)
         {
             ArgumentGreaterThan(argumentName, value, 0);
         }
 
         [ContractAnnotation("value:null => halt")]
-        public static void ArgumentNotNull([NotNull] [InvokerParameterName] string argumentName,
+        public static void ArgumentNotNull([NotNull,InvokerParameterName]  string argumentName,
             [CanBeNull] object value)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             if (value == null)
@@ -203,10 +203,10 @@ namespace Abacaxi.Internal
         }
 
         [ContractAnnotation("sequence:null => halt")]
-        public static void SequenceArgumentNotEmpty<T>([NotNull] [InvokerParameterName] string argumentName,
+        public static void SequenceArgumentNotEmpty<T>([NotNull,InvokerParameterName]  string argumentName,
             [CanBeNull] IEnumerable<T> sequence)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName),
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName),
                 $"Argument {nameof(argumentName)} cannot be null or empty.");
 
             ArgumentNotNull(argumentName, sequence);
@@ -230,10 +230,10 @@ namespace Abacaxi.Internal
         }
 
         [ContractAnnotation("sequence:null => halt")]
-        public static void CollectionArgumentsInBounds<T>([NotNull] [InvokerParameterName] string sequenceArgName,
+        public static void CollectionArgumentsInBounds<T>([NotNull,InvokerParameterName]  string sequenceArgName,
             [NotNull] ICollection<T> sequence, int startIndex, int length)
         {
-            Debug.Assert(!string.IsNullOrEmpty(sequenceArgName),
+            Assert.NotNull(!string.IsNullOrEmpty(sequenceArgName),
                 $"Argument {nameof(sequenceArgName)} cannot be null or empty.");
 
             ArgumentNotNull(nameof(sequence), sequence);
@@ -246,9 +246,9 @@ namespace Abacaxi.Internal
 
         [ContractAnnotation("sequence:null => halt")]
         public static void CollectionArgumentsHasEvenNumberOfElements<T>(
-            [NotNull] [InvokerParameterName] string sequenceArgName, [NotNull] ICollection<T> sequence)
+            [NotNull,InvokerParameterName]  string sequenceArgName, [NotNull] ICollection<T> sequence)
         {
-            Debug.Assert(!string.IsNullOrEmpty(sequenceArgName),
+            Assert.NotNull(!string.IsNullOrEmpty(sequenceArgName),
                 $"Argument {nameof(sequenceArgName)} cannot be null or empty.");
 
             ArgumentNotNull(nameof(sequence), sequence);

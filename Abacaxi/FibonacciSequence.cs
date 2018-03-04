@@ -30,7 +30,7 @@ namespace Abacaxi
         [NotNull]
         private static IEnumerable<int> EnumerateFibonacciNumbersIterate(int count)
         {
-            Debug.Assert(count >= 0);
+            Assert.NotNull(count >= 0);
 
             var b2 = 0;
             var b1 = 1;

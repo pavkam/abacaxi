@@ -272,13 +272,13 @@ namespace Abacaxi
         [ItemNotNull]
         private static IEnumerable<string> SplitIntoLinesIterate([NotNull] this string s)
         {
-            Debug.Assert(s != null);
+            Assert.NotNull(s != null);
 
             var si = 0;
             var ci = 0;
             while (ci < s.Length)
             {
-                Debug.Assert(ci >= si);
+                Assert.NotNull(ci >= si);
 
                 if (s[ci] == '\n')
                 {
@@ -306,7 +306,7 @@ namespace Abacaxi
                 }
             }
 
-            Debug.Assert(ci == s.Length);
+            Assert.NotNull(ci == s.Length);
             if (si < ci)
             {
                 yield return s.Substring(si, ci - si);
@@ -335,8 +335,8 @@ namespace Abacaxi
         [NotNull]
         private static IEnumerable<string> WordWrapIterate([NotNull] this string s, int lineLength)
         {
-            Debug.Assert(s != null);
-            Debug.Assert(lineLength > 0);
+            Assert.NotNull(s != null);
+            Assert.NotNull(lineLength > 0);
 
             foreach (var line in SplitIntoLinesIterate(s))
             {

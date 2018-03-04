@@ -58,7 +58,7 @@ namespace Abacaxi.Trees
         [ContractAnnotation("=> halt")]
         protected static void ThrowKeyNotFound([NotNull] string argumentName)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName));
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName));
             throw new ArgumentException("The tree does not contain a node with the given key.", argumentName);
         }
 
@@ -70,7 +70,7 @@ namespace Abacaxi.Trees
         [ContractAnnotation("=> halt")]
         protected static void ThrowDuplicateKeyFound([NotNull] string argumentName)
         {
-            Debug.Assert(!string.IsNullOrEmpty(argumentName));
+            Assert.NotNull(!string.IsNullOrEmpty(argumentName));
             throw new ArgumentException("The tree already contains a node with the given key.", argumentName);
         }
 

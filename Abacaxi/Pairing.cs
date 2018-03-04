@@ -42,8 +42,8 @@ namespace Abacaxi
                 [NotNull] int[] indices,
                 [NotNull] Func<int, int, double> calculatePairCost)
             {
-                Debug.Assert(indices != null);
-                Debug.Assert(calculatePairCost != null);
+                Assert.NotNull(indices);
+                Assert.NotNull(calculatePairCost);
 
                 Indices = indices;
                 CalculatePairCost = calculatePairCost;
@@ -56,7 +56,7 @@ namespace Abacaxi
             int set,
             double currentCost)
         {
-            Debug.Assert(context != null);
+            Assert.NotNull(context);
 
             if (context.LowestCostSoFar.HasValue && currentCost >= context.LowestCostSoFar.Value)
             {
@@ -81,18 +81,20 @@ namespace Abacaxi
             {
                 for (var ni = i + 1; ni < context.Indices.Length; ni++)
                 {
-                    if (context.Indices[ni] == 0)
+                    if (context.Indices[ni] != 0)
                     {
-                        context.Indices[i] = set;
-                        context.Indices[ni] = set;
-
-                        var pairCost = context.CalculatePairCost(i, ni);
-                        var newCost = currentCost + pairCost;
-
-                        RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set + 1, newCost);
-
-                        context.Indices[ni] = 0;
+                        continue;
                     }
+
+                    context.Indices[i] = set;
+                    context.Indices[ni] = set;
+
+                    var pairCost = context.CalculatePairCost(i, ni);
+                    var newCost = currentCost + pairCost;
+
+                    RecursiveFindSubsetPairingWithLowestCost(context, i + 1, set + 1, newCost);
+
+                    context.Indices[ni] = 0;
                 }
 
                 context.Indices[i] = 0;
@@ -114,8 +116,8 @@ namespace Abacaxi
         /// <returns>A sequence of pairs which lowest overall cost.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluateCostOfPairFunc"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence"/> is not even.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,
+         ItemNotNull]
         public static Tuple<T, T>[] GetWithMinimumCost<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Func<T, T, double> evaluateCostOfPairFunc)
@@ -132,22 +134,22 @@ namespace Abacaxi
                 new int[sequence.Count],
                 (l, r) =>
                 {
-                    Debug.Assert(l >= 0 && l < sequence.Count);
-                    Debug.Assert(r >= 0 && r < sequence.Count);
-                    Debug.Assert(l != r);
+                    Assert.NotNull(l >= 0 && l < sequence.Count);
+                    Assert.NotNull(r >= 0 && r < sequence.Count);
+                    Assert.NotNull(l != r);
 
                     return evaluateCostOfPairFunc(sequence[l], sequence[r]);
                 }
             );
 
             RecursiveFindSubsetPairingWithLowestCost(context, 0, 1, 0);
-            Debug.Assert(context.BestCombination != null);
+            Assert.NotNull(context.BestCombination);
 
             var sets = new RecursiveFindSubsetPairingWithLowestCostPair<T>[sequence.Count / 2];
             for (var i = 0; i < context.BestCombination.Length; i++)
             {
                 var setIndex = context.BestCombination[i] - 1;
-                Debug.Assert(setIndex >= 0);
+                Assert.NotNull(setIndex >= 0);
 
                 if (sets[setIndex] == null)
                 {
@@ -174,8 +176,7 @@ namespace Abacaxi
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> or <paramref name="evaluateCostOfPairFunc" /> are <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence" /> is not even.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         public static Tuple<T, T>[] GetWithApproximateMinimumCost<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Func<T, T, double> evaluateCostOfPairFunc,
@@ -193,14 +194,18 @@ namespace Abacaxi
             var steps = (int)Math.Sqrt(iterations);
             var result = SimulatedAnnealing.Evaluate(sequence, 2, pair =>
                 {
-                    Debug.Assert(pair != null && pair.Length == 2);
+                    Assert.NotNull(pair);
+                    Assert.Condition(pair.Length == 2);
+
                     return evaluateCostOfPairFunc(pair[0], pair[1]);
                 },
                 new SimulatedAnnealing.AlgorithmParameters(coolingSteps: steps, iterationsPerCoolingStep: steps));
 
             return result.Select(pair =>
             {
-                Debug.Assert(pair != null && pair.Length == 2);
+                Assert.NotNull(pair);
+                Assert.Condition(pair.Length == 2);
+
                 return Tuple.Create(pair[0], pair[1]);
             }).ToArray();
         }

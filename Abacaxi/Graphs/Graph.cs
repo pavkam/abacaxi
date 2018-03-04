@@ -48,13 +48,13 @@ namespace Abacaxi.Graphs
 
             public BfsNode([NotNull] TVertex vertex)
             {
-                Debug.Assert(vertex != null);
+                Assert.NotNull(vertex != null);
                 Vertex = vertex;
             }
 
             public BfsNode([NotNull] Edge<TVertex> entryEdge)
             {
-                Debug.Assert(entryEdge != null);
+                Assert.NotNull(entryEdge != null);
                 Vertex = entryEdge.ToVertex;
                 EntryEdge = entryEdge;
             }
@@ -70,13 +70,13 @@ namespace Abacaxi.Graphs
 
             public DfsNode([NotNull] TVertex vertex)
             {
-                Debug.Assert(vertex != null);
+                Assert.NotNull(vertex != null);
                 Vertex = vertex;
             }
 
             public DfsNode([NotNull] Edge<TVertex> entryEdge)
             {
-                Debug.Assert(entryEdge != null);
+                Assert.NotNull(entryEdge != null);
                 Vertex = entryEdge.ToVertex;
                 EntryEdge = entryEdge;
             }
@@ -84,8 +84,8 @@ namespace Abacaxi.Graphs
 
         private static int CompareEdgesByWeight([NotNull] Edge<TVertex> a, [NotNull] Edge<TVertex> b)
         {
-            Debug.Assert(a != null);
-            Debug.Assert(b != null);
+            Assert.NotNull(a != null);
+            Assert.NotNull(b != null);
 
             return a.Weight.CompareTo(a.Weight);
         }
@@ -101,11 +101,11 @@ namespace Abacaxi.Graphs
             [NotNull] Predicate<IDfsNode> handleVertexCompleted,
             [NotNull] Func<IDfsNode, IDfsNode, bool> handleCycle)
         {
-            Debug.Assert(vertexNode != null);
-            Debug.Assert(visitedNodes != null);
-            Debug.Assert(handleVertexCompleted != null);
-            Debug.Assert(handleVertexVisited != null);
-            Debug.Assert(handleCycle != null);
+            Assert.NotNull(vertexNode != null);
+            Assert.NotNull(visitedNodes != null);
+            Assert.NotNull(handleVertexCompleted != null);
+            Assert.NotNull(handleVertexVisited != null);
+            Assert.NotNull(handleCycle != null);
 
             visitedNodes.Add(vertexNode.Vertex, vertexNode);
             vertexNode.EntryTime = time++;
@@ -333,8 +333,8 @@ namespace Abacaxi.Graphs
             while (inspectQueue.Count > 0)
             {
                 var vertexNode = inspectQueue.Dequeue();
-                Debug.Assert(vertexNode != null);
-                Debug.Assert(discoveredSet.Contains(vertexNode.Vertex));
+                Assert.NotNull(vertexNode != null);
+                Assert.NotNull(discoveredSet.Contains(vertexNode.Vertex));
 
                 foreach (var edge in GetEdges(vertexNode.Vertex))
                 {
@@ -695,8 +695,8 @@ namespace Abacaxi.Graphs
                 componentIndex++;
             }
 
-            Debug.Assert(vertices.Count == 0);
-            Debug.Assert(componentIndexes.Count == inDegrees.Count && componentIndexes.Count == outDegrees.Count);
+            Assert.NotNull(vertices.Count == 0);
+            Assert.NotNull(componentIndexes.Count == inDegrees.Count && componentIndexes.Count == outDegrees.Count);
 
             // ReSharper disable once IdentifierTypo
             foreach (var ckvp in componentIndexes)
@@ -722,8 +722,8 @@ namespace Abacaxi.Graphs
 
             var comparer = Comparer<PathNode>.Create((a, b) =>
             {
-                Debug.Assert(a != null);
-                Debug.Assert(b != null);
+                Assert.NotNull(a != null);
+                Assert.NotNull(b != null);
 
                 return a.PotentialCostToDestination.CompareTo(b.PotentialCostToDestination);
             });
@@ -744,7 +744,7 @@ namespace Abacaxi.Graphs
             while (visitationQueue.Count > 0)
             {
                 var vertexNode = visitationQueue.RemoveTop();
-                Debug.Assert(vertexNode != null && discoveredVertices.ContainsKey(vertexNode.Vertex));
+                Assert.NotNull(vertexNode != null && discoveredVertices.ContainsKey(vertexNode.Vertex));
 
                 if (Equals(vertexNode.Vertex, endVertex))
                 {

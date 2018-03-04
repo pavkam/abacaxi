@@ -15,9 +15,9 @@
 
 namespace Abacaxi.Trees
 {
-    using System.Diagnostics;
     using System.Collections.Generic;
     using JetBrains.Annotations;
+    using Internal;
 
     /// <summary>
     /// Class implements the AVL balanced search tree.
@@ -25,15 +25,15 @@ namespace Abacaxi.Trees
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     [PublicAPI]
-    public class AvlTree<TKey, TValue> : BinarySearchTree<TKey, TValue>
+    public sealed class AvlTree<TKey, TValue> : BinarySearchTree<TKey, TValue>
     {
         [NotNull]
         private AvlTreeNode<TKey, TValue> RotateLeft([NotNull] AvlTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
+            Assert.NotNull(node);
 
             var right = node.RightChild;
-            Debug.Assert(right != null, "right != null");
+            Assert.NotNull(right);
 
             var rightLeft = right.LeftChild;
             var parent = node.Parent;
@@ -54,7 +54,7 @@ namespace Abacaxi.Trees
             }
             else
             {
-                Debug.Assert(parent != null);
+                Assert.NotNull(parent);
 
                 if (parent.RightChild == node)
                 {
@@ -75,10 +75,10 @@ namespace Abacaxi.Trees
         [NotNull]
         private AvlTreeNode<TKey, TValue> RotateRight([NotNull] AvlTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
+            Assert.NotNull(node);
 
             var left = node.LeftChild;
-            Debug.Assert(left != null);
+            Assert.NotNull(left);
 
             var leftRight = left.RightChild;
             var parent = node.Parent;
@@ -99,7 +99,7 @@ namespace Abacaxi.Trees
             }
             else
             {
-                Debug.Assert(parent != null);
+                Assert.NotNull(parent);
                 if (parent.LeftChild == node)
                 {
                     parent.LeftChild = left;
@@ -119,11 +119,11 @@ namespace Abacaxi.Trees
         [NotNull]
         private AvlTreeNode<TKey, TValue> RotateLeftRight([NotNull] AvlTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
+            Assert.NotNull(node);
 
             var left = node.LeftChild;
-            Debug.Assert(left != null);
-            Debug.Assert(left.RightChild != null);
+            Assert.NotNull(left);
+            Assert.NotNull(left.RightChild);
 
             var leftRight = left.RightChild;
             var parent = node.Parent;
@@ -154,7 +154,7 @@ namespace Abacaxi.Trees
             }
             else
             {
-                Debug.Assert(parent != null);
+                Assert.NotNull(parent);
                 if (parent.LeftChild == node)
                 {
                     parent.LeftChild = leftRight;
@@ -189,13 +189,13 @@ namespace Abacaxi.Trees
         [NotNull]
         private AvlTreeNode<TKey, TValue> RotateRightLeft([NotNull] AvlTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
+            Assert.NotNull(node);
 
             var right = node.RightChild;
-            Debug.Assert(right != null);
+            Assert.NotNull(right);
 
             var rightLeft = right.LeftChild;
-            Debug.Assert(rightLeft != null);
+            Assert.NotNull(rightLeft);
 
             var parent = node.Parent;
             var rightLeftLeft = rightLeft.LeftChild;
@@ -225,7 +225,7 @@ namespace Abacaxi.Trees
             }
             else
             {
-                Debug.Assert(parent != null);
+                Assert.NotNull(parent);
                 if (parent.RightChild == node)
                 {
                     parent.RightChild = rightLeft;
@@ -261,8 +261,8 @@ namespace Abacaxi.Trees
             [NotNull] AvlTreeNode<TKey, TValue> target,
             [NotNull] AvlTreeNode<TKey, TValue> source)
         {
-            Debug.Assert(target != null);
-            Debug.Assert(source != null);
+            Assert.NotNull(target);
+            Assert.NotNull(source);
 
             var left = source.LeftChild;
             var right = source.RightChild;
@@ -370,7 +370,7 @@ namespace Abacaxi.Trees
                     case 0:
                         return;
                     case 2:
-                        Debug.Assert(node.LeftChild != null);
+                        Assert.NotNull(node.LeftChild);
 
                         if (node.LeftChild.Balance == 1)
                         {
@@ -383,7 +383,7 @@ namespace Abacaxi.Trees
 
                         return;
                     case -2:
-                        Debug.Assert(node.RightChild != null);
+                        Assert.NotNull(node.RightChild);
 
                         if (node.RightChild.Balance == -1)
                         {
@@ -416,7 +416,7 @@ namespace Abacaxi.Trees
                 switch (balance)
                 {
                     case 2:
-                        Debug.Assert(node.LeftChild != null);
+                        Assert.NotNull(node.LeftChild);
 
                         if (node.LeftChild.Balance >= 0)
                         {
@@ -433,7 +433,7 @@ namespace Abacaxi.Trees
                         }
                         break;
                     case -2:
-                        Debug.Assert(node.RightChild != null);
+                        Assert.NotNull(node.RightChild);
 
                         if (node.RightChild.Balance <= 0)
                         {
@@ -478,7 +478,7 @@ namespace Abacaxi.Trees
         public new AvlTreeNode<TKey, TValue> LookupNode(TKey key)
         {
             var node = base.LookupNode(key);
-            Debug.Assert(node == null || node is AvlTreeNode<TKey, TValue>);
+            Assert.NotNull(node == null || node is AvlTreeNode<TKey, TValue>);
 
             return (AvlTreeNode<TKey, TValue>) node;
         }
@@ -494,7 +494,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Debug.Assert(base.Root == null || base.Root is AvlTreeNode<TKey, TValue>);
+                Assert.NotNull(base.Root == null || base.Root is AvlTreeNode<TKey, TValue>);
                 return (AvlTreeNode<TKey, TValue>) base.Root;
             }
             set => base.Root = value;
@@ -574,7 +574,7 @@ namespace Abacaxi.Trees
                             else
                             {
                                 var parent = node.Parent;
-                                Debug.Assert(parent != null);
+                                Assert.NotNull(parent);
 
                                 if (parent.LeftChild == node)
                                 {
@@ -623,7 +623,7 @@ namespace Abacaxi.Trees
                             }
                             else
                             {
-                                Debug.Assert(parent != null);
+                                Assert.NotNull(parent);
 
                                 if (parent.LeftChild == node)
                                 {
@@ -647,7 +647,7 @@ namespace Abacaxi.Trees
                             var parent = node.Parent;
 
                             var successorParent = successor.Parent;
-                            Debug.Assert(successorParent != null);
+                            Assert.NotNull(successorParent);
 
                             var successorRight = successor.RightChild;
 
@@ -683,7 +683,7 @@ namespace Abacaxi.Trees
                             }
                             else
                             {
-                                Debug.Assert(parent != null);
+                                Assert.NotNull(parent);
 
                                 if (parent.LeftChild == node)
                                 {

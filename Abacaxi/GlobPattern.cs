@@ -38,7 +38,7 @@ namespace Abacaxi
         [NotNull]
         internal static GlobPattern GetPattern([NotNull] string pattern, bool ignoreCase)
         {
-            Debug.Assert(pattern != null);
+            Assert.NotNull(pattern != null);
             return ignoreCase ? 
                 CachedIgnoreCasePatterns.GetOrAdd(pattern, key => new GlobPattern(key, true)) : 
                 CachedPatterns.GetOrAdd(pattern, key => new GlobPattern(key, false));

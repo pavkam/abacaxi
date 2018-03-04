@@ -34,8 +34,8 @@ namespace Abacaxi
             [NotNull] [ItemNotNull] IEnumerable<ISet<T>> sets,
             [NotNull] IEqualityComparer<T> comparer)
         {
-            Debug.Assert(sets != null);
-            Debug.Assert(comparer != null);
+            Assert.NotNull(sets != null);
+            Assert.NotNull(comparer != null);
 
             var copies = sets.ToSet();
             var superSet = new HashSet<T>(comparer);
@@ -103,8 +103,8 @@ namespace Abacaxi
         private static IEnumerable<T[][]> EvaluateAllSubsetCombinationsIterate<T>([NotNull] IList<T> sequence,
             int subsets)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(subsets > 0);
+            Assert.NotNull(sequence != null);
+            Assert.NotNull(subsets > 0);
 
             if (sequence.Count == 0)
             {

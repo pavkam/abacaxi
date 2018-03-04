@@ -100,7 +100,7 @@ namespace Abacaxi
 
             public Partition([NotNull] T[] items, double cost)
             {
-                Debug.Assert(items != null);
+                Assert.NotNull(items != null);
 
                 Items = items;
                 Cost = cost;
@@ -213,7 +213,7 @@ namespace Abacaxi
 
             var result = Evaluate(sequence, sequence.Count, input =>
                 {
-                    Debug.Assert(input != null);
+                    Assert.NotNull(input != null);
 
                     /* Create partitions */
                     var partitions = new List<T[]>();
@@ -243,10 +243,10 @@ namespace Abacaxi
                 },
                 (solution, input, i1, i2) =>
                 {
-                    Debug.Assert(solution != null);
-                    Debug.Assert(input != null);
-                    Debug.Assert(i1 >= 0 && i1 < input.Count);
-                    Debug.Assert(i2 >= 0 && i2 < input.Count);
+                    Assert.NotNull(solution != null);
+                    Assert.NotNull(input != null);
+                    Assert.NotNull(i1 >= 0 && i1 < input.Count);
+                    Assert.NotNull(i2 >= 0 && i2 < input.Count);
 
                     var partition1 = solution[i1 / partitionLength];
                     var partition2 = solution[i2 / partitionLength];
@@ -266,7 +266,7 @@ namespace Abacaxi
                 },
                 solution =>
                 {
-                    Debug.Assert(solution != null);
+                    Assert.NotNull(solution != null);
                     return solution.Sum(s => s.Cost);
                 },
                 algorithmParams);

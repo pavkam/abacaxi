@@ -60,13 +60,13 @@ namespace Abacaxi.IO
 
         private static uint AssembleWord([NotNull] byte[] bytes, int index)
         {
-            Debug.Assert(bytes != null);
-            Debug.Assert(index + BytesInWord <= bytes.Length);
+            Assert.NotNull(bytes != null);
+            Assert.NotNull(index + BytesInWord <= bytes.Length);
 
             var word =
-                (uint)bytes[index + 3] << 24 |
-                (uint)bytes[index + 2] << 16 |
-                (uint)bytes[index + 1] << 8 |
+                ((uint)bytes[index + 3] << 24) |
+                ((uint)bytes[index + 2] << 16) |
+                ((uint)bytes[index + 1] << 8) |
                 bytes[index];
 
             return word;
@@ -74,8 +74,8 @@ namespace Abacaxi.IO
 
         private void WriteBitsPartial(uint bits, int count)
         {
-            Debug.Assert(count > 0 && count <= BitsInWord);
-            Debug.Assert(count <= _currentBitIndex + 1);
+            Assert.NotNull(count > 0 && count <= BitsInWord);
+            Assert.NotNull(count <= _currentBitIndex + 1);
 
             /* Shift the bits to the most left, then to the right (to clear them for OR) */
             bits <<= Msb - count + 1;
@@ -85,39 +85,43 @@ namespace Abacaxi.IO
             _currentBitIndex -= count;
 
             /* If overloaded, flush the word and reset. */
-            Debug.Assert(_currentBitIndex >= -1);
-            if (_currentBitIndex == -1)
+            Assert.NotNull(_currentBitIndex >= -1);
+            if (_currentBitIndex != -1)
             {
-                var bytes = DisassembleWord(_currentWord);
-                WriteToStream(bytes, 0, bytes.Length);
-
-                _currentBitIndex = Msb;
-                _currentWord = 0;
+                return;
             }
+
+            var bytes = DisassembleWord(_currentWord);
+            WriteToStream(bytes, 0, bytes.Length);
+
+            _currentBitIndex = Msb;
+            _currentWord = 0;
         }
 
         private void WriteToStream([NotNull] byte[] bytes, int offset, int count)
         {
-            Debug.Assert(bytes != null);
-            Debug.Assert(offset >= 0 && offset < bytes.Length);
-            Debug.Assert(count > 0 && offset + count <= bytes.Length);
-            Debug.Assert(_stream != null);
+            Assert.NotNull(bytes != null);
+            Assert.NotNull(offset >= 0 && offset < bytes.Length);
+            Assert.NotNull(count > 0 && offset + count <= bytes.Length);
+            Assert.NotNull(_stream != null);
 
             _stream.Write(bytes, offset, count);
         }
 
         private void Flush()
         {
-            if (_currentBitIndex < Msb)
+            if (_currentBitIndex >= Msb)
             {
-                /* Find the number of bytes to actually flush. */
-                var bytes = DisassembleWord(_currentWord);
-                var msbFlush = (_currentBitIndex + 1) / BitsInByte;
-                WriteToStream(bytes, 0, BytesInWord - msbFlush);
-
-                _currentBitIndex = Msb;
-                _currentWord = 0;
+                return;
             }
+
+            /* Find the number of bytes to actually flush. */
+            var bytes = DisassembleWord(_currentWord);
+            var msbFlush = (_currentBitIndex + 1) / BitsInByte;
+            WriteToStream(bytes, 0, BytesInWord - msbFlush);
+
+            _currentBitIndex = Msb;
+            _currentWord = 0;
         }
 
         /// <summary>
@@ -325,7 +329,7 @@ namespace Abacaxi.IO
         /// <param name="value">The value to encode.</param>
         public void Write(ulong value)
         {
-            WriteBits((uint)(value >> BitsInByte * sizeof(uint)), BitsInByte * sizeof(uint));
+            WriteBits((uint)(value >> (BitsInByte * sizeof(uint))), BitsInByte * sizeof(uint));
             WriteBits((uint)value, BitsInByte * sizeof(uint));
         }
 
@@ -335,7 +339,7 @@ namespace Abacaxi.IO
         /// <param name="value">The value to encode.</param>
         public void Write(long value)
         {
-            WriteBits((uint)(value >> BitsInByte * sizeof(uint)), BitsInByte * sizeof(uint));
+            WriteBits((uint)(value >> (BitsInByte * sizeof(uint))), BitsInByte * sizeof(uint));
             WriteBits((uint)value, BitsInByte * sizeof(uint));
         }
 
@@ -359,7 +363,7 @@ namespace Abacaxi.IO
             // ReSharper disable once IdentifierTypo
             var repr = *(ulong*)&value;
 
-            WriteBits((uint)(repr >> BitsInByte * sizeof(uint)), BitsInByte * sizeof(uint));
+            WriteBits((uint)(repr >> (BitsInByte * sizeof(uint))), BitsInByte * sizeof(uint));
             WriteBits((uint)repr, BitsInByte * sizeof(uint));
         }
 
@@ -373,7 +377,7 @@ namespace Abacaxi.IO
             var repr = decimal.GetBits(value);
             var bytesInDecimal = repr.Length * sizeof(int);
 
-            Debug.Assert(bytesInDecimal <= _assemblyBuffer.Length);
+            Assert.NotNull(bytesInDecimal <= _assemblyBuffer.Length);
 
             Buffer.BlockCopy(repr, 0, _assemblyBuffer, 0, bytesInDecimal);
             WriteBytes(_assemblyBuffer, 0, bytesInDecimal);
@@ -442,22 +446,26 @@ namespace Abacaxi.IO
         /// Disposes this instance of <see cref="BitWriter"/> class and attempts to close
         /// the underlying stream.
         /// </summary>
-        /// <param name="disposing"><c>true</c> if method called explicitly; <c>false</c> 
+        /// <param name="disposing"><c>true</c> if method called explicitly; <c>false</c>
         /// if method was called from finalizer.</param>
         private void Dispose(bool disposing)
         {
-            if (_stream != null)
+            if (_stream == null)
             {
-                Flush();
-
-                if (!_leaveOpen)
-                {
-                    Debug.Assert(_stream != null);
-
-                    _stream.Dispose();
-                    _stream = null;
-                }
+                return;
             }
+
+            Flush();
+
+            if (_leaveOpen)
+            {
+                return;
+            }
+
+            Assert.NotNull(_stream != null);
+
+            _stream.Dispose();
+            _stream = null;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Abacaxi.Graphs
         [ItemNotNull]
         private IEnumerable<Edge<Cell>> GetEdgesIterate(Cell vertex)
         {
-            Debug.Assert(VertexExists(vertex.X, vertex.Y));
+            Assert.NotNull(VertexExists(vertex.X, vertex.Y));
 
             for (var i = -1; i < 2; i += 2)
             {

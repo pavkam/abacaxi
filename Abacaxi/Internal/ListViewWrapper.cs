@@ -51,10 +51,10 @@ namespace Abacaxi.Internal
 
         public ListViewWrapper([NotNull] IList<T> sequence, int startIndex, int length)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(startIndex >= 0);
-            Debug.Assert(length >= 0);
-            Debug.Assert(length + startIndex <= sequence.Count);
+            Assert.NotNull(sequence != null);
+            Assert.NotNull(startIndex >= 0);
+            Assert.NotNull(length >= 0);
+            Assert.NotNull(length + startIndex <= sequence.Count);
 
             _startIndex = startIndex;
             Count = length;

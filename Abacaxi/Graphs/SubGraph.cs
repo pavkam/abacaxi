@@ -47,8 +47,8 @@ namespace Abacaxi.Graphs
         [ItemNotNull]
         private IEnumerable<Edge<TVertex>> GetEdgesIterate([NotNull] TVertex vertex)
         {
-            Debug.Assert(vertex != null);
-            Debug.Assert(_vertices.Contains(vertex));
+            Assert.NotNull(vertex != null);
+            Assert.NotNull(_vertices.Contains(vertex));
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var edge in _graph.GetEdges(vertex))

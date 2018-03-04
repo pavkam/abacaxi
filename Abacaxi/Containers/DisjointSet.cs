@@ -16,7 +16,6 @@
 namespace Abacaxi.Containers
 {
     using System.Collections.Generic;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
     using System.Collections;
@@ -40,8 +39,8 @@ namespace Abacaxi.Containers
         [NotNull]
         private Node GetRootNodeRecursive([NotNull] T @object)
         {
-            Debug.Assert(@object != null);
-            Debug.Assert(_nodes.ContainsKey(@object));
+            Assert.NotNull(@object);
+            Assert.Condition(_nodes.ContainsKey(@object));
 
             var node = _nodes[@object];
             if (_comparer.Equals(@object, node.Parent))
@@ -59,7 +58,7 @@ namespace Abacaxi.Containers
         [NotNull]
         private Node GetRootNode([NotNull] T @object)
         {
-            Debug.Assert(@object != null);
+            Assert.NotNull(@object);
 
             if (_nodes.TryGetValue(@object, out var node))
             {
@@ -133,7 +132,7 @@ namespace Abacaxi.Containers
 
             var roots = new Node[otherObjects.Length + 1];
             roots[0] = GetRootNode(@object);
-            Debug.Assert(roots[0] != null);
+            Assert.NotNull(roots[0] != null);
             var heaviest = roots[0];
 
             if (otherObjects.Length <= 0)
@@ -148,7 +147,7 @@ namespace Abacaxi.Containers
                 var root = GetRootNode(otherObjects[i]);
                 roots[i + 1] = root;
 
-                Debug.Assert(heaviest != null);
+                Assert.NotNull(heaviest);
                 if (root.Rank > heaviest.Rank)
                 {
                     heaviest = root;
@@ -201,7 +200,6 @@ namespace Abacaxi.Containers
             }
 
             return false;
-
         }
 
         /// <summary>

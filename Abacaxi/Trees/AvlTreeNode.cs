@@ -17,14 +17,14 @@ namespace Abacaxi.Trees
 {
     using JetBrains.Annotations;
     using System.Diagnostics;
+    using Internal;
 
     /// <summary>
     /// Class represents a node in a AVL balanced search tree.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-    [PublicAPI]
-    [DebuggerDisplay("Key={Key}, Value={Value} Balance={Balance}")]
+    [PublicAPI, DebuggerDisplay("Key={Key}, Value={Value} Balance={Balance}")]
     public sealed class AvlTreeNode<TKey, TValue>: BinaryTreeNode<TKey, TValue>
     {
         /// <summary>
@@ -38,7 +38,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Debug.Assert(base.RightChild == null ||  base.RightChild is AvlTreeNode<TKey, TValue>);
+                Assert.NotNull(base.RightChild == null ||  base.RightChild is AvlTreeNode<TKey, TValue>);
                 return (AvlTreeNode<TKey, TValue>) base.RightChild;
             }
             set => base.RightChild = value;
@@ -55,7 +55,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Debug.Assert(base.LeftChild == null || base.LeftChild is AvlTreeNode<TKey, TValue>);
+                Assert.NotNull(base.LeftChild == null || base.LeftChild is AvlTreeNode<TKey, TValue>);
                 return (AvlTreeNode<TKey, TValue>)base.LeftChild;
             }
             set => base.LeftChild = value;

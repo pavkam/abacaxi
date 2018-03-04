@@ -18,9 +18,9 @@ namespace Abacaxi.Containers
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
+    using System.Diagnostics;
 
     /// <summary>
     /// Class implements a Dictionary of Dictionaries plus List and such. Serves as a Swiss army knife container that can
@@ -91,14 +91,14 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ValueMask)
             {
                 case 0:
-                    Debug.Assert(_valueObj == null);
+                    Assert.Condition(_valueObj == null);
                     if (ver != _ver)
                     {
                         ThrowCollectionChangedDuringEnumeration();
                     }
                     yield break;
                 case StorageState.ValueIsOneObject:
-                    Debug.Assert(_valueObj == null || _valueObj is TValue);
+                    Assert.Condition(_valueObj == null || _valueObj is TValue);
                     if (ver != _ver)
                     {
                         ThrowCollectionChangedDuringEnumeration();
@@ -107,9 +107,9 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.ValuesInTwoElementArray:
-                    Debug.Assert(_valueObj is TValue[]);
+                    Assert.Condition(_valueObj is TValue[]);
                     var array = (TValue[]) _valueObj;
-                    Debug.Assert(array.Length == 2);
+                    Assert.Condition(array.Length == 2);
                     if (ver != _ver)
                     {
                         ThrowCollectionChangedDuringEnumeration();
@@ -121,11 +121,12 @@ namespace Abacaxi.Containers
                         ThrowCollectionChangedDuringEnumeration();
                     }
                     yield return array[1];
+
                     break;
                 case StorageState.ValuesInList:
-                    Debug.Assert(_valueObj is IList<TValue>);
+                    Assert.Condition(_valueObj is IList<TValue>);
                     var list = (IList<TValue>) _valueObj;
-                    Debug.Assert(list.Count > 2);
+                    Assert.Condition(list.Count > 2);
 
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (var i = 0; i < list.Count; i++)
@@ -138,7 +139,7 @@ namespace Abacaxi.Containers
                     }
                     break;
                 default:
-                    Debug.Fail($"Invalid mash state detected: {_state}.");
+                    Assert.Fail($"Invalid mash state detected: {_state}.");
                     break;
             }
         }
@@ -149,10 +150,7 @@ namespace Abacaxi.Containers
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// Adds an item to the <see cref="Mash{TKey,TValue}" />'s value collection.
@@ -164,7 +162,7 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ValueMask)
             {
                 case 0:
-                    Debug.Assert(_valueObj == null);
+                    Assert.Condition(_valueObj == null);
 
                     _ver++;
                     _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
@@ -172,7 +170,7 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.ValueIsOneObject:
-                    Debug.Assert(_valueObj == null || _valueObj is TValue);
+                    Assert.Condition(_valueObj == null || _valueObj is TValue);
 
                     _ver++;
                     _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInTwoElementArray;
@@ -184,9 +182,9 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.ValuesInTwoElementArray:
-                    Debug.Assert(_valueObj is TValue[]);
+                    Assert.Condition(_valueObj is TValue[]);
                     var array = (TValue[]) _valueObj;
-                    Debug.Assert(array.Length == 2);
+                    Assert.Condition(array.Length == 2);
 
                     _ver++;
                     _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInList;
@@ -199,16 +197,16 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.ValuesInList:
-                    Debug.Assert(_valueObj is IList<TValue>);
+                    Assert.Condition(_valueObj is IList<TValue>);
                     var list = (IList<TValue>) _valueObj;
-                    Debug.Assert(list.Count > 2);
+                    Assert.Condition(list.Count > 2);
 
                     _ver++;
                     list.Add(item);
 
                     break;
                 default:
-                    Debug.Fail($"Invalid mash state detected: {_state}.");
+                    Assert.Fail($"Invalid mash state detected: {_state}.");
                     break;
             }
         }
@@ -222,7 +220,7 @@ namespace Abacaxi.Containers
             _state = _state & StorageState.ChildrenMask;
             _valueObj = null;
 
-            Debug.Assert(Count == 0);
+            Assert.Condition(Count == 0);
         }
 
         /// <summary>
@@ -235,14 +233,14 @@ namespace Abacaxi.Containers
         public bool Contains(TValue item) => IndexOf(item) > -1;
 
         /// <summary>
-        /// Copies the elements of the <see cref="Mash{TKey,TValue}" />'s value collection to an <see cref="T:System.Array" />, 
+        /// Copies the elements of the <see cref="Mash{TKey,TValue}" />'s value collection to an <see cref="T:System.Array" />,
         /// starting at a particular <see cref="T:System.Array" /> index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied 
+        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied
         /// from <see cref="Mash{TKey,TValue}" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="array"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the destination <paramref name="array"/> does not have enough 
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the destination <paramref name="array"/> does not have enough
         /// space to hold the contents of the set.</exception>
         public void CopyTo([NotNull] TValue[] array, int arrayIndex)
         {
@@ -253,34 +251,34 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ValueMask)
             {
                 case 0:
-                    Debug.Assert(_valueObj == null);
+                    Assert.Condition(_valueObj == null);
                     Validate.ArgumentLessThanOrEqualTo(nameof(arrayIndex), 0, array.Length - arrayIndex);
 
                     break;
                 case StorageState.ValueIsOneObject:
-                    Debug.Assert(_valueObj == null || _valueObj is TValue);
+                    Assert.Condition(_valueObj == null || _valueObj is TValue);
                     Validate.ArgumentLessThanOrEqualTo(nameof(arrayIndex), 1, array.Length - arrayIndex);
 
                     array[arrayIndex] = (TValue) _valueObj;
                     break;
                 case StorageState.ValuesInTwoElementArray:
-                    Debug.Assert(_valueObj is TValue[]);
+                    Assert.Condition(_valueObj is TValue[]);
                     var oArray = (TValue[]) _valueObj;
-                    Debug.Assert(oArray.Length == 2);
+                    Assert.Condition(oArray.Length == 2);
                     Validate.ArgumentLessThanOrEqualTo(nameof(arrayIndex), 2, array.Length - arrayIndex);
 
                     array[arrayIndex] = oArray[0];
                     array[arrayIndex + 1] = oArray[1];
                     break;
                 case StorageState.ValuesInList:
-                    Debug.Assert(_valueObj is IList<TValue>);
+                    Assert.Condition(_valueObj is IList<TValue>);
                     var list = (IList<TValue>) _valueObj;
-                    Debug.Assert(list.Count > 2);
+                    Assert.Condition(list.Count > 2);
                     Validate.ArgumentLessThanOrEqualTo(nameof(arrayIndex), list.Count, array.Length - arrayIndex);
                     list.CopyTo(array, arrayIndex);
                     break;
                 default:
-                    Debug.Fail($"Invalid mash state detected: {_state}.");
+                    Assert.Fail($"Invalid mash state detected: {_state}.");
                     break;
             }
         }
@@ -298,10 +296,10 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ValueMask)
             {
                 case 0:
-                    Debug.Assert(_valueObj == null);
+                    Assert.Condition(_valueObj == null);
                     return false;
                 case StorageState.ValueIsOneObject:
-                    Debug.Assert(_valueObj == null || _valueObj is TValue);
+                    Assert.Condition(_valueObj == null || _valueObj is TValue);
                     if (!Equals((TValue) _valueObj, item))
                     {
                         return false;
@@ -313,9 +311,9 @@ namespace Abacaxi.Containers
 
                     return true;
                 case StorageState.ValuesInTwoElementArray:
-                    Debug.Assert(_valueObj is TValue[]);
+                    Assert.Condition(_valueObj is TValue[]);
                     var array = (TValue[]) _valueObj;
-                    Debug.Assert(array.Length == 2);
+                    Assert.Condition(array.Length == 2);
                     if (Equals(array[0], item))
                     {
                         _ver++;
@@ -324,37 +322,43 @@ namespace Abacaxi.Containers
 
                         return true;
                     }
-                    if (Equals(array[1], item))
-                    {
-                        _ver++;
-                        _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
-                        _valueObj = array[0];
 
-                        return true;
-                    }
-                    return false;
-                case StorageState.ValuesInList:
-                    Debug.Assert(_valueObj is IList<TValue>);
-                    var list = (IList<TValue>) _valueObj;
-                    Debug.Assert(list.Count > 2);
-                    var removedFromList = list.Remove(item);
-                    Debug.Assert(list.Count >= 2);
-                    if (removedFromList)
+                    if (!Equals(array[1], item))
                     {
-                        _ver++;
-                        if (list.Count == 2)
-                        {
-                            _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInTwoElementArray;
-                            _valueObj = new[]
-                            {
-                                list[0],
-                                list[1]
-                            };
-                        }
+                        return false;
                     }
+
+                    _ver++;
+                    _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
+                    _valueObj = array[0];
+
+                    return true;
+                case StorageState.ValuesInList:
+                    Assert.Condition(_valueObj is IList<TValue>);
+                    var list = (IList<TValue>) _valueObj;
+                    Assert.Condition(list.Count > 2);
+                    var removedFromList = list.Remove(item);
+                    Assert.Condition(list.Count >= 2);
+                    if (!removedFromList)
+                    {
+                        return removedFromList;
+                    }
+
+                    _ver++;
+                    if (list.Count != 2)
+                    {
+                        return removedFromList;
+                    }
+
+                    _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInTwoElementArray;
+                    _valueObj = new[]
+                    {
+                        list[0],
+                        list[1]
+                    };
                     return removedFromList;
                 default:
-                    Debug.Fail($"Invalid mash state detected: {_state}.");
+                    Assert.Fail($"Invalid mash state detected: {_state}.");
                     break;
             }
 
@@ -372,23 +376,23 @@ namespace Abacaxi.Containers
                 switch (_state & StorageState.ValueMask)
                 {
                     case 0:
-                        Debug.Assert(_valueObj == null);
+                        Assert.Condition(_valueObj == null);
                         return 0;
                     case StorageState.ValueIsOneObject:
-                        Debug.Assert(_valueObj == null || _valueObj is TValue);
+                        Assert.Condition(_valueObj == null || _valueObj is TValue);
                         return 1;
                     case StorageState.ValuesInTwoElementArray:
-                        Debug.Assert(_valueObj is TValue[]);
+                        Assert.Condition(_valueObj is TValue[]);
                         var array = (TValue[]) _valueObj;
-                        Debug.Assert(array.Length == 2);
+                        Assert.Condition(array.Length == 2);
                         return 2;
                     case StorageState.ValuesInList:
-                        Debug.Assert(_valueObj is IList<TValue>);
+                        Assert.Condition(_valueObj is IList<TValue>);
                         var list = (IList<TValue>) _valueObj;
-                        Debug.Assert(list.Count > 2);
+                        Assert.Condition(list.Count > 2);
                         return list.Count;
                     default:
-                        Debug.Fail($"Invalid mash state detected: {_state}.");
+                        Assert.Fail($"Invalid mash state detected: {_state}.");
                         break;
                 }
 
@@ -417,19 +421,19 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ValueMask)
             {
                 case 0:
-                    Debug.Assert(_valueObj == null);
+                    Assert.Condition(_valueObj == null);
                     return -1;
                 case StorageState.ValueIsOneObject:
-                    Debug.Assert(_valueObj == null || _valueObj is TValue);
+                    Assert.Condition(_valueObj == null || _valueObj is TValue);
                     if (Equals((TValue) _valueObj, item))
                     {
                         return 0;
                     }
                     return -1;
                 case StorageState.ValuesInTwoElementArray:
-                    Debug.Assert(_valueObj is TValue[]);
+                    Assert.Condition(_valueObj is TValue[]);
                     var array = (TValue[]) _valueObj;
-                    Debug.Assert(array.Length == 2);
+                    Assert.Condition(array.Length == 2);
                     if (Equals(array[0], item))
                     {
                         return 0;
@@ -440,12 +444,12 @@ namespace Abacaxi.Containers
                     }
                     return -1;
                 case StorageState.ValuesInList:
-                    Debug.Assert(_valueObj is IList<TValue>);
+                    Assert.Condition(_valueObj is IList<TValue>);
                     var list = (IList<TValue>) _valueObj;
-                    Debug.Assert(list.Count > 2);
+                    Assert.Condition(list.Count > 2);
                     return list.IndexOf(item);
                 default:
-                    Debug.Fail($"Invalid mash state detected: {_state}.");
+                    Assert.Fail($"Invalid mash state detected: {_state}.");
                     break;
             }
 
@@ -466,7 +470,7 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ValueMask)
             {
                 case 0:
-                    Debug.Assert(_valueObj == null);
+                    Assert.Condition(_valueObj == null);
                     Validate.ArgumentLessThanOrEqualTo(nameof(index), index, 0);
 
                     _ver++;
@@ -475,7 +479,7 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.ValueIsOneObject:
-                    Debug.Assert(_valueObj == null || _valueObj is TValue);
+                    Assert.Condition(_valueObj == null || _valueObj is TValue);
 
                     Validate.ArgumentLessThanOrEqualTo(nameof(index), index, 1);
 
@@ -492,7 +496,7 @@ namespace Abacaxi.Containers
                     }
                     else
                     {
-                        Debug.Assert(index == 1);
+                        Assert.Condition(index == 1);
                         _valueObj = new[]
                         {
                             (TValue) _valueObj,
@@ -502,9 +506,9 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.ValuesInTwoElementArray:
-                    Debug.Assert(_valueObj is TValue[]);
+                    Assert.Condition(_valueObj is TValue[]);
                     var array = (TValue[]) _valueObj;
-                    Debug.Assert(array.Length == 2);
+                    Assert.Condition(array.Length == 2);
 
                     Validate.ArgumentLessThanOrEqualTo(nameof(index), index, 2);
 
@@ -530,7 +534,7 @@ namespace Abacaxi.Containers
                             };
                             break;
                         default:
-                            Debug.Assert(index == 2);
+                            Assert.Condition(index == 2);
                             _valueObj = new List<TValue>
                             {
                                 array[0],
@@ -542,19 +546,19 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.ValuesInList:
-                    Debug.Assert(_valueObj is IList<TValue>);
+                    Assert.Condition(_valueObj is IList<TValue>);
                     var list = (IList<TValue>) _valueObj;
-                    Debug.Assert(list.Count > 2);
+                    Assert.Condition(list.Count > 2);
 
                     Validate.ArgumentLessThanOrEqualTo(nameof(index), index, list.Count);
 
                     _ver++;
                     list.Insert(index, item);
-                    Debug.Assert(list.Count > 2);
+                    Assert.Condition(list.Count > 2);
 
                     break;
                 default:
-                    Debug.Fail($"Invalid mash state detected: {_state}.");
+                    Assert.Fail($"Invalid mash state detected: {_state}.");
                     break;
             }
         }
@@ -572,11 +576,11 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ValueMask)
             {
                 case 0:
-                    Debug.Assert(_valueObj == null);
+                    Assert.Condition(_valueObj == null);
                     Validate.ArgumentLessThan(nameof(index), index, 0);
                     break;
                 case StorageState.ValueIsOneObject:
-                    Debug.Assert(_valueObj == null || _valueObj is TValue);
+                    Assert.Condition(_valueObj == null || _valueObj is TValue);
 
                     Validate.ArgumentLessThan(nameof(index), index, 1);
 
@@ -586,9 +590,9 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.ValuesInTwoElementArray:
-                    Debug.Assert(_valueObj is TValue[]);
+                    Assert.Condition(_valueObj is TValue[]);
                     var array = (TValue[]) _valueObj;
-                    Debug.Assert(array.Length == 2);
+                    Assert.Condition(array.Length == 2);
 
                     Validate.ArgumentLessThan(nameof(index), index, 2);
 
@@ -601,22 +605,22 @@ namespace Abacaxi.Containers
                             _valueObj = array[1];
                             break;
                         default:
-                            Debug.Assert(index == 1);
+                            Assert.Condition(index == 1);
                             _valueObj = array[0];
                             break;
                     }
 
                     break;
                 case StorageState.ValuesInList:
-                    Debug.Assert(_valueObj is IList<TValue>);
+                    Assert.Condition(_valueObj is IList<TValue>);
                     var list = (IList<TValue>) _valueObj;
-                    Debug.Assert(list.Count > 2);
+                    Assert.Condition(list.Count > 2);
 
                     Validate.ArgumentLessThan(nameof(index), index, list.Count);
 
                     _ver++;
                     list.RemoveAt(index);
-                    Debug.Assert(list.Count >= 2);
+                    Assert.Condition(list.Count >= 2);
 
                     if (list.Count == 2)
                     {
@@ -630,7 +634,7 @@ namespace Abacaxi.Containers
 
                     break;
                 default:
-                    Debug.Fail($"Invalid mash state detected: {_state}.");
+                    Assert.Fail($"Invalid mash state detected: {_state}.");
                     break;
             }
         }
@@ -654,35 +658,35 @@ namespace Abacaxi.Containers
                 switch (_state & StorageState.ValueMask)
                 {
                     case 0:
-                        Debug.Assert(_valueObj == null);
+                        Assert.Condition(_valueObj == null);
                         Validate.ArgumentLessThan(nameof(index), index, 0);
 
                         break;
                     case StorageState.ValueIsOneObject:
-                        Debug.Assert(_valueObj == null || _valueObj is TValue);
+                        Assert.Condition(_valueObj == null || _valueObj is TValue);
 
                         Validate.ArgumentLessThan(nameof(index), index, 1);
-                        Debug.Assert(index == 0);
+                        Assert.Condition(index == 0);
                         return (TValue) _valueObj;
                     case StorageState.ValuesInTwoElementArray:
-                        Debug.Assert(_valueObj is TValue[]);
+                        Assert.Condition(_valueObj is TValue[]);
                         var array = (TValue[]) _valueObj;
-                        Debug.Assert(array.Length == 2);
+                        Assert.Condition(array.Length == 2);
 
                         Validate.ArgumentLessThan(nameof(index), index, 2);
-                        Debug.Assert(index == 0 || index == 1);
+                        Assert.Condition(index == 0 || index == 1);
 
                         return array[index];
                     case StorageState.ValuesInList:
-                        Debug.Assert(_valueObj is IList<TValue>);
+                        Assert.Condition(_valueObj is IList<TValue>);
                         var list = (IList<TValue>) _valueObj;
-                        Debug.Assert(list.Count > 2);
+                        Assert.Condition(list.Count > 2);
 
                         Validate.ArgumentLessThan(nameof(index), index, list.Count);
-                        Debug.Assert(index >= 0 && index < list.Count);
+                        Assert.Condition(index >= 0 && index < list.Count);
                         return list[index];
                     default:
-                        Debug.Fail($"Invalid mash state detected: {_state}.");
+                        Assert.Fail($"Invalid mash state detected: {_state}.");
                         break;
                 }
 
@@ -696,43 +700,43 @@ namespace Abacaxi.Containers
                 switch (_state & StorageState.ValueMask)
                 {
                     case 0:
-                        Debug.Assert(_valueObj == null);
+                        Assert.Condition(_valueObj == null);
                         Validate.ArgumentLessThan(nameof(index), index, 0);
 
                         break;
                     case StorageState.ValueIsOneObject:
-                        Debug.Assert(_valueObj == null || _valueObj is TValue);
+                        Assert.Condition(_valueObj == null || _valueObj is TValue);
 
                         Validate.ArgumentLessThan(nameof(index), index, 1);
-                        Debug.Assert(index == 0);
+                        Assert.Condition(index == 0);
 
                         _ver++;
                         _valueObj = value;
                         break;
                     case StorageState.ValuesInTwoElementArray:
-                        Debug.Assert(_valueObj is TValue[]);
+                        Assert.Condition(_valueObj is TValue[]);
                         var array = (TValue[]) _valueObj;
-                        Debug.Assert(array.Length == 2);
+                        Assert.Condition(array.Length == 2);
 
                         Validate.ArgumentLessThan(nameof(index), index, 2);
-                        Debug.Assert(index == 0 || index == 1);
+                        Assert.Condition(index == 0 || index == 1);
 
                         _ver++;
                         array[index] = value;
                         break;
                     case StorageState.ValuesInList:
-                        Debug.Assert(_valueObj is IList<TValue>);
+                        Assert.Condition(_valueObj is IList<TValue>);
                         var list = (IList<TValue>) _valueObj;
-                        Debug.Assert(list.Count > 2);
+                        Assert.Condition(list.Count > 2);
 
                         Validate.ArgumentLessThan(nameof(index), index, list.Count);
-                        Debug.Assert(index >= 0 && index < list.Count);
+                        Assert.Condition(index >= 0 && index < list.Count);
 
                         _ver++;
                         list[index] = value;
                         break;
                     default:
-                        Debug.Fail($"Invalid mash state detected: {_state}.");
+                        Assert.Fail($"Invalid mash state detected: {_state}.");
                         break;
                 }
             }
@@ -758,23 +762,23 @@ namespace Abacaxi.Containers
                 switch (_state & StorageState.ValueMask)
                 {
                     case 0:
-                        Debug.Assert(_valueObj == null);
+                        Assert.Condition(_valueObj == null);
                         break;
                     case StorageState.ValueIsOneObject:
-                        Debug.Assert(_valueObj == null || _valueObj is TValue);
+                        Assert.Condition(_valueObj == null || _valueObj is TValue);
                         return (TValue) _valueObj;
                     case StorageState.ValuesInTwoElementArray:
-                        Debug.Assert(_valueObj is TValue[]);
+                        Assert.Condition(_valueObj is TValue[]);
                         var array = (TValue[]) _valueObj;
-                        Debug.Assert(array.Length == 2);
+                        Assert.Condition(array.Length == 2);
                         return array[0];
                     case StorageState.ValuesInList:
-                        Debug.Assert(_valueObj is IList<TValue>);
+                        Assert.Condition(_valueObj is IList<TValue>);
                         var list = (IList<TValue>) _valueObj;
-                        Debug.Assert(list.Count > 2);
+                        Assert.Condition(list.Count > 2);
                         return list[0];
                     default:
-                        Debug.Fail($"Invalid mash state detected: {_state}.");
+                        Assert.Fail($"Invalid mash state detected: {_state}.");
                         break;
                 }
 
@@ -786,32 +790,32 @@ namespace Abacaxi.Containers
                 switch (_state & StorageState.ValueMask)
                 {
                     case 0:
-                        Debug.Assert(_valueObj == null);
+                        Assert.Condition(_valueObj == null);
                         _ver++;
                         _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
                         _valueObj = value;
                         break;
                     case StorageState.ValueIsOneObject:
-                        Debug.Assert(_valueObj == null || _valueObj is TValue);
+                        Assert.Condition(_valueObj == null || _valueObj is TValue);
                         _ver++;
                         _valueObj = value;
                         break;
                     case StorageState.ValuesInTwoElementArray:
-                        Debug.Assert(_valueObj is TValue[]);
+                        Assert.Condition(_valueObj is TValue[]);
                         var array = (TValue[]) _valueObj;
-                        Debug.Assert(array.Length == 2);
+                        Assert.Condition(array.Length == 2);
                         _ver++;
                         array[0] = value;
                         break;
                     case StorageState.ValuesInList:
-                        Debug.Assert(_valueObj is IList<TValue>);
+                        Assert.Condition(_valueObj is IList<TValue>);
                         var list = (IList<TValue>) _valueObj;
-                        Debug.Assert(list.Count > 2);
+                        Assert.Condition(list.Count > 2);
                         _ver++;
                         list[0] = value;
                         break;
                     default:
-                        Debug.Fail($"Invalid mash state detected: {_state}.");
+                        Assert.Fail($"Invalid mash state detected: {_state}.");
                         break;
                 }
             }
@@ -836,14 +840,14 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ChildrenMask)
             {
                 case 0:
-                    Debug.Assert(_childrenObj == null);
+                    Assert.Condition(_childrenObj == null);
                     _state = (_state & StorageState.ValueMask) | StorageState.HasOneChildInATuple;
                     var subMash = new Mash<TKey, TValue>(_equalityComparer);
                     _childrenObj = Tuple.Create(key, subMash);
                     return subMash;
 
                 case StorageState.HasOneChildInATuple:
-                    Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
+                    Assert.Condition(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
                     var tuple = (Tuple<TKey, Mash<TKey, TValue>>) _childrenObj;
                     if (_equalityComparer.Equals(tuple.Item1, key))
                     {
@@ -860,9 +864,9 @@ namespace Abacaxi.Containers
 
                     return subMash;
                 case StorageState.HasTwoChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array2 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array2.Length == 2);
+                    Assert.Condition(array2.Length == 2);
 
                     if (_equalityComparer.Equals(array2[0].Key, key))
                     {
@@ -884,9 +888,9 @@ namespace Abacaxi.Containers
 
                     return subMash;
                 case StorageState.HasThreeChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array3 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array3.Length == 3);
+                    Assert.Condition(array3.Length == 3);
 
                     if (_equalityComparer.Equals(array3[0].Key, key))
                     {
@@ -913,9 +917,9 @@ namespace Abacaxi.Containers
 
                     return subMash;
                 case StorageState.HasFourChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array4 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array4.Length == 4);
+                    Assert.Condition(array4.Length == 4);
 
                     if (_equalityComparer.Equals(array4[0].Key, key))
                     {
@@ -947,9 +951,9 @@ namespace Abacaxi.Containers
 
                     return subMash;
                 case StorageState.HasFiveChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array5 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array5.Length == 5);
+                    Assert.Condition(array5.Length == 5);
 
                     if (_equalityComparer.Equals(array5[0].Key, key))
                     {
@@ -986,19 +990,21 @@ namespace Abacaxi.Containers
 
                     return subMash;
                 case StorageState.HasManyChildrenInAHashTable:
-                    Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
+                    Assert.Condition(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
                     var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _childrenObj;
 
-                    if (!dict.TryGetValue(key, out subMash))
+                    if (dict.TryGetValue(key, out subMash))
                     {
-                        subMash = new Mash<TKey, TValue>(_equalityComparer);
-                        dict.Add(key, subMash);
+                        return subMash;
                     }
+
+                    subMash = new Mash<TKey, TValue>(_equalityComparer);
+                    dict.Add(key, subMash);
 
                     return subMash;
             }
 
-            Debug.Fail($"Invalid mash state detected: {_state}.");
+            Assert.Fail($"Invalid mash state detected: {_state}.");
             return null;
         }
 
@@ -1017,13 +1023,13 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ChildrenMask)
             {
                 case 0:
-                    Debug.Assert(_childrenObj == null);
+                    Assert.Condition(_childrenObj == null);
                     _state = (_state & StorageState.ValueMask) | StorageState.HasOneChildInATuple;
                     _childrenObj = Tuple.Create(key, mash);
                     break;
 
                 case StorageState.HasOneChildInATuple:
-                    Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
+                    Assert.Condition(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
                     var tuple = (Tuple<TKey, Mash<TKey, TValue>>) _childrenObj;
                     if (_equalityComparer.Equals(tuple.Item1, key))
                     {
@@ -1041,9 +1047,9 @@ namespace Abacaxi.Containers
                     break;
 
                 case StorageState.HasTwoChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array2 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array2.Length == 2);
+                    Assert.Condition(array2.Length == 2);
 
                     var mashKvp = new KeyValuePair<TKey, Mash<TKey, TValue>>(key, mash);
                     if (_equalityComparer.Equals(array2[0].Key, key))
@@ -1067,9 +1073,9 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.HasThreeChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array3 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array3.Length == 3);
+                    Assert.Condition(array3.Length == 3);
 
                     mashKvp = new KeyValuePair<TKey, Mash<TKey, TValue>>(key, mash);
                     if (_equalityComparer.Equals(array3[0].Key, key))
@@ -1098,9 +1104,9 @@ namespace Abacaxi.Containers
 
                     break;
                 case StorageState.HasFourChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array4 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array4.Length == 4);
+                    Assert.Condition(array4.Length == 4);
 
                     mashKvp = new KeyValuePair<TKey, Mash<TKey, TValue>>(key, mash);
                     if (_equalityComparer.Equals(array4[0].Key, key))
@@ -1133,9 +1139,9 @@ namespace Abacaxi.Containers
                     }
                     break;
                 case StorageState.HasFiveChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array5 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array5.Length == 5);
+                    Assert.Condition(array5.Length == 5);
 
                     mashKvp = new KeyValuePair<TKey, Mash<TKey, TValue>>(key, mash);
                     if (_equalityComparer.Equals(array5[0].Key, key))
@@ -1173,13 +1179,13 @@ namespace Abacaxi.Containers
                     }
                     break;
                 case StorageState.HasManyChildrenInAHashTable:
-                    Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
+                    Assert.Condition(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
                     var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _childrenObj;
 
                     dict[key] = mash;
                     break;
                 default:
-                    Debug.Fail($"Invalid mash state detected: {_state}.");
+                    Assert.Fail($"Invalid mash state detected: {_state}.");
                     break;
             }
         }
@@ -1198,26 +1204,26 @@ namespace Abacaxi.Containers
             switch (_state & StorageState.ChildrenMask)
             {
                 case 0:
-                    Debug.Assert(_childrenObj == null);
+                    Assert.Condition(_childrenObj == null);
                     break;
 
                 case StorageState.HasOneChildInATuple:
-                    Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
+                    Assert.Condition(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
                     var tuple = (Tuple<TKey, Mash<TKey, TValue>>) _childrenObj;
-                    if (_equalityComparer.Equals(tuple.Item1, key))
+                    if (!_equalityComparer.Equals(tuple.Item1, key))
                     {
-                        _state = _state & StorageState.ValueMask;
-                        _childrenObj = null;
-
-                        return true;
+                        return false;
                     }
 
-                    return false;
+                    _state = _state & StorageState.ValueMask;
+                    _childrenObj = null;
+
+                    return true;
 
                 case StorageState.HasTwoChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array2 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array2.Length == 2);
+                    Assert.Condition(array2.Length == 2);
 
                     if (_equalityComparer.Equals(array2[0].Key, key))
                     {
@@ -1235,9 +1241,9 @@ namespace Abacaxi.Containers
                     return false;
 
                 case StorageState.HasThreeChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array3 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array3.Length == 3);
+                    Assert.Condition(array3.Length == 3);
 
                     if (_equalityComparer.Equals(array3[0].Key, key))
                     {
@@ -1275,9 +1281,9 @@ namespace Abacaxi.Containers
 
                     return false;
                 case StorageState.HasFourChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array4 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array4.Length == 4);
+                    Assert.Condition(array4.Length == 4);
 
                     if (_equalityComparer.Equals(array4[0].Key, key))
                     {
@@ -1330,9 +1336,9 @@ namespace Abacaxi.Containers
 
                     return false;
                 case StorageState.HasFiveChildrenInKeyValuePairArray:
-                    Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                    Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                     var array5 = (KeyValuePair<TKey, Mash<TKey, TValue>>[]) _childrenObj;
-                    Debug.Assert(array5.Length == 5);
+                    Assert.Condition(array5.Length == 5);
 
                     if (_equalityComparer.Equals(array5[0].Key, key))
                     {
@@ -1402,13 +1408,13 @@ namespace Abacaxi.Containers
 
                     return false;
                 case StorageState.HasManyChildrenInAHashTable:
-                    Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
+                    Assert.Condition(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
                     var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _childrenObj;
 
                     return dict.Remove(key);
             }
 
-            Debug.Fail($"Invalid mash state detected: {_state}.");
+            Assert.Fail($"Invalid mash state detected: {_state}.");
             return false;
         }
 
@@ -1441,30 +1447,30 @@ namespace Abacaxi.Containers
                 switch (_state & StorageState.ChildrenMask)
                 {
                     case 0:
-                        Debug.Assert(_childrenObj == null);
+                        Assert.Condition(_childrenObj == null);
                         return 0;
                     case StorageState.HasOneChildInATuple:
-                        Debug.Assert(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
+                        Assert.Condition(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
                         return 1;
                     case StorageState.HasTwoChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                         return 2;
                     case StorageState.HasThreeChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                         return 3;
                     case StorageState.HasFourChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                         return 4;
                     case StorageState.HasFiveChildrenInKeyValuePairArray:
-                        Debug.Assert(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
                         return 5;
                     case StorageState.HasManyChildrenInAHashTable:
-                        Debug.Assert(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
+                        Assert.Condition(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
                         var dict = (IDictionary<TKey, Mash<TKey, TValue>>)_childrenObj;
-                        Debug.Assert(dict.Count > 5);
+                        Assert.Condition(dict.Count > 5);
                         return dict.Count;
                     default:
-                        Debug.Fail($"Invalid mash state detected: {_state}.");
+                        Assert.Fail($"Invalid mash state detected: {_state}.");
                         break;
                 }
 

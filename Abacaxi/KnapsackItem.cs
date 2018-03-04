@@ -73,7 +73,7 @@ namespace Abacaxi
         /// <returns>
         ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override bool Equals([CanBeNull] object obj)
         {
             if (obj?.GetType() != GetType())
             {
@@ -81,8 +81,8 @@ namespace Abacaxi
             }
 
             var e = (KnapsackItem<T>) obj;
+            Assert.NotNull(e);
             return
-                // ReSharper disable once PossibleNullReferenceException
                 Equals(e.Item, Item) &&
                 Equals(e.Value, Value) &&
                 Equals(e.Weight, Weight);
@@ -94,16 +94,14 @@ namespace Abacaxi
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            return $"{Item} ({Value:N2}, {Weight})";
-        }
+        [NotNull]
+        public override string ToString() => $"{Item} ({Value:N2}, {Weight})";
 
         /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {

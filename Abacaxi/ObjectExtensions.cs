@@ -95,15 +95,17 @@ namespace Abacaxi
                 }
             }
 
-            if (flags.HasFlag(InspectionFlags.IncludeMethods))
+            if (!flags.HasFlag(InspectionFlags.IncludeMethods))
             {
-                foreach (var m in typeof(T).GetRuntimeMethods())
+                return memberDict;
+            }
+
+            foreach (var m in typeof(T).GetRuntimeMethods())
+            {
+                if (!m.IsSpecialName && !m.IsGenericMethodDefinition && m.GetParameters().Length == 0 &&
+                    m.IsPublic && !m.IsConstructor && !m.IsAbstract && !m.IsStatic)
                 {
-                    if (!m.IsSpecialName && !m.IsGenericMethodDefinition && m.GetParameters().Length == 0 &&
-                        m.IsPublic && !m.IsConstructor && !m.IsAbstract && !m.IsStatic)
-                    {
-                        memberDict[m.Name] = m.Invoke(value, null);
-                    }
+                    memberDict[m.Name] = m.Invoke(value, null);
                 }
             }
 
@@ -118,7 +120,8 @@ namespace Abacaxi
         /// <param name="formatProvider">The format provider.</param>
         /// <param name="result">The resulting converted value.</param>
         /// <returns><c>true</c> if the conversion succeeded; otherwise, <c>false</c>.</returns>
-        public static bool TryConvert<T>([CanBeNull] this object @object, [NotNull] IFormatProvider formatProvider, out T result)
+        public static bool TryConvert<T>([CanBeNull] this object @object, [NotNull] IFormatProvider formatProvider,
+            out T result)
         {
             Validate.ArgumentNotNull(nameof(formatProvider), formatProvider);
 
@@ -144,6 +147,7 @@ namespace Abacaxi
             {
                 toType = underlyingType;
             }
+
             var toTypeInfo = toType.GetTypeInfo();
             var objTypeInfo = objType.GetTypeInfo();
 
@@ -202,10 +206,8 @@ namespace Abacaxi
         /// <param name="object">The object to convert.</param>
         /// <param name="result">The resulting converted value.</param>
         /// <returns><c>true</c> if the conversion succeeded; otherwise, <c>false</c>.</returns>
-        public static bool TryConvert<T>([CanBeNull] this object @object, out T result)
-        {
-            return TryConvert(@object, CultureInfo.InvariantCulture, out result);
-        }
+        public static bool TryConvert<T>([CanBeNull] this object @object, out T result) =>
+            TryConvert(@object, CultureInfo.InvariantCulture, out result);
 
         /// <summary>
         /// Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
@@ -222,7 +224,8 @@ namespace Abacaxi
         {
             if (!TryConvert(@object, formatProvider, out T result))
             {
-                throw new FormatException($"Failed to convert object \"{@object}\" to a value of type {typeof(T).Name}.");
+                throw new FormatException(
+                    $"Failed to convert object \"{@object}\" to a value of type {typeof(T).Name}.");
             }
 
             return result;
@@ -242,7 +245,8 @@ namespace Abacaxi
         {
             if (!TryConvert(@object, out T result))
             {
-                throw new FormatException($"Failed to convert object \"{@object}\" to a value of type {typeof(T).Name}.");
+                throw new FormatException(
+                    $"Failed to convert object \"{@object}\" to a value of type {typeof(T).Name}.");
             }
 
             return result;

@@ -15,9 +15,9 @@
 
 namespace Abacaxi.Trees
 {
-    using System.Diagnostics;
     using System.Collections.Generic;
     using JetBrains.Annotations;
+    using Internal;
 
     /// <summary>
     /// Class implements the left-leaning red-black balanced search tree.
@@ -25,20 +25,17 @@ namespace Abacaxi.Trees
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     [PublicAPI]
-    public class LeftLeaningRedBlackTree<TKey, TValue> : BinarySearchTree<TKey, TValue>
+    public sealed class LeftLeaningRedBlackTree<TKey, TValue> : BinarySearchTree<TKey, TValue>
     {
-        private static bool IsRed([CanBeNull] RedBlackTreeNode<TKey, TValue> node)
-        {
-            return node?.Color == RedBlackTreeNodeColor.Red;
-        }
+        private static bool IsRed([CanBeNull] RedBlackTreeNode<TKey, TValue> node) => node?.Color == RedBlackTreeNodeColor.Red;
 
         private static void FlipColor([NotNull] RedBlackTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
-            Debug.Assert(node.LeftChild != null);
-            Debug.Assert(node.RightChild != null);
+            Assert.NotNull(node);
+            Assert.NotNull(node.LeftChild);
+            Assert.NotNull(node.RightChild);
 
-            node.Color = 
+            node.Color =
                 node.Color == RedBlackTreeNodeColor.Black
                 ? RedBlackTreeNodeColor.Red
                 : RedBlackTreeNodeColor.Black;
@@ -55,10 +52,10 @@ namespace Abacaxi.Trees
         [NotNull]
         private static RedBlackTreeNode<TKey, TValue> RotateLeft([NotNull] RedBlackTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
+            Assert.NotNull(node);
 
             var right = node.RightChild;
-            Debug.Assert(right != null);
+            Assert.NotNull(right);
 
             node.RightChild = right.LeftChild;
             right.LeftChild = node;
@@ -71,10 +68,10 @@ namespace Abacaxi.Trees
         [NotNull]
         private static RedBlackTreeNode<TKey, TValue> RotateRight([NotNull] RedBlackTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
+            Assert.NotNull(node);
 
             var left = node.LeftChild;
-            Debug.Assert(left != null);
+            Assert.NotNull(left);
 
             node.LeftChild = left.RightChild;
             left.RightChild = node;
@@ -87,22 +84,24 @@ namespace Abacaxi.Trees
         [NotNull]
         private static RedBlackTreeNode<TKey, TValue> MoveRedLeft([NotNull] RedBlackTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
-            Debug.Assert(node.RightChild != null);
+            Assert.NotNull(node);
+            Assert.NotNull(node.RightChild);
 
             FlipColor(node);
-            if (IsRed(node.RightChild.LeftChild))
+            if (!IsRed(node.RightChild.LeftChild))
             {
-                node.RightChild = RotateRight(node.RightChild);
-                node = RotateLeft(node);
+                return node;
+            }
 
-                FlipColor(node);
+            node.RightChild = RotateRight(node.RightChild);
+            node = RotateLeft(node);
 
-                Debug.Assert(node.RightChild != null);
-                if (IsRed(node.RightChild.RightChild))
-                {
-                    node.RightChild = RotateLeft(node.RightChild);
-                }
+            FlipColor(node);
+
+            Assert.NotNull(node.RightChild);
+            if (IsRed(node.RightChild.RightChild))
+            {
+                node.RightChild = RotateLeft(node.RightChild);
             }
 
             return node;
@@ -111,15 +110,17 @@ namespace Abacaxi.Trees
         [NotNull]
         private static RedBlackTreeNode<TKey, TValue> MoveRedRight([NotNull] RedBlackTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
-            Debug.Assert(node.LeftChild != null);
+            Assert.NotNull(node);
+            Assert.NotNull(node.LeftChild);
 
             FlipColor(node);
-            if (IsRed(node.LeftChild.LeftChild))
+            if (!IsRed(node.LeftChild.LeftChild))
             {
-                node = RotateRight(node);
-                FlipColor(node);
+                return node;
             }
+
+            node = RotateRight(node);
+            FlipColor(node);
 
             return node;
         }
@@ -127,20 +128,20 @@ namespace Abacaxi.Trees
         [CanBeNull]
         private RedBlackTreeNode<TKey, TValue> DeleteMinimumRecursive([NotNull] RedBlackTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
+            Assert.NotNull(node);
 
             if (node.LeftChild == null)
             {
                 return null;
             }
 
-            if (!IsRed(node.LeftChild) && 
+            if (!IsRed(node.LeftChild) &&
                 !IsRed(node.LeftChild.LeftChild))
             {
                 node = MoveRedLeft(node);
             }
 
-            Debug.Assert(node.LeftChild != null);
+            Assert.NotNull(node.LeftChild);
             node.LeftChild = DeleteMinimumRecursive(node.LeftChild);
 
             return FixUp(node);
@@ -149,7 +150,7 @@ namespace Abacaxi.Trees
         [NotNull]
         private static RedBlackTreeNode<TKey, TValue> FixUp([NotNull] RedBlackTreeNode<TKey, TValue> node)
         {
-            Debug.Assert(node != null);
+            Assert.NotNull(node);
 
             if (IsRed(node.RightChild))
             {
@@ -158,7 +159,7 @@ namespace Abacaxi.Trees
 
             if (IsRed(node.LeftChild))
             {
-                Debug.Assert(node.LeftChild != null);
+                Assert.NotNull(node.LeftChild);
                 if (IsRed(node.LeftChild.LeftChild))
                 {
                     node = RotateRight(node);
@@ -170,15 +171,15 @@ namespace Abacaxi.Trees
                 FlipColor(node);
             }
 
-            if (node.LeftChild != null && 
-                IsRed(node.LeftChild.RightChild) && 
-                !IsRed(node.LeftChild.LeftChild))
+            if (node.LeftChild == null || !IsRed(node.LeftChild.RightChild) || IsRed(node.LeftChild.LeftChild))
             {
-                node.LeftChild = RotateLeft(node.LeftChild);
-                if (IsRed(node.LeftChild))
-                {
-                    node = RotateRight(node);
-                }
+                return node;
+            }
+
+            node.LeftChild = RotateLeft(node.LeftChild);
+            if (IsRed(node.LeftChild))
+            {
+                node = RotateRight(node);
             }
 
             return node;
@@ -186,8 +187,8 @@ namespace Abacaxi.Trees
 
         [NotNull]
         private RedBlackTreeNode<TKey, TValue> InsertRecursive(
-            [CanBeNull] RedBlackTreeNode<TKey, TValue> node, 
-            TKey key, 
+            [CanBeNull] RedBlackTreeNode<TKey, TValue> node,
+            TKey key,
             TValue value,
             bool allowUpdate)
         {
@@ -235,13 +236,15 @@ namespace Abacaxi.Trees
                 node = RotateLeft(node);
             }
 
-            if (IsRed(node.LeftChild))
+            if (!IsRed(node.LeftChild))
             {
-                Debug.Assert(node.LeftChild != null);
-                if (IsRed(node.LeftChild.LeftChild))
-                {
-                    node = RotateRight(node);
-                }
+                return node;
+            }
+
+            Assert.NotNull(node.LeftChild);
+            if (IsRed(node.LeftChild.LeftChild))
+            {
+                node = RotateRight(node);
             }
 
             return node;
@@ -252,16 +255,18 @@ namespace Abacaxi.Trees
         {
             if (Comparer.Compare(key, node.Key) < 0)
             {
-                if (node.LeftChild != null)
+                if (node.LeftChild == null)
                 {
-                    if (!IsRed(node.LeftChild) && !IsRed(node.LeftChild.LeftChild))
-                    {
-                        node = MoveRedLeft(node);
-                    }
-
-                    Debug.Assert(node.LeftChild != null);
-                    node.LeftChild = RemoveRecursive(node.LeftChild, key);
+                    return FixUp(node);
                 }
+
+                if (!IsRed(node.LeftChild) && !IsRed(node.LeftChild.LeftChild))
+                {
+                    node = MoveRedLeft(node);
+                }
+
+                Assert.NotNull(node.LeftChild);
+                node.LeftChild = RemoveRecursive(node.LeftChild, key);
             }
             else
             {
@@ -272,39 +277,41 @@ namespace Abacaxi.Trees
 
                 if (Comparer.Compare(key, node.Key) == 0 && node.RightChild == null)
                 {
-                    Debug.Assert(node.LeftChild == null);
+                    Assert.NotNull(node.LeftChild == null);
 
                     NotifyTreeChanged(-1);
                     return null;
                 }
 
-                if (node.RightChild != null)
+                if (node.RightChild == null)
                 {
-                    if (!IsRed(node.RightChild) && !IsRed(node.RightChild.LeftChild))
+                    return FixUp(node);
+                }
+
+                if (!IsRed(node.RightChild) && !IsRed(node.RightChild.LeftChild))
+                {
+                    node = MoveRedRight(node);
+                }
+
+                Assert.NotNull(node.RightChild);
+
+                if (Comparer.Compare(key, node.Key) == 0)
+                {
+                    NotifyTreeChanged(-1);
+
+                    var m = node.RightChild;
+                    while (m.LeftChild != null)
                     {
-                        node = MoveRedRight(node);
+                        m = m.LeftChild;
                     }
 
-                    Debug.Assert(node.RightChild != null);
-
-                    if (Comparer.Compare(key, node.Key) == 0)
-                    {
-                        NotifyTreeChanged(-1);
-
-                        var m = node.RightChild;
-                        while (m.LeftChild != null)
-                        {
-                            m = m.LeftChild;
-                        }
-
-                        node.Key = m.Key;
-                        node.Value = m.Value;
-                        node.RightChild = DeleteMinimumRecursive(node.RightChild);
-                    }
-                    else
-                    {
-                        node.RightChild = RemoveRecursive(node.RightChild, key);
-                    }
+                    node.Key = m.Key;
+                    node.Value = m.Value;
+                    node.RightChild = DeleteMinimumRecursive(node.RightChild);
+                }
+                else
+                {
+                    node.RightChild = RemoveRecursive(node.RightChild, key);
                 }
             }
 
@@ -320,7 +327,7 @@ namespace Abacaxi.Trees
         public new RedBlackTreeNode<TKey, TValue> LookupNode(TKey key)
         {
             var node = base.LookupNode(key);
-            Debug.Assert(node == null || node is RedBlackTreeNode<TKey, TValue>);
+            Assert.NotNull(node == null || node is RedBlackTreeNode<TKey, TValue>);
 
             return (RedBlackTreeNode<TKey, TValue>) node;
         }
@@ -336,7 +343,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Debug.Assert(base.Root == null || base.Root is RedBlackTreeNode<TKey, TValue>);
+                Assert.NotNull(base.Root == null || base.Root is RedBlackTreeNode<TKey, TValue>);
                 return (RedBlackTreeNode<TKey, TValue>)base.Root;
             }
             set => base.Root = value;
@@ -389,13 +396,15 @@ namespace Abacaxi.Trees
         public override bool Remove(TKey key)
         {
             var initialCount = Count;
+            if (Root == null)
+            {
+                return initialCount != Count;
+            }
+
+            Root = RemoveRecursive(Root, key);
             if (Root != null)
             {
-                Root = RemoveRecursive(Root, key);
-                if (Root != null)
-                {
-                    Root.Color = RedBlackTreeNodeColor.Black;
-                }
+                Root.Color = RedBlackTreeNodeColor.Black;
             }
             return initialCount != Count;
         }

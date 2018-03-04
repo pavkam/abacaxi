@@ -23,11 +23,9 @@ namespace Abacaxi.Tests.Trees
     [TestFixture]
     public sealed class AvlTreeTests : BinarySearchTreeTests
     {
-        [NotNull]
-        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>([NotNull] IComparer<TKey> comparer) =>
+        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>(IComparer<TKey> comparer) =>
             new AvlTree<TKey, TValue>(comparer);
 
-        [NotNull]
         protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>() => new AvlTree<TKey, TValue>();
 
         [Test]

@@ -16,7 +16,7 @@
 namespace Abacaxi.Trees
 {
     using JetBrains.Annotations;
-    using System.Diagnostics;
+    using Internal;
 
     /// <summary>
     /// Class represents a node in a red-black balanced search tree.
@@ -37,7 +37,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Debug.Assert(base.RightChild == null ||  base.RightChild is RedBlackTreeNode<TKey, TValue>);
+                Assert.Condition(base.RightChild == null || base.RightChild is RedBlackTreeNode<TKey, TValue>);
                 return (RedBlackTreeNode<TKey, TValue>) base.RightChild;
             }
             set => base.RightChild = value;
@@ -54,7 +54,7 @@ namespace Abacaxi.Trees
         {
             get
             {
-                Debug.Assert(base.LeftChild == null || base.LeftChild is RedBlackTreeNode<TKey, TValue>);
+                Assert.Condition(base.LeftChild == null || base.LeftChild is RedBlackTreeNode<TKey, TValue>);
                 return (RedBlackTreeNode<TKey, TValue>)base.LeftChild;
             }
             set => base.LeftChild = value;

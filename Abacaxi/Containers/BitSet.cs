@@ -18,7 +18,6 @@ namespace Abacaxi.Containers
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using Internal;
     using JetBrains.Annotations;
@@ -37,7 +36,7 @@ namespace Abacaxi.Containers
 
         private void LocateItem(int item, out int chunk, out int mask)
         {
-            Debug.Assert(item >= _min && item <= _max);
+            Assert.NotNull(item >= _min && item <= _max);
 
             item -= _min;
             chunk = item / BitsPerChunk;

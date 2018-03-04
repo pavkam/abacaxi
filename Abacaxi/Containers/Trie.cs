@@ -39,7 +39,7 @@ namespace Abacaxi.Containers
 
             public Node([NotNull] IEqualityComparer<TElement> comparer)
             {
-                Debug.Assert(comparer != null);
+                Assert.NotNull(comparer != null);
                 Children = new Dictionary<TElement, Node>(comparer);
             }
         }
@@ -55,7 +55,7 @@ namespace Abacaxi.Containers
 
         private bool FlowDown([NotNull] IList<TElement> key, [NotNull] out Node node)
         {
-            Debug.Assert(key != null);
+            Assert.NotNull(key != null);
 
             var i = 0;
             node = _root;

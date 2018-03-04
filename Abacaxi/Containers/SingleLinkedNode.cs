@@ -90,13 +90,13 @@ namespace Abacaxi.Containers
 
             while (two != null)
             {
-                Debug.Assert(one != null);
+                Assert.NotNull(one != null);
 
                 one = one.Next;
                 two = two.Next?.Next;
             }
 
-            Debug.Assert(one != null);
+            Assert.NotNull(one != null);
             return one;
         }
 
@@ -111,7 +111,7 @@ namespace Abacaxi.Containers
 
             while (two != null)
             {
-                Debug.Assert(one != null);
+                Assert.NotNull(one != null);
 
                 one = one.Next;
                 two = two.Next?.Next;

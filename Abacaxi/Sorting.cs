@@ -32,11 +32,11 @@ namespace Abacaxi
 
         private static void BuildHeap<T>([NotNull] IList<T> sequence, int lo, int hi, [NotNull] IComparer<T> comparer)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(lo >= 0);
-            Debug.Assert(hi < sequence.Count);
-            Debug.Assert(lo <= hi);
-            Debug.Assert(comparer != null);
+            Assert.NotNull(sequence != null);
+            Assert.NotNull(lo >= 0);
+            Assert.NotNull(hi < sequence.Count);
+            Assert.NotNull(lo <= hi);
+            Assert.NotNull(comparer != null);
 
             for (var tailIndex = lo; tailIndex <= hi; tailIndex++)
             {
@@ -62,11 +62,11 @@ namespace Abacaxi
 
         private static void ReorderHeap<T>([NotNull] IList<T> sequence, int lo, int hi, [NotNull] IComparer<T> comparer)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(lo >= 0);
-            Debug.Assert(hi < sequence.Count);
-            Debug.Assert(lo <= hi);
-            Debug.Assert(comparer != null);
+            Assert.NotNull(sequence != null);
+            Assert.NotNull(lo >= 0);
+            Assert.NotNull(hi < sequence.Count);
+            Assert.NotNull(lo <= hi);
+            Assert.NotNull(comparer != null);
 
             for (var tailIndex = hi; tailIndex > lo; tailIndex--)
             {
@@ -112,11 +112,11 @@ namespace Abacaxi
         private static int PartitionSegment<T>([NotNull] IList<T> sequence, int lo, int hi,
             [NotNull] IComparer<T> comparer)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(lo >= 0);
-            Debug.Assert(hi < sequence.Count);
-            Debug.Assert(lo <= hi);
-            Debug.Assert(comparer != null);
+            Assert.NotNull(sequence != null);
+            Assert.NotNull(lo >= 0);
+            Assert.NotNull(hi < sequence.Count);
+            Assert.NotNull(lo <= hi);
+            Assert.NotNull(comparer != null);
 
             var pi = hi;
             var li = lo;
@@ -148,11 +148,11 @@ namespace Abacaxi
         private static void QuickSortRecursive<T>([NotNull] IList<T> sequence, int lo, int hi,
             [NotNull] IComparer<T> comparer)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(lo >= 0);
-            Debug.Assert(hi < sequence.Count);
-            Debug.Assert(lo <= hi);
-            Debug.Assert(comparer != null);
+            Assert.NotNull(sequence != null);
+            Assert.NotNull(lo >= 0);
+            Assert.NotNull(hi < sequence.Count);
+            Assert.NotNull(lo <= hi);
+            Assert.NotNull(comparer != null);
 
             if (hi - lo == 1)
             {
@@ -180,15 +180,15 @@ namespace Abacaxi
         private static void MergeSegments<T>([NotNull] IList<T> sequence, int llo, int lhi, int rlo, int rhi,
             [NotNull] IComparer<T> comparer)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(comparer != null);
-            Debug.Assert(llo >= 0);
-            Debug.Assert(lhi < sequence.Count);
-            Debug.Assert(llo <= lhi);
-            Debug.Assert(rlo >= 0);
-            Debug.Assert(rhi < sequence.Count);
-            Debug.Assert(rlo <= rhi);
-            Debug.Assert(rlo > lhi);
+            Assert.NotNull(sequence != null);
+            Assert.NotNull(comparer != null);
+            Assert.NotNull(llo >= 0);
+            Assert.NotNull(lhi < sequence.Count);
+            Assert.NotNull(llo <= lhi);
+            Assert.NotNull(rlo >= 0);
+            Assert.NotNull(rhi < sequence.Count);
+            Assert.NotNull(rlo <= rhi);
+            Assert.NotNull(rlo > lhi);
 
             var mergeLength = (lhi - llo) + (rhi - rlo) + 2;
             var mergeArray = new T[mergeLength];
@@ -228,11 +228,11 @@ namespace Abacaxi
             int hi,
             [NotNull] IComparer<T> comparer)
         {
-            Debug.Assert(sequence != null);
-            Debug.Assert(comparer != null);
-            Debug.Assert(lo >= 0);
-            Debug.Assert(hi < sequence.Count);
-            Debug.Assert(lo <= hi);
+            Assert.NotNull(sequence != null);
+            Assert.NotNull(comparer != null);
+            Assert.NotNull(lo >= 0);
+            Assert.NotNull(hi < sequence.Count);
+            Assert.NotNull(lo <= hi);
 
             if (lo == hi)
             {
