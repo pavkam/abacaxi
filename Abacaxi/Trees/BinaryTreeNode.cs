@@ -23,8 +23,7 @@ namespace Abacaxi.Trees
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-    [PublicAPI]
-    [DebuggerDisplay("Key={Key}, Value={Value}")]
+    [PublicAPI, DebuggerDisplay("Key={Key}, Value={Value}")]
     public class BinaryTreeNode<TKey, TValue>
     {
         /// <summary>

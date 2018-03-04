@@ -13,15 +13,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Collections.Concurrent;
-using System.Diagnostics;
-
 namespace Abacaxi
 {
     using System.Text;
     using Internal;
     using JetBrains.Annotations;
     using System.Text.RegularExpressions;
+    using System.Collections.Concurrent;
 
     /// <summary>
     /// Class implements the "glob-style" pattern matching.
@@ -38,9 +36,9 @@ namespace Abacaxi
         [NotNull]
         internal static GlobPattern GetPattern([NotNull] string pattern, bool ignoreCase)
         {
-            Assert.NotNull(pattern != null);
-            return ignoreCase ? 
-                CachedIgnoreCasePatterns.GetOrAdd(pattern, key => new GlobPattern(key, true)) : 
+            Assert.NotNull(pattern);
+            return ignoreCase ?
+                CachedIgnoreCasePatterns.GetOrAdd(pattern, key => new GlobPattern(key, true)) :
                 CachedPatterns.GetOrAdd(pattern, key => new GlobPattern(key, false));
         }
 
@@ -62,17 +60,19 @@ namespace Abacaxi
             for (var i = 0; i < pattern.Length; i++)
             {
                 var pc = pattern[i];
-                if (pc == '*' || pc == '?')
+                if (pc != '*' && pc != '?')
                 {
-                    if (s < i)
-                    {
-                        var escapedChunk = Regex.Escape(pattern.Substring(s, i - s));
-                        rePattern.Append(escapedChunk);
-                    }
-
-                    rePattern.Append(pc == '*' ? ".*" : ".");
-                    s = i + 1;
+                    continue;
                 }
+
+                if (s < i)
+                {
+                    var escapedChunk = Regex.Escape(pattern.Substring(s, i - s));
+                    rePattern.Append(escapedChunk);
+                }
+
+                rePattern.Append(pc == '*' ? ".*" : ".");
+                s = i + 1;
             }
 
             if (s < pattern.Length)
@@ -95,9 +95,6 @@ namespace Abacaxi
         ///   <c>true</c> if the specified string matches the pattern; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
-        public bool IsMatch([NotNull] string s)
-        {
-            return _regex.IsMatch(s);
-        }
+        public bool IsMatch([NotNull] string s) => _regex.IsMatch(s);
     }
 }

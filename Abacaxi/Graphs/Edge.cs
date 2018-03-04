@@ -79,7 +79,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override bool Equals([CanBeNull] object obj)
         {
             if (obj == null || obj.GetType() != GetType())
             {
@@ -90,14 +90,14 @@ namespace Abacaxi.Graphs
             return
                 Equals(co.Weight, Weight) &&
                 Equals(co.FromVertex, FromVertex) &&
-                Equals(co.ToVertex, ToVertex); 
+                Equals(co.ToVertex, ToVertex);
         }
 
         /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {
@@ -115,9 +115,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            return $"{FromVertex} >={Weight}=> {ToVertex}";
-        }
+        [NotNull]
+        public override string ToString() => $"{FromVertex} >={Weight}=> {ToVertex}";
     }
 }

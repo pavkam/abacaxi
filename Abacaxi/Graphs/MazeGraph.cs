@@ -19,7 +19,6 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using Internal;
     using JetBrains.Annotations;
-    using System.Diagnostics;
 
     /// <summary>
     /// A maze-structured graph.
@@ -32,12 +31,9 @@ namespace Abacaxi.Graphs
         private readonly int _lengthX;
         private readonly int _lengthY;
 
-        private bool VertexExists(int x, int y)
-        {
-            return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY && _matrix[x, y];
-        }
+        private bool VertexExists(int x, int y) => x >= 0 && x < _lengthX && y >= 0 && y < _lengthY && _matrix[x, y];
 
-        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, Cell vertex)
+        private void ValidateVertex([InvokerParameterName, NotNull]  string argumentName, Cell vertex)
         {
             if (!VertexExists(vertex.X, vertex.Y))
             {
@@ -45,8 +41,7 @@ namespace Abacaxi.Graphs
             }
         }
 
-        [NotNull]
-        [ItemNotNull]
+        [NotNull, ItemNotNull]
         private IEnumerable<Edge<Cell>> GetEdgesIterate(Cell vertex)
         {
             Assert.NotNull(VertexExists(vertex.X, vertex.Y));
@@ -102,7 +97,7 @@ namespace Abacaxi.Graphs
 
             _matrix = matrix;
             _lengthX = matrix.GetLength(0);
-            _lengthY = matrix.GetLength(1); 
+            _lengthY = matrix.GetLength(1);
         }
 
         /// <summary>
@@ -136,7 +131,7 @@ namespace Abacaxi.Graphs
             ValidateVertex(nameof(fromVertex), fromVertex);
             ValidateVertex(nameof(toVertex), toVertex);
 
-            return 
+            return
                 Math.Abs(toVertex.X - fromVertex.X) +
                 Math.Abs(toVertex.Y - fromVertex.Y);
         }

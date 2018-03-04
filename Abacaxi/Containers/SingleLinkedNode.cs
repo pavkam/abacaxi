@@ -17,7 +17,6 @@ namespace Abacaxi.Containers
 {
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -90,13 +89,13 @@ namespace Abacaxi.Containers
 
             while (two != null)
             {
-                Assert.NotNull(one != null);
+                Assert.NotNull(one);
 
                 one = one.Next;
                 two = two.Next?.Next;
             }
 
-            Assert.NotNull(one != null);
+            Assert.NotNull(one);
             return one;
         }
 
@@ -111,7 +110,7 @@ namespace Abacaxi.Containers
 
             while (two != null)
             {
-                Assert.NotNull(one != null);
+                Assert.NotNull(one);
 
                 one = one.Next;
                 two = two.Next?.Next;
@@ -154,10 +153,7 @@ namespace Abacaxi.Containers
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -172,6 +168,7 @@ namespace Abacaxi.Containers
             while (current != null)
             {
                 yield return current;
+
                 current = current.Next;
             }
         }

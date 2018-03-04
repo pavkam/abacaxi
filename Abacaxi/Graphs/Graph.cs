@@ -17,7 +17,6 @@ namespace Abacaxi.Graphs
 {
     using System;
     using System.Collections;
-    using System.Diagnostics;
     using System.Linq;
     using System.Collections.Generic;
     using Internal;
@@ -48,13 +47,13 @@ namespace Abacaxi.Graphs
 
             public BfsNode([NotNull] TVertex vertex)
             {
-                Assert.NotNull(vertex != null);
+                Assert.NotNull(vertex);
                 Vertex = vertex;
             }
 
             public BfsNode([NotNull] Edge<TVertex> entryEdge)
             {
-                Assert.NotNull(entryEdge != null);
+                Assert.NotNull(entryEdge);
                 Vertex = entryEdge.ToVertex;
                 EntryEdge = entryEdge;
             }
@@ -70,13 +69,13 @@ namespace Abacaxi.Graphs
 
             public DfsNode([NotNull] TVertex vertex)
             {
-                Assert.NotNull(vertex != null);
+                Assert.NotNull(vertex);
                 Vertex = vertex;
             }
 
             public DfsNode([NotNull] Edge<TVertex> entryEdge)
             {
-                Assert.NotNull(entryEdge != null);
+                Assert.NotNull(entryEdge);
                 Vertex = entryEdge.ToVertex;
                 EntryEdge = entryEdge;
             }
@@ -84,8 +83,8 @@ namespace Abacaxi.Graphs
 
         private static int CompareEdgesByWeight([NotNull] Edge<TVertex> a, [NotNull] Edge<TVertex> b)
         {
-            Assert.NotNull(a != null);
-            Assert.NotNull(b != null);
+            Assert.NotNull(a);
+            Assert.NotNull(b);
 
             return a.Weight.CompareTo(a.Weight);
         }
@@ -101,11 +100,11 @@ namespace Abacaxi.Graphs
             [NotNull] Predicate<IDfsNode> handleVertexCompleted,
             [NotNull] Func<IDfsNode, IDfsNode, bool> handleCycle)
         {
-            Assert.NotNull(vertexNode != null);
-            Assert.NotNull(visitedNodes != null);
-            Assert.NotNull(handleVertexCompleted != null);
-            Assert.NotNull(handleVertexVisited != null);
-            Assert.NotNull(handleCycle != null);
+            Assert.NotNull(vertexNode);
+            Assert.NotNull(visitedNodes);
+            Assert.NotNull(handleVertexCompleted);
+            Assert.NotNull(handleVertexVisited);
+            Assert.NotNull(handleCycle);
 
             visitedNodes.Add(vertexNode.Vertex, vertexNode);
             vertexNode.EntryTime = time++;
@@ -305,10 +304,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// Traverses the graph using the breadth-first-search starting from <paramref name="startVertex"/>.
@@ -333,21 +329,23 @@ namespace Abacaxi.Graphs
             while (inspectQueue.Count > 0)
             {
                 var vertexNode = inspectQueue.Dequeue();
-                Assert.NotNull(vertexNode != null);
-                Assert.NotNull(discoveredSet.Contains(vertexNode.Vertex));
+                Assert.NotNull(vertexNode);
+                Assert.Condition(discoveredSet.Contains(vertexNode.Vertex));
 
                 foreach (var edge in GetEdges(vertexNode.Vertex))
                 {
-                    if (!discoveredSet.Contains(edge.ToVertex))
+                    if (discoveredSet.Contains(edge.ToVertex))
                     {
-                        var connectedNode = new BfsNode(edge)
-                        {
-                            Parent = vertexNode
-                        };
-
-                        discoveredSet.Add(edge.ToVertex);
-                        inspectQueue.Enqueue(connectedNode);
+                        continue;
                     }
+
+                    var connectedNode = new BfsNode(edge)
+                    {
+                        Parent = vertexNode
+                    };
+
+                    discoveredSet.Add(edge.ToVertex);
+                    inspectQueue.Enqueue(connectedNode);
                 }
 
                 if (!handleVertexCompleted(vertexNode))
@@ -364,7 +362,7 @@ namespace Abacaxi.Graphs
         /// <param name="handleVertexVisited">The function called when a vertex is being visited.</param>
         /// <param name="handleVertexCompleted">The function called when a vertex is completed.</param>
         /// <param name="handleCycle">The function called when a cycle is identified.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="handleVertexVisited"/>, <paramref name="handleVertexCompleted"/>, 
+        /// <exception cref="ArgumentNullException">The <paramref name="handleVertexVisited"/>, <paramref name="handleVertexCompleted"/>,
         /// <paramref name="handleCycle"/> or <paramref name="startVertex"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
         public virtual void TraverseDfs([NotNull] TVertex startVertex,
@@ -411,7 +409,7 @@ namespace Abacaxi.Graphs
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="startVertex"/> or <paramref name="endVertex"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
         [NotNull]
-        public virtual TVertex[] FindShortestPath(TVertex startVertex, TVertex endVertex)
+        public virtual TVertex[] FindShortestPath([NotNull] TVertex startVertex, [NotNull] TVertex endVertex)
         {
             Validate.ArgumentNotNull(nameof(startVertex), startVertex);
             Validate.ArgumentNotNull(nameof(endVertex), endVertex);
@@ -419,13 +417,14 @@ namespace Abacaxi.Graphs
             IBfsNode solution = null;
             TraverseBfs(startVertex, node =>
             {
-                if (Equals(node.Vertex, endVertex))
+                if (!Equals(node.Vertex, endVertex))
                 {
-                    solution = node;
-                    return false;
+                    return true;
                 }
 
-                return true;
+                solution = node;
+                return false;
+
             });
 
             var result = new List<TVertex>();
@@ -722,8 +721,8 @@ namespace Abacaxi.Graphs
 
             var comparer = Comparer<PathNode>.Create((a, b) =>
             {
-                Assert.NotNull(a != null);
-                Assert.NotNull(b != null);
+                Assert.NotNull(a);
+                Assert.NotNull(b);
 
                 return a.PotentialCostToDestination.CompareTo(b.PotentialCostToDestination);
             });
@@ -744,7 +743,7 @@ namespace Abacaxi.Graphs
             while (visitationQueue.Count > 0)
             {
                 var vertexNode = visitationQueue.RemoveTop();
-                Assert.NotNull(vertexNode != null && discoveredVertices.ContainsKey(vertexNode.Vertex));
+                Assert.Condition(vertexNode != null && discoveredVertices.ContainsKey(vertexNode.Vertex));
 
                 if (Equals(vertexNode.Vertex, endVertex))
                 {
@@ -781,33 +780,37 @@ namespace Abacaxi.Graphs
                     }
                     else
                     {
-                        if (costFromStartForThisPath < discoveredNode.TotalCostFromStart)
+                        if (!(costFromStartForThisPath < discoveredNode.TotalCostFromStart))
                         {
-                            discoveredNode.TotalCostFromStart = costFromStartForThisPath;
-                            discoveredNode.Parent = vertexNode;
-                            discoveredNode.PotentialCostToDestination =
-                                SupportsPotentialWeightEvaluation
-                                    ? costFromStartForThisPath + GetPotentialWeight(discoveredNode.Vertex, endVertex)
-                                    : costFromStartForThisPath;
-
-                            visitationQueue.Add(discoveredNode);
+                            continue;
                         }
+
+                        discoveredNode.TotalCostFromStart = costFromStartForThisPath;
+                        discoveredNode.Parent = vertexNode;
+                        discoveredNode.PotentialCostToDestination =
+                            SupportsPotentialWeightEvaluation
+                                ? costFromStartForThisPath + GetPotentialWeight(discoveredNode.Vertex, endVertex)
+                                : costFromStartForThisPath;
+
+                        visitationQueue.Add(discoveredNode);
                     }
                 }
             }
 
             var result = new List<TVertex>();
-            if (foundAPath)
+            if (!foundAPath)
             {
-                var node = discoveredVertices[endVertex];
-                do
-                {
-                    result.Add(node.Vertex);
-                    node = node.Parent;
-                } while (node != null);
-
-                result.Reverse();
+                return result;
             }
+
+            var node = discoveredVertices[endVertex];
+            do
+            {
+                result.Add(node.Vertex);
+                node = node.Parent;
+            } while (node != null);
+
+            result.Reverse();
 
             return result;
         }

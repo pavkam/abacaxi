@@ -19,7 +19,6 @@ namespace Abacaxi.Graphs
     using System.Collections.Generic;
     using Internal;
     using JetBrains.Annotations;
-    using System.Diagnostics;
 
     /// <summary>
     /// Implements a "connected component" of a graph, basically a sub-graph. This implementation uses the original graph
@@ -27,14 +26,14 @@ namespace Abacaxi.Graphs
     /// </summary>
     /// <typeparam name="TVertex">The type of the vertex.</typeparam>
     [PublicAPI]
-    public class SubGraph<TVertex> : Graph<TVertex>
+    public sealed class SubGraph<TVertex> : Graph<TVertex>
     {
         [NotNull]
         private readonly Graph<TVertex> _graph;
         [NotNull]
         private readonly HashSet<TVertex> _vertices;
 
-        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, TVertex vertex)
+        private void ValidateVertex([InvokerParameterName, NotNull]  string argumentName, [NotNull] TVertex vertex)
         {
             Validate.ArgumentNotNull(argumentName, vertex);
             if (!_vertices.Contains(vertex))
@@ -43,12 +42,11 @@ namespace Abacaxi.Graphs
             }
         }
 
-        [NotNull]
-        [ItemNotNull]
+        [NotNull, ItemNotNull]
         private IEnumerable<Edge<TVertex>> GetEdgesIterate([NotNull] TVertex vertex)
         {
-            Assert.NotNull(vertex != null);
-            Assert.NotNull(_vertices.Contains(vertex));
+            Assert.NotNull(vertex);
+            Assert.Condition(_vertices.Contains(vertex));
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var edge in _graph.GetEdges(vertex))
@@ -115,10 +113,8 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
-        public override IEnumerator<TVertex> GetEnumerator()
-        {
-            return _vertices.GetEnumerator();
-        }
+        [NotNull]
+        public override IEnumerator<TVertex> GetEnumerator() => _vertices.GetEnumerator();
 
         /// <summary>
         /// Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" /> vertices.

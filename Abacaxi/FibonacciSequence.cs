@@ -19,7 +19,6 @@ namespace Abacaxi
     using System.Collections.Generic;
     using Internal;
     using JetBrains.Annotations;
-    using System.Diagnostics;
 
     /// <summary>
     /// Class supplies methods related to the "Fibonacci sequence".
@@ -43,16 +42,19 @@ namespace Abacaxi
             {
                 yield return b1;
             }
-            if (count > 2)
-            {
-                for (var i = 2; i < count; i++)
-                {
-                    var b = b2 + b1;
-                    b2 = b1;
-                    b1 = b;
 
-                    yield return b;
-                }
+            if (count <= 2)
+            {
+                yield break;
+            }
+
+            for (var i = 2; i < count; i++)
+            {
+                var b = b2 + b1;
+                b2 = b1;
+                b1 = b;
+
+                yield return b;
             }
         }
 

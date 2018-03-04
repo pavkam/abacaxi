@@ -341,13 +341,13 @@ namespace Abacaxi.Containers
                     Assert.Condition(list.Count >= 2);
                     if (!removedFromList)
                     {
-                        return removedFromList;
+                        return false;
                     }
 
                     _ver++;
                     if (list.Count != 2)
                     {
-                        return removedFromList;
+                        return true;
                     }
 
                     _state = (_state & StorageState.ChildrenMask) | StorageState.ValuesInTwoElementArray;
@@ -356,7 +356,7 @@ namespace Abacaxi.Containers
                         list[0],
                         list[1]
                     };
-                    return removedFromList;
+                    return true;
                 default:
                     Assert.Fail($"Invalid mash state detected: {_state}.");
                     break;

@@ -18,7 +18,6 @@ namespace Abacaxi.Containers
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -31,7 +30,7 @@ namespace Abacaxi.Containers
     public sealed class Trie<TElement, TValue> : ICollection<KeyValuePair<TElement[], TValue>>,
         IReadOnlyCollection<KeyValuePair<TElement[], TValue>>
     {
-        private class Node
+        private sealed class Node
         {
             public bool IsTerminal;
             public TValue Value;
@@ -39,7 +38,7 @@ namespace Abacaxi.Containers
 
             public Node([NotNull] IEqualityComparer<TElement> comparer)
             {
-                Assert.NotNull(comparer != null);
+                Assert.NotNull(comparer);
                 Children = new Dictionary<TElement, Node>(comparer);
             }
         }
@@ -55,7 +54,7 @@ namespace Abacaxi.Containers
 
         private bool FlowDown([NotNull] IList<TElement> key, [NotNull] out Node node)
         {
-            Assert.NotNull(key != null);
+            Assert.NotNull(key);
 
             var i = 0;
             node = _root;
@@ -136,10 +135,7 @@ namespace Abacaxi.Containers
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
         /// <exception cref="InvalidOperationException">Collection has been modified while enumerating.</exception>
-        public IEnumerator<KeyValuePair<TElement[], TValue>> GetEnumerator()
-        {
-            return Query(EmptyElementArray).GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<TElement[], TValue>> GetEnumerator() => Query(EmptyElementArray).GetEnumerator();
 
         /// <summary>
         /// Queries this <see cref="Trie{TElement,TValue}"/> for all key/value pairs that start with a given <paramref name="prefix"/>.
@@ -152,29 +148,31 @@ namespace Abacaxi.Containers
         {
             Validate.ArgumentNotNull(nameof(prefix), prefix);
 
-            if (FlowDown(prefix, out var root))
+            if (!FlowDown(prefix, out var root))
             {
-                var stack = new Stack<KeyValuePair<TElement[], Node>>();
-                stack.Push(new KeyValuePair<TElement[], Node>(prefix, root));
+                yield break;
+            }
 
-                var ver = _ver;
-                while (stack.Count > 0)
+            var stack = new Stack<KeyValuePair<TElement[], Node>>();
+            stack.Push(new KeyValuePair<TElement[], Node>(prefix, root));
+
+            var ver = _ver;
+            while (stack.Count > 0)
+            {
+                if (ver != _ver)
                 {
-                    if (ver != _ver)
-                    {
-                        throw new InvalidOperationException("Collection has been modified while enumerating.");
-                    }
+                    throw new InvalidOperationException("Collection has been modified while enumerating.");
+                }
 
-                    var c = stack.Pop();
-                    if (c.Value.IsTerminal)
-                    {
-                        yield return new KeyValuePair<TElement[], TValue>(c.Key, c.Value.Value);
-                    }
+                var c = stack.Pop();
+                if (c.Value.IsTerminal)
+                {
+                    yield return new KeyValuePair<TElement[], TValue>(c.Key, c.Value.Value);
+                }
 
-                    foreach (var n in c.Value.Children)
-                    {
-                        stack.Push(new KeyValuePair<TElement[], Node>(c.Key.Append(n.Key), n.Value));
-                    }
+                foreach (var n in c.Value.Children)
+                {
+                    stack.Push(new KeyValuePair<TElement[], Node>(c.Key.Append(n.Key), n.Value));
                 }
             }
         }
@@ -231,12 +229,10 @@ namespace Abacaxi.Containers
                     node.Value = updateFunc(value);
                     return false;
                 }
-                else
-                {
-                    node.IsTerminal = true;
-                    node.Value = value;
-                    Count++;
-                }
+
+                node.IsTerminal = true;
+                node.Value = value;
+                Count++;
 
                 _ver++;
             }
@@ -311,7 +307,7 @@ namespace Abacaxi.Containers
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="array"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="arrayIndex"/> is out of bounds or there is not enough space in the array.</exception>
-        public void CopyTo(KeyValuePair<TElement[], TValue>[] array, int arrayIndex)
+        public void CopyTo([NotNull] KeyValuePair<TElement[], TValue>[] array, int arrayIndex)
         {
             Validate.CollectionArgumentsInBounds(nameof(array), array, arrayIndex, Count);
 
@@ -355,28 +351,29 @@ namespace Abacaxi.Containers
                 i++;
             }
 
-            if (i == key.Length && node.IsTerminal)
+            if (i != key.Length || !node.IsTerminal)
             {
-                node.IsTerminal = false;
-
-                while (
-                    !node.IsTerminal &&
-                    node.Children.Count == 0 &&
-                    path.Count > 0)
-                {
-                    var parent = path.Pop();
-
-                    parent.Children.Remove(key[--i]);
-                    node = parent;
-                }
-
-                _ver++;
-                Count--;
-
-                return true;
+                return false;
             }
 
-            return false;
+            node.IsTerminal = false;
+
+            while (
+                !node.IsTerminal &&
+                node.Children.Count == 0 &&
+                path.Count > 0)
+            {
+                var parent = path.Pop();
+
+                parent.Children.Remove(key[--i]);
+                node = parent;
+            }
+
+            _ver++;
+            Count--;
+
+            return true;
+
         }
 
         /// <summary>
@@ -385,7 +382,7 @@ namespace Abacaxi.Containers
         /// <param name="key">The key.</param>
         /// <param name="value">The output value.</param>
         /// <returns><c>true</c> if the key was found; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue([NotNull] TElement[] key, out TValue value)
+        public bool TryGetValue([NotNull] TElement[] key, [CanBeNull] out TValue value)
         {
             Validate.ArgumentNotNull(nameof(key), key);
 

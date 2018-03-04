@@ -18,6 +18,7 @@ namespace Abacaxi.Threading
     using System;
     using Internal;
     using JetBrains.Annotations;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Container that caches a value for a specified duration.
@@ -35,7 +36,8 @@ namespace Abacaxi.Threading
 
         private long CurrentTicks => DateTime.Now.Ticks;
 
-        [CanBeNull]
+        [CanBeNull,
+         SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
         private T GetInternal([CanBeNull] Func<T> valueRefreshFunc = null)
         {
             if (_expiresAtTicks >= CurrentTicks)

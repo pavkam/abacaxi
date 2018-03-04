@@ -17,7 +17,6 @@ namespace Abacaxi
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using Internal;
     using JetBrains.Annotations;
@@ -100,7 +99,7 @@ namespace Abacaxi
 
             public Partition([NotNull] T[] items, double cost)
             {
-                Assert.NotNull(items != null);
+                Assert.NotNull(items);
 
                 Items = items;
                 Cost = cost;
@@ -121,11 +120,11 @@ namespace Abacaxi
         /// <returns>
         /// The approximated solution.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="problemInput" /> or <paramref name="evaluateInitialSolutionFunc" /> or 
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="problemInput" /> or <paramref name="evaluateInitialSolutionFunc" /> or
         /// <paramref name="solutionTransitionFunc" /> or <paramref name="evaluateSolutionCostFunc" /> or <paramref name="algorithmParams" /> are null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="problemInputLength"/> is less than or equal to zero.</exception>
         public static TSolution Evaluate<TInput, TSolution>(
-            TInput problemInput,
+            [NotNull] TInput problemInput,
             int problemInputLength,
             [NotNull] Func<TInput, TSolution> evaluateInitialSolutionFunc,
             [NotNull] Func<TSolution, TInput, int, int, double> solutionTransitionFunc,
@@ -198,8 +197,7 @@ namespace Abacaxi
         /// <returns>A sequence of partitions whose total cost is the approximated minimum.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluatePartitionCostFunc"/> or <paramref name="algorithmParams"/> are <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="partitionLength"/> is less than one.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull, ItemNotNull]
         public static T[][] Evaluate<T>(
             [NotNull] IList<T> sequence,
             int partitionLength,
@@ -213,7 +211,7 @@ namespace Abacaxi
 
             var result = Evaluate(sequence, sequence.Count, input =>
                 {
-                    Assert.NotNull(input != null);
+                    Assert.NotNull(input);
 
                     /* Create partitions */
                     var partitions = new List<T[]>();
@@ -221,6 +219,7 @@ namespace Abacaxi
                     {
                         partitions.Add(new T[partitionLength]);
                     }
+
                     var remainder = input.Count % partitionLength;
                     if (remainder != 0)
                     {
@@ -243,10 +242,10 @@ namespace Abacaxi
                 },
                 (solution, input, i1, i2) =>
                 {
-                    Assert.NotNull(solution != null);
-                    Assert.NotNull(input != null);
-                    Assert.NotNull(i1 >= 0 && i1 < input.Count);
-                    Assert.NotNull(i2 >= 0 && i2 < input.Count);
+                    Assert.NotNull(solution);
+                    Assert.NotNull(input);
+                    Assert.Condition(i1 >= 0 && i1 < input.Count);
+                    Assert.Condition(i2 >= 0 && i2 < input.Count);
 
                     var partition1 = solution[i1 / partitionLength];
                     var partition2 = solution[i2 / partitionLength];

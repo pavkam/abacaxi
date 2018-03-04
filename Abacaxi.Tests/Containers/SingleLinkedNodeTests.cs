@@ -228,6 +228,7 @@ namespace Abacaxi.Tests.Containers
         public void Enumeration_ReturnsSelf()
         {
             var node = SingleLinkedNode<char>.Create("A");
+            Debug.Assert(node != null);
 
             TestHelper.AssertSequence(node,
                 node);

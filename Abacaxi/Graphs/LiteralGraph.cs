@@ -17,7 +17,6 @@ namespace Abacaxi.Graphs
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -33,21 +32,23 @@ namespace Abacaxi.Graphs
 
         private void AddVertex(char vertex)
         {
-            Assert.NotNull(char.IsLetterOrDigit(vertex));
-            Assert.NotNull(_vertices != null);
+            Assert.Condition(char.IsLetterOrDigit(vertex));
+            Assert.NotNull(_vertices);
 
-            if (!_vertices.TryGetValue(vertex, out var set))
+            if (_vertices.TryGetValue(vertex, out var set))
             {
-                set = new HashSet<Edge<char>> ();
-                _vertices.Add(vertex, set);
+                return;
             }
+
+            set = new HashSet<Edge<char>> ();
+            _vertices.Add(vertex, set);
         }
 
         private void AddVertices(char from, char to, int weight)
         {
-            Assert.NotNull(char.IsLetterOrDigit(from));
-            Assert.NotNull(char.IsLetterOrDigit(to));
-            Assert.NotNull(_vertices != null);
+            Assert.Condition(char.IsLetterOrDigit(from));
+            Assert.Condition(char.IsLetterOrDigit(to));
+            Assert.NotNull(_vertices);
 
             if (!_vertices.TryGetValue(from, out var fromToSet))
             {
@@ -80,18 +81,18 @@ namespace Abacaxi.Graphs
 
                     if (to != from)
                     {
-                        AddVertices(to, @from, weight);
+                        AddVertices(to, from, weight);
                     }
                     break;
                 default:
-                    Assert.NotNull(false, "Unexpected relation character.");
+                    Assert.Fail($"Unexpected relation character: {relation}");
                     break;
             }
         }
 
         private void Parse([NotNull] string relationships)
         {
-            Assert.NotNull(relationships != null);
+            Assert.NotNull(relationships);
 
             // ReSharper disable once IdentifierTypo
             var rels = new HashSet<char> {'-'};
@@ -109,6 +110,7 @@ namespace Abacaxi.Graphs
             for (var i = 0; i < relationships.Length; i++)
             {
                 var c = relationships[i];
+                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (stage)
                 {
                     case 0: /* Expect "from" vertex (or whitespace) */
@@ -239,7 +241,7 @@ namespace Abacaxi.Graphs
             }
         }
 
-        private void ValidateVertex([InvokerParameterName] [NotNull] string argumentName, char vertex)
+        private void ValidateVertex([InvokerParameterName, NotNull]  string argumentName, char vertex)
         {
             if (!_vertices.ContainsKey(vertex))
             {
@@ -283,10 +285,8 @@ namespace Abacaxi.Graphs
         /// Gets the enumerator.
         /// </summary>
         /// <returns></returns>
-        public override IEnumerator<char> GetEnumerator()
-        {
-            return _vertices.Keys.GetEnumerator();
-        }
+        [NotNull]
+        public override IEnumerator<char> GetEnumerator() => _vertices.Keys.GetEnumerator();
 
         /// <summary>
         /// Gets the edges of a given <paramref name="vertex" />.

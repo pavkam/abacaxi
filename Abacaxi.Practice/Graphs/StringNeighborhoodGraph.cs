@@ -20,7 +20,6 @@ namespace Abacaxi.Practice.Graphs
     using Abacaxi.Graphs;
     using Containers;
     using Internal;
-    using System.Diagnostics;
     using JetBrains.Annotations;
 
     /// <summary>
@@ -49,8 +48,8 @@ namespace Abacaxi.Practice.Graphs
         [NotNull, ItemNotNull]
         private IEnumerable<Edge<string>> GetEdgesIterate([NotNull] string vertex)
         {
-            Debug.Assert(vertex != null);
-            Debug.Assert(_vertices.Contains(vertex));
+            Assert.NotNull(vertex);
+            Assert.Condition(_vertices.Contains(vertex));
 
             foreach (var pattern in GetAllStringPatterns(vertex))
             {

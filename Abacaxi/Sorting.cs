@@ -17,7 +17,6 @@ namespace Abacaxi
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -32,11 +31,11 @@ namespace Abacaxi
 
         private static void BuildHeap<T>([NotNull] IList<T> sequence, int lo, int hi, [NotNull] IComparer<T> comparer)
         {
-            Assert.NotNull(sequence != null);
-            Assert.NotNull(lo >= 0);
-            Assert.NotNull(hi < sequence.Count);
-            Assert.NotNull(lo <= hi);
-            Assert.NotNull(comparer != null);
+            Assert.NotNull(sequence);
+            Assert.Condition(lo >= 0);
+            Assert.Condition(hi < sequence.Count);
+            Assert.Condition(lo <= hi);
+            Assert.NotNull(comparer);
 
             for (var tailIndex = lo; tailIndex <= hi; tailIndex++)
             {
@@ -62,11 +61,11 @@ namespace Abacaxi
 
         private static void ReorderHeap<T>([NotNull] IList<T> sequence, int lo, int hi, [NotNull] IComparer<T> comparer)
         {
-            Assert.NotNull(sequence != null);
-            Assert.NotNull(lo >= 0);
-            Assert.NotNull(hi < sequence.Count);
-            Assert.NotNull(lo <= hi);
-            Assert.NotNull(comparer != null);
+            Assert.NotNull(sequence);
+            Assert.Condition(lo >= 0);
+            Assert.Condition(hi < sequence.Count);
+            Assert.Condition(lo <= hi);
+            Assert.NotNull(comparer);
 
             for (var tailIndex = hi; tailIndex > lo; tailIndex--)
             {
@@ -112,11 +111,11 @@ namespace Abacaxi
         private static int PartitionSegment<T>([NotNull] IList<T> sequence, int lo, int hi,
             [NotNull] IComparer<T> comparer)
         {
-            Assert.NotNull(sequence != null);
-            Assert.NotNull(lo >= 0);
-            Assert.NotNull(hi < sequence.Count);
-            Assert.NotNull(lo <= hi);
-            Assert.NotNull(comparer != null);
+            Assert.NotNull(sequence);
+            Assert.Condition(lo >= 0);
+            Assert.Condition(hi < sequence.Count);
+            Assert.Condition(lo <= hi);
+            Assert.NotNull(comparer);
 
             var pi = hi;
             var li = lo;
@@ -148,20 +147,22 @@ namespace Abacaxi
         private static void QuickSortRecursive<T>([NotNull] IList<T> sequence, int lo, int hi,
             [NotNull] IComparer<T> comparer)
         {
-            Assert.NotNull(sequence != null);
-            Assert.NotNull(lo >= 0);
-            Assert.NotNull(hi < sequence.Count);
-            Assert.NotNull(lo <= hi);
-            Assert.NotNull(comparer != null);
+            Assert.NotNull(sequence);
+            Assert.Condition(lo >= 0);
+            Assert.Condition(hi < sequence.Count);
+            Assert.Condition(lo <= hi);
+            Assert.NotNull(comparer);
 
             if (hi - lo == 1)
             {
-                if (comparer.Compare(sequence[lo], sequence[hi]) > 0)
+                if (comparer.Compare(sequence[lo], sequence[hi]) <= 0)
                 {
-                    var temp = sequence[lo];
-                    sequence[lo] = sequence[hi];
-                    sequence[hi] = temp;
+                    return;
                 }
+
+                var temp = sequence[lo];
+                sequence[lo] = sequence[hi];
+                sequence[hi] = temp;
             }
             else
             {
@@ -180,15 +181,15 @@ namespace Abacaxi
         private static void MergeSegments<T>([NotNull] IList<T> sequence, int llo, int lhi, int rlo, int rhi,
             [NotNull] IComparer<T> comparer)
         {
-            Assert.NotNull(sequence != null);
-            Assert.NotNull(comparer != null);
-            Assert.NotNull(llo >= 0);
-            Assert.NotNull(lhi < sequence.Count);
-            Assert.NotNull(llo <= lhi);
-            Assert.NotNull(rlo >= 0);
-            Assert.NotNull(rhi < sequence.Count);
-            Assert.NotNull(rlo <= rhi);
-            Assert.NotNull(rlo > lhi);
+            Assert.NotNull(sequence);
+            Assert.NotNull(comparer);
+            Assert.Condition(llo >= 0);
+            Assert.Condition(lhi < sequence.Count);
+            Assert.Condition(llo <= lhi);
+            Assert.Condition(rlo >= 0);
+            Assert.Condition(rhi < sequence.Count);
+            Assert.Condition(rlo <= rhi);
+            Assert.Condition(rlo > lhi);
 
             var mergeLength = (lhi - llo) + (rhi - rlo) + 2;
             var mergeArray = new T[mergeLength];
@@ -228,11 +229,11 @@ namespace Abacaxi
             int hi,
             [NotNull] IComparer<T> comparer)
         {
-            Assert.NotNull(sequence != null);
-            Assert.NotNull(comparer != null);
-            Assert.NotNull(lo >= 0);
-            Assert.NotNull(hi < sequence.Count);
-            Assert.NotNull(lo <= hi);
+            Assert.NotNull(sequence);
+            Assert.NotNull(comparer);
+            Assert.Condition(lo >= 0);
+            Assert.Condition(hi < sequence.Count);
+            Assert.Condition(lo <= hi);
 
             if (lo == hi)
             {
@@ -268,14 +269,16 @@ namespace Abacaxi
                 swapped = false;
                 for (var i = startIndex; i < startIndex + length - 1; i++)
                 {
-                    if (comparer.Compare(sequence[i], sequence[i + 1]) > 0)
+                    if (comparer.Compare(sequence[i], sequence[i + 1]) <= 0)
                     {
-                        var temp = sequence[i];
-                        sequence[i] = sequence[i + 1];
-                        sequence[i + 1] = temp;
-
-                        swapped = true;
+                        continue;
                     }
+
+                    var temp = sequence[i];
+                    sequence[i] = sequence[i + 1];
+                    sequence[i + 1] = temp;
+
+                    swapped = true;
                 }
             }
         }
@@ -304,14 +307,16 @@ namespace Abacaxi
                 swapped = false;
                 for (var i = lowerBound; i < upperBound; i++)
                 {
-                    if (comparer.Compare(sequence[i], sequence[i + 1]) > 0)
+                    if (comparer.Compare(sequence[i], sequence[i + 1]) <= 0)
                     {
-                        var temp = sequence[i];
-                        sequence[i] = sequence[i + 1];
-                        sequence[i + 1] = temp;
-
-                        swapped = true;
+                        continue;
                     }
+
+                    var temp = sequence[i];
+                    sequence[i] = sequence[i + 1];
+                    sequence[i + 1] = temp;
+
+                    swapped = true;
                 }
 
                 upperBound--;
@@ -321,14 +326,16 @@ namespace Abacaxi
                     swapped = false;
                     for (var i = upperBound; i > lowerBound; i--)
                     {
-                        if (comparer.Compare(sequence[i - 1], sequence[i]) > 0)
+                        if (comparer.Compare(sequence[i - 1], sequence[i]) <= 0)
                         {
-                            var temp = sequence[i];
-                            sequence[i] = sequence[i - 1];
-                            sequence[i - 1] = temp;
-
-                            swapped = true;
+                            continue;
                         }
+
+                        var temp = sequence[i];
+                        sequence[i] = sequence[i - 1];
+                        sequence[i - 1] = temp;
+
+                        swapped = true;
                     }
                 }
 
@@ -363,14 +370,16 @@ namespace Abacaxi
 
                 for (var i = startIndex; i < startIndex + length - gap; i++)
                 {
-                    if (comparer.Compare(sequence[i], sequence[i + gap]) > 0)
+                    if (comparer.Compare(sequence[i], sequence[i + gap]) <= 0)
                     {
-                        var temp = sequence[i];
-                        sequence[i] = sequence[i + gap];
-                        sequence[i + gap] = temp;
-
-                        finished = false;
+                        continue;
                     }
+
+                    var temp = sequence[i];
+                    sequence[i] = sequence[i + gap];
+                    sequence[i + gap] = temp;
+
+                    finished = false;
                 }
             }
         }
@@ -513,26 +522,30 @@ namespace Abacaxi
                 swapped = false;
                 for (var i = lowerBound; i < upperBound; i += 2)
                 {
-                    if (comparer.Compare(sequence[i], sequence[i + 1]) > 0)
+                    if (comparer.Compare(sequence[i], sequence[i + 1]) <= 0)
                     {
-                        var temp = sequence[i];
-                        sequence[i] = sequence[i + 1];
-                        sequence[i + 1] = temp;
-
-                        swapped = true;
+                        continue;
                     }
+
+                    var temp = sequence[i];
+                    sequence[i] = sequence[i + 1];
+                    sequence[i + 1] = temp;
+
+                    swapped = true;
                 }
 
                 for (var i = lowerBound + 1; i < upperBound; i += 2)
                 {
-                    if (comparer.Compare(sequence[i], sequence[i + 1]) > 0)
+                    if (comparer.Compare(sequence[i], sequence[i + 1]) <= 0)
                     {
-                        var temp = sequence[i];
-                        sequence[i] = sequence[i + 1];
-                        sequence[i + 1] = temp;
-
-                        swapped = true;
+                        continue;
                     }
+
+                    var temp = sequence[i];
+                    sequence[i] = sequence[i + 1];
+                    sequence[i + 1] = temp;
+
+                    swapped = true;
                 }
             }
         }

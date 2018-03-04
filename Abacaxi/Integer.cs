@@ -47,18 +47,20 @@ namespace Abacaxi
 
         private static void AppendLastDigit(ref int number, ref int result, ref int power, int @base)
         {
-            if (number >= 0)
+            if (number < 0)
             {
-                var digit = number % @base;
-                number /= @base;
-                if (number == 0)
-                {
-                    number = -1;
-                }
-
-                result = result >= 0 ? (digit * power) + result : digit;
-                power *= @base;
+                return;
             }
+
+            var digit = number % @base;
+            number /= @base;
+            if (number == 0)
+            {
+                number = -1;
+            }
+
+            result = result >= 0 ? (digit * power) + result : digit;
+            power *= @base;
         }
 
         /// <summary>
@@ -111,6 +113,7 @@ namespace Abacaxi
                         factors++;
 
                         yield return sign * i;
+
                         number = number / i;
                         limit = GetIterationLimit(number);
                     }
@@ -123,6 +126,7 @@ namespace Abacaxi
                 if (number != sign)
                 {
                     yield return number;
+
                     factors++;
                 }
 

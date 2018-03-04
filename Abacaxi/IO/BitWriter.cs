@@ -18,7 +18,6 @@ namespace Abacaxi.IO
     using System;
     using System.Text;
     using System.IO;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -60,8 +59,8 @@ namespace Abacaxi.IO
 
         private static uint AssembleWord([NotNull] byte[] bytes, int index)
         {
-            Assert.NotNull(bytes != null);
-            Assert.NotNull(index + BytesInWord <= bytes.Length);
+            Assert.NotNull(bytes);
+            Assert.Condition(index + BytesInWord <= bytes.Length);
 
             var word =
                 ((uint)bytes[index + 3] << 24) |
@@ -100,10 +99,10 @@ namespace Abacaxi.IO
 
         private void WriteToStream([NotNull] byte[] bytes, int offset, int count)
         {
-            Assert.NotNull(bytes != null);
-            Assert.NotNull(offset >= 0 && offset < bytes.Length);
-            Assert.NotNull(count > 0 && offset + count <= bytes.Length);
-            Assert.NotNull(_stream != null);
+            Assert.NotNull(bytes);
+            Assert.Condition(offset >= 0 && offset < bytes.Length);
+            Assert.Condition(count > 0 && offset + count <= bytes.Length);
+            Assert.NotNull(_stream);
 
             _stream.Write(bytes, offset, count);
         }
@@ -462,7 +461,7 @@ namespace Abacaxi.IO
                 return;
             }
 
-            Assert.NotNull(_stream != null);
+            Assert.NotNull(_stream);
 
             _stream.Dispose();
             _stream = null;

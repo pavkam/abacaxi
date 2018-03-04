@@ -18,7 +18,6 @@ namespace Abacaxi
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -28,14 +27,13 @@ namespace Abacaxi
     [PublicAPI]
     public static class Set
     {
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         private static IEnumerable<ISet<T>> FindMinimumNumberOfSetsWithFullCoverageIterate<T>(
-            [NotNull] [ItemNotNull] IEnumerable<ISet<T>> sets,
+            [NotNull,ItemNotNull]  IEnumerable<ISet<T>> sets,
             [NotNull] IEqualityComparer<T> comparer)
         {
-            Assert.NotNull(sets != null);
-            Assert.NotNull(comparer != null);
+            Assert.NotNull(sets);
+            Assert.NotNull(comparer);
 
             var copies = sets.ToSet();
             var superSet = new HashSet<T>(comparer);
@@ -57,12 +55,14 @@ namespace Abacaxi
                     }
                 }
 
-                if (bestSet != null)
+                if (bestSet == null)
                 {
-                    superSet.ExceptWith(bestSet);
-                    copies.Remove(bestSet);
-                    yield return bestSet;
+                    continue;
                 }
+
+                superSet.ExceptWith(bestSet);
+                copies.Remove(bestSet);
+                yield return bestSet;
             }
         }
 
@@ -74,10 +74,9 @@ namespace Abacaxi
         /// <param name="comparer">The comparer.</param>
         /// <returns>A sequence of selected sets whose union results in the full coverage.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sets"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         public static IEnumerable<ISet<T>> GetOptimalFullCoverage<T>(
-            [NotNull] [ItemNotNull] IEnumerable<ISet<T>> sets,
+            [NotNull, ItemNotNull]  IEnumerable<ISet<T>> sets,
             [NotNull] IEqualityComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sets), sets);
@@ -98,13 +97,13 @@ namespace Abacaxi
             }
         }
 
-        [NotNull]
-        [ItemNotNull]
-        private static IEnumerable<T[][]> EvaluateAllSubsetCombinationsIterate<T>([NotNull] IList<T> sequence,
+        [NotNull, ItemNotNull]
+        private static IEnumerable<T[][]> EvaluateAllSubsetCombinationsIterate<T>(
+            [NotNull] IList<T> sequence,
             int subsets)
         {
-            Assert.NotNull(sequence != null);
-            Assert.NotNull(subsets > 0);
+            Assert.NotNull(sequence);
+            Assert.Condition(subsets > 0);
 
             if (sequence.Count == 0)
             {
@@ -128,20 +127,23 @@ namespace Abacaxi
                 {
                     resultSets[step.SetIndex - 1].RemoveAt(resultSets[step.SetIndex - 1].Count - 1);
                 }
-                if (step.SetIndex < subsets)
+
+                if (step.SetIndex >= subsets)
                 {
-                    resultSets[step.SetIndex].Add(sequence[step.ItemIndex]);
+                    continue;
+                }
 
-                    stack.Push(new EvaluateAllSubsetCombinationsStep(step.ItemIndex, step.SetIndex + 1));
+                resultSets[step.SetIndex].Add(sequence[step.ItemIndex]);
 
-                    if (step.ItemIndex == sequence.Count - 1)
-                    {
-                        yield return resultSets.Select(s => s.ToArray()).ToArray();
-                    }
-                    else
-                    {
-                        stack.Push(new EvaluateAllSubsetCombinationsStep(step.ItemIndex + 1, 0));
-                    }
+                stack.Push(new EvaluateAllSubsetCombinationsStep(step.ItemIndex, step.SetIndex + 1));
+
+                if (step.ItemIndex == sequence.Count - 1)
+                {
+                    yield return resultSets.Select(s => s.ToArray()).ToArray();
+                }
+                else
+                {
+                    stack.Push(new EvaluateAllSubsetCombinationsStep(step.ItemIndex + 1, 0));
                 }
             }
         }
@@ -155,8 +157,7 @@ namespace Abacaxi
         /// <returns>All the combinations of subsets.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets"/> is less than one.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         public static IEnumerable<T[][]> EnumerateSubsetCombinations<T>([NotNull] IList<T> sequence, int subsets)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -176,8 +177,7 @@ namespace Abacaxi
         /// <returns>The first sequence of subsets that have the same aggregated value.</returns>
         /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="aggregator"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets"/> is less than one.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         public static T[][] SplitIntoSubsetsOfEqualValue<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Aggregator<T> aggregator,
@@ -204,11 +204,13 @@ namespace Abacaxi
                     }
                     else
                     {
-                        if (comparer.Compare(firstSum, subsetSum) != 0)
+                        if (comparer.Compare(firstSum, subsetSum) == 0)
                         {
-                            allEqual = false;
-                            break;
+                            continue;
                         }
+
+                        allEqual = false;
+                        break;
                     }
                 }
 
@@ -288,11 +290,8 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="target"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
         public static bool ContainsSubsetWithExactValue(
-            [NotNull] IEnumerable<int> sequence, 
-            int target)
-        {
-            return GetSubsetWithNearValue(sequence, target).Sum() == target;
-        }
+            [NotNull] IEnumerable<int> sequence,
+            int target) => GetSubsetWithNearValue(sequence, target).Sum() == target;
 
         /// <summary>
         /// Finds the elements, which summed, yield the biggest sum.
@@ -309,7 +308,7 @@ namespace Abacaxi
         public static T[] GetSubsetWithGreatestValue<T>(
             [NotNull] IEnumerable<T> sequence,
             int size,
-            [NotNull] Aggregator<T> aggregator, 
+            [NotNull] Aggregator<T> aggregator,
             [NotNull] IComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);

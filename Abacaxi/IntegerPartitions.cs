@@ -33,46 +33,49 @@ namespace Abacaxi
         [NotNull]
         public static IEnumerable<int[]> Enumerate(int number)
         {
-            if (number != 0)
+            if (number == 0)
             {
-                var selection = new Stack<int>();
-                var numbers = new Stack<int>();
-                var i = 0;
-                var doNotBreak = false;
-                var sign = Math.Sign(number);
+                yield break;
+            }
 
-                for (;;)
+            var selection = new Stack<int>();
+            var numbers = new Stack<int>();
+            var i = 0;
+            var doNotBreak = false;
+            var sign = Math.Sign(number);
+
+            for (;;)
+            {
+                if (i == 0)
                 {
-                    if (i == 0)
+                    selection.Push(number);
+                    yield return selection.ToArray();
+
+                    selection.Pop();
+
+                    i = sign;
+                }
+                else if (i * sign > number / 2 * sign || doNotBreak)
+                {
+                    if (selection.Count == 0)
                     {
-                        selection.Push(number);
-                        yield return selection.ToArray();
-                        selection.Pop();
-
-                        i = sign;
+                        break;
                     }
-                    else if (i * sign > number / 2 * sign || doNotBreak)
-                    {
-                        if (selection.Count == 0)
-                        {
-                            break;
-                        }
 
-                        number = numbers.Pop();
-                        i = selection.Pop() + sign;
+                    number = numbers.Pop();
+                    i = selection.Pop() + sign;
 
-                        doNotBreak = false;
-                    }
-                    else
-                    {
-                        selection.Push(i);
-                        numbers.Push(number);
+                    doNotBreak = false;
+                }
+                else
+                {
+                    selection.Push(i);
+                    numbers.Push(number);
 
-                        doNotBreak = i * 2 == number;
+                    doNotBreak = i * 2 == number;
 
-                        number = number - i;
-                        i = 0;
-                    }
+                    number = number - i;
+                    i = 0;
                 }
             }
         }

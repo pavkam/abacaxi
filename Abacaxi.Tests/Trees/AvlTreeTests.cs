@@ -18,7 +18,6 @@ namespace Abacaxi.Tests.Trees
     using NUnit.Framework;
     using Abacaxi.Trees;
     using System.Collections.Generic;
-    using JetBrains.Annotations;
 
     [TestFixture]
     public sealed class AvlTreeTests : BinarySearchTreeTests

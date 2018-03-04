@@ -23,7 +23,7 @@ namespace Abacaxi.Graphs
     /// Class used to describe a vertex in the context of a graph.
     /// </summary>
     [PublicAPI]
-    public class VertexDescriptor<TVertex>
+    public sealed class VertexDescriptor<TVertex>
     {
         /// <summary>
         /// Gets the vertex.
@@ -64,7 +64,7 @@ namespace Abacaxi.Graphs
         /// <param name="componentIndex">Index of the component.</param>
         /// <param name="inDegree">The in-degree.</param>
         /// <param name="outDegree">The out-degree.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="componentIndex"/> or 
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="componentIndex"/> or
         /// <paramref name="inDegree"/> or <paramref name="outDegree"/> are less than zero.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="vertex"/> is <c>null</c>.</exception>
         public VertexDescriptor([NotNull] TVertex vertex, int componentIndex, int inDegree, int outDegree)
@@ -86,9 +86,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            return $"{InDegree} => {Vertex} ({ComponentIndex}) => {OutDegree}";
-        }
+        [NotNull]
+        public override string ToString() => $"{InDegree} => {Vertex} ({ComponentIndex}) => {OutDegree}";
     }
 }

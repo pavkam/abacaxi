@@ -17,7 +17,6 @@ namespace Abacaxi.Internal
 {
     using System;
     using System.Collections;
-    using System.Diagnostics;
     using System.Collections.Generic;
     using JetBrains.Annotations;
 
@@ -51,10 +50,10 @@ namespace Abacaxi.Internal
 
         public ListViewWrapper([NotNull] IList<T> sequence, int startIndex, int length)
         {
-            Assert.NotNull(sequence != null);
-            Assert.NotNull(startIndex >= 0);
-            Assert.NotNull(length >= 0);
-            Assert.NotNull(length + startIndex <= sequence.Count);
+            Assert.NotNull(sequence);
+            Assert.Condition(startIndex >= 0);
+            Assert.Condition(length >= 0);
+            Assert.Condition(length + startIndex <= sequence.Count);
 
             _startIndex = startIndex;
             Count = length;
@@ -70,10 +69,7 @@ namespace Abacaxi.Internal
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public void Add(T item)
         {
@@ -100,9 +96,9 @@ namespace Abacaxi.Internal
             AssertSegmentStillValid();
 
             return IndexOf(item) > -1;
-        } 
+        }
 
-        public void CopyTo(T[] array, int arrayIndex)
+        public void CopyTo([NotNull] T[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
@@ -122,13 +118,15 @@ namespace Abacaxi.Internal
 
             for (var i = 0; i < Count; i++)
             {
-                if (Equals(_sequence[_startIndex + i], item))
+                if (!Equals(_sequence[_startIndex + i], item))
                 {
-                    _sequence.RemoveAt(_startIndex + i);
-                    Count--;
-
-                    return true;
+                    continue;
                 }
+
+                _sequence.RemoveAt(_startIndex + i);
+                Count--;
+
+                return true;
             }
 
             return false;

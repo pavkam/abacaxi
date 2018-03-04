@@ -20,7 +20,6 @@ namespace Abacaxi
     using JetBrains.Annotations;
     using System.Globalization;
     using System.Text;
-    using System.Diagnostics;
 
     /// <summary>
     /// Extension method for the <see cref="string"/> data type.
@@ -268,11 +267,10 @@ namespace Abacaxi
             return result.ToArray();
         }
 
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         private static IEnumerable<string> SplitIntoLinesIterate([NotNull] this string s)
         {
-            Assert.NotNull(s != null);
+            Assert.NotNull(s);
 
             var si = 0;
             var ci = 0;
@@ -323,8 +321,7 @@ namespace Abacaxi
         /// <param name="s">The string to split.</param>
         /// <returns>A sequence of strings, each representing an individual line in the string.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull,ItemNotNull]
         public static IEnumerable<string> SplitIntoLines([NotNull] this string s)
         {
             Validate.ArgumentNotNull(nameof(s), s);
@@ -335,8 +332,8 @@ namespace Abacaxi
         [NotNull]
         private static IEnumerable<string> WordWrapIterate([NotNull] this string s, int lineLength)
         {
-            Assert.NotNull(s != null);
-            Assert.NotNull(lineLength > 0);
+            Assert.NotNull(s);
+            Assert.Condition(lineLength > 0);
 
             foreach (var line in SplitIntoLinesIterate(s))
             {
@@ -422,6 +419,7 @@ namespace Abacaxi
             var result = new StringBuilder();
             foreach (var c in normalizedForm)
             {
+                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (CharUnicodeInfo.GetUnicodeCategory(c))
                 {
                     case UnicodeCategory.NonSpacingMark:
