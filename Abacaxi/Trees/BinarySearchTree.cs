@@ -454,7 +454,7 @@ namespace Abacaxi.Trees
         /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="NotImplementedException"></exception>
-        public void CopyTo([NotNull] KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
@@ -536,7 +536,6 @@ namespace Abacaxi.Trees
         /// <returns>
         /// An enumerator that can be used to iterate through the tree.
         /// </returns>
-        [NotNull]
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => GetEnumerator(TreeTraversalMode.InOrder);
 
         /// <summary>
@@ -545,7 +544,6 @@ namespace Abacaxi.Trees
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the tree.
         /// </returns>
-        [NotNull]
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

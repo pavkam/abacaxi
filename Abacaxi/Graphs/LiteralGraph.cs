@@ -285,7 +285,6 @@ namespace Abacaxi.Graphs
         /// Gets the enumerator.
         /// </summary>
         /// <returns></returns>
-        [NotNull]
         public override IEnumerator<char> GetEnumerator() => _vertices.Keys.GetEnumerator();
 
         /// <summary>

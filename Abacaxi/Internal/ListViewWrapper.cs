@@ -98,7 +98,7 @@ namespace Abacaxi.Internal
             return IndexOf(item) > -1;
         }
 
-        public void CopyTo([NotNull] T[] array, int arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);

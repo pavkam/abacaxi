@@ -113,7 +113,6 @@ namespace Abacaxi.Graphs
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
-        [NotNull]
         public override IEnumerator<TVertex> GetEnumerator() => _vertices.GetEnumerator();
 
         /// <summary>

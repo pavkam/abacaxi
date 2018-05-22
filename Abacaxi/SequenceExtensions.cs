@@ -497,7 +497,7 @@ namespace Abacaxi
                 target);
         }
 
-        [NotNull]
+        [ItemCanBeNull, NotNull]
         private static IEnumerable<T> InterleaveIterate<T>(
             [NotNull] IComparer<T> comparer,
             [NotNull] IEnumerable<T> sequence,
@@ -858,7 +858,7 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="dict"/> or <paramref name="updateFunc"/> are <c>null</c>.</exception>
         public static bool AddOrUpdate<TKey, TValue>(
             [NotNull] this IDictionary<TKey, TValue> dict,
-            TKey key, TValue value,
+            [NotNull] TKey key, TValue value,
             [NotNull] Func<TValue, TValue> updateFunc)
         {
             Validate.ArgumentNotNull(nameof(dict), dict);

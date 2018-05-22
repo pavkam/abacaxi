@@ -208,7 +208,6 @@ namespace Abacaxi.Containers
         /// <returns>
         /// An enumerator that can be used to iterate through the set.
         /// </returns>
-        [NotNull]
         public IEnumerator<T> GetEnumerator() => _nodes.Keys.GetEnumerator();
 
         /// <summary>
@@ -217,7 +216,6 @@ namespace Abacaxi.Containers
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the set.
         /// </returns>
-        [NotNull]
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

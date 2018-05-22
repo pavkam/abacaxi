@@ -329,7 +329,7 @@ namespace Abacaxi
             return SplitIntoLinesIterate(s);
         }
 
-        [NotNull]
+        [ItemNotNull, NotNull]
         private static IEnumerable<string> WordWrapIterate([NotNull] this string s, int lineLength)
         {
             Assert.NotNull(s);

@@ -30,7 +30,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="number">The input number.</param>
         /// <returns>A sequence of combinations.</returns>
-        [NotNull]
+        [ItemNotNull, NotNull]
         public static IEnumerable<int[]> Enumerate(int number)
         {
             if (number == 0)

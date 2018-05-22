@@ -242,7 +242,7 @@ namespace Abacaxi.Containers
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="array"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the destination <paramref name="array"/> does not have enough
         /// space to hold the contents of the set.</exception>
-        public void CopyTo([NotNull] TValue[] array, int arrayIndex)
+        public void CopyTo(TValue[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
