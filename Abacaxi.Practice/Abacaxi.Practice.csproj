@@ -15,20 +15,12 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <FileVersion>1.0.0.0</FileVersion>
     <RepositoryUrl>https://github.com/pavkam/abacaxi</RepositoryUrl>
-    <RepositoryType>GIT</RepositoryType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\Abacaxi.Practice.xml</DocumentationFile>
+    <RepositoryType>git</RepositoryType>
+    <DocumentationFile>$(OutputPath)\Abacaxi.Practice.xml</DocumentationFile>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
-    <NoWarn />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\Abacaxi.Practice.xml</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
-  </ItemGroup>
+ 
   <ItemGroup>
     <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />
   </ItemGroup>

@@ -16,3 +16,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Abacaxi.Practice")]
+[assembly: InternalsVisibleTo("Abacaxi.Tests")]
