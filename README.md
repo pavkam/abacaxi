@@ -76,7 +76,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.Diff` | Implements the generic *edit distance* algorithm. See related material: <https://en.wikipedia.org/wiki/Edit_distance> |
 | `SequenceExtensions. GetLongestCommonSubSequence` |  |
 | `SequenceExtensions.GetItemFrequencies` |  |
-| `SequenceExtensions.ToSet` | Helper method to *convert a given sequence into a set*. |
+| `SequenceExtensions.ToSet` | Helper methods to *convert a given sequence into a set*. |
 | `SequenceExtensions.AsList` | Helper method that *interprets a given sequence as a list*. If the sequence is already a list/array then the original object is returned; otherwise, the sequence is converted to an array. **This method may or may not create a new object and does not guarantee mutability of the result.** |
 | `SequenceExtensions.AddOrUpdate` | Extends the dictionary classes with the ability to *add a new, or update an existing* key/pair. |
 | `SequenceExtensions.Append` | A number of small utility methods used to *append items to arrays*. If the array is null, a new array is created. These methods return new arrays as their return values. |
@@ -116,3 +116,4 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `StringExtensions.SplitIntoLines` | *Splits* a given string into its contituent lines. Treats both _"\n"_ and _"\r\n"_ as line breaks. |
 | `StringExtensions.WordWrap` | *Word-wraps* a string to a given max line length. Uses white-spaces and puctuation characters as potential line breaks. |
 | `StringExtensions.StripDiacritics` | *Strips the Unicode diacritics* from a text. Useful for text normalization in searches. |
+| `StringBuilderExtensions.AppendNotEmptyLine` | *Appends a line to the string builder* if the line is not empty. |
