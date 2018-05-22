@@ -170,7 +170,7 @@ namespace Abacaxi
 
                 for (var i = dyna.Count - 1; i >= 0; i--)
                 {
-                    if (comparer.Compare(dyna[i].Item1, e) >= 0 || (pi != -1 && pm >= dyna[i].Item2))
+                    if (comparer.Compare(dyna[i].Item1, e) >= 0 || pi != -1 && pm >= dyna[i].Item2)
                     {
                         continue;
                     }
@@ -1300,7 +1300,7 @@ namespace Abacaxi
                     var nextItem = enumerator.Current;
                     var nextMin = selector(nextItem);
 
-                    if (nextMin == null || (min != null && comparer.Compare(min, nextMin) <= 0))
+                    if (nextMin == null || min != null && comparer.Compare(min, nextMin) <= 0)
                     {
                         continue;
                     }
@@ -1374,7 +1374,7 @@ namespace Abacaxi
                     var nextItem = enumerator.Current;
                     var nextMin = selector(nextItem);
 
-                    if (nextMin == null || (min != null && comparer.Compare(min, nextMin) >= 0))
+                    if (nextMin == null || min != null && comparer.Compare(min, nextMin) >= 0)
                     {
                         continue;
                     }

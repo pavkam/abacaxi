@@ -74,7 +74,7 @@ namespace Abacaxi.Containers
         {
             while (ci > 0)
             {
-                var pi = (ci % 2 == 1) ? (ci - 1) / 2 : (ci - 2) / 2;
+                var pi = ci % 2 == 1 ? (ci - 1) / 2 : (ci - 2) / 2;
                 if (_comparer.Compare(array[pi], array[ci]) < 0)
                 {
                     var temp = array[ci];
@@ -303,7 +303,7 @@ namespace Abacaxi.Containers
                 {
                     _array[i] = _array[Count - 1];
 
-                    var pi = (i % 2 == 1) ? (i - 1) / 2 : (i - 2) / 2;
+                    var pi = i % 2 == 1 ? (i - 1) / 2 : (i - 2) / 2;
                     if (pi >= 0 && _comparer.Compare(_array[pi], _array[i]) < 0)
                     {
                         SiftUp(_array, i);

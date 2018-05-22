@@ -57,7 +57,7 @@ namespace Abacaxi.Practice
                 if (multipliers[i] <= number)
                 {
                     number -= multipliers[i];
-                    result += (1 << i);
+                    result += 1 << i;
                 }
 
                 i--;

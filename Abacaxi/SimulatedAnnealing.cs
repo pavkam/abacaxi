@@ -157,7 +157,7 @@ namespace Abacaxi
                     var flip = random.NextDouble();
 
                     var delta = solutionTransitionFunc(solution, problemInput, i1, i2);
-                    var exponent = (-delta / currentSolutionCost) / (kb * temperature);
+                    var exponent = -delta / currentSolutionCost / (kb * temperature);
                     var merit = Math.Pow(Math.E, exponent);
 
                     if (delta < 0)

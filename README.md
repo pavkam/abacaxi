@@ -51,32 +51,32 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `FibonacciSequence.Enumerate` | Lists all *Fibonacci numbers* up to a given index in the series. See related material: <https://en.wikipedia.org/wiki/Fibonacci_number> |
 | `FibonacciSequence.GetMember` | Returns the *Fibonacci number* at a given index in the series. See related material: <https://en.wikipedia.org/wiki/Fibonacci_number> |
 | `Integer.DeconstructIntoPowersOfTwo` | *Deconstructs* an integer into a sum of powers of two. |
-| `Integer.DeconstructIntoPrimeFactors` |  |
+| `Integer.DeconstructIntoPrimeFactors` | *Deconstructs* an integer into a prime factors. |
 | `Integer.IsPrime` | Checks whether an integer is a *prime number*. |
-| `Integer.Zip` |  |
-| `Integer.Divide` |  |
-| `IntegerPartitions.Enumerate` |  |
-| `IntegerPartitions.GetCount` |  |
+| `Integer.Zip` | *Zips the digits* of two integers into a new integer. |
+| `Integer.Divide` | A simple *division* algorithm. |
+| `IntegerPartitions.Enumerate` | Enumerates all *integer partition* for a given number. |
+| `IntegerPartitions.GetCount` | Calculates the number of *integer partitions* for a given number. |
 | `Knapsack.Fill` | The generic *0/1 knapsack* algorithm. See related material: <https://en.wikipedia.org/wiki/Knapsack_problem> |
-| `Pairing.GetWithMinimumCost` |  |
-| `Pairing.GetWithApproximateMinimumCost` |  |
+| `Pairing.GetWithMinimumCost` | *Pairs the elements of a sequence* as to minimize the cost of each pair. |
+| `Pairing.GetWithApproximateMinimumCost` | *Pairs the elements of a sequence* as to approximate minimization of the cost of each pair.  |
 | `ZArray.Construct` | Constructs a *Z-array* from a given input sequence. Z-arrays are useful for string pattern matching. See related materials: <http://wittawat.com/assets/talks/z_algorithm.pdf>, <https://shiv4289.wordpress.com/2013/09/17/z-algorithm-for-pattern-matching/> |
 | `RandomExtensions.Sample` | A *random sampling* algorithm for a sequence of objects. See related material: <https://en.wikipedia.org/wiki/Reservoir_sampling> |
 | `RandomExtensions.NextBool` | An extension method that allows retrieving a *random boolean* value. |
 | `RandomExtensions.NextItem` | An extension method that allows retrieving a *random item* from a sequence of objects. |
-| `SequenceExtensions. FindLongestIncreasingSequence` |  |
-| `SequenceExtensions. ContainsTwoElementsThatAggregateTo` |  |
+| `SequenceExtensions. FindLongestIncreasingSequence` | Finds the *longest increasing sequence* within a given sequence. |
+| `SequenceExtensions. ContainsTwoElementsThatAggregateTo` | Determines whether the sequence contains two elements *that aggregate to a given target*. |
 | `SequenceExtensions.FindDuplicates` | *Finds duplicates* in a sequence of objects. A specialized and optimized version for integer sequences also provided. |
 | `SequenceExtensions.ExtractNestedBlocks` | An algorithm to allow *extracting nested* sub-sequences from a sequence (e.g. _"(a(b))"_ would return _"(b)"_ then _"(a(b))"_). |
-| `SequenceExtensions. FindSubsequencesWithGivenAggregatedValue` |  |
+| `SequenceExtensions. FindSubsequencesWithGivenAggregatedValue` | Finds all *sub-sequences of a given aggregated value*. |
 | `SequenceExtensions.Interleave` | Creates a sequence which combines multiple *interleaved sequences* based on a given comparison. |
 | `SequenceExtensions.Reverse` | *Reverses* a sequence in place. |
 | `SequenceExtensions.Repeat` | Creates a sequence which is based on the original sequence *repeated a number of times*. |
 | `SequenceExtensions.BinarySearch` | Implements the standard *binary search* algorithm. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
 | `SequenceExtensions.Diff` | Implements the generic *edit distance* algorithm. See related material: <https://en.wikipedia.org/wiki/Edit_distance> |
 | `SequenceExtensions. GetLongestCommonSubSequence` |  |
-| `SequenceExtensions.GetItemFrequencies` |  |
-| `SequenceExtensions.ToSet` | Helper method to *convert a given sequence into a set*. |
+| `SequenceExtensions.GetItemFrequencies` | Gets the *items and their frequencies* within a sequence. |
+| `SequenceExtensions.ToSet` | Helper methods to *convert a given sequence into a set*. |
 | `SequenceExtensions.AsList` | Helper method that *interprets a given sequence as a list*. If the sequence is already a list/array then the original object is returned; otherwise, the sequence is converted to an array. **This method may or may not create a new object and does not guarantee mutability of the result.** |
 | `SequenceExtensions.AddOrUpdate` | Extends the dictionary classes with the ability to *add a new, or update an existing* key/pair. |
 | `SequenceExtensions.Append` | A number of small utility methods used to *append items to arrays*. If the array is null, a new array is created. These methods return new arrays as their return values. |
@@ -116,3 +116,4 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `StringExtensions.SplitIntoLines` | *Splits* a given string into its contituent lines. Treats both _"\n"_ and _"\r\n"_ as line breaks. |
 | `StringExtensions.WordWrap` | *Word-wraps* a string to a given max line length. Uses white-spaces and puctuation characters as potential line breaks. |
 | `StringExtensions.StripDiacritics` | *Strips the Unicode diacritics* from a text. Useful for text normalization in searches. |
+| `StringBuilderExtensions.AppendNotEmptyLine` | *Appends a line to the string builder* if the line is not empty. |

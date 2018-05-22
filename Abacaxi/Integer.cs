@@ -59,7 +59,7 @@ namespace Abacaxi
                 number = -1;
             }
 
-            result = result >= 0 ? (digit * power) + result : digit;
+            result = result >= 0 ? digit * power + result : digit;
             power *= @base;
         }
 
