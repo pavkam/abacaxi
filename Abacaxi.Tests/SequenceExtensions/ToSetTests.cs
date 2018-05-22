@@ -13,33 +13,44 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Collections.Generic;
     using NUnit.Framework;
+    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class ToSetTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfSequenceIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToSet(EqualityComparer<int>.Default));
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfSequenceIsNull2()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToSet());
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToSet_ThrowsException_IfSequenceIsNull3()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((int[])null).ToSet(a => a));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfEqualityComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new[] {1}.ToSet(null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToSet_ThrowsException_IfSelectorIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.ToSet((Func<int, int>)null));
         }
 
         [Test]
@@ -56,6 +67,14 @@ namespace Abacaxi.Tests.SequenceExtensions
             var set = new[] {1, 1, 2, 3}.ToSet(EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(set, 1, 2, 3);
+        }
+
+        [Test]
+        public void ToSet_ReturnsAValidSet3()
+        {
+            var set = new[] { 1, 1, 2, 3 }.ToSet(a => a.ToString());
+
+            TestHelper.AssertSequence(set, "1", "2", "3");
         }
 
         [Test]

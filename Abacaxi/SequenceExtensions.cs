@@ -63,6 +63,7 @@ namespace Abacaxi
                 {
                     matrix[i, 0] = initColumnCellFunc(i);
                 }
+
                 if (i <= resultSequence.Count)
                 {
                     matrix[0, i] = initRowCellFunc(i);
@@ -104,14 +105,14 @@ namespace Abacaxi
             var pi2 = resultSequence.Count;
             for (;;)
             {
-                var ceds = matrix[pi1, pi2];
-                if (ceds.Operation == EditChoice.Cancel)
+                var choice = matrix[pi1, pi2];
+                if (choice.Operation == EditChoice.Cancel)
                 {
                     break;
                 }
 
                 Edit<T> edit;
-                switch (ceds.Operation)
+                switch (choice.Operation)
                 {
                     case EditChoice.Match:
                         var actualEdit = Equals(sequence[pi1 - 1], resultSequence[pi2 - 1])
@@ -240,6 +241,7 @@ namespace Abacaxi
                 {
                     return true;
                 }
+
                 if (cr > 0)
                 {
                     j--;
@@ -335,7 +337,7 @@ namespace Abacaxi
             return result.ToArray();
         }
 
-        [NotNull,ItemNotNull]
+        [NotNull, ItemNotNull]
         private static IEnumerable<T[]> ExtractNestedBlocksIterate<T>(
             [NotNull] this IEnumerable<T> sequence,
             T openBracket,
@@ -399,7 +401,7 @@ namespace Abacaxi
         /// <returns>The sequence of extracted groups, starting with the inner most ones.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">Throws if the number of open and close brackets do not match.</exception>
-        [NotNull,ItemNotNull]
+        [NotNull, ItemNotNull]
         public static IEnumerable<T[]> ExtractNestedBlocks<T>(
             [NotNull] this IEnumerable<T> sequence,
             T openBracket,
@@ -501,7 +503,7 @@ namespace Abacaxi
         private static IEnumerable<T> InterleaveIterate<T>(
             [NotNull] IComparer<T> comparer,
             [NotNull] IEnumerable<T> sequence,
-            [NotNull,ItemNotNull]  params IEnumerable<T>[] sequences)
+            [NotNull, ItemNotNull] params IEnumerable<T>[] sequences)
         {
             Assert.NotNull(comparer);
             Assert.NotNull(sequence);
@@ -555,7 +557,7 @@ namespace Abacaxi
         public static IEnumerable<T> Interleave<T>(
             [NotNull] IComparer<T> comparer,
             [NotNull] IEnumerable<T> sequence,
-            [NotNull,ItemNotNull]  params IEnumerable<T>[] sequences)
+            [NotNull, ItemNotNull] params IEnumerable<T>[] sequences)
         {
             Validate.ArgumentNotNull(nameof(comparer), comparer);
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -785,6 +787,33 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
             return new HashSet<T>(sequence);
+        }
+
+        /// <summary>
+        /// Converts a sequence to a set using a selector.
+        /// </summary>
+        /// <typeparam name="TSource">The type of items in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of elements in the resulting set.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="selector">The selector.</param>
+        /// <returns>
+        /// A new set containing the values selected from elements in <paramref name="sequence" />.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> or <paramref name="selector" /> is <c>null</c>.</exception>
+        [NotNull]
+        public static ISet<TResult> ToSet<TSource, TResult>([NotNull] this IEnumerable<TSource> sequence,
+            [NotNull] Func<TSource, TResult> selector)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(selector), selector);
+
+            var set = new HashSet<TResult>();
+            foreach (var item in sequence)
+            {
+                set.Add(selector(item));
+            }
+
+            return set;
         }
 
         /// <summary>
@@ -1084,7 +1113,7 @@ namespace Abacaxi
             return result;
         }
 
-        [NotNull,ItemNotNull]
+        [NotNull, ItemNotNull]
         private static IEnumerable<T[]> PartitionIterate<T>([NotNull] this IEnumerable<T> sequence, int size)
         {
             Assert.NotNull(sequence);
@@ -1127,7 +1156,7 @@ namespace Abacaxi
         /// <returns>A sequence of partitioned items. Each partition is of the specified <paramref name="size"/> (or less, if no elements are left).</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size"/> is less than one.</exception>
-        [NotNull,ItemNotNull]
+        [NotNull, ItemNotNull]
         public static IEnumerable<T[]> Partition<T>([NotNull] this IEnumerable<T> sequence, int size)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -1143,7 +1172,8 @@ namespace Abacaxi
         /// <param name="sequence">The sequence.</param>
         /// <returns>The original sequence or an empty one.</returns>
         [NotNull]
-        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence) => sequence ?? Enumerable.Empty<T>();
+        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence) =>
+            sequence ?? Enumerable.Empty<T>();
 
         /// <summary>
         /// Determines whether the given <paramref name="sequence"/> is null or empty.
@@ -1261,6 +1291,7 @@ namespace Abacaxi
                     {
                         return default(T);
                     }
+
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
                 }
 
@@ -1334,6 +1365,7 @@ namespace Abacaxi
                     {
                         return default(T);
                     }
+
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
                 }
 
