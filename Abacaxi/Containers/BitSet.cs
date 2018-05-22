@@ -433,7 +433,7 @@ namespace Abacaxi.Containers
 
                     if (chunk % 2 == 1)
                     {
-                        array[arrayIndex++] = _min + (ci * BitsPerChunk + bi);
+                        array[arrayIndex++] = _min + ci * BitsPerChunk + bi;
                     }
                 }
             }
@@ -494,7 +494,7 @@ namespace Abacaxi.Containers
 
                     if (chunk % 2 == 1)
                     {
-                        yield return _min + (ci * BitsPerChunk + bi);
+                        yield return _min + ci * BitsPerChunk + bi;
                     }
                 }
             }

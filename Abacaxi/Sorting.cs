@@ -191,7 +191,7 @@ namespace Abacaxi
             Assert.Condition(rlo <= rhi);
             Assert.Condition(rlo > lhi);
 
-            var mergeLength = (lhi - llo) + (rhi - rlo) + 2;
+            var mergeLength = lhi - llo + (rhi - rlo) + 2;
             var mergeArray = new T[mergeLength];
 
             var li = llo;

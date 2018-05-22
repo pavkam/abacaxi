@@ -198,7 +198,7 @@ namespace Abacaxi
 
                     return evaluateCostOfPairFunc(pair[0], pair[1]);
                 },
-                new SimulatedAnnealing.AlgorithmParameters(coolingSteps: steps, iterationsPerCoolingStep: steps));
+                new SimulatedAnnealing.AlgorithmParameters(steps, steps));
 
             return result.Select(pair =>
             {
