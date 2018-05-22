@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
@@ -17,7 +17,7 @@
     <FileVersion>1.1.0.0</FileVersion>
     <RepositoryUrl>https://github.com/pavkam/abacaxi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <DocumentationFile>$(OutputPath)\Abacaxi.xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)Abacaxi.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   

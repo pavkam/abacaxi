@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0</Version>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <Version>1.1</Version>
     <Authors>Alexandru Ciobanu (alex+git@ciobanu.org)</Authors>
     <Company>Alexandru Ciobanu (alex+git@ciobanu.org)</Company>
     <PackageLicenseUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/LICENSE</PackageLicenseUrl>
@@ -13,10 +13,10 @@
     <PackageTags>Algorithms Containers Learning Extensions</PackageTags>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <FileVersion>1.0.0.0</FileVersion>
+    <FileVersion>1.1.0.0</FileVersion>
     <RepositoryUrl>https://github.com/pavkam/abacaxi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <DocumentationFile>$(OutputPath)\Abacaxi.Practice.xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)Abacaxi.Practice.xml</DocumentationFile>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
   </PropertyGroup>
@@ -24,4 +24,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />
   </ItemGroup>
+  
 </Project>
