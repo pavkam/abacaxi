@@ -111,6 +111,12 @@ namespace Abacaxi.Tests.Containers
             Assert.Throws<ArgumentNullException>(() => _empty.RemoveConflicts(null, "1"));
         }
 
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Toggle_ThrowsException_ForNullTag()
+        {
+            Assert.Throws<ArgumentNullException>(() => _empty.Toggle(null, true));
+        }
+
         [Test]
         public void Toggle_AddsTagIfDoesNotExist()
         {
@@ -128,15 +134,16 @@ namespace Abacaxi.Tests.Containers
             squid.RemoveDependencies("B", "e");
 
             squid.Toggle("a", true);
-            AssertSet(_empty.Selection, "A", "b", "c", "D");
+            AssertSet(squid.Selection, "A", "b", "c", "D");
         }
 
         [Test]
         public void Toggle_DoesNothingIfTheTagDoesNotExist_AndRemoving()
         {
-            _empty.Toggle("A", false);
+            _empty.Toggle("A", true);
+            _empty.Toggle("B", false);
 
-            AssertSet(_empty.Selection);
+            AssertSet(_empty.Selection, "A");
         }
 
         [Test]
@@ -197,16 +204,17 @@ namespace Abacaxi.Tests.Containers
             AssertSet(_empty.Selection, "A", "B", "C", "D", "E");
 
             _empty.Toggle("C", false);
-            AssertSet(_empty.Selection, "A", "B");
+            AssertSet(_empty.Selection, "E", "D");
 
-            _empty.Toggle("A", false);
-            AssertSet(_empty.Selection);
+            _empty.Toggle("E", false);
+            AssertSet(_empty.Selection, "D");
 
+            _empty.Toggle("D", false);
             _empty.Toggle("C", true);
             AssertSet(_empty.Selection, "C", "D", "E");
 
             _empty.Toggle("E", false);
-            AssertSet(_empty.Selection, "C", "D");
+            AssertSet(_empty.Selection, "D");
         }
 
         [Test]
@@ -240,7 +248,7 @@ namespace Abacaxi.Tests.Containers
             AssertSet(_empty.Selection, "A", "B", "C", "D", "E");
 
             _empty.Toggle("C", false);
-            AssertSet(_empty.Selection, "D", "E");
+            AssertSet(_empty.Selection, "B", "D", "E");
         }
 
         [Test]
@@ -257,6 +265,8 @@ namespace Abacaxi.Tests.Containers
         {
             _empty.AddDependencies("A", "B", "C", "D");
             _empty.AddDependencies("D", "A");
+            _empty.AddDependencies("C", "D");
+            _empty.AddDependencies("B", "D");
             _empty.Toggle("A", true);
 
             AssertSet(_empty.Selection, "A", "B", "C", "D");
@@ -366,7 +376,7 @@ namespace Abacaxi.Tests.Containers
             AssertSet(_empty.Selection, "A", "B", "C", "G");
 
             _empty.Toggle("H", true);
-            AssertSet(_empty.Selection, "A", "B", "C", "G");
+            AssertSet(_empty.Selection, "A", "B", "C", "G", "H");
 
             _empty.Toggle("E", true);
             AssertSet(_empty.Selection, "D", "E", "G", "H");
@@ -381,7 +391,7 @@ namespace Abacaxi.Tests.Containers
             AssertSet(_empty.Selection, "A", "B", "C", "G");
 
             _empty.Toggle("F", true);
-            AssertSet(_empty.Selection, "D", "E", "F", "H");
+            AssertSet(_empty.Selection, "D", "E", "F", "G", "H");
         }
 
         [Test]
@@ -402,6 +412,34 @@ namespace Abacaxi.Tests.Containers
 
             _empty.Toggle("C", true);
             AssertSet(_empty.Selection, "C");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase7()
+        {
+            _empty.AddDependencies("A", "B");
+            _empty.AddDependencies("B", "C");
+            _empty.AddConflicts("A", "C");
+
+            _empty.Toggle("A", true);
+            _empty.RemoveConflicts("A", "C");
+            AssertSet(_empty.Selection);
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A", "B", "C");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase8()
+        {
+            _empty.Toggle("A", true);
+            _empty.Toggle("B", true);
+            _empty.AddDependencies("B", "C");
+
+            AssertSet(_empty.Selection, "A", "B", "C");
+            _empty.AddConflicts("A", "C");
+
+            AssertSet(_empty.Selection, "A");
         }
     }
 }

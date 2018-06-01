@@ -60,6 +60,52 @@ namespace Abacaxi.Containers
             return node;
         }
 
+        private void CollectDependentsRecursive(
+            [NotNull] Node node,
+            [NotNull] ISet<Node> dependents)
+        {
+            Assert.NotNull(node);
+            Assert.NotNull(dependents);
+
+            dependents.Add(node);
+
+            foreach (var dep in node.Dependents)
+            {
+                if (dependents.Add(dep))
+                {
+                    CollectDependentsRecursive(dep, dependents);
+                }
+            }
+        }
+
+        private void CollectDependenciesAndConflictsRecursive(
+            [NotNull] Node node,
+            [NotNull] ISet<Node> dependencies,
+            [NotNull] ISet<Node> conflicts)
+        {
+            Assert.NotNull(node);
+            Assert.NotNull(dependencies);
+            Assert.NotNull(conflicts);
+
+            dependencies.Add(node);
+
+            foreach (var dep in node.Dependencies)
+            {
+                if (dependencies.Add(dep))
+                {
+                    CollectDependenciesAndConflictsRecursive(dep, dependencies, conflicts);
+                }
+            }
+
+            foreach (var conflict in node.Conflicts)
+            {
+                if (conflicts.Add(conflict))
+                {
+                    CollectDependentsRecursive(conflict, conflicts);
+                }
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DependencySquid{TTag}"/> class.
         /// </summary>
@@ -88,19 +134,33 @@ namespace Abacaxi.Containers
         /// <param name="dependent">The dependent.</param>
         /// <param name="dependencies">The dependencies to add.</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="dependent" /> or <paramref name="dependencies"/> are null <c>null</c>.
+        ///     Thrown if <paramref name="dependent" /> or <paramref name="dependencies"/> are <c>null</c>.
         /// </exception>
         public void AddDependencies([NotNull] TTag dependent, [NotNull, ItemNotNull] params TTag[] dependencies)
         {
             Validate.ArgumentNotNull(nameof(dependent), dependent);
+            Validate.ArgumentNotNull(nameof(dependencies), dependencies);
 
             var dependentNode = GetOrAddNode(dependent);
+
+            var selected = _selected.Contains(dependentNode);
             foreach (var dependency in dependencies)
             {
                 var dependencyNode = GetOrAddNode(dependency);
 
                 dependentNode.Dependencies.Add(dependencyNode);
                 dependencyNode.Dependents.Add(dependentNode);
+
+                if (selected)
+                {
+                    var depDependencies = new HashSet<Node>();
+                    var depConflicts = new HashSet<Node>();
+
+                    CollectDependenciesAndConflictsRecursive(dependencyNode, depDependencies, depConflicts);
+
+                    _selected.UnionWith(depDependencies);
+                    _selected.ExceptWith(depConflicts);
+                }
             }
         }
 
@@ -110,17 +170,30 @@ namespace Abacaxi.Containers
         /// <param name="dependent">The dependent.</param>
         /// <param name="conflicts">The conflicts to add.</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="dependent" /> or <paramref name="conflicts"/> are null <c>null</c>.
+        ///     Thrown if <paramref name="dependent" /> or <paramref name="conflicts"/> are <c>null</c>.
         /// </exception>
         public void AddConflicts([NotNull] TTag dependent, [NotNull, ItemNotNull] params TTag[] conflicts)
         {
             Validate.ArgumentNotNull(nameof(dependent), dependent);
+            Validate.ArgumentNotNull(nameof(conflicts), conflicts);
 
             var dependentNode = GetOrAddNode(dependent);
+            var selected = _selected.Contains(dependentNode);
             foreach (var conflict in conflicts)
             {
                 var conflictNode = GetOrAddNode(conflict);
+
                 dependentNode.Conflicts.Add(conflictNode);
+                conflictNode.Conflicts.Add(dependentNode);
+
+                if (selected)
+                {
+                    var depDependents = new HashSet<Node>();
+
+                    CollectDependentsRecursive(conflictNode, depDependents);
+
+                    _selected.ExceptWith(depDependents);
+                }
             }
         }
 
@@ -130,11 +203,12 @@ namespace Abacaxi.Containers
         /// <param name="dependent">The dependent.</param>
         /// <param name="dependencies">The dependencies to remove.</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="dependent" /> or <paramref name="dependencies"/> are null <c>null</c>.
+        ///     Thrown if <paramref name="dependent" /> or <paramref name="dependencies"/> are <c>null</c>.
         /// </exception>
         public void RemoveDependencies([NotNull] TTag dependent, [NotNull, ItemNotNull] params TTag[] dependencies)
         {
             Validate.ArgumentNotNull(nameof(dependent), dependent);
+            Validate.ArgumentNotNull(nameof(dependencies), dependencies);
 
             if (!_all.TryGetValue(dependent, out var dependentNode))
             {
@@ -148,8 +222,8 @@ namespace Abacaxi.Containers
                     continue;
                 }
 
-                dependentNode.Dependencies.Add(dependencyNode);
-                dependencyNode.Dependents.Add(dependentNode);
+                dependentNode.Dependencies.Remove(dependencyNode);
+                dependencyNode.Dependents.Remove(dependentNode);
             }
         }
 
@@ -159,11 +233,12 @@ namespace Abacaxi.Containers
         /// <param name="dependent">The dependent.</param>
         /// <param name="conflicts">The conflicts to remove.</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="dependent" /> or <paramref name="conflicts"/> are null <c>null</c>.
+        ///     Thrown if <paramref name="dependent" /> or <paramref name="conflicts"/> are <c>null</c>.
         /// </exception>
         public void RemoveConflicts([NotNull] TTag dependent, [NotNull, ItemNotNull] params TTag[] conflicts)
         {
             Validate.ArgumentNotNull(nameof(dependent), dependent);
+            Validate.ArgumentNotNull(nameof(conflicts), conflicts);
 
             if (!_all.TryGetValue(dependent, out var dependentNode))
             {
@@ -177,7 +252,8 @@ namespace Abacaxi.Containers
                     continue;
                 }
 
-                dependentNode.Conflicts.Add(conflictNode);
+                dependentNode.Conflicts.Remove(conflictNode);
+                conflictNode.Conflicts.Remove(dependentNode);
             }
         }
 
@@ -189,9 +265,38 @@ namespace Abacaxi.Containers
         /// </remarks>
         /// <param name="tag">The tag to toggle.</param>
         /// <param name="selected">If set to <c>true</c>, the tag is selected. Otherwise it is removed.</param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="tag" /> is <c>null</c>.
+        /// </exception>
         public void Toggle([NotNull] TTag tag, bool selected)
         {
+            Validate.ArgumentNotNull(nameof(tag), tag);
+
             var node = GetOrAddNode(tag);
+
+            if (_selected.Contains(node) == selected)
+            {
+                return;
+            }
+
+            if (selected)
+            {
+                var dependencies = new HashSet<Node>();
+                var conflicts = new HashSet<Node>();
+
+                CollectDependenciesAndConflictsRecursive(node, dependencies, conflicts);
+
+                _selected.UnionWith(dependencies);
+                _selected.ExceptWith(conflicts);
+            }
+            else
+            {
+                var dependents = new HashSet<Node>();
+
+                CollectDependentsRecursive(node, dependents);
+
+                _selected.ExceptWith(dependents);
+            }
         }
 
         /// <summary>
