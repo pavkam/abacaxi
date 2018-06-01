@@ -221,6 +221,39 @@ namespace Abacaxi
         }
 
         /// <summary>
+        /// Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
+        /// </summary>
+        /// <typeparam name="T">The type to convert to.</typeparam>
+        /// <param name="object">The value to convert.</param>
+        /// <param name="formatProvider">The format provider.</param>
+        /// <param name="validateFunc">The validation function.</param>
+        /// <returns>
+        /// The converted value.
+        /// </returns>
+        /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the validation failed.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="formatProvider" /> or <paramref name="validateFunc" /> is <c>null</c>.</exception>
+        public static T As<T>([CanBeNull] this object @object,
+            [NotNull] IFormatProvider formatProvider, [NotNull] Func<T, bool> validateFunc)
+        {
+            Validate.ArgumentNotNull(nameof(validateFunc), validateFunc);
+
+            if (!TryConvert(@object, formatProvider, out T result))
+            {
+                throw new FormatException(
+                    $"Failed to convert object \"{@object}\" to a value of type {typeof(T).Name}.");
+            }
+
+            if (!validateFunc(result))
+            {
+                throw new InvalidOperationException(
+                    $"Failed to validate object \"{@object}\" (converted to type {typeof(T).Name} as {result}).");
+            }
+
+            return result;
+        }
+
+        /// <summary>
         ///     Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
         /// </summary>
         /// <typeparam name="T">The type to convert to.</typeparam>
@@ -233,13 +266,24 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="formatProvider" /> is <c>null</c>.</exception>
         public static T As<T>([CanBeNull] this object @object, [NotNull] IFormatProvider formatProvider)
         {
-            if (!TryConvert(@object, formatProvider, out T result))
-            {
-                throw new FormatException(
-                    $"Failed to convert object \"{@object}\" to a value of type {typeof(T).Name}.");
-            }
+            return As<T>(@object, formatProvider, v => true);
+        }
 
-            return result;
+        /// <summary>
+        /// Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
+        /// This method uses <seealso cref="CultureInfo.InvariantCulture" /> for the conversion.
+        /// </summary>
+        /// <typeparam name="T">The type to convert to.</typeparam>
+        /// <param name="object">The value to convert.</param>
+        /// <param name="validateFunc">The validation function.</param>
+        /// <returns>
+        /// The converted value.
+        /// </returns>
+        /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the validation failed.</exception>
+        public static T As<T>([CanBeNull] this object @object, [NotNull] Func<T, bool> validateFunc)
+        {
+            return As(@object, CultureInfo.InvariantCulture, validateFunc);
         }
 
         /// <summary>
@@ -254,13 +298,7 @@ namespace Abacaxi
         /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
         public static T As<T>([CanBeNull] this object @object)
         {
-            if (!TryConvert(@object, out T result))
-            {
-                throw new FormatException(
-                    $"Failed to convert object \"{@object}\" to a value of type {typeof(T).Name}.");
-            }
-
-            return result;
+            return As<T>(@object, CultureInfo.InvariantCulture, v => true);
         }
 
         /// <summary>

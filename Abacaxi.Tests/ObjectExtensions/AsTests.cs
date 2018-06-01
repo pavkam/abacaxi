@@ -43,10 +43,40 @@ namespace Abacaxi.Tests.ObjectExtensions
             Assert.Throws<FormatException>(() => "a".As<int>(CultureInfo.InvariantCulture));
         }
 
+        [Test]
+        public void As_ThrowException_WhenValidationFails()
+        {
+            Assert.Throws<InvalidOperationException>(() => "100".As<int>(v => false));
+            Assert.Throws<InvalidOperationException>(() => "100".As<int>(CultureInfo.InvariantCulture, v => false));
+        }
+
+        [Test]
+        public void As_ActuallyPerformsValidation1()
+        {
+            var result = string.Empty;
+            100.As<string>(v => { result = v;
+                return true;
+            });
+
+            Assert.AreEqual("100", result);
+        }
+
+        [Test]
+        public void As_ActuallyPerformsValidation2()
+        {
+            var result = string.Empty;
+            100.As<string>(CultureInfo.InvariantCulture, v => {
+                result = v;
+                return true;
+            });
+
+            Assert.AreEqual("100", result);
+        }
+
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void As_ThrowsException_ForNullFormatProvider()
         {
-            Assert.Throws<ArgumentNullException>(() => "a".As<string>(null));
+            Assert.Throws<ArgumentNullException>(() => "a".As<string>((IFormatProvider)null));
         }
 
         [Test]
@@ -54,5 +84,18 @@ namespace Abacaxi.Tests.ObjectExtensions
         {
             Assert.AreEqual(11, "1,1".As<double>());
         }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void As_ThrowsException_ForNullValidateFunc1()
+        {
+            Assert.Throws<ArgumentNullException>(() => "a".As((Func<string, bool>)null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void As_ThrowsException_ForNullValidateFunc2()
+        {
+            Assert.Throws<ArgumentNullException>(() => "a".As(CultureInfo.InvariantCulture, (Func<string, bool>)null));
+        }
+
     }
 }
