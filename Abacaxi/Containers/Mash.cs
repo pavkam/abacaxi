@@ -18,51 +18,28 @@ namespace Abacaxi.Containers
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
-    using System.Diagnostics;
 
     /// <summary>
-    /// Class implements a Dictionary of Dictionaries plus List and such. Serves as a Swiss army knife container that can
-    /// be used to store anything.
+    ///     Class implements a Dictionary of Dictionaries plus List and such. Serves as a Swiss army knife container that can
+    ///     be used to store anything.
     /// </summary>
     [PublicAPI, DebuggerDisplay("Count = {" + nameof(Count) + "} Children = {" + nameof(LinkedCount) + "}")]
     public sealed class Mash<TKey, TValue> : IList<TValue>
     {
-        [Flags]
-        private enum StorageState : byte
-        {
-            HasOneChildInATuple = 1,
-            HasTwoChildrenInKeyValuePairArray = 2,
-            HasThreeChildrenInKeyValuePairArray = 3,
-            HasFourChildrenInKeyValuePairArray = 4,
-            HasFiveChildrenInKeyValuePairArray = 5,
-            HasManyChildrenInAHashTable = 6,
-            ValueIsOneObject = 1 << 3,
-            ValuesInTwoElementArray = 2 << 3,
-            ValuesInList = 3 << 3,
-
-            ChildrenMask = 7,
-            ValueMask = 3 << 3
-        }
-
         [NotNull] private readonly IEqualityComparer<TKey> _equalityComparer;
         [CanBeNull] private object _childrenObj;
-        [CanBeNull] private object _valueObj;
         private StorageState _state;
+        [CanBeNull] private object _valueObj;
         private int _ver;
 
-        [ContractAnnotation("=> halt")]
-        private static void ThrowCollectionChangedDuringEnumeration()
-        {
-            throw new InvalidOperationException("Collection changed during enumeration. Cannot continue.");
-        }
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="Mash{TKey, TValue}"/> class.
+        ///     Initializes a new instance of the <see cref="Mash{TKey, TValue}" /> class.
         /// </summary>
         /// <param name="equalityComparer">The equality comparer used for sub-mash indexing.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="equalityComparer"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="equalityComparer" /> is <c>null</c>.</exception>
         public Mash([NotNull] IEqualityComparer<TKey> equalityComparer)
         {
             Validate.ArgumentNotNull(nameof(equalityComparer), equalityComparer);
@@ -71,17 +48,160 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Mash{TKey, TValue}"/> class using the default <see cref="IEqualityComparer{T}"/>.
+        ///     Initializes a new instance of the <see cref="Mash{TKey, TValue}" /> class using the default
+        ///     <see cref="IEqualityComparer{T}" />.
         /// </summary>
         public Mash() : this(EqualityComparer<TKey>.Default)
         {
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through the values stored in this <see cref="Mash{TKey,TValue}"/>.
+        ///     Gets or sets the value stored by this <see cref="Mash{TKey,TValue}" />.
+        /// </summary>
+        /// <value>
+        ///     The value stored by this mash.
+        /// </value>
+        /// <remarks>
+        ///     The <see cref="Mash{TKey,TValue}" /> allows for storage of collection of items. The <see cref="Value" /> property
+        ///     acts as a simplified way to access the element with zero-index in this collection. If the collection is empty and a
+        ///     setter
+        ///     is accessed, the value is added into collection. Given how the <see cref="Mash{TKey,TValue}" /> class stores the
+        ///     value collection,
+        ///     use the <see cref="Value" /> property if you only need to store one element in the <see cref="Mash{TKey,TValue}" />
+        ///     .
+        /// </remarks>
+        public TValue Value
+        {
+            get
+            {
+                // ReSharper disable once SwitchStatementMissingSomeCases
+                switch (_state & StorageState.ValueMask)
+                {
+                    case 0:
+                        Assert.Condition(_valueObj == null);
+                        break;
+                    case StorageState.ValueIsOneObject:
+                        Assert.Condition(_valueObj == null || _valueObj is TValue);
+                        return (TValue) _valueObj;
+                    case StorageState.ValuesInTwoElementArray:
+                        Assert.Condition(_valueObj is TValue[]);
+                        var array = (TValue[]) _valueObj;
+                        Assert.Condition(array.Length == 2);
+                        return array[0];
+                    case StorageState.ValuesInList:
+                        Assert.Condition(_valueObj is IList<TValue>);
+                        var list = (IList<TValue>) _valueObj;
+                        Assert.Condition(list.Count > 2);
+                        return list[0];
+                    default:
+                        Assert.Fail($"Invalid mash state detected: {_state}.");
+                        break;
+                }
+
+                return default(TValue);
+            }
+            set
+            {
+                // ReSharper disable once SwitchStatementMissingSomeCases
+                switch (_state & StorageState.ValueMask)
+                {
+                    case 0:
+                        Assert.Condition(_valueObj == null);
+                        _ver++;
+                        _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
+                        _valueObj = value;
+                        break;
+                    case StorageState.ValueIsOneObject:
+                        Assert.Condition(_valueObj == null || _valueObj is TValue);
+                        _ver++;
+                        _valueObj = value;
+                        break;
+                    case StorageState.ValuesInTwoElementArray:
+                        Assert.Condition(_valueObj is TValue[]);
+                        var array = (TValue[]) _valueObj;
+                        Assert.Condition(array.Length == 2);
+                        _ver++;
+                        array[0] = value;
+                        break;
+                    case StorageState.ValuesInList:
+                        Assert.Condition(_valueObj is IList<TValue>);
+                        var list = (IList<TValue>) _valueObj;
+                        Assert.Condition(list.Count > 2);
+                        _ver++;
+                        list[0] = value;
+                        break;
+                    default:
+                        Assert.Fail($"Invalid mash state detected: {_state}.");
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Gets the linked <see cref="Mash{TKey, TValue}" /> with the specified key.
+        /// </summary>
+        /// <value>
+        ///     The linked <see cref="Mash{TKey, TValue}" /> associated with the given key.
+        /// </value>
+        /// <remarks>
+        ///     This indexer is equivalent to <see cref="GetLinked" /> method.
+        /// </remarks>
+        /// <param name="key">The key.</param>
+        /// <returns>The child <see cref="Mash{TKey,TValue}" />.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key" /> is <c>null</c>.</exception>
+        [NotNull]
+        public Mash<TKey, TValue> this[[NotNull] TKey key] => GetLinked(key);
+
+        /// <summary>
+        ///     Gets the count of linked <see cref="Mash{TKey,TValue}" />s referenced by this instance.
+        /// </summary>
+        /// <value>
+        ///     The count of linked <see cref="Mash{TKey,TValue}" />s.
+        /// </value>
+        public int LinkedCount
+        {
+            get
+            {
+                // ReSharper disable once SwitchStatementMissingSomeCases
+                switch (_state & StorageState.ChildrenMask)
+                {
+                    case 0:
+                        Assert.Condition(_childrenObj == null);
+                        return 0;
+                    case StorageState.HasOneChildInATuple:
+                        Assert.Condition(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
+                        return 1;
+                    case StorageState.HasTwoChildrenInKeyValuePairArray:
+                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        return 2;
+                    case StorageState.HasThreeChildrenInKeyValuePairArray:
+                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        return 3;
+                    case StorageState.HasFourChildrenInKeyValuePairArray:
+                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        return 4;
+                    case StorageState.HasFiveChildrenInKeyValuePairArray:
+                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
+                        return 5;
+                    case StorageState.HasManyChildrenInAHashTable:
+                        Assert.Condition(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
+                        var dict = (IDictionary<TKey, Mash<TKey, TValue>>) _childrenObj;
+                        Assert.Condition(dict.Count > 5);
+                        return dict.Count;
+                    default:
+                        Assert.Fail($"Invalid mash state detected: {_state}.");
+                        break;
+                }
+
+                return 0;
+            }
+        }
+
+        /// <summary>
+        ///     Returns an enumerator that iterates through the values stored in this <see cref="Mash{TKey,TValue}" />.
         /// </summary>
         /// <returns>
-        /// An enumerator that can be used to iterate through the collection.
+        ///     An enumerator that can be used to iterate through the collection.
         /// </returns>
         /// <exception cref="NotImplementedException"></exception>
         public IEnumerator<TValue> GetEnumerator()
@@ -96,6 +216,7 @@ namespace Abacaxi.Containers
                     {
                         ThrowCollectionChangedDuringEnumeration();
                     }
+
                     yield break;
                 case StorageState.ValueIsOneObject:
                     Assert.Condition(_valueObj == null || _valueObj is TValue);
@@ -103,6 +224,7 @@ namespace Abacaxi.Containers
                     {
                         ThrowCollectionChangedDuringEnumeration();
                     }
+
                     yield return (TValue) _valueObj;
 
                     break;
@@ -114,12 +236,14 @@ namespace Abacaxi.Containers
                     {
                         ThrowCollectionChangedDuringEnumeration();
                     }
+
                     yield return array[0];
 
                     if (ver != _ver)
                     {
                         ThrowCollectionChangedDuringEnumeration();
                     }
+
                     yield return array[1];
 
                     break;
@@ -135,8 +259,10 @@ namespace Abacaxi.Containers
                         {
                             ThrowCollectionChangedDuringEnumeration();
                         }
+
                         yield return list[i];
                     }
+
                     break;
                 default:
                     Assert.Fail($"Invalid mash state detected: {_state}.");
@@ -145,17 +271,20 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through the values stored in this <see cref="Mash{TKey,TValue}"/>.
+        ///     Returns an enumerator that iterates through the values stored in this <see cref="Mash{TKey,TValue}" />.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         /// <summary>
-        /// Adds an item to the <see cref="Mash{TKey,TValue}" />'s value collection.
+        ///     Adds an item to the <see cref="Mash{TKey,TValue}" />'s value collection.
         /// </summary>
-        /// <param name="item">The object to add to this <see cref="Mash{TKey,TValue}"/>.</param>
+        /// <param name="item">The object to add to this <see cref="Mash{TKey,TValue}" />.</param>
         public void Add(TValue item)
         {
             // ReSharper disable once SwitchStatementMissingSomeCases
@@ -212,7 +341,7 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes all items from the this <see cref="Mash{TKey,TValue}"/>'s value collection.
+        ///     Removes all items from the this <see cref="Mash{TKey,TValue}" />'s value collection.
         /// </summary>
         public void Clear()
         {
@@ -224,24 +353,31 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Determines whether the <see cref="Mash{TKey,TValue}"/> contains a specific value.
+        ///     Determines whether the <see cref="Mash{TKey,TValue}" /> contains a specific value.
         /// </summary>
         /// <param name="item">The object to locate in the mash.</param>
         /// <returns>
-        /// <c>true</c> if <paramref name="item" /> is found in the <see cref="Mash{TKey,TValue}" />; otherwise, <c>false</c>.
+        ///     <c>true</c> if <paramref name="item" /> is found in the <see cref="Mash{TKey,TValue}" />; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(TValue item) => IndexOf(item) > -1;
+        public bool Contains(TValue item)
+        {
+            return IndexOf(item) > -1;
+        }
 
         /// <summary>
-        /// Copies the elements of the <see cref="Mash{TKey,TValue}" />'s value collection to an <see cref="T:System.Array" />,
-        /// starting at a particular <see cref="T:System.Array" /> index.
+        ///     Copies the elements of the <see cref="Mash{TKey,TValue}" />'s value collection to an <see cref="T:System.Array" />,
+        ///     starting at a particular <see cref="T:System.Array" /> index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied
-        /// from <see cref="Mash{TKey,TValue}" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+        /// <param name="array">
+        ///     The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied
+        ///     from <see cref="Mash{TKey,TValue}" />. The <see cref="T:System.Array" /> must have zero-based indexing.
+        /// </param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="array"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the destination <paramref name="array"/> does not have enough
-        /// space to hold the contents of the set.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="array" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if the destination <paramref name="array" /> does not have enough
+        ///     space to hold the contents of the set.
+        /// </exception>
         public void CopyTo(TValue[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
@@ -284,11 +420,11 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific object from the <see cref="Mash{TKey,TValue}"/>'s value collection.
+        ///     Removes the first occurrence of a specific object from the <see cref="Mash{TKey,TValue}" />'s value collection.
         /// </summary>
         /// <param name="item">The object to remove from the value collection.</param>
         /// <returns>
-        /// <c>true</c> if <paramref name="item" /> was successfully removed; otherwise, <c>false</c>.
+        ///     <c>true</c> if <paramref name="item" /> was successfully removed; otherwise, <c>false</c>.
         /// </returns>
         public bool Remove(TValue item)
         {
@@ -366,7 +502,7 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="Mash{TKey,TValue}" />'s value collection.
+        ///     Gets the number of elements contained in the <see cref="Mash{TKey,TValue}" />'s value collection.
         /// </summary>
         public int Count
         {
@@ -401,19 +537,19 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="Mash{TKey,TValue}" /> is read-only.
+        ///     Gets a value indicating whether the <see cref="Mash{TKey,TValue}" /> is read-only.
         /// </summary>
         /// <value>
-        /// This property is always <c>false</c>.
+        ///     This property is always <c>false</c>.
         /// </value>
         public bool IsReadOnly => false;
 
         /// <summary>
-        /// Determines the index of a specific item in the <see cref="Mash{TKey,TValue}" />'s value collection.
+        ///     Determines the index of a specific item in the <see cref="Mash{TKey,TValue}" />'s value collection.
         /// </summary>
         /// <param name="item">The object to locate in the <see cref="Mash{TKey,TValue}" />'s value collection.</param>
         /// <returns>
-        /// The index of <paramref name="item" /> if found in the list; otherwise, -1.
+        ///     The index of <paramref name="item" /> if found in the list; otherwise, -1.
         /// </returns>
         public int IndexOf(TValue item)
         {
@@ -429,6 +565,7 @@ namespace Abacaxi.Containers
                     {
                         return 0;
                     }
+
                     return -1;
                 case StorageState.ValuesInTwoElementArray:
                     Assert.Condition(_valueObj is TValue[]);
@@ -438,10 +575,12 @@ namespace Abacaxi.Containers
                     {
                         return 0;
                     }
+
                     if (Equals(array[1], item))
                     {
                         return 1;
                     }
+
                     return -1;
                 case StorageState.ValuesInList:
                     Assert.Condition(_valueObj is IList<TValue>);
@@ -457,11 +596,12 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Inserts an item to the <see cref="Mash{TKey,TValue}" />'s value collection at the specified <paramref name="index"/>.
+        ///     Inserts an item to the <see cref="Mash{TKey,TValue}" />'s value collection at the specified
+        ///     <paramref name="index" />.
         /// </summary>
         /// <param name="index">The zero-based index at which <paramref name="item" /> should be inserted.</param>
         /// <param name="item">The object to insert into the <see cref="Mash{TKey,TValue}" />'s value collection.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index" /> is out of bounds.</exception>
         public void Insert(int index, TValue item)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(index), index);
@@ -564,10 +704,10 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes the <see cref="Mash{TKey,TValue}" />'s item at the specified <paramref name="index"/>.
+        ///     Removes the <see cref="Mash{TKey,TValue}" />'s item at the specified <paramref name="index" />.
         /// </summary>
         /// <param name="index">The zero-based index of the item to remove.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index" /> is out of bounds.</exception>
         public void RemoveAt(int index)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(index), index);
@@ -640,14 +780,15 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets or sets the value in the <see cref="Mash{TKey,TValue}"/>'s value collection at the specified <paramref name="index"/>.
+        ///     Gets or sets the value in the <see cref="Mash{TKey,TValue}" />'s value collection at the specified
+        ///     <paramref name="index" />.
         /// </summary>
         /// <value>
-        /// The value at the specified index.
+        ///     The value at the specified index.
         /// </value>
         /// <param name="index">The index.</param>
-        /// <returns>The value stored in the <see cref="Mash{TKey,TValue}"/>'s value collection at the specified index.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is out of bounds.</exception>
+        /// <returns>The value stored in the <see cref="Mash{TKey,TValue}" />'s value collection at the specified index.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index" /> is out of bounds.</exception>
         public TValue this[int index]
         {
             get
@@ -742,95 +883,23 @@ namespace Abacaxi.Containers
             }
         }
 
-        /// <summary>
-        /// Gets or sets the value stored by this <see cref="Mash{TKey,TValue}"/>.
-        /// </summary>
-        /// <value>
-        /// The value stored by this mash.
-        /// </value>
-        /// <remarks>
-        /// The <see cref="Mash{TKey,TValue}"/> allows for storage of collection of items. The <see cref="Value"/> property
-        /// acts as a simplified way to access the element with zero-index in this collection. If the collection is empty and a setter
-        /// is accessed, the value is added into collection. Given how the <see cref="Mash{TKey,TValue}"/> class stores the value collection,
-        /// use the <see cref="Value"/> property if you only need to store one element in the <see cref="Mash{TKey,TValue}"/>.
-        /// </remarks>
-        public TValue Value
+        [ContractAnnotation("=> halt")]
+        private static void ThrowCollectionChangedDuringEnumeration()
         {
-            get
-            {
-                // ReSharper disable once SwitchStatementMissingSomeCases
-                switch (_state & StorageState.ValueMask)
-                {
-                    case 0:
-                        Assert.Condition(_valueObj == null);
-                        break;
-                    case StorageState.ValueIsOneObject:
-                        Assert.Condition(_valueObj == null || _valueObj is TValue);
-                        return (TValue) _valueObj;
-                    case StorageState.ValuesInTwoElementArray:
-                        Assert.Condition(_valueObj is TValue[]);
-                        var array = (TValue[]) _valueObj;
-                        Assert.Condition(array.Length == 2);
-                        return array[0];
-                    case StorageState.ValuesInList:
-                        Assert.Condition(_valueObj is IList<TValue>);
-                        var list = (IList<TValue>) _valueObj;
-                        Assert.Condition(list.Count > 2);
-                        return list[0];
-                    default:
-                        Assert.Fail($"Invalid mash state detected: {_state}.");
-                        break;
-                }
-
-                return default(TValue);
-            }
-            set
-            {
-                // ReSharper disable once SwitchStatementMissingSomeCases
-                switch (_state & StorageState.ValueMask)
-                {
-                    case 0:
-                        Assert.Condition(_valueObj == null);
-                        _ver++;
-                        _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
-                        _valueObj = value;
-                        break;
-                    case StorageState.ValueIsOneObject:
-                        Assert.Condition(_valueObj == null || _valueObj is TValue);
-                        _ver++;
-                        _valueObj = value;
-                        break;
-                    case StorageState.ValuesInTwoElementArray:
-                        Assert.Condition(_valueObj is TValue[]);
-                        var array = (TValue[]) _valueObj;
-                        Assert.Condition(array.Length == 2);
-                        _ver++;
-                        array[0] = value;
-                        break;
-                    case StorageState.ValuesInList:
-                        Assert.Condition(_valueObj is IList<TValue>);
-                        var list = (IList<TValue>) _valueObj;
-                        Assert.Condition(list.Count > 2);
-                        _ver++;
-                        list[0] = value;
-                        break;
-                    default:
-                        Assert.Fail($"Invalid mash state detected: {_state}.");
-                        break;
-                }
-            }
+            throw new InvalidOperationException("Collection changed during enumeration. Cannot continue.");
         }
 
         /// <summary>
-        /// Gets the linked <see cref="Mash{TKey, TValue}"/> with the specified key.
+        ///     Gets the linked <see cref="Mash{TKey, TValue}" /> with the specified key.
         /// </summary>
         /// <remarks>
-        /// This method serves as an alternative to the indexer in cases when <typeparamref name="TKey"/> and <typeparamref name="TValue"/>
-        /// are of the same type (and method overloading fails).
+        ///     This method serves as an alternative to the indexer in cases when <typeparamref name="TKey" /> and
+        ///     <typeparamref name="TValue" />
+        ///     are of the same type (and method overloading fails).
         /// </remarks>
         /// <param name="key">The key.</param>
-        /// <returns>The linked <see cref="Mash{TKey,TValue}"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        /// <returns>The linked <see cref="Mash{TKey,TValue}" />.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key" /> is <c>null</c>.</exception>
         [NotNull]
         public Mash<TKey, TValue> GetLinked([NotNull] TKey key)
         {
@@ -859,7 +928,7 @@ namespace Abacaxi.Containers
                     _childrenObj = new[]
                     {
                         new KeyValuePair<TKey, Mash<TKey, TValue>>(key, subMash),
-                        new KeyValuePair<TKey, Mash<TKey, TValue>>(tuple.Item1, tuple.Item2),
+                        new KeyValuePair<TKey, Mash<TKey, TValue>>(tuple.Item1, tuple.Item2)
                     };
 
                     return subMash;
@@ -872,6 +941,7 @@ namespace Abacaxi.Containers
                     {
                         return array2[0].Value;
                     }
+
                     if (_equalityComparer.Equals(array2[1].Key, key))
                     {
                         return array2[1].Value;
@@ -896,10 +966,12 @@ namespace Abacaxi.Containers
                     {
                         return array3[0].Value;
                     }
+
                     if (_equalityComparer.Equals(array3[1].Key, key))
                     {
                         return array3[1].Value;
                     }
+
                     if (_equalityComparer.Equals(array3[2].Key, key))
                     {
                         return array3[2].Value;
@@ -925,14 +997,17 @@ namespace Abacaxi.Containers
                     {
                         return array4[0].Value;
                     }
+
                     if (_equalityComparer.Equals(array4[1].Key, key))
                     {
                         return array4[1].Value;
                     }
+
                     if (_equalityComparer.Equals(array4[2].Key, key))
                     {
                         return array4[2].Value;
                     }
+
                     if (_equalityComparer.Equals(array4[3].Key, key))
                     {
                         return array4[3].Value;
@@ -959,18 +1034,22 @@ namespace Abacaxi.Containers
                     {
                         return array5[0].Value;
                     }
+
                     if (_equalityComparer.Equals(array5[1].Key, key))
                     {
                         return array5[1].Value;
                     }
+
                     if (_equalityComparer.Equals(array5[2].Key, key))
                     {
                         return array5[2].Value;
                     }
+
                     if (_equalityComparer.Equals(array5[3].Key, key))
                     {
                         return array5[3].Value;
                     }
+
                     if (_equalityComparer.Equals(array5[4].Key, key))
                     {
                         return array5[4].Value;
@@ -980,12 +1059,12 @@ namespace Abacaxi.Containers
                     subMash = new Mash<TKey, TValue>(_equalityComparer);
                     _childrenObj = new Dictionary<TKey, Mash<TKey, TValue>>
                     {
-                        {array5[0].Key, array5[0].Value},
-                        {array5[1].Key, array5[1].Value},
-                        {array5[2].Key, array5[2].Value},
-                        {array5[3].Key, array5[3].Value},
-                        {array5[4].Key, array5[4].Value},
-                        {key, subMash}
+                        { array5[0].Key, array5[0].Value },
+                        { array5[1].Key, array5[1].Value },
+                        { array5[2].Key, array5[2].Value },
+                        { array5[3].Key, array5[3].Value },
+                        { array5[4].Key, array5[4].Value },
+                        { key, subMash }
                     };
 
                     return subMash;
@@ -1009,11 +1088,12 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Links a given <paramref name="mash"/> with this <see cref="Mash{TKey,TValue}"/> using the supplied <paramref name="key"/>.
+        ///     Links a given <paramref name="mash" /> with this <see cref="Mash{TKey,TValue}" /> using the supplied
+        ///     <paramref name="key" />.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="mash">The mash to link.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> or <paramref name="mash"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key" /> or <paramref name="mash" /> is <c>null</c>.</exception>
         public void Link([NotNull] TKey key, [NotNull] Mash<TKey, TValue> mash)
         {
             Validate.ArgumentNotNull(nameof(mash), mash);
@@ -1041,9 +1121,10 @@ namespace Abacaxi.Containers
                         _childrenObj = new[]
                         {
                             new KeyValuePair<TKey, Mash<TKey, TValue>>(key, mash),
-                            new KeyValuePair<TKey, Mash<TKey, TValue>>(tuple.Item1, tuple.Item2),
+                            new KeyValuePair<TKey, Mash<TKey, TValue>>(tuple.Item1, tuple.Item2)
                         };
                     }
+
                     break;
 
                 case StorageState.HasTwoChildrenInKeyValuePairArray:
@@ -1137,6 +1218,7 @@ namespace Abacaxi.Containers
                             array4[3]
                         };
                     }
+
                     break;
                 case StorageState.HasFiveChildrenInKeyValuePairArray:
                     Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
@@ -1169,14 +1251,15 @@ namespace Abacaxi.Containers
                         _state = (_state & StorageState.ValueMask) | StorageState.HasManyChildrenInAHashTable;
                         _childrenObj = new Dictionary<TKey, Mash<TKey, TValue>>
                         {
-                            {array5[0].Key, array5[0].Value},
-                            {array5[1].Key, array5[1].Value},
-                            {array5[2].Key, array5[2].Value},
-                            {array5[3].Key, array5[3].Value},
-                            {array5[4].Key, array5[4].Value},
-                            {key, mash}
+                            { array5[0].Key, array5[0].Value },
+                            { array5[1].Key, array5[1].Value },
+                            { array5[2].Key, array5[2].Value },
+                            { array5[3].Key, array5[3].Value },
+                            { array5[4].Key, array5[4].Value },
+                            { key, mash }
                         };
                     }
+
                     break;
                 case StorageState.HasManyChildrenInAHashTable:
                     Assert.Condition(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
@@ -1191,11 +1274,11 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Un-links the <see cref="Mash{TKey,TValue}"/> with the specified key from this <see cref="Mash{TKey,TValue}"/>.
+        ///     Un-links the <see cref="Mash{TKey,TValue}" /> with the specified key from this <see cref="Mash{TKey,TValue}" />.
         /// </summary>
-        /// <param name="key">The key of the <see cref="Mash{TKey,TValue}"/> to un-link.</param>
+        /// <param name="key">The key of the <see cref="Mash{TKey,TValue}" /> to un-link.</param>
         /// <returns><c>true</c> if the mash was un-linked; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key" /> is <c>null</c>.</exception>
         public bool Unlink([NotNull] TKey key)
         {
             Validate.ArgumentNotNull(nameof(key), key);
@@ -1292,7 +1375,7 @@ namespace Abacaxi.Containers
                         {
                             array4[1],
                             array4[2],
-                            array4[3],
+                            array4[3]
                         };
 
                         return true;
@@ -1304,7 +1387,7 @@ namespace Abacaxi.Containers
                         {
                             array4[0],
                             array4[2],
-                            array4[3],
+                            array4[3]
                         };
 
                         return true;
@@ -1316,7 +1399,7 @@ namespace Abacaxi.Containers
                         {
                             array4[0],
                             array4[1],
-                            array4[3],
+                            array4[3]
                         };
 
                         return true;
@@ -1328,7 +1411,7 @@ namespace Abacaxi.Containers
                         {
                             array4[0],
                             array4[1],
-                            array4[2],
+                            array4[2]
                         };
 
                         return true;
@@ -1418,64 +1501,21 @@ namespace Abacaxi.Containers
             return false;
         }
 
-        /// <summary>
-        /// Gets the linked <see cref="Mash{TKey, TValue}"/> with the specified key.
-        /// </summary>
-        /// <value>
-        /// The linked <see cref="Mash{TKey, TValue}"/> associated with the given key.
-        /// </value>
-        /// <remarks>
-        /// This indexer is equivalent to <see cref="GetLinked"/> method.
-        /// </remarks>
-        /// <param name="key">The key.</param>
-        /// <returns>The child <see cref="Mash{TKey,TValue}"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
-        [NotNull]
-        public Mash<TKey, TValue> this[[NotNull] TKey key] => GetLinked(key);
-
-        /// <summary>
-        /// Gets the count of linked <see cref="Mash{TKey,TValue}"/>s referenced by this instance.
-        /// </summary>
-        /// <value>
-        /// The count of linked <see cref="Mash{TKey,TValue}"/>s.
-        /// </value>
-        public int LinkedCount
+        [Flags]
+        private enum StorageState : byte
         {
-            get
-            {
-                // ReSharper disable once SwitchStatementMissingSomeCases
-                switch (_state & StorageState.ChildrenMask)
-                {
-                    case 0:
-                        Assert.Condition(_childrenObj == null);
-                        return 0;
-                    case StorageState.HasOneChildInATuple:
-                        Assert.Condition(_childrenObj is Tuple<TKey, Mash<TKey, TValue>>);
-                        return 1;
-                    case StorageState.HasTwoChildrenInKeyValuePairArray:
-                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        return 2;
-                    case StorageState.HasThreeChildrenInKeyValuePairArray:
-                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        return 3;
-                    case StorageState.HasFourChildrenInKeyValuePairArray:
-                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        return 4;
-                    case StorageState.HasFiveChildrenInKeyValuePairArray:
-                        Assert.Condition(_childrenObj is KeyValuePair<TKey, Mash<TKey, TValue>>[]);
-                        return 5;
-                    case StorageState.HasManyChildrenInAHashTable:
-                        Assert.Condition(_childrenObj is IDictionary<TKey, Mash<TKey, TValue>>);
-                        var dict = (IDictionary<TKey, Mash<TKey, TValue>>)_childrenObj;
-                        Assert.Condition(dict.Count > 5);
-                        return dict.Count;
-                    default:
-                        Assert.Fail($"Invalid mash state detected: {_state}.");
-                        break;
-                }
+            HasOneChildInATuple = 1,
+            HasTwoChildrenInKeyValuePairArray = 2,
+            HasThreeChildrenInKeyValuePairArray = 3,
+            HasFourChildrenInKeyValuePairArray = 4,
+            HasFiveChildrenInKeyValuePairArray = 5,
+            HasManyChildrenInAHashTable = 6,
+            ValueIsOneObject = 1 << 3,
+            ValuesInTwoElementArray = 2 << 3,
+            ValuesInList = 3 << 3,
 
-                return 0;
-            }
+            ChildrenMask = 7,
+            ValueMask = 3 << 3
         }
     }
 }

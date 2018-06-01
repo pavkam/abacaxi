@@ -21,13 +21,13 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class exposes one static method used to compute a Z-Array of a sequence.
+    ///     Class exposes one static method used to compute a Z-Array of a sequence.
     /// </summary>
     [PublicAPI]
     public static class ZArray
     {
         /// <summary>
-        /// Computes the Z-array for the given <paramref name="sequence" />.
+        ///     Computes the Z-array for the given <paramref name="sequence" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to compute the Z-array for.</param>
@@ -35,9 +35,12 @@ namespace Abacaxi
         /// <param name="length">The length of the sequence.</param>
         /// <param name="comparer">The comparer.</param>
         /// <returns>A new, computed Z-array (of integers).</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer"/> ic <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer" /> ic <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex" /> and <paramref name="length" /> is out of bounds.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         [NotNull]
         public static int[] Construct<T>(
             [NotNull] IList<T> sequence,

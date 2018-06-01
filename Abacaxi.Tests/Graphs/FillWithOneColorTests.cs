@@ -17,30 +17,19 @@ namespace Abacaxi.Tests.Graphs
 {
     using System;
     using System.Collections.Generic;
-    using Abacaxi.Graphs;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using Abacaxi.Graphs;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class FillWithOneColorTests
     {
-        [Test]
-        public void FillWithOneColor_ThrowsException_ForInvalidVertex()
-        {
-            var graph = new LiteralGraph("A>1>B", true);
-            Assert.Throws<ArgumentException>(() => graph.FillWithOneColor('Z', v => { }));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void FillWithOneColor_ThrowsException_ForNullApplyColor()
-        {
-            var graph = new LiteralGraph("A>1>B", true);
-            Assert.Throws<ArgumentNullException>(() => graph.FillWithOneColor('A', null));
-        }
-
-        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'A', "A,B,C"),TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'C', "C"),TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'D', "D,E,B,C,F")]
-        public void FillWithOneColor_FillsExpectedVertices([NotNull] string relationships, char startVertex, string expected)
+        [TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'A', "A,B,C"),
+         TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'C', "C"),
+         TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'D', "D,E,B,C,F")]
+        public void FillWithOneColor_FillsExpectedVertices([NotNull] string relationships, char startVertex,
+            string expected)
         {
             var graph = new LiteralGraph(relationships, true);
             var result = new List<char>();
@@ -48,6 +37,20 @@ namespace Abacaxi.Tests.Graphs
             graph.FillWithOneColor(startVertex, vertex => result.Add(vertex));
 
             Assert.AreEqual(expected, string.Join(",", result));
+        }
+
+        [Test]
+        public void FillWithOneColor_ThrowsException_ForInvalidVertex()
+        {
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<ArgumentException>(() => graph.FillWithOneColor('Z', v => { }));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void FillWithOneColor_ThrowsException_ForNullApplyColor()
+        {
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<ArgumentNullException>(() => graph.FillWithOneColor('A', null));
         }
     }
 }

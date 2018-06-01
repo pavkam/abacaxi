@@ -15,51 +15,26 @@
 
 namespace Abacaxi.Tests.SequenceExtensions
 {
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public class EditTests
     {
-        [Test]
-        public void Operation_ReturnsValidValue()
-        {
-            var edit = new Edit<char>(EditOperation.Insert, 'a');
-
-            Assert.AreEqual(EditOperation.Insert, edit.Operation);
-        }
-
-        [Test]
-        public void Item_ReturnsValidValue()
-        {
-            var edit = new Edit<char>(EditOperation.Insert, 'a');
-
-            Assert.AreEqual('a', edit.Item);
-        }
-
-        [TestCase(EditOperation.Match, 'a', "=a"),TestCase(EditOperation.Delete, 'b', "-b"),TestCase(EditOperation.Insert, 'c', "+c"),TestCase(EditOperation.Substitute, 'd', "#d")]
+        [TestCase(EditOperation.Match, 'a', "=a"), TestCase(EditOperation.Delete, 'b', "-b"),
+         TestCase(EditOperation.Insert, 'c', "+c"), TestCase(EditOperation.Substitute, 'd', "#d")]
         public void ToString_ReturnsValidValue(EditOperation op, char ch, string expected)
         {
             var edit = new Edit<char>(op, ch);
             Assert.AreEqual(expected, edit.ToString());
         }
 
-        [Test]
-        public void Equals_ReturnsTrue_ForEqualEdits()
+        [Test, SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+        public void Equals_ReturnsFalse_ForNonEditObject()
         {
-            var e1 = new Edit<char>(EditOperation.Insert, 'a');
-            var e2 = new Edit<char>(EditOperation.Insert, 'a');
+            var e1 = new Edit<char>(EditOperation.Match, 'a');
 
-            Assert.IsTrue(e1.Equals(e2));
-        }
-
-        [Test]
-        public void Equals_ReturnsFalse_ForNonEqualOperations()
-        {
-            var e1 = new Edit<char>(EditOperation.Insert, 'a');
-            var e2 = new Edit<char>(EditOperation.Match, 'a');
-
-            Assert.IsFalse(e1.Equals(e2));
+            Assert.IsFalse(e1.Equals(this));
         }
 
 
@@ -72,12 +47,13 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.IsFalse(e1.Equals(e2));
         }
 
-        [Test,SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
-        public void Equals_ReturnsFalse_ForNonEditObject()
+        [Test]
+        public void Equals_ReturnsFalse_ForNonEqualOperations()
         {
-            var e1 = new Edit<char>(EditOperation.Match, 'a');
+            var e1 = new Edit<char>(EditOperation.Insert, 'a');
+            var e2 = new Edit<char>(EditOperation.Match, 'a');
 
-            Assert.IsFalse(e1.Equals(this));
+            Assert.IsFalse(e1.Equals(e2));
         }
 
         [Test]
@@ -89,12 +65,21 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void GetHashCode_ReturnsEqualHashCodes_ForEqualEdits()
+        public void Equals_ReturnsTrue_ForEqualEdits()
+        {
+            var e1 = new Edit<char>(EditOperation.Insert, 'a');
+            var e2 = new Edit<char>(EditOperation.Insert, 'a');
+
+            Assert.IsTrue(e1.Equals(e2));
+        }
+
+        [Test]
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentItems()
         {
             var e1 = new Edit<char>(EditOperation.Match, 'a');
-            var e2 = new Edit<char>(EditOperation.Match, 'a');
+            var e2 = new Edit<char>(EditOperation.Match, 'b');
 
-            Assert.AreEqual(e1.GetHashCode(), e2.GetHashCode());
+            Assert.AreNotEqual(e1.GetHashCode(), e2.GetHashCode());
         }
 
         [Test]
@@ -107,12 +92,28 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentItems()
+        public void GetHashCode_ReturnsEqualHashCodes_ForEqualEdits()
         {
             var e1 = new Edit<char>(EditOperation.Match, 'a');
-            var e2 = new Edit<char>(EditOperation.Match, 'b');
+            var e2 = new Edit<char>(EditOperation.Match, 'a');
 
-            Assert.AreNotEqual(e1.GetHashCode(), e2.GetHashCode());
+            Assert.AreEqual(e1.GetHashCode(), e2.GetHashCode());
+        }
+
+        [Test]
+        public void Item_ReturnsValidValue()
+        {
+            var edit = new Edit<char>(EditOperation.Insert, 'a');
+
+            Assert.AreEqual('a', edit.Item);
+        }
+
+        [Test]
+        public void Operation_ReturnsValidValue()
+        {
+            var edit = new Edit<char>(EditOperation.Insert, 'a');
+
+            Assert.AreEqual(EditOperation.Insert, edit.Operation);
         }
     }
 }

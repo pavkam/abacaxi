@@ -22,7 +22,7 @@ namespace Abacaxi.Trees
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class implements the binary search tree and serves as a base class for other balanced search trees.
+    ///     Class implements the binary search tree and serves as a base class for other balanced search trees.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
@@ -32,25 +32,190 @@ namespace Abacaxi.Trees
         private int _ver;
 
         /// <summary>
-        /// Gets the comparer used for ordering tree nodes' keys.
+        ///     Initializes a new instance of the <see cref="BinarySearchTree{TKey, TValue}" /> class.
+        /// </summary>
+        /// <param name="comparer">The key comparer used.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer" /> is <c>null</c>.</exception>
+        public BinarySearchTree([NotNull] IComparer<TKey> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            Comparer = comparer;
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="BinarySearchTree{TKey, TValue}" /> class using the default
+        ///     <typeparamref name="TKey" /> comparer.
+        /// </summary>
+        public BinarySearchTree() : this(Comparer<TKey>.Default)
+        {
+        }
+
+        /// <summary>
+        ///     Gets the comparer used for ordering tree nodes' keys.
         /// </summary>
         /// <value>
-        /// The comparer.
+        ///     The comparer.
         /// </value>
         [NotNull]
         protected IComparer<TKey> Comparer { get; }
 
         /// <summary>
-        /// Gets or sets the root tree node.
+        ///     Gets or sets the root tree node.
         /// </summary>
         /// <value>
-        /// The root tree node.
+        ///     The root tree node.
         /// </value>
         [CanBeNull]
         protected BinaryTreeNode<TKey, TValue> Root { get; set; }
 
         /// <summary>
-        /// Throws the standard "key not found" exception.
+        ///     Gets or sets the value of a node identified by <paramref name="key" />.
+        /// </summary>
+        /// <value>
+        ///     The value of the node.
+        /// </value>
+        /// <param name="key">The key of the node.</param>
+        /// <returns>The value of the node identified by the <paramref name="key" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     Thrown if the tree does not contain any node identified by the
+        ///     <paramref name="key" />.
+        /// </exception>
+        [CanBeNull]
+        public TValue this[TKey key]
+        {
+            get
+            {
+                if (!TryGetValue(key, out var value))
+                {
+                    ThrowKeyNotFound(nameof(key));
+                }
+
+                return value;
+            }
+            set => AddOrUpdate(key, value);
+        }
+
+        /// <summary>
+        ///     Adds the specified key/value node to the tree.
+        /// </summary>
+        /// <param name="item">The node's key/value pair.</param>
+        /// <exception cref="ArgumentException">Thrown if a node with the same key is already present in the tree.</exception>
+        public void Add(KeyValuePair<TKey, TValue> item)
+        {
+            Add(item.Key, item.Value);
+        }
+
+        /// <summary>
+        ///     Removes the node identified by the key and value of the given <paramref name="item" />.
+        /// </summary>
+        /// <remarks>
+        ///     This method is provided for compatibility with <see cref="ICollection{T}" />. It is not recommended for normal use.
+        ///     The values of nodes are compared using the default equality comparer for that type.
+        /// </remarks>
+        /// <param name="item">The key/value pair to remove from the tree.</param>
+        /// <returns>
+        ///     <c>true</c> if the node was successfully removed; otherwise, false.
+        /// </returns>
+        public bool Remove(KeyValuePair<TKey, TValue> item)
+        {
+            return TryGetValue(item.Key, out var value) &&
+                   EqualityComparer<TValue>.Default.Equals(value, item.Value) &&
+                   Remove(item.Key);
+        }
+
+        /// <summary>
+        ///     Determines whether the tree contains the given key/value node.
+        /// </summary>
+        /// <param name="item">The key/value pair to search for.</param>
+        /// <returns>
+        ///     <c>true</c> if <paramref name="item" /> is found in the tree; otherwise, <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        ///     This method is provided for compatibility with <see cref="ICollection{T}" />. It is not recommended for normal use.
+        ///     The values of nodes are compared using the default equality comparer for that type.
+        /// </remarks>
+        public bool Contains(KeyValuePair<TKey, TValue> item)
+        {
+            return TryGetValue(item.Key, out var value) &&
+                   EqualityComparer<TValue>.Default.Equals(value, item.Value);
+        }
+
+        /// <summary>
+        ///     Clears this tree.
+        /// </summary>
+        public void Clear()
+        {
+            NotifyTreeChanged(0);
+
+            Root = null;
+            Count = 0;
+        }
+
+        /// <summary>
+        ///     Copies the elements of the tree to an <see cref="T:System.Array" />, starting at a particular
+        ///     <see cref="T:System.Array" /> index.
+        /// </summary>
+        /// <param name="array">
+        ///     The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied
+        ///     from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have
+        ///     zero-based indexing.
+        /// </param>
+        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        {
+            Validate.ArgumentNotNull(nameof(array), array);
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
+            Validate.ArgumentLessThanOrEqualTo(nameof(arrayIndex), Count, array.Length - arrayIndex);
+
+            using (var enumerator = GetEnumerator())
+            {
+                var index = arrayIndex;
+                while (enumerator.MoveNext())
+                {
+                    array[index++] = enumerator.Current;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Gets the count of nodes in this tree.
+        /// </summary>
+        /// <value>
+        ///     The total count of nodes.
+        /// </value>
+        public int Count { get; private set; }
+
+        /// <summary>
+        ///     Gets a value indicating whether the tree is read-only.
+        /// </summary>
+        public bool IsReadOnly => false;
+
+        /// <summary>
+        ///     Returns an enumerator that iterates through the tree in-order.
+        /// </summary>
+        /// <returns>
+        ///     An enumerator that can be used to iterate through the tree.
+        /// </returns>
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        {
+            return GetEnumerator(TreeTraversalMode.InOrder);
+        }
+
+        /// <summary>
+        ///     Returns an enumerator that iterates through the tree in-order.
+        /// </summary>
+        /// <returns>
+        ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the tree.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// <summary>
+        ///     Throws the standard "key not found" exception.
         /// </summary>
         /// <param name="argumentName">Name of the argument.</param>
         /// <exception cref="ArgumentException">The tree does not contain a node with the given key.</exception>
@@ -62,7 +227,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Throws the standard "duplicate key found" exception.
+        ///     Throws the standard "duplicate key found" exception.
         /// </summary>
         /// <param name="argumentName">Name of the argument.</param>
         /// <exception cref="ArgumentException">The tree already contains a node with the given key.</exception>
@@ -94,7 +259,7 @@ namespace Abacaxi.Trees
                 return new BinaryTreeNode<TKey, TValue>
                 {
                     Key = key,
-                    Value = value,
+                    Value = value
                 };
             }
 
@@ -151,6 +316,7 @@ namespace Abacaxi.Trees
                 {
                     return root.RightChild;
                 }
+
                 if (root.RightChild == null)
                 {
                     return root.LeftChild;
@@ -195,7 +361,8 @@ namespace Abacaxi.Trees
                 yield return new KeyValuePair<TKey, TValue>(current.Key, current.Value);
 
                 current = current.RightChild;
-            } while (stack.Count > 0 || current != null);
+            } while (stack.Count > 0 ||
+                     current != null);
 
             CheckVersion(ver);
         }
@@ -225,7 +392,8 @@ namespace Abacaxi.Trees
 
                 current = stack.Pop();
                 current = current.RightChild;
-            } while (stack.Count > 0 || current != null);
+            } while (stack.Count > 0 ||
+                     current != null);
 
             CheckVersion(ver);
         }
@@ -245,10 +413,12 @@ namespace Abacaxi.Trees
                     current = current.LeftChild;
                 }
 
-                while (current == null && stack.Count > 0)
+                while (current == null &&
+                       stack.Count > 0)
                 {
                     current = stack.Peek();
-                    if (current.RightChild == null || current.RightChild == previous)
+                    if (current.RightChild == null ||
+                        current.RightChild == previous)
                     {
                         CheckVersion(ver);
 
@@ -269,7 +439,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Increases the version of the tree. The version must be increased on each modification.
+        ///     Increases the version of the tree. The version must be increased on each modification.
         /// </summary>
         protected void NotifyTreeChanged(int countDelta)
         {
@@ -278,7 +448,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Looks up the node ky the given <paramref name="key"/>.
+        ///     Looks up the node ky the given <paramref name="key" />.
         /// </summary>
         /// <param name="key">The key of the node.</param>
         /// <returns>The node, if found; otherwise, <c>null</c>.</returns>
@@ -307,51 +477,25 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinarySearchTree{TKey, TValue}"/> class.
-        /// </summary>
-        /// <param name="comparer">The key comparer used.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer"/> is <c>null</c>.</exception>
-        public BinarySearchTree([NotNull] IComparer<TKey> comparer)
-        {
-            Validate.ArgumentNotNull(nameof(comparer), comparer);
-
-            Comparer = comparer;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BinarySearchTree{TKey, TValue}"/> class using the default <typeparamref name="TKey"/> comparer.
-        /// </summary>
-        public BinarySearchTree() : this(Comparer<TKey>.Default)
-        {
-        }
-
-        /// <summary>
-        /// Adds the specified key/value node to the tree.
+        ///     Adds the specified key/value node to the tree.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's value.</param>
-        /// <exception cref="ArgumentException">Thrown if a node with the same <paramref name="key"/> is already present in the tree.</exception>
+        /// <exception cref="ArgumentException">
+        ///     Thrown if a node with the same <paramref name="key" /> is already present in the
+        ///     tree.
+        /// </exception>
         public virtual void Add(TKey key, TValue value)
         {
             Root = InsertRecursive(Root, key, value, false);
         }
 
         /// <summary>
-        /// Adds the specified key/value node to the tree.
-        /// </summary>
-        /// <param name="item">The node's key/value pair.</param>
-        /// <exception cref="ArgumentException">Thrown if a node with the same key is already present in the tree.</exception>
-        public void Add(KeyValuePair<TKey, TValue> item)
-        {
-            Add(item.Key, item.Value);
-        }
-
-        /// <summary>
-        /// Updated the value of a node having a given key.
+        ///     Updated the value of a node having a given key.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's new value.</param>
-        /// <exception cref="ArgumentException">Thrown if no node found with the given <paramref name="key"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown if no node found with the given <paramref name="key" />.</exception>
         public void Update(TKey key, TValue value)
         {
             var node = LookupNode(key);
@@ -365,7 +509,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Adds or updates a tree node that has a given key and value.
+        ///     Adds or updates a tree node that has a given key and value.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's new value.</param>
@@ -375,7 +519,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Removes the node from the tree that has a specified key.
+        ///     Removes the node from the tree that has a specified key.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <returns><c>true</c> if the node was removed; otherwise, <c>false</c>.</returns>
@@ -388,38 +532,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Removes the node identified by the key and value of the given <paramref name="item"/>.
-        /// </summary>
-        /// <remarks>
-        /// This method is provided for compatibility with <see cref="ICollection{T}"/>. It is not recommended for normal use.
-        /// The values of nodes are compared using the default equality comparer for that type.
-        /// </remarks>
-        /// <param name="item">The key/value pair to remove from the tree.</param>
-        /// <returns>
-        /// <c>true</c> if the node was successfully removed; otherwise, false.
-        /// </returns>
-        public bool Remove(KeyValuePair<TKey, TValue> item) =>
-            TryGetValue(item.Key, out var value) &&
-            EqualityComparer<TValue>.Default.Equals(value, item.Value) &&
-            Remove(item.Key);
-
-        /// <summary>
-        /// Determines whether the tree contains the given key/value node.
-        /// </summary>
-        /// <param name="item">The key/value pair to search for.</param>
-        /// <returns>
-        ///   <c>true</c> if <paramref name="item" /> is found in the tree; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// This method is provided for compatibility with <see cref="ICollection{T}" />. It is not recommended for normal use.
-        /// The values of nodes are compared using the default equality comparer for that type.
-        /// </remarks>
-        public bool Contains(KeyValuePair<TKey, TValue> item) =>
-            TryGetValue(item.Key, out var value) &&
-            EqualityComparer<TValue>.Default.Equals(value, item.Value);
-
-        /// <summary>
-        /// Tries the get value of the node identified by the given <paramref name="key"/>.
+        ///     Tries the get value of the node identified by the given <paramref name="key" />.
         /// </summary>
         /// <param name="key">The key of the node.</param>
         /// <param name="value">The value of the node (if found).</param>
@@ -438,82 +551,13 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Clears this tree.
-        /// </summary>
-        public void Clear()
-        {
-            NotifyTreeChanged(0);
-
-            Root = null;
-            Count = 0;
-        }
-
-        /// <summary>
-        /// Copies the elements of the tree to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
-        /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
-        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-        /// <exception cref="NotImplementedException"></exception>
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-        {
-            Validate.ArgumentNotNull(nameof(array), array);
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(arrayIndex), arrayIndex);
-            Validate.ArgumentLessThanOrEqualTo(nameof(arrayIndex), Count, array.Length - arrayIndex);
-
-            using (var enumerator = GetEnumerator())
-            {
-                var index = arrayIndex;
-                while (enumerator.MoveNext())
-                {
-                    array[index++] = enumerator.Current;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the count of nodes in this tree.
-        /// </summary>
-        /// <value>
-        /// The total count of nodes.
-        /// </value>
-        public int Count { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether the tree is read-only.
-        /// </summary>
-        public bool IsReadOnly => false;
-
-        /// <summary>
-        /// Gets or sets the value of a node identified by <paramref name="key"/>.
-        /// </summary>
-        /// <value>
-        /// The value of the node.
-        /// </value>
-        /// <param name="key">The key of the node.</param>
-        /// <returns>The value of the node identified by the <paramref name="key"/>.</returns>
-        /// <exception cref="ArgumentException">Thrown if the tree does not contain any node identified by the <paramref name="key"/>.</exception>
-        [CanBeNull]
-        public TValue this[TKey key]
-        {
-            get
-            {
-                if (!TryGetValue(key, out var value))
-                {
-                    ThrowKeyNotFound(nameof(key));
-                }
-                return value;
-            }
-            set => AddOrUpdate(key, value);
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the tree.
+        ///     Returns an enumerator that iterates through the tree.
         /// </summary>
         /// <param name="mode">The traversal mode.</param>
         /// <returns>
-        /// An enumerator that can be used to iterate through the tree.
+        ///     An enumerator that can be used to iterate through the tree.
         /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="mode"/> is invalid.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="mode" /> is invalid.</exception>
         [NotNull]
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator(TreeTraversalMode mode)
         {
@@ -529,21 +573,5 @@ namespace Abacaxi.Trees
                     throw new ArgumentOutOfRangeException(nameof(mode), mode, "Invalid enum value.");
             }
         }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the tree in-order.
-        /// </summary>
-        /// <returns>
-        /// An enumerator that can be used to iterate through the tree.
-        /// </returns>
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => GetEnumerator(TreeTraversalMode.InOrder);
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the tree in-order.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the tree.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

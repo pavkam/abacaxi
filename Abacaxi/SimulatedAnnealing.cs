@@ -22,92 +22,13 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Defines a set of algorithms useful during heuristic search for solutions.
+    ///     Defines a set of algorithms useful during heuristic search for solutions.
     /// </summary>
     [PublicAPI]
     internal static class SimulatedAnnealing
     {
         /// <summary>
-        /// Class that holds the required properties for <see cref="SimulatedAnnealing.Evaluate{TInput,TSolution}"/> method.
-        /// </summary>
-        public sealed class AlgorithmParameters
-        {
-            /// <summary>
-            /// Gets number the cooling steps.
-            /// </summary>
-            /// <value>
-            /// The number of cooling steps.
-            /// </value>
-            public int CoolingSteps { get; }
-
-            /// <summary>
-            /// Gets the number of iterations per cooling step.
-            /// </summary>
-            /// <value>
-            /// The number of iterations per cooling step.
-            /// </value>
-            public int IterationsPerCoolingStep { get; }
-
-            /// <summary>
-            /// Gets the initial temperature.
-            /// </summary>
-            /// <value>
-            /// The initial temperature.
-            /// </value>
-            public double InitialTemperature { get; }
-
-            /// <summary>
-            /// Gets the cooling alpha constant.
-            /// </summary>
-            /// <value>
-            /// The cooling alpha constant.
-            /// </value>
-            public double CoolingAlpha { get; }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="AlgorithmParameters"/> class.
-            /// </summary>
-            /// <param name="coolingSteps">The number cooling steps.</param>
-            /// <param name="iterationsPerCoolingStep">The number of iterations per cooling step.</param>
-            /// <param name="coolingAlpha">The cooling alpha constant.</param>
-            /// <param name="initialTemperature">The initial temperature.</param>
-            /// <exception cref="ArgumentOutOfRangeException">Thrown if any of the provided values are out of allowed range.</exception>
-            public AlgorithmParameters(
-                int coolingSteps = 100,
-                int iterationsPerCoolingStep = 100,
-                double coolingAlpha = 0.99,
-                double initialTemperature = 1)
-            {
-                Validate.ArgumentGreaterThanZero(nameof(coolingSteps), coolingSteps);
-                Validate.ArgumentGreaterThanZero(nameof(iterationsPerCoolingStep), iterationsPerCoolingStep);
-                Validate.ArgumentGreaterThanZero(nameof(coolingAlpha), coolingAlpha);
-                Validate.ArgumentLessThan(nameof(coolingAlpha), coolingAlpha, 1);
-                Validate.ArgumentGreaterThanZero(nameof(initialTemperature), initialTemperature);
-                Validate.ArgumentLessThanOrEqualTo(nameof(initialTemperature), initialTemperature, 1);
-
-                CoolingSteps = coolingSteps;
-                IterationsPerCoolingStep = iterationsPerCoolingStep;
-                InitialTemperature = initialTemperature;
-                CoolingAlpha = coolingAlpha;
-            }
-        }
-
-        private sealed class Partition<T>
-        {
-            [NotNull] public readonly T[] Items;
-            public double Cost;
-
-            public Partition([NotNull] T[] items, double cost)
-            {
-                Assert.NotNull(items);
-
-                Items = items;
-                Cost = cost;
-            }
-        }
-
-        /// <summary>
-        /// Applies the simulated annealing algorithm to a given <paramref name="problemInput" />.
+        ///     Applies the simulated annealing algorithm to a given <paramref name="problemInput" />.
         /// </summary>
         /// <typeparam name="TInput">The type of the input data.</typeparam>
         /// <typeparam name="TSolution">The type of the solution.</typeparam>
@@ -118,11 +39,17 @@ namespace Abacaxi
         /// <param name="evaluateSolutionCostFunc">Function used to evaluate the full cost of a solution.</param>
         /// <param name="algorithmParams">The algorithm parameters.</param>
         /// <returns>
-        /// The approximated solution.
+        ///     The approximated solution.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="problemInput" /> or <paramref name="evaluateInitialSolutionFunc" /> or
-        /// <paramref name="solutionTransitionFunc" /> or <paramref name="evaluateSolutionCostFunc" /> or <paramref name="algorithmParams" /> are null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="problemInputLength"/> is less than or equal to zero.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="problemInput" /> or <paramref name="evaluateInitialSolutionFunc" /> or
+        ///     <paramref name="solutionTransitionFunc" /> or <paramref name="evaluateSolutionCostFunc" /> or
+        ///     <paramref name="algorithmParams" /> are null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="problemInputLength" /> is less than or equal to
+        ///     zero.
+        /// </exception>
         public static TSolution Evaluate<TInput, TSolution>(
             [NotNull] TInput problemInput,
             int problemInputLength,
@@ -187,7 +114,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Applies the combinatorial simulated annealing algorithm to a given <paramref name="sequence" />.
+        ///     Applies the combinatorial simulated annealing algorithm to a given <paramref name="sequence" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
@@ -195,8 +122,11 @@ namespace Abacaxi
         /// <param name="evaluatePartitionCostFunc">Function used evaluate the cost of a given partition.</param>
         /// <param name="algorithmParams">The algorithm parameters.</param>
         /// <returns>A sequence of partitions whose total cost is the approximated minimum.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="evaluatePartitionCostFunc"/> or <paramref name="algorithmParams"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="partitionLength"/> is less than one.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="evaluatePartitionCostFunc" /> or <paramref name="algorithmParams" /> are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="partitionLength" /> is less than one.</exception>
         [NotNull, ItemNotNull]
         public static T[][] Evaluate<T>(
             [NotNull] IList<T> sequence,
@@ -271,6 +201,85 @@ namespace Abacaxi
                 algorithmParams);
 
             return result.Select(s => s.Items).ToArray();
+        }
+
+        /// <summary>
+        ///     Class that holds the required properties for <see cref="SimulatedAnnealing.Evaluate{TInput,TSolution}" /> method.
+        /// </summary>
+        public sealed class AlgorithmParameters
+        {
+            /// <summary>
+            ///     Initializes a new instance of the <see cref="AlgorithmParameters" /> class.
+            /// </summary>
+            /// <param name="coolingSteps">The number cooling steps.</param>
+            /// <param name="iterationsPerCoolingStep">The number of iterations per cooling step.</param>
+            /// <param name="coolingAlpha">The cooling alpha constant.</param>
+            /// <param name="initialTemperature">The initial temperature.</param>
+            /// <exception cref="ArgumentOutOfRangeException">Thrown if any of the provided values are out of allowed range.</exception>
+            public AlgorithmParameters(
+                int coolingSteps = 100,
+                int iterationsPerCoolingStep = 100,
+                double coolingAlpha = 0.99,
+                double initialTemperature = 1)
+            {
+                Validate.ArgumentGreaterThanZero(nameof(coolingSteps), coolingSteps);
+                Validate.ArgumentGreaterThanZero(nameof(iterationsPerCoolingStep), iterationsPerCoolingStep);
+                Validate.ArgumentGreaterThanZero(nameof(coolingAlpha), coolingAlpha);
+                Validate.ArgumentLessThan(nameof(coolingAlpha), coolingAlpha, 1);
+                Validate.ArgumentGreaterThanZero(nameof(initialTemperature), initialTemperature);
+                Validate.ArgumentLessThanOrEqualTo(nameof(initialTemperature), initialTemperature, 1);
+
+                CoolingSteps = coolingSteps;
+                IterationsPerCoolingStep = iterationsPerCoolingStep;
+                InitialTemperature = initialTemperature;
+                CoolingAlpha = coolingAlpha;
+            }
+
+            /// <summary>
+            ///     Gets number the cooling steps.
+            /// </summary>
+            /// <value>
+            ///     The number of cooling steps.
+            /// </value>
+            public int CoolingSteps { get; }
+
+            /// <summary>
+            ///     Gets the number of iterations per cooling step.
+            /// </summary>
+            /// <value>
+            ///     The number of iterations per cooling step.
+            /// </value>
+            public int IterationsPerCoolingStep { get; }
+
+            /// <summary>
+            ///     Gets the initial temperature.
+            /// </summary>
+            /// <value>
+            ///     The initial temperature.
+            /// </value>
+            public double InitialTemperature { get; }
+
+            /// <summary>
+            ///     Gets the cooling alpha constant.
+            /// </summary>
+            /// <value>
+            ///     The cooling alpha constant.
+            /// </value>
+            public double CoolingAlpha { get; }
+        }
+
+        private sealed class Partition<T>
+        {
+            [NotNull] public readonly T[] Items;
+            public double Cost;
+
+            public Partition([NotNull] T[] items, double cost)
+            {
+                Assert.NotNull(items);
+
+                Items = items;
+                Cost = cost;
+            }
         }
     }
 }

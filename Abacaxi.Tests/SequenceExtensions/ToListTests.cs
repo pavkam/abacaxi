@@ -17,29 +17,17 @@ namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class ToListTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ToList1_ThrowsException_ForNullSequence()
-        {
-            Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList(i => i));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ToList1_ThrowsException_ForNullSelector()
-        {
-            Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int>) null));
-        }
-
         [Test]
         public void ToList1_SelectsExpectedItems_ForAList()
         {
-            var actual = new List<string> {"1", "2", "3"}.ToList(int.Parse);
+            var actual = new List<string> { "1", "2", "3" }.ToList(int.Parse);
 
             TestHelper.AssertSequence(actual, 1, 2, 3);
         }
@@ -47,27 +35,27 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToList1_SelectsExpectedItems_ForEnumerable()
         {
-            var actual = new List<string> {"1", "2", "3"}.Where(p => true).ToList(int.Parse);
+            var actual = new List<string> { "1", "2", "3" }.Where(p => true).ToList(int.Parse);
 
             TestHelper.AssertSequence(actual, 1, 2, 3);
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ToList2_ThrowsException_ForNullSequence()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToList1_ThrowsException_ForNullSelector()
         {
-            Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList((n, i) => i));
+            Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int>) null));
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ToList2_ThrowsException_ForNullSelector()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToList1_ThrowsException_ForNullSequence()
         {
-            Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int, int>) null));
+            Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList(i => i));
         }
 
         [Test]
         public void ToList2_SelectsExpectedItems_ForAList()
         {
-            var actual = new List<string> {"a", "b", "c"}.ToList((s, i) => $"{i}:{s}");
+            var actual = new List<string> { "a", "b", "c" }.ToList((s, i) => $"{i}:{s}");
 
             TestHelper.AssertSequence(actual, "0:a", "1:b", "2:c");
         }
@@ -75,9 +63,21 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToList2_SelectsExpectedItems_ForEnumerable()
         {
-            var actual = new List<string> {"a", "b", "c"}.Where(p => true).ToList((s, i) => $"{i}:{s}");
+            var actual = new List<string> { "a", "b", "c" }.Where(p => true).ToList((s, i) => $"{i}:{s}");
 
             TestHelper.AssertSequence(actual, "0:a", "1:b", "2:c");
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToList2_ThrowsException_ForNullSelector()
+        {
+            Assert.Throws<ArgumentNullException>(() => new int[] { }.ToList((Func<int, int, int>) null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToList2_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToList((n, i) => i));
         }
     }
 }

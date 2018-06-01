@@ -17,9 +17,9 @@ namespace Abacaxi.Internal
 {
     using System;
     using System.Diagnostics;
-    using JetBrains.Annotations;
-    using System.Runtime.CompilerServices;
     using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.CompilerServices;
+    using JetBrains.Annotations;
 
     internal static class Assert
     {
@@ -33,7 +33,8 @@ namespace Abacaxi.Internal
         {
             if (value == null)
             {
-                throw new InvalidOperationException($"Assertion failed. Value cannot be null at method: {callerMemberName}, line: {callerLineNumber}.");
+                throw new InvalidOperationException(
+                    $"Assertion failed. Value cannot be null at method: {callerMemberName}, line: {callerLineNumber}.");
             }
         }
 
@@ -47,7 +48,8 @@ namespace Abacaxi.Internal
         {
             if (!condition)
             {
-                throw new InvalidOperationException($"Assertion failed. Condition failed at method: {callerMemberName}, line: {callerLineNumber}.");
+                throw new InvalidOperationException(
+                    $"Assertion failed. Condition failed at method: {callerMemberName}, line: {callerLineNumber}.");
             }
         }
 

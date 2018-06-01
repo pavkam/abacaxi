@@ -15,10 +15,10 @@
 
 namespace Abacaxi.Tests
 {
-    using NUnit.Framework;
     using System.Collections.Generic;
     using System.Linq;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     internal static class TestHelper
     {
@@ -27,15 +27,18 @@ namespace Abacaxi.Tests
             Assert.NotNull(sequence, "The sequence is null.");
 
             var array = sequence.ToArray();
-            Assert.AreEqual(expected.Length, array.Length, $"The length of the sequence [{array.Length}] does not match the expected length.");
+            Assert.AreEqual(expected.Length, array.Length,
+                $"The length of the sequence [{array.Length}] does not match the expected length.");
 
             for (var i = 0; i < expected.Length; i++)
             {
-                Assert.AreEqual(expected[i], array[i], $"Element [{i}] of the sequence does not match the expected value.");
+                Assert.AreEqual(expected[i], array[i],
+                    $"Element [{i}] of the sequence does not match the expected value.");
             }
         }
 
-        public static void AssertSequence<T>([NotNull] IEnumerable<IEnumerable<T>> sequence, [NotNull] params T[][] expected)
+        public static void AssertSequence<T>([NotNull] IEnumerable<IEnumerable<T>> sequence,
+            [NotNull] params T[][] expected)
         {
             Assert.NotNull(sequence);
 

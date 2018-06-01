@@ -16,32 +16,26 @@
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public class FindLongestIncreasingSequenceTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void FindLongestIncreasingSequence_ThrowsException_ForNullSequence()
+        [Test]
+        public void FindLongestIncreasingSequence_ReturnsAllElements_ForPerfectSequence()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).FindLongestIncreasingSequence(Comparer<int>.Default));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void FindLongestIncreasingSequence_ThrowsException_ForNullComparer()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindLongestIncreasingSequence(null));
+            TestHelper.AssertSequence(
+                new[] { 1, 2, 3, 4, 5 }.FindLongestIncreasingSequence(Comparer<int>.Default),
+                1, 2, 3, 4, 5);
         }
 
         [Test]
         public void FindLongestIncreasingSequence_ReturnsNothing_ForEmptySequence()
         {
             TestHelper.AssertSequence(
-                new int[] {}.FindLongestIncreasingSequence(Comparer<int>.Default));
+                new int[] { }.FindLongestIncreasingSequence(Comparer<int>.Default));
         }
 
         [Test]
@@ -53,11 +47,11 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void FindLongestIncreasingSequence_ReturnsAllElements_ForPerfectSequence()
+        public void FindLongestIncreasingSequence_ReturnsTheLastClosedSequence_IfTwoAvailable()
         {
             TestHelper.AssertSequence(
-                new[] { 1, 2, 3, 4, 5 }.FindLongestIncreasingSequence(Comparer<int>.Default),
-                1, 2, 3, 4, 5);
+                new[] { 1, 4, 2, 5, 3 }.FindLongestIncreasingSequence(Comparer<int>.Default),
+                1, 2, 5);
         }
 
         [Test]
@@ -68,12 +62,18 @@ namespace Abacaxi.Tests.SequenceExtensions
                 1, 2, 3, 4, 5);
         }
 
-        [Test]
-        public void FindLongestIncreasingSequence_ReturnsTheLastClosedSequence_IfTwoAvailable()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void FindLongestIncreasingSequence_ThrowsException_ForNullComparer()
         {
-            TestHelper.AssertSequence(
-                new[] { 1, 4, 2, 5, 3 }.FindLongestIncreasingSequence(Comparer<int>.Default),
-                1, 2, 5);
+            Assert.Throws<ArgumentNullException>(() =>
+                new[] { 1 }.FindLongestIncreasingSequence(null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void FindLongestIncreasingSequence_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ((int[]) null).FindLongestIncreasingSequence(Comparer<int>.Default));
         }
     }
 }

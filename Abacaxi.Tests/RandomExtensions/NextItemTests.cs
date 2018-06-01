@@ -14,39 +14,17 @@
  */
 
 
-
 namespace Abacaxi.Tests.RandomExtensions
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class NextItemTests
     {
         private readonly Random _random = new Random();
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void NextItem1_ThrowsException_IfRandomIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((Random)null).NextItem(new []{1}));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void NextItem1_ThrowsException_IfSequenceIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                _random.NextItem<int>(null));
-        }
-
-        [Test]
-        public void NextItem1_ThrowsException_IfSequenceIsEmpty()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                _random.NextItem(new int[0]));
-        }
 
         [Test]
         public void NextItem1_ReturnsARandomSample()
@@ -64,27 +42,25 @@ namespace Abacaxi.Tests.RandomExtensions
             Assert.AreEqual(0, set.Count);
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void NextItem2_ThrowsException_IfRandomIsNull()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void NextItem1_ThrowsException_IfRandomIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((Random)null).NextItem(1, 2));
+                ((Random) null).NextItem(new[] { 1 }));
         }
 
         [Test]
-        public void NextItem2_ReturnsARandomSample_ForTwoItems()
+        public void NextItem1_ThrowsException_IfSequenceIsEmpty()
         {
-            var all = new[] {100, 200};
-            var set = all.ToSet();
+            Assert.Throws<ArgumentException>(() =>
+                _random.NextItem(new int[0]));
+        }
 
-            for (var i = 0; i < 100; i++)
-            {
-                var r = _random.NextItem(all[0], all[1]);
-                Assert.IsTrue(all.Contains(r));
-                set.Remove(r);
-            }
-
-            Assert.AreEqual(0, set.Count);
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void NextItem1_ThrowsException_IfSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                _random.NextItem<int>(null));
         }
 
         [Test]
@@ -104,5 +80,27 @@ namespace Abacaxi.Tests.RandomExtensions
             Assert.AreEqual(0, set.Count);
         }
 
+        [Test]
+        public void NextItem2_ReturnsARandomSample_ForTwoItems()
+        {
+            var all = new[] { 100, 200 };
+            var set = all.ToSet();
+
+            for (var i = 0; i < 100; i++)
+            {
+                var r = _random.NextItem(all[0], all[1]);
+                Assert.IsTrue(all.Contains(r));
+                set.Remove(r);
+            }
+
+            Assert.AreEqual(0, set.Count);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void NextItem2_ThrowsException_IfRandomIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ((Random) null).NextItem(1, 2));
+        }
     }
 }

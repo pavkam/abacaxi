@@ -16,22 +16,22 @@
 namespace Abacaxi.Trees
 {
     /// <summary>
-    /// Defines the three traversal/enumeration modes that can be used on trees.
+    ///     Defines the three traversal/enumeration modes that can be used on trees.
     /// </summary>
     public enum TreeTraversalMode
     {
         /// <summary>
-        /// In-order traversal (left subtree, node, then right subtree).
+        ///     In-order traversal (left subtree, node, then right subtree).
         /// </summary>
         InOrder,
 
         /// <summary>
-        /// Pre-order traversal (node, left subtree, then right subtree).
+        ///     Pre-order traversal (node, left subtree, then right subtree).
         /// </summary>
         PreOrder,
 
         /// <summary>
-        /// Post-order traversal (node, right subtree, then left subtree).
+        ///     Post-order traversal (node, right subtree, then left subtree).
         /// </summary>
         PostOrder
     }

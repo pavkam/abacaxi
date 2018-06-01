@@ -17,8 +17,8 @@ namespace Abacaxi.Tests.Graphs
 {
     using System.Linq;
     using Abacaxi.Graphs;
-    using NUnit.Framework;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class GetComponentsTests
@@ -39,7 +39,8 @@ namespace Abacaxi.Tests.Graphs
         [TestCase("", ""), TestCase("A", "A"), TestCase("A>1>A", "A"), TestCase("A>1>A,A>1>A", "A"),
          TestCase("A>1>B,B-1-C,C>1>D", "A,B,C,D"), TestCase("A,B,C", "A;B;C"),
          TestCase("A-1-B,B-1-C,C-1-A,D-1-E", "A,B,C;D,E"), TestCase("A>1>B,C>1>D", "A,B;C,D")]
-        public void GetComponents_ReturnsProperComponents_ForDirectedGraphs([NotNull] string relationships, string expected)
+        public void GetComponents_ReturnsProperComponents_ForDirectedGraphs([NotNull] string relationships,
+            string expected)
         {
             var graph = new LiteralGraph(relationships, true);
             var result = string.Join(";",

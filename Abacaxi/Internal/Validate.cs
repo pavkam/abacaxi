@@ -27,7 +27,7 @@ namespace Abacaxi.Internal
     internal static class Validate
     {
         public static void ArgumentDifferentThan(
-            [NotNull,InvokerParameterName]  string argumentName,
+            [NotNull, InvokerParameterName] string argumentName,
             int value,
             int bound)
         {
@@ -41,7 +41,7 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentGreaterThan(
-            [NotNull,InvokerParameterName]  string argumentName,
+            [NotNull, InvokerParameterName] string argumentName,
             int value,
             int bound)
         {
@@ -55,7 +55,7 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentGreaterThan(
-            [NotNull,InvokerParameterName]  string argumentName,
+            [NotNull, InvokerParameterName] string argumentName,
             double value,
             double bound)
         {
@@ -69,7 +69,7 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentLessThan(
-            [NotNull,InvokerParameterName]  string argumentName,
+            [NotNull, InvokerParameterName] string argumentName,
             int value,
             int bound)
         {
@@ -83,7 +83,7 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentLessThan(
-            [NotNull,InvokerParameterName]  string argumentName,
+            [NotNull, InvokerParameterName] string argumentName,
             double value,
             double bound)
         {
@@ -97,7 +97,7 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentLessThanOrEqualTo(
-            [NotNull,InvokerParameterName]  string argumentName,
+            [NotNull, InvokerParameterName] string argumentName,
             int value,
             int bound)
         {
@@ -111,7 +111,7 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentLessThanOrEqualTo(
-            [NotNull,InvokerParameterName]  string argumentName,
+            [NotNull, InvokerParameterName] string argumentName,
             double value,
             double bound)
         {
@@ -125,7 +125,7 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentGreaterThanOrEqualTo(
-            [NotNull,InvokerParameterName]  string argumentName,
+            [NotNull, InvokerParameterName] string argumentName,
             int value,
             int bound)
         {
@@ -139,7 +139,7 @@ namespace Abacaxi.Internal
         }
 
         public static void ArgumentGreaterThanOrEqualTo(
-            [NotNull,InvokerParameterName]  string argumentName,
+            [NotNull, InvokerParameterName] string argumentName,
             double value,
             double bound)
         {
@@ -152,35 +152,35 @@ namespace Abacaxi.Internal
             }
         }
 
-        public static void ArgumentDifferentThanZero([NotNull,InvokerParameterName]  string argumentName, int value)
+        public static void ArgumentDifferentThanZero([NotNull, InvokerParameterName] string argumentName, int value)
         {
             ArgumentDifferentThan(argumentName, value, 0);
         }
 
-        public static void ArgumentGreaterThanOrEqualToZero([NotNull,InvokerParameterName]  string argumentName,
+        public static void ArgumentGreaterThanOrEqualToZero([NotNull, InvokerParameterName] string argumentName,
             int value)
         {
             ArgumentGreaterThanOrEqualTo(argumentName, value, 0);
         }
 
-        public static void ArgumentGreaterThanOrEqualToZero([NotNull,InvokerParameterName]  string argumentName,
+        public static void ArgumentGreaterThanOrEqualToZero([NotNull, InvokerParameterName] string argumentName,
             double value)
         {
             ArgumentGreaterThanOrEqualTo(argumentName, value, 0);
         }
 
-        public static void ArgumentGreaterThanZero([NotNull,InvokerParameterName]  string argumentName, int value)
+        public static void ArgumentGreaterThanZero([NotNull, InvokerParameterName] string argumentName, int value)
         {
             ArgumentGreaterThan(argumentName, value, 0);
         }
 
-        public static void ArgumentGreaterThanZero([NotNull,InvokerParameterName]  string argumentName, double value)
+        public static void ArgumentGreaterThanZero([NotNull, InvokerParameterName] string argumentName, double value)
         {
             ArgumentGreaterThan(argumentName, value, 0);
         }
 
         [ContractAnnotation("value:null => halt")]
-        public static void ArgumentNotNull([NotNull,InvokerParameterName]  string argumentName,
+        public static void ArgumentNotNull([NotNull, InvokerParameterName] string argumentName,
             [CanBeNull] object value)
         {
             Assert.Condition(!string.IsNullOrEmpty(argumentName));
@@ -192,7 +192,7 @@ namespace Abacaxi.Internal
         }
 
         [ContractAnnotation("sequence:null => halt")]
-        public static void SequenceArgumentNotEmpty<T>([NotNull,InvokerParameterName]  string argumentName,
+        public static void SequenceArgumentNotEmpty<T>([NotNull, InvokerParameterName] string argumentName,
             [CanBeNull] IEnumerable<T> sequence)
         {
             Assert.Condition(!string.IsNullOrEmpty(argumentName));
@@ -218,13 +218,15 @@ namespace Abacaxi.Internal
         }
 
         [ContractAnnotation("sequence:null => halt")]
-        public static void CollectionArgumentsInBounds<T>([NotNull,InvokerParameterName]  string sequenceArgName,
+        public static void CollectionArgumentsInBounds<T>([NotNull, InvokerParameterName] string sequenceArgName,
             [NotNull] ICollection<T> sequence, int startIndex, int length)
         {
             Assert.Condition(!string.IsNullOrEmpty(sequenceArgName));
 
             ArgumentNotNull(nameof(sequence), sequence);
-            if (startIndex < 0 || length < 0 || startIndex + length > sequence.Count)
+            if (startIndex < 0 ||
+                length < 0 ||
+                startIndex + length > sequence.Count)
             {
                 throw new ArgumentOutOfRangeException(
                     $"The combination of start index ({startIndex}) and length ({length}) must be less of equal to {sequence.Count}");
@@ -233,7 +235,7 @@ namespace Abacaxi.Internal
 
         [ContractAnnotation("sequence:null => halt")]
         public static void CollectionArgumentsHasEvenNumberOfElements<T>(
-            [NotNull,InvokerParameterName]  string sequenceArgName, [NotNull] ICollection<T> sequence)
+            [NotNull, InvokerParameterName] string sequenceArgName, [NotNull] ICollection<T> sequence)
         {
             Assert.Condition(!string.IsNullOrEmpty(sequenceArgName));
 

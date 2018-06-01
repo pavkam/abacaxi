@@ -13,49 +13,22 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
     public class ReverseTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Reverse_ThrowsException_ForNullArray()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).Reverse(1, 1));
-        }
-
         [Test]
-        public void Reverse_ThrowsException_ForNegativeStartIndex()
+        public void Reverse_DoesNothing_ForEmptyArray()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Reverse(-1, 1));
-        }
+            var array = new int[] { };
+            array.Reverse(0, 0);
 
-        [Test]
-        public void Reverse_ThrowsException_ForNegativeLength()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Reverse(0, -1));
-        }
-
-        [Test]
-        public void Reverse_ThrowsException_ForOutOfBounds1()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Reverse(0, 2));
-        }
-
-        [Test]
-        public void Reverse_ThrowsException_ForOutOfBounds2()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Reverse(1, 1));
+            Assert.AreEqual(new int[] { }, array);
         }
 
         [Test]
@@ -65,15 +38,6 @@ namespace Abacaxi.Tests.SequenceExtensions
             array.Reverse(1, 0);
 
             Assert.AreEqual(new[] { 1, 2 }, array);
-        }
-
-        [Test]
-        public void Reverse_DoesNothing_ForEmptyArray()
-        {
-            var array = new int[] { };
-            array.Reverse(0, 0);
-
-            Assert.AreEqual(new int[] { }, array);
         }
 
         [Test]
@@ -101,6 +65,41 @@ namespace Abacaxi.Tests.SequenceExtensions
             array.Reverse(0, 2);
 
             Assert.AreEqual(new[] { 2, 1, 3, 4, 5 }, array);
+        }
+
+        [Test]
+        public void Reverse_ThrowsException_ForNegativeLength()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new[] { 1 }.Reverse(0, -1));
+        }
+
+        [Test]
+        public void Reverse_ThrowsException_ForNegativeStartIndex()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new[] { 1 }.Reverse(-1, 1));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Reverse_ThrowsException_ForNullArray()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ((int[]) null).Reverse(1, 1));
+        }
+
+        [Test]
+        public void Reverse_ThrowsException_ForOutOfBounds1()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new[] { 1 }.Reverse(0, 2));
+        }
+
+        [Test]
+        public void Reverse_ThrowsException_ForOutOfBounds2()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new[] { 1 }.Reverse(1, 1));
         }
     }
 }

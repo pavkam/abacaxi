@@ -15,78 +15,26 @@
 
 namespace Abacaxi.Tests.Pairing
 {
-    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
+    using Pairing = Abacaxi.Pairing;
 
     [TestFixture]
     public sealed class GetWithMinimumCost
     {
-        private static double BanalCostOfPairsEvaluator(int l, int r) => l + r;
-
-        private static double DistanceCostOfPairsEvaluator(int l, int r) => Math.Abs(l - r);
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetWithMinimumCost_ThrowsException_ForNullSequence()
+        private static double BanalCostOfPairsEvaluator(int l, int r)
         {
-            Assert.Throws<ArgumentNullException>(
-                () => Abacaxi.Pairing.GetWithMinimumCost<int>(null, BanalCostOfPairsEvaluator));
+            return l + r;
         }
 
-        [Test]
-        public void GetWithMinimumCost_ThrowsException_ForSequenceWithOddNumberOfElements()
+        private static double DistanceCostOfPairsEvaluator(int l, int r)
         {
-            Assert.Throws<ArgumentException>(
-                () => Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2, 3 }, BanalCostOfPairsEvaluator));
+            return Math.Abs(l - r);
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetWithMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
-        {
-            Assert.Throws<ArgumentNullException>(
-                () => Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2 }, null));
-        }
-
-        [Test]
-        public void GetWithMinimumCost_ReturnsEmptyArray_ForEmptySequence()
-        {
-            var result = Abacaxi.Pairing.GetWithMinimumCost(new int[] { }, BanalCostOfPairsEvaluator);
-            TestHelper.AssertSequence(result);
-        }
-
-        [Test]
-        public void GetWithMinimumCost_ReturnsOnePair_ForTwoElementSequence()
-        {
-            var result = Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2 }, BanalCostOfPairsEvaluator);
-
-            TestHelper.AssertSequence(result, Tuple.Create(1, 2));
-        }
-
-        [Test]
-        public void GetWithMinimumCost_ReturnsTwoPairs_ForFourElementSequence()
-        {
-            var result = Abacaxi.Pairing.GetWithMinimumCost(new[] { 4, 10, 2, 8 }, BanalCostOfPairsEvaluator);
-
-            TestHelper.AssertSequence(result,
-                Tuple.Create(4, 10),
-                Tuple.Create(2, 8));
-        }
-
-
-        [Test]
-        public void GetWithMinimumCost_CreatesSets_UsingTheActualCost()
-        {
-            var result = Abacaxi.Pairing.GetWithMinimumCost(new[] { 1, 2, 3, 8, 9, 12, 4, 6 }, DistanceCostOfPairsEvaluator);
-
-            TestHelper.AssertSequence(result,
-                Tuple.Create(1, 2),
-                Tuple.Create(3, 4),
-                Tuple.Create(8, 6),
-                Tuple.Create(9, 12));
-        }
-
-        [TestCase(10),TestCase(20)]
+        [TestCase(10), TestCase(20)]
         public void GetWithMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
         {
             var random = new Random();
@@ -99,10 +47,10 @@ namespace Abacaxi.Tests.Pairing
                 expected.AddOrUpdate(item, 1, e => e + 1);
             }
 
-            var result = Abacaxi.Pairing.GetWithMinimumCost(sequence, DistanceCostOfPairsEvaluator);
+            var result = Pairing.GetWithMinimumCost(sequence, DistanceCostOfPairsEvaluator);
             foreach (var r in result)
             {
-                var x = new[] {r.Item1, r.Item2};
+                var x = new[] { r.Item1, r.Item2 };
                 foreach (var item in x)
                 {
                     Assert.IsTrue(expected.TryGetValue(item, out var appearances));
@@ -118,6 +66,65 @@ namespace Abacaxi.Tests.Pairing
             }
 
             Assert.AreEqual(0, expected.Count);
+        }
+
+
+        [Test]
+        public void GetWithMinimumCost_CreatesSets_UsingTheActualCost()
+        {
+            var result = Pairing.GetWithMinimumCost(new[] { 1, 2, 3, 8, 9, 12, 4, 6 }, DistanceCostOfPairsEvaluator);
+
+            TestHelper.AssertSequence(result,
+                Tuple.Create(1, 2),
+                Tuple.Create(3, 4),
+                Tuple.Create(8, 6),
+                Tuple.Create(9, 12));
+        }
+
+        [Test]
+        public void GetWithMinimumCost_ReturnsEmptyArray_ForEmptySequence()
+        {
+            var result = Pairing.GetWithMinimumCost(new int[] { }, BanalCostOfPairsEvaluator);
+            TestHelper.AssertSequence(result);
+        }
+
+        [Test]
+        public void GetWithMinimumCost_ReturnsOnePair_ForTwoElementSequence()
+        {
+            var result = Pairing.GetWithMinimumCost(new[] { 1, 2 }, BanalCostOfPairsEvaluator);
+
+            TestHelper.AssertSequence(result, Tuple.Create(1, 2));
+        }
+
+        [Test]
+        public void GetWithMinimumCost_ReturnsTwoPairs_ForFourElementSequence()
+        {
+            var result = Pairing.GetWithMinimumCost(new[] { 4, 10, 2, 8 }, BanalCostOfPairsEvaluator);
+
+            TestHelper.AssertSequence(result,
+                Tuple.Create(4, 10),
+                Tuple.Create(2, 8));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetWithMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => Pairing.GetWithMinimumCost(new[] { 1, 2 }, null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetWithMinimumCost_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => Pairing.GetWithMinimumCost<int>(null, BanalCostOfPairsEvaluator));
+        }
+
+        [Test]
+        public void GetWithMinimumCost_ThrowsException_ForSequenceWithOddNumberOfElements()
+        {
+            Assert.Throws<ArgumentException>(
+                () => Pairing.GetWithMinimumCost(new[] { 1, 2, 3 }, BanalCostOfPairsEvaluator));
         }
     }
 }

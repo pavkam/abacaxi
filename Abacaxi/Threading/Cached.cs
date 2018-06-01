@@ -16,12 +16,12 @@
 namespace Abacaxi.Threading
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Internal;
     using JetBrains.Annotations;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
-    /// Container that caches a value for a specified duration.
+    ///     Container that caches a value for a specified duration.
     /// </summary>
     /// <typeparam name="T">The type of value cached by this container.</typeparam>
     [PublicAPI]
@@ -30,11 +30,46 @@ namespace Abacaxi.Threading
         [NotNull] private readonly object _lock = new object();
         [CanBeNull] private readonly Func<T> _valueRefreshFunc;
         private readonly int _valueTtlMillis;
-
-        private T _value;
         private long _expiresAtTicks;
 
+        private T _value;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Cached{T}" /> class.
+        /// </summary>
+        /// <param name="valueRefreshFunc">The function that creates a new value.</param>
+        /// <param name="valueLifespanMillis">The lifespan of the created resource (in milliseconds).</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="valueRefreshFunc" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="valueLifespanMillis" /> is less than one.</exception>
+        public Cached([NotNull] Func<T> valueRefreshFunc, int valueLifespanMillis) : this(valueLifespanMillis)
+        {
+            Validate.ArgumentNotNull(nameof(valueRefreshFunc), valueRefreshFunc);
+
+            _valueRefreshFunc = valueRefreshFunc;
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Cached{T}" /> class.
+        /// </summary>
+        /// <param name="valueLifespanMillis">The lifespan of the created resource (in milliseconds).</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="valueLifespanMillis" /> is less than one.</exception>
+        public Cached(int valueLifespanMillis)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(valueLifespanMillis), valueLifespanMillis);
+
+            _valueTtlMillis = valueLifespanMillis;
+        }
+
         private long CurrentTicks => DateTime.Now.Ticks;
+
+        /// <summary>
+        ///     Gets the cached value. This property is thread-safe and is blocking during the refresh.
+        /// </summary>
+        /// <value>
+        ///     The cached value.
+        /// </value>
+        [CanBeNull]
+        public T Value => GetInternal();
 
         [CanBeNull,
          SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
@@ -67,46 +102,11 @@ namespace Abacaxi.Threading
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Cached{T}"/> class.
-        /// </summary>
-        /// <param name="valueRefreshFunc">The function that creates a new value.</param>
-        /// <param name="valueLifespanMillis">The lifespan of the created resource (in milliseconds).</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="valueRefreshFunc"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="valueLifespanMillis"/> is less than one.</exception>
-        public Cached([NotNull] Func<T> valueRefreshFunc, int valueLifespanMillis) : this(valueLifespanMillis)
-        {
-            Validate.ArgumentNotNull(nameof(valueRefreshFunc), valueRefreshFunc);
-
-            _valueRefreshFunc = valueRefreshFunc;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Cached{T}"/> class.
-        /// </summary>
-        /// <param name="valueLifespanMillis">The lifespan of the created resource (in milliseconds).</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="valueLifespanMillis"/> is less than one.</exception>
-        public Cached(int valueLifespanMillis)
-        {
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(valueLifespanMillis), valueLifespanMillis);
-
-            _valueTtlMillis = valueLifespanMillis;
-        }
-
-        /// <summary>
-        /// Gets the cached value. This property is thread-safe and is blocking during the refresh.
-        /// </summary>
-        /// <value>
-        /// The cached value.
-        /// </value>
-        [CanBeNull]
-        public T Value => GetInternal();
-
-        /// <summary>
-        /// Gets the cached value using a given refresh function.
+        ///     Gets the cached value using a given refresh function.
         /// </summary>
         /// <param name="valueRefreshFunc">The value refresh function.</param>
         /// <returns>The cached value.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="valueRefreshFunc"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="valueRefreshFunc" /> is <c>null</c>.</exception>
         [CanBeNull]
         public T Get([NotNull] Func<T> valueRefreshFunc)
         {
@@ -119,9 +119,9 @@ namespace Abacaxi.Threading
         }
 
         /// <summary>
-        /// Expires current resource value managed by this <see cref="Cached{T}"/>.
+        ///     Expires current resource value managed by this <see cref="Cached{T}" />.
         /// </summary>
-        /// <remarks>The resource will be refreshed the next time <see cref="Value"/> property is accessed.</remarks>
+        /// <remarks>The resource will be refreshed the next time <see cref="Value" /> property is accessed.</remarks>
         public void Expire()
         {
             lock (_lock)

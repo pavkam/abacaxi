@@ -16,23 +16,24 @@
 namespace Abacaxi.Tests.StringExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class StripDiacriticsTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void StripDiacritics_ThrowsException_IfStringIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => ((string)null).StripDiacritics());
-        }
-
-        [TestCase("", ""),TestCase("ł", "l"),TestCase("Ł", "L"),TestCase("Café", "Cafe"),TestCase("Gebärden", "Gebarden")]
+        [TestCase("", ""), TestCase("ł", "l"), TestCase("Ł", "L"), TestCase("Café", "Cafe"),
+         TestCase("Gebärden", "Gebarden")]
         public void StripDiacritics_ReturnsTheExpectedResult([NotNull] string a, string e)
         {
             Assert.AreEqual(e, a.StripDiacritics());
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void StripDiacritics_ThrowsException_IfStringIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((string) null).StripDiacritics());
         }
     }
 }

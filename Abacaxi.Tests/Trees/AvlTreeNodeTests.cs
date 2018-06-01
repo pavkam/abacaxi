@@ -22,6 +22,13 @@ namespace Abacaxi.Tests.Trees
     public class AvlTreeNodeTests
     {
         [Test]
+        public void Balance_Setter_StoresTheValue()
+        {
+            var instance = new AvlTreeNode<int, string> { Balance = -1 };
+            Assert.AreEqual(-1, instance.Balance);
+        }
+
+        [Test]
         public void Ctor_CreatesInstance_WithDefaultKey()
         {
             var instance = new AvlTreeNode<int, string>();
@@ -38,19 +45,19 @@ namespace Abacaxi.Tests.Trees
         }
 
         [Test]
-        public void Ctor_CreatesInstance_WithNullRightChild()
-        {
-            var instance = new AvlTreeNode<int, string>();
-
-            Assert.IsNull(instance.RightChild);
-        }
-
-        [Test]
         public void Ctor_CreatesInstance_WithNullLeftChild()
         {
             var instance = new AvlTreeNode<int, string>();
 
             Assert.IsNull(instance.LeftChild);
+        }
+
+        [Test]
+        public void Ctor_CreatesInstance_WithNullRightChild()
+        {
+            var instance = new AvlTreeNode<int, string>();
+
+            Assert.IsNull(instance.RightChild);
         }
 
         [Test]
@@ -64,38 +71,31 @@ namespace Abacaxi.Tests.Trees
         [Test]
         public void Key_Setter_StoresTheValue()
         {
-            var instance = new AvlTreeNode<int, string> {Key = 100};
+            var instance = new AvlTreeNode<int, string> { Key = 100 };
             Assert.AreEqual(100, instance.Key);
-        }
-
-        [Test]
-        public void Value_Setter_StoresTheValue()
-        {
-            var instance = new AvlTreeNode<int, string> {Value = "Hello"};
-            Assert.AreEqual("Hello", instance.Value);
-        }
-
-        [Test]
-        public void RightChild_Setter_StoresTheValue()
-        {
-            var r = new AvlTreeNode<int, string>();
-            var instance = new AvlTreeNode<int, string> {RightChild = r};
-            Assert.AreSame(r, instance.RightChild);
         }
 
         [Test]
         public void LeftChild_Setter_StoresTheValue()
         {
             var r = new AvlTreeNode<int, string>();
-            var instance = new AvlTreeNode<int, string> {LeftChild = r};
+            var instance = new AvlTreeNode<int, string> { LeftChild = r };
             Assert.AreSame(r, instance.LeftChild);
         }
 
         [Test]
-        public void Balance_Setter_StoresTheValue()
+        public void RightChild_Setter_StoresTheValue()
         {
-            var instance = new AvlTreeNode<int, string> { Balance = -1 };
-            Assert.AreEqual(-1, instance.Balance);
+            var r = new AvlTreeNode<int, string>();
+            var instance = new AvlTreeNode<int, string> { RightChild = r };
+            Assert.AreSame(r, instance.RightChild);
+        }
+
+        [Test]
+        public void Value_Setter_StoresTheValue()
+        {
+            var instance = new AvlTreeNode<int, string> { Value = "Hello" };
+            Assert.AreEqual("Hello", instance.Value);
         }
     }
 }

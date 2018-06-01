@@ -21,13 +21,6 @@ namespace Abacaxi.Tests.StringExtensions
     public class FindDuplicatesTests
     {
         [Test]
-        public void StringFindDuplicates_ReturnsNothing_ForDistinctElements()
-        {
-            TestHelper.AssertSequence(
-                "123456789\u5000\u5001".FindDuplicates());
-        }
-
-        [Test]
         public void StringFindDuplicates_ReturnsDuplicates_ForDistinctElements()
         {
             TestHelper.AssertSequence(
@@ -35,6 +28,13 @@ namespace Abacaxi.Tests.StringExtensions
                 new Frequency<char>('1', 3),
                 new Frequency<char>('2', 2),
                 new Frequency<char>('\u5000', 2));
+        }
+
+        [Test]
+        public void StringFindDuplicates_ReturnsNothing_ForDistinctElements()
+        {
+            TestHelper.AssertSequence(
+                "123456789\u5000\u5001".FindDuplicates());
         }
     }
 }

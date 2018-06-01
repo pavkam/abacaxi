@@ -16,30 +16,26 @@
 namespace Abacaxi.Tests.Graphs
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Abacaxi.Graphs;
-    using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class TopologicalSortTests
     {
-        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void TopologicalSort_ThrowsException_ForUndirectedGraph()
-        {
-            var graph = new LiteralGraph("A-1-B", false);
-            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
-        }
-
-        [TestCase("A-1-B"),TestCase("A>1>B,B>1>A"),TestCase("A>1>B,B>1>C,C>1>A"),SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        [TestCase("A-1-B"), TestCase("A>1>B,B>1>A"), TestCase("A>1>B,B>1>C,C>1>A"),
+         SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void TopologicalSort_ThrowsException_ForDirectedGraphWith([NotNull] string relationships)
         {
             var graph = new LiteralGraph(relationships, true);
             Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
         }
 
-        [TestCase("", ""),TestCase("A", "A"),TestCase("A>1>B", "A,B"),TestCase("A>1>B,B>1>C", "A,B,C"),TestCase("A>1>B,B>1>C,A>1>C", "A,B,C"),TestCase("A,B,C,C>1>D", "A,B,C,D"),TestCase("A>1>B,C>1>B,B>1>D,B>1>E,E>1>D,F", "A,C,F,B,E,D")]
+        [TestCase("", ""), TestCase("A", "A"), TestCase("A>1>B", "A,B"), TestCase("A>1>B,B>1>C", "A,B,C"),
+         TestCase("A>1>B,B>1>C,A>1>C", "A,B,C"), TestCase("A,B,C,C>1>D", "A,B,C,D"),
+         TestCase("A>1>B,C>1>B,B>1>D,B>1>E,E>1>D,F", "A,C,F,B,E,D")]
         public void TopologicalSort_AlignsTheVerticesAsExpected([NotNull] string relationships, string expected)
         {
             var graph = new LiteralGraph(relationships, true);
@@ -47,6 +43,13 @@ namespace Abacaxi.Tests.Graphs
             var actual = string.Join(",", result);
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        public void TopologicalSort_ThrowsException_ForUndirectedGraph()
+        {
+            var graph = new LiteralGraph("A-1-B", false);
+            Assert.Throws<InvalidOperationException>(() => graph.TopologicalSort());
         }
     }
 }

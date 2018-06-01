@@ -16,90 +16,60 @@
 namespace Abacaxi.Tests.ZArray
 {
     using System;
-    using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
+    using NUnit.Framework;
+    using ZArray = Abacaxi.ZArray;
 
     [TestFixture]
     public sealed class ConstructTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Construct_ThrowsException_ForNullArray()
+        [TestCase("0123456789", 0, 10), TestCase("0", 0, 1), TestCase("abc", 1, 2)]
+        public void Construct_ReturnsAnArrayOfTheSameLengthAsInput([NotNull] string s, int start, int length)
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.ZArray.Construct(null, 1, 1, EqualityComparer<int>.Default));
+            var sequence = s.AsList();
+            var z = ZArray.Construct(sequence, start, length, EqualityComparer<char>.Default);
+
+            Assert.AreEqual(z.Length, length);
         }
 
-        [Test]
-        public void Construct_ThrowsException_ForNegativeStartIndex()
+        [TestCase("0123456789", 0, 10), TestCase("0", 0, 1), TestCase("abc", 1, 2)]
+        public void Construct_ReturnsTheLengthOfArrayAsElementZero([NotNull] string s, int start, int length)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.ZArray.Construct(new[] { 1 }, -1, 1, EqualityComparer<int>.Default));
-        }
+            var sequence = s.AsList();
+            var z = ZArray.Construct(sequence, start, length, EqualityComparer<char>.Default);
 
-        [Test]
-        public void Construct_ThrowsException_ForNegativeLength()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.ZArray.Construct(new[] { 1 }, 0, -1, EqualityComparer<int>.Default));
-        }
-
-        [Test]
-        public void Construct_ThrowsException_ForOutOfBounds1()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.ZArray.Construct(new[] { 1 }, 0, 2, EqualityComparer<int>.Default));
-        }
-
-        [Test]
-        public void Construct_ThrowsException_ForOutOfBounds2()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.ZArray.Construct(new[] { 1 }, 1, 1, EqualityComparer<int>.Default));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Construct_ThrowsException_ForNullComparer()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.ZArray.Construct(new[] { 1 }, 0, 1, null));
-        }
-
-        [Test]
-        public void Construct_DoesNothing_ForZeroLength()
-        {
-            var array = new[] { 1, 2 };
-            Abacaxi.ZArray.Construct(array, 1, 0, EqualityComparer<int>.Default);
-
-            Assert.AreEqual(new[] { 1, 2 }, array);
+            Assert.AreEqual(length, z[0]);
         }
 
         [Test]
         public void Construct_DoesNothing_ForEmptyArray()
         {
             var array = new int[] { };
-            Abacaxi.ZArray.Construct(array, 0, 0, EqualityComparer<int>.Default);
+            ZArray.Construct(array, 0, 0, EqualityComparer<int>.Default);
 
             Assert.AreEqual(new int[] { }, array);
         }
 
-        [TestCase("0123456789", 0, 10),TestCase("0", 0, 1),TestCase("abc", 1, 2)]
-        public void Construct_ReturnsAnArrayOfTheSameLengthAsInput([NotNull] string s, int start, int length)
+        [Test]
+        public void Construct_DoesNothing_ForZeroLength()
         {
-            var sequence = s.AsList();
-            var z = Abacaxi.ZArray.Construct(sequence, start, length, EqualityComparer<char>.Default);
+            var array = new[] { 1, 2 };
+            ZArray.Construct(array, 1, 0, EqualityComparer<int>.Default);
 
-            Assert.AreEqual(z.Length, length);
+            Assert.AreEqual(new[] { 1, 2 }, array);
         }
 
-        [TestCase("0123456789", 0, 10),TestCase("0", 0, 1),TestCase("abc", 1, 2)]
-        public void Construct_ReturnsTheLengthOfArrayAsElementZero([NotNull] string s, int start, int length)
+        [Test]
+        public void Construct_ReturnsADecreasingSequence_ForArrayOfSameChars()
         {
-            var sequence = s.AsList();
-            var z = Abacaxi.ZArray.Construct(sequence, start, length, EqualityComparer<char>.Default);
+            // ReSharper disable once StringLiteralTypo
+            var sequence = "aaaaaaaa".AsList();
+            var z = ZArray.Construct(sequence, 0, sequence.Count, EqualityComparer<char>.Default);
 
-            Assert.AreEqual(length, z[0]);
+            TestHelper.AssertSequence(z,
+                8, 7, 6, 5, 4, 3, 2, 1);
         }
 
         [Test]
@@ -107,7 +77,7 @@ namespace Abacaxi.Tests.ZArray
         {
             // ReSharper disable once StringLiteralTypo
             var sequence = "abcaababc".AsList();
-            var z = Abacaxi.ZArray.Construct(sequence, 0, sequence.Count, EqualityComparer<char>.Default);
+            var z = ZArray.Construct(sequence, 0, sequence.Count, EqualityComparer<char>.Default);
 
             TestHelper.AssertSequence(z,
                 9, 0, 0, 1, 2, 0, 3, 0, 0);
@@ -118,7 +88,7 @@ namespace Abacaxi.Tests.ZArray
         {
             // ReSharper disable once StringLiteralTypo
             var sequence = "abcaababc".AsList();
-            var z = Abacaxi.ZArray.Construct(sequence, 1, sequence.Count - 1, EqualityComparer<char>.Default);
+            var z = ZArray.Construct(sequence, 1, sequence.Count - 1, EqualityComparer<char>.Default);
 
             TestHelper.AssertSequence(z,
                 8, 0, 0, 0, 1, 0, 2, 0);
@@ -129,21 +99,52 @@ namespace Abacaxi.Tests.ZArray
         {
             // ReSharper disable once StringLiteralTypo
             var sequence = "abcaababc".AsList();
-            var z = Abacaxi.ZArray.Construct(sequence, 0, sequence.Count - 1, EqualityComparer<char>.Default);
+            var z = ZArray.Construct(sequence, 0, sequence.Count - 1, EqualityComparer<char>.Default);
 
             TestHelper.AssertSequence(z,
                 8, 0, 0, 1, 2, 0, 2, 0);
         }
 
         [Test]
-        public void Construct_ReturnsADecreasingSequence_ForArrayOfSameChars()
+        public void Construct_ThrowsException_ForNegativeLength()
         {
-            // ReSharper disable once StringLiteralTypo
-            var sequence = "aaaaaaaa".AsList();
-            var z = Abacaxi.ZArray.Construct(sequence, 0, sequence.Count, EqualityComparer<char>.Default);
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                ZArray.Construct(new[] { 1 }, 0, -1, EqualityComparer<int>.Default));
+        }
 
-            TestHelper.AssertSequence(z,
-                8, 7, 6, 5, 4, 3, 2, 1);
+        [Test]
+        public void Construct_ThrowsException_ForNegativeStartIndex()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                ZArray.Construct(new[] { 1 }, -1, 1, EqualityComparer<int>.Default));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Construct_ThrowsException_ForNullArray()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ZArray.Construct(null, 1, 1, EqualityComparer<int>.Default));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Construct_ThrowsException_ForNullComparer()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ZArray.Construct(new[] { 1 }, 0, 1, null));
+        }
+
+        [Test]
+        public void Construct_ThrowsException_ForOutOfBounds1()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                ZArray.Construct(new[] { 1 }, 0, 2, EqualityComparer<int>.Default));
+        }
+
+        [Test]
+        public void Construct_ThrowsException_ForOutOfBounds2()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                ZArray.Construct(new[] { 1 }, 1, 1, EqualityComparer<int>.Default));
         }
     }
 }

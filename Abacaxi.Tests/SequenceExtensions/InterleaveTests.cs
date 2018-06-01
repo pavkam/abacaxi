@@ -16,61 +16,67 @@
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
-    using System.Linq;
-    using NUnit.Framework;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using NUnit.Framework;
+    using SequenceExtensions = Abacaxi.SequenceExtensions;
 
     [TestFixture]
     public class InterleaveTests
     {
-        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Interleave_ThrowsException_WhenComparerIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.Interleave(null, new int[] { }));
-        }
-
-        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Interleave_ThrowsException_WhenSequenceIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, null, new int[] { }));
-        }
-
-        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Interleave_ThrowsException_WhenParamsIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, new int[] { }, null));
-        }
-
-        [Test,SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void Interleave_ThrowsException_WhenStreamIsUnsorted()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-                Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, new[] { 10, 11 }).ToArray());
-        }
-
         [Test]
-        public void Interleave_ReturnsOriginalSequence_IfOnlyOne()
+        public void Interleave_InterleavesThreeStreams()
         {
-            TestHelper.AssertSequence(Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, new[] { 10, 9, 8, 7 }),
-                10, 9, 8, 7);
+            TestHelper.AssertSequence(
+                SequenceExtensions.Interleave(Comparer<int>.Default, new[] { 20, 17 }, new[] { 19, 16, 14 },
+                    new[] { 18, 15, 13, 12 }),
+                20, 19, 18, 17, 16, 15, 14, 13, 12);
         }
 
         [Test]
         public void Interleave_ReturnsNothingIfSequencesAreEmpty()
         {
-            TestHelper.AssertSequence(Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, new int[] { }, new int[] { }, new int[] { }));
+            TestHelper.AssertSequence(SequenceExtensions.Interleave(Comparer<int>.Default, new int[] { }, new int[] { },
+                new int[] { }));
         }
 
         [Test]
-        public void Interleave_InterleavesThreeStreams()
+        public void Interleave_ReturnsOriginalSequence_IfOnlyOne()
         {
-            TestHelper.AssertSequence(
-                Abacaxi.SequenceExtensions.Interleave(Comparer<int>.Default, new[] { 20, 17 }, new[] { 19, 16, 14 }, new[] { 18, 15, 13, 12 }),
-                20, 19, 18, 17, 16, 15, 14, 13, 12);
+            TestHelper.AssertSequence(SequenceExtensions.Interleave(Comparer<int>.Default, new[] { 10, 9, 8, 7 }),
+                10, 9, 8, 7);
+        }
+
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Interleave_ThrowsException_WhenComparerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceExtensions.Interleave(null, new int[] { }));
+        }
+
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Interleave_ThrowsException_WhenParamsIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceExtensions.Interleave(Comparer<int>.Default, new int[] { }, null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Interleave_ThrowsException_WhenSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceExtensions.Interleave(Comparer<int>.Default, null, new int[] { }));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        public void Interleave_ThrowsException_WhenStreamIsUnsorted()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                SequenceExtensions.Interleave(Comparer<int>.Default, new[] { 10, 11 }).ToArray());
         }
     }
 }

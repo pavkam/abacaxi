@@ -16,8 +16,8 @@
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public class ToStringTests
@@ -28,21 +28,17 @@ namespace Abacaxi.Tests.SequenceExtensions
         private readonly int[] _twoArray = { 123, 456 };
 
         [Test]
-        public void ToString1_ThrowsException_ForNullSequence()
+        public void ToString1_ActuallyCaresAboutSelector()
         {
-            Assert.Throws<ArgumentNullException>(() => _nullArray.ToString(s => s, ""));
+            var result = _twoArray.ToString(s => $"[{s}]", "-");
+            Assert.AreEqual("[123]-[456]", result);
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ToString1_ThrowsException_ForNullSelector()
+        [Test]
+        public void ToString1_ReturnsCommaDelimitedString_ForSequenceOfTwo()
         {
-            Assert.Throws<ArgumentNullException>(() => _emptyArray.ToString((Func<int, int>)null, ""));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ToString1_ThrowsException_ForNullSeparator()
-        {
-            Assert.Throws<ArgumentNullException>(() => _emptyArray.ToString(i => i, null));
+            var result = _twoArray.ToString(s => s, ",");
+            Assert.AreEqual("123,456", result);
         }
 
         [Test]
@@ -59,30 +55,29 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.AreEqual("123", result);
         }
 
-        [Test]
-        public void ToString1_ReturnsCommaDelimitedString_ForSequenceOfTwo()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToString1_ThrowsException_ForNullSelector()
         {
-            var result = _twoArray.ToString(s => s, ",");
+            Assert.Throws<ArgumentNullException>(() => _emptyArray.ToString((Func<int, int>) null, ""));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToString1_ThrowsException_ForNullSeparator()
+        {
+            Assert.Throws<ArgumentNullException>(() => _emptyArray.ToString(i => i, null));
+        }
+
+        [Test]
+        public void ToString1_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() => _nullArray.ToString(s => s, ""));
+        }
+
+        [Test]
+        public void ToString2_ReturnsCommaDelimitedString_ForSequenceOfTwo()
+        {
+            var result = _twoArray.ToString(",");
             Assert.AreEqual("123,456", result);
-        }
-
-        [Test]
-        public void ToString1_ActuallyCaresAboutSelector()
-        {
-            var result = _twoArray.ToString(s => $"[{s}]", "-");
-            Assert.AreEqual("[123]-[456]", result);
-        }
-
-        [Test]
-        public void ToString2_ThrowsException_ForNullSequence()
-        {
-            Assert.Throws<ArgumentNullException>(() => _nullArray.ToString(""));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ToString2_ThrowsException_ForNullSeparator()
-        {
-            Assert.Throws<ArgumentNullException>(() => _emptyArray.ToString(null));
         }
 
         [Test]
@@ -99,11 +94,16 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.AreEqual("123", result);
         }
 
-        [Test]
-        public void ToString2_ReturnsCommaDelimitedString_ForSequenceOfTwo()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToString2_ThrowsException_ForNullSeparator()
         {
-            var result = _twoArray.ToString(",");
-            Assert.AreEqual("123,456", result);
+            Assert.Throws<ArgumentNullException>(() => _emptyArray.ToString(null));
+        }
+
+        [Test]
+        public void ToString2_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() => _nullArray.ToString(""));
         }
     }
 }

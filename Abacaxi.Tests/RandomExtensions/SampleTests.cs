@@ -16,44 +16,15 @@
 namespace Abacaxi.Tests.RandomExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class SampleTests
     {
         private readonly Random _random = new Random();
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Sample_ThrowsException_IfRandomIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((Random)null).Sample(new[] { 1 }, 1));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Sample_ThrowsException_IfSequenceIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                _random.Sample<int>(null, 1));
-        }
-
-        [Test]
-        public void Sample_ThrowsException_IfSampleLengthIsLessThanOne()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                _random.Sample(new[] {1}, 0));
-        }
-
-        [Test]
-        public void Sample_ReturnsNothing_ForAnEmptyInputSequence()
-        {
-            var result = _random.Sample(new int[] { }, 1);
-
-            TestHelper.AssertSequence(result);
-        }
-
-        [TestCase(1),TestCase(2)]
+        [TestCase(1), TestCase(2)]
         public void Sample_ReturnsSingleElement_ForOneLengthSequence(int expectedLength)
         {
             var result = _random.Sample(new[] { 1 }, expectedLength);
@@ -64,10 +35,39 @@ namespace Abacaxi.Tests.RandomExtensions
         [Test]
         public void Sample_ReturnsARandomSample()
         {
-            var input = new[] {1, 2, 3, 4, 5, 6}.ToSet();
+            var input = new[] { 1, 2, 3, 4, 5, 6 }.ToSet();
             var result = _random.Sample(input, 3).ToSet();
 
             Assert.IsTrue(input.IsProperSupersetOf(result));
+        }
+
+        [Test]
+        public void Sample_ReturnsNothing_ForAnEmptyInputSequence()
+        {
+            var result = _random.Sample(new int[] { }, 1);
+
+            TestHelper.AssertSequence(result);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Sample_ThrowsException_IfRandomIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ((Random) null).Sample(new[] { 1 }, 1));
+        }
+
+        [Test]
+        public void Sample_ThrowsException_IfSampleLengthIsLessThanOne()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                _random.Sample(new[] { 1 }, 0));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Sample_ThrowsException_IfSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                _random.Sample<int>(null, 1));
         }
     }
 }

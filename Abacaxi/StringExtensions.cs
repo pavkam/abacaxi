@@ -16,31 +16,30 @@
 namespace Abacaxi
 {
     using System.Collections.Generic;
-    using Internal;
-    using JetBrains.Annotations;
     using System.Globalization;
     using System.Text;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
-    /// Extension method for the <see cref="string"/> data type.
+    ///     Extension method for the <see cref="string" /> data type.
     /// </summary>
     [PublicAPI]
     public static class StringExtensions
     {
-        [NotNull]
-        private static readonly IDictionary<char, char> SpecialDiacriticMappings = new
+        [NotNull] private static readonly IDictionary<char, char> SpecialDiacriticMappings = new
             Dictionary<char, char>
             {
-                {'ł', 'l'},
-                {'Ł', 'L'}
+                { 'ł', 'l' },
+                { 'Ł', 'L' }
             };
 
         /// <summary>
-        /// Treats a given string as a list of characters.
+        ///     Treats a given string as a list of characters.
         /// </summary>
         /// <param name="s">The string.</param>
         /// <returns>A wrapping list.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
         [NotNull]
         public static IList<char> AsList([NotNull] this string s)
         {
@@ -49,11 +48,11 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Reverses the specified string using "undivided" string chunks.
+        ///     Reverses the specified string using "undivided" string chunks.
         /// </summary>
         /// <param name="s">The string to reverse.</param>
         /// <returns>The reserved string.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
         [NotNull]
         public static string Reverse([NotNull] this string s)
         {
@@ -73,14 +72,17 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Shortens the specified string up to a maximum length.
+        ///     Shortens the specified string up to a maximum length.
         /// </summary>
         /// <param name="s">The string.</param>
         /// <param name="maxLength">The maximum length of the output string.</param>
         /// <param name="ellipsis">The optional ellipsis string.</param>
-        /// <returns>A string of a maximum of <paramref name="maxLength"/> character.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="maxLength"/> is less than one or the length of <paramref name="ellipsis"/>is greater than <paramref name="maxLength"/>.</exception>
+        /// <returns>A string of a maximum of <paramref name="maxLength" /> character.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="maxLength" /> is less than one or the
+        ///     length of <paramref name="ellipsis" />is greater than <paramref name="maxLength" />.
+        /// </exception>
         [NotNull]
         public static string Shorten([NotNull] this string s, int maxLength, [CanBeNull] string ellipsis = null)
         {
@@ -124,10 +126,11 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Escapes the specified string.
+        ///     Escapes the specified string.
         /// </summary>
         /// <remarks>
-        /// This method escapes the special characters and unicode escape characters.</remarks>
+        ///     This method escapes the special characters and unicode escape characters.
+        /// </remarks>
         /// <param name="s">The string to escape.</param>
         /// <returns>The escaped string.</returns>
         [NotNull]
@@ -188,6 +191,7 @@ namespace Abacaxi
                             {
                                 result.Append(c);
                             }
+
                             break;
                     }
                 }
@@ -201,13 +205,16 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Checks whether the given string matches the specified pattern.
+        ///     Checks whether the given string matches the specified pattern.
         /// </summary>
         /// <param name="s">The string to check.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="ignoreCase">If set to <c>true</c>, ignores the case.</param>
         /// <returns><c>true</c> if the string matches the pattern; otherwise, <c>false</c>.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> or <paramref name="pattern"/> are <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">
+        ///     Thrown if <paramref name="s" /> or <paramref name="pattern" /> are
+        ///     <c>null</c>.
+        /// </exception>
         public static bool Like([NotNull] this string s, [NotNull] string pattern, bool ignoreCase = true)
         {
             Validate.ArgumentNotNull(nameof(pattern), pattern);
@@ -215,11 +222,11 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds all duplicate characters in a given <paramref name="s"/>.
+        ///     Finds all duplicate characters in a given <paramref name="s" />.
         /// </summary>
         /// <param name="s">The string to inspect.</param>
         /// <returns>A s of element-appearances pairs of the detected duplicates.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
         [NotNull]
         public static Frequency<char>[] FindDuplicates([NotNull] this string s)
         {
@@ -267,7 +274,7 @@ namespace Abacaxi
             return result.ToArray();
         }
 
-        [NotNull,ItemNotNull]
+        [NotNull, ItemNotNull]
         private static IEnumerable<string> SplitIntoLinesIterate([NotNull] this string s)
         {
             Assert.NotNull(s);
@@ -286,7 +293,8 @@ namespace Abacaxi
                     }
                     else
                     {
-                        if (ci > si && s[ci - 1] == '\r')
+                        if (ci > si &&
+                            s[ci - 1] == '\r')
                         {
                             yield return s.Substring(si, ci - si - 1);
                         }
@@ -316,12 +324,12 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Splits a given string into separate lines (based on the presence of CRLF or LF sequences).
+        ///     Splits a given string into separate lines (based on the presence of CRLF or LF sequences).
         /// </summary>
         /// <param name="s">The string to split.</param>
         /// <returns>A sequence of strings, each representing an individual line in the string.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
-        [NotNull,ItemNotNull]
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
+        [NotNull, ItemNotNull]
         public static IEnumerable<string> SplitIntoLines([NotNull] this string s)
         {
             Validate.ArgumentNotNull(nameof(s), s);
@@ -358,7 +366,8 @@ namespace Abacaxi
 
                         si = i;
                     }
-                    else if (char.IsWhiteSpace(line, i) && lineLength > 1)
+                    else if (char.IsWhiteSpace(line, i) &&
+                             lineLength > 1)
                     {
                         yield return line.Substring(si, lineLength);
 
@@ -388,13 +397,13 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Wraps the specified string according to a given line length.
+        ///     Wraps the specified string according to a given line length.
         /// </summary>
         /// <param name="s">The string to word wrap.</param>
         /// <param name="lineLength">Length of the line.</param>
         /// <returns>A sequence of lines containing the word wrapped string.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="lineLength"/> is less than one.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="lineLength" /> is less than one.</exception>
         [NotNull]
         public static IEnumerable<string> WordWrap([NotNull] this string s, int lineLength)
         {
@@ -405,11 +414,11 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Strips the diacritics from a given string, replacing the characters in question with equivalent non-diacritic ones.
+        ///     Strips the diacritics from a given string, replacing the characters in question with equivalent non-diacritic ones.
         /// </summary>
         /// <param name="s">The string.</param>
         /// <returns>A string with stripped diacritics.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
         [NotNull]
         public static string StripDiacritics([NotNull] this string s)
         {

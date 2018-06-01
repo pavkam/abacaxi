@@ -16,119 +16,120 @@
 namespace Abacaxi.Tests.Set
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
+    using Set = Abacaxi.Set;
 
     [TestFixture]
     public class GetSubsetWithNearValueTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetSubsetWithNearValue_ThrowsException_ForNullSequence()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.Set.GetSubsetWithNearValue(null, 1));
-        }
-
-        [Test]
-        public void GetSubsetWithNearValue_ThrowsException_ForZeroTargetSum()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Set.GetSubsetWithNearValue(new int[] { }, 0));
-        }
-
-        [Test]
-        public void GetSubsetWithNearValue_ThrowsException_ForNegativeNumberInSequence()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Set.GetSubsetWithNearValue(new[] {-1}, 1));
-        }
-
-        [Test]
-        public void GetSubsetWithNearValue_ReturnsNothing_WhenSumCannotBeCompleted()
-        {
-            var array = new[] {2, 3, 4};
-            TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 1));
-        }
-
         [Test]
         public void GetSubsetWithNearValue_ReturnsNothing_ForEmptyArray()
         {
             var array = new int[] { };
             TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 1));
+                Set.GetSubsetWithNearValue(array, 1));
+        }
+
+        [Test]
+        public void GetSubsetWithNearValue_ReturnsNothing_WhenSumCannotBeCompleted()
+        {
+            var array = new[] { 2, 3, 4 };
+            TestHelper.AssertSequence(
+                Set.GetSubsetWithNearValue(array, 1));
         }
 
         [Test]
         public void GetSubsetWithNearValue_ReturnsOne_ForPerfectMatchingSumOfOne()
         {
-            var array = new[] {1};
+            var array = new[] { 1 };
             TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 1),
+                Set.GetSubsetWithNearValue(array, 1),
                 1);
         }
 
         [Test]
         public void GetSubsetWithNearValue_ReturnsOne_WhenSkippingZeroes()
         {
-            var array = new[] {0, 0, 1};
+            var array = new[] { 0, 0, 1 };
             TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 1),
+                Set.GetSubsetWithNearValue(array, 1),
                 1);
-        }
-
-        [Test]
-        public void GetSubsetWithNearValue_ReturnsTwo_ForPerfectFullyCompletedSumOfTwo()
-        {
-            var array = new[] {1, 2};
-            TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 2),
-                2);
-        }
-
-        [Test]
-        public void GetSubsetWithNearValue_ReturnsOneTwoThree_ForASumOfTen()
-        {
-            var array = new[] {1, 2, 3};
-            TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 10),
-                3, 2, 1);
         }
 
         [Test]
         public void GetSubsetWithNearValue_ReturnsOneAndTwo_ForASumOfThree()
         {
-            var array = new[] {1, 2, 3, 4, 5};
+            var array = new[] { 1, 2, 3, 4, 5 };
             TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 3),
+                Set.GetSubsetWithNearValue(array, 3),
                 2, 1);
         }
 
         [Test]
         public void GetSubsetWithNearValue_ReturnsOneTwoThree_ForASumOfSeven_ExcludingTen()
         {
-            var array = new[] {1, 2, 3, 10};
+            var array = new[] { 1, 2, 3, 10 };
             TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 7),
+                Set.GetSubsetWithNearValue(array, 7),
+                3, 2, 1);
+        }
+
+        [Test]
+        public void GetSubsetWithNearValue_ReturnsOneTwoThree_ForASumOfTen()
+        {
+            var array = new[] { 1, 2, 3 };
+            TestHelper.AssertSequence(
+                Set.GetSubsetWithNearValue(array, 10),
                 3, 2, 1);
         }
 
         [Test]
         public void GetSubsetWithNearValue_ReturnsTen_ForASumOfEleven_ExcludingFive()
         {
-            var array = new[] {5, 10};
+            var array = new[] { 5, 10 };
             TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 11),
+                Set.GetSubsetWithNearValue(array, 11),
                 10);
         }
 
         [Test]
         public void GetSubsetWithNearValue_ReturnsTenOne_ForASumOfEleven_ExcludingOneTwoThree()
         {
-            var array = new[] {1, 2, 3, 10};
+            var array = new[] { 1, 2, 3, 10 };
             TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithNearValue(array, 11),
+                Set.GetSubsetWithNearValue(array, 11),
                 10, 1);
+        }
+
+        [Test]
+        public void GetSubsetWithNearValue_ReturnsTwo_ForPerfectFullyCompletedSumOfTwo()
+        {
+            var array = new[] { 1, 2 };
+            TestHelper.AssertSequence(
+                Set.GetSubsetWithNearValue(array, 2),
+                2);
+        }
+
+        [Test]
+        public void GetSubsetWithNearValue_ThrowsException_ForNegativeNumberInSequence()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Set.GetSubsetWithNearValue(new[] { -1 }, 1));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetSubsetWithNearValue_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                Set.GetSubsetWithNearValue(null, 1));
+        }
+
+        [Test]
+        public void GetSubsetWithNearValue_ThrowsException_ForZeroTargetSum()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Set.GetSubsetWithNearValue(new int[] { }, 0));
         }
     }
 }

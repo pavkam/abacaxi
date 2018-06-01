@@ -6,77 +6,82 @@
     <members>
         <member name="T:Abacaxi.Practice.Graphs.ChessHorsePathGraph">
             <summary>
-            A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped movements).
+                A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped
+                movements).
             </summary>
+        </member>
+        <member name="M:Abacaxi.Practice.Graphs.ChessHorsePathGraph.#ctor(System.Int32,System.Int32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Abacaxi.Practice.Graphs.ChessHorsePathGraph" /> class.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="boardWidth" /> or
+                <paramref name="boardHeight" /> are less than <c>1</c>.
+            </exception>
         </member>
         <member name="P:Abacaxi.Practice.Graphs.ChessHorsePathGraph.IsDirected">
             <summary>
-            Gets a value indicating whether this graph's edges are directed.
+                Gets a value indicating whether this graph's edges are directed.
             </summary>
             <value>
-            Always returns <c>true</c>.
+                Always returns <c>true</c>.
             </value>
         </member>
         <member name="P:Abacaxi.Practice.Graphs.ChessHorsePathGraph.IsReadOnly">
             <summary>
-            Gets a value indicating whether this instance is read only.
+                Gets a value indicating whether this instance is read only.
             </summary>
             <value>
-            <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+                <c>true</c> if this instance is read only; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:Abacaxi.Practice.Graphs.ChessHorsePathGraph.SupportsPotentialWeightEvaluation">
             <summary>
-            Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+                Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
             </summary>
             <remarks>
-            This implementation always returns <c>false</c>.
+                This implementation always returns <c>false</c>.
             </remarks>
             <value>
-            <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+                <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
             </value>
-        </member>
-        <member name="M:Abacaxi.Practice.Graphs.ChessHorsePathGraph.#ctor(System.Int32,System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Abacaxi.Practice.Graphs.ChessHorsePathGraph"/> class.
-            </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if <paramref name="boardWidth"/> or <paramref name="boardHeight"/> are less than <c>1</c>.</exception>
         </member>
         <member name="M:Abacaxi.Practice.Graphs.ChessHorsePathGraph.GetEnumerator">
             <summary>
-            Returns an enumerator that iterates all vertices in the graph.
+                Returns an enumerator that iterates all vertices in the graph.
             </summary>
             <returns>
-            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+                A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
             </returns>
         </member>
         <member name="M:Abacaxi.Practice.Graphs.ChessHorsePathGraph.GetPotentialWeight(Abacaxi.Graphs.Cell,Abacaxi.Graphs.Cell)">
             <summary>
-            Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" /> vertices.
+                Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" />
+                vertices.
             </summary>
             <remarks>
-            This graph does not support potential weight evaluation.
+                This graph does not support potential weight evaluation.
             </remarks>
             <param name="fromVertex">The first vertex.</param>
             <param name="toVertex">The destination vertex.</param>
             <returns>
-            The potential total cost.
+                The potential total cost.
             </returns>
             <exception cref="T:System.NotImplementedException">Always thrown.</exception>
         </member>
         <member name="M:Abacaxi.Practice.Graphs.ChessHorsePathGraph.GetEdges(Abacaxi.Graphs.Cell)">
             <summary>
-            Gets the edges for a given <paramref name="vertex" />.
+                Gets the edges for a given <paramref name="vertex" />.
             </summary>
             <param name="vertex"></param>
             <returns>
-            A sequence of edges connected to the given <paramref name="vertex" />
+                A sequence of edges connected to the given <paramref name="vertex" />
             </returns>
-            <exception cref="T:System.ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the <paramref name="vertex" /> is not part of the graph.</exception>
         </member>
         <member name="M:Abacaxi.Practice.Graphs.ChessHorsePathGraph.FindChessHorsePathBetweenTwoPoints(Abacaxi.Graphs.Cell,Abacaxi.Graphs.Cell)">
             <summary>
-            Finds the shortest path between any two arbitrary cells on an infinite chess board.
+                Finds the shortest path between any two arbitrary cells on an infinite chess board.
             </summary>
             <param name="startCell">The start cell.</param>
             <param name="endCell">The end cell.</param>
@@ -84,90 +89,95 @@
         </member>
         <member name="T:Abacaxi.Practice.Graphs.StringNeighborhoodGraph">
             <summary>
-            A graph composed by a number of strings (representing vertices) and connected by edges signifying potential one-letter transformations.
+                A graph composed by a number of strings (representing vertices) and connected by edges signifying potential
+                one-letter transformations.
             </summary>
+        </member>
+        <member name="M:Abacaxi.Practice.Graphs.StringNeighborhoodGraph.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+                Initializes a new instance of the <see cref="T:Abacaxi.Practice.Graphs.StringNeighborhoodGraph" /> class.
+            </summary>
+            <param name="sequence">The sequence of strings to build the graph upon.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
         </member>
         <member name="P:Abacaxi.Practice.Graphs.StringNeighborhoodGraph.IsDirected">
             <summary>
-            Gets a value indicating whether this graph's edges are directed.
+                Gets a value indicating whether this graph's edges are directed.
             </summary>
             <value>
-            Always returns <c>false</c>.
+                Always returns <c>false</c>.
             </value>
         </member>
         <member name="P:Abacaxi.Practice.Graphs.StringNeighborhoodGraph.IsReadOnly">
             <summary>
-            Gets a value indicating whether this instance is read only.
+                Gets a value indicating whether this instance is read only.
             </summary>
             <value>
-            <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+                <c>true</c> if this instance is read only; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:Abacaxi.Practice.Graphs.StringNeighborhoodGraph.SupportsPotentialWeightEvaluation">
             <summary>
-            Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+                Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
             </summary>
             <remarks>
-            This implementation always returns <c>false</c>.
+                This implementation always returns <c>false</c>.
             </remarks>
             <value>
-            <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+                <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
             </value>
-        </member>
-        <member name="M:Abacaxi.Practice.Graphs.StringNeighborhoodGraph.#ctor(System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            Initializes a new instance of the <see cref="T:Abacaxi.Practice.Graphs.StringNeighborhoodGraph"/> class.
-            </summary>
-            <param name="sequence">The sequence of strings to build the graph upon.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
         </member>
         <member name="M:Abacaxi.Practice.Graphs.StringNeighborhoodGraph.GetEnumerator">
             <summary>
-            Returns an enumerator that iterates all vertices in the graph.
+                Returns an enumerator that iterates all vertices in the graph.
             </summary>
             <returns>
-            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+                A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
             </returns>
         </member>
         <member name="M:Abacaxi.Practice.Graphs.StringNeighborhoodGraph.GetEdges(System.String)">
             <summary>
-            Gets the edges for a given <paramref name="vertex" />.
+                Gets the edges for a given <paramref name="vertex" />.
             </summary>
             <param name="vertex"></param>
             <returns>
-            A sequence of edges connected to the given <paramref name="vertex" />
+                A sequence of edges connected to the given <paramref name="vertex" />
             </returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="vertex"/> is <c>null</c>.</exception>
-            <exception cref="T:System.ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="vertex" /> is <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the <paramref name="vertex" /> is not part of the graph.</exception>
         </member>
         <member name="M:Abacaxi.Practice.Graphs.StringNeighborhoodGraph.GetPotentialWeight(System.String,System.String)">
             <summary>
-            Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" /> vertices.
+                Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" />
+                vertices.
             </summary>
             <remarks>
-            This graph does not support potential weight evaluation.
+                This graph does not support potential weight evaluation.
             </remarks>
             <param name="fromVertex">The first vertex.</param>
             <param name="toVertex">The destination vertex.</param>
             <returns>
-            The potential total cost.
+                The potential total cost.
             </returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="fromVertex"/> or <paramref name="toVertex"/> is <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown if <paramref name="fromVertex" /> or <paramref name="toVertex" /> is
+                <c>null</c>.
+            </exception>
             <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="T:Abacaxi.Practice.Integer">
             <summary>
-            Class that only contains practice algorithms related to integers.
+                Class that only contains practice algorithms related to integers.
             </summary>
         </member>
         <member name="M:Abacaxi.Practice.Integer.Divide(System.Int32,System.Int32)">
             <summary>
-            Divides <paramref name="number"/> by <paramref name="divisor"/>.
+                Divides <paramref name="number" /> by <paramref name="divisor" />.
             </summary>
             <param name="number">The number to divide.</param>
             <param name="divisor">The divisor.</param>
             <returns>The result of division.</returns>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if <paramref name="divisor"/> is <c>0</c>.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if <paramref name="divisor" /> is <c>0</c>.</exception>
         </member>
     </members>
 </doc>

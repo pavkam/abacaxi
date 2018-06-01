@@ -29,18 +29,18 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void EmptyIfNull_ReturnsOriginalSequence_IfSequenceIsEmpty()
+        public void EmptyIfNull_ReturnsOriginalSequence_IfSequenceContainsElements()
         {
-            var o = new string[] {};
+            var o = new[] { "a" };
             var actual = o.EmptyIfNull();
 
             Assert.AreSame(o, actual);
         }
 
         [Test]
-        public void EmptyIfNull_ReturnsOriginalSequence_IfSequenceContainsElements()
+        public void EmptyIfNull_ReturnsOriginalSequence_IfSequenceIsEmpty()
         {
-            var o = new[] { "a" };
+            var o = new string[] { };
             var actual = o.EmptyIfNull();
 
             Assert.AreSame(o, actual);

@@ -17,46 +17,22 @@ namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class ExtractNestedBlocksTests
     {
-        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ExtractNestedBlocks_ThrowsException_ForNullSequence()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default));
-        }
-
-        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ExtractNestedBlocks_ThrowsException_ForComparer()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new int[] { }.ExtractNestedBlocks(1, 1, null));
-        }
-
-        [Test,SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void ExtractNestedBlocks_ThrowsException_ForOrphanOpenBracket()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-                "(".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
-        }
-
-        [Test,SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void ExtractNestedBlocks_ThrowsException_ForOrphanCloseBracket()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-                ")".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
-        }
-
         [Test]
-        public void ExtractNestedBlocks_ReturnsNothing_ForEmptySequence()
+        public void ExtractNestedBlocks_ReturnsAllSequences_InMultiBlock()
         {
             TestHelper.AssertSequence(
-                new int[] { }.ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default));
+                "a(b(c))d(e)".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
+                "c".ToCharArray(),
+                "b(c)".ToCharArray(),
+                "e".ToCharArray(),
+                "a(b(c))d(e)".ToCharArray());
         }
 
         [Test]
@@ -68,6 +44,13 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        public void ExtractNestedBlocks_ReturnsNothing_ForEmptySequence()
+        {
+            TestHelper.AssertSequence(
+                new int[] { }.ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default));
+        }
+
+        [Test]
         public void ExtractNestedBlocks_ReturnsTwoSequences_IfOneBlockPresent()
         {
             TestHelper.AssertSequence(
@@ -76,15 +59,34 @@ namespace Abacaxi.Tests.SequenceExtensions
                 "(Hello World)".ToCharArray());
         }
 
-        [Test]
-        public void ExtractNestedBlocks_ReturnsAllSequences_InMultiBlock()
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ExtractNestedBlocks_ThrowsException_ForComparer()
         {
-            TestHelper.AssertSequence(
-                "a(b(c))d(e)".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
-                "c".ToCharArray(),
-                "b(c)".ToCharArray(),
-                "e".ToCharArray(),
-                "a(b(c))d(e)".ToCharArray());
+            Assert.Throws<ArgumentNullException>(() =>
+                new int[] { }.ExtractNestedBlocks(1, 1, null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ExtractNestedBlocks_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ((int[]) null).ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        public void ExtractNestedBlocks_ThrowsException_ForOrphanCloseBracket()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                ")".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
+        }
+
+        [Test, SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        public void ExtractNestedBlocks_ThrowsException_ForOrphanOpenBracket()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                "(".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
         }
     }
 }

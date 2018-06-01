@@ -16,17 +16,17 @@
 namespace Abacaxi.Trees
 {
     /// <summary>
-    /// Defines possible colors a red-black tree node can take.
+    ///     Defines possible colors a red-black tree node can take.
     /// </summary>
     public enum RedBlackTreeNodeColor
     {
         /// <summary>
-        /// The color red.
+        ///     The color red.
         /// </summary>
         Red,
 
         /// <summary>
-        /// The color black.
+        ///     The color black.
         /// </summary>
         Black
     }

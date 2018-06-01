@@ -16,95 +16,31 @@
 namespace Abacaxi.Containers
 {
     using System;
-    using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using Internal;
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class implements the heap data structure, most commonly known as the "priority queue".
+    ///     Class implements the heap data structure, most commonly known as the "priority queue".
     /// </summary>
     [PublicAPI]
     public sealed class Heap<T> : ICollection<T>
     {
         private const int DefaultArraySize = 32;
 
-        [NotNull]
-        private readonly IComparer<T> _comparer;
-        [NotNull]
-        private T[] _array;
+        [NotNull] private readonly IComparer<T> _comparer;
+
+        [NotNull] private T[] _array;
+
         private int _ver;
 
-        private void SiftDown([NotNull] IList<T> array, int length, int pi)
-        {
-            Assert.Condition(length <= array.Count);
-            Assert.Condition(pi >= 0 && pi < length);
-
-            while (pi < length)
-            {
-                var gi = pi;
-
-                for (var i = 1; i <= 2; i++)
-                {
-                    var ci = pi * 2 + i;
-                    if (ci < length && _comparer.Compare(array[gi], array[ci]) < 0)
-                    {
-                        gi = ci;
-                    }
-                }
-
-                if (gi != pi)
-                {
-                    var temp = array[gi];
-                    array[gi] = array[pi];
-                    array[pi] = temp;
-
-                    pi = gi;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-        }
-
-        private void SiftUp([NotNull] IList<T> array, int ci)
-        {
-            while (ci > 0)
-            {
-                var pi = ci % 2 == 1 ? (ci - 1) / 2 : (ci - 2) / 2;
-                if (_comparer.Compare(array[pi], array[ci]) < 0)
-                {
-                    var temp = array[ci];
-                    array[ci] = array[pi];
-                    array[pi] = temp;
-
-                    ci = pi;
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
-
-        private void BuildHeap([NotNull] IList<T> array, int length)
-        {
-            Assert.Condition(length <= array.Count);
-
-            for (var ci = 1; ci < length; ci++)
-            {
-                SiftUp(array, ci);
-            }
-        }
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="Heap{T}"/> class.
+        ///     Initializes a new instance of the <see cref="Heap{T}" /> class.
         /// </summary>
         /// <param name="comparer">The comparer.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer" /> is <c>null</c>.</exception>
         public Heap([NotNull] IComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -114,11 +50,14 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Heap{T}"/> class.
+        ///     Initializes a new instance of the <see cref="Heap{T}" /> class.
         /// </summary>
         /// <param name="collection">The collection to add to the container..</param>
         /// <param name="comparer">The comparer.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer"/> or <paramref name="collection"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="comparer" /> or <paramref name="collection" /> is
+        ///     <c>null</c>.
+        /// </exception>
         public Heap([NotNull] IEnumerable<T> collection, [NotNull] IComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(collection), collection);
@@ -135,10 +74,10 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets the top of the heap.
+        ///     Gets the top of the heap.
         /// </summary>
         /// <value>
-        /// The top element.
+        ///     The top element.
         /// </value>
         /// <exception cref="InvalidOperationException">The heap is empty.</exception>
         public T Top
@@ -155,17 +94,17 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="Heap{T}" />.
+        ///     Gets the number of elements contained in the <see cref="Heap{T}" />.
         /// </summary>
         public int Count { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="Heap{T}" /> is read-only.
+        ///     Gets a value indicating whether the <see cref="Heap{T}" /> is read-only.
         /// </summary>
         public bool IsReadOnly => false;
 
         /// <summary>
-        /// Adds an item to the <see cref="Heap{T}" />.
+        ///     Adds an item to the <see cref="Heap{T}" />.
         /// </summary>
         /// <param name="item">The object to add to the <see cref="Heap{T}" />.</param>
         public void Add(T item)
@@ -183,7 +122,7 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes all items from the <see cref="Heap{T}" />.
+        ///     Removes all items from the <see cref="Heap{T}" />.
         /// </summary>
         public void Clear()
         {
@@ -192,11 +131,11 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Determines whether the <see cref="Heap{T}" /> contains a specific value.
+        ///     Determines whether the <see cref="Heap{T}" /> contains a specific value.
         /// </summary>
         /// <param name="item">The object to locate in the <see cref="Heap{T}" />.</param>
         /// <returns>
-        /// true if <paramref name="item" /> is found in the <see cref="Heap{T}" />; otherwise, false.
+        ///     true if <paramref name="item" /> is found in the <see cref="Heap{T}" />; otherwise, false.
         /// </returns>
         public bool Contains(T item)
         {
@@ -212,12 +151,16 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Copies the elements of the <see cref="Heap{T}" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
+        ///     Copies the elements of the <see cref="Heap{T}" /> to an <see cref="T:System.Array" />, starting at a particular
+        ///     <see cref="T:System.Array" /> index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="Heap{T}" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+        /// <param name="array">
+        ///     The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied
+        ///     from <see cref="Heap{T}" />. The <see cref="T:System.Array" /> must have zero-based indexing.
+        /// </param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="array"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if there is not enough space in the <paramref name="array"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="array" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if there is not enough space in the <paramref name="array" />.</exception>
         public void CopyTo(T[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
@@ -247,10 +190,10 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through the collection.
+        ///     Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        ///     A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
@@ -284,11 +227,12 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific object from the <see cref="Heap{T}" />.
+        ///     Removes the first occurrence of a specific object from the <see cref="Heap{T}" />.
         /// </summary>
         /// <param name="item">The object to remove from the <see cref="Heap{T}" />.</param>
         /// <returns>
-        /// true if <paramref name="item" /> was successfully removed from the <see cref="Heap{T}" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="Heap{T}" />.
+        ///     true if <paramref name="item" /> was successfully removed from the <see cref="Heap{T}" />; otherwise, false. This
+        ///     method also returns false if <paramref name="item" /> is not found in the original <see cref="Heap{T}" />.
         /// </returns>
         public bool Remove(T item)
         {
@@ -304,7 +248,8 @@ namespace Abacaxi.Containers
                     _array[i] = _array[Count - 1];
 
                     var pi = i % 2 == 1 ? (i - 1) / 2 : (i - 2) / 2;
-                    if (pi >= 0 && _comparer.Compare(_array[pi], _array[i]) < 0)
+                    if (pi >= 0 &&
+                        _comparer.Compare(_array[pi], _array[i]) < 0)
                     {
                         SiftUp(_array, i);
                     }
@@ -323,7 +268,82 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes the top element in the <see cref="Heap{T}" />.
+        ///     Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        private void SiftDown([NotNull] IList<T> array, int length, int pi)
+        {
+            Assert.Condition(length <= array.Count);
+            Assert.Condition(pi >= 0 && pi < length);
+
+            while (pi < length)
+            {
+                var gi = pi;
+
+                for (var i = 1; i <= 2; i++)
+                {
+                    var ci = pi * 2 + i;
+                    if (ci < length &&
+                        _comparer.Compare(array[gi], array[ci]) < 0)
+                    {
+                        gi = ci;
+                    }
+                }
+
+                if (gi != pi)
+                {
+                    var temp = array[gi];
+                    array[gi] = array[pi];
+                    array[pi] = temp;
+
+                    pi = gi;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        private void SiftUp([NotNull] IList<T> array, int ci)
+        {
+            while (ci > 0)
+            {
+                var pi = ci % 2 == 1 ? (ci - 1) / 2 : (ci - 2) / 2;
+                if (_comparer.Compare(array[pi], array[ci]) < 0)
+                {
+                    var temp = array[ci];
+                    array[ci] = array[pi];
+                    array[pi] = temp;
+
+                    ci = pi;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        private void BuildHeap([NotNull] IList<T> array, int length)
+        {
+            Assert.Condition(length <= array.Count);
+
+            for (var ci = 1; ci < length; ci++)
+            {
+                SiftUp(array, ci);
+            }
+        }
+
+        /// <summary>
+        ///     Removes the top element in the <see cref="Heap{T}" />.
         /// </summary>
         /// <returns>The top element.</returns>
         /// <exception cref="InvalidOperationException">The heap is empty.</exception>
@@ -346,13 +366,5 @@ namespace Abacaxi.Containers
 
             return result;
         }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

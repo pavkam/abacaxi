@@ -16,35 +16,72 @@
 namespace Abacaxi.Tests.StringExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class WordWrapTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void WordWrap_ThrowsException_IfStringIsNull()
+        [TestCase("a", 1), TestCase("abc", 10), TestCase("abc def", 50)]
+        public void WordWrap_ReturnsWholeString_IfLineLengthEqualOrLongerThanStringLength([NotNull] string s, int l)
         {
-            Assert.Throws<ArgumentNullException>(() => ((string)null).WordWrap(1));
+            TestHelper.AssertSequence(s.WordWrap(l), s);
+        }
+
+        [TestCase('.'), TestCase(','), TestCase(';'), TestCase('!'), TestCase('?'), TestCase('-'), TestCase('+'),
+         TestCase('/'), TestCase('\\'), TestCase('*'), TestCase('^')]
+        public void WordWrap_WillFunctionOverKnownSpecialCharacters(char c)
+        {
+            var result = $"ab{c}cd".WordWrap(3);
+            TestHelper.AssertSequence(result,
+                $"ab{c}", "cd");
         }
 
         [Test]
-        public void WordWrap_ThrowsException_IfLineLengthIsLessThanOne()
+        public void WordWrap_ConsidersCrAsNothing()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => "test".WordWrap(0));
+            var result = "a\rbb".WordWrap(2);
+            TestHelper.AssertSequence(result,
+                "a\r", "bb");
+        }
+
+        [Test]
+        public void WordWrap_ConsidersCrlfAsSeparator()
+        {
+            var result = "a\r\nbb".WordWrap(2);
+            TestHelper.AssertSequence(result,
+                "a", "bb");
+        }
+
+        [Test]
+        public void WordWrap_ConsidersLfAsSeparator()
+        {
+            var result = "a\nbb".WordWrap(2);
+            TestHelper.AssertSequence(result,
+                "a", "bb");
+        }
+
+        [Test]
+        public void WordWrap_GoesConsecutive_ForSpecials()
+        {
+            var result = "aaaabbb.cc.cd.d.dd...e".WordWrap(4);
+            TestHelper.AssertSequence(result,
+                "aaaa", "bbb.", "cc.", "cd.", "d.", "dd..", ".e");
+        }
+
+        [Test]
+        public void WordWrap_GoesConsecutive_ForWhiteSpaces()
+        {
+            var result = "aaaabbb cc cd d dd   e".WordWrap(4);
+            TestHelper.AssertSequence(result,
+                "aaaa", "bbb", "cc", "cd d", "dd  ", "e");
         }
 
         [Test]
         public void WordWrap_ReturnsNothing_ForEmptyString()
         {
             Assert.IsEmpty(string.Empty.WordWrap(1));
-        }
-
-        [TestCase("a", 1),TestCase("abc", 10),TestCase("abc def", 50)]
-        public void WordWrap_ReturnsWholeString_IfLineLengthEqualOrLongerThanStringLength([NotNull] string s, int l)
-        {
-            TestHelper.AssertSequence(s.WordWrap(l), s);
         }
 
         [Test]
@@ -72,27 +109,15 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [Test]
-        public void WordWrap_ConsidersCrlfAsSeparator()
+        public void WordWrap_ThrowsException_IfLineLengthIsLessThanOne()
         {
-            var result = "a\r\nbb".WordWrap(2);
-            TestHelper.AssertSequence(result,
-                "a", "bb");
+            Assert.Throws<ArgumentOutOfRangeException>(() => "test".WordWrap(0));
         }
 
-        [Test]
-        public void WordWrap_ConsidersLfAsSeparator()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void WordWrap_ThrowsException_IfStringIsNull()
         {
-            var result = "a\nbb".WordWrap(2);
-            TestHelper.AssertSequence(result,
-                "a", "bb");
-        }
-
-        [Test]
-        public void WordWrap_ConsidersCrAsNothing()
-        {
-            var result = "a\rbb".WordWrap(2);
-            TestHelper.AssertSequence(result,
-                "a\r", "bb");
+            Assert.Throws<ArgumentNullException>(() => ((string) null).WordWrap(1));
         }
 
         [Test]
@@ -109,30 +134,6 @@ namespace Abacaxi.Tests.StringExtensions
             var result = "ab.cd".WordWrap(3);
             TestHelper.AssertSequence(result,
                 "ab.", "cd");
-        }
-
-        [TestCase('.'),TestCase(','),TestCase(';'),TestCase('!'),TestCase('?'),TestCase('-'),TestCase('+'),TestCase('/'),TestCase('\\'),TestCase('*'),TestCase('^')]
-        public void WordWrap_WillFunctionOverKnownSpecialCharacters(char c)
-        {
-            var result = $"ab{c}cd".WordWrap(3);
-            TestHelper.AssertSequence(result,
-                $"ab{c}", "cd");
-        }
-
-        [Test]
-        public void WordWrap_GoesConsecutive_ForWhiteSpaces()
-        {
-            var result = "aaaabbb cc cd d dd   e".WordWrap(4);
-            TestHelper.AssertSequence(result,
-                "aaaa", "bbb", "cc", "cd d", "dd  ", "e");
-        }
-
-        [Test]
-        public void WordWrap_GoesConsecutive_ForSpecials()
-        {
-            var result = "aaaabbb.cc.cd.d.dd...e".WordWrap(4);
-            TestHelper.AssertSequence(result,
-                "aaaa", "bbb.", "cc.", "cd.", "d.", "dd..", ".e");
         }
     }
 }

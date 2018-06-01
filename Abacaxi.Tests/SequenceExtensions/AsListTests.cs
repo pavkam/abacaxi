@@ -17,41 +17,35 @@ namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public sealed class AsListTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void AsList_ThrowsException_IfSequenceIsNull()
+        [Test]
+        public void AsList_ReturnsANewList_ForAnEnumerable()
         {
-            Assert.Throws<ArgumentNullException>(() => ((int[]) null).AsList());
+            var e = Enumerable.Range(1, 3);
+            var asList = e.AsList();
+
+            TestHelper.AssertSequence(asList, 1, 2, 3);
         }
 
         [Test]
-        public void AsList_ReturnsSameObject_IfItIsAList()
+        public void AsList_ReturnsANewList_ForAString()
         {
-            var list = new List<int>() {1};
-            var asList = list.AsList();
+            const string s = "123";
+            var asList = ((IEnumerable<char>) s).AsList();
 
-            Assert.AreSame(list, asList);
-        }
-
-        [Test]
-        public void AsList_ReturnsSameObject_IfItIsAnArray()
-        {
-            var list = new[] {1};
-            var asList = list.AsList();
-
-            Assert.AreSame(list, asList);
+            TestHelper.AssertSequence(asList, '1', '2', '3');
         }
 
         [Test]
         public void AsList_ReturnsANewList_FromACollection()
         {
-            var coll = new[] {1, 2, 3}.ToSet();
+            var coll = new[] { 1, 2, 3 }.ToSet();
             var asList = coll.AsList();
 
             TestHelper.AssertSequence(asList, 1, 2, 3);
@@ -64,21 +58,27 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void AsList_ReturnsANewList_ForAString()
+        public void AsList_ReturnsSameObject_IfItIsAList()
         {
-            const string s = "123";
-            var asList = ((IEnumerable<char>)s).AsList();
+            var list = new List<int> { 1 };
+            var asList = list.AsList();
 
-            TestHelper.AssertSequence(asList, '1', '2', '3');
+            Assert.AreSame(list, asList);
         }
 
         [Test]
-        public void AsList_ReturnsANewList_ForAnEnumerable()
+        public void AsList_ReturnsSameObject_IfItIsAnArray()
         {
-            var e = Enumerable.Range(1, 3);
-            var asList = e.AsList();
+            var list = new[] { 1 };
+            var asList = list.AsList();
 
-            TestHelper.AssertSequence(asList, 1, 2, 3);
+            Assert.AreSame(list, asList);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void AsList_ThrowsException_IfSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((int[]) null).AsList());
         }
     }
 }

@@ -16,21 +16,22 @@
 namespace Abacaxi.Tests.IntegerPartitions
 {
     using NUnit.Framework;
+    using IntegerPartitions = Abacaxi.IntegerPartitions;
 
     [TestFixture]
     public class GetCountTests
     {
-        [TestCase(0, 0),TestCase(1, 1),TestCase(2, 2),TestCase(3, 3),TestCase(4, 5),TestCase(5, 7)]
+        [TestCase(0, 0), TestCase(1, 1), TestCase(2, 2), TestCase(3, 3), TestCase(4, 5), TestCase(5, 7)]
         public void GetCount_ReturnsValidCount_ForPositiveNumber(int number, int expected)
         {
-            var result = Abacaxi.IntegerPartitions.GetCount(number);
+            var result = IntegerPartitions.GetCount(number);
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase(-1, 1),TestCase(-2, 2),TestCase(-3, 3),TestCase(-4, 5),TestCase(-5, 7)]
+        [TestCase(-1, 1), TestCase(-2, 2), TestCase(-3, 3), TestCase(-4, 5), TestCase(-5, 7)]
         public void GetCount_ReturnsValidCount_ForNegativeNumber(int number, int expected)
         {
-            var result = Abacaxi.IntegerPartitions.GetCount(number);
+            var result = IntegerPartitions.GetCount(number);
             Assert.AreEqual(expected, result);
         }
     }

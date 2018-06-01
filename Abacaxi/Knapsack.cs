@@ -22,22 +22,22 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class implements a set of  knapsack algorithms.
+    ///     Class implements a set of  knapsack algorithms.
     /// </summary>
     [PublicAPI]
     public static class Knapsack
     {
         /// <summary>
-        /// Finds the best combination of items to be placed in a knapsack of given <paramref name="knapsackWeight" /> weight.
+        ///     Finds the best combination of items to be placed in a knapsack of given <paramref name="knapsackWeight" /> weight.
         /// </summary>
         /// <typeparam name="T">The type of item.</typeparam>
         /// <param name="sequence">The sequence of item/value/weight elements.</param>
         /// <param name="knapsackWeight">The total knapsack weight.</param>
         /// <returns>
-        /// The best selection of items filling the knapsack and maximizing total value.
+        ///     The best selection of items filling the knapsack and maximizing total value.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="knapsackWeight"/> is less than one.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="knapsackWeight" /> is less than one.</exception>
         [NotNull]
         public static T[] Fill<T>([NotNull] IEnumerable<KnapsackItem<T>> sequence, int knapsackWeight)
         {
@@ -50,7 +50,8 @@ namespace Abacaxi
             for (var i = 0; i <= elements.Length; i++)
             for (var w = 0; w <= knapsackWeight; w++)
             {
-                if (i == 0 || w == 0)
+                if (i == 0 ||
+                    w == 0)
                 {
                     m[i, w] = 0;
                 }
@@ -71,7 +72,8 @@ namespace Abacaxi
             var rwi = knapsackWeight;
             var rsi = elements.Length;
             var result = new List<T>();
-            while (rsi > 0 && rwi > 0)
+            while (rsi > 0 &&
+                   rwi > 0)
             {
                 if (m[rsi, rwi] > m[rsi - 1, rwi])
                 {

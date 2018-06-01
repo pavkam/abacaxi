@@ -15,19 +15,23 @@
 
 namespace Abacaxi.Tests.Graphs
 {
+    using System.Linq;
     using Abacaxi.Graphs;
     using NUnit.Framework;
-    using System.Linq;
     using Practice.Graphs;
 
     [TestFixture]
     public class FindChessHorsePathBetweenTwoPointsTests
     {
-        [TestCase(0, 0, 0, 0, "0,0"),TestCase(0, 0, 1, 0, "0,0;-2,-1;0,-2;1,0"),TestCase(0, 0, 0, 1, "0,0;-1,-2;-2,0;0,1"),TestCase(0, 0, 1, 1, "0,0;2,-1;1,1"),TestCase(-5, -5, 10, 10, "-5,-5;-3,-4;-1,-3;1,-2;3,-1;5,0;6,2;7,4;8,6;9,8;10,10")]
-        public void FindChessHorsePathBetweenTwoPoints_FindsShortestPathBetweenTwoPoints(int sx, int sy, int ex, int ey, string expected)
+        [TestCase(0, 0, 0, 0, "0,0"), TestCase(0, 0, 1, 0, "0,0;-2,-1;0,-2;1,0"),
+         TestCase(0, 0, 0, 1, "0,0;-1,-2;-2,0;0,1"), TestCase(0, 0, 1, 1, "0,0;2,-1;1,1"),
+         TestCase(-5, -5, 10, 10, "-5,-5;-3,-4;-1,-3;1,-2;3,-1;5,0;6,2;7,4;8,6;9,8;10,10")]
+        public void FindChessHorsePathBetweenTwoPoints_FindsShortestPathBetweenTwoPoints(int sx, int sy, int ex, int ey,
+            string expected)
         {
-            var actual = string.Join(";", ChessHorsePathGraph.FindChessHorsePathBetweenTwoPoints(new Cell(sx, sy), new Cell(ex, ey))
-                .Select(s => $"{s.X},{s.Y}"));
+            var actual = string.Join(";",
+                ChessHorsePathGraph.FindChessHorsePathBetweenTwoPoints(new Cell(sx, sy), new Cell(ex, ey))
+                    .Select(s => $"{s.X},{s.Y}"));
 
             Assert.AreEqual(expected, actual);
         }

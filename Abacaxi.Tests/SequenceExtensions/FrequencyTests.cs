@@ -15,8 +15,8 @@
 
 namespace Abacaxi.Tests.SequenceExtensions
 {
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public class FrequencyTests
@@ -27,30 +27,6 @@ namespace Abacaxi.Tests.SequenceExtensions
             var freq = new Frequency<char>('a', 1);
 
             Assert.AreEqual(1, freq.Count);
-        }
-
-        [Test]
-        public void Item_ReturnsValidValue()
-        {
-            var freq = new Frequency<char>('a', 1);
-
-            Assert.AreEqual('a', freq.Item);
-        }
-
-        [Test]
-        public void ToString_ReturnsValidValue()
-        {
-            var freq = new Frequency<char>('a', 10);
-            Assert.AreEqual("a (10)", freq.ToString());
-        }
-
-        [Test]
-        public void Equals_ReturnsTrue_ForEqualFrequencies()
-        {
-            var e1 = new Frequency<char>('a', 1);
-            var e2 = new Frequency<char>('a', 1);
-
-            Assert.IsTrue(e1.Equals(e2));
         }
 
         [Test]
@@ -72,7 +48,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.IsFalse(e1.Equals(e2));
         }
 
-        [Test,SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+        [Test, SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonFrequencyObject()
         {
             var e1 = new Frequency<char>('a', 1);
@@ -89,12 +65,12 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void GetHashCode_ReturnsEqualHashCodes_ForEqualFrequencies()
+        public void Equals_ReturnsTrue_ForEqualFrequencies()
         {
             var e1 = new Frequency<char>('a', 1);
             var e2 = new Frequency<char>('a', 1);
 
-            Assert.AreEqual(e1.GetHashCode(), e2.GetHashCode());
+            Assert.IsTrue(e1.Equals(e2));
         }
 
         [Test]
@@ -113,6 +89,30 @@ namespace Abacaxi.Tests.SequenceExtensions
             var e2 = new Frequency<char>('b', 1);
 
             Assert.AreNotEqual(e1.GetHashCode(), e2.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_ReturnsEqualHashCodes_ForEqualFrequencies()
+        {
+            var e1 = new Frequency<char>('a', 1);
+            var e2 = new Frequency<char>('a', 1);
+
+            Assert.AreEqual(e1.GetHashCode(), e2.GetHashCode());
+        }
+
+        [Test]
+        public void Item_ReturnsValidValue()
+        {
+            var freq = new Frequency<char>('a', 1);
+
+            Assert.AreEqual('a', freq.Item);
+        }
+
+        [Test]
+        public void ToString_ReturnsValidValue()
+        {
+            var freq = new Frequency<char>('a', 10);
+            Assert.AreEqual("a (10)", freq.ToString());
         }
     }
 }

@@ -21,14 +21,55 @@ namespace Abacaxi.Graphs
     using JetBrains.Annotations;
 
     /// <summary>
-    /// A graph class used primarily for designing algorithms. Each vertex is a digit or letter and can be connected with other
-    /// vertices in directed or undirected fashion.
+    ///     A graph class used primarily for designing algorithms. Each vertex is a digit or letter and can be connected with
+    ///     other
+    ///     vertices in directed or undirected fashion.
     /// </summary>
     [PublicAPI]
     public sealed class LiteralGraph : Graph<char>
     {
-        [NotNull]
-        private readonly Dictionary<char, ISet<Edge<char>>> _vertices;
+        [NotNull] private readonly Dictionary<char, ISet<Edge<char>>> _vertices;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LiteralGraph" /> class.
+        /// </summary>
+        /// <param name="relationships">The vertex relationship definitions.</param>
+        /// <param name="isDirected">Specifies whether the graph is directed.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="relationships" /> is <c>null</c>.</exception>
+        public LiteralGraph([NotNull] string relationships, bool isDirected)
+        {
+            Validate.ArgumentNotNull(nameof(relationships), relationships);
+
+            _vertices = new Dictionary<char, ISet<Edge<char>>>();
+
+            IsDirected = isDirected;
+            Parse(relationships);
+        }
+
+        /// <summary>
+        ///     Gets a value indicating whether this graph's edges are directed.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if the graph is directed; <c>false</c> otherwise.
+        /// </value>
+        public override bool IsDirected { get; }
+
+        /// <summary>
+        ///     Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsReadOnly { get; } = true;
+
+        /// <summary>
+        ///     Gets a value indicating whether this graph supports potential weight evaluation (heuristics). This
+        ///     implementation always returns <c>false</c>.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsPotentialWeightEvaluation => false;
 
         private void AddVertex(char vertex)
         {
@@ -40,7 +81,7 @@ namespace Abacaxi.Graphs
                 return;
             }
 
-            set = new HashSet<Edge<char>> ();
+            set = new HashSet<Edge<char>>();
             _vertices.Add(vertex, set);
         }
 
@@ -55,6 +96,7 @@ namespace Abacaxi.Graphs
                 fromToSet = new HashSet<Edge<char>>();
                 _vertices.Add(from, fromToSet);
             }
+
             if (!_vertices.TryGetValue(to, out var toFromSet))
             {
                 toFromSet = new HashSet<Edge<char>>();
@@ -83,6 +125,7 @@ namespace Abacaxi.Graphs
                     {
                         AddVertices(to, from, weight);
                     }
+
                     break;
                 default:
                     Assert.Fail($"Unexpected relation character: {relation}");
@@ -95,7 +138,7 @@ namespace Abacaxi.Graphs
             Assert.NotNull(relationships);
 
             // ReSharper disable once IdentifierTypo
-            var rels = new HashSet<char> {'-'};
+            var rels = new HashSet<char> { '-' };
             if (IsDirected)
             {
                 rels.Add('>');
@@ -118,9 +161,11 @@ namespace Abacaxi.Graphs
                         {
                             continue;
                         }
+
                         if (!char.IsLetterOrDigit(c))
                         {
-                            throw new FormatException($"Invalid character '{c}' at position {i}. Expected letter or digit.");
+                            throw new FormatException(
+                                $"Invalid character '{c}' at position {i}. Expected letter or digit.");
                         }
 
                         vertices[0] = c;
@@ -131,6 +176,7 @@ namespace Abacaxi.Graphs
                         {
                             continue;
                         }
+
                         if (c == ',')
                         {
                             AddVertex(vertices[0]);
@@ -138,9 +184,11 @@ namespace Abacaxi.Graphs
                             stage = 0;
                             continue;
                         }
+
                         if (!rels.Contains(c))
                         {
-                            throw new FormatException($"Invalid character '{c}' at position {i}. Expected a relationship character.");
+                            throw new FormatException(
+                                $"Invalid character '{c}' at position {i}. Expected a relationship character.");
                         }
 
                         relation = c;
@@ -151,6 +199,7 @@ namespace Abacaxi.Graphs
                         {
                             continue;
                         }
+
                         if (!char.IsDigit(c))
                         {
                             throw new FormatException($"Invalid character '{c}' at position {i}. Expected a digit.");
@@ -165,6 +214,7 @@ namespace Abacaxi.Graphs
                             stage = 4;
                             continue;
                         }
+
                         if (rels.Contains(c))
                         {
                             if (c != relation)
@@ -176,6 +226,7 @@ namespace Abacaxi.Graphs
                             stage = 5;
                             continue;
                         }
+
                         if (!char.IsDigit(c))
                         {
                             throw new FormatException($"Invalid character '{c}' at position {i}. Expected a digit.");
@@ -188,6 +239,7 @@ namespace Abacaxi.Graphs
                         {
                             continue;
                         }
+
                         if (c != relation)
                         {
                             throw new FormatException(
@@ -201,9 +253,11 @@ namespace Abacaxi.Graphs
                         {
                             continue;
                         }
+
                         if (!char.IsLetterOrDigit(c))
                         {
-                            throw new FormatException($"Invalid character '{c}' at position {i}. Expected letter or digit.");
+                            throw new FormatException(
+                                $"Invalid character '{c}' at position {i}. Expected letter or digit.");
                         }
 
                         vertices[1] = c;
@@ -214,6 +268,7 @@ namespace Abacaxi.Graphs
                         {
                             continue;
                         }
+
                         if (c != ',')
                         {
                             throw new FormatException($"Invalid character '{c}' at position {i}. Expected comma.");
@@ -241,7 +296,7 @@ namespace Abacaxi.Graphs
             }
         }
 
-        private void ValidateVertex([InvokerParameterName, NotNull]  string argumentName, char vertex)
+        private void ValidateVertex([InvokerParameterName, NotNull] string argumentName, char vertex)
         {
             if (!_vertices.ContainsKey(vertex))
             {
@@ -250,51 +305,25 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Gets a value indicating whether this graph's edges are directed.
+        ///     Gets the enumerator.
         /// </summary>
-        /// <value>
-        ///     <c>true</c> if the graph is directed; <c>false</c> otherwise.
-        /// </value>
-        public override bool IsDirected { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is read only.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
-        /// </value>
-        public override bool IsReadOnly { get; } = true;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LiteralGraph"/> class.
-        /// </summary>
-        /// <param name="relationships">The vertex relationship definitions.</param>
-        /// <param name="isDirected">Specifies whether the graph is directed.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="relationships"/> is <c>null</c>.</exception>
-        public LiteralGraph([NotNull] string relationships, bool isDirected)
+        /// <returns></returns>
+        public override IEnumerator<char> GetEnumerator()
         {
-            Validate.ArgumentNotNull(nameof(relationships), relationships);
-
-            _vertices = new Dictionary<char, ISet<Edge<char>>>();
-
-            IsDirected = isDirected;
-            Parse(relationships);
+            return _vertices.Keys.GetEnumerator();
         }
 
         /// <summary>
-        /// Gets the enumerator.
-        /// </summary>
-        /// <returns></returns>
-        public override IEnumerator<char> GetEnumerator() => _vertices.Keys.GetEnumerator();
-
-        /// <summary>
-        /// Gets the edges of a given <paramref name="vertex" />.
+        ///     Gets the edges of a given <paramref name="vertex" />.
         /// </summary>
         /// <param name="vertex">The vertex.</param>
         /// <returns>
-        /// A sequence of edges connecting the <paramref name="vertex" /> to other vertices.
+        ///     A sequence of edges connecting the <paramref name="vertex" /> to other vertices.
         /// </returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if the given <paramref name="vertex"/> if not part of the graph.</exception>
+        /// <exception cref="System.InvalidOperationException">
+        ///     Thrown if the given <paramref name="vertex" /> if not part of the
+        ///     graph.
+        /// </exception>
         public override IEnumerable<Edge<char>> GetEdges(char vertex)
         {
             ValidateVertex(nameof(vertex), vertex);
@@ -303,13 +332,16 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Gets the potential weight.
+        ///     Gets the potential weight.
         /// </summary>
         /// <param name="fromVertex">From vertex.</param>
         /// <param name="toVertex">To vertex.</param>
         /// <returns></returns>
         /// <exception cref="NotSupportedException">Always thrown.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if either of <paramref name="fromVertex"/> or <paramref name="fromVertex"/> are not part of this graph.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if either of <paramref name="fromVertex" /> or
+        ///     <paramref name="fromVertex" /> are not part of this graph.
+        /// </exception>
         public override double GetPotentialWeight(char fromVertex, char toVertex)
         {
             ValidateVertex(nameof(fromVertex), fromVertex);
@@ -317,14 +349,5 @@ namespace Abacaxi.Graphs
 
             throw new NotSupportedException("This graph does not support potential weight calculation.");
         }
-
-        /// <summary>
-        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics). This
-        /// implementation always returns <c>false</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
-        /// </value>
-        public override bool SupportsPotentialWeightEvaluation => false;
     }
 }

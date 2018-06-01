@@ -15,42 +15,31 @@
 
 namespace Abacaxi
 {
+    using System.Collections.Concurrent;
     using System.Text;
+    using System.Text.RegularExpressions;
     using Internal;
     using JetBrains.Annotations;
-    using System.Text.RegularExpressions;
-    using System.Collections.Concurrent;
 
     /// <summary>
-    /// Class implements the "glob-style" pattern matching.
+    ///     Class implements the "glob-style" pattern matching.
     /// </summary>
     public sealed class GlobPattern
     {
-        [NotNull]
-        private static readonly ConcurrentDictionary<string, GlobPattern> CachedPatterns =
-            new ConcurrentDictionary<string, GlobPattern>();
-        [NotNull]
-        private static readonly ConcurrentDictionary<string, GlobPattern> CachedIgnoreCasePatterns =
+        [NotNull] private static readonly ConcurrentDictionary<string, GlobPattern> CachedPatterns =
             new ConcurrentDictionary<string, GlobPattern>();
 
-        [NotNull]
-        internal static GlobPattern GetPattern([NotNull] string pattern, bool ignoreCase)
-        {
-            Assert.NotNull(pattern);
-            return ignoreCase ?
-                CachedIgnoreCasePatterns.GetOrAdd(pattern, key => new GlobPattern(key, true)) :
-                CachedPatterns.GetOrAdd(pattern, key => new GlobPattern(key, false));
-        }
+        [NotNull] private static readonly ConcurrentDictionary<string, GlobPattern> CachedIgnoreCasePatterns =
+            new ConcurrentDictionary<string, GlobPattern>();
 
-        [NotNull]
-        private readonly Regex _regex;
+        [NotNull] private readonly Regex _regex;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GlobPattern"/> class.
+        ///     Initializes a new instance of the <see cref="GlobPattern" /> class.
         /// </summary>
         /// <param name="pattern">The glob-style pattern.</param>
         /// <param name="ignoreCase">Supply a value of <c>true</c> to make the pattern case insensitive.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="pattern"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="pattern" /> is <c>null</c>.</exception>
         public GlobPattern([NotNull] string pattern, bool ignoreCase)
         {
             Validate.ArgumentNotNull(nameof(pattern), pattern);
@@ -60,7 +49,8 @@ namespace Abacaxi
             for (var i = 0; i < pattern.Length; i++)
             {
                 var pc = pattern[i];
-                if (pc != '*' && pc != '?')
+                if (pc != '*' &&
+                    pc != '?')
                 {
                     continue;
                 }
@@ -87,14 +77,26 @@ namespace Abacaxi
             _regex = new Regex(rePattern.ToString(), ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
         }
 
+        [NotNull]
+        internal static GlobPattern GetPattern([NotNull] string pattern, bool ignoreCase)
+        {
+            Assert.NotNull(pattern);
+            return ignoreCase
+                ? CachedIgnoreCasePatterns.GetOrAdd(pattern, key => new GlobPattern(key, true))
+                : CachedPatterns.GetOrAdd(pattern, key => new GlobPattern(key, false));
+        }
+
         /// <summary>
-        /// Determines whether the specified string matches this pattern.
+        ///     Determines whether the specified string matches this pattern.
         /// </summary>
         /// <param name="s">The string to check.</param>
         /// <returns>
-        ///   <c>true</c> if the specified string matches the pattern; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified string matches the pattern; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s"/> is <c>null</c>.</exception>
-        public bool IsMatch([NotNull] string s) => _regex.IsMatch(s);
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
+        public bool IsMatch([NotNull] string s)
+        {
+            return _regex.IsMatch(s);
+        }
     }
 }

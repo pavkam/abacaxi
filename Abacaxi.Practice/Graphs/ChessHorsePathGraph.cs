@@ -17,22 +17,69 @@ namespace Abacaxi.Practice.Graphs
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Abacaxi.Graphs;
     using Internal;
     using JetBrains.Annotations;
-    using System.Linq;
 
     /// <summary>
-    /// A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped movements).
+    ///     A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped
+    ///     movements).
     /// </summary>
     public sealed class ChessHorsePathGraph : Graph<Cell>
     {
         private readonly int _lengthX;
         private readonly int _lengthY;
 
-        private bool VertexExists(int x, int y) => x >= 0 && x < _lengthX && y >= 0 && y < _lengthY;
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ChessHorsePathGraph" /> class.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="boardWidth" /> or
+        ///     <paramref name="boardHeight" /> are less than <c>1</c>.
+        /// </exception>
+        public ChessHorsePathGraph(int boardWidth, int boardHeight)
+        {
+            Validate.ArgumentGreaterThanZero(nameof(boardWidth), boardWidth);
+            Validate.ArgumentGreaterThanZero(nameof(boardHeight), boardHeight);
 
-        private void ValidateVertex([InvokerParameterName,NotNull]  string argumentName, Cell vertex)
+            _lengthX = boardWidth;
+            _lengthY = boardHeight;
+        }
+
+        /// <summary>
+        ///     Gets a value indicating whether this graph's edges are directed.
+        /// </summary>
+        /// <value>
+        ///     Always returns <c>true</c>.
+        /// </value>
+        public override bool IsDirected => false;
+
+        /// <summary>
+        ///     Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsReadOnly => true;
+
+        /// <summary>
+        ///     Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+        /// </summary>
+        /// <remarks>
+        ///     This implementation always returns <c>false</c>.
+        /// </remarks>
+        /// <value>
+        ///     <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsPotentialWeightEvaluation => false;
+
+        private bool VertexExists(int x, int y)
+        {
+            return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY;
+        }
+
+        private void ValidateVertex([InvokerParameterName, NotNull]  string argumentName, Cell vertex)
         {
             if (!VertexExists(vertex.X, vertex.Y))
             {
@@ -40,7 +87,7 @@ namespace Abacaxi.Practice.Graphs
             }
         }
 
-        [NotNull,ItemNotNull]
+        [NotNull, ItemNotNull]
         private IEnumerable<Edge<Cell>> GetEdgesIterate(Cell vertex)
         {
             Assert.Condition(VertexExists(vertex.X, vertex.Y));
@@ -52,6 +99,7 @@ namespace Abacaxi.Practice.Graphs
                 {
                     yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y + j));
                 }
+
                 if (VertexExists(vertex.X + j, vertex.Y + i))
                 {
                     yield return new Edge<Cell>(vertex, new Cell(vertex.X + j, vertex.Y + i));
@@ -60,50 +108,10 @@ namespace Abacaxi.Practice.Graphs
         }
 
         /// <summary>
-        /// Gets a value indicating whether this graph's edges are directed.
-        /// </summary>
-        /// <value>
-        /// Always returns <c>true</c>.
-        /// </value>
-        public override bool IsDirected => false;
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is read only.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
-        /// </value>
-        public override bool IsReadOnly => true;
-
-        /// <summary>
-        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
-        /// </summary>
-        /// <remarks>
-        /// This implementation always returns <c>false</c>.
-        /// </remarks>
-        /// <value>
-        /// <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
-        /// </value>
-        public override bool SupportsPotentialWeightEvaluation => false;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChessHorsePathGraph"/> class.
-        /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="boardWidth"/> or <paramref name="boardHeight"/> are less than <c>1</c>.</exception>
-        public ChessHorsePathGraph(int boardWidth, int boardHeight)
-        {
-            Validate.ArgumentGreaterThanZero(nameof(boardWidth), boardWidth);
-            Validate.ArgumentGreaterThanZero(nameof(boardHeight), boardHeight);
-
-            _lengthX = boardWidth;
-            _lengthY = boardHeight;
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates all vertices in the graph.
+        ///     Returns an enumerator that iterates all vertices in the graph.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        ///     A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
         public override IEnumerator<Cell> GetEnumerator()
         {
@@ -115,15 +123,16 @@ namespace Abacaxi.Practice.Graphs
         }
 
         /// <summary>
-        /// Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" /> vertices.
+        ///     Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" />
+        ///     vertices.
         /// </summary>
         /// <remarks>
-        /// This graph does not support potential weight evaluation.
+        ///     This graph does not support potential weight evaluation.
         /// </remarks>
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The destination vertex.</param>
         /// <returns>
-        /// The potential total cost.
+        ///     The potential total cost.
         /// </returns>
         /// <exception cref="NotImplementedException">Always thrown.</exception>
         public override double GetPotentialWeight(Cell fromVertex, Cell toVertex)
@@ -135,13 +144,13 @@ namespace Abacaxi.Practice.Graphs
         }
 
         /// <summary>
-        /// Gets the edges for a given <paramref name="vertex" />.
+        ///     Gets the edges for a given <paramref name="vertex" />.
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns>
-        /// A sequence of edges connected to the given <paramref name="vertex" />
+        ///     A sequence of edges connected to the given <paramref name="vertex" />
         /// </returns>
-        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex" /> is not part of the graph.</exception>
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             ValidateVertex(nameof(vertex), vertex);
@@ -150,7 +159,7 @@ namespace Abacaxi.Practice.Graphs
         }
 
         /// <summary>
-        /// Finds the shortest path between any two arbitrary cells on an infinite chess board.
+        ///     Finds the shortest path between any two arbitrary cells on an infinite chess board.
         /// </summary>
         /// <param name="startCell">The start cell.</param>
         /// <param name="endCell">The end cell.</param>
@@ -170,7 +179,8 @@ namespace Abacaxi.Practice.Graphs
             var shortestPath = board.FindShortestPath(
                     new Cell(startCell.X - deltaX, startCell.Y - deltaY),
                     new Cell(endCell.X - deltaX, endCell.Y - deltaY))
-                .Select(cell => new Cell(cell.X + deltaX, cell.Y + deltaY)).ToArray();
+                .Select(cell => new Cell(cell.X + deltaX, cell.Y + deltaY))
+                .ToArray();
 
             return shortestPath;
         }

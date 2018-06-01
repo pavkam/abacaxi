@@ -21,35 +21,51 @@ namespace Abacaxi.Tests.SequenceExtensions
     public sealed class AppendTests
     {
         [Test]
-        public void Append_CreatesNewArray_ForNullArray_AndOneElement()
+        public void Append_CreatesNewArray_ForFullArray_AndFiveElements()
         {
-            var array = ((int[]) null).Append(1);
+            var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4, 5);
 
-            TestHelper.AssertSequence(array, 1);
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4, 5);
         }
 
         [Test]
-        public void Append_CreatesNewArray_ForNullArray_AndTwoElements()
+        public void Append_CreatesNewArray_ForFullArray_AndFourElements()
         {
-            var array = ((int[]) null).Append(1, 2);
+            var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4);
 
-            TestHelper.AssertSequence(array, 1, 2);
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4);
         }
 
         [Test]
-        public void Append_CreatesNewArray_ForNullArray_AndThreeElements()
+        public void Append_CreatesNewArray_ForFullArray_AndOneElement()
         {
-            var array = ((int[]) null).Append(1, 2, 3);
+            var array = new[] { -2, -1, 0 }.Append(1);
 
-            TestHelper.AssertSequence(array, 1, 2, 3);
+            TestHelper.AssertSequence(array, -2, -1, 0, 1);
         }
 
         [Test]
-        public void Append_CreatesNewArray_ForNullArray_AndFourElements()
+        public void Append_CreatesNewArray_ForFullArray_AndSixElements()
         {
-            var array = ((int[]) null).Append(1, 2, 3, 4);
+            var array = new[] { -2, -1, 0 }.Append(1, 2, 3, 4, 5, 6);
 
-            TestHelper.AssertSequence(array, 1, 2, 3, 4);
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4, 5, 6);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForFullArray_AndThreeElements()
+        {
+            var array = new[] { -2, -1, 0 }.Append(1, 2, 3);
+
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForFullArray_AndTwoElements()
+        {
+            var array = new[] { -2, -1, 0 }.Append(1, 2);
+
+            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2);
         }
 
         [Test]
@@ -61,6 +77,22 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        public void Append_CreatesNewArray_ForNullArray_AndFourElements()
+        {
+            var array = ((int[]) null).Append(1, 2, 3, 4);
+
+            TestHelper.AssertSequence(array, 1, 2, 3, 4);
+        }
+
+        [Test]
+        public void Append_CreatesNewArray_ForNullArray_AndOneElement()
+        {
+            var array = ((int[]) null).Append(1);
+
+            TestHelper.AssertSequence(array, 1);
+        }
+
+        [Test]
         public void Append_CreatesNewArray_ForNullArray_AndSixElements()
         {
             var array = ((int[]) null).Append(1, 2, 3, 4, 5, 6);
@@ -69,51 +101,19 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void Append_CreatesNewArray_ForFullArray_AndOneElement()
+        public void Append_CreatesNewArray_ForNullArray_AndThreeElements()
         {
-            var array = new[] {-2, -1, 0}.Append(1);
+            var array = ((int[]) null).Append(1, 2, 3);
 
-            TestHelper.AssertSequence(array, -2, -1, 0, 1);
+            TestHelper.AssertSequence(array, 1, 2, 3);
         }
 
         [Test]
-        public void Append_CreatesNewArray_ForFullArray_AndTwoElements()
+        public void Append_CreatesNewArray_ForNullArray_AndTwoElements()
         {
-            var array = new[] {-2, -1, 0}.Append(1, 2);
+            var array = ((int[]) null).Append(1, 2);
 
-            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2);
-        }
-
-        [Test]
-        public void Append_CreatesNewArray_ForFullArray_AndThreeElements()
-        {
-            var array = new[] {-2, -1, 0}.Append(1, 2, 3);
-
-            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3);
-        }
-
-        [Test]
-        public void Append_CreatesNewArray_ForFullArray_AndFourElements()
-        {
-            var array = new[] {-2, -1, 0}.Append(1, 2, 3, 4);
-
-            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4);
-        }
-
-        [Test]
-        public void Append_CreatesNewArray_ForFullArray_AndFiveElements()
-        {
-            var array = new[] {-2, -1, 0}.Append(1, 2, 3, 4, 5);
-
-            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4, 5);
-        }
-
-        [Test]
-        public void Append_CreatesNewArray_ForFullArray_AndSixElements()
-        {
-            var array = new[] {-2, -1, 0}.Append(1, 2, 3, 4, 5, 6);
-
-            TestHelper.AssertSequence(array, -2, -1, 0, 1, 2, 3, 4, 5, 6);
+            TestHelper.AssertSequence(array, 1, 2);
         }
     }
 }

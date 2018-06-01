@@ -13,28 +13,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
- namespace Abacaxi.Containers
+namespace Abacaxi.Containers
 {
-    using System.Linq;
     using System.Collections.Generic;
+    using System.Linq;
     using Internal;
     using JetBrains.Annotations;
 
     /// <summary>
-    /// A class that provides array equality comparison (based on the array's elements).
+    ///     A class that provides array equality comparison (based on the array's elements).
     /// </summary>
     /// <typeparam name="TElement">The type of the elements in the arrays.</typeparam>
     [PublicAPI]
     public sealed class ArrayEqualityComparer<TElement> : IEqualityComparer<TElement[]>
     {
-        [NotNull]
-        private readonly IEqualityComparer<TElement> _elementComparer;
+        [NotNull] private readonly IEqualityComparer<TElement> _elementComparer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArrayEqualityComparer{TElement}"/> class.
+        ///     Initializes a new instance of the <see cref="ArrayEqualityComparer{TElement}" /> class.
         /// </summary>
         /// <param name="elementComparer">The element comparer.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="elementComparer"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="elementComparer" /> is <c>null</c>.</exception>
         public ArrayEqualityComparer([NotNull] IEqualityComparer<TElement> elementComparer)
         {
             Validate.ArgumentNotNull(nameof(elementComparer), elementComparer);
@@ -43,17 +42,29 @@
         }
 
         /// <summary>
-        /// Checks whether <paramref name="array1"/> and <paramref name="array2"/> are structurally equal.
+        ///     Gets the default equality comparer for the given array type.
+        /// </summary>
+        /// <value>
+        ///     The default equality comparer.
+        /// </value>
+        [NotNull]
+        public static IEqualityComparer<TElement[]> Default { get; } =
+            new ArrayEqualityComparer<TElement>(EqualityComparer<TElement>.Default);
+
+        /// <summary>
+        ///     Checks whether <paramref name="array1" /> and <paramref name="array2" /> are structurally equal.
         /// </summary>
         /// <param name="array1">The first array.</param>
         /// <param name="array2">The second array.</param>
         /// <returns><c>true</c> if the array contain the same elements; otherwise, <c>false</c>.</returns>
         public bool Equals(TElement[] array1, TElement[] array2)
         {
-            if (array1 == null || array2 == null)
+            if (array1 == null ||
+                array2 == null)
             {
                 return array1 == array2;
             }
+
             if (array1.Length != array2.Length)
             {
                 return false;
@@ -63,11 +74,11 @@
         }
 
         /// <summary>
-        /// Calculates the hash code for a given <paramref name="array"/>.
+        ///     Calculates the hash code for a given <paramref name="array" />.
         /// </summary>
         /// <param name="array">The array.</param>
         /// <returns>
-        /// A hash code for the array instance, suitable for use in hashing algorithms and data structures like a hash table.
+        ///     A hash code for the array instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public int GetHashCode(TElement[] array)
         {
@@ -80,16 +91,8 @@
             {
                 hashCode = unchecked(hashCode * 314159 + _elementComparer.GetHashCode(array[i]));
             }
+
             return hashCode;
         }
-
-        /// <summary>
-        /// Gets the default equality comparer for the given array type.
-        /// </summary>
-        /// <value>
-        /// The default equality comparer.
-        /// </value>
-        [NotNull]
-        public static IEqualityComparer<TElement[]> Default { get; } = new ArrayEqualityComparer<TElement>(EqualityComparer<TElement>.Default);
     }
 }
