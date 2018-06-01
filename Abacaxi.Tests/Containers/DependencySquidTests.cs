@@ -283,5 +283,125 @@ namespace Abacaxi.Tests.Containers
             _empty.Toggle("B", false);
             AssertSet(_empty.Selection);
         }
+
+        [Test]
+        public void Dependencies_WorkAsExpected_ForCase8()
+        {
+            _empty.AddDependencies("A", "B");
+            _empty.AddDependencies("B", "C");
+            _empty.AddDependencies("C", "D");
+
+            _empty.Toggle("A", true);
+            _empty.RemoveDependencies("B", "C");
+            _empty.Toggle("D", false);
+
+            AssertSet(_empty.Selection, "A", "B");
+        }
+
+        [Test]
+        public void Dependencies_WorkAsExpected_ForCase9()
+        {
+            _empty.AddDependencies("A", "A");
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase1()
+        {
+            _empty.AddConflicts("A", "A");
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection);
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase2()
+        {
+            _empty.AddConflicts("A", "B");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A");
+
+            _empty.Toggle("B", true);
+            AssertSet(_empty.Selection, "B");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase3()
+        {
+            _empty.AddDependencies("A", "B");
+            _empty.AddConflicts("B", "C");
+
+            _empty.Toggle("C", true);
+            AssertSet(_empty.Selection, "C");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A", "B");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase4()
+        {
+            _empty.AddConflicts("A", "B");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A");
+
+            _empty.Toggle("B", true);
+            AssertSet(_empty.Selection, "B");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase5()
+        {
+            _empty.AddDependencies("A", "B");
+            _empty.AddDependencies("B", "C");
+            _empty.AddDependencies("B", "G");
+            _empty.AddDependencies("F", "E");
+            _empty.AddDependencies("E", "D");
+            _empty.AddDependencies("E", "H");
+            _empty.AddConflicts("C", "D");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A", "B", "C", "G");
+
+            _empty.Toggle("H", true);
+            AssertSet(_empty.Selection, "A", "B", "C", "G");
+
+            _empty.Toggle("E", true);
+            AssertSet(_empty.Selection, "D", "E", "G", "H");
+
+            _empty.Toggle("C", true);
+            AssertSet(_empty.Selection, "C", "G", "H");
+
+            _empty.AddConflicts("C", "H");
+            AssertSet(_empty.Selection, "C", "G");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A", "B", "C", "G");
+
+            _empty.Toggle("F", true);
+            AssertSet(_empty.Selection, "D", "E", "F", "H");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase6()
+        {
+            _empty.AddDependencies("A", "B");
+            _empty.AddDependencies("B", "C");
+            _empty.AddConflicts("A", "C");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection);
+
+            _empty.Toggle("B", true);
+            AssertSet(_empty.Selection, "B", "C");
+
+            _empty.Toggle("C", false);
+            AssertSet(_empty.Selection);
+
+            _empty.Toggle("C", true);
+            AssertSet(_empty.Selection, "C");
+        }
     }
 }

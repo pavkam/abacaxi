@@ -82,7 +82,6 @@ namespace Abacaxi.Containers
         {
         }
 
-
         /// <summary>
         /// Adds a number of dependencies for a given <paramref name="dependent"/>.
         /// </summary>
@@ -192,6 +191,7 @@ namespace Abacaxi.Containers
         /// <param name="selected">If set to <c>true</c>, the tag is selected. Otherwise it is removed.</param>
         public void Toggle([NotNull] TTag tag, bool selected)
         {
+            var node = GetOrAddNode(tag);
         }
 
         /// <summary>
