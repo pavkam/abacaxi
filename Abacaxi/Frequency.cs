@@ -41,7 +41,7 @@ namespace Abacaxi
         public int Count { get; }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Frequency{T}" /> struct.
+        ///     Initializes a new instance of the <see cref="Frequency{T}" /> structure.
         /// </summary>
         /// <param name="item">The item being counted.</param>
         /// <param name="count">The number of appearances.</param>

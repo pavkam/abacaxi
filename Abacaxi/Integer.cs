@@ -28,21 +28,21 @@ namespace Abacaxi
     {
         private static int GetIterationLimit(int number)
         {
-            double sqrt;
+            double squareRoot;
             if (number > 0)
             {
-                sqrt = Math.Sqrt(number);
+                squareRoot = Math.Sqrt(number);
             }
             else if (number > int.MinValue)
             {
-                sqrt = Math.Sqrt(Math.Abs(number));
+                squareRoot = Math.Sqrt(Math.Abs(number));
             }
             else
             {
-                sqrt = Math.Sqrt(Math.Abs(number + 1));
+                squareRoot = Math.Sqrt(Math.Abs(number + 1));
             }
 
-            return (int) sqrt;
+            return (int) squareRoot;
         }
 
         private static void AppendLastDigit(ref int number, ref int result, ref int power, int @base)

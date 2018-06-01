@@ -24,6 +24,7 @@ namespace Abacaxi
     /// <summary>
     ///     Class implements the "glob-style" pattern matching.
     /// </summary>
+    [PublicAPI]
     public sealed class GlobPattern
     {
         [NotNull] private static readonly ConcurrentDictionary<string, GlobPattern> CachedPatterns =
