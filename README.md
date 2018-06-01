@@ -31,6 +31,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `Temporary` | A class used to store a value for a specific amount of time. The value expires and has to be reloaded. **Multi-threaded** |
 | `BitWriter` | A specialized I/O class that implements the *Stream* base class. Allows for writing to a stream with bit granularity. |
 | `GlobPattern` | Simple class that allows checking if a string matches a glob-like pattern (e.g. _"some*.?xt"_) |
+| `DependencySquid` | Class that helps represent the state of a dependancy tree (including conflicts). Can be used to validate selection viability (think package dependancies). |
 
 ### The list of implemented algorithms/helper methods:
 | Algorithm/Method | Description |
