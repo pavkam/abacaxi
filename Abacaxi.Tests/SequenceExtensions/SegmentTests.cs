@@ -27,12 +27,12 @@ namespace Abacaxi.Tests.SequenceExtensions
         [SetUp]
         public void SetUp()
         {
-            _original = new List<int> { 0 };
+            _original = new List<int> {0};
             _start = _original.Segment(0, 0);
             _end = _original.Segment(1, 0);
             _middle = _original.Segment(0, 1);
 
-            var original = new List<int> { 0, 1, 2, 3, 4 };
+            var original = new List<int> {0, 1, 2, 3, 4};
             _broken = original.Segment(2, 3);
             original.RemoveAt(4);
         }
@@ -228,7 +228,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_GetEnumerator_EnumeratesTheOriginalList()
         {
-            var list = new[] { 0, 1, 2, 3 };
+            var list = new[] {0, 1, 2, 3};
             var segment = list.Segment(1, 2);
             var actual = new List<int>();
             list[1] = 100;
@@ -245,7 +245,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_GetEnumerator_EnumeratesTheRangeItWasGiven()
         {
-            var list = new[] { 0, 1, 2, 3 };
+            var list = new[] {0, 1, 2, 3};
             var segment = list.Segment(1, 2);
             var actual = new List<int>();
             // ReSharper disable once LoopCanBeConvertedToQuery
@@ -266,7 +266,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Getter_ReturnsTheElementAtGivenIndex()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
 
             Assert.AreEqual(1, segment[0]);
@@ -459,7 +459,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Remove_DecrementsCountByOne()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
             segment.Remove(2);
 
@@ -469,7 +469,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Remove_DoesNothing_IfElementNotInSegment()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
             segment.Remove(0);
             segment.Remove(5);
@@ -480,7 +480,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Remove_ModifiesTheContentsOfTheOriginalList_IfElementWasRemoved()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
             segment.Remove(2);
 
@@ -490,7 +490,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Remove_ModifiesTheContentsOfTheSegment_IfElementWasRemoved()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
             segment.Remove(2);
 
@@ -500,7 +500,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Remove_ReturnsFalse_IfElementNotInSegment()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
 
             Assert.IsFalse(segment.Remove(0));
@@ -510,7 +510,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Remove_ReturnsTrue_IfElementInSegment()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
 
             Assert.IsTrue(segment.Remove(2));
@@ -525,7 +525,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_RemoveAt_DecrementsCountByOne()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
             segment.RemoveAt(1);
 
@@ -535,7 +535,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_RemoveAt_ModifiesTheContentsOfTheOriginalList_IfElementWasRemoved()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
             segment.RemoveAt(1);
 
@@ -545,7 +545,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_RemoveAt_ModifiesTheContentsOfTheSegment_IfElementWasRemoved()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
             segment.RemoveAt(1);
 
@@ -585,7 +585,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Setter_DoesNotModifyTheCount()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
 
             segment[0] = 100;
@@ -597,7 +597,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Setter_ModifiesTheElementAtGivenIndex()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
 
             segment[0] = 100;
@@ -609,7 +609,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Segment_Setter_ModifiesTheOriginalCollection()
         {
-            var original = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var original = new List<int> {0, 1, 2, 3, 4, 5};
             var segment = original.Segment(1, 4);
 
             segment[0] = 100;
@@ -676,28 +676,28 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void Segment_ThrowsException_ForNegativeLength()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Segment(0, -1));
+                new[] {1}.Segment(0, -1));
         }
 
         [Test]
         public void Segment_ThrowsException_ForNegativeStartIndex()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Segment(-1, 1));
+                new[] {1}.Segment(-1, 1));
         }
 
         [Test]
         public void Segment_ThrowsException_ForOutOfBounds1()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Segment(0, 2));
+                new[] {1}.Segment(0, 2));
         }
 
         [Test]
         public void Segment_ThrowsException_ForOutOfBounds2()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Segment(1, 1));
+                new[] {1}.Segment(1, 1));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]

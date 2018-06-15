@@ -276,10 +276,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         ///     Adds an item to the <see cref="Mash{TKey,TValue}" />'s value collection.
@@ -359,10 +356,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     <c>true</c> if <paramref name="item" /> is found in the <see cref="Mash{TKey,TValue}" />; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(TValue item)
-        {
-            return IndexOf(item) > -1;
-        }
+        public bool Contains(TValue item) => IndexOf(item) > -1;
 
         /// <summary>
         ///     Copies the elements of the <see cref="Mash{TKey,TValue}" />'s value collection to an <see cref="T:System.Array" />,
@@ -1059,12 +1053,12 @@ namespace Abacaxi.Containers
                     subMash = new Mash<TKey, TValue>(_equalityComparer);
                     _childrenObj = new Dictionary<TKey, Mash<TKey, TValue>>
                     {
-                        { array5[0].Key, array5[0].Value },
-                        { array5[1].Key, array5[1].Value },
-                        { array5[2].Key, array5[2].Value },
-                        { array5[3].Key, array5[3].Value },
-                        { array5[4].Key, array5[4].Value },
-                        { key, subMash }
+                        {array5[0].Key, array5[0].Value},
+                        {array5[1].Key, array5[1].Value},
+                        {array5[2].Key, array5[2].Value},
+                        {array5[3].Key, array5[3].Value},
+                        {array5[4].Key, array5[4].Value},
+                        {key, subMash}
                     };
 
                     return subMash;
@@ -1251,12 +1245,12 @@ namespace Abacaxi.Containers
                         _state = (_state & StorageState.ValueMask) | StorageState.HasManyChildrenInAHashTable;
                         _childrenObj = new Dictionary<TKey, Mash<TKey, TValue>>
                         {
-                            { array5[0].Key, array5[0].Value },
-                            { array5[1].Key, array5[1].Value },
-                            { array5[2].Key, array5[2].Value },
-                            { array5[3].Key, array5[3].Value },
-                            { array5[4].Key, array5[4].Value },
-                            { key, mash }
+                            {array5[0].Key, array5[0].Value},
+                            {array5[1].Key, array5[1].Value},
+                            {array5[2].Key, array5[2].Value},
+                            {array5[3].Key, array5[3].Value},
+                            {array5[4].Key, array5[4].Value},
+                            {key, mash}
                         };
                     }
 

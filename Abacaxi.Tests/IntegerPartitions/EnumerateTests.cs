@@ -37,11 +37,11 @@ namespace Abacaxi.Tests.IntegerPartitions
         {
             TestHelper.AssertSequence(
                 IntegerPartitions.Enumerate(4),
-                new[] { 4 },
-                new[] { 3, 1 },
-                new[] { 2, 1, 1 },
-                new[] { 1, 1, 1, 1 },
-                new[] { 2, 2 });
+                new[] {4},
+                new[] {3, 1},
+                new[] {2, 1, 1},
+                new[] {1, 1, 1, 1},
+                new[] {2, 2});
         }
 
         [Test]
@@ -50,11 +50,11 @@ namespace Abacaxi.Tests.IntegerPartitions
         {
             TestHelper.AssertSequence(
                 IntegerPartitions.Enumerate(-4),
-                new[] { -4 },
-                new[] { -3, -1 },
-                new[] { -2, -1, -1 },
-                new[] { -1, -1, -1, -1 },
-                new[] { -2, -2 });
+                new[] {-4},
+                new[] {-3, -1},
+                new[] {-2, -1, -1},
+                new[] {-1, -1, -1, -1},
+                new[] {-2, -2});
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace Abacaxi.Tests.IntegerPartitions
         {
             TestHelper.AssertSequence(
                 IntegerPartitions.Enumerate(-1),
-                new[] { -1 });
+                new[] {-1});
         }
 
         [Test]
@@ -70,9 +70,9 @@ namespace Abacaxi.Tests.IntegerPartitions
         {
             TestHelper.AssertSequence(
                 IntegerPartitions.Enumerate(-3),
-                new[] { -3 },
-                new[] { -2, -1 },
-                new[] { -1, -1, -1 });
+                new[] {-3},
+                new[] {-2, -1},
+                new[] {-1, -1, -1});
         }
 
         [Test]
@@ -80,8 +80,8 @@ namespace Abacaxi.Tests.IntegerPartitions
         {
             TestHelper.AssertSequence(
                 IntegerPartitions.Enumerate(-2),
-                new[] { -2 },
-                new[] { -1, -1 });
+                new[] {-2},
+                new[] {-1, -1});
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace Abacaxi.Tests.IntegerPartitions
         {
             TestHelper.AssertSequence(
                 IntegerPartitions.Enumerate(1),
-                new[] { 1 });
+                new[] {1});
         }
 
         [Test]
@@ -97,9 +97,9 @@ namespace Abacaxi.Tests.IntegerPartitions
         {
             TestHelper.AssertSequence(
                 IntegerPartitions.Enumerate(3),
-                new[] { 3 },
-                new[] { 2, 1 },
-                new[] { 1, 1, 1 });
+                new[] {3},
+                new[] {2, 1},
+                new[] {1, 1, 1});
         }
 
         [Test]
@@ -107,8 +107,8 @@ namespace Abacaxi.Tests.IntegerPartitions
         {
             TestHelper.AssertSequence(
                 IntegerPartitions.Enumerate(2),
-                new[] { 2 },
-                new[] { 1, 1 });
+                new[] {2},
+                new[] {1, 1});
         }
 
         [Test]

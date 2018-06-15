@@ -31,7 +31,7 @@ namespace Abacaxi.Tests.Containers
         public void Comparer_TakesIntoAccount_TheElementComparer()
         {
             var comparer = new ArrayEqualityComparer<string>(StringComparer.OrdinalIgnoreCase);
-            var result = comparer.Equals(new[] { "a" }, new[] { "A" });
+            var result = comparer.Equals(new[] {"a"}, new[] {"A"});
 
             Assert.IsTrue(result);
         }
@@ -47,7 +47,7 @@ namespace Abacaxi.Tests.Containers
         public void Default_ReturnsTheDefaultComparer()
         {
             var comparer = ArrayEqualityComparer<string>.Default;
-            var result = comparer.Equals(new[] { "a" }, new[] { "A" });
+            var result = comparer.Equals(new[] {"a"}, new[] {"A"});
 
             Assert.IsFalse(result);
         }
@@ -55,7 +55,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Equals_ReturnsFalse_IfElementsDiffer()
         {
-            var result = _comparer.Equals(new[] { 1, 2 }, new[] { 1, 3 });
+            var result = _comparer.Equals(new[] {1, 2}, new[] {1, 3});
 
             Assert.IsFalse(result);
         }
@@ -71,7 +71,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Equals_ReturnsFalse_IfLengthsDiffer()
         {
-            var result = _comparer.Equals(new[] { 1, 2 }, new[] { 1 });
+            var result = _comparer.Equals(new[] {1, 2}, new[] {1});
 
             Assert.IsFalse(result);
         }
@@ -112,8 +112,8 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentArrays()
         {
-            var r1 = _comparer.GetHashCode(new[] { 1, 2, 3 });
-            var r2 = _comparer.GetHashCode(new[] { 1, 2, 4 });
+            var r1 = _comparer.GetHashCode(new[] {1, 2, 3});
+            var r2 = _comparer.GetHashCode(new[] {1, 2, 4});
 
             Assert.AreNotEqual(r1, r2);
         }
@@ -121,8 +121,8 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void GetHashCode_ReturnsSameHashCode_ForEqualArrays()
         {
-            var r1 = _comparer.GetHashCode(new[] { 1, 2, 3 });
-            var r2 = _comparer.GetHashCode(new[] { 1, 2, 3 });
+            var r1 = _comparer.GetHashCode(new[] {1, 2, 3});
+            var r2 = _comparer.GetHashCode(new[] {1, 2, 3});
 
             Assert.AreEqual(r1, r2);
         }

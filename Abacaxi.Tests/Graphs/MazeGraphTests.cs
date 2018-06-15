@@ -27,15 +27,15 @@ namespace Abacaxi.Tests.Graphs
     {
         private readonly bool[,] _m3X3 =
         {
-            { true, true, true },
-            { true, true, true },
-            { true, true, true }
+            {true, true, true},
+            {true, true, true},
+            {true, true, true}
         };
 
         private readonly bool[,] _m2X2 =
         {
-            { true, false },
-            { true, true }
+            {true, false},
+            {true, true}
         };
 
         private static Cell Parse([NotNull] string v)
@@ -64,7 +64,7 @@ namespace Abacaxi.Tests.Graphs
          SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForInvalidCell(int x, int y)
         {
-            var graph = new MazeGraph(new[,] { { true } });
+            var graph = new MazeGraph(new[,] {{true}});
 
             Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(x, y)));
         }
@@ -157,7 +157,7 @@ namespace Abacaxi.Tests.Graphs
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForFalseCell()
         {
-            var graph = new MazeGraph(new[,] { { false } });
+            var graph = new MazeGraph(new[,] {{false}});
 
             Assert.Throws<ArgumentException>(() => graph.GetEdges(new Cell(0, 0)));
         }
@@ -167,8 +167,8 @@ namespace Abacaxi.Tests.Graphs
         {
             var graph = new MazeGraph(new[,]
             {
-                { true, false },
-                { true, true }
+                {true, false},
+                {true, true}
             });
 
             Assert.IsFalse(graph.IsDirected);
@@ -177,7 +177,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void IsReadOnly_ReturnsFalse()
         {
-            var graph = new MazeGraph(new[,] { { true } });
+            var graph = new MazeGraph(new[,] {{true}});
 
             Assert.IsFalse(graph.IsReadOnly);
         }

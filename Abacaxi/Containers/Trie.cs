@@ -98,10 +98,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         ///     Returns an enumerator that iterates through the collection.
@@ -110,10 +107,8 @@ namespace Abacaxi.Containers
         ///     An enumerator that can be used to iterate through the collection.
         /// </returns>
         /// <exception cref="InvalidOperationException">Collection has been modified while enumerating.</exception>
-        public IEnumerator<KeyValuePair<TElement[], TValue>> GetEnumerator()
-        {
-            return Query(EmptyElementArray).GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<TElement[], TValue>> GetEnumerator() =>
+            Query(EmptyElementArray).GetEnumerator();
 
         /// <summary>
         ///     Adds an item to the <see cref="Trie{TElement,TValue}" />.

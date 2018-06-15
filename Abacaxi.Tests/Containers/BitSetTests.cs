@@ -258,7 +258,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void ExceptWith_RemovesElements_EqualToOther()
         {
-            _full.ExceptWith(new[] { 0, 1, 2, -8 });
+            _full.ExceptWith(new[] {0, 1, 2, -8});
 
             Assert.IsFalse(_full.Contains(0));
             Assert.IsFalse(_full.Contains(1));
@@ -398,7 +398,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void IntersectWith_RemovesElements_NotInOther()
         {
-            _full.IntersectWith(new[] { 0, -7 });
+            _full.IntersectWith(new[] {0, -7});
 
             Assert.IsTrue(_full.Contains(0));
             Assert.IsFalse(_full.Contains(1));
@@ -421,19 +421,19 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void IsProperSubsetOf_ReturnsFalse_IfNotProperSubset()
         {
-            Assert.IsFalse(_full.IsProperSubsetOf(new[] { 3, 2, 1, 0 }));
+            Assert.IsFalse(_full.IsProperSubsetOf(new[] {3, 2, 1, 0}));
         }
 
         [Test]
         public void IsProperSubsetOf_ReturnsFalse_IfNotSubset()
         {
-            Assert.IsFalse(_full.IsProperSubsetOf(new[] { 3, 2, 1, 8 }));
+            Assert.IsFalse(_full.IsProperSubsetOf(new[] {3, 2, 1, 8}));
         }
 
         [Test]
         public void IsProperSubsetOf_ReturnsTrue_IfProperSubset()
         {
-            Assert.IsTrue(_full.IsProperSubsetOf(new[] { 8, 3, 2, 1, 0 }));
+            Assert.IsTrue(_full.IsProperSubsetOf(new[] {8, 3, 2, 1, 0}));
         }
 
         [Test]
@@ -451,25 +451,25 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void IsProperSupersetOf_ReturnsFalse_IfNotProperSuperset()
         {
-            Assert.IsFalse(_full.IsProperSupersetOf(new[] { 3, 2, 1, 0 }));
+            Assert.IsFalse(_full.IsProperSupersetOf(new[] {3, 2, 1, 0}));
         }
 
         [Test]
         public void IsProperSupersetOf_ReturnsFalse_IfNotSuperset1()
         {
-            Assert.IsFalse(_full.IsProperSupersetOf(new[] { 8 }));
+            Assert.IsFalse(_full.IsProperSupersetOf(new[] {8}));
         }
 
         [Test]
         public void IsProperSupersetOf_ReturnsFalse_IfNotSuperset2()
         {
-            Assert.IsFalse(_full.IsProperSupersetOf(new[] { 0, 1, 2, 3, 8 }));
+            Assert.IsFalse(_full.IsProperSupersetOf(new[] {0, 1, 2, 3, 8}));
         }
 
         [Test]
         public void IsProperSupersetOf_ReturnsTrue_IfProperSuperset()
         {
-            Assert.IsTrue(_full.IsProperSupersetOf(new[] { 3, 2, 1 }));
+            Assert.IsTrue(_full.IsProperSupersetOf(new[] {3, 2, 1}));
         }
 
         [Test]
@@ -493,19 +493,19 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void IsSubsetOf_ReturnsFalse_IfNotSubset()
         {
-            Assert.IsFalse(_full.IsSubsetOf(new[] { 3, 2, 1, 8 }));
+            Assert.IsFalse(_full.IsSubsetOf(new[] {3, 2, 1, 8}));
         }
 
         [Test]
         public void IsSubsetOf_ReturnsTrue_IfEqualSet()
         {
-            Assert.IsTrue(_full.IsSubsetOf(new[] { 3, 2, 1, 0 }));
+            Assert.IsTrue(_full.IsSubsetOf(new[] {3, 2, 1, 0}));
         }
 
         [Test]
         public void IsSubsetOf_ReturnsTrue_IfProperSubset()
         {
-            Assert.IsTrue(_full.IsSubsetOf(new[] { 3, 2, 1, 0, -1 }));
+            Assert.IsTrue(_full.IsSubsetOf(new[] {3, 2, 1, 0, -1}));
         }
 
         [Test]
@@ -517,13 +517,13 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void IsSupersetOf_ReturnsFalse_IfNotSuperset1()
         {
-            Assert.IsFalse(_full.IsSupersetOf(new[] { 3, 2, 1, 8 }));
+            Assert.IsFalse(_full.IsSupersetOf(new[] {3, 2, 1, 8}));
         }
 
         [Test]
         public void IsSupersetOf_ReturnsFalse_IfNotSuperset2()
         {
-            Assert.IsFalse(_full.IsSupersetOf(new[] { 3, 2, 1, 0, 8 }));
+            Assert.IsFalse(_full.IsSupersetOf(new[] {3, 2, 1, 0, 8}));
         }
 
         [Test]
@@ -535,13 +535,13 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void IsSupersetOf_ReturnsTrue_IfEqualSet()
         {
-            Assert.IsTrue(_full.IsSupersetOf(new[] { 3, 2, 1, 0 }));
+            Assert.IsTrue(_full.IsSupersetOf(new[] {3, 2, 1, 0}));
         }
 
         [Test]
         public void IsSupersetOf_ReturnsTrue_IfProperSuperset()
         {
-            Assert.IsTrue(_full.IsSupersetOf(new[] { 3, 2, 0 }));
+            Assert.IsTrue(_full.IsSupersetOf(new[] {3, 2, 0}));
         }
 
         [Test]
@@ -553,7 +553,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Overlaps_ReturnsFalse_IfNoCommonElements()
         {
-            Assert.IsFalse(_full.Overlaps(new[] { 8, 9, 10 }));
+            Assert.IsFalse(_full.Overlaps(new[] {8, 9, 10}));
         }
 
         [Test]
@@ -565,7 +565,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Overlaps_ReturnsTrue_IfHaveCommonElements()
         {
-            Assert.IsTrue(_full.Overlaps(new[] { 0, -1 }));
+            Assert.IsTrue(_full.Overlaps(new[] {0, -1}));
         }
 
         [Test]
@@ -618,31 +618,31 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void SetEquals_ReturnsFalse_IfNotSame1()
         {
-            Assert.IsFalse(_full.SetEquals(new[] { 0, 1, 2, 3, 4 }));
+            Assert.IsFalse(_full.SetEquals(new[] {0, 1, 2, 3, 4}));
         }
 
         [Test]
         public void SetEquals_ReturnsFalse_IfNotSame2()
         {
-            Assert.IsFalse(_full.SetEquals(new[] { 1, 2, 3, 4 }));
+            Assert.IsFalse(_full.SetEquals(new[] {1, 2, 3, 4}));
         }
 
         [Test]
         public void SetEquals_ReturnsFalse_IfSameCountWithDifferences()
         {
-            Assert.IsFalse(_full.SetEquals(new[] { 3, 3, 3, 3 }));
+            Assert.IsFalse(_full.SetEquals(new[] {3, 3, 3, 3}));
         }
 
         [Test]
         public void SetEquals_ReturnsTrue_IfSame()
         {
-            Assert.IsTrue(_full.SetEquals(new[] { 3, 2, 1, 0 }));
+            Assert.IsTrue(_full.SetEquals(new[] {3, 2, 1, 0}));
         }
 
         [Test]
         public void SetEquals_ReturnsTrue_IfSameWithDuplicates()
         {
-            Assert.IsTrue(_full.SetEquals(new[] { 3, 2, 1, 0, 0, 3 }));
+            Assert.IsTrue(_full.SetEquals(new[] {3, 2, 1, 0, 0, 3}));
         }
 
 
@@ -672,7 +672,7 @@ namespace Abacaxi.Tests.Containers
                 2,
                 3
             };
-            set.SymmetricExceptWith(new[] { 1, 2, 4 });
+            set.SymmetricExceptWith(new[] {1, 2, 4});
 
             Assert.IsFalse(set.Contains(1));
             Assert.IsFalse(set.Contains(2));
@@ -690,14 +690,14 @@ namespace Abacaxi.Tests.Containers
         public void SymmetricExceptWith_ThrowsException_TryingToAddElementGreaterThanMax()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                _full.SymmetricExceptWith(new[] { 0, 4 }));
+                _full.SymmetricExceptWith(new[] {0, 4}));
         }
 
         [Test]
         public void SymmetricExceptWith_ThrowsException_TryingToAddElementLessThanMin()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                _full.SymmetricExceptWith(new[] { 0, -1 }));
+                _full.SymmetricExceptWith(new[] {0, -1}));
         }
 
         [Test]
@@ -720,7 +720,7 @@ namespace Abacaxi.Tests.Containers
                 2,
                 3
             };
-            set.UnionWith(new[] { 1, 2, 4 });
+            set.UnionWith(new[] {1, 2, 4});
 
             Assert.IsTrue(set.Contains(1));
             Assert.IsTrue(set.Contains(2));
@@ -738,14 +738,14 @@ namespace Abacaxi.Tests.Containers
         public void UnionWith_ThrowsException_TryingToAddElementGreaterThanMax()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                _full.UnionWith(new[] { 0, 4 }));
+                _full.UnionWith(new[] {0, 4}));
         }
 
         [Test]
         public void UnionWith_ThrowsException_TryingToAddElementLessThanMin()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                _full.UnionWith(new[] { 0, -1 }));
+                _full.UnionWith(new[] {0, -1}));
         }
     }
 }

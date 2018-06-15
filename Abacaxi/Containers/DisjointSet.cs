@@ -79,10 +79,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     An enumerator that can be used to iterate through the set.
         /// </returns>
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _nodes.Keys.GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => _nodes.Keys.GetEnumerator();
 
         /// <summary>
         ///     Returns an enumerator that iterates through the set.
@@ -90,10 +87,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the set.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         [NotNull]
         private Node GetRootNodeRecursive([NotNull] T @object)

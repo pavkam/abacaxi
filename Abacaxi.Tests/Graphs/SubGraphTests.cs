@@ -48,7 +48,7 @@ namespace Abacaxi.Tests.Graphs
          SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_ForNullGraph()
         {
-            Assert.Throws<ArgumentNullException>(() => new SubGraph<int>(null, new[] { 1 }));
+            Assert.Throws<ArgumentNullException>(() => new SubGraph<int>(null, new[] {1}));
         }
 
         [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
@@ -70,7 +70,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void GetPotentialWeight_ReturnsExpectedWeight_IfBackingGraphSupportsIt()
         {
-            var graph = new MazeGraph(new[,] { { true, true }, { true, true } });
+            var graph = new MazeGraph(new[,] {{true, true}, {true, true}});
             var sub = new SubGraph<Cell>(graph, graph);
 
             Assert.AreEqual(2, sub.GetPotentialWeight(new Cell(0, 0), new Cell(1, 1)));
@@ -80,7 +80,7 @@ namespace Abacaxi.Tests.Graphs
         public void GetPotentialWeight_ThrowsException_IfBackingGraphDoesNotSupportIt()
         {
             var graph = new LiteralGraph("A>1>B", true);
-            var sub = new SubGraph<char>(graph, new[] { 'A', 'B' });
+            var sub = new SubGraph<char>(graph, new[] {'A', 'B'});
 
             Assert.Throws<NotSupportedException>(() => sub.GetPotentialWeight('A', 'B'));
         }
@@ -116,8 +116,8 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void IsReadOnly_ReturnsFalse_IfBackingGraphIsNotReaOnly()
         {
-            var graph = new MazeGraph(new[,] { { true } });
-            var sub = new SubGraph<Cell>(graph, new[] { new Cell(0, 0) });
+            var graph = new MazeGraph(new[,] {{true}});
+            var sub = new SubGraph<Cell>(graph, new[] {new Cell(0, 0)});
 
             Assert.IsFalse(sub.IsReadOnly);
         }
@@ -126,7 +126,7 @@ namespace Abacaxi.Tests.Graphs
         public void IsReadOnly_ReturnsTrue_IfBackingGraphIsReaOnly()
         {
             var graph = new LiteralGraph("A", true);
-            var sub = new SubGraph<char>(graph, new[] { 'A' });
+            var sub = new SubGraph<char>(graph, new[] {'A'});
 
             Assert.IsTrue(sub.IsReadOnly);
         }
@@ -135,7 +135,7 @@ namespace Abacaxi.Tests.Graphs
         public void SupportsPotentialWeightEvaluation_ReturnsFalse_IfBackingGraphDoesNotSupportIt()
         {
             var graph = new LiteralGraph("A", true);
-            var sub = new SubGraph<char>(graph, new[] { 'A' });
+            var sub = new SubGraph<char>(graph, new[] {'A'});
 
             Assert.IsFalse(sub.SupportsPotentialWeightEvaluation);
         }
@@ -143,8 +143,8 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void SupportsPotentialWeightEvaluation_ReturnsTrue_IfBackingGraphSupportsIt()
         {
-            var graph = new MazeGraph(new[,] { { true } });
-            var sub = new SubGraph<Cell>(graph, new[] { new Cell(0, 0) });
+            var graph = new MazeGraph(new[,] {{true}});
+            var sub = new SubGraph<Cell>(graph, new[] {new Cell(0, 0)});
 
             Assert.IsTrue(sub.SupportsPotentialWeightEvaluation);
         }

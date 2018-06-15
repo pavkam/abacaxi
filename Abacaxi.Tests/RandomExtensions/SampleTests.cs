@@ -27,7 +27,7 @@ namespace Abacaxi.Tests.RandomExtensions
         [TestCase(1), TestCase(2)]
         public void Sample_ReturnsSingleElement_ForOneLengthSequence(int expectedLength)
         {
-            var result = _random.Sample(new[] { 1 }, expectedLength);
+            var result = _random.Sample(new[] {1}, expectedLength);
 
             TestHelper.AssertSequence(result, 1);
         }
@@ -35,7 +35,7 @@ namespace Abacaxi.Tests.RandomExtensions
         [Test]
         public void Sample_ReturnsARandomSample()
         {
-            var input = new[] { 1, 2, 3, 4, 5, 6 }.ToSet();
+            var input = new[] {1, 2, 3, 4, 5, 6}.ToSet();
             var result = _random.Sample(input, 3).ToSet();
 
             Assert.IsTrue(input.IsProperSupersetOf(result));
@@ -53,14 +53,14 @@ namespace Abacaxi.Tests.RandomExtensions
         public void Sample_ThrowsException_IfRandomIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((Random) null).Sample(new[] { 1 }, 1));
+                ((Random) null).Sample(new[] {1}, 1));
         }
 
         [Test]
         public void Sample_ThrowsException_IfSampleLengthIsLessThanOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                _random.Sample(new[] { 1 }, 0));
+                _random.Sample(new[] {1}, 0));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]

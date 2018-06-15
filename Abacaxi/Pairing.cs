@@ -128,7 +128,7 @@ namespace Abacaxi
 
                 if (sets[setIndex] == null)
                 {
-                    sets[setIndex] = new RecursiveFindSubsetPairingWithLowestCostPair<T> { Item1 = sequence[i] };
+                    sets[setIndex] = new RecursiveFindSubsetPairingWithLowestCostPair<T> {Item1 = sequence[i]};
                 }
                 else
                 {

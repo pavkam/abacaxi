@@ -33,7 +33,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void GetItemFrequencies_ReturnsValidItems()
         {
-            var list = new[] { 10, 1, 10, 10, 2, 2 };
+            var list = new[] {10, 1, 10, 10, 2, 2};
             var freq = list.GetItemFrequencies(EqualityComparer<int>.Default);
 
             Assert.AreEqual(3, freq.Count);
@@ -45,7 +45,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetItemFrequencies_ThrowsException_IfEqualityComparerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.GetItemFrequencies(null));
+            Assert.Throws<ArgumentNullException>(() => new[] {1}.GetItemFrequencies(null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
@@ -58,7 +58,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void GetItemFrequencies_UsesTheEqualityComparer()
         {
-            var list = new[] { "a", "A" };
+            var list = new[] {"a", "A"};
             var freq = list.GetItemFrequencies(StringComparer.OrdinalIgnoreCase);
 
             Assert.AreEqual(2, freq["a"]);

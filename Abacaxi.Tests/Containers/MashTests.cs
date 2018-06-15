@@ -30,9 +30,9 @@ namespace Abacaxi.Tests.Containers
         public void SetUp()
         {
             _emptyMash = new Mash<string, int>();
-            _oneMash = new Mash<string, int> { 1 };
-            _twoMash = new Mash<string, int> { 1, 2 };
-            _threeMash = new Mash<string, int> { 1, 2, 3 };
+            _oneMash = new Mash<string, int> {1};
+            _twoMash = new Mash<string, int> {1, 2};
+            _threeMash = new Mash<string, int> {1, 2, 3};
         }
 
         private Mash<string, int> _emptyMash;

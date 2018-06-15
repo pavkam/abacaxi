@@ -117,12 +117,10 @@ namespace Abacaxi.Trees
         /// <returns>
         ///     <c>true</c> if the node was successfully removed; otherwise, false.
         /// </returns>
-        public bool Remove(KeyValuePair<TKey, TValue> item)
-        {
-            return TryGetValue(item.Key, out var value) &&
-                   EqualityComparer<TValue>.Default.Equals(value, item.Value) &&
-                   Remove(item.Key);
-        }
+        public bool Remove(KeyValuePair<TKey, TValue> item) => TryGetValue(item.Key, out var value) &&
+                                                               EqualityComparer<TValue>.Default.Equals(value,
+                                                                   item.Value) &&
+                                                               Remove(item.Key);
 
         /// <summary>
         ///     Determines whether the tree contains the given key/value node.
@@ -135,11 +133,10 @@ namespace Abacaxi.Trees
         ///     This method is provided for compatibility with <see cref="ICollection{T}" />. It is not recommended for normal use.
         ///     The values of nodes are compared using the default equality comparer for that type.
         /// </remarks>
-        public bool Contains(KeyValuePair<TKey, TValue> item)
-        {
-            return TryGetValue(item.Key, out var value) &&
-                   EqualityComparer<TValue>.Default.Equals(value, item.Value);
-        }
+        public bool Contains(KeyValuePair<TKey, TValue> item) =>
+            TryGetValue(item.Key, out var value) &&
+            EqualityComparer<TValue>.Default.Equals(value,
+                item.Value);
 
         /// <summary>
         ///     Clears this tree.
@@ -198,10 +195,7 @@ namespace Abacaxi.Trees
         /// <returns>
         ///     An enumerator that can be used to iterate through the tree.
         /// </returns>
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            return GetEnumerator(TreeTraversalMode.InOrder);
-        }
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => GetEnumerator(TreeTraversalMode.InOrder);
 
         /// <summary>
         ///     Returns an enumerator that iterates through the tree in-order.
@@ -209,10 +203,7 @@ namespace Abacaxi.Trees
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the tree.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         ///     Throws the standard "key not found" exception.

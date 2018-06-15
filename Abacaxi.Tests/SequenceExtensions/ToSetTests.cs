@@ -26,7 +26,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToSet_ReturnsAValidSet1()
         {
-            var set = new[] { 1, 1, 2, 3 }.ToSet();
+            var set = new[] {1, 1, 2, 3}.ToSet();
 
             TestHelper.AssertSequence(set, 1, 2, 3);
         }
@@ -34,7 +34,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToSet_ReturnsAValidSet2()
         {
-            var set = new[] { 1, 1, 2, 3 }.ToSet(EqualityComparer<int>.Default);
+            var set = new[] {1, 1, 2, 3}.ToSet(EqualityComparer<int>.Default);
 
             TestHelper.AssertSequence(set, 1, 2, 3);
         }
@@ -42,7 +42,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToSet_ReturnsAValidSet3()
         {
-            var set = new[] { 1, 1, 2, 3 }.ToSet(a => a.ToString());
+            var set = new[] {1, 1, 2, 3}.ToSet(a => a.ToString());
 
             TestHelper.AssertSequence(set, "1", "2", "3");
         }
@@ -50,13 +50,13 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfEqualityComparerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.ToSet(null));
+            Assert.Throws<ArgumentNullException>(() => new[] {1}.ToSet(null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfSelectorIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.ToSet((Func<int, int>) null));
+            Assert.Throws<ArgumentNullException>(() => new[] {1}.ToSet((Func<int, int>) null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
@@ -80,7 +80,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToSet_UsesTheEqualityComparer()
         {
-            var set = new[] { "a", "A", "b", "c" }.ToSet(StringComparer.OrdinalIgnoreCase);
+            var set = new[] {"a", "A", "b", "c"}.ToSet(StringComparer.OrdinalIgnoreCase);
 
             TestHelper.AssertSequence(set, "a", "b", "c");
         }

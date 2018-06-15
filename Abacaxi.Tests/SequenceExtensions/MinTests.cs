@@ -34,14 +34,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Min1_ReturnsTheFirstFoundItem_BasedOnLowestKey()
         {
-            var result = new[] { "bb", "ccc", "a", "z" }.Min(i => i.Length, Comparer<int>.Default);
+            var result = new[] {"bb", "ccc", "a", "z"}.Min(i => i.Length, Comparer<int>.Default);
             Assert.AreEqual("a", result);
         }
 
         [Test]
         public void Min1_ReturnsTheOnlyElement_EvenIfTheKeyIsNull()
         {
-            var result = new[] { 1 }.Min(i => null, StringComparer.Ordinal);
+            var result = new[] {1}.Min(i => null, StringComparer.Ordinal);
             Assert.AreEqual(1, result);
         }
 
@@ -49,7 +49,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void Min1_SkipsElements_ThatHaveNullKeys()
         {
             var result =
-                new[] { 1, 2, 3, 4 }.Min(i => i % 2 == 1 ? null as string : i.ToString(), StringComparer.Ordinal);
+                new[] {1, 2, 3, 4}.Min(i => i % 2 == 1 ? null as string : i.ToString(), StringComparer.Ordinal);
             Assert.AreEqual(2, result);
         }
 
@@ -91,21 +91,21 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Min2_ReturnsTheFirstFoundItem_BasedOnLowestKey()
         {
-            var result = new[] { "bb", "ccc", "a", "z" }.Min(i => i.Length);
+            var result = new[] {"bb", "ccc", "a", "z"}.Min(i => i.Length);
             Assert.AreEqual("a", result);
         }
 
         [Test]
         public void Min2_ReturnsTheOnlyElement_EvenIfTheKeyIsNull()
         {
-            var result = new[] { 1 }.Min<int, string>(i => null);
+            var result = new[] {1}.Min<int, string>(i => null);
             Assert.AreEqual(1, result);
         }
 
         [Test]
         public void Min2_SkipsElements_ThatHaveNullKeys()
         {
-            var result = new[] { 1, 2, 3, 4 }.Min(i => i % 2 == 1 ? null as string : i.ToString());
+            var result = new[] {1, 2, 3, 4}.Min(i => i % 2 == 1 ? null as string : i.ToString());
             Assert.AreEqual(2, result);
         }
 

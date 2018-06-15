@@ -59,7 +59,7 @@ namespace Abacaxi.Tests.Knapsack
         [Test]
         public void Fill_ReturnsNothingForSingleItem_IfCannotBeFitted()
         {
-            var array = new[] { new KnapsackItem<string>("item1", 1, 10) };
+            var array = new[] {new KnapsackItem<string>("item1", 1, 10)};
             var result = Knapsack.Fill(array, 9);
             TestHelper.AssertSequence(result);
         }
@@ -67,7 +67,7 @@ namespace Abacaxi.Tests.Knapsack
         [Test]
         public void Fill_ReturnsSingleItem_IfCanBeFitted()
         {
-            var array = new[] { new KnapsackItem<string>("item1", 1, 1) };
+            var array = new[] {new KnapsackItem<string>("item1", 1, 1)};
             var result = Knapsack.Fill(array, 1);
             TestHelper.AssertSequence(result, "item1");
         }

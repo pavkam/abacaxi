@@ -36,58 +36,34 @@ namespace Abacaxi.Tests.ObjectExtensions
 
         [NotNull] public string PublicField = "public_field";
 
-        [NotNull]
-        public static string PublicStaticProperty => "public_static_property";
+        [NotNull] public static string PublicStaticProperty => "public_static_property";
+
+        [NotNull] public string PublicProperty => "public_property";
+
+        [NotNull] internal string InternalProperty => "internal_property";
+
+        [NotNull] private string PrivateProperty => "private_property";
+
+        [NotNull] protected string ProtectedProperty => "protected_property";
+
+        [NotNull] public string this[string index] => "public_property_with_index_argument";
 
         [NotNull]
-        public string PublicProperty => "public_property";
+        public string PublicMethod() => "public_method";
 
         [NotNull]
-        internal string InternalProperty => "internal_property";
+        internal string InternalMethod() => "internal_method";
 
         [NotNull]
-        private string PrivateProperty => "private_property";
+        private string PrivateMethod() => "private_method";
 
         [NotNull]
-        protected string ProtectedProperty => "protected_property";
+        private string ProtectedMethod() => "protected_method";
 
         [NotNull]
-        public string this[string index] => "public_property_with_index_argument";
+        public string PublicMethodWithOneArgument(string arg) => "public_method_with_one_argument";
 
         [NotNull]
-        public string PublicMethod()
-        {
-            return "public_method";
-        }
-
-        [NotNull]
-        internal string InternalMethod()
-        {
-            return "internal_method";
-        }
-
-        [NotNull]
-        private string PrivateMethod()
-        {
-            return "private_method";
-        }
-
-        [NotNull]
-        private string ProtectedMethod()
-        {
-            return "protected_method";
-        }
-
-        [NotNull]
-        public string PublicMethodWithOneArgument(string arg)
-        {
-            return "public_method_with_one_argument";
-        }
-
-        [NotNull]
-        public string PublicGenericMethod<T>()
-        {
-            return "public_generic_method";
-        }
+        public string PublicGenericMethod<T>() => "public_generic_method";
     }
 }

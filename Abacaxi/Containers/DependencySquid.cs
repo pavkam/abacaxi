@@ -22,7 +22,7 @@ namespace Abacaxi.Containers
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class handles dependencies and conflicts across tags. Allows maintaining a valid state when toggling on/off tags.
+    ///     Class handles dependencies and conflicts across tags. Allows maintaining a valid state when toggling on/off tags.
     /// </summary>
     /// <typeparam name="TTag">The type of the tag (item managed by the squid).</typeparam>
     [PublicAPI]
@@ -31,13 +31,38 @@ namespace Abacaxi.Containers
         [NotNull] private readonly IDictionary<TTag, Node> _all;
         [NotNull] private readonly HashSet<Node> _selected;
 
-        private sealed class Node
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DependencySquid{TTag}" /> class.
+        /// </summary>
+        /// <param name="equalityComparer">The equality comparer.</param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="equalityComparer" /> is <c>null</c>.
+        /// </exception>
+        public DependencySquid([NotNull] IEqualityComparer<TTag> equalityComparer)
         {
-            public TTag Tag;
-            public ISet<Node> Conflicts;
-            public ISet<Node> Dependencies;
-            public ISet<Node> Dependents;
+            Validate.ArgumentNotNull(nameof(equalityComparer), equalityComparer);
+
+            _all = new Dictionary<TTag, Node>(equalityComparer);
+            _selected = new HashSet<Node>();
         }
+
+        /// <inheritdoc />
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="T:Abacaxi.Containers.DependencySquid`1" /> class using the default
+        ///     equality comparer for <typeparamref name="TTag" />.
+        /// </summary>
+        public DependencySquid() : this(EqualityComparer<TTag>.Default)
+        {
+        }
+
+        /// <summary>
+        ///     Gets the current tag selection.
+        /// </summary>
+        /// <value>
+        ///     The selection of tags.
+        /// </value>
+        [NotNull, ItemNotNull]
+        public TTag[] Selection => _selected.Select(node => node.Tag).ToArray();
 
         [NotNull]
         private Node GetOrAddNode([NotNull] TTag tag)
@@ -107,35 +132,12 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DependencySquid{TTag}"/> class.
-        /// </summary>
-        /// <param name="equalityComparer">The equality comparer.</param>
-        /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="equalityComparer" /> is <c>null</c>.
-        /// </exception>
-        public DependencySquid([NotNull] IEqualityComparer<TTag> equalityComparer)
-        {
-            Validate.ArgumentNotNull(nameof(equalityComparer), equalityComparer);
-
-            _all = new Dictionary<TTag, Node>(equalityComparer);
-            _selected = new HashSet<Node>();
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:Abacaxi.Containers.DependencySquid`1" /> class using the default equality comparer for <typeparamref name="TTag" />.
-        /// </summary>
-        public DependencySquid() : this(EqualityComparer<TTag>.Default)
-        {
-        }
-
-        /// <summary>
-        /// Adds a number of dependencies for a given <paramref name="dependent"/>.
+        ///     Adds a number of dependencies for a given <paramref name="dependent" />.
         /// </summary>
         /// <param name="dependent">The dependent.</param>
         /// <param name="dependencies">The dependencies to add.</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="dependent" /> or <paramref name="dependencies"/> are <c>null</c>.
+        ///     Thrown if <paramref name="dependent" /> or <paramref name="dependencies" /> are <c>null</c>.
         /// </exception>
         public void AddDependencies([NotNull] TTag dependent, [NotNull, ItemNotNull] params TTag[] dependencies)
         {
@@ -166,12 +168,12 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Adds a number of conflicts for a given <paramref name="dependent"/>.
+        ///     Adds a number of conflicts for a given <paramref name="dependent" />.
         /// </summary>
         /// <param name="dependent">The dependent.</param>
         /// <param name="conflicts">The conflicts to add.</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="dependent" /> or <paramref name="conflicts"/> are <c>null</c>.
+        ///     Thrown if <paramref name="dependent" /> or <paramref name="conflicts" /> are <c>null</c>.
         /// </exception>
         public void AddConflicts([NotNull] TTag dependent, [NotNull, ItemNotNull] params TTag[] conflicts)
         {
@@ -199,12 +201,12 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes a number of dependencies from a given <paramref name="dependent"/>.
+        ///     Removes a number of dependencies from a given <paramref name="dependent" />.
         /// </summary>
         /// <param name="dependent">The dependent.</param>
         /// <param name="dependencies">The dependencies to remove.</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="dependent" /> or <paramref name="dependencies"/> are <c>null</c>.
+        ///     Thrown if <paramref name="dependent" /> or <paramref name="dependencies" /> are <c>null</c>.
         /// </exception>
         public void RemoveDependencies([NotNull] TTag dependent, [NotNull, ItemNotNull] params TTag[] dependencies)
         {
@@ -229,12 +231,12 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Removes a number of conflicts from a given <paramref name="dependent"/>.
+        ///     Removes a number of conflicts from a given <paramref name="dependent" />.
         /// </summary>
         /// <param name="dependent">The dependent.</param>
         /// <param name="conflicts">The conflicts to remove.</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="dependent" /> or <paramref name="conflicts"/> are <c>null</c>.
+        ///     Thrown if <paramref name="dependent" /> or <paramref name="conflicts" /> are <c>null</c>.
         /// </exception>
         public void RemoveConflicts([NotNull] TTag dependent, [NotNull, ItemNotNull] params TTag[] conflicts)
         {
@@ -259,10 +261,10 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Toggles the specified dependent.
+        ///     Toggles the specified dependent.
         /// </summary>
         /// <remarks>
-        /// Selected tags and all dependencies are selected. All conflicts are removed.
+        ///     Selected tags and all dependencies are selected. All conflicts are removed.
         /// </remarks>
         /// <param name="tag">The tag to toggle.</param>
         /// <param name="selected">If set to <c>true</c>, the tag is selected. Otherwise it is removed.</param>
@@ -301,20 +303,19 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Clears this instance.
+        ///     Clears this instance.
         /// </summary>
         public void Clear()
         {
             _selected.Clear();
         }
 
-        /// <summary>
-        /// Gets the current tag selection.
-        /// </summary>
-        /// <value>
-        /// The selection of tags.
-        /// </value>
-        [NotNull, ItemNotNull]
-        public TTag[] Selection => _selected.Select(node => node.Tag).ToArray();
+        private sealed class Node
+        {
+            public ISet<Node> Conflicts;
+            public ISet<Node> Dependencies;
+            public ISet<Node> Dependents;
+            public TTag Tag;
+        }
     }
 }

@@ -55,10 +55,10 @@ namespace Abacaxi.Tests.ZArray
         [Test]
         public void Construct_DoesNothing_ForZeroLength()
         {
-            var array = new[] { 1, 2 };
+            var array = new[] {1, 2};
             ZArray.Construct(array, 1, 0, EqualityComparer<int>.Default);
 
-            Assert.AreEqual(new[] { 1, 2 }, array);
+            Assert.AreEqual(new[] {1, 2}, array);
         }
 
         [Test]
@@ -109,14 +109,14 @@ namespace Abacaxi.Tests.ZArray
         public void Construct_ThrowsException_ForNegativeLength()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                ZArray.Construct(new[] { 1 }, 0, -1, EqualityComparer<int>.Default));
+                ZArray.Construct(new[] {1}, 0, -1, EqualityComparer<int>.Default));
         }
 
         [Test]
         public void Construct_ThrowsException_ForNegativeStartIndex()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                ZArray.Construct(new[] { 1 }, -1, 1, EqualityComparer<int>.Default));
+                ZArray.Construct(new[] {1}, -1, 1, EqualityComparer<int>.Default));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
@@ -130,21 +130,21 @@ namespace Abacaxi.Tests.ZArray
         public void Construct_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ZArray.Construct(new[] { 1 }, 0, 1, null));
+                ZArray.Construct(new[] {1}, 0, 1, null));
         }
 
         [Test]
         public void Construct_ThrowsException_ForOutOfBounds1()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                ZArray.Construct(new[] { 1 }, 0, 2, EqualityComparer<int>.Default));
+                ZArray.Construct(new[] {1}, 0, 2, EqualityComparer<int>.Default));
         }
 
         [Test]
         public void Construct_ThrowsException_ForOutOfBounds2()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                ZArray.Construct(new[] { 1 }, 1, 1, EqualityComparer<int>.Default));
+                ZArray.Construct(new[] {1}, 1, 1, EqualityComparer<int>.Default));
         }
     }
 }

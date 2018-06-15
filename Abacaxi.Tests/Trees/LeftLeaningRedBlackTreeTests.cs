@@ -22,15 +22,11 @@ namespace Abacaxi.Tests.Trees
     [TestFixture]
     public class LeftLeaningRedBlackTreeTests : BinarySearchTreeTests
     {
-        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>(IComparer<TKey> comparer)
-        {
-            return new LeftLeaningRedBlackTree<TKey, TValue>(comparer);
-        }
+        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>(IComparer<TKey> comparer) =>
+            new LeftLeaningRedBlackTree<TKey, TValue>(comparer);
 
-        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>()
-        {
-            return new LeftLeaningRedBlackTree<TKey, TValue>();
-        }
+        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>() =>
+            new LeftLeaningRedBlackTree<TKey, TValue>();
 
         [Test]
         public override void GetEnumerator_PostOrder_ReturnsElementsPostOrder()

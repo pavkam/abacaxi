@@ -46,7 +46,7 @@ namespace Abacaxi.Tests.RandomExtensions
         public void NextItem1_ThrowsException_IfRandomIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ((Random) null).NextItem(new[] { 1 }));
+                ((Random) null).NextItem(new[] {1}));
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace Abacaxi.Tests.RandomExtensions
         [Test]
         public void NextItem2_ReturnsARandomSample_ForTwoItems()
         {
-            var all = new[] { 100, 200 };
+            var all = new[] {100, 200};
             var set = all.ToSet();
 
             for (var i = 0; i < 100; i++)

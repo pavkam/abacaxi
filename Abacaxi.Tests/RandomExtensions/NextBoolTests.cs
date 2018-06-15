@@ -27,7 +27,7 @@ namespace Abacaxi.Tests.RandomExtensions
         [Test]
         public void NextBool_ReturnsARandomSample()
         {
-            var set = new[] { true, false }.ToSet();
+            var set = new[] {true, false}.ToSet();
 
             for (var i = 0; i < 100; i++)
             {

@@ -34,14 +34,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Max1_ReturnsTheFirstFoundItem_BasedOnHighestKey()
         {
-            var result = new[] { "bb", "ccc", "a", "z" }.Max(i => i.Length, Comparer<int>.Default);
+            var result = new[] {"bb", "ccc", "a", "z"}.Max(i => i.Length, Comparer<int>.Default);
             Assert.AreEqual("ccc", result);
         }
 
         [Test]
         public void Max1_ReturnsTheOnlyElement_EvenIfTheKeyIsNull()
         {
-            var result = new[] { 1 }.Max(i => null, StringComparer.Ordinal);
+            var result = new[] {1}.Max(i => null, StringComparer.Ordinal);
             Assert.AreEqual(1, result);
         }
 
@@ -49,7 +49,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void Max1_SkipsElements_ThatHaveNullKeys()
         {
             var result =
-                new[] { 1, 2, 3, 4 }.Max(i => i % 2 == 0 ? null as string : i.ToString(), StringComparer.Ordinal);
+                new[] {1, 2, 3, 4}.Max(i => i % 2 == 0 ? null as string : i.ToString(), StringComparer.Ordinal);
             Assert.AreEqual(3, result);
         }
 
@@ -91,21 +91,21 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Max2_ReturnsTheFirstFoundItem_BasedOnHighestKey()
         {
-            var result = new[] { "bb", "ccc", "a", "z" }.Max(i => i.Length);
+            var result = new[] {"bb", "ccc", "a", "z"}.Max(i => i.Length);
             Assert.AreEqual("ccc", result);
         }
 
         [Test]
         public void Max2_ReturnsTheOnlyElement_EvenIfTheKeyIsNull()
         {
-            var result = new[] { 1 }.Max<int, string>(i => null);
+            var result = new[] {1}.Max<int, string>(i => null);
             Assert.AreEqual(1, result);
         }
 
         [Test]
         public void Max2_SkipsElements_ThatHaveNullKeys()
         {
-            var result = new[] { 1, 2, 3, 4 }.Max(i => i % 2 == 0 ? null as string : i.ToString());
+            var result = new[] {1, 2, 3, 4}.Max(i => i % 2 == 0 ? null as string : i.ToString());
             Assert.AreEqual(3, result);
         }
 

@@ -194,7 +194,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Determines whether the sequence contains two elements that aggregate to a given <paramref name="target"/> value.
+        ///     Determines whether the sequence contains two elements that aggregate to a given <paramref name="target" /> value.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to check.</param>
@@ -202,7 +202,7 @@ namespace Abacaxi
         /// <param name="aggregator">The function that aggregates two values.</param>
         /// <param name="comparer">The comparer.</param>
         /// <returns>
-        ///   <c>true</c> if the <paramref name="sequence"/> contains two elements that aggregate; otherwise, <c>false</c>.
+        ///     <c>true</c> if the <paramref name="sequence" /> contains two elements that aggregate; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown if <paramref name="sequence" />, <paramref name="aggregator" /> or
@@ -1237,10 +1237,8 @@ namespace Abacaxi
         /// <param name="sequence">The sequence.</param>
         /// <returns>The original sequence or an empty one.</returns>
         [NotNull]
-        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence)
-        {
-            return sequence ?? Enumerable.Empty<T>();
-        }
+        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence) =>
+            sequence ?? Enumerable.Empty<T>();
 
         /// <summary>
         ///     Determines whether the given <paramref name="sequence" /> is null or empty.
@@ -1250,10 +1248,7 @@ namespace Abacaxi
         /// <returns>
         ///     <c>true</c> if the sequence is null or empty; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> sequence)
-        {
-            return sequence?.Any() != true;
-        }
+        public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> sequence) => sequence?.Any() != true;
 
         /// <summary>
         ///     Returns a <see cref="string" /> that represents this sequence of elements.
@@ -1415,10 +1410,7 @@ namespace Abacaxi
         [CanBeNull]
         public static T Min<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
-            [NotNull] Func<T, TKey> selector)
-        {
-            return Min(sequence, selector, Comparer<TKey>.Default);
-        }
+            [NotNull] Func<T, TKey> selector) => Min(sequence, selector, Comparer<TKey>.Default);
 
         /// <summary>
         ///     Finds the object that has a given maximum <typeparamref name="TKey" />.
@@ -1505,10 +1497,7 @@ namespace Abacaxi
         [CanBeNull]
         public static T Max<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
-            [NotNull] Func<T, TKey> selector)
-        {
-            return Max(sequence, selector, Comparer<TKey>.Default);
-        }
+            [NotNull] Func<T, TKey> selector) => Max(sequence, selector, Comparer<TKey>.Default);
 
         /// <summary>
         ///     Obtains a dedicated view into a segment of a given list. The returned list is a wrapper object that

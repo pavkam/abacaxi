@@ -28,8 +28,8 @@ namespace Abacaxi.Tests.SequenceExtensions
             var actual = "Alex".Partition(3);
 
             TestHelper.AssertSequence(actual,
-                new[] { 'A', 'l', 'e' },
-                new[] { 'x' });
+                new[] {'A', 'l', 'e'},
+                new[] {'x'});
         }
 
         [Test]
@@ -46,16 +46,16 @@ namespace Abacaxi.Tests.SequenceExtensions
             var actual = "Alex".Partition(1);
 
             TestHelper.AssertSequence(actual,
-                new[] { 'A' },
-                new[] { 'l' },
-                new[] { 'e' },
-                new[] { 'x' });
+                new[] {'A'},
+                new[] {'l'},
+                new[] {'e'},
+                new[] {'x'});
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void Partition_ThrowsException_ForSizeLessThanOne()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new[] { 1 }.Partition(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new[] {1}.Partition(0));
         }
     }
 }

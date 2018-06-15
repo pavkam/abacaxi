@@ -22,15 +22,10 @@ namespace Abacaxi.Tests.Trees
     [TestFixture]
     public sealed class AvlTreeTests : BinarySearchTreeTests
     {
-        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>(IComparer<TKey> comparer)
-        {
-            return new AvlTree<TKey, TValue>(comparer);
-        }
+        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>(IComparer<TKey> comparer) =>
+            new AvlTree<TKey, TValue>(comparer);
 
-        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>()
-        {
-            return new AvlTree<TKey, TValue>();
-        }
+        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>() => new AvlTree<TKey, TValue>();
 
         [Test]
         public override void GetEnumerator_PostOrder_ReturnsElementsPostOrder()
