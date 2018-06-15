@@ -32,19 +32,15 @@ namespace Abacaxi.Threading
     public sealed class NanoCache<TKey, TValue>
     {
         [NotNull] private ConcurrentDictionary<TKey, Tuple<TValue, long>> _dictionary;
-        private int _itemTtlInMillis;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="NanoCache{TKey, TValue}" /> class.
         /// </summary>
         /// <param name="equalityComparer">The equality comparer used for th item's keys.</param>
-        /// <param name="itemTtl">The lifespan of cached items.</param>
-        public NanoCache([NotNull] IEqualityComparer<TKey> equalityComparer, int itemTtl = Timeout.Infinite)
+        public NanoCache([NotNull] IEqualityComparer<TKey> equalityComparer)
         {
             Validate.ArgumentNotNull(nameof(equalityComparer), equalityComparer);
-            Validate.ArgumentGreaterThanOrEqualTo(nameof(itemTtl), itemTtl, Timeout.Infinite);
 
-            _itemTtlInMillis = itemTtl;
             _dictionary = new ConcurrentDictionary<TKey, Tuple<TValue, long>>(equalityComparer);
         }
 
@@ -52,8 +48,7 @@ namespace Abacaxi.Threading
         /// <summary>
         ///     Initializes a new instance of the <see cref="NanoCache{TKey, TValue}" /> class.
         /// </summary>
-        /// <param name="itemTtl">The lifespan of cached items.</param>
-        public NanoCache(int itemTtl = Timeout.Infinite) : this(EqualityComparer<TKey>.Default, itemTtl)
+        public NanoCache() : this(EqualityComparer<TKey>.Default)
         {
         }
 
@@ -72,23 +67,7 @@ namespace Abacaxi.Threading
         public TValue this[[NotNull] TKey key]
         {
             get => TryGetValue(key, out var result) ? result : default(TValue);
-            set
-            {
-                Validate.ArgumentNotNull(nameof(key), key);
-
-                if (Equals(value, default(TValue)))
-                {
-                    _dictionary.TryRemove(key, out _);
-                }
-                else
-                {
-                    var nextExpiry = _itemTtlInMillis != Timeout.Infinite
-                        ? DateTime.UtcNow.AddMilliseconds(_itemTtlInMillis).Ticks
-                        : long.MaxValue;
-
-                    _dictionary[key] = Tuple.Create(value, nextExpiry);
-                }
-            }
+            set => Set(key, value);
         }
 
         /// <summary>
@@ -136,8 +115,37 @@ namespace Abacaxi.Threading
         /// </summary>
         /// <param name="key">The key representing the item to remove.</param>
         /// <returns><c>true</c> if the item was removed; otherwise, <c>false</c>.</returns>
-        public bool Remove([NotNull] TKey key) =>
-            _dictionary.TryRemove(key, out var removed) && removed.Item2 >= DateTime.UtcNow.Ticks;
+        public bool Remove([NotNull] TKey key)
+        {
+            Validate.ArgumentNotNull(nameof(key), key);
+            return _dictionary.TryRemove(key, out var removed) && removed.Item2 >= DateTime.UtcNow.Ticks;
+        }
+
+        /// <summary>
+        /// Caches a given item using an optional <paramref name="ttl" />
+        /// </summary>
+        /// <param name="key">The key of the item.</param>
+        /// <param name="value">The value to cache.</param>
+        /// <param name="ttl">The TTL of the value.</param>
+        public void Set([NotNull] TKey key, TValue value, int ttl = Timeout.Infinite)
+        {
+            Validate.ArgumentNotNull(nameof(key), key);
+
+            if (Equals(value, default(TValue)))
+            {
+                _dictionary.TryRemove(key, out _);
+            }
+            else
+            {
+                Validate.ArgumentGreaterThanOrEqualTo(nameof(ttl), ttl, Timeout.Infinite);
+
+                var nextExpiry = ttl != Timeout.Infinite
+                    ? DateTime.UtcNow.AddMilliseconds(ttl).Ticks
+                    : long.MaxValue;
+
+                _dictionary[key] = Tuple.Create(value, nextExpiry);
+            }
+        }
 
         /// <summary>
         ///     Flushes all expired items from this cache instance.

@@ -16,7 +16,7 @@
     <FileVersion>1.1.0.0</FileVersion>
     <RepositoryUrl>https://github.com/pavkam/abacaxi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <DocumentationFile>$(OutDir)\Abacaxi.Practice.xml</DocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Abacaxi.Practice.xml</DocumentationFile>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
   </PropertyGroup>

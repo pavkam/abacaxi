@@ -17,8 +17,8 @@
     <FileVersion>0.0.0.0</FileVersion>
     <RepositoryUrl>https://github.com/pavkam/abacaxi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <DocumentationFile>$(OutDir)\Abacaxi.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Abacaxi.xml</DocumentationFile>
   </PropertyGroup>
   
 </Project>

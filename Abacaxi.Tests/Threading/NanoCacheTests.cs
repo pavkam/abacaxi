@@ -27,10 +27,8 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void Count_IncludesExpiredItems()
         {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
+            var cache = new NanoCache<string, int>();
+            cache.Set("1", 1, 10);
 
             Thread.Sleep(100);
 
@@ -84,11 +82,9 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void Count_IsUpdatedWhenExpiredItemIsFlushed1()
         {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
+            var cache = new NanoCache<string, int>();
 
+            cache.Set("1", 1, 10);
             Thread.Sleep(100);
 
             cache.TryGetValue("1", out _);
@@ -99,11 +95,9 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void Count_IsUpdatedWhenExpiredItemIsFlushed2()
         {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
+            var cache = new NanoCache<string, int>();
 
+            cache.Set("1", 1, 10);
             Thread.Sleep(100);
 
             Assert.AreEqual(0, cache["1"]);
@@ -113,11 +107,9 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void Count_IsUpdatedWhenExpiredItemIsFlushed3()
         {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
+            var cache = new NanoCache<string, int>();
 
+            cache.Set("1", 1, 10);
             Thread.Sleep(100);
 
             cache.Remove("1");
@@ -154,21 +146,6 @@ namespace Abacaxi.Tests.Threading
             Assert.AreEqual(cache["A"], 0);
         }
 
-        [Test,
-         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Ctor1_ThrowsException_ForTtlLessThanMinusOne()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new NanoCache<string, object>(StringComparer.OrdinalIgnoreCase, -2));
-        }
-
-        [Test,
-         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Ctor2_ThrowsException_ForTtlLessThanMinusOne()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new NanoCache<string, object>(-2));
-        }
-
         [Test]
         public void Flush_DoesNothingForUnExpiredItems()
         {
@@ -185,11 +162,9 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void Flush_RemovesTheExpiredItems()
         {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
+            var cache = new NanoCache<string, int>();
 
+            cache.Set("1", 1, 10);
             Thread.Sleep(100);
 
             cache.Flush();
@@ -200,10 +175,9 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void Flush_RemovesTheExpiredItemsWhileLeavingTheNormalOnes()
         {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
+            var cache = new NanoCache<string, int>();
+
+            cache.Set("1", 1, 10);
 
             Thread.Sleep(100);
 
@@ -216,7 +190,9 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void Indexer_DoesNotAcknowledgeExpiredItems()
         {
-            var cache = new NanoCache<string, int>(10) {["item"] = 1234};
+            var cache = new NanoCache<string, int>();
+
+            cache.Set("item", 1234, 10);
             Thread.Sleep(100);
 
             Assert.AreEqual(0, cache["item"]);
@@ -233,7 +209,9 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void Indexer_RefreshesValueOfExpiredItem()
         {
-            var cache = new NanoCache<string, int>(10) {["item"] = 1234};
+            var cache = new NanoCache<string, int>();
+
+            cache.Set("item", 1234, 10);
             Thread.Sleep(100);
             cache["item"] = 9876;
 
@@ -296,7 +274,9 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void Remove_DoesNotAcknowledgeExpiredItems()
         {
-            var cache = new NanoCache<string, int>(10) {["item"] = 1234};
+            var cache = new NanoCache<string, int>();
+
+            cache.Set("item", 1234, 10);
             Thread.Sleep(100);
 
             Assert.IsFalse(cache.Remove("item"));
@@ -342,6 +322,68 @@ namespace Abacaxi.Tests.Threading
         }
 
         [Test]
+        public void Set_ThrowsException_ForTtlLessThanMinusOne()
+        {
+            var cache = new NanoCache<string, int>();
+            Assert.Throws<ArgumentOutOfRangeException>(() => cache.Set("a", 1, -2));
+        }
+        
+        [Test]
+        public void Set_RefreshesValueOfExpiredItem()
+        {
+            var cache = new NanoCache<string, int>();
+
+            cache.Set("item", 1234, 10);
+            Thread.Sleep(100);
+            cache.Set("item", 9876, 10);
+
+            Assert.AreEqual(9876, cache["item"]);
+        }
+
+        [Test]
+        public void Set_RemovesTheValueFromTheCacheIfDefaultProvided()
+        {
+            var cache = new NanoCache<string, int>
+            {
+                ["item"] = 999
+            };
+
+            cache.Set("item", 0);
+
+            Assert.IsFalse(cache.Remove("item"));
+        }
+
+        [Test]
+        public void Set_ReplacesAnExistingValueInTheCache()
+        {
+            var cache = new NanoCache<string, int>
+            {
+                ["item"] = 999
+            };
+
+            cache.Set("item", 111);
+
+            Assert.AreEqual(cache["item"], 111);
+        }
+
+        [Test,
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Set_ThrowsException_ForNullKey()
+        {
+            var cache = new NanoCache<string, int>();
+            Assert.Throws<ArgumentNullException>(() => cache.Set(null, 100));
+        }
+
+        [Test]
+        public void Set_StoresANewValueIntoTheCache()
+        {
+            var cache = new NanoCache<string, int>();
+
+            cache.Set("item", 999);
+            Assert.AreEqual(cache["item"], 999);
+        }
+
+        [Test]
         public void TryGetValue_ReturnsDefaultIfNotExists()
         {
             var cache = new NanoCache<string, int>();
@@ -360,7 +402,9 @@ namespace Abacaxi.Tests.Threading
         [Test]
         public void TryGetValue_ReturnsFalseIfItemExpired()
         {
-            var cache = new NanoCache<string, int>(10) {["item"] = 1234};
+            var cache = new NanoCache<string, int>();
+
+            cache.Set("item", 1234, 10);
             Thread.Sleep(100);
 
             Assert.IsFalse(cache.TryGetValue("item", out _));
