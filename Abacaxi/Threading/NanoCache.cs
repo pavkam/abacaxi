@@ -115,6 +115,7 @@ namespace Abacaxi.Threading
         /// </summary>
         /// <param name="key">The key representing the item to remove.</param>
         /// <returns><c>true</c> if the item was removed; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="key" /> is <c>null</c>.</exception>
         public bool Remove([NotNull] TKey key)
         {
             Validate.ArgumentNotNull(nameof(key), key);
@@ -122,11 +123,13 @@ namespace Abacaxi.Threading
         }
 
         /// <summary>
-        /// Caches a given item using an optional <paramref name="ttl" />
+        ///     Caches a given item using an optional <paramref name="ttl" />
         /// </summary>
         /// <param name="key">The key of the item.</param>
         /// <param name="value">The value to cache.</param>
         /// <param name="ttl">The TTL of the value.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="key" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="ttl" /> is less than <c>-1</c>.</exception>
         public void Set([NotNull] TKey key, TValue value, int ttl = Timeout.Infinite)
         {
             Validate.ArgumentNotNull(nameof(key), key);
