@@ -121,8 +121,9 @@ namespace Abacaxi.Containers
             _selected = new HashSet<Node>();
         }
 
+        /// <inheritdoc />
         /// <summary>
-        /// Initializes a new instance of the <see cref="DependencySquid{TTag}"/> class using the default equality comparer for <typeparamref name="TTag"/>.
+        /// Initializes a new instance of the <see cref="T:Abacaxi.Containers.DependencySquid`1" /> class using the default equality comparer for <typeparamref name="TTag" />.
         /// </summary>
         public DependencySquid() : this(EqualityComparer<TTag>.Default)
         {

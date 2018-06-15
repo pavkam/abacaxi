@@ -34,13 +34,17 @@ namespace Abacaxi.Threading
 
         private T _value;
 
+        /// <inheritdoc />
         /// <summary>
         ///     Initializes a new instance of the <see cref="Cached{T}" /> class.
         /// </summary>
         /// <param name="valueRefreshFunc">The function that creates a new value.</param>
         /// <param name="valueLifespanMillis">The lifespan of the created resource (in milliseconds).</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="valueRefreshFunc" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="valueLifespanMillis" /> is less than one.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="valueRefreshFunc" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="valueLifespanMillis" /> is less than
+        ///     one.
+        /// </exception>
         public Cached([NotNull] Func<T> valueRefreshFunc, int valueLifespanMillis) : this(valueLifespanMillis)
         {
             Validate.ArgumentNotNull(nameof(valueRefreshFunc), valueRefreshFunc);
