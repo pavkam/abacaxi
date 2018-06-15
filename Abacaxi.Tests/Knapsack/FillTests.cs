@@ -15,51 +15,15 @@
 
 namespace Abacaxi.Tests.Knapsack
 {
-    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
+    using Knapsack = Abacaxi.Knapsack;
 
     [TestFixture]
     public class FillTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Fill_ThrowsException_ForNullSequence()
-        {
-            Assert.Throws<ArgumentNullException>(
-                () => Abacaxi.Knapsack.Fill<int>(null, 1));
-        }
-
-        [Test]
-        public void Fill_ThrowsException_ForZeroOrLessKnapsackWeight()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(
-                () => Abacaxi.Knapsack.Fill(new List<KnapsackItem<int>>(), 0));
-        }
-
-        [Test]
-        public void Fill_ReturnsNothing_ForEmptySequence()
-        {
-            var result = Abacaxi.Knapsack.Fill(new List<KnapsackItem<int>>(), 1);
-            TestHelper.AssertSequence(result);
-        }
-
-        [Test]
-        public void Fill_ReturnsSingleItem_IfCanBeFitted()
-        {
-            var array = new[] {new KnapsackItem<string>("item1", 1, 1)};
-            var result = Abacaxi.Knapsack.Fill(array, 1);
-            TestHelper.AssertSequence(result, "item1");
-        }
-
-        [Test]
-        public void Fill_ReturnsNothingForSingleItem_IfCannotBeFitted()
-        {
-            var array = new[] { new KnapsackItem<string>("item1", 1, 10) };
-            var result = Abacaxi.Knapsack.Fill(array, 9);
-            TestHelper.AssertSequence(result);
-        }
-
         [Test]
         public void Fill_FitsTwoItems_1()
         {
@@ -68,7 +32,7 @@ namespace Abacaxi.Tests.Knapsack
                 new KnapsackItem<string>("item1", 1, 5),
                 new KnapsackItem<string>("item2", 1, 5)
             };
-            var result = Abacaxi.Knapsack.Fill(array, 10);
+            var result = Knapsack.Fill(array, 10);
             TestHelper.AssertSequence(result, "item2", "item1");
         }
 
@@ -81,8 +45,31 @@ namespace Abacaxi.Tests.Knapsack
                 new KnapsackItem<string>("item2", 1, 4),
                 new KnapsackItem<string>("item3", 1, 3)
             };
-            var result = Abacaxi.Knapsack.Fill(array, 10);
+            var result = Knapsack.Fill(array, 10);
             TestHelper.AssertSequence(result, "item2", "item3");
+        }
+
+        [Test]
+        public void Fill_ReturnsNothing_ForEmptySequence()
+        {
+            var result = Knapsack.Fill(new List<KnapsackItem<int>>(), 1);
+            TestHelper.AssertSequence(result);
+        }
+
+        [Test]
+        public void Fill_ReturnsNothingForSingleItem_IfCannotBeFitted()
+        {
+            var array = new[] { new KnapsackItem<string>("item1", 1, 10) };
+            var result = Knapsack.Fill(array, 9);
+            TestHelper.AssertSequence(result);
+        }
+
+        [Test]
+        public void Fill_ReturnsSingleItem_IfCanBeFitted()
+        {
+            var array = new[] { new KnapsackItem<string>("item1", 1, 1) };
+            var result = Knapsack.Fill(array, 1);
+            TestHelper.AssertSequence(result, "item1");
         }
 
         [Test]
@@ -93,8 +80,22 @@ namespace Abacaxi.Tests.Knapsack
                 new KnapsackItem<string>("item1", 1, 1),
                 new KnapsackItem<string>("item2", 2, 1)
             };
-            var result = Abacaxi.Knapsack.Fill(array, 1);
+            var result = Knapsack.Fill(array, 1);
             TestHelper.AssertSequence(result, "item2");
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Fill_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => Knapsack.Fill<int>(null, 1));
+        }
+
+        [Test]
+        public void Fill_ThrowsException_ForZeroOrLessKnapsackWeight()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(
+                () => Knapsack.Fill(new List<KnapsackItem<int>>(), 0));
         }
 
         [Test]
@@ -105,9 +106,9 @@ namespace Abacaxi.Tests.Knapsack
                 new KnapsackItem<string>("item1", 2, 10),
                 new KnapsackItem<string>("item2", 1, 3),
                 new KnapsackItem<string>("item3", 1, 3),
-                new KnapsackItem<string>("item4", 1, 4),
+                new KnapsackItem<string>("item4", 1, 4)
             };
-            var result = Abacaxi.Knapsack.Fill(array, 10);
+            var result = Knapsack.Fill(array, 10);
             TestHelper.AssertSequence(result, "item4", "item3", "item2");
         }
 
@@ -119,9 +120,9 @@ namespace Abacaxi.Tests.Knapsack
                 new KnapsackItem<string>("item1", 4, 10),
                 new KnapsackItem<string>("item2", 1, 3),
                 new KnapsackItem<string>("item3", 1, 3),
-                new KnapsackItem<string>("item4", 1, 4),
+                new KnapsackItem<string>("item4", 1, 4)
             };
-            var result = Abacaxi.Knapsack.Fill(array, 10);
+            var result = Knapsack.Fill(array, 10);
             TestHelper.AssertSequence(result, "item1");
         }
     }

@@ -22,9 +22,8 @@ namespace Abacaxi.Tests.Sorting
 
     public abstract class SortingAlgorithmTestsBase
     {
-        protected abstract void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer);
-
         protected abstract bool IsStable { get; }
+        protected abstract void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer);
 
         [Test]
         public void Sort_ThrowsException_ForNullArray()

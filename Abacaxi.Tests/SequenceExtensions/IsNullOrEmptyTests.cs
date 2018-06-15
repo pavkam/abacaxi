@@ -21,24 +21,24 @@ namespace Abacaxi.Tests.SequenceExtensions
     public class IsNullOrEmptyTests
     {
         [Test]
-        public void IsNullOrEmpty_ReturnsTrue_IfSequenceIsNull()
+        public void IsNullOrEmpty_ReturnsFalse_IfSequenceIsNotEmpty()
         {
-            var actual = ((int[]) null).IsNullOrEmpty();
-            Assert.IsTrue(actual);
+            var actual = new[] { 1 }.IsNullOrEmpty();
+            Assert.IsFalse(actual);
         }
 
         [Test]
         public void IsNullOrEmpty_ReturnsTrue_IfSequenceIsEmpty()
         {
-            var actual = new int[]{}.IsNullOrEmpty();
+            var actual = new int[] { }.IsNullOrEmpty();
             Assert.IsTrue(actual);
         }
 
         [Test]
-        public void IsNullOrEmpty_ReturnsFalse_IfSequenceIsNotEmpty()
+        public void IsNullOrEmpty_ReturnsTrue_IfSequenceIsNull()
         {
-            var actual = new[] { 1 }.IsNullOrEmpty();
-            Assert.IsFalse(actual);
+            var actual = ((int[]) null).IsNullOrEmpty();
+            Assert.IsTrue(actual);
         }
     }
 }

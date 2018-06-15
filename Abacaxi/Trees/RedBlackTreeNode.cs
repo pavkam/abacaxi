@@ -15,22 +15,22 @@
 
 namespace Abacaxi.Trees
 {
-    using JetBrains.Annotations;
     using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
-    /// Class represents a node in a red-black balanced search tree.
+    ///     Class represents a node in a red-black balanced search tree.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     [PublicAPI]
-    public sealed class RedBlackTreeNode<TKey, TValue>: BinaryTreeNode<TKey, TValue>
+    public sealed class RedBlackTreeNode<TKey, TValue> : BinaryTreeNode<TKey, TValue>
     {
         /// <summary>
-        /// Gets the right child node.
+        ///     Gets the right child node.
         /// </summary>
         /// <value>
-        /// The right child node.
+        ///     The right child node.
         /// </value>
         [CanBeNull]
         public new RedBlackTreeNode<TKey, TValue> RightChild
@@ -44,10 +44,10 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Gets the left child node.
+        ///     Gets the left child node.
         /// </summary>
         /// <value>
-        /// The left child node.
+        ///     The left child node.
         /// </value>
         [CanBeNull]
         public new RedBlackTreeNode<TKey, TValue> LeftChild
@@ -55,16 +55,16 @@ namespace Abacaxi.Trees
             get
             {
                 Assert.Condition(base.LeftChild == null || base.LeftChild is RedBlackTreeNode<TKey, TValue>);
-                return (RedBlackTreeNode<TKey, TValue>)base.LeftChild;
+                return (RedBlackTreeNode<TKey, TValue>) base.LeftChild;
             }
             set => base.LeftChild = value;
         }
 
         /// <summary>
-        /// Gets or sets the color of this node.
+        ///     Gets or sets the color of this node.
         /// </summary>
         /// <value>
-        /// The color.
+        ///     The color.
         /// </value>
         public RedBlackTreeNodeColor Color { get; set; }
     }

@@ -18,7 +18,7 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Defines a function that aggregates two values of a given type.
+    ///     Defines a function that aggregates two values of a given type.
     /// </summary>
     /// <typeparam name="T">The type of values to aggregate.</typeparam>
     /// <param name="a">The first value.</param>

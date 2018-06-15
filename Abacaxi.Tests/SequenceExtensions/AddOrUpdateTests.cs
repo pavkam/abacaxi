@@ -17,38 +17,12 @@ namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Collections.Generic;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class AddOrUpdateTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void AddOrUpdate_ThrowsException_IfDictIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => ((Dictionary<int, int>) null).AddOrUpdate(1, 1, i => i));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void AddOrUpdate_ThrowsException_IfUpdateFuncIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Dictionary<int, int>().AddOrUpdate(1, 1, null));
-        }
-
-        [Test]
-        public void AddOrUpdate_ReturnsTrue_IfKeyValueIsAdded()
-        {
-            var dict = new Dictionary<string, int>();
-            Assert.IsTrue(dict.AddOrUpdate("key", 1, i => i));
-        }
-
-        [Test]
-        public void AddOrUpdate_ReturnsFalse_IfKeyValueIsUpdated()
-        {
-            var dict = new Dictionary<string, int> {{"key", 1}};
-            Assert.IsFalse(dict.AddOrUpdate("key", 1, i => i));
-        }
-
         [Test]
         public void AddOrUpdate_AddsTheKeyValue_IfTheKeyIsNotFound()
         {
@@ -60,9 +34,35 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        public void AddOrUpdate_ReturnsFalse_IfKeyValueIsUpdated()
+        {
+            var dict = new Dictionary<string, int> { { "key", 1 } };
+            Assert.IsFalse(dict.AddOrUpdate("key", 1, i => i));
+        }
+
+        [Test]
+        public void AddOrUpdate_ReturnsTrue_IfKeyValueIsAdded()
+        {
+            var dict = new Dictionary<string, int>();
+            Assert.IsTrue(dict.AddOrUpdate("key", 1, i => i));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void AddOrUpdate_ThrowsException_IfDictIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((Dictionary<int, int>) null).AddOrUpdate(1, 1, i => i));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void AddOrUpdate_ThrowsException_IfUpdateFuncIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Dictionary<int, int>().AddOrUpdate(1, 1, null));
+        }
+
+        [Test]
         public void AddOrUpdate_UpdatesTheValue_IfTheKeyIsFound()
         {
-            var dict = new Dictionary<string, int> {{"key", 1}};
+            var dict = new Dictionary<string, int> { { "key", 1 } };
             dict.AddOrUpdate("key", 2, i => -1);
 
             Assert.IsTrue(dict.TryGetValue("key", out var value));

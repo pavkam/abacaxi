@@ -13,43 +13,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics;
-
 namespace Abacaxi.Tests.Containers
 {
-    using NUnit.Framework;
+    using System.Diagnostics;
     using Abacaxi.Containers;
+    using NUnit.Framework;
 
     [TestFixture]
     public class SingleLinkedNodeTests
     {
-        [Test]
-        public void Ctor_StoresTheValue()
-        {
-            var node = new SingleLinkedNode<int>(99);
-
-            Assert.AreEqual(99, node.Value);
-        }
-
-        [Test]
-        public void Next_CanBeAssigned()
-        {
-            var node = new SingleLinkedNode<int>(0);
-
-            node.Next = node;
-            Assert.AreSame(node, node.Next);
-        }
-
-        [Test]
-        public void Next_CanBeSetToNull()
-        {
-            var node = new SingleLinkedNode<int>(0);
-            node.Next = node;
-            node.Next = null;
-
-            Assert.IsNull(node.Next);
-        }
-
         [Test]
         public void Create_ReturnsNull_ForEmptySequence()
         {
@@ -80,72 +52,36 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void VerifyIfKnotted_ReturnsFalse_ForSingleUnknottedNode()
+        public void Ctor_StoresTheValue()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1 });
-            Debug.Assert(head != null);
+            var node = new SingleLinkedNode<int>(99);
 
-            var check = head.VerifyIfKnotted();
-            Assert.IsFalse(check);
+            Assert.AreEqual(99, node.Value);
         }
 
         [Test]
-        public void VerifyIfKnotted_ReturnsFalse_ForDoubleUnknottedNode()
+        public void Enumeration_ReturnsSelf()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
-            Debug.Assert(head != null);
+            var node = SingleLinkedNode<char>.Create("A");
+            Debug.Assert(node != null);
 
-            var check = head.VerifyIfKnotted();
-            Assert.IsFalse(check);
+            TestHelper.AssertSequence(node,
+                node);
         }
 
         [Test]
-        public void VerifyIfKnotted_ReturnsFalse_ForTripleUnknottedNode()
+        public void Enumeration_ReturnsSequence()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
-            Debug.Assert(head != null);
-
-            var check = head.VerifyIfKnotted();
-            Assert.IsFalse(check);
-        }
-
-        [Test]
-        public void VerifyIfKnotted_ReturnsTrue_ForSingleKnottedNode()
-        {
-            var head = SingleLinkedNode<int>.Create(new[] { 1 });
-            Debug.Assert(head != null);
-
-            head.Next = head;
-
-            var check = head.VerifyIfKnotted();
-            Assert.IsTrue(check);
-        }
-
-        [Test]
-        public void VerifyIfKnotted_ReturnsTrue_ForDoubleKnottedNode()
-        {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
-            Debug.Assert(head != null);
-            Debug.Assert(head.Next != null);
-
-            head.Next.Next = head;
-
-            var check = head.VerifyIfKnotted();
-            Assert.IsTrue(check);
-        }
-
-        [Test]
-        public void VerifyIfKnotted_ReturnsTrue_ForTripleKnottedNode()
-        {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
+            var head = SingleLinkedNode<char>.Create("ALEX");
             Debug.Assert(head != null);
             Debug.Assert(head.Next != null);
             Debug.Assert(head.Next.Next != null);
 
-            head.Next.Next.Next = head.Next;
-
-            var check = head.VerifyIfKnotted();
-            Assert.IsTrue(check);
+            TestHelper.AssertSequence(head,
+                head,
+                head.Next,
+                head.Next.Next,
+                head.Next.Next.Next);
         }
 
         [Test]
@@ -179,6 +115,25 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        public void Next_CanBeAssigned()
+        {
+            var node = new SingleLinkedNode<int>(0);
+
+            node.Next = node;
+            Assert.AreSame(node, node.Next);
+        }
+
+        [Test]
+        public void Next_CanBeSetToNull()
+        {
+            var node = new SingleLinkedNode<int>(0);
+            node.Next = node;
+            node.Next = null;
+
+            Assert.IsNull(node.Next);
+        }
+
+        [Test]
         public void Reverse_DoesNothing_ForSingleNode()
         {
             var head = SingleLinkedNode<int>.Create(new[] { 1 });
@@ -188,21 +143,6 @@ namespace Abacaxi.Tests.Containers
 
             Assert.AreSame(head, newHead);
             Assert.IsNull(newHead.Next);
-        }
-
-        [Test]
-        public void Reverse_Reverses_AListOfTwo()
-        {
-            var e1 = SingleLinkedNode<int>.Create(new[] { 1, 2 });
-            Debug.Assert(e1 != null);
-            var e2 = e1.Next;
-            Debug.Assert(e2 != null);
-
-            var newHead = e1.Reverse();
-
-            Assert.AreSame(e2, newHead);
-            Assert.AreSame(e2.Next, e1);
-            Assert.IsNull(e1.Next);
         }
 
 
@@ -225,28 +165,87 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Enumeration_ReturnsSelf()
+        public void Reverse_Reverses_AListOfTwo()
         {
-            var node = SingleLinkedNode<char>.Create("A");
-            Debug.Assert(node != null);
+            var e1 = SingleLinkedNode<int>.Create(new[] { 1, 2 });
+            Debug.Assert(e1 != null);
+            var e2 = e1.Next;
+            Debug.Assert(e2 != null);
 
-            TestHelper.AssertSequence(node,
-                node);
+            var newHead = e1.Reverse();
+
+            Assert.AreSame(e2, newHead);
+            Assert.AreSame(e2.Next, e1);
+            Assert.IsNull(e1.Next);
         }
 
         [Test]
-        public void Enumeration_ReturnsSequence()
+        public void VerifyIfKnotted_ReturnsFalse_ForDoubleUnknottedNode()
         {
-            var head = SingleLinkedNode<char>.Create("ALEX");
+            var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
+            Debug.Assert(head != null);
+
+            var check = head.VerifyIfKnotted();
+            Assert.IsFalse(check);
+        }
+
+        [Test]
+        public void VerifyIfKnotted_ReturnsFalse_ForSingleUnknottedNode()
+        {
+            var head = SingleLinkedNode<int>.Create(new[] { 1 });
+            Debug.Assert(head != null);
+
+            var check = head.VerifyIfKnotted();
+            Assert.IsFalse(check);
+        }
+
+        [Test]
+        public void VerifyIfKnotted_ReturnsFalse_ForTripleUnknottedNode()
+        {
+            var head = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
+            Debug.Assert(head != null);
+
+            var check = head.VerifyIfKnotted();
+            Assert.IsFalse(check);
+        }
+
+        [Test]
+        public void VerifyIfKnotted_ReturnsTrue_ForDoubleKnottedNode()
+        {
+            var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
+            Debug.Assert(head != null);
+            Debug.Assert(head.Next != null);
+
+            head.Next.Next = head;
+
+            var check = head.VerifyIfKnotted();
+            Assert.IsTrue(check);
+        }
+
+        [Test]
+        public void VerifyIfKnotted_ReturnsTrue_ForSingleKnottedNode()
+        {
+            var head = SingleLinkedNode<int>.Create(new[] { 1 });
+            Debug.Assert(head != null);
+
+            head.Next = head;
+
+            var check = head.VerifyIfKnotted();
+            Assert.IsTrue(check);
+        }
+
+        [Test]
+        public void VerifyIfKnotted_ReturnsTrue_ForTripleKnottedNode()
+        {
+            var head = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
             Debug.Assert(head != null);
             Debug.Assert(head.Next != null);
             Debug.Assert(head.Next.Next != null);
 
-            TestHelper.AssertSequence(head,
-                head,
-                head.Next,
-                head.Next.Next,
-                head.Next.Next.Next);
+            head.Next.Next.Next = head.Next;
+
+            var check = head.VerifyIfKnotted();
+            Assert.IsTrue(check);
         }
     }
 }

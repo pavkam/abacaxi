@@ -21,28 +21,28 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Helper class that defines a number of methods useful in integer/algorithmic manipulations.
+    ///     Helper class that defines a number of methods useful in integer/algorithmic manipulations.
     /// </summary>
     [PublicAPI]
     public static class Integer
     {
         private static int GetIterationLimit(int number)
         {
-            double sqrt;
+            double squareRoot;
             if (number > 0)
             {
-                sqrt = Math.Sqrt(number);
+                squareRoot = Math.Sqrt(number);
             }
             else if (number > int.MinValue)
             {
-                sqrt = Math.Sqrt(Math.Abs(number));
+                squareRoot = Math.Sqrt(Math.Abs(number));
             }
             else
             {
-                sqrt = Math.Sqrt(Math.Abs(number + 1));
+                squareRoot = Math.Sqrt(Math.Abs(number + 1));
             }
 
-            return (int)sqrt;
+            return (int) squareRoot;
         }
 
         private static void AppendLastDigit(ref int number, ref int result, ref int power, int @base)
@@ -64,7 +64,8 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Returns a sequence of numbers (powers of two), which summed, result in the original number <paramref name="number"/>.
+        ///     Returns a sequence of numbers (powers of two), which summed, result in the original number
+        ///     <paramref name="number" />.
         /// </summary>
         /// <param name="number">The number to be decomposed.</param>
         /// <returns>A sequence of numbers.</returns>
@@ -87,7 +88,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Returns a sequence of numbers, which, when multiplied produce the value of <paramref name="number"/>.
+        ///     Returns a sequence of numbers, which, when multiplied produce the value of <paramref name="number" />.
         /// </summary>
         /// <param name="number">The number to be dis-constructed into its prime factors.</param>
         /// <returns>A sequence of primes.</returns>
@@ -130,7 +131,8 @@ namespace Abacaxi
                     factors++;
                 }
 
-                if (sign == -1 && factors % 2 == 0)
+                if (sign == -1 &&
+                    factors % 2 == 0)
                 {
                     yield return sign;
                 }
@@ -138,7 +140,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Checks whether a given number is prime.
+        ///     Checks whether a given number is prime.
         /// </summary>
         /// <param name="number">The number to check.</param>
         /// <returns><c>true</c> if the number is prime; <c>false</c> otherwise.</returns>
@@ -150,13 +152,16 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Zips the digits of two integer numbers to form a new integer number.
+        ///     Zips the digits of two integer numbers to form a new integer number.
         /// </summary>
         /// <param name="x">The first number to zip.</param>
         /// <param name="y">The second number to zip.</param>
         /// <param name="base">The base of the digits.</param>
-        /// <returns>A number whose digits are taken from both <paramref name="x"/> and <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="x"/> or <paramref name="y"/> are less than zero; or <paramref name="base"/> is less than two.</exception>
+        /// <returns>A number whose digits are taken from both <paramref name="x" /> and <paramref name="y" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="x" /> or <paramref name="y" /> are less than
+        ///     zero; or <paramref name="base" /> is less than two.
+        /// </exception>
         public static int Zip(int x, int y, int @base = 10)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(x), x);
@@ -165,7 +170,8 @@ namespace Abacaxi
 
             var result = -1;
             var power = 1;
-            while (x >= 0 || y >= 0)
+            while (x >= 0 ||
+                   y >= 0)
             {
                 AppendLastDigit(ref x, ref result, ref power, @base);
                 AppendLastDigit(ref y, ref result, ref power, @base);

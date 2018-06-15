@@ -20,53 +20,23 @@ namespace Abacaxi.Graphs
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class used to describe a vertex in the context of a graph.
+    ///     Class used to describe a vertex in the context of a graph.
     /// </summary>
     [PublicAPI]
     public sealed class VertexDescriptor<TVertex>
     {
         /// <summary>
-        /// Gets the vertex.
-        /// </summary>
-        /// <value>
-        /// The vertex.
-        /// </value>
-        public TVertex Vertex { get; }
-
-        /// <summary>
-        /// Gets the in-degree of the <see cref="Vertex"/>.
-        /// </summary>
-        /// <value>
-        /// The in-degree.
-        /// </value>
-        public int InDegree { get; }
-
-        /// <summary>
-        /// Gets the out-degree of the <see cref="Vertex"/>.
-        /// </summary>
-        /// <value>
-        /// The out degree.
-        /// </value>
-        public int OutDegree { get; }
-
-        /// <summary>
-        /// Gets the index of the component that contains the <see cref="Vertex"/>.
-        /// </summary>
-        /// <value>
-        /// The component index.
-        /// </value>
-        public int ComponentIndex { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VertexDescriptor{TVertex}" /> structure.
+        ///     Initializes a new instance of the <see cref="VertexDescriptor{TVertex}" /> structure.
         /// </summary>
         /// <param name="vertex">The vertex.</param>
         /// <param name="componentIndex">Index of the component.</param>
         /// <param name="inDegree">The in-degree.</param>
         /// <param name="outDegree">The out-degree.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="componentIndex"/> or
-        /// <paramref name="inDegree"/> or <paramref name="outDegree"/> are less than zero.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vertex"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="componentIndex" /> or
+        ///     <paramref name="inDegree" /> or <paramref name="outDegree" /> are less than zero.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vertex" /> is <c>null</c>.</exception>
         public VertexDescriptor([NotNull] TVertex vertex, int componentIndex, int inDegree, int outDegree)
         {
             Validate.ArgumentNotNull(nameof(vertex), vertex);
@@ -81,11 +51,46 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
+        ///     Gets the vertex.
+        /// </summary>
+        /// <value>
+        ///     The vertex.
+        /// </value>
+        public TVertex Vertex { get; }
+
+        /// <summary>
+        ///     Gets the in-degree of the <see cref="Vertex" />.
+        /// </summary>
+        /// <value>
+        ///     The in-degree.
+        /// </value>
+        public int InDegree { get; }
+
+        /// <summary>
+        ///     Gets the out-degree of the <see cref="Vertex" />.
+        /// </summary>
+        /// <value>
+        ///     The out degree.
+        /// </value>
+        public int OutDegree { get; }
+
+        /// <summary>
+        ///     Gets the index of the component that contains the <see cref="Vertex" />.
+        /// </summary>
+        /// <value>
+        ///     The component index.
+        /// </value>
+        public int ComponentIndex { get; }
+
+        /// <summary>
+        ///     Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="string" /> that represents this instance.
+        ///     A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString() => $"{InDegree} => {Vertex} ({ComponentIndex}) => {OutDegree}";
+        public override string ToString()
+        {
+            return $"{InDegree} => {Vertex} ({ComponentIndex}) => {OutDegree}";
+        }
     }
 }

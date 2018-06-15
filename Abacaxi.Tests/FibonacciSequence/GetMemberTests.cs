@@ -17,25 +17,27 @@ namespace Abacaxi.Tests.FibonacciSequence
 {
     using System;
     using NUnit.Framework;
+    using FibonacciSequence = Abacaxi.FibonacciSequence;
 
     [TestFixture]
     public class GetFibonacciNumber
     {
         [Test]
-        public void GetMember_ThrowsException_ForNegativeIndex()
+        public void GetMember_ReturnsCorrectNumber_ForGivenIndex()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Abacaxi.FibonacciSequence.GetMember(-1));
+            var expected = new[]
+                { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765 };
+            for (var i = 0; i < expected.Length; i++)
+            {
+                var result = FibonacciSequence.GetMember(i);
+                Assert.AreEqual(expected[i], result);
+            }
         }
 
         [Test]
-        public void GetMember_ReturnsCorrectNumber_ForGivenIndex()
+        public void GetMember_ThrowsException_ForNegativeIndex()
         {
-            var expected = new[] { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765 };
-            for (var i = 0; i < expected.Length; i++)
-            {
-                var result = Abacaxi.FibonacciSequence.GetMember(i);
-                Assert.AreEqual(expected[i], result);
-            }
+            Assert.Throws<ArgumentOutOfRangeException>(() => FibonacciSequence.GetMember(-1));
         }
     }
 }

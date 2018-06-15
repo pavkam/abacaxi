@@ -18,29 +18,30 @@ namespace Abacaxi
     using System;
 
     /// <summary>
-    /// Defines the three types of members that can be extracted from an object using <seealso cref="ObjectExtensions.Inspect{T}"/> method.
+    ///     Defines the three types of members that can be extracted from an object using
+    ///     <seealso cref="ObjectExtensions.Inspect{T}" /> method.
     /// </summary>
     [Flags]
     public enum InspectionFlags
     {
         /// <summary>
-        /// Fields are included into the resulting dictionary.
+        ///     Fields are included into the resulting dictionary.
         /// </summary>
         IncludeFields = 1,
 
         /// <summary>
-        /// Properties are included into the resulting dictionary.
+        ///     Properties are included into the resulting dictionary.
         /// </summary>
         IncludeProperties = 2,
 
         /// <summary>
-        /// Parameter-less methods are included into the resulting dictionary.
+        ///     Parameter-less methods are included into the resulting dictionary.
         /// </summary>
         IncludeMethods = 4,
 
         /// <summary>
-        /// All members are included into the resulting dictionary.
+        ///     All members are included into the resulting dictionary.
         /// </summary>
-        IncludeAll = IncludeFields | IncludeProperties | IncludeMethods,
+        IncludeAll = IncludeFields | IncludeProperties | IncludeMethods
     }
 }

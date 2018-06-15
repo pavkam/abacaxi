@@ -16,20 +16,13 @@
 namespace Abacaxi.Tests.RandomExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class NextBoolTests
     {
         private readonly Random _random = new Random();
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void NextBool_ThrowsException_IfRandomIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((Random)null).NextBool());
-        }
 
         [Test]
         public void NextBool_ReturnsARandomSample()
@@ -43,6 +36,13 @@ namespace Abacaxi.Tests.RandomExtensions
             }
 
             Assert.AreEqual(0, set.Count);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void NextBool_ThrowsException_IfRandomIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ((Random) null).NextBool());
         }
     }
 }

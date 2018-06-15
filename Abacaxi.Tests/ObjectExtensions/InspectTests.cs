@@ -16,64 +16,19 @@
 namespace Abacaxi.Tests.ObjectExtensions
 {
     using System;
-    using NUnit.Framework;
-    using System.Linq;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class InspectTests
     {
         private static readonly InspectMockObject Mock = new InspectMockObject();
 
-        private static KeyValuePair<string, object> Kvp(string key, object value) => new KeyValuePair<string, object>(key, value);
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Inspect_ThrowsException_ForNullValue()
+        private static KeyValuePair<string, object> Kvp(string key, object value)
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((object) null).Inspect());
-        }
-
-        [Test]
-        public void Inspect_ReturnsOnlyFields_IfChosenTo()
-        {
-            var dictionary = Mock.Inspect(InspectionFlags.IncludeFields).OrderBy(s => s.Key).AsList();
-
-            TestHelper.AssertSequence(dictionary,
-                Kvp(nameof(Mock.PublicField), Mock.PublicField)
-                );
-        }
-
-        [Test]
-        public void Inspect_ReturnsOnlyProperties_IfChosenTo()
-        {
-            var dictionary = Mock.Inspect().OrderBy(s => s.Key).AsList();
-
-            TestHelper.AssertSequence(dictionary,
-                Kvp(nameof(Mock.PublicProperty), Mock.PublicProperty)
-            );
-        }
-
-        [Test]
-        public void Inspect_ReturnsOnlyMethods_IfChosenTo()
-        {
-            var dictionary = Mock.Inspect(InspectionFlags.IncludeMethods).OrderBy(s => s.Key).AsList();
-
-            TestHelper.AssertSequence(dictionary,
-                Kvp(nameof(GetHashCode), Mock.GetHashCode()),
-                Kvp(nameof(GetType), Mock.GetType()),
-                Kvp(nameof(Mock.PublicMethod), Mock.PublicMethod()),
-                Kvp(nameof(ToString), Mock.ToString())
-            );
-        }
-
-        [Test]
-        public void Inspect_ReturnsNothing_IfFlagsIsZero()
-        {
-            var dictionary = Mock.Inspect(0).OrderBy(s => s.Key).AsList();
-
-            TestHelper.AssertSequence(dictionary);
+            return new KeyValuePair<string, object>(key, value);
         }
 
         [Test]
@@ -95,12 +50,14 @@ namespace Abacaxi.Tests.ObjectExtensions
         public void Inspect_ReturnsAllTypesOfProperties()
         {
             var dictionary = new
-            {
-                I = 100,
-                S = "S",
-                B = true,
-                T = this
-            }.Inspect().OrderBy(s => s.Key).AsList();
+                {
+                    I = 100,
+                    S = "S",
+                    B = true,
+                    T = this
+                }.Inspect()
+                .OrderBy(s => s.Key)
+                .AsList();
 
             TestHelper.AssertSequence(dictionary,
                 Kvp("B", true),
@@ -108,6 +65,54 @@ namespace Abacaxi.Tests.ObjectExtensions
                 Kvp("S", "S"),
                 Kvp("T", this)
             );
+        }
+
+        [Test]
+        public void Inspect_ReturnsNothing_IfFlagsIsZero()
+        {
+            var dictionary = Mock.Inspect(0).OrderBy(s => s.Key).AsList();
+
+            TestHelper.AssertSequence(dictionary);
+        }
+
+        [Test]
+        public void Inspect_ReturnsOnlyFields_IfChosenTo()
+        {
+            var dictionary = Mock.Inspect(InspectionFlags.IncludeFields).OrderBy(s => s.Key).AsList();
+
+            TestHelper.AssertSequence(dictionary,
+                Kvp(nameof(Mock.PublicField), Mock.PublicField)
+            );
+        }
+
+        [Test]
+        public void Inspect_ReturnsOnlyMethods_IfChosenTo()
+        {
+            var dictionary = Mock.Inspect(InspectionFlags.IncludeMethods).OrderBy(s => s.Key).AsList();
+
+            TestHelper.AssertSequence(dictionary,
+                Kvp(nameof(GetHashCode), Mock.GetHashCode()),
+                Kvp(nameof(GetType), Mock.GetType()),
+                Kvp(nameof(Mock.PublicMethod), Mock.PublicMethod()),
+                Kvp(nameof(ToString), Mock.ToString())
+            );
+        }
+
+        [Test]
+        public void Inspect_ReturnsOnlyProperties_IfChosenTo()
+        {
+            var dictionary = Mock.Inspect().OrderBy(s => s.Key).AsList();
+
+            TestHelper.AssertSequence(dictionary,
+                Kvp(nameof(Mock.PublicProperty), Mock.PublicProperty)
+            );
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Inspect_ThrowsException_ForNullValue()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ((object) null).Inspect());
         }
     }
 }

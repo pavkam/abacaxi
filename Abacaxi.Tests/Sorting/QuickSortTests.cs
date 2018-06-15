@@ -16,15 +16,17 @@
 namespace Abacaxi.Tests.Sorting
 {
     using System.Collections.Generic;
-    using NUnit.Framework;
     using JetBrains.Annotations;
+    using NUnit.Framework;
+    using Sorting = Abacaxi.Sorting;
 
     [TestFixture]
     public sealed class QuickSortTestsBase : SortingAlgorithmTestsBase
     {
-        protected override void Sort<T>([NotNull] T[] array, int startIndex, int length, [NotNull] IComparer<T> comparer)
+        protected override void Sort<T>([NotNull] T[] array, int startIndex, int length,
+            [NotNull] IComparer<T> comparer)
         {
-            Abacaxi.Sorting.QuickSort(array, startIndex, length, comparer);
+            Sorting.QuickSort(array, startIndex, length, comparer);
         }
 
         protected override bool IsStable => false;

@@ -16,20 +16,14 @@
 namespace Abacaxi.Tests.StringExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class AppendNotEmptyLineTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void AsList_ThrowsException_IfStringIsNull1()
-        {
-            Assert.Throws<ArgumentNullException>(() => ((string)null).AsList());
-        }
-
-        [TestCase("", ""),TestCase("a", "a"),TestCase("abc", "a,b,c")]
+        [TestCase("", ""), TestCase("a", "a"), TestCase("abc", "a,b,c")]
         public void AsList_GetEnumerator_ReturnsTheExpectedSequence([NotNull] string s, string expected)
         {
             var actual = string.Join(",", s.AsList());
@@ -51,34 +45,6 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [Test]
-        public void AsList_ThenRemove_ThrowsException()
-        {
-            var list = "test".AsList();
-            Assert.Throws<NotSupportedException>(() => list.Remove('t'));
-        }
-
-        [Test]
-        public void AsList_ThenInsert_ThrowsException()
-        {
-            var list = "test".AsList();
-            Assert.Throws<NotSupportedException>(() => list.Insert(0, 't'));
-        }
-
-        [Test]
-        public void AsList_ThenRemoveAt_ThrowsException()
-        {
-            var list = "test".AsList();
-            Assert.Throws<NotSupportedException>(() => list.RemoveAt(0));
-        }
-
-        [Test]
-        public void AsList_ThenIndexer_ThrowsException()
-        {
-            var list = "test".AsList();
-            Assert.Throws<NotSupportedException>(() => list[0] = 'a');
-        }
-
-        [Test]
         public void AsList_ThenContains_ReturnsExpectedIndex()
         {
             var list = "test".AsList();
@@ -86,34 +52,17 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [Test]
-        public void AsList_ThenCount_ReturnsExpectedLength()
+        public void AsList_ThenCopyTo_CopiesTheElements()
         {
             var list = "test".AsList();
-            Assert.AreEqual(4, list.Count);
+            var a = new char[4];
+            list.CopyTo(a, 0);
+
+            var actual = string.Join(",", a);
+            Assert.AreEqual("t,e,s,t", actual);
         }
 
-        [Test]
-        public void AsList_ThenIsReadOnly_ReturnsTrue()
-        {
-            var list = "test".AsList();
-            Assert.IsTrue(list.IsReadOnly);
-        }
-
-        [Test]
-        public void AsList_ThenIndexOf_ReturnsTheExpectedIndex()
-        {
-            var list = "test".AsList();
-            Assert.AreEqual(2, list.IndexOf('s'));
-        }
-
-        [Test]
-        public void AsList_ThenThis_ReturnsTheExpectedElement()
-        {
-            var list = "test".AsList();
-            Assert.AreEqual('s', list[2]);
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AsList_ThenCopyTo_ThrowsException_IfArrayIsNull()
         {
             var list = "test".AsList();
@@ -129,14 +78,65 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [Test]
-        public void AsList_ThenCopyTo_CopiesTheElements()
+        public void AsList_ThenCount_ReturnsExpectedLength()
         {
             var list = "test".AsList();
-            var a = new char[4];
-            list.CopyTo(a, 0);
+            Assert.AreEqual(4, list.Count);
+        }
 
-            var actual = string.Join(",", a);
-            Assert.AreEqual("t,e,s,t", actual);
+        [Test]
+        public void AsList_ThenIndexer_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list[0] = 'a');
+        }
+
+        [Test]
+        public void AsList_ThenIndexOf_ReturnsTheExpectedIndex()
+        {
+            var list = "test".AsList();
+            Assert.AreEqual(2, list.IndexOf('s'));
+        }
+
+        [Test]
+        public void AsList_ThenInsert_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list.Insert(0, 't'));
+        }
+
+        [Test]
+        public void AsList_ThenIsReadOnly_ReturnsTrue()
+        {
+            var list = "test".AsList();
+            Assert.IsTrue(list.IsReadOnly);
+        }
+
+        [Test]
+        public void AsList_ThenRemove_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list.Remove('t'));
+        }
+
+        [Test]
+        public void AsList_ThenRemoveAt_ThrowsException()
+        {
+            var list = "test".AsList();
+            Assert.Throws<NotSupportedException>(() => list.RemoveAt(0));
+        }
+
+        [Test]
+        public void AsList_ThenThis_ReturnsTheExpectedElement()
+        {
+            var list = "test".AsList();
+            Assert.AreEqual('s', list[2]);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void AsList_ThrowsException_IfStringIsNull1()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((string) null).AsList());
         }
     }
 }

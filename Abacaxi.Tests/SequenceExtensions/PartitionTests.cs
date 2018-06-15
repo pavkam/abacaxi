@@ -16,16 +16,20 @@
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class PartitionTests
     {
-        [Test,SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void Partition_ThrowsException_ForSizeLessThanOne()
+        [Test]
+        public void Partition_ReturnsFullArraysAndASpill_IfOneExists()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new[] {1}.Partition(0));
+            var actual = "Alex".Partition(3);
+
+            TestHelper.AssertSequence(actual,
+                new[] { 'A', 'l', 'e' },
+                new[] { 'x' });
         }
 
         [Test]
@@ -42,21 +46,16 @@ namespace Abacaxi.Tests.SequenceExtensions
             var actual = "Alex".Partition(1);
 
             TestHelper.AssertSequence(actual,
-                new[] {'A'},
-                new[] {'l'},
-                new[] {'e'},
-                new[] {'x'});
+                new[] { 'A' },
+                new[] { 'l' },
+                new[] { 'e' },
+                new[] { 'x' });
         }
 
-        [Test]
-        public void Partition_ReturnsFullArraysAndASpill_IfOneExists()
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        public void Partition_ThrowsException_ForSizeLessThanOne()
         {
-            var actual = "Alex".Partition(3);
-
-            TestHelper.AssertSequence(actual,
-                new[] {'A', 'l', 'e'},
-                new[] {'x'});
+            Assert.Throws<ArgumentOutOfRangeException>(() => new[] { 1 }.Partition(0));
         }
-
     }
 }

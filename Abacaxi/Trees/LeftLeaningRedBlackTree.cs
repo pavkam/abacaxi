@@ -16,18 +16,55 @@
 namespace Abacaxi.Trees
 {
     using System.Collections.Generic;
-    using JetBrains.Annotations;
     using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
-    /// Class implements the left-leaning red-black balanced search tree.
+    ///     Class implements the left-leaning red-black balanced search tree.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     [PublicAPI]
     public sealed class LeftLeaningRedBlackTree<TKey, TValue> : BinarySearchTree<TKey, TValue>
     {
-        private static bool IsRed([CanBeNull] RedBlackTreeNode<TKey, TValue> node) => node?.Color == RedBlackTreeNodeColor.Red;
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LeftLeaningRedBlackTree{TKey, TValue}" /> class.
+        /// </summary>
+        /// <param name="comparer">The key comparer used.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="comparer" /> is <c>null</c>.</exception>
+        public LeftLeaningRedBlackTree([NotNull] IComparer<TKey> comparer) : base(comparer)
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LeftLeaningRedBlackTree{TKey, TValue}" /> class using the default
+        ///     <typeparamref name="TKey" /> comparer.
+        /// </summary>
+        public LeftLeaningRedBlackTree()
+        {
+        }
+
+        /// <summary>
+        ///     Gets or sets the root node of the AVL tree.
+        /// </summary>
+        /// <value>
+        ///     The root.
+        /// </value>
+        [CanBeNull]
+        public new RedBlackTreeNode<TKey, TValue> Root
+        {
+            get
+            {
+                Assert.Condition(base.Root == null || base.Root is RedBlackTreeNode<TKey, TValue>);
+                return (RedBlackTreeNode<TKey, TValue>) base.Root;
+            }
+            set => base.Root = value;
+        }
+
+        private static bool IsRed([CanBeNull] RedBlackTreeNode<TKey, TValue> node)
+        {
+            return node?.Color == RedBlackTreeNodeColor.Red;
+        }
 
         private static void FlipColor([NotNull] RedBlackTreeNode<TKey, TValue> node)
         {
@@ -37,8 +74,8 @@ namespace Abacaxi.Trees
 
             node.Color =
                 node.Color == RedBlackTreeNodeColor.Black
-                ? RedBlackTreeNodeColor.Red
-                : RedBlackTreeNodeColor.Black;
+                    ? RedBlackTreeNodeColor.Red
+                    : RedBlackTreeNodeColor.Black;
             node.LeftChild.Color =
                 node.LeftChild.Color == RedBlackTreeNodeColor.Black
                     ? RedBlackTreeNodeColor.Red
@@ -166,12 +203,15 @@ namespace Abacaxi.Trees
                 }
             }
 
-            if (IsRed(node.LeftChild) && IsRed(node.RightChild))
+            if (IsRed(node.LeftChild) &&
+                IsRed(node.RightChild))
             {
                 FlipColor(node);
             }
 
-            if (node.LeftChild == null || !IsRed(node.LeftChild.RightChild) || IsRed(node.LeftChild.LeftChild))
+            if (node.LeftChild == null ||
+                !IsRed(node.LeftChild.RightChild) ||
+                IsRed(node.LeftChild.LeftChild))
             {
                 return node;
             }
@@ -204,7 +244,8 @@ namespace Abacaxi.Trees
                 };
             }
 
-            if (IsRed(node.LeftChild) && IsRed(node.RightChild))
+            if (IsRed(node.LeftChild) &&
+                IsRed(node.RightChild))
             {
                 FlipColor(node);
             }
@@ -260,7 +301,8 @@ namespace Abacaxi.Trees
                     return FixUp(node);
                 }
 
-                if (!IsRed(node.LeftChild) && !IsRed(node.LeftChild.LeftChild))
+                if (!IsRed(node.LeftChild) &&
+                    !IsRed(node.LeftChild.LeftChild))
                 {
                     node = MoveRedLeft(node);
                 }
@@ -275,7 +317,8 @@ namespace Abacaxi.Trees
                     node = RotateRight(node);
                 }
 
-                if (Comparer.Compare(key, node.Key) == 0 && node.RightChild == null)
+                if (Comparer.Compare(key, node.Key) == 0 &&
+                    node.RightChild == null)
                 {
                     Assert.Condition(node.LeftChild == null);
 
@@ -288,7 +331,8 @@ namespace Abacaxi.Trees
                     return FixUp(node);
                 }
 
-                if (!IsRed(node.RightChild) && !IsRed(node.RightChild.LeftChild))
+                if (!IsRed(node.RightChild) &&
+                    !IsRed(node.RightChild.LeftChild))
                 {
                     node = MoveRedRight(node);
                 }
@@ -319,7 +363,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Looks up the node ky the given <paramref name="key"/>.
+        ///     Looks up the node ky the given <paramref name="key" />.
         /// </summary>
         /// <param name="key">The key of the node.</param>
         /// <returns>The node, if found; otherwise, <c>null</c>.</returns>
@@ -333,44 +377,14 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Gets or sets the root node of the AVL tree.
-        /// </summary>
-        /// <value>
-        /// The root.
-        /// </value>
-        [CanBeNull]
-        public new RedBlackTreeNode<TKey, TValue> Root
-        {
-            get
-            {
-                Assert.Condition(base.Root == null || base.Root is RedBlackTreeNode<TKey, TValue>);
-                return (RedBlackTreeNode<TKey, TValue>)base.Root;
-            }
-            set => base.Root = value;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LeftLeaningRedBlackTree{TKey, TValue}"/> class.
-        /// </summary>
-        /// <param name="comparer">The key comparer used.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="comparer"/> is <c>null</c>.</exception>
-        public LeftLeaningRedBlackTree([NotNull] IComparer<TKey> comparer) : base(comparer)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LeftLeaningRedBlackTree{TKey, TValue}"/> class using the default <typeparamref name="TKey"/> comparer.
-        /// </summary>
-        public LeftLeaningRedBlackTree()
-        {
-        }
-
-        /// <summary>
-        /// Adds the specified key/value node to the tree.
+        ///     Adds the specified key/value node to the tree.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's value.</param>
-        /// <exception cref="System.ArgumentException">Thrown if a node with the same <paramref name="key"/> is already present in the tree.</exception>
+        /// <exception cref="System.ArgumentException">
+        ///     Thrown if a node with the same <paramref name="key" /> is already present in
+        ///     the tree.
+        /// </exception>
         public override void Add(TKey key, TValue value)
         {
             Root = InsertRecursive(Root, key, value, false);
@@ -378,7 +392,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Adds or updates a tree node that has a given key and value.
+        ///     Adds or updates a tree node that has a given key and value.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's new value.</param>
@@ -389,7 +403,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Removes the node from the tree that has a specified key.
+        ///     Removes the node from the tree that has a specified key.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <returns><c>true</c> if the node was removed; otherwise, <c>false</c>.</returns>
@@ -406,6 +420,7 @@ namespace Abacaxi.Trees
             {
                 Root.Color = RedBlackTreeNodeColor.Black;
             }
+
             return initialCount != Count;
         }
     }

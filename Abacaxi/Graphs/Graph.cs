@@ -17,68 +17,114 @@ namespace Abacaxi.Graphs
 {
     using System;
     using System.Collections;
-    using System.Linq;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using Containers;
     using Internal;
     using JetBrains.Annotations;
-    using System.Diagnostics.CodeAnalysis;
-    using Containers;
 
     /// <summary>
-    /// Generic graph class. This class serves as an abstract base for all concrete implementations.
+    ///     Generic graph class. This class serves as an abstract base for all concrete implementations.
     /// </summary>
     /// <typeparam name="TVertex">The type of graph vertices.</typeparam>
     [PublicAPI, SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global")]
     public abstract class Graph<TVertex> : IEnumerable<TVertex>
     {
-        private sealed class PathNode
+        [NotNull] private static IComparer<Edge<TVertex>> _edgesByWeightComparer =
+            Comparer<Edge<TVertex>>.Create(CompareEdgesByWeight);
+
+        /// <summary>
+        ///     Gets a value indicating whether this graph's edges are directed.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this graph's edges are directed; otherwise, <c>false</c>.
+        /// </value>
+        public abstract bool IsDirected { get; }
+
+        /// <summary>
+        ///     Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public abstract bool IsReadOnly { get; }
+
+        /// <summary>
+        ///     Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public abstract bool SupportsPotentialWeightEvaluation { get; }
+
+        /// <summary>
+        ///     Verifies the current graph is bipartite.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this instance is bipartite; otherwise, <c>false</c>.
+        /// </value>
+        /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
+        public virtual bool IsBipartite
         {
-            public TVertex Vertex;
-            [CanBeNull] public PathNode Parent;
-            public double TotalCostFromStart;
-            public double PotentialCostToDestination;
+            get
+            {
+                RequireUndirectedGraph();
+
+                var remainingVertices = new HashSet<TVertex>(this);
+                var isBipartite = true;
+                while (remainingVertices.Count > 0 && isBipartite)
+                {
+                    var assignments = new Dictionary<TVertex, bool>();
+                    TraverseDfs(remainingVertices.First(),
+                        node =>
+                        {
+                            remainingVertices.Remove(node.Vertex);
+
+                            if (node.Parent == null)
+                            {
+                                assignments.Add(node.Vertex, false);
+                            }
+                            else
+                            {
+                                assignments.Add(node.Vertex, !assignments[node.Parent.Vertex]);
+                            }
+
+                            return true;
+                        },
+                        node => true,
+                        (fromNode, toNode) =>
+                        {
+                            if (assignments[fromNode.Vertex] == assignments[toNode.Vertex])
+                            {
+                                isBipartite = false;
+                            }
+
+                            return isBipartite;
+                        });
+                }
+
+                return isBipartite;
+            }
         }
 
-        private sealed class BfsNode : IBfsNode
+        /// <summary>
+        ///     Returns an enumerator that iterates all vertices in the graph.
+        /// </summary>
+        /// <returns>
+        ///     A <see cref="IEnumerator{TVertex}" /> that can be used to iterate through the collection.
+        /// </returns>
+        public abstract IEnumerator<TVertex> GetEnumerator();
+
+        /// <summary>
+        ///     Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        ///     An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            public TVertex Vertex { get; }
-            public IBfsNode Parent { get; set; }
-            public Edge<TVertex> EntryEdge { get; }
-
-            public BfsNode([NotNull] TVertex vertex)
-            {
-                Assert.NotNull(vertex);
-                Vertex = vertex;
-            }
-
-            public BfsNode([NotNull] Edge<TVertex> entryEdge)
-            {
-                Assert.NotNull(entryEdge);
-                Vertex = entryEdge.ToVertex;
-                EntryEdge = entryEdge;
-            }
-        }
-
-        private sealed class DfsNode : IDfsNode
-        {
-            public TVertex Vertex { get; }
-            public IDfsNode Parent { get; set; }
-            public Edge<TVertex> EntryEdge { get; }
-            public int EntryTime { get; set; }
-            public int ExitTime { get; set; }
-
-            public DfsNode([NotNull] TVertex vertex)
-            {
-                Assert.NotNull(vertex);
-                Vertex = vertex;
-            }
-
-            public DfsNode([NotNull] Edge<TVertex> entryEdge)
-            {
-                Assert.NotNull(entryEdge);
-                Vertex = entryEdge.ToVertex;
-                EntryEdge = entryEdge;
-            }
+            return GetEnumerator();
         }
 
         private static int CompareEdgesByWeight([NotNull] Edge<TVertex> a, [NotNull] Edge<TVertex> b)
@@ -88,9 +134,6 @@ namespace Abacaxi.Graphs
 
             return a.Weight.CompareTo(a.Weight);
         }
-
-        [NotNull] private static IComparer<Edge<TVertex>> _edgesByWeightComparer =
-            Comparer<Edge<TVertex>>.Create(CompareEdgesByWeight);
 
         private bool TraverseDfs(
             [NotNull] DfsNode vertexNode,
@@ -127,7 +170,7 @@ namespace Abacaxi.Graphs
                 {
                     visitedNode = new DfsNode(edge)
                     {
-                        Parent = vertexNode,
+                        Parent = vertexNode
                     };
 
                     breakRequested =
@@ -154,89 +197,7 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Describes a node in a BFS traversal tree.
-        /// </summary>
-        public interface IBfsNode
-        {
-            /// <summary>
-            /// Gets the vertex of the BFS node.
-            /// </summary>
-            /// <value>
-            /// The vertex.
-            /// </value>
-            [NotNull]
-            TVertex Vertex { get; }
-
-            /// <summary>
-            /// Gets the parent BFS node in the traversal tree.
-            /// </summary>
-            /// <value>
-            /// The parent node.
-            /// </value>
-            [CanBeNull]
-            IBfsNode Parent { get; }
-
-            /// <summary>
-            /// Gets the entry edge (the edge connecting <see cref="Parent"/> and <see cref="Vertex"/>.
-            /// </summary>
-            /// <value>
-            /// The entry edge.
-            /// </value>
-            [CanBeNull]
-            Edge<TVertex> EntryEdge { get; }
-        }
-
-        /// <summary>
-        /// Describes a node in a DFS traversal tree.
-        /// </summary>
-        public interface IDfsNode
-        {
-            /// <summary>
-            /// Gets the vertex of the BFS node.
-            /// </summary>
-            /// <value>
-            /// The vertex.
-            /// </value>
-            [NotNull]
-            TVertex Vertex { get; }
-
-            /// <summary>
-            /// Gets the parent DFS node in the traversal tree.
-            /// </summary>
-            /// <value>
-            /// The parent node.
-            /// </value>
-            [CanBeNull]
-            IDfsNode Parent { get; }
-
-            /// <summary>
-            /// Gets the entry edge (the edge connecting <see cref="Parent"/> and <see cref="Vertex"/>.
-            /// </summary>
-            /// <value>
-            /// The entry edge.
-            /// </value>
-            [CanBeNull]
-            Edge<TVertex> EntryEdge { get; }
-
-            /// <summary>
-            /// Gets the vertex "entry time".
-            /// </summary>
-            /// <value>
-            /// The entry time.
-            /// </value>
-            int EntryTime { get; }
-
-            /// <summary>
-            /// Gets the vertex "exit time".
-            /// </summary>
-            /// <value>
-            /// The exit time.
-            /// </value>
-            int ExitTime { get; }
-        }
-
-        /// <summary>
-        /// Asserts this graph is undirected.
+        ///     Asserts this graph is undirected.
         /// </summary>
         /// <exception cref="InvalidOperationException">This operation is not allowed on directed graphs.</exception>
         protected void RequireUndirectedGraph()
@@ -248,71 +209,38 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Gets a value indicating whether this graph's edges are directed.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this graph's edges are directed; otherwise, <c>false</c>.
-        /// </value>
-        public abstract bool IsDirected { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is read only.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is read only; otherwise, <c>false</c>.
-        /// </value>
-        public abstract bool IsReadOnly { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
-        /// </value>
-        public abstract bool SupportsPotentialWeightEvaluation { get; }
-
-        /// <summary>
-        /// Gets the potential total weight connecting <paramref name="fromVertex"/> and <paramref name="toVertex"/> vertices.
+        ///     Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" />
+        ///     vertices.
         /// </summary>
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The destination vertex.</param>
         /// <returns>The potential total cost.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="fromVertex"/> or <paramref name="toVertex"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="fromVertex" /> or <paramref name="toVertex" /> is
+        ///     <c>null</c>.
+        /// </exception>
         public abstract double GetPotentialWeight([NotNull] TVertex fromVertex, [NotNull] TVertex toVertex);
 
         /// <summary>
-        /// Gets the edges for a given <paramref name="vertex"/>.
+        ///     Gets the edges for a given <paramref name="vertex" />.
         /// </summary>
         /// <param name="vertex">The vertex to get the edges for.</param>
-        /// <returns>A sequence of edges connected to the given <paramref name="vertex"/></returns>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="vertex"/> is not part of this graph.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vertex"/> is <c>null</c>.</exception>
+        /// <returns>A sequence of edges connected to the given <paramref name="vertex" /></returns>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="vertex" /> is not part of this graph.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vertex" /> is <c>null</c>.</exception>
         [NotNull, ItemNotNull]
         public abstract IEnumerable<Edge<TVertex>> GetEdges([NotNull] TVertex vertex);
 
         /// <summary>
-        /// Returns an enumerator that iterates all vertices in the graph.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="IEnumerator{TVertex}" /> that can be used to iterate through the collection.
-        /// </returns>
-        public abstract IEnumerator<TVertex> GetEnumerator();
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        /// <summary>
-        /// Traverses the graph using the breadth-first-search starting from <paramref name="startVertex"/>.
+        ///     Traverses the graph using the breadth-first-search starting from <paramref name="startVertex" />.
         /// </summary>
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="handleVertexCompleted">The function called when a vertex is completed.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="startVertex"/> or <paramref name="handleVertexCompleted"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="startVertex" /> or
+        ///     <paramref name="handleVertexCompleted" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex" /> is not part of this graph.</exception>
         public virtual void TraverseBfs([NotNull] TVertex startVertex,
             [NotNull] Predicate<IBfsNode> handleVertexCompleted)
         {
@@ -356,15 +284,17 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Traverses the graph using the depth-first-search starting from <paramref name="startVertex"/>.
+        ///     Traverses the graph using the depth-first-search starting from <paramref name="startVertex" />.
         /// </summary>
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="handleVertexVisited">The function called when a vertex is being visited.</param>
         /// <param name="handleVertexCompleted">The function called when a vertex is completed.</param>
         /// <param name="handleCycle">The function called when a cycle is identified.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="handleVertexVisited"/>, <paramref name="handleVertexCompleted"/>,
-        /// <paramref name="handleCycle"/> or <paramref name="startVertex"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="startVertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="handleVertexVisited" />, <paramref name="handleVertexCompleted" />,
+        ///     <paramref name="handleCycle" /> or <paramref name="startVertex" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">The <paramref name="startVertex" /> is not part of this graph.</exception>
         public virtual void TraverseDfs([NotNull] TVertex startVertex,
             [NotNull] Predicate<IDfsNode> handleVertexVisited,
             [NotNull] Predicate<IDfsNode> handleVertexCompleted, [NotNull] Func<IDfsNode, IDfsNode, bool> handleCycle)
@@ -382,12 +312,15 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Fills the graph with one color.
+        ///     Fills the graph with one color.
         /// </summary>
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="applyColor">Color to apply to each vertex.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="applyColor"/> or <paramref name="startVertex"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="applyColor" /> or <paramref name="startVertex" /> is
+        ///     <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex" /> is not part of this graph.</exception>
         public virtual void FillWithOneColor([NotNull] TVertex startVertex, [NotNull] Action<TVertex> applyColor)
         {
             Validate.ArgumentNotNull(nameof(startVertex), startVertex);
@@ -401,13 +334,16 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Finds the shortest path between two vertices in a graph.
+        ///     Finds the shortest path between two vertices in a graph.
         /// </summary>
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="endVertex">The end vertex.</param>
         /// <returns>Returns a sequence of vertices in visitation order.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="startVertex"/> or <paramref name="endVertex"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of this graph.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="startVertex" /> or <paramref name="endVertex" /> is
+        ///     <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex" /> is not part of this graph.</exception>
         [NotNull]
         public virtual TVertex[] FindShortestPath([NotNull] TVertex startVertex, [NotNull] TVertex endVertex)
         {
@@ -424,7 +360,6 @@ namespace Abacaxi.Graphs
 
                 solution = node;
                 return false;
-
             });
 
             var result = new List<TVertex>();
@@ -439,7 +374,7 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Gets all connected components in a given undirected graph.
+        ///     Gets all connected components in a given undirected graph.
         /// </summary>
         /// <returns>A sequence of sub-graphs, each representing a connected component.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
@@ -466,7 +401,7 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Sorts a directed acyclic graph in topological order.
+        ///     Sorts a directed acyclic graph in topological order.
         /// </summary>
         /// <returns>A sequence of vertices sorted in topological order.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is undirected or contains one or more cycles.</exception>
@@ -533,7 +468,7 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Finds all articulation vertices in the given graph.
+        ///     Finds all articulation vertices in the given graph.
         /// </summary>
         /// <returns>A sequence of all articulation vertices.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
@@ -593,7 +528,8 @@ namespace Abacaxi.Graphs
                     (fromNode, toNode) =>
                     {
                         var ea = eaDict[fromNode.Vertex];
-                        if (ea == null || ea.EntryTime > toNode.EntryTime)
+                        if (ea == null ||
+                            ea.EntryTime > toNode.EntryTime)
                         {
                             eaDict[fromNode.Vertex] = toNode;
                         }
@@ -606,56 +542,7 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Verifies the current graph is bipartite.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is bipartite; otherwise, <c>false</c>.
-        /// </value>
-        /// <exception cref="InvalidOperationException">Thrown if the graph is directed.</exception>
-        public virtual bool IsBipartite
-        {
-            get
-            {
-                RequireUndirectedGraph();
-
-                var remainingVertices = new HashSet<TVertex>(this);
-                var isBipartite = true;
-                while (remainingVertices.Count > 0 && isBipartite)
-                {
-                    var assignments = new Dictionary<TVertex, bool>();
-                    TraverseDfs(remainingVertices.First(),
-                        node =>
-                        {
-                            remainingVertices.Remove(node.Vertex);
-
-                            if (node.Parent == null)
-                            {
-                                assignments.Add(node.Vertex, false);
-                            }
-                            else
-                            {
-                                assignments.Add(node.Vertex, !assignments[node.Parent.Vertex]);
-                            }
-                            return true;
-                        },
-                        node => true,
-                        (fromNode, toNode) =>
-                        {
-                            if (assignments[fromNode.Vertex] == assignments[toNode.Vertex])
-                            {
-                                isBipartite = false;
-                            }
-
-                            return isBipartite;
-                        });
-                }
-
-                return isBipartite;
-            }
-        }
-
-        /// <summary>
-        /// Describes the vertices of graph (degrees and components).
+        ///     Describes the vertices of graph (degrees and components).
         /// </summary>
         /// <returns>A list of vertex descriptions.</returns>
         [NotNull, ItemNotNull]
@@ -706,13 +593,17 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Finds the cheapest path in a graph between two vertices <paramref name="startVertex"/> and <paramref name="endVertex"/>
+        ///     Finds the cheapest path in a graph between two vertices <paramref name="startVertex" /> and
+        ///     <paramref name="endVertex" />
         /// </summary>
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="endVertex">The end vertex.</param>
         /// <returns>A sequence of vertices that yield the shortest path. Returns an empty sequence if no path available.</returns>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex"/> is not part of teh graph.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="startVertex"/> or <paramref name="endVertex"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex" /> is not part of teh graph.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="startVertex" /> or <paramref name="endVertex" /> is
+        ///     <c>null</c>.
+        /// </exception>
         [NotNull]
         public IEnumerable<TVertex> FindCheapestPath([NotNull] TVertex startVertex, [NotNull] TVertex endVertex)
         {
@@ -732,11 +623,11 @@ namespace Abacaxi.Graphs
                 Vertex = startVertex,
                 TotalCostFromStart = 0,
                 PotentialCostToDestination =
-                    SupportsPotentialWeightEvaluation ? GetPotentialWeight(startVertex, endVertex) : 0,
+                    SupportsPotentialWeightEvaluation ? GetPotentialWeight(startVertex, endVertex) : 0
             };
 
-            var discoveredVertices = new Dictionary<TVertex, PathNode> {{startVertex, startVertexNode}};
-            var visitationQueue = new Heap<PathNode>(comparer) {startVertexNode};
+            var discoveredVertices = new Dictionary<TVertex, PathNode> { { startVertex, startVertexNode } };
+            var visitationQueue = new Heap<PathNode>(comparer) { startVertexNode };
             var foundAPath = false;
             var cheapestCostSoFar = .0;
 
@@ -747,7 +638,8 @@ namespace Abacaxi.Graphs
 
                 if (Equals(vertexNode.Vertex, endVertex))
                 {
-                    if (!foundAPath || cheapestCostSoFar > vertexNode.TotalCostFromStart)
+                    if (!foundAPath ||
+                        cheapestCostSoFar > vertexNode.TotalCostFromStart)
                     {
                         foundAPath = true;
                         cheapestCostSoFar = vertexNode.TotalCostFromStart;
@@ -772,7 +664,7 @@ namespace Abacaxi.Graphs
                             PotentialCostToDestination =
                                 SupportsPotentialWeightEvaluation
                                     ? costFromStartForThisPath + GetPotentialWeight(edge.ToVertex, endVertex)
-                                    : costFromStartForThisPath,
+                                    : costFromStartForThisPath
                         };
 
                         discoveredVertices.Add(discoveredNode.Vertex, discoveredNode);
@@ -813,6 +705,138 @@ namespace Abacaxi.Graphs
             result.Reverse();
 
             return result;
+        }
+
+        private sealed class PathNode
+        {
+            [CanBeNull] public PathNode Parent;
+            public double PotentialCostToDestination;
+            public double TotalCostFromStart;
+            public TVertex Vertex;
+        }
+
+        private sealed class BfsNode : IBfsNode
+        {
+            public BfsNode([NotNull] TVertex vertex)
+            {
+                Assert.NotNull(vertex);
+                Vertex = vertex;
+            }
+
+            public BfsNode([NotNull] Edge<TVertex> entryEdge)
+            {
+                Assert.NotNull(entryEdge);
+                Vertex = entryEdge.ToVertex;
+                EntryEdge = entryEdge;
+            }
+
+            public TVertex Vertex { get; }
+            public IBfsNode Parent { get; set; }
+            public Edge<TVertex> EntryEdge { get; }
+        }
+
+        private sealed class DfsNode : IDfsNode
+        {
+            public DfsNode([NotNull] TVertex vertex)
+            {
+                Assert.NotNull(vertex);
+                Vertex = vertex;
+            }
+
+            public DfsNode([NotNull] Edge<TVertex> entryEdge)
+            {
+                Assert.NotNull(entryEdge);
+                Vertex = entryEdge.ToVertex;
+                EntryEdge = entryEdge;
+            }
+
+            public TVertex Vertex { get; }
+            public IDfsNode Parent { get; set; }
+            public Edge<TVertex> EntryEdge { get; }
+            public int EntryTime { get; set; }
+            public int ExitTime { get; set; }
+        }
+
+        /// <summary>
+        ///     Describes a node in a BFS traversal tree.
+        /// </summary>
+        public interface IBfsNode
+        {
+            /// <summary>
+            ///     Gets the vertex of the BFS node.
+            /// </summary>
+            /// <value>
+            ///     The vertex.
+            /// </value>
+            [NotNull]
+            TVertex Vertex { get; }
+
+            /// <summary>
+            ///     Gets the parent BFS node in the traversal tree.
+            /// </summary>
+            /// <value>
+            ///     The parent node.
+            /// </value>
+            [CanBeNull]
+            IBfsNode Parent { get; }
+
+            /// <summary>
+            ///     Gets the entry edge (the edge connecting <see cref="Parent" /> and <see cref="Vertex" />.
+            /// </summary>
+            /// <value>
+            ///     The entry edge.
+            /// </value>
+            [CanBeNull]
+            Edge<TVertex> EntryEdge { get; }
+        }
+
+        /// <summary>
+        ///     Describes a node in a DFS traversal tree.
+        /// </summary>
+        public interface IDfsNode
+        {
+            /// <summary>
+            ///     Gets the vertex of the BFS node.
+            /// </summary>
+            /// <value>
+            ///     The vertex.
+            /// </value>
+            [NotNull]
+            TVertex Vertex { get; }
+
+            /// <summary>
+            ///     Gets the parent DFS node in the traversal tree.
+            /// </summary>
+            /// <value>
+            ///     The parent node.
+            /// </value>
+            [CanBeNull]
+            IDfsNode Parent { get; }
+
+            /// <summary>
+            ///     Gets the entry edge (the edge connecting <see cref="Parent" /> and <see cref="Vertex" />.
+            /// </summary>
+            /// <value>
+            ///     The entry edge.
+            /// </value>
+            [CanBeNull]
+            Edge<TVertex> EntryEdge { get; }
+
+            /// <summary>
+            ///     Gets the vertex "entry time".
+            /// </summary>
+            /// <value>
+            ///     The entry time.
+            /// </value>
+            int EntryTime { get; }
+
+            /// <summary>
+            ///     Gets the vertex "exit time".
+            /// </summary>
+            /// <value>
+            ///     The exit time.
+            /// </value>
+            int ExitTime { get; }
         }
     }
 }

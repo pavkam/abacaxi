@@ -20,17 +20,17 @@ namespace Abacaxi.Practice
     using Internal;
 
     /// <summary>
-    /// Class that only contains practice algorithms related to integers.
+    ///     Class that only contains practice algorithms related to integers.
     /// </summary>
     public static class Integer
     {
         /// <summary>
-        /// Divides <paramref name="number"/> by <paramref name="divisor"/>.
+        ///     Divides <paramref name="number" /> by <paramref name="divisor" />.
         /// </summary>
         /// <param name="number">The number to divide.</param>
         /// <param name="divisor">The divisor.</param>
         /// <returns>The result of division.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="divisor"/> is <c>0</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="divisor" /> is <c>0</c>.</exception>
         public static int Divide(int number, int divisor)
         {
             Validate.ArgumentDifferentThanZero(nameof(divisor), divisor);

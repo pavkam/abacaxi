@@ -16,78 +16,31 @@
 namespace Abacaxi.Tests.Graphs
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Abacaxi.Graphs;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class EdgeTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Ctor_ThrowsException_NullFromVertex()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Edge<string>(null, "hello"));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Ctor_ThrowsException_NullToVertex()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Edge<string>("hello", null));
-        }
-
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfWeightIsLessThanZero()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new Edge<string>("1", "2", -1));
         }
 
-        [Test]
-        public void FromVertex_ReturnsValidValue()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Ctor_ThrowsException_NullFromVertex()
         {
-            var edge = new Edge<string>("from", "to", 99);
-
-            Assert.AreEqual("from", edge.FromVertex);
+            Assert.Throws<ArgumentNullException>(() => new Edge<string>(null, "hello"));
         }
 
-        [Test]
-        public void ToVertex_ReturnsValidValue()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Ctor_ThrowsException_NullToVertex()
         {
-            var edge = new Edge<string>("from", "to", 99);
-
-            Assert.AreEqual("to", edge.ToVertex);
-        }
-
-        [Test]
-        public void Weight_ReturnsValidValue()
-        {
-            var edge = new Edge<string>("from", "to", 99);
-
-            Assert.AreEqual(99, edge.Weight);
-        }
-
-        [Test]
-        public void Weight_DefaultValue_IsOne()
-        {
-            var edge = new Edge<string>("from", "to");
-
-            Assert.AreEqual(1, edge.Weight);
-        }
-
-        [Test]
-        public void ToString_ReturnsValidValue()
-        {
-            var edge = new Edge<string>("from", "to", 99);
-
-            Assert.AreEqual("from >=99=> to", edge.ToString());
-        }
-
-        [Test]
-        public void Equals_ReturnsTrue_ForEqualComponents()
-        {
-            var edge1 = new Edge<string>("from", "to");
-            var edge2 = new Edge<string>("from", "to");
-
-            Assert.IsTrue(edge1.Equals(edge2));
+            Assert.Throws<ArgumentNullException>(() => new Edge<string>("hello", null));
         }
 
         [Test]
@@ -117,7 +70,7 @@ namespace Abacaxi.Tests.Graphs
             Assert.IsFalse(edge1.Equals(edge2));
         }
 
-        [Test,SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+        [Test, SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonEdgeObject()
         {
             var edge = new Edge<string>("from", "to");
@@ -134,12 +87,20 @@ namespace Abacaxi.Tests.Graphs
         }
 
         [Test]
-        public void GetHashCode_ReturnsEqualHashCodes_ForEqualComponents()
+        public void Equals_ReturnsTrue_ForEqualComponents()
         {
             var edge1 = new Edge<string>("from", "to");
             var edge2 = new Edge<string>("from", "to");
 
-            Assert.AreEqual(edge1.GetHashCode(), edge2.GetHashCode());
+            Assert.IsTrue(edge1.Equals(edge2));
+        }
+
+        [Test]
+        public void FromVertex_ReturnsValidValue()
+        {
+            var edge = new Edge<string>("from", "to", 99);
+
+            Assert.AreEqual("from", edge.FromVertex);
         }
 
         [Test]
@@ -167,6 +128,47 @@ namespace Abacaxi.Tests.Graphs
             var edge2 = new Edge<string>("from", "to", 991);
 
             Assert.AreNotEqual(edge1.GetHashCode(), edge2.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_ReturnsEqualHashCodes_ForEqualComponents()
+        {
+            var edge1 = new Edge<string>("from", "to");
+            var edge2 = new Edge<string>("from", "to");
+
+            Assert.AreEqual(edge1.GetHashCode(), edge2.GetHashCode());
+        }
+
+        [Test]
+        public void ToString_ReturnsValidValue()
+        {
+            var edge = new Edge<string>("from", "to", 99);
+
+            Assert.AreEqual("from >=99=> to", edge.ToString());
+        }
+
+        [Test]
+        public void ToVertex_ReturnsValidValue()
+        {
+            var edge = new Edge<string>("from", "to", 99);
+
+            Assert.AreEqual("to", edge.ToVertex);
+        }
+
+        [Test]
+        public void Weight_DefaultValue_IsOne()
+        {
+            var edge = new Edge<string>("from", "to");
+
+            Assert.AreEqual(1, edge.Weight);
+        }
+
+        [Test]
+        public void Weight_ReturnsValidValue()
+        {
+            var edge = new Edge<string>("from", "to", 99);
+
+            Assert.AreEqual(99, edge.Weight);
         }
     }
 }

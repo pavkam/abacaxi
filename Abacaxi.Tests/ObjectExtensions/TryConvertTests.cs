@@ -16,19 +16,146 @@
 namespace Abacaxi.Tests.ObjectExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Collections;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class TryConvertTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void TryConvert_ThrowsException_ForNullFormatProvider()
+        [Test]
+        public void TryConvert_FailsFor_BadObject_To_EnumType()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                "a".TryConvert(null, out int _));
+            Assert.IsFalse(this.TryConvert(CultureInfo.InvariantCulture, out EditOperation _));
+        }
+
+        [Test]
+        public void TryConvert_FailsFor_BadString_To_EnumType()
+        {
+            Assert.IsFalse("fail".TryConvert(CultureInfo.InvariantCulture, out EditOperation _));
+        }
+
+        [Test]
+        public void TryConvert_FailsFor_BadString_To_ValueType()
+        {
+            Assert.IsFalse("string".TryConvert(CultureInfo.InvariantCulture, out double _));
+        }
+
+        [Test]
+        public void TryConvert_FailsFor_Null_To_ValueType()
+        {
+            Assert.IsFalse(((object) null).TryConvert(CultureInfo.InvariantCulture, out int _));
+        }
+
+        [Test]
+        public void TryConvert_FailsFor_String_To_BadInterface()
+        {
+            Assert.IsFalse("string".TryConvert(CultureInfo.InvariantCulture, out ICustomFormatter _));
+        }
+
+        [Test]
+        public void TryConvert_FailsFor_String_To_UnrelatedValueType()
+        {
+            Assert.IsFalse("string".TryConvert(CultureInfo.InvariantCulture, out Edit<int> _));
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_AnyObject_To_String()
+        {
+            Assert.IsTrue(this.TryConvert(CultureInfo.InvariantCulture, out string result));
+            Assert.AreEqual(ToString(), result);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_GoodString_To_NullableEnumType()
+        {
+            Assert.IsTrue("Match".TryConvert(CultureInfo.InvariantCulture, out EditOperation? result));
+            Assert.AreEqual(EditOperation.Match, result);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_GoodString_To_NullableOfValueType()
+        {
+            Assert.IsTrue("100".TryConvert(CultureInfo.InvariantCulture, out double? result));
+            Assert.AreEqual(100, result);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_GoodString_To_ValueType()
+        {
+            Assert.IsTrue("100".TryConvert(CultureInfo.InvariantCulture, out int result));
+            Assert.AreEqual(100, result);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_Int_To_EnumType()
+        {
+            Assert.IsTrue(100.TryConvert(CultureInfo.InvariantCulture, out EditOperation result));
+            Assert.AreEqual(100, (int) result);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_Null_To_ArrayType()
+        {
+            Assert.IsTrue(((object) null).TryConvert(CultureInfo.InvariantCulture, out int[] value));
+            Assert.IsNull(value);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_Null_To_ClassType()
+        {
+            Assert.IsTrue(((object) null).TryConvert(CultureInfo.InvariantCulture, out string value));
+            Assert.IsNull(value);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_Null_To_InterfaceType()
+        {
+            Assert.IsTrue(((object) null).TryConvert(CultureInfo.InvariantCulture, out ICloneable value));
+            Assert.IsNull(value);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_Null_To_NullableType()
+        {
+            Assert.IsTrue(((object) null).TryConvert(CultureInfo.InvariantCulture, out double? value));
+            Assert.IsNull(value);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_SameType()
+        {
+            Assert.IsTrue(this.TryConvert(CultureInfo.InvariantCulture, out TryConvertTests result));
+            Assert.AreSame(this, result);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_String_To_EnumType()
+        {
+            Assert.IsTrue("Match".TryConvert(CultureInfo.InvariantCulture, out EditOperation result));
+            Assert.AreEqual(EditOperation.Match, result);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_String_To_GoodInterface()
+        {
+            Assert.IsTrue("string".TryConvert(CultureInfo.InvariantCulture, out IEnumerable result));
+            Assert.AreEqual("string", result);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_String_To_Object()
+        {
+            Assert.IsTrue("string".TryConvert(CultureInfo.InvariantCulture, out object result));
+            Assert.AreEqual("string", result);
+        }
+
+        [Test]
+        public void TryConvert_SucceedsFor_ValueType_To_NullableOfSameValueType()
+        {
+            Assert.IsTrue(1.TryConvert(CultureInfo.InvariantCulture, out int? result));
+            Assert.AreEqual(1, result);
         }
 
         [Test]
@@ -51,145 +178,18 @@ namespace Abacaxi.Tests.ObjectExtensions
             Assert.AreEqual("1.1", value2);
         }
 
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void TryConvert_ThrowsException_ForNullFormatProvider()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                "a".TryConvert(null, out int _));
+        }
+
         [Test]
         public void TryConvert_UsesInvariantCulture_ByDefault()
         {
             Assert.IsTrue("1,1".TryConvert(CultureInfo.InvariantCulture, out double value2));
             Assert.AreEqual(11, value2);
-        }
-
-        [Test]
-        public void TryConvert_FailsFor_Null_To_ValueType()
-        {
-            Assert.IsFalse(((object) null).TryConvert(CultureInfo.InvariantCulture, out int _));
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_Null_To_ClassType()
-        {
-            Assert.IsTrue(((object) null).TryConvert(CultureInfo.InvariantCulture, out string value));
-            Assert.IsNull(value);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_Null_To_ArrayType()
-        {
-            Assert.IsTrue(((object) null).TryConvert(CultureInfo.InvariantCulture, out int[] value));
-            Assert.IsNull(value);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_Null_To_NullableType()
-        {
-            Assert.IsTrue(((object) null).TryConvert(CultureInfo.InvariantCulture, out double? value));
-            Assert.IsNull(value);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_Null_To_InterfaceType()
-        {
-            Assert.IsTrue(((object) null).TryConvert(CultureInfo.InvariantCulture, out ICloneable value));
-            Assert.IsNull(value);
-        }
-
-        [Test]
-        public void TryConvert_FailsFor_BadString_To_EnumType()
-        {
-            Assert.IsFalse("fail".TryConvert(CultureInfo.InvariantCulture, out EditOperation _));
-        }
-
-        [Test]
-        public void TryConvert_FailsFor_BadObject_To_EnumType()
-        {
-            Assert.IsFalse(this.TryConvert(CultureInfo.InvariantCulture, out EditOperation _));
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_Int_To_EnumType()
-        {
-            Assert.IsTrue(100.TryConvert(CultureInfo.InvariantCulture, out EditOperation result));
-            Assert.AreEqual(100, (int) result);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_String_To_EnumType()
-        {
-            Assert.IsTrue("Match".TryConvert(CultureInfo.InvariantCulture, out EditOperation result));
-            Assert.AreEqual(EditOperation.Match, result);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_String_To_Object()
-        {
-            Assert.IsTrue("string".TryConvert(CultureInfo.InvariantCulture, out object result));
-            Assert.AreEqual("string", result);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_String_To_GoodInterface()
-        {
-            Assert.IsTrue("string".TryConvert(CultureInfo.InvariantCulture, out IEnumerable result));
-            Assert.AreEqual("string", result);
-        }
-
-        [Test]
-        public void TryConvert_FailsFor_String_To_BadInterface()
-        {
-            Assert.IsFalse("string".TryConvert(CultureInfo.InvariantCulture, out ICustomFormatter _));
-        }
-
-        [Test]
-        public void TryConvert_FailsFor_String_To_UnrelatedValueType()
-        {
-            Assert.IsFalse("string".TryConvert(CultureInfo.InvariantCulture, out Edit<int> _));
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_GoodString_To_ValueType()
-        {
-            Assert.IsTrue("100".TryConvert(CultureInfo.InvariantCulture, out int result));
-            Assert.AreEqual(100, result);
-        }
-
-        [Test]
-        public void TryConvert_FailsFor_BadString_To_ValueType()
-        {
-            Assert.IsFalse("string".TryConvert(CultureInfo.InvariantCulture, out double _));
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_SameType()
-        {
-            Assert.IsTrue(this.TryConvert(CultureInfo.InvariantCulture, out TryConvertTests result));
-            Assert.AreSame(this, result);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_AnyObject_To_String()
-        {
-            Assert.IsTrue(this.TryConvert(CultureInfo.InvariantCulture, out string result));
-            Assert.AreEqual(ToString(), result);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_ValueType_To_NullableOfSameValueType()
-        {
-            Assert.IsTrue(1.TryConvert(CultureInfo.InvariantCulture, out int? result));
-            Assert.AreEqual(1, result);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_GoodString_To_NullableOfValueType()
-        {
-            Assert.IsTrue("100".TryConvert(CultureInfo.InvariantCulture, out double? result));
-            Assert.AreEqual(100, result);
-        }
-
-        [Test]
-        public void TryConvert_SucceedsFor_GoodString_To_NullableEnumType()
-        {
-            Assert.IsTrue("Match".TryConvert(CultureInfo.InvariantCulture, out EditOperation? result));
-            Assert.AreEqual(EditOperation.Match, result);
         }
     }
 }

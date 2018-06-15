@@ -15,47 +15,26 @@
 
 namespace Abacaxi
 {
-    using JetBrains.Annotations;
     using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
-    /// Class describes an item that is used in the <seealso cref="Knapsack"/> algorithms.
+    ///     Class describes an item that is used in the <seealso cref="Knapsack" /> algorithms.
     /// </summary>
     /// <typeparam name="T">The type of described item.</typeparam>
     [PublicAPI]
     public sealed class KnapsackItem<T>
     {
         /// <summary>
-        /// Gets the item.
-        /// </summary>
-        /// <value>
-        /// The item.
-        /// </value>
-        public T Item { get; }
-
-        /// <summary>
-        /// Gets the item weight.
-        /// </summary>
-        /// <value>
-        /// The item weight.
-        /// </value>
-        public int Weight { get; }
-
-        /// <summary>
-        /// Gets the item value.
-        /// </summary>
-        /// <value>
-        /// The item value.
-        /// </value>
-        public double Value { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="KnapsackItem{T}"/> class.
+        ///     Initializes a new instance of the <see cref="KnapsackItem{T}" /> class.
         /// </summary>
         /// <param name="item">The item.</param>
         /// <param name="value">The item value.</param>
         /// <param name="weight">The item weight.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="value"/> or <paramref name="weight"/> are less than or equal to zero.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="value" /> or <paramref name="weight" />
+        ///     are less than or equal to zero.
+        /// </exception>
         public KnapsackItem(T item, double value, int weight)
         {
             Validate.ArgumentGreaterThanZero(nameof(value), value);
@@ -67,11 +46,35 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" />, is equal to this instance.
+        ///     Gets the item.
+        /// </summary>
+        /// <value>
+        ///     The item.
+        /// </value>
+        public T Item { get; }
+
+        /// <summary>
+        ///     Gets the item weight.
+        /// </summary>
+        /// <value>
+        ///     The item weight.
+        /// </value>
+        public int Weight { get; }
+
+        /// <summary>
+        ///     Gets the item value.
+        /// </summary>
+        /// <value>
+        ///     The item value.
+        /// </value>
+        public double Value { get; }
+
+        /// <summary>
+        ///     Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
         /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -89,18 +92,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
+        ///     Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="string" /> that represents this instance.
+        ///     A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString() => $"{Item} ({Value:N2}, {Weight})";
+        public override string ToString()
+        {
+            return $"{Item} ({Value:N2}, {Weight})";
+        }
 
         /// <summary>
-        /// Returns a hash code for this instance.
+        ///     Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {

@@ -17,54 +17,55 @@ namespace Abacaxi.Tests.FibonacciSequence
 {
     using System;
     using NUnit.Framework;
+    using FibonacciSequence = Abacaxi.FibonacciSequence;
 
     [TestFixture]
     public sealed class EnumerateTests
     {
         [Test]
-        public void Enumerate_ThrowsException_ForNegativeCount()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.FibonacciSequence.Enumerate(-1));
-        }
-
-        [Test]
-        public void Enumerate_ReturnsNothing_ForZeroCount()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.FibonacciSequence.Enumerate(0));
-        }
-
-        [Test]
         public void Enumerate_ReturnsCorrectSequence_ForCountOfOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.FibonacciSequence.Enumerate(1),
+                FibonacciSequence.Enumerate(1),
                 0);
-        }
-
-        [Test]
-        public void Enumerate_ReturnsCorrectSequence_ForCountOfTwo()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.FibonacciSequence.Enumerate(2),
-                0, 1);
         }
 
         [Test]
         public void Enumerate_ReturnsCorrectSequence_ForCountOfThree()
         {
             TestHelper.AssertSequence(
-                Abacaxi.FibonacciSequence.Enumerate(3),
+                FibonacciSequence.Enumerate(3),
                 0, 1, 1);
+        }
+
+        [Test]
+        public void Enumerate_ReturnsCorrectSequence_ForCountOfTwo()
+        {
+            TestHelper.AssertSequence(
+                FibonacciSequence.Enumerate(2),
+                0, 1);
         }
 
         [Test]
         public void Enumerate_ReturnsCorrectSequence_ForLongCount()
         {
             TestHelper.AssertSequence(
-                Abacaxi.FibonacciSequence.Enumerate(21),
+                FibonacciSequence.Enumerate(21),
                 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765);
+        }
+
+        [Test]
+        public void Enumerate_ReturnsNothing_ForZeroCount()
+        {
+            TestHelper.AssertSequence(
+                FibonacciSequence.Enumerate(0));
+        }
+
+        [Test]
+        public void Enumerate_ThrowsException_ForNegativeCount()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                FibonacciSequence.Enumerate(-1));
         }
     }
 }

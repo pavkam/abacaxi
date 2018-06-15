@@ -21,7 +21,7 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class supplies methods related to the "Fibonacci sequence".
+    ///     Class supplies methods related to the "Fibonacci sequence".
     /// </summary>
     [PublicAPI]
     public static class FibonacciSequence
@@ -38,6 +38,7 @@ namespace Abacaxi
             {
                 yield return b2;
             }
+
             if (count > 1)
             {
                 yield return b1;
@@ -59,11 +60,11 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Enumerates the first <paramref name="count" /> Fibonacci numbers.
+        ///     Enumerates the first <paramref name="count" /> Fibonacci numbers.
         /// </summary>
         /// <param name="count">The count of Fibonacci "numbers" to enumerate.</param>
         /// <returns>The Fibonacci sequence.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count"/> is less than zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count" /> is less than zero.</exception>
         [NotNull]
         public static IEnumerable<int> Enumerate(int count)
         {
@@ -73,11 +74,11 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Gets the Nth Fibonacci number.
+        ///     Gets the Nth Fibonacci number.
         /// </summary>
         /// <param name="index">The index of the Fibonacci number to calculate.</param>
         /// <returns>The Fibonacci number</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is less than zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index" /> is less than zero.</exception>
         public static int GetMember(int index)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(index), index);
@@ -88,6 +89,7 @@ namespace Abacaxi
                 {
                     return result;
                 }
+
                 index--;
             }
 

@@ -17,25 +17,12 @@ namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Collections.Generic;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class GetItemFrequenciesTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetItemFrequencies_ThrowsException_IfSequenceIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(
-                () => ((int[]) null).GetItemFrequencies(EqualityComparer<int>.Default));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetItemFrequencies_ThrowsException_IfEqualityComparerIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new[] {1}.GetItemFrequencies(null));
-        }
-
         [Test]
         public void GetItemFrequencies_ReturnsEmptyDictionary_ForEmptySequence()
         {
@@ -46,7 +33,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void GetItemFrequencies_ReturnsValidItems()
         {
-            var list = new[] {10, 1, 10, 10, 2, 2};
+            var list = new[] { 10, 1, 10, 10, 2, 2 };
             var freq = list.GetItemFrequencies(EqualityComparer<int>.Default);
 
             Assert.AreEqual(3, freq.Count);
@@ -55,10 +42,23 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.AreEqual(1, freq[1]);
         }
 
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetItemFrequencies_ThrowsException_IfEqualityComparerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.GetItemFrequencies(null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetItemFrequencies_ThrowsException_IfSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => ((int[]) null).GetItemFrequencies(EqualityComparer<int>.Default));
+        }
+
         [Test]
         public void GetItemFrequencies_UsesTheEqualityComparer()
         {
-            var list = new[] {"a", "A"};
+            var list = new[] { "a", "A" };
             var freq = list.GetItemFrequencies(StringComparer.OrdinalIgnoreCase);
 
             Assert.AreEqual(2, freq["a"]);

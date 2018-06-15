@@ -30,36 +30,64 @@ namespace Abacaxi.Tests.ObjectExtensions
     {
         [NotNull] public const string PublicConstField = "public_const_field";
         [NotNull] public static string PublicStaticField = "public_static_field";
-        [NotNull] public static string PublicStaticProperty => "public_static_property";
-
-        [NotNull] public string PublicField = "public_field";
         [NotNull] internal string InternalField = "internal_field";
         [NotNull] private string PrivateField = "private_field";
         [NotNull] protected string ProtectedField = "protected_field";
 
-        [NotNull] public string PublicProperty => "public_property";
-        [NotNull] internal string InternalProperty => "internal_property";
-        [NotNull] private string PrivateProperty => "private_property";
-        [NotNull] protected string ProtectedProperty => "protected_property";
+        [NotNull] public string PublicField = "public_field";
 
         [NotNull]
-        public string PublicMethod() => "public_method";
+        public static string PublicStaticProperty => "public_static_property";
 
         [NotNull]
-        internal string InternalMethod() => "internal_method";
+        public string PublicProperty => "public_property";
 
         [NotNull]
-        private string PrivateMethod() => "private_method";
+        internal string InternalProperty => "internal_property";
 
         [NotNull]
-        private string ProtectedMethod() => "protected_method";
+        private string PrivateProperty => "private_property";
 
         [NotNull]
-        public string PublicMethodWithOneArgument(string arg) => "public_method_with_one_argument";
-
-        [NotNull] public string this[string index] => "public_property_with_index_argument";
+        protected string ProtectedProperty => "protected_property";
 
         [NotNull]
-        public string PublicGenericMethod<T>() => "public_generic_method";
+        public string this[string index] => "public_property_with_index_argument";
+
+        [NotNull]
+        public string PublicMethod()
+        {
+            return "public_method";
+        }
+
+        [NotNull]
+        internal string InternalMethod()
+        {
+            return "internal_method";
+        }
+
+        [NotNull]
+        private string PrivateMethod()
+        {
+            return "private_method";
+        }
+
+        [NotNull]
+        private string ProtectedMethod()
+        {
+            return "protected_method";
+        }
+
+        [NotNull]
+        public string PublicMethodWithOneArgument(string arg)
+        {
+            return "public_method_with_one_argument";
+        }
+
+        [NotNull]
+        public string PublicGenericMethod<T>()
+        {
+            return "public_generic_method";
+        }
     }
 }

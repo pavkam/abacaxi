@@ -16,275 +16,108 @@
 namespace Abacaxi.Tests.Containers
 {
     using System;
-    using System.Linq;
-    using System.Collections.Generic;
     using System.Collections;
-    using Abacaxi.Containers;
-    using NUnit.Framework;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using Abacaxi.Containers;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class TrieTests
     {
-        private Trie<char, int> _trie0;
-        private Trie<char, int> _trie5;
-
-        [NotNull]
-        private static char[] _([NotNull] string a) => a.ToCharArray();
-
         [SetUp]
         public void SetUp()
         {
             _trie0 = new Trie<char, int>();
-            _trie5 = new Trie<char, int> {{_("abc"), 1}, {_("acb"), 2}, {_("abd"), 3}, {_("cbc"), 4}, {_("cba"), 5}};
-        }
-
-        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Ctor_ThrowsException_IfEnumerableIsNull1()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new Trie<char, int>((IEnumerable<KeyValuePair<char[], int>>) null));
-        }
-
-        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Ctor_ThrowsException_IfEnumerableIsNull2()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(null, EqualityComparer<char>.Default));
-        }
-
-        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Ctor_ThrowsException_IfComparerIsNull1()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>((IEqualityComparer<char>) null));
-        }
-
-        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Ctor_ThrowsException_IfComparerIsNull2()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(new KeyValuePair<char[], int>[] { }, null));
-        }
-
-        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Ctor_ThrowsException_IfEnumerableContainsDupes()
-        {
-            var seq = new[]
+            _trie5 = new Trie<char, int>
             {
-                new KeyValuePair<char[], int>(_("1"), 1),
-                new KeyValuePair<char[], int>(_("1"), 2),
+                { _("abc"), 1 },
+                { _("acb"), 2 },
+                { _("abd"), 3 },
+                { _("cbc"), 4 },
+                { _("cba"), 5 }
             };
-
-            Assert.Throws<ArgumentException>(() => new Trie<char, int>(seq));
         }
 
-        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Ctor_ThrowsException_IfEnumerableContainsNullKey()
+        private Trie<char, int> _trie0;
+        private Trie<char, int> _trie5;
+
+        [NotNull]
+        private static char[] _([NotNull] string a)
         {
-            var seq = new[]
+            return a.ToCharArray();
+        }
+
+        [TestCase(0, 0), TestCase(0, 1), TestCase(4, 0), TestCase(5, 1)]
+        public void CopyTo_ThrowsException_ForInvalidArrayIndex(int arrayLength, int arrayIndex)
+        {
+            var a = new KeyValuePair<char[], int>[arrayLength];
+            Assert.Throws<ArgumentOutOfRangeException>(() => _trie5.CopyTo(a, arrayIndex));
+        }
+
+        [TestCase(1), TestCase(2), TestCase(5)]
+        public void Trie_StaysConsistent_ForLargeNumberOfElements(int cx)
+        {
+            for (var i = 'A'; i < 'A' + cx; i++)
+            for (var j = 'A'; j < 'A' + cx; j++)
+            for (var z = 'A'; z < 'A' + cx; z++)
             {
-                new KeyValuePair<char[], int>(null, 1),
-                new KeyValuePair<char[], int>(_("2"), 2),
-            };
+                _trie0.Add(_($"{i}{j}{z}"), 0);
+            }
 
-            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(seq));
-        }
+            var ex = cx * cx * cx;
+            Assert.AreEqual(ex, _trie0.Count);
 
-        [Test]
-        public void Ctor_SetsUpAnEmptyTrie()
-        {
+            for (var i = 'A'; i < 'A' + cx; i++)
+            for (var j = 'A'; j < 'A' + cx; j++)
+            for (var z = 'A'; z < 'A' + cx; z++)
+            {
+                var removed = _trie0.Remove(_($"{i}{j}{z}"));
+                Assert.IsTrue(removed);
+            }
+
             Assert.AreEqual(0, _trie0.Count);
         }
 
-
         [Test]
-        public void Query_ReturnsNothing_IfKeyNotFound()
+        public void Add_ActuallyAddsTheKey()
         {
-            TestHelper.AssertSequence(_trie0.Query(_("hello")));
+            _trie0.Add(_("test"), 1);
+
+            Assert.IsTrue(_trie0.Contains(_("test")));
         }
 
         [Test]
-        public void Query_ReturnsTheKey_IfOnlyKeyPrefixedWithString()
+        public void Add_ActuallyAddsTheKeyAndValue()
         {
-            TestHelper.AssertSequence(
-                _trie5.Query(_("abc")),
-                new KeyValuePair<char[], int>(_("abc"), 1));
+            _trie0.Add(_("test"), 1);
+
+            Assert.IsTrue(_trie0.Contains(new KeyValuePair<char[], int>(_("test"), 1)));
         }
 
         [Test]
-        public void Query_ReturnsAllKeyValuesForAGivenPrefix()
+        public void Add_DoesNotIncreaseTheCount_IfKeyValueWasNotAdded()
         {
-            TestHelper.AssertSequence(
-                _trie5.Query(_("a")),
-                new KeyValuePair<char[], int>(_("acb"), 2),
-                new KeyValuePair<char[], int>(_("abd"), 3),
-                new KeyValuePair<char[], int>(_("abc"), 1));
-        }
-
-
-        [Test]
-        public void Query_Fails_IfAddingElement()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
+            var preCount = _trie5.Count;
+            try
             {
-                // ReSharper disable once UnusedVariable
-                foreach (var kvp in _trie5.Query(_("a")))
-                {
-                    _trie5.Add(_("test"), 0);
-                }
-            });
-        }
-
-        [Test]
-        public void Query_Fails_IfRemovingElement()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
+                _trie5.Add(_("abc"), -1);
+            }
+            // ReSharper disable once EmptyGeneralCatchClause
+            catch
             {
-                // ReSharper disable once UnusedVariable
-                foreach (var kvp in _trie5.Query(_("a")))
-                {
-                    _trie5.Remove(_("abc"));
-                }
-            });
+            }
+
+            Assert.AreEqual(preCount, _trie5.Count);
         }
 
         [Test]
-        public void Query_Fails_IfClearing()
+        public void Add_IncreasesTheCountByOne_IfKeyValueIsAdded()
         {
-            Assert.Throws<InvalidOperationException>(() =>
-            {
-                // ReSharper disable once UnusedVariable
-                foreach (var kvp in _trie5.Query(_("a")))
-                {
-                    _trie5.Clear();
-                }
-            });
-        }
-
-        [Test]
-        public void Enumeration_ListsNothingForEmptyTrie()
-        {
-            TestHelper.AssertSequence(_trie0);
-        }
-
-        [Test]
-        public void Enumeration_ListsAllElements()
-        {
-            TestHelper.AssertSequence(_trie5,
-                new KeyValuePair<char[], int>(_("cba"), 5),
-                new KeyValuePair<char[], int>(_("cbc"), 4),
-                new KeyValuePair<char[], int>(_("acb"), 2),
-                new KeyValuePair<char[], int>(_("abd"), 3),
-                new KeyValuePair<char[], int>(_("abc"), 1)
-            );
-        }
-
-        [Test]
-        public void ImplicitGetEnumerator_IsActuallyTheGenericOne()
-        {
-            var enumerator = ((IEnumerable) _trie5).GetEnumerator();
-            Assert.IsInstanceOf<IEnumerator<KeyValuePair<char[], int>>>(enumerator);
-        }
-
-        [Test]
-        public void Enumeration_Fails_IfAddingElement()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-            {
-                // ReSharper disable once UnusedVariable
-                foreach (var kvp in _trie5)
-                {
-                    _trie5.Add(_("test"), 0);
-                }
-            });
-        }
-
-        [Test]
-        public void Enumeration_Fails_IfRemovingElement()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-            {
-                // ReSharper disable once UnusedVariable
-                foreach (var kvp in _trie5)
-                {
-                    _trie5.Remove(_("abc"));
-                }
-            });
-        }
-
-        [Test]
-        public void Enumeration_Fails_IfClearing()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-            {
-                // ReSharper disable once UnusedVariable
-                foreach (var kvp in _trie5)
-                {
-                    _trie5.Clear();
-                }
-            });
-        }
-
-        [Test]
-        public void Contains_ReturnsTrue_IfKeyIsContained()
-        {
-            Assert.IsTrue(_trie5.Contains(_("cba")));
-        }
-
-        [Test]
-        public void Contains_ReturnsFalse_IfKeyIsNotContained()
-        {
-            Assert.IsFalse(_trie5.Contains(_("cbz")));
-        }
-
-        [Test]
-        public void Contains_ReturnsTrue_IfKeyAndValueAreContained()
-        {
-            Assert.IsTrue(_trie5.Contains(new KeyValuePair<char[], int>(_("cba"), 5)));
-        }
-
-        [Test]
-        public void Contains_ReturnsFalse_IfKeyIsContainedButNotTheValue()
-        {
-            Assert.IsFalse(_trie5.Contains(new KeyValuePair<char[], int>(_("abc"), -1)));
-        }
-
-        [Test]
-        public void Contains_ReturnsFalse_IfKeyNotContained()
-        {
-            Assert.IsFalse(_trie5.Contains(new KeyValuePair<char[], int>(_("zzz"), 4)));
-        }
-
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Contains_ThrowsException_IfKeyIsNull1()
-        {
-            Assert.Throws<ArgumentNullException>(() => _trie0.Contains(null));
-        }
-
-        [Test, SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void Contains_ThrowsException_IfKeyIsNull2()
-        {
-            Assert.Throws<ArgumentNullException>(() => _trie0.Contains(new KeyValuePair<char[], int>(null, -1)));
-        }
-
-
-        [Test]
-        public void Clear_RemovesAllElementsFromTheTrie()
-        {
-            _trie5.Clear();
-
-            TestHelper.AssertSequence(_trie5);
-        }
-
-        [Test]
-        public void Clear_ResetsCountToZero()
-        {
-            _trie5.Clear();
-
-            Assert.AreEqual(0, _trie5.Count);
+            _trie0.Add(_("test"), 1);
+            Assert.AreEqual(1, _trie0.Count);
         }
 
         [Test]
@@ -314,67 +147,28 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Add_IncreasesTheCountByOne_IfKeyValueIsAdded()
-        {
-            _trie0.Add(_("test"), 1);
-            Assert.AreEqual(1, _trie0.Count);
-        }
-
-        [Test]
-        public void Add_DoesNotIncreaseTheCount_IfKeyValueWasNotAdded()
-        {
-            var preCount = _trie5.Count;
-            try
-            {
-                _trie5.Add(_("abc"), -1);
-            }
-            // ReSharper disable once EmptyGeneralCatchClause
-            catch
-            {
-            }
-
-            Assert.AreEqual(preCount, _trie5.Count);
-        }
-
-        [Test]
-        public void Add_ActuallyAddsTheKey()
-        {
-            _trie0.Add(_("test"), 1);
-
-            Assert.IsTrue(_trie0.Contains(_("test")));
-        }
-
-        [Test]
-        public void Add_ActuallyAddsTheKeyAndValue()
-        {
-            _trie0.Add(_("test"), 1);
-
-            Assert.IsTrue(_trie0.Contains(new KeyValuePair<char[], int>(_("test"), 1)));
-        }
-
-        [Test]
         public void Add_WorksAsExpectedOn_EmptyString()
         {
             _trie0.Add(_(""), 10);
             Assert.IsTrue(_trie0.Contains(_("")));
         }
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void AddOrUpdate_ThrowsException_IfKeyIsNull()
+        [Test]
+        public void AddOrUpdate_AddsTheKeyValue_IfTheKeyIsNotFound()
         {
-            Assert.Throws<ArgumentNullException>(() => _trie5.AddOrUpdate(null, 1, i => i));
-        }
+            _trie0.AddOrUpdate(_("test"), 1, i => i);
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void AddOrUpdate_ThrowsException_IfUpdateFuncIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => _trie5.AddOrUpdate(_("a"), 1, null));
+            Assert.IsTrue(_trie0.TryGetValue(_("test"), out var value));
+            Assert.AreEqual(1, value);
         }
 
         [Test]
-        public void AddOrUpdate_ReturnsTrue_IfKeyValueIsAdded()
+        public void AddOrUpdate_DoesNotIncreaseTheCount_IfValueIsUpdated()
         {
-            Assert.IsTrue(_trie0.AddOrUpdate(_("test"), 1, i => i));
+            var preCount = _trie5.Count;
+            _trie5.AddOrUpdate(_("abc"), -1, i => -1);
+
+            Assert.AreEqual(preCount, _trie5.Count);
         }
 
         [Test]
@@ -391,21 +185,21 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void AddOrUpdate_DoesNotIncreaseTheCount_IfValueIsUpdated()
+        public void AddOrUpdate_ReturnsTrue_IfKeyValueIsAdded()
         {
-            var preCount = _trie5.Count;
-            _trie5.AddOrUpdate(_("abc"), -1, i => -1);
-
-            Assert.AreEqual(preCount, _trie5.Count);
+            Assert.IsTrue(_trie0.AddOrUpdate(_("test"), 1, i => i));
         }
 
-        [Test]
-        public void AddOrUpdate_AddsTheKeyValue_IfTheKeyIsNotFound()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void AddOrUpdate_ThrowsException_IfKeyIsNull()
         {
-            _trie0.AddOrUpdate(_("test"), 1, i => i);
+            Assert.Throws<ArgumentNullException>(() => _trie5.AddOrUpdate(null, 1, i => i));
+        }
 
-            Assert.IsTrue(_trie0.TryGetValue(_("test"), out var value));
-            Assert.AreEqual(1, value);
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void AddOrUpdate_ThrowsException_IfUpdateFuncIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _trie5.AddOrUpdate(_("a"), 1, null));
         }
 
         [Test]
@@ -417,17 +211,63 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(-1, value);
         }
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void CopyTo_ThrowsException_ForNullArray()
+
+        [Test]
+        public void Clear_RemovesAllElementsFromTheTrie()
         {
-            Assert.Throws<ArgumentNullException>(() => _trie0.CopyTo(null, 0));
+            _trie5.Clear();
+
+            TestHelper.AssertSequence(_trie5);
         }
 
-        [TestCase(0, 0), TestCase(0, 1), TestCase(4, 0), TestCase(5, 1)]
-        public void CopyTo_ThrowsException_ForInvalidArrayIndex(int arrayLength, int arrayIndex)
+        [Test]
+        public void Clear_ResetsCountToZero()
         {
-            var a = new KeyValuePair<char[], int>[arrayLength];
-            Assert.Throws<ArgumentOutOfRangeException>(() => _trie5.CopyTo(a, arrayIndex));
+            _trie5.Clear();
+
+            Assert.AreEqual(0, _trie5.Count);
+        }
+
+        [Test]
+        public void Contains_ReturnsFalse_IfKeyIsContainedButNotTheValue()
+        {
+            Assert.IsFalse(_trie5.Contains(new KeyValuePair<char[], int>(_("abc"), -1)));
+        }
+
+        [Test]
+        public void Contains_ReturnsFalse_IfKeyIsNotContained()
+        {
+            Assert.IsFalse(_trie5.Contains(_("cbz")));
+        }
+
+        [Test]
+        public void Contains_ReturnsFalse_IfKeyNotContained()
+        {
+            Assert.IsFalse(_trie5.Contains(new KeyValuePair<char[], int>(_("zzz"), 4)));
+        }
+
+        [Test]
+        public void Contains_ReturnsTrue_IfKeyAndValueAreContained()
+        {
+            Assert.IsTrue(_trie5.Contains(new KeyValuePair<char[], int>(_("cba"), 5)));
+        }
+
+        [Test]
+        public void Contains_ReturnsTrue_IfKeyIsContained()
+        {
+            Assert.IsTrue(_trie5.Contains(_("cba")));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Contains_ThrowsException_IfKeyIsNull1()
+        {
+            Assert.Throws<ArgumentNullException>(() => _trie0.Contains(null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        public void Contains_ThrowsException_IfKeyIsNull2()
+        {
+            Assert.Throws<ArgumentNullException>(() => _trie0.Contains(new KeyValuePair<char[], int>(null, -1)));
         }
 
         [Test]
@@ -449,32 +289,211 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Remove_ThrowsException_IfKeyIsNull1()
+        public void CopyTo_ThrowsException_ForNullArray()
         {
-            Assert.Throws<ArgumentNullException>(() => _trie0.Remove(null));
+            Assert.Throws<ArgumentNullException>(() => _trie0.CopyTo(null, 0));
         }
 
         [Test]
-        public void Remove_ThrowsException_IfKeyIsNull2()
+        public void Count_IsEqualToTheNumberOfKeyValuesReturnedByEnumeration()
+        {
+            var enumerated = _trie5.Count;
+
+            Assert.AreEqual(enumerated, _trie5.Count);
+        }
+
+        [Test]
+        public void Ctor_SetsUpAnEmptyTrie()
+        {
+            Assert.AreEqual(0, _trie0.Count);
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Ctor_ThrowsException_IfComparerIsNull1()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>((IEqualityComparer<char>) null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Ctor_ThrowsException_IfComparerIsNull2()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(new KeyValuePair<char[], int>[] { }, null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Ctor_ThrowsException_IfEnumerableContainsDupes()
+        {
+            var seq = new[]
+            {
+                new KeyValuePair<char[], int>(_("1"), 1),
+                new KeyValuePair<char[], int>(_("1"), 2)
+            };
+
+            Assert.Throws<ArgumentException>(() => new Trie<char, int>(seq));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Ctor_ThrowsException_IfEnumerableContainsNullKey()
+        {
+            var seq = new[]
+            {
+                new KeyValuePair<char[], int>(null, 1),
+                new KeyValuePair<char[], int>(_("2"), 2)
+            };
+
+            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(seq));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Ctor_ThrowsException_IfEnumerableIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                (_trie0 as ICollection<KeyValuePair<char[], int>>).Remove(new KeyValuePair<char[], int>(null, -1)));
+                new Trie<char, int>((IEnumerable<KeyValuePair<char[], int>>) null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Ctor_ThrowsException_IfEnumerableIsNull2()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Trie<char, int>(null, EqualityComparer<char>.Default));
         }
 
         [Test]
-        public void Remove_ReturnsTrue_IfKeyValueWasRemoved()
+        public void Enumeration_Fails_IfAddingElement()
         {
-            var result = _trie5.Remove(_("abc"));
-
-            Assert.IsTrue(result);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                // ReSharper disable once UnusedVariable
+                foreach (var kvp in _trie5)
+                {
+                    _trie5.Add(_("test"), 0);
+                }
+            });
         }
 
         [Test]
-        public void Remove_ReturnsFalse_IfKeyValueWasNotRemoved()
+        public void Enumeration_Fails_IfClearing()
         {
-            var result = _trie5.Remove(_("abz"));
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                // ReSharper disable once UnusedVariable
+                foreach (var kvp in _trie5)
+                {
+                    _trie5.Clear();
+                }
+            });
+        }
 
-            Assert.IsFalse(result);
+        [Test]
+        public void Enumeration_Fails_IfRemovingElement()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                // ReSharper disable once UnusedVariable
+                foreach (var kvp in _trie5)
+                {
+                    _trie5.Remove(_("abc"));
+                }
+            });
+        }
+
+        [Test]
+        public void Enumeration_ListsAllElements()
+        {
+            TestHelper.AssertSequence(_trie5,
+                new KeyValuePair<char[], int>(_("cba"), 5),
+                new KeyValuePair<char[], int>(_("cbc"), 4),
+                new KeyValuePair<char[], int>(_("acb"), 2),
+                new KeyValuePair<char[], int>(_("abd"), 3),
+                new KeyValuePair<char[], int>(_("abc"), 1)
+            );
+        }
+
+        [Test]
+        public void Enumeration_ListsNothingForEmptyTrie()
+        {
+            TestHelper.AssertSequence(_trie0);
+        }
+
+        [Test]
+        public void ImplicitGetEnumerator_IsActuallyTheGenericOne()
+        {
+            var enumerator = ((IEnumerable) _trie5).GetEnumerator();
+            Assert.IsInstanceOf<IEnumerator<KeyValuePair<char[], int>>>(enumerator);
+        }
+
+        [Test]
+        public void IsReadOnly_ReturnsFalse()
+        {
+            Assert.IsFalse(_trie0.IsReadOnly);
+        }
+
+
+        [Test]
+        public void Query_Fails_IfAddingElement()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                // ReSharper disable once UnusedVariable
+                foreach (var kvp in _trie5.Query(_("a")))
+                {
+                    _trie5.Add(_("test"), 0);
+                }
+            });
+        }
+
+        [Test]
+        public void Query_Fails_IfClearing()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                // ReSharper disable once UnusedVariable
+                foreach (var kvp in _trie5.Query(_("a")))
+                {
+                    _trie5.Clear();
+                }
+            });
+        }
+
+        [Test]
+        public void Query_Fails_IfRemovingElement()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                // ReSharper disable once UnusedVariable
+                foreach (var kvp in _trie5.Query(_("a")))
+                {
+                    _trie5.Remove(_("abc"));
+                }
+            });
+        }
+
+        [Test]
+        public void Query_ReturnsAllKeyValuesForAGivenPrefix()
+        {
+            TestHelper.AssertSequence(
+                _trie5.Query(_("a")),
+                new KeyValuePair<char[], int>(_("acb"), 2),
+                new KeyValuePair<char[], int>(_("abd"), 3),
+                new KeyValuePair<char[], int>(_("abc"), 1));
+        }
+
+
+        [Test]
+        public void Query_ReturnsNothing_IfKeyNotFound()
+        {
+            TestHelper.AssertSequence(_trie0.Query(_("hello")));
+        }
+
+        [Test]
+        public void Query_ReturnsTheKey_IfOnlyKeyPrefixedWithString()
+        {
+            TestHelper.AssertSequence(
+                _trie5.Query(_("abc")),
+                new KeyValuePair<char[], int>(_("abc"), 1));
         }
 
         [Test]
@@ -505,12 +524,41 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        public void Remove_ReturnsFalse_IfKeyValueWasNotRemoved()
+        {
+            var result = _trie5.Remove(_("abz"));
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
         public void Remove_ReturnsTrue_IfKeyAndValueAreBothPresent()
         {
             var result =
                 (_trie5 as ICollection<KeyValuePair<char[], int>>).Remove(new KeyValuePair<char[], int>(_("abc"), 1));
 
             Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Remove_ReturnsTrue_IfKeyValueWasRemoved()
+        {
+            var result = _trie5.Remove(_("abc"));
+
+            Assert.IsTrue(result);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Remove_ThrowsException_IfKeyIsNull1()
+        {
+            Assert.Throws<ArgumentNullException>(() => _trie0.Remove(null));
+        }
+
+        [Test]
+        public void Remove_ThrowsException_IfKeyIsNull2()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                (_trie0 as ICollection<KeyValuePair<char[], int>>).Remove(new KeyValuePair<char[], int>(null, -1)));
         }
 
         [Test]
@@ -521,10 +569,12 @@ namespace Abacaxi.Tests.Containers
             Assert.IsTrue(_trie0.Remove(_("")));
         }
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void TryGetValue_ThrowsException_IfKeyIsNull()
+        [Test]
+        public void Trie_TakesIntoAccountTheComparer()
         {
-            Assert.Throws<ArgumentNullException>(() => _trie5.TryGetValue(null, out var dummy));
+            var trie = new Trie<string, int>(StringComparer.OrdinalIgnoreCase) { { new[] { "A" }, 1 } };
+
+            Assert.IsTrue(trie.Contains(new[] { "a" }));
         }
 
         [Test]
@@ -547,50 +597,10 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(5, output);
         }
 
-        [Test]
-        public void Count_IsEqualToTheNumberOfKeyValuesReturnedByEnumeration()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void TryGetValue_ThrowsException_IfKeyIsNull()
         {
-            var enumerated = _trie5.Count;
-
-            Assert.AreEqual(enumerated, _trie5.Count);
-        }
-
-        [Test]
-        public void IsReadOnly_ReturnsFalse()
-        {
-            Assert.IsFalse(_trie0.IsReadOnly);
-        }
-
-        [TestCase(1), TestCase(2), TestCase(5)]
-        public void Trie_StaysConsistent_ForLargeNumberOfElements(int cx)
-        {
-            for (var i = 'A'; i < 'A' + cx; i++)
-            for (var j = 'A'; j < 'A' + cx; j++)
-            for (var z = 'A'; z < 'A' + cx; z++)
-            {
-                _trie0.Add(_($"{i}{j}{z}"), 0);
-            }
-
-            var ex = cx * cx * cx;
-            Assert.AreEqual(ex, _trie0.Count);
-
-            for (var i = 'A'; i < 'A' + cx; i++)
-            for (var j = 'A'; j < 'A' + cx; j++)
-            for (var z = 'A'; z < 'A' + cx; z++)
-            {
-                var removed = _trie0.Remove(_($"{i}{j}{z}"));
-                Assert.IsTrue(removed);
-            }
-
-            Assert.AreEqual(0, _trie0.Count);
-        }
-
-        [Test]
-        public void Trie_TakesIntoAccountTheComparer()
-        {
-            var trie = new Trie<string, int>(StringComparer.OrdinalIgnoreCase) {{new[] {"A"}, 1}};
-
-            Assert.IsTrue(trie.Contains(new[] {"a"}));
+            Assert.Throws<ArgumentNullException>(() => _trie5.TryGetValue(null, out var dummy));
         }
     }
 }

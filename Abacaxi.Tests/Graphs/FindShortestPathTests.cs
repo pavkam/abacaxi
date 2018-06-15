@@ -16,21 +16,14 @@
 namespace Abacaxi.Tests.Graphs
 {
     using System;
-    using Abacaxi.Graphs;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using Abacaxi.Graphs;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class FindShortestPathTests
     {
-        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
-        public void FindShortestPath_ThrowsException_ForInvalidStartVertex()
-        {
-            var graph = new LiteralGraph("A>1>B", true);
-            Assert.Throws<ArgumentException>(() => graph.FindShortestPath('Z', 'A'));
-        }
-
         [TestCase("A-1-B,A-1-C", 'A', 'B', "A,B"), TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'D', 'B', "D,C,B"),
          TestCase("A-1-B,B-1-C,C-1-D,D-1-A,B>1>D", 'B', 'D', "B,D"),
          TestCase("A>1>B,A>1>C,C<1<F,F-1-E,E-1-D,D>1>B,D>1>C", 'A', 'E', ""),
@@ -42,6 +35,13 @@ namespace Abacaxi.Tests.Graphs
             var seq = graph.FindShortestPath(startVertex, endVertex);
 
             Assert.AreEqual(expected, string.Join(",", seq));
+        }
+
+        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
+        public void FindShortestPath_ThrowsException_ForInvalidStartVertex()
+        {
+            var graph = new LiteralGraph("A>1>B", true);
+            Assert.Throws<ArgumentException>(() => graph.FindShortestPath('Z', 'A'));
         }
     }
 }

@@ -22,14 +22,14 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class implements set coverage algorithms.
+    ///     Class implements set coverage algorithms.
     /// </summary>
     [PublicAPI]
     public static class Set
     {
-        [NotNull,ItemNotNull]
+        [NotNull, ItemNotNull]
         private static IEnumerable<ISet<T>> FindMinimumNumberOfSetsWithFullCoverageIterate<T>(
-            [NotNull,ItemNotNull]  IEnumerable<ISet<T>> sets,
+            [NotNull, ItemNotNull] IEnumerable<ISet<T>> sets,
             [NotNull] IEqualityComparer<T> comparer)
         {
             Assert.NotNull(sets);
@@ -49,7 +49,8 @@ namespace Abacaxi
                 foreach (var set in copies)
                 {
                     var itemsInSuperSet = set.Count(p => superSet.Contains(p));
-                    if (bestSet == null || itemsInSuperSet > bestSet.Count)
+                    if (bestSet == null ||
+                        itemsInSuperSet > bestSet.Count)
                     {
                         bestSet = set;
                     }
@@ -67,34 +68,25 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds the minimum number of sets that cover the full set of elements.
+        ///     Finds the minimum number of sets that cover the full set of elements.
         /// </summary>
         /// <typeparam name="T">The type of elements in the set.</typeparam>
         /// <param name="sets">The sets.</param>
         /// <param name="comparer">The comparer.</param>
         /// <returns>A sequence of selected sets whose union results in the full coverage.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sets"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
-        [NotNull,ItemNotNull]
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sets" /> or <paramref name="comparer" /> is
+        ///     <c>null</c>.
+        /// </exception>
+        [NotNull, ItemNotNull]
         public static IEnumerable<ISet<T>> GetOptimalFullCoverage<T>(
-            [NotNull, ItemNotNull]  IEnumerable<ISet<T>> sets,
+            [NotNull, ItemNotNull] IEnumerable<ISet<T>> sets,
             [NotNull] IEqualityComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sets), sets);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
             return FindMinimumNumberOfSetsWithFullCoverageIterate(sets, comparer);
-        }
-
-        private struct EvaluateAllSubsetCombinationsStep
-        {
-            public int ItemIndex { get; }
-            public int SetIndex { get; }
-
-            public EvaluateAllSubsetCombinationsStep(int itemIndex, int setIndex)
-            {
-                ItemIndex = itemIndex;
-                SetIndex = setIndex;
-            }
         }
 
         [NotNull, ItemNotNull]
@@ -149,15 +141,15 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Evaluates all combinations of items in <paramref name="sequence"/> divided into <paramref name="subsets"/>.
+        ///     Evaluates all combinations of items in <paramref name="sequence" /> divided into <paramref name="subsets" />.
         /// </summary>
-        /// <typeparam name="T">The type of items in the <paramref name="sequence"/></typeparam>
+        /// <typeparam name="T">The type of items in the <paramref name="sequence" /></typeparam>
         /// <param name="sequence">The sequence of elements.</param>
         /// <param name="subsets">Number of sub-sets.</param>
         /// <returns>All the combinations of subsets.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets"/> is less than one.</exception>
-        [NotNull,ItemNotNull]
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets" /> is less than one.</exception>
+        [NotNull, ItemNotNull]
         public static IEnumerable<T[][]> EnumerateSubsetCombinations<T>([NotNull] IList<T> sequence, int subsets)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -167,17 +159,20 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds the subsets with equal aggregate value.
+        ///     Finds the subsets with equal aggregate value.
         /// </summary>
-        /// <typeparam name="T">The type of elements in <paramref name="sequence"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in <paramref name="sequence" />.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <param name="aggregator">The aggregator function.</param>
         /// <param name="comparer">The comparer.</param>
         /// <param name="subsets">The number of subsets to split into.</param>
         /// <returns>The first sequence of subsets that have the same aggregated value.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="aggregator"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets"/> is less than one.</exception>
-        [NotNull,ItemNotNull]
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="aggregator" />
+        ///     or <paramref name="comparer" /> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets" /> is less than one.</exception>
+        [NotNull, ItemNotNull]
         public static T[][] SplitIntoSubsetsOfEqualValue<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Aggregator<T> aggregator,
@@ -224,13 +219,17 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds the <paramref name="sequence"/> of integers, which summed, return the closest sum to a given <paramref name="target"/>.
+        ///     Finds the <paramref name="sequence" /> of integers, which summed, return the closest sum to a given
+        ///     <paramref name="target" />.
         /// </summary>
         /// <param name="sequence">The sequence of natural integers.</param>
         /// <param name="target">The target sum to aim for.</param>
         /// <returns>A sequence of found integers.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="target"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="target" /> is less than <c>1</c> or the
+        ///     <paramref name="sequence" /> contains negative number.
+        /// </exception>
         [NotNull]
         public static IEnumerable<int> GetSubsetWithNearValue(
             [NotNull] IEnumerable<int> sequence,
@@ -267,7 +266,8 @@ namespace Abacaxi
             var rwi = target;
             var rsi = elements.Length;
             var result = new List<int>();
-            while (rsi > 0 && rwi > 0)
+            while (rsi > 0 &&
+                   rwi > 0)
             {
                 if (solutions[rwi, rsi] > solutions[rwi, rsi - 1])
                 {
@@ -282,28 +282,41 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Checks if the <paramref name="sequence"/> contains elements, which, summed, yield a given target <paramref name="target"/>.
+        ///     Checks if the <paramref name="sequence" /> contains elements, which, summed, yield a given target
+        ///     <paramref name="target" />.
         /// </summary>
         /// <param name="sequence">The sequence of natural integers.</param>
         /// <param name="target">The sum to target for.</param>
         /// <returns><c>true</c> if the condition is satisfied; <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="target"/> is less than <c>1</c> or the <paramref name="sequence"/> contains negative number.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="target" /> is less than <c>1</c> or the
+        ///     <paramref name="sequence" /> contains negative number.
+        /// </exception>
         public static bool ContainsSubsetWithExactValue(
             [NotNull] IEnumerable<int> sequence,
-            int target) => GetSubsetWithNearValue(sequence, target).Sum() == target;
+            int target)
+        {
+            return GetSubsetWithNearValue(sequence, target).Sum() == target;
+        }
 
         /// <summary>
-        /// Finds the elements, which summed, yield the biggest sum.
+        ///     Finds the elements, which summed, yield the biggest sum.
         /// </summary>
-        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
         /// <param name="sequence">The sequence of elements.</param>
         /// <param name="size">The size of elements to consider.</param>
         /// <param name="aggregator">The aggregator function which sums elements.</param>
         /// <param name="comparer">The comparer.</param>
         /// <returns>An array of elements with the highest sum.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregator"/> or <paramref name="comparer"/> are null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="size"/> is greater than the number of elements in <paramref name="sequence"/>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" />, <paramref name="aggregator" /> or
+        ///     <paramref name="comparer" /> are null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if the <paramref name="size" /> is greater than the number of
+        ///     elements in <paramref name="sequence" />.
+        /// </exception>
         [NotNull]
         public static T[] GetSubsetWithGreatestValue<T>(
             [NotNull] IEnumerable<T> sequence,
@@ -325,6 +338,18 @@ namespace Abacaxi
             Array.Copy(array, array.Length - size, result, 0, size);
 
             return result;
+        }
+
+        private struct EvaluateAllSubsetCombinationsStep
+        {
+            public int ItemIndex { get; }
+            public int SetIndex { get; }
+
+            public EvaluateAllSubsetCombinationsStep(int itemIndex, int setIndex)
+            {
+                ItemIndex = itemIndex;
+                SetIndex = setIndex;
+            }
         }
     }
 }

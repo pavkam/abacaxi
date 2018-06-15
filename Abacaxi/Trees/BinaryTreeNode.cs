@@ -15,11 +15,11 @@
 
 namespace Abacaxi.Trees
 {
-    using JetBrains.Annotations;
     using System.Diagnostics;
+    using JetBrains.Annotations;
 
     /// <summary>
-    /// Class represents a node in a binary search tree (or any derivative balanced search tree).
+    ///     Class represents a node in a binary search tree (or any derivative balanced search tree).
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
@@ -27,37 +27,37 @@ namespace Abacaxi.Trees
     public class BinaryTreeNode<TKey, TValue>
     {
         /// <summary>
-        /// Gets the key of the node.
+        ///     Gets the key of the node.
         /// </summary>
         /// <value>
-        /// The key.
+        ///     The key.
         /// </value>
         [CanBeNull]
         public TKey Key { get; set; }
 
         /// <summary>
-        /// Gets the value of the node.
+        ///     Gets the value of the node.
         /// </summary>
         /// <value>
-        /// The value.
+        ///     The value.
         /// </value>
         [CanBeNull]
         public TValue Value { get; set; }
 
         /// <summary>
-        /// Gets the right child node.
+        ///     Gets the right child node.
         /// </summary>
         /// <value>
-        /// The right child node.
+        ///     The right child node.
         /// </value>
         [CanBeNull]
         public BinaryTreeNode<TKey, TValue> RightChild { get; set; }
 
         /// <summary>
-        /// Gets the left child node.
+        ///     Gets the left child node.
         /// </summary>
         /// <value>
-        /// The left child node.
+        ///     The left child node.
         /// </value>
         [CanBeNull]
         public BinaryTreeNode<TKey, TValue> LeftChild { get; set; }

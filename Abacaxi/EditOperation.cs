@@ -18,29 +18,29 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}"/> method.
+    ///     Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}" /> method.
     /// </summary>
     [PublicAPI]
     public enum EditOperation
     {
         /// <summary>
-        /// Items from both sequences match at given location.
+        ///     Items from both sequences match at given location.
         /// </summary>
         Match = '=',
 
         /// <summary>
-        /// An item from a given location in the original sequence is substituted with an item in the result sequence.
+        ///     An item from a given location in the original sequence is substituted with an item in the result sequence.
         /// </summary>
         Substitute = '#',
 
         /// <summary>
-        /// An item is inserted into the original sequence at a given location to match the result sequence.
+        ///     An item is inserted into the original sequence at a given location to match the result sequence.
         /// </summary>
         Insert = '+',
 
         /// <summary>
-        /// An item is removed from the original sequence at a given location to match the result sequence.
+        ///     An item is removed from the original sequence at a given location to match the result sequence.
         /// </summary>
-        Delete = '-',
+        Delete = '-'
     }
 }

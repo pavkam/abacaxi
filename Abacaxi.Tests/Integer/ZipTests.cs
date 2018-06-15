@@ -17,43 +17,45 @@ namespace Abacaxi.Tests.Integer
 {
     using System;
     using NUnit.Framework;
+    using Integer = Abacaxi.Integer;
 
     [TestFixture]
     public class ZipTests
     {
-        [Test]
-        public void Zip_ThrowsException_ForNegativeX()
+        [TestCase(0, 0, 0), TestCase(0, 1, 10), TestCase(1, 0, 1), TestCase(12, 3, 132), TestCase(1, 23, 231),
+         TestCase(12, 34, 3142)]
+        public void Zip_ReturnsCorrectResult_IntBase10(int x, int y, int expected)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Integer.Zip(-1, 1, 2));
+            var result = Integer.Zip(x, y);
+            Assert.AreEqual(expected, result);
         }
 
-        [Test]
-        public void Zip_ThrowsException_ForNegativeY()
+        [TestCase(0xA, 0xBC, 0xBCA), TestCase(0xAB, 0xC, 0xACB), TestCase(0xAB, 0xCD, 0xCADB)]
+        public void Zip_ReturnsCorrectResult_IntBase16(int x, int y, int expected)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Integer.Zip(1, -1, 2));
+            var result = Integer.Zip(x, y, 16);
+            Assert.AreEqual(expected, result);
         }
 
         [Test]
         public void Zip_ThrowsException_ForBaseOne()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Integer.Zip(1, 1, 1));
+                Integer.Zip(1, 1, 1));
         }
 
-        [TestCase(0, 0, 0),TestCase(0, 1, 10),TestCase(1, 0, 1),TestCase(12, 3, 132),TestCase(1, 23, 231),TestCase(12, 34, 3142)]
-        public void Zip_ReturnsCorrectResult_IntBase10(int x, int y, int expected)
+        [Test]
+        public void Zip_ThrowsException_ForNegativeX()
         {
-            var result = Abacaxi.Integer.Zip(x, y);
-            Assert.AreEqual(expected, result);
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Integer.Zip(-1, 1, 2));
         }
 
-        [TestCase(0xA, 0xBC, 0xBCA),TestCase(0xAB, 0xC, 0xACB),TestCase(0xAB, 0xCD, 0xCADB)]
-        public void Zip_ReturnsCorrectResult_IntBase16(int x, int y, int expected)
+        [Test]
+        public void Zip_ThrowsException_ForNegativeY()
         {
-            var result = Abacaxi.Integer.Zip(x, y, 16);
-            Assert.AreEqual(expected, result);
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Integer.Zip(1, -1, 2));
         }
     }
 }

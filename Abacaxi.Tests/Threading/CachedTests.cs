@@ -24,19 +24,7 @@ namespace Abacaxi.Tests.Threading
     [TestFixture]
     public class CachedTests
     {
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement"),SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Ctor1_ThrowsException_WhenRefreshValueFuncIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Cached<int>(null, 1));
-        }
-
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Ctor1_ThrowsException_WhenValueLifespanMillisIsLessThanZero()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Cached<int>(-1));
-        }
-
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor1_DoesNotInitializeTheValueImmediately()
         {
             var called = false;
@@ -49,71 +37,27 @@ namespace Abacaxi.Tests.Threading
             Assert.IsFalse(called);
         }
 
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Ctor1_ThrowsException_WhenRefreshValueFuncIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Cached<int>(null, 1));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Ctor1_ThrowsException_WhenValueLifespanMillisIsLessThanZero()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Cached<int>(-1));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor2_ThrowsException_WhenValueLifespanMillisIsLessThanZero()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new Cached<int>(-1));
         }
 
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Value_ThrowsExceptionIfRefreshValueFuncWasNotSpecified()
-        {
-            var cached = new Cached<int>(100);
-            Assert.Throws<InvalidOperationException>(() => Assert.IsTrue(cached.Value != 0));
-        }
-
-        [Test,SuppressMessage("ReSharper", "UnusedVariable")]
-        public void Value_RefreshesTheValueOnFirstRead()
-        {
-            var called = false;
-            var temp = new Cached<int>(() =>
-            {
-                called = true;
-                return -1;
-            }, 1);
-
-            var x = temp.Value;
-
-            Assert.IsTrue(called);
-        }
-
-        [Test,SuppressMessage("ReSharper", "UnusedVariable"),SuppressMessage("ReSharper", "RedundantAssignment"),SuppressMessage("ReSharper", "NotAccessedVariable")]
-        public void Value_RefreshesTheValueIfExpired()
-        {
-            var called = 0;
-            var temp = new Cached<int>(() =>
-            {
-                called++;
-                return -1;
-            }, 1);
-
-            var x = temp.Value;
-            Thread.Sleep(10);
-
-            x = temp.Value;
-            Assert.IsTrue(called > 1);
-        }
-
-        [Test,SuppressMessage("ReSharper", "UnusedVariable"),SuppressMessage("ReSharper", "RedundantAssignment"),SuppressMessage("ReSharper", "NotAccessedVariable")]
-        public void Value_RefreshesTheValueAtEveryOneMsReadIfTtlWasSuppliedAsZero()
-        {
-            var called = 0;
-            var temp = new Cached<int>(() =>
-            {
-                called++;
-                return -1;
-            }, 0);
-
-            var x = temp.Value;
-            Thread.Sleep(1);
-            x = temp.Value;
-            Thread.Sleep(1);
-            x = temp.Value;
-
-            Assert.AreEqual(3, called);
-        }
-
-        [Test,SuppressMessage("ReSharper", "NotAccessedVariable"),SuppressMessage("ReSharper", "RedundantAssignment"),SuppressMessage("ReSharper", "UnusedVariable")]
+        [Test, SuppressMessage("ReSharper", "NotAccessedVariable"), SuppressMessage("ReSharper", "RedundantAssignment"),
+         SuppressMessage("ReSharper", "UnusedVariable")]
         public void Expire_MarksTheValueAsExpired()
         {
             var called = 0;
@@ -128,7 +72,7 @@ namespace Abacaxi.Tests.Threading
             Assert.IsTrue(called == 1);
         }
 
-        [Test,SuppressMessage("ReSharper", "NotAccessedVariable"),SuppressMessage("ReSharper", "RedundantAssignment")]
+        [Test, SuppressMessage("ReSharper", "NotAccessedVariable"), SuppressMessage("ReSharper", "RedundantAssignment")]
         public void Expire_WillForceTheValueToBeRefreshed()
         {
             var called = 0;
@@ -146,22 +90,8 @@ namespace Abacaxi.Tests.Threading
             Assert.IsTrue(called == 2);
         }
 
-        [Test,SuppressMessage("ReSharper", "UnusedVariable")]
-        public void Get_RefreshesTheValueOnFirstRead()
-        {
-            var called = false;
-            var temp = new Cached<int>(1);
-
-            var x = temp.Get(() =>
-            {
-                called = true;
-                return -1;
-            });
-
-            Assert.IsTrue(called);
-        }
-
-        [Test,SuppressMessage("ReSharper", "UnusedVariable"),SuppressMessage("ReSharper", "RedundantAssignment"),SuppressMessage("ReSharper", "NotAccessedVariable")]
+        [Test, SuppressMessage("ReSharper", "UnusedVariable"), SuppressMessage("ReSharper", "RedundantAssignment"),
+         SuppressMessage("ReSharper", "NotAccessedVariable")]
         public void Get_RefreshesTheValueIfExpired()
         {
             var called = 0;
@@ -182,13 +112,29 @@ namespace Abacaxi.Tests.Threading
             Assert.IsTrue(called == 2);
         }
 
-        [Test,SuppressMessage("ReSharper", "UnusedVariable"),SuppressMessage("ReSharper", "RedundantAssignment"),SuppressMessage("ReSharper", "NotAccessedVariable")]
+        [Test, SuppressMessage("ReSharper", "UnusedVariable")]
+        public void Get_RefreshesTheValueOnFirstRead()
+        {
+            var called = false;
+            var temp = new Cached<int>(1);
+
+            var x = temp.Get(() =>
+            {
+                called = true;
+                return -1;
+            });
+
+            Assert.IsTrue(called);
+        }
+
+        [Test, SuppressMessage("ReSharper", "UnusedVariable"), SuppressMessage("ReSharper", "RedundantAssignment"),
+         SuppressMessage("ReSharper", "NotAccessedVariable")]
         public void Get_UsesTheSuppliedFunctionInsteadOfTheDefaultOne()
         {
             var called = 0;
             var temp = new Cached<int>(() =>
             {
-                called+=10;
+                called += 10;
                 return -1;
             }, 1);
 
@@ -199,6 +145,66 @@ namespace Abacaxi.Tests.Threading
             });
 
             Assert.IsTrue(called == 1);
+        }
+
+        [Test, SuppressMessage("ReSharper", "UnusedVariable"), SuppressMessage("ReSharper", "RedundantAssignment"),
+         SuppressMessage("ReSharper", "NotAccessedVariable")]
+        public void Value_RefreshesTheValueAtEveryOneMsReadIfTtlWasSuppliedAsZero()
+        {
+            var called = 0;
+            var temp = new Cached<int>(() =>
+            {
+                called++;
+                return -1;
+            }, 0);
+
+            var x = temp.Value;
+            Thread.Sleep(1);
+            x = temp.Value;
+            Thread.Sleep(1);
+            x = temp.Value;
+
+            Assert.AreEqual(3, called);
+        }
+
+        [Test, SuppressMessage("ReSharper", "UnusedVariable"), SuppressMessage("ReSharper", "RedundantAssignment"),
+         SuppressMessage("ReSharper", "NotAccessedVariable")]
+        public void Value_RefreshesTheValueIfExpired()
+        {
+            var called = 0;
+            var temp = new Cached<int>(() =>
+            {
+                called++;
+                return -1;
+            }, 1);
+
+            var x = temp.Value;
+            Thread.Sleep(10);
+
+            x = temp.Value;
+            Assert.IsTrue(called > 1);
+        }
+
+        [Test, SuppressMessage("ReSharper", "UnusedVariable")]
+        public void Value_RefreshesTheValueOnFirstRead()
+        {
+            var called = false;
+            var temp = new Cached<int>(() =>
+            {
+                called = true;
+                return -1;
+            }, 1);
+
+            var x = temp.Value;
+
+            Assert.IsTrue(called);
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Value_ThrowsExceptionIfRefreshValueFuncWasNotSpecified()
+        {
+            var cached = new Cached<int>(100);
+            Assert.Throws<InvalidOperationException>(() => Assert.IsTrue(cached.Value != 0));
         }
     }
 }

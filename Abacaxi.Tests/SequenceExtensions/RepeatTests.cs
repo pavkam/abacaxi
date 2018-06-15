@@ -13,37 +13,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
     public class RepeatTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Repeat_ThrowsException_ForNullString()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((int[])null).Repeat(1));
-        }
-
-        [Test]
-        public void Repeat_ThrowsException_ForZeroRepetitions()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                "A".Repeat(0));
-        }
-
-        [Test]
-        public void Repeat_ReturnsNothing_ForEmptyEnumerable()
-        {
-            var result = "".Repeat(5);
-            Assert.AreEqual("", result);
-        }
-
         [Test]
         public void Repeat_DoesNothing_ForOneRepetition()
         {
@@ -56,6 +34,27 @@ namespace Abacaxi.Tests.SequenceExtensions
         {
             var result = "A".Repeat(2);
             Assert.AreEqual("AA", result);
+        }
+
+        [Test]
+        public void Repeat_ReturnsNothing_ForEmptyEnumerable()
+        {
+            var result = "".Repeat(5);
+            Assert.AreEqual("", result);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Repeat_ThrowsException_ForNullString()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                ((int[]) null).Repeat(1));
+        }
+
+        [Test]
+        public void Repeat_ThrowsException_ForZeroRepetitions()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                "A".Repeat(0));
         }
 
         [Test]

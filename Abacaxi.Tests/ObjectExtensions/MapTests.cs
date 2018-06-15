@@ -16,31 +16,32 @@
 namespace Abacaxi.Tests.ObjectExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class MapTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test]
+        public void Map_CallsTheFunctionAndReturnsTheResult()
+        {
+            var mapped = 100.Map(o => o.ToString());
+            Assert.AreEqual("100", mapped);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Map_ThrowsException_IfMapFuncIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 1.Map<int, int>(null));
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),SuppressMessage("ReSharper", "UnthrowableException")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "UnthrowableException")]
         public void Map_ThrowsException_IfMapFuncThrowsIt()
         {
             Assert.Throws<InvalidProgramException>(() =>
                 1.Map<int, int>(o => throw new InvalidProgramException()));
-        }
-
-        [Test]
-        public void Map_CallsTheFunctionAndReturnsTheResult()
-        {
-            var mapped = 100.Map(o => o.ToString());
-            Assert.AreEqual("100", mapped);
         }
     }
 }

@@ -15,23 +15,23 @@
 
 namespace Abacaxi
 {
+    using System.Text;
     using Internal;
     using JetBrains.Annotations;
-    using System.Text;
 
     /// <summary>
-    /// Extension method for the <see cref="StringBuilder"/> class.
+    ///     Extension method for the <see cref="StringBuilder" /> class.
     /// </summary>
     [PublicAPI]
     public static class StringBuilderExtensions
     {
         /// <summary>
-        /// Appends a line to the string builder if the value is not empty.
+        ///     Appends a line to the string builder if the value is not empty.
         /// </summary>
         /// <param name="builder">The string builder.</param>
         /// <param name="value">The value to append.</param>
         /// <returns>A sequence of lines containing the word wrapped string.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="builder"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="builder" /> is <c>null</c>.</exception>
         [NotNull]
         public static StringBuilder AppendNotEmptyLine([NotNull] this StringBuilder builder, [CanBeNull] string value)
         {

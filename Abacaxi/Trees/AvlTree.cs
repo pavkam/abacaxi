@@ -16,17 +16,51 @@
 namespace Abacaxi.Trees
 {
     using System.Collections.Generic;
-    using JetBrains.Annotations;
     using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
-    /// Class implements the AVL balanced search tree.
+    ///     Class implements the AVL balanced search tree.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     [PublicAPI]
     public sealed class AvlTree<TKey, TValue> : BinarySearchTree<TKey, TValue>
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="AvlTree{TKey, TValue}" /> class.
+        /// </summary>
+        /// <param name="comparer">The key comparer used.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="comparer" /> is <c>null</c>.</exception>
+        public AvlTree([NotNull] IComparer<TKey> comparer) : base(comparer)
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="AvlTree{TKey, TValue}" /> class using the default
+        ///     <typeparamref name="TKey" /> comparer.
+        /// </summary>
+        public AvlTree()
+        {
+        }
+
+        /// <summary>
+        ///     Gets or sets the root node of the AVL tree.
+        /// </summary>
+        /// <value>
+        ///     The root.
+        /// </value>
+        [CanBeNull]
+        public new AvlTreeNode<TKey, TValue> Root
+        {
+            get
+            {
+                Assert.Condition(base.Root == null || base.Root is AvlTreeNode<TKey, TValue>);
+                return (AvlTreeNode<TKey, TValue>) base.Root;
+            }
+            set => base.Root = value;
+        }
+
         [NotNull]
         private AvlTreeNode<TKey, TValue> RotateLeft([NotNull] AvlTreeNode<TKey, TValue> node)
         {
@@ -318,6 +352,7 @@ namespace Abacaxi.Trees
                             ReBalanceTreeAfterInsert(node, 1);
                             return;
                         }
+
                         node = left;
                     }
                     else if (comparisonResult > 0)
@@ -431,6 +466,7 @@ namespace Abacaxi.Trees
                         {
                             node = RotateLeftRight(node);
                         }
+
                         break;
                     case -2:
                         Assert.NotNull(node.RightChild);
@@ -448,12 +484,14 @@ namespace Abacaxi.Trees
                         {
                             node = RotateRightLeft(node);
                         }
+
                         break;
                     default:
                         if (balance != 0)
                         {
                             return;
                         }
+
                         break;
                 }
 
@@ -470,7 +508,7 @@ namespace Abacaxi.Trees
 
 
         /// <summary>
-        /// Looks up the node ky the given <paramref name="key"/>.
+        ///     Looks up the node ky the given <paramref name="key" />.
         /// </summary>
         /// <param name="key">The key of the node.</param>
         /// <returns>The node, if found; otherwise, <c>null</c>.</returns>
@@ -484,51 +522,21 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Gets or sets the root node of the AVL tree.
-        /// </summary>
-        /// <value>
-        /// The root.
-        /// </value>
-        [CanBeNull]
-        public new AvlTreeNode<TKey, TValue> Root
-        {
-            get
-            {
-                Assert.Condition(base.Root == null || base.Root is AvlTreeNode<TKey, TValue>);
-                return (AvlTreeNode<TKey, TValue>) base.Root;
-            }
-            set => base.Root = value;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AvlTree{TKey, TValue}"/> class.
-        /// </summary>
-        /// <param name="comparer">The key comparer used.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="comparer"/> is <c>null</c>.</exception>
-        public AvlTree([NotNull] IComparer<TKey> comparer) : base(comparer)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AvlTree{TKey, TValue}"/> class using the default <typeparamref name="TKey"/> comparer.
-        /// </summary>
-        public AvlTree()
-        {
-        }
-
-        /// <summary>
-        /// Adds the specified key/value node to the tree.
+        ///     Adds the specified key/value node to the tree.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's value.</param>
-        /// <exception cref="System.ArgumentException">Thrown if a node with the same <paramref name="key"/> is already present in the tree.</exception>
+        /// <exception cref="System.ArgumentException">
+        ///     Thrown if a node with the same <paramref name="key" /> is already present in
+        ///     the tree.
+        /// </exception>
         public override void Add(TKey key, TValue value)
         {
             Insert(key, value, false);
         }
 
         /// <summary>
-        /// Adds or updates a tree node that has a given key and value.
+        ///     Adds or updates a tree node that has a given key and value.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's new value.</param>
@@ -538,7 +546,7 @@ namespace Abacaxi.Trees
         }
 
         /// <summary>
-        /// Removes the node from the tree that has a specified key.
+        ///     Removes the node from the tree that has a specified key.
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <returns><c>true</c> if the node was removed; otherwise, <c>false</c>.</returns>

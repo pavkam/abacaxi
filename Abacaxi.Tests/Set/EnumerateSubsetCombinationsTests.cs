@@ -16,31 +16,72 @@
 namespace Abacaxi.Tests.Set
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
+    using Set = Abacaxi.Set;
 
     [TestFixture]
     public class EnumerateSubsetCombinationsTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void EnumerateSubsetCombinations_ThrowsException_ForNullSequence()
+        [Test]
+        public void EnumerateSubsetCombinations_DoesNotCareIfDuplicates()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.Set.EnumerateSubsetCombinations<int>(null, 1));
+            TestHelper.AssertSequence(
+                Set.EnumerateSubsetCombinations(new[] { 1, 1 }, 2),
+                new[]
+                {
+                    new[] { 1, 1 },
+                    new int[] { }
+                },
+                new[]
+                {
+                    new[] { 1 },
+                    new[] { 1 }
+                },
+                new[]
+                {
+                    new[] { 1 },
+                    new[] { 1 }
+                },
+                new[]
+                {
+                    new int[] { },
+                    new[] { 1, 1 }
+                });
         }
 
         [Test]
-        public void EnumerateSubsetCombinations_ThrowsException_ForSubsetsLessThanOne()
+        public void EnumerateSubsetCombinations_ReturnsFourCombinations_ForTwoElementAndTwoSubsets()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Set.EnumerateSubsetCombinations(new int[] { }, 0));
+            TestHelper.AssertSequence(
+                Set.EnumerateSubsetCombinations(new[] { 11, 19 }, 2),
+                new[]
+                {
+                    new[] { 11, 19 },
+                    new int[] { }
+                },
+                new[]
+                {
+                    new[] { 11 },
+                    new[] { 19 }
+                },
+                new[]
+                {
+                    new[] { 19 },
+                    new[] { 11 }
+                },
+                new[]
+                {
+                    new int[] { },
+                    new[] { 11, 19 }
+                });
         }
 
         [Test]
         public void EnumerateSubsetCombinations_ReturnsNothing_ForEmptySequence()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Set.EnumerateSubsetCombinations(new int[] { }, 1)
+                Set.EnumerateSubsetCombinations(new int[] { }, 1)
             );
         }
 
@@ -48,71 +89,31 @@ namespace Abacaxi.Tests.Set
         public void EnumerateSubsetCombinations_ReturnsOneCombination_ForOneElementAndOneSubset()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Set.EnumerateSubsetCombinations(new[] {10}, 1),
-                new[] {new[] {10}});
+                Set.EnumerateSubsetCombinations(new[] { 10 }, 1),
+                new[] { new[] { 10 } });
         }
 
         [Test]
         public void EnumerateSubsetCombinations_ReturnsTwoCombinations_ForOneElementAndTwoSubsets()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Set.EnumerateSubsetCombinations(new[] {10}, 2),
-                new[] {new[] {10}, new int[] { }},
-                new[] {new int[] { }, new[] {10}});
+                Set.EnumerateSubsetCombinations(new[] { 10 }, 2),
+                new[] { new[] { 10 }, new int[] { } },
+                new[] { new int[] { }, new[] { 10 } });
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void EnumerateSubsetCombinations_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                Set.EnumerateSubsetCombinations<int>(null, 1));
         }
 
         [Test]
-        public void EnumerateSubsetCombinations_ReturnsFourCombinations_ForTwoElementAndTwoSubsets()
+        public void EnumerateSubsetCombinations_ThrowsException_ForSubsetsLessThanOne()
         {
-            TestHelper.AssertSequence(
-                Abacaxi.Set.EnumerateSubsetCombinations(new[] {11, 19}, 2),
-                new[]
-                {
-                    new[] {11, 19},
-                    new int[] { }
-                },
-                new[]
-                {
-                    new[] {11},
-                    new[] {19}
-                },
-                new[]
-                {
-                    new[] {19},
-                    new[] {11}
-                },
-                new[]
-                {
-                    new int[] { },
-                    new[] {11, 19}
-                });
-        }
-
-        [Test]
-        public void EnumerateSubsetCombinations_DoesNotCareIfDuplicates()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.Set.EnumerateSubsetCombinations(new[] {1, 1}, 2),
-                new[]
-                {
-                    new[] {1, 1},
-                    new int[] { }
-                },
-                new[]
-                {
-                    new[] {1},
-                    new[] {1}
-                },
-                new[]
-                {
-                    new[] {1},
-                    new[] {1}
-                },
-                new[]
-                {
-                    new int[] { },
-                    new[] {1, 1}
-                });
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Set.EnumerateSubsetCombinations(new int[] { }, 0));
         }
     }
 }

@@ -21,19 +21,73 @@ namespace Abacaxi.Graphs
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Implements a "connected component" of a graph, basically a sub-graph. This implementation uses the original graph
-    /// to obtain the edges but only reports the edges which stay within the given set of vertices.
+    ///     Implements a "connected component" of a graph, basically a sub-graph. This implementation uses the original graph
+    ///     to obtain the edges but only reports the edges which stay within the given set of vertices.
     /// </summary>
     /// <typeparam name="TVertex">The type of the vertex.</typeparam>
     [PublicAPI]
     public sealed class SubGraph<TVertex> : Graph<TVertex>
     {
-        [NotNull]
-        private readonly Graph<TVertex> _graph;
-        [NotNull]
-        private readonly HashSet<TVertex> _vertices;
+        [NotNull] private readonly Graph<TVertex> _graph;
 
-        private void ValidateVertex([InvokerParameterName, NotNull]  string argumentName, [NotNull] TVertex vertex)
+        [NotNull] private readonly HashSet<TVertex> _vertices;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="SubGraph{TVertex}" /> class.
+        /// </summary>
+        /// <param name="graph">The graph.</param>
+        /// <param name="vertices">The vertices that part of this sub-graph.</param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="graph" /> or <paramref name="vertices" /> are
+        ///     <c>null</c>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown if <paramref name="vertices" /> contains at least one vertex that is
+        ///     not contained in <paramref name="graph" />.
+        /// </exception>
+        public SubGraph([NotNull] Graph<TVertex> graph, [NotNull] IEnumerable<TVertex> vertices)
+        {
+            Validate.ArgumentNotNull(nameof(graph), graph);
+            Validate.ArgumentNotNull(nameof(vertices), vertices);
+
+            _vertices = new HashSet<TVertex>(vertices);
+            _graph = graph;
+        }
+
+        /// <summary>
+        ///     Checks whether the sub-graph has directed edges.
+        /// </summary>
+        /// <remarks>
+        ///     This implementation uses the parent graph's <see cref="IsDirected" /> property.
+        /// </remarks>
+        /// <value>
+        ///     <c>true</c> if the sub-graph is directed; otherwise, <c>false</c> .
+        /// </value>
+        public override bool IsDirected => _graph.IsDirected;
+
+        /// <summary>
+        ///     Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <remarks>
+        ///     This implementation uses the parent graph's <see cref="IsReadOnly" /> property.
+        /// </remarks>
+        /// <value>
+        ///     <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsReadOnly => _graph.IsReadOnly;
+
+        /// <summary>
+        ///     Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+        /// </summary>
+        /// <remarks>
+        ///     This implementation uses the parent graph's <see cref="SupportsPotentialWeightEvaluation" /> property.
+        /// </remarks>
+        /// <value>
+        ///     <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsPotentialWeightEvaluation => _graph.SupportsPotentialWeightEvaluation;
+
+        private void ValidateVertex([InvokerParameterName, NotNull] string argumentName, [NotNull] TVertex vertex)
         {
             Validate.ArgumentNotNull(argumentName, vertex);
             if (!_vertices.Contains(vertex))
@@ -59,72 +113,27 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubGraph{TVertex}"/> class.
+        ///     Returns an enumerator that iterates all vertices in the graph.
         /// </summary>
-        /// <param name="graph">The graph.</param>
-        /// <param name="vertices">The vertices that part of this sub-graph.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="graph"/> or <paramref name="vertices"/> are <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">Thrown if <paramref name="vertices"/> contains at least one vertex that is not contained in <paramref name="graph"/>.</exception>
-        public SubGraph([NotNull] Graph<TVertex> graph, [NotNull] IEnumerable<TVertex> vertices)
+        /// <returns>
+        ///     A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        /// </returns>
+        public override IEnumerator<TVertex> GetEnumerator()
         {
-            Validate.ArgumentNotNull(nameof(graph), graph);
-            Validate.ArgumentNotNull(nameof(vertices), vertices);
-
-            _vertices = new HashSet<TVertex>(vertices);
-            _graph = graph;
+            return _vertices.GetEnumerator();
         }
 
         /// <summary>
-        /// Checks whether the sub-graph has directed edges.
+        ///     Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" />
+        ///     vertices.
         /// </summary>
         /// <remarks>
-        /// This implementation uses the parent graph's <see cref="IsDirected"/> property.
-        /// </remarks>
-        /// <value>
-        ///     <c>true</c> if the sub-graph is directed; otherwise, <c>false</c> .
-        /// </value>
-        public override bool IsDirected => _graph.IsDirected;
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is read only.
-        /// </summary>
-        /// <remarks>
-        /// This implementation uses the parent graph's <see cref="IsReadOnly"/> property.
-        /// </remarks>
-        /// <value>
-        /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
-        /// </value>
-        public override bool IsReadOnly => _graph.IsReadOnly;
-
-        /// <summary>
-        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
-        /// </summary>
-        /// <remarks>
-        /// This implementation uses the parent graph's <see cref="SupportsPotentialWeightEvaluation"/> property.
-        /// </remarks>
-        /// <value>
-        /// <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
-        /// </value>
-        public override bool SupportsPotentialWeightEvaluation => _graph.SupportsPotentialWeightEvaluation;
-
-        /// <summary>
-        /// Returns an enumerator that iterates all vertices in the graph.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
-        /// </returns>
-        public override IEnumerator<TVertex> GetEnumerator() => _vertices.GetEnumerator();
-
-        /// <summary>
-        /// Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" /> vertices.
-        /// </summary>
-        /// <remarks>
-        /// This implementation uses the parent graph's <see cref="GetPotentialWeight"/> method.
+        ///     This implementation uses the parent graph's <see cref="GetPotentialWeight" /> method.
         /// </remarks>
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The destination vertex.</param>
         /// <returns>
-        /// The potential total cost.
+        ///     The potential total cost.
         /// </returns>
         /// <exception cref="NotImplementedException"></exception>
         public override double GetPotentialWeight(TVertex fromVertex, TVertex toVertex)
@@ -136,13 +145,13 @@ namespace Abacaxi.Graphs
         }
 
         /// <summary>
-        /// Gets the edges for a given <paramref name="vertex" />.
+        ///     Gets the edges for a given <paramref name="vertex" />.
         /// </summary>
         /// <param name="vertex">Then vertex to get edges for.</param>
         /// <returns>
-        /// A sequence of edges connected to the given <paramref name="vertex"/>.
+        ///     A sequence of edges connected to the given <paramref name="vertex" />.
         /// </returns>
-        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex" /> is not part of the graph.</exception>
         public override IEnumerable<Edge<TVertex>> GetEdges(TVertex vertex)
         {
             ValidateVertex(nameof(vertex), vertex);

@@ -22,6 +22,13 @@ namespace Abacaxi.Tests.Trees
     public class RedBlackTreeNodeTests
     {
         [Test]
+        public void Color_Setter_StoresTheValue()
+        {
+            var instance = new RedBlackTreeNode<int, string> { Color = RedBlackTreeNodeColor.Black };
+            Assert.AreEqual(RedBlackTreeNodeColor.Black, instance.Color);
+        }
+
+        [Test]
         public void Ctor_CreatesInstance_WithDefaultKey()
         {
             var instance = new RedBlackTreeNode<int, string>();
@@ -38,11 +45,11 @@ namespace Abacaxi.Tests.Trees
         }
 
         [Test]
-        public void Ctor_CreatesInstance_WithRedColor()
+        public void Ctor_CreatesInstance_WithNullLeftChild()
         {
             var instance = new RedBlackTreeNode<int, string>();
 
-            Assert.AreEqual(RedBlackTreeNodeColor.Red, instance.Color);
+            Assert.IsNull(instance.LeftChild);
         }
 
         [Test]
@@ -54,48 +61,41 @@ namespace Abacaxi.Tests.Trees
         }
 
         [Test]
-        public void Ctor_CreatesInstance_WithNullLeftChild()
+        public void Ctor_CreatesInstance_WithRedColor()
         {
             var instance = new RedBlackTreeNode<int, string>();
 
-            Assert.IsNull(instance.LeftChild);
+            Assert.AreEqual(RedBlackTreeNodeColor.Red, instance.Color);
         }
 
         [Test]
         public void Key_Setter_StoresTheValue()
         {
-            var instance = new RedBlackTreeNode<int, string> {Key = 100};
+            var instance = new RedBlackTreeNode<int, string> { Key = 100 };
             Assert.AreEqual(100, instance.Key);
-        }
-
-        [Test]
-        public void Value_Setter_StoresTheValue()
-        {
-            var instance = new RedBlackTreeNode<int, string> {Value = "Hello"};
-            Assert.AreEqual("Hello", instance.Value);
-        }
-
-        [Test]
-        public void Color_Setter_StoresTheValue()
-        {
-            var instance = new RedBlackTreeNode<int, string> { Color = RedBlackTreeNodeColor.Black };
-            Assert.AreEqual(RedBlackTreeNodeColor.Black, instance.Color);
-        }
-
-        [Test]
-        public void RightChild_Setter_StoresTheValue()
-        {
-            var r = new RedBlackTreeNode<int, string>();
-            var instance = new RedBlackTreeNode<int, string> {RightChild = r};
-            Assert.AreSame(r, instance.RightChild);
         }
 
         [Test]
         public void LeftChild_Setter_StoresTheValue()
         {
             var r = new RedBlackTreeNode<int, string>();
-            var instance = new RedBlackTreeNode<int, string> {LeftChild = r};
+            var instance = new RedBlackTreeNode<int, string> { LeftChild = r };
             Assert.AreSame(r, instance.LeftChild);
+        }
+
+        [Test]
+        public void RightChild_Setter_StoresTheValue()
+        {
+            var r = new RedBlackTreeNode<int, string>();
+            var instance = new RedBlackTreeNode<int, string> { RightChild = r };
+            Assert.AreSame(r, instance.RightChild);
+        }
+
+        [Test]
+        public void Value_Setter_StoresTheValue()
+        {
+            var instance = new RedBlackTreeNode<int, string> { Value = "Hello" };
+            Assert.AreEqual("Hello", instance.Value);
         }
     }
 }

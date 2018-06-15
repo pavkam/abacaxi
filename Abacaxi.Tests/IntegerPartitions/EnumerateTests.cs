@@ -15,52 +15,28 @@
 
 namespace Abacaxi.Tests.IntegerPartitions
 {
-    using NUnit.Framework;
     using System.Linq;
+    using NUnit.Framework;
+    using IntegerPartitions = Abacaxi.IntegerPartitions;
 
     [TestFixture]
     public class EnumerateTests
     {
-        [Test]
-        public void Enumerate_Zero_ReturnsNothing()
+        [TestCase(20), TestCase(-20)]
+        public void Enumerate_SumsToOriginal(int number)
         {
-            TestHelper.AssertSequence(
-                Abacaxi.IntegerPartitions.Enumerate(0)
-                );
-        }
-
-        [Test]
-        public void Enumerate_One_ReturnsOne()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.IntegerPartitions.Enumerate(1),
-                new[] { 1 });
-        }
-
-        [Test]
-        public void Enumerate_Two_ReturnsTwo_ThenOneOne()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.IntegerPartitions.Enumerate(2),
-                new[] { 2 },
-                new[] { 1, 1 });
-        }
-
-        [Test]
-        public void Enumerate_Three_ReturnsThree_ThenTwoOne_ThenOneOneOne()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.IntegerPartitions.Enumerate(3),
-                new[] { 3 },
-                new[] { 2, 1 },
-                new[] { 1, 1, 1 });
+            foreach (var combo in IntegerPartitions.Enumerate(number))
+            {
+                var sum = combo.Sum();
+                Assert.AreEqual(number, sum);
+            }
         }
 
         [Test]
         public void Enumerate_Four_ReturnsFour_ThenThreeOne_ThenTwoTwo_ThenTwoOneOne_ThenOneOneOneOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.IntegerPartitions.Enumerate(4),
+                IntegerPartitions.Enumerate(4),
                 new[] { 4 },
                 new[] { 3, 1 },
                 new[] { 2, 1, 1 },
@@ -69,37 +45,11 @@ namespace Abacaxi.Tests.IntegerPartitions
         }
 
         [Test]
-        public void Enumerate_MinusOne_ReturnsMinusOne()
+        public void
+            Enumerate_MinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
         {
             TestHelper.AssertSequence(
-                Abacaxi.IntegerPartitions.Enumerate(-1),
-                new[] { -1 });
-        }
-
-        [Test]
-        public void Enumerate_MinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.IntegerPartitions.Enumerate(-2),
-                new[] { -2 },
-                new[] { -1, -1 });
-        }
-
-        [Test]
-        public void Enumerate_MinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.IntegerPartitions.Enumerate(-3),
-                new[] { -3 },
-                new[] { -2, -1 },
-                new[] { -1, -1, -1 });
-        }
-
-        [Test]
-        public void Enumerate_MinusFour_ReturnsMinusFour_ThenMinusThreeMinusOne_ThenMinusTwoMinusTwo_ThenMinusTwoMinusOneMinusOne_ThenMinusOneMinusOneMinusOneMinusOne()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.IntegerPartitions.Enumerate(-4),
+                IntegerPartitions.Enumerate(-4),
                 new[] { -4 },
                 new[] { -3, -1 },
                 new[] { -2, -1, -1 },
@@ -107,14 +57,66 @@ namespace Abacaxi.Tests.IntegerPartitions
                 new[] { -2, -2 });
         }
 
-        [TestCase(20),TestCase(-20)]
-        public void Enumerate_SumsToOriginal(int number)
+        [Test]
+        public void Enumerate_MinusOne_ReturnsMinusOne()
         {
-            foreach (var combo in Abacaxi.IntegerPartitions.Enumerate(number))
-            {
-                var sum = combo.Sum();
-                Assert.AreEqual(number, sum);
-            }
+            TestHelper.AssertSequence(
+                IntegerPartitions.Enumerate(-1),
+                new[] { -1 });
+        }
+
+        [Test]
+        public void Enumerate_MinusThree_ReturnsMinusThree_ThenMinusTwoMinusOne_ThenMinusOneMinusOneMinusOne()
+        {
+            TestHelper.AssertSequence(
+                IntegerPartitions.Enumerate(-3),
+                new[] { -3 },
+                new[] { -2, -1 },
+                new[] { -1, -1, -1 });
+        }
+
+        [Test]
+        public void Enumerate_MinusTwo_ReturnsMinusTwo_ThenMinusOneMinusOne()
+        {
+            TestHelper.AssertSequence(
+                IntegerPartitions.Enumerate(-2),
+                new[] { -2 },
+                new[] { -1, -1 });
+        }
+
+        [Test]
+        public void Enumerate_One_ReturnsOne()
+        {
+            TestHelper.AssertSequence(
+                IntegerPartitions.Enumerate(1),
+                new[] { 1 });
+        }
+
+        [Test]
+        public void Enumerate_Three_ReturnsThree_ThenTwoOne_ThenOneOneOne()
+        {
+            TestHelper.AssertSequence(
+                IntegerPartitions.Enumerate(3),
+                new[] { 3 },
+                new[] { 2, 1 },
+                new[] { 1, 1, 1 });
+        }
+
+        [Test]
+        public void Enumerate_Two_ReturnsTwo_ThenOneOne()
+        {
+            TestHelper.AssertSequence(
+                IntegerPartitions.Enumerate(2),
+                new[] { 2 },
+                new[] { 1, 1 });
+        }
+
+        [Test]
+        public void Enumerate_Zero_ReturnsNothing()
+        {
+            TestHelper.AssertSequence(
+                IntegerPartitions.Enumerate(0)
+            );
         }
     }
 }

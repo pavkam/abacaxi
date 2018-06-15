@@ -18,30 +18,30 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Stores the number of times a certain item appears in a collection.
+    ///     Stores the number of times a certain item appears in a collection.
     /// </summary>
     /// <typeparam name="T">Te type of elements in collection.</typeparam>
     [PublicAPI]
     public struct Frequency<T>
     {
         /// <summary>
-        /// Gets the item that is being counted.
+        ///     Gets the item that is being counted.
         /// </summary>
         /// <value>
-        /// The item.
+        ///     The item.
         /// </value>
         public T Item { get; }
 
         /// <summary>
-        /// Gets the number of appearances.
+        ///     Gets the number of appearances.
         /// </summary>
         /// <value>
-        /// The count.
+        ///     The count.
         /// </value>
         public int Count { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Frequency{T}"/> struct.
+        ///     Initializes a new instance of the <see cref="Frequency{T}" /> structure.
         /// </summary>
         /// <param name="item">The item being counted.</param>
         /// <param name="count">The number of appearances.</param>
@@ -52,11 +52,11 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" />, is equal to this instance.
+        ///     Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
         /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -73,18 +73,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
+        ///     Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="string" /> that represents this instance.
+        ///     A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString() => $"{Item} ({Count})";
+        public override string ToString()
+        {
+            return $"{Item} ({Count})";
+        }
 
         /// <summary>
-        /// Returns a hash code for this instance.
+        ///     Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {

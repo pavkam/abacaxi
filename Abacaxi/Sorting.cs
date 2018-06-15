@@ -21,7 +21,7 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class provides a large number of sorting algorithms to use on sequences.
+    ///     Class provides a large number of sorting algorithms to use on sequences.
     /// </summary>
     [PublicAPI]
     public static class Sorting
@@ -92,7 +92,8 @@ namespace Abacaxi
 
                         j = leftIndex;
                     }
-                    else if (rightIndex < tailIndex && comparer.Compare(sequence[j], sequence[rightIndex]) < 0)
+                    else if (rightIndex < tailIndex &&
+                             comparer.Compare(sequence[j], sequence[rightIndex]) < 0)
                     {
                         var temp = sequence[rightIndex];
                         sequence[rightIndex] = sequence[j];
@@ -137,6 +138,7 @@ namespace Abacaxi
                         sequence[li] = sequence[pi - 1];
                         sequence[pi - 1] = temp;
                     }
+
                     li++;
                 }
             }
@@ -171,6 +173,7 @@ namespace Abacaxi
                 {
                     QuickSortRecursive(sequence, lo, pivotIndex - 1, comparer);
                 }
+
                 if (hi - pivotIndex > 1)
                 {
                     QuickSortRecursive(sequence, pivotIndex + 1, hi, comparer);
@@ -201,7 +204,8 @@ namespace Abacaxi
             while (mi < mergeLength)
             {
                 T next;
-                if (li <= lhi && ri <= rhi)
+                if (li <= lhi &&
+                    ri <= rhi)
                 {
                     next = comparer.Compare(sequence[li], sequence[ri]) < 0 ? sequence[li++] : sequence[ri++];
                 }
@@ -248,15 +252,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Bubble-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Bubble-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void BubbleSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -284,15 +294,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Cocktail-Shaker-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Cocktail-Shaker-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void CocktailShakerSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -344,15 +360,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Comb-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Comb-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void CombSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -385,15 +407,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Gnome-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Gnome-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void GnomeSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -422,15 +450,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Heap-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Heap-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void HeapSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -447,15 +481,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Insertion-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Insertion-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void InsertionSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -466,7 +506,8 @@ namespace Abacaxi
             {
                 var temp = sequence[i + 1];
                 var j = i;
-                while (j >= startIndex && comparer.Compare(temp, sequence[j]) < 0)
+                while (j >= startIndex &&
+                       comparer.Compare(temp, sequence[j]) < 0)
                 {
                     sequence[j + 1] = sequence[j];
                     j--;
@@ -477,15 +518,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Merge-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Merge-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void MergeSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -499,15 +546,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Odd-Even-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Odd-Even-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void OddEvenSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -551,15 +604,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Quick-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Quick-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void QuickSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -573,15 +632,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Shell-Sorts the <paramref name="sequence"/> using the provided <paramref name="comparer"/>.
+        ///     Shell-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to sort.</param>
         /// <param name="comparer">Comparer used in the search.</param>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void ShellSort<T>([NotNull] IList<T> sequence, int startIndex, int length,
             [NotNull] IComparer<T> comparer)
         {
@@ -603,7 +668,8 @@ namespace Abacaxi
                 {
                     var temp = sequence[i + gap];
                     var j = i;
-                    while (j >= startIndex + gap - 1 && comparer.Compare(temp, sequence[j]) < 0)
+                    while (j >= startIndex + gap - 1 &&
+                           comparer.Compare(temp, sequence[j]) < 0)
                     {
                         sequence[j + gap] = sequence[j];
                         j -= gap;

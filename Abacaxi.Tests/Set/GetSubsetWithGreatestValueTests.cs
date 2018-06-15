@@ -17,68 +17,72 @@ namespace Abacaxi.Tests.Set
 {
     using System;
     using System.Collections.Generic;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
+    using Set = Abacaxi.Set;
 
     [TestFixture]
     public sealed class GetSubsetWithGreatestValueTests
     {
-        private static int IntegerAggregator(int a, int b) => a + b;
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetSubsetWithGreatestValue_ThrowsException_IfSequenceIsNull()
+        private static int IntegerAggregator(int a, int b)
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.Set.GetSubsetWithGreatestValue(null, 1, IntegerAggregator, Comparer<int>.Default));
-        }
-
-        [Test]
-        public void GetSubsetWithGreatestValue_ThrowsException_IfCountIsLessThanOne()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Abacaxi.Set.GetSubsetWithGreatestValue(new int[] { }, 0, IntegerAggregator,
-                    Comparer<int>.Default));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetSubsetWithGreatestValue_ThrowsException_IfAggregatorIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {1}, 1, null, Comparer<int>.Default));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetSubsetWithGreatestValue_ThrowsException_IfComparerIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {1}, 1, IntegerAggregator, null));
-        }
-
-        [Test]
-        public void GetSubsetWithGreatestValue_ReturnsBiggestElement_ForCountOfOne()
-        {
-            TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {1, 2, 3}, 1, IntegerAggregator,
-                    Comparer<int>.Default),
-                3);
+            return a + b;
         }
 
         [Test]
         public void GetSubsetWithGreatestValue_ReturnsAllElements_ForCountOfThree()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {3, 2, 1}, 3, IntegerAggregator,
+                Set.GetSubsetWithGreatestValue(new[] { 3, 2, 1 }, 3, IntegerAggregator,
                     Comparer<int>.Default),
                 1, 2, 3);
+        }
+
+        [Test]
+        public void GetSubsetWithGreatestValue_ReturnsBiggestElement_ForCountOfOne()
+        {
+            TestHelper.AssertSequence(
+                Set.GetSubsetWithGreatestValue(new[] { 1, 2, 3 }, 1, IntegerAggregator,
+                    Comparer<int>.Default),
+                3);
         }
 
         [Test]
         public void GetSubsetWithGreatestValue_ReturnsLastThreeElements()
         {
             TestHelper.AssertSequence(
-                Abacaxi.Set.GetSubsetWithGreatestValue(new[] {100, 200, 1, 50, 70, 188}, 3,
+                Set.GetSubsetWithGreatestValue(new[] { 100, 200, 1, 50, 70, 188 }, 3,
                     IntegerAggregator, Comparer<int>.Default),
                 100, 188, 200);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetSubsetWithGreatestValue_ThrowsException_IfAggregatorIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                Set.GetSubsetWithGreatestValue(new[] { 1 }, 1, null, Comparer<int>.Default));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetSubsetWithGreatestValue_ThrowsException_IfComparerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                Set.GetSubsetWithGreatestValue(new[] { 1 }, 1, IntegerAggregator, null));
+        }
+
+        [Test]
+        public void GetSubsetWithGreatestValue_ThrowsException_IfCountIsLessThanOne()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Set.GetSubsetWithGreatestValue(new int[] { }, 0, IntegerAggregator,
+                    Comparer<int>.Default));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetSubsetWithGreatestValue_ThrowsException_IfSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                Set.GetSubsetWithGreatestValue(null, 1, IntegerAggregator, Comparer<int>.Default));
         }
     }
 }

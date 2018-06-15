@@ -18,30 +18,31 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Represents an unique "edit" step in a sequence transformation. See <seealso cref="SequenceExtensions.Diff{T}"/> for more details.
+    ///     Represents an unique "edit" step in a sequence transformation. See <seealso cref="SequenceExtensions.Diff{T}" />
+    ///     for more details.
     /// </summary>
     /// <typeparam name="T">The type of elements being edited.</typeparam>
     [PublicAPI]
     public struct Edit<T>
     {
         /// <summary>
-        /// Gets the edit operation type.
+        ///     Gets the edit operation type.
         /// </summary>
         /// <value>
-        /// The operation type.
+        ///     The operation type.
         /// </value>
         public EditOperation Operation { get; }
 
         /// <summary>
-        /// Gets the transformation item associated with the <see cref="Operation"/>.
+        ///     Gets the transformation item associated with the <see cref="Operation" />.
         /// </summary>
         /// <value>
-        /// The item.
+        ///     The item.
         /// </value>
         public T Item { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Edit{T}"/> struct.
+        ///     Initializes a new instance of the <see cref="Edit{T}" /> struct.
         /// </summary>
         /// <param name="operation">The edit operation.</param>
         /// <param name="item">The edit item.</param>
@@ -52,11 +53,11 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" />, is equal to this instance.
+        ///     Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
         /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -73,18 +74,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
+        ///     Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="string" /> that represents this instance.
+        ///     A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString() => $"{(char) Operation}{Item}";
+        public override string ToString()
+        {
+            return $"{(char) Operation}{Item}";
+        }
 
         /// <summary>
-        /// Returns a hash code for this instance.
+        ///     Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {

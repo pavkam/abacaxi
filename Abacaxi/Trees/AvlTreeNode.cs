@@ -15,40 +15,40 @@
 
 namespace Abacaxi.Trees
 {
-    using JetBrains.Annotations;
     using System.Diagnostics;
     using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
-    /// Class represents a node in a AVL balanced search tree.
+    ///     Class represents a node in a AVL balanced search tree.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     [PublicAPI, DebuggerDisplay("Key={Key}, Value={Value} Balance={Balance}")]
-    public sealed class AvlTreeNode<TKey, TValue>: BinaryTreeNode<TKey, TValue>
+    public sealed class AvlTreeNode<TKey, TValue> : BinaryTreeNode<TKey, TValue>
     {
         /// <summary>
-        /// Gets the right child node.
+        ///     Gets the right child node.
         /// </summary>
         /// <value>
-        /// The right child node.
+        ///     The right child node.
         /// </value>
         [CanBeNull]
         public new AvlTreeNode<TKey, TValue> RightChild
         {
             get
             {
-                Assert.Condition(base.RightChild == null ||  base.RightChild is AvlTreeNode<TKey, TValue>);
+                Assert.Condition(base.RightChild == null || base.RightChild is AvlTreeNode<TKey, TValue>);
                 return (AvlTreeNode<TKey, TValue>) base.RightChild;
             }
             set => base.RightChild = value;
         }
 
         /// <summary>
-        /// Gets the left child node.
+        ///     Gets the left child node.
         /// </summary>
         /// <value>
-        /// The left child node.
+        ///     The left child node.
         /// </value>
         [CanBeNull]
         public new AvlTreeNode<TKey, TValue> LeftChild
@@ -56,25 +56,25 @@ namespace Abacaxi.Trees
             get
             {
                 Assert.Condition(base.LeftChild == null || base.LeftChild is AvlTreeNode<TKey, TValue>);
-                return (AvlTreeNode<TKey, TValue>)base.LeftChild;
+                return (AvlTreeNode<TKey, TValue>) base.LeftChild;
             }
             set => base.LeftChild = value;
         }
 
         /// <summary>
-        /// Gets or sets the parent node.
+        ///     Gets or sets the parent node.
         /// </summary>
         /// <value>
-        /// The parent node.
+        ///     The parent node.
         /// </value>
         [CanBeNull]
         public AvlTreeNode<TKey, TValue> Parent { get; set; }
 
         /// <summary>
-        /// Gets or sets the balance of this node (AVL sub-tree).
+        ///     Gets or sets the balance of this node (AVL sub-tree).
         /// </summary>
         /// <value>
-        /// The balance of the sub-tree.
+        ///     The balance of the sub-tree.
         /// </value>
         public int Balance { get; set; }
     }

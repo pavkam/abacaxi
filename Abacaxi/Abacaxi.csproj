@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>1.1</Version>
+    <Version>0.0</Version>
     <Authors>Alexandru Ciobanu (alex+git@ciobanu.org)</Authors>
     <Company>Alexandru Ciobanu (alex+git@ciobanu.org)</Company>
     <PackageLicenseUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/LICENSE</PackageLicenseUrl>
@@ -12,12 +12,12 @@
     <PackageReleaseNotes></PackageReleaseNotes>
     <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017-2018</Copyright>
     <PackageTags>algorithms containers learning extensions</PackageTags>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <FileVersion>1.1.0.0</FileVersion>
+    <FileVersion>0.0.0.0</FileVersion>
     <RepositoryUrl>https://github.com/pavkam/abacaxi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <DocumentationFile>$(OutputPath)Abacaxi.xml</DocumentationFile>
+    <DocumentationFile>$(OutDir)\Abacaxi.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   

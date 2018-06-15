@@ -20,13 +20,13 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class implements integer partitioning algorithms.
+    ///     Class implements integer partitioning algorithms.
     /// </summary>
     [PublicAPI]
     public static class IntegerPartitions
     {
         /// <summary>
-        /// Partitions a given integer into all possible combinations of smaller integers.
+        ///     Partitions a given integer into all possible combinations of smaller integers.
         /// </summary>
         /// <param name="number">The input number.</param>
         /// <returns>A sequence of combinations.</returns>
@@ -81,7 +81,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Calculates the count of partitions that a <paramref name="number"/> can be split into.
+        ///     Calculates the count of partitions that a <paramref name="number" /> can be split into.
         /// </summary>
         /// <param name="number">The number to split.</param>
         /// <returns>The partition count.</returns>

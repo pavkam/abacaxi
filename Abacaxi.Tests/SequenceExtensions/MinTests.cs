@@ -16,41 +16,14 @@
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
+    using SequenceExtensions = Abacaxi.SequenceExtensions;
 
     [TestFixture]
     public class MinTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Min1_ThrowsException_ForNullSequence()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.Min<string, string>(null, i => i, StringComparer.Ordinal));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Min1_ThrowsException_ForNullSelector()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new string[]{}.Min(null, StringComparer.Ordinal));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Min1_ThrowsException_ForNullComparer()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new string[] { }.Min(i => i, null));
-        }
-
-        [Test]
-        public void Min1_ThrowsException_ForEmptyCollectionOfValueTypes()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-                    new int[] { }.Min(i => i, Comparer<int>.Default));
-        }
-
         [Test]
         public void Min1_ReturnsNull_ForEmptyCollectionOfObjects()
         {
@@ -66,38 +39,46 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void Min1_SkipsElements_ThatHaveNullKeys()
-        {
-            var result = new[] { 1, 2, 3, 4 }.Min(i => i % 2 == 1 ? null as string : i.ToString(), StringComparer.Ordinal);
-            Assert.AreEqual(2, result);
-        }
-
-        [Test]
         public void Min1_ReturnsTheOnlyElement_EvenIfTheKeyIsNull()
         {
             var result = new[] { 1 }.Min(i => null, StringComparer.Ordinal);
             Assert.AreEqual(1, result);
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Min2_ThrowsException_ForNullSequence()
+        [Test]
+        public void Min1_SkipsElements_ThatHaveNullKeys()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.Min<string, string>(null, i => i));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Min2_ThrowsException_ForNullSelector()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new string[] { }.Min<string, string>(null));
+            var result =
+                new[] { 1, 2, 3, 4 }.Min(i => i % 2 == 1 ? null as string : i.ToString(), StringComparer.Ordinal);
+            Assert.AreEqual(2, result);
         }
 
         [Test]
-        public void Min2_ThrowsException_ForEmptyCollectionOfValueTypes()
+        public void Min1_ThrowsException_ForEmptyCollectionOfValueTypes()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new int[] { }.Min(i => i));
+                new int[] { }.Min(i => i, Comparer<int>.Default));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min1_ThrowsException_ForNullComparer()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new string[] { }.Min(i => i, null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min1_ThrowsException_ForNullSelector()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new string[] { }.Min(null, StringComparer.Ordinal));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min1_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceExtensions.Min<string, string>(null, i => i, StringComparer.Ordinal));
         }
 
         [Test]
@@ -115,6 +96,13 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
+        public void Min2_ReturnsTheOnlyElement_EvenIfTheKeyIsNull()
+        {
+            var result = new[] { 1 }.Min<int, string>(i => null);
+            Assert.AreEqual(1, result);
+        }
+
+        [Test]
         public void Min2_SkipsElements_ThatHaveNullKeys()
         {
             var result = new[] { 1, 2, 3, 4 }.Min(i => i % 2 == 1 ? null as string : i.ToString());
@@ -122,10 +110,24 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void Min2_ReturnsTheOnlyElement_EvenIfTheKeyIsNull()
+        public void Min2_ThrowsException_ForEmptyCollectionOfValueTypes()
         {
-            var result = new[] { 1 }.Min<int, string>(i => null);
-            Assert.AreEqual(1, result);
+            Assert.Throws<InvalidOperationException>(() =>
+                new int[] { }.Min(i => i));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min2_ThrowsException_ForNullSelector()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new string[] { }.Min<string, string>(null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Min2_ThrowsException_ForNullSequence()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceExtensions.Min<string, string>(null, i => i));
         }
     }
 }

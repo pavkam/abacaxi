@@ -17,29 +17,19 @@ namespace Abacaxi
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using Internal;
-    using Containers;
-    using JetBrains.Annotations;
     using System.Text;
+    using Containers;
+    using Internal;
+    using JetBrains.Annotations;
 
     /// <summary>
-    /// Class provides a large number of algorithms to use on sequences.
+    ///     Class provides a large number of algorithms to use on sequences.
     /// </summary>
     [PublicAPI]
     public static class SequenceExtensions
     {
-        private struct EditChoice
-        {
-            public const int Cancel = -1;
-            public const int Match = 0;
-            public const int Insert = 1;
-            public const int Delete = 2;
-
-            public int Operation;
-            public double Cost;
-        }
-
         [NotNull]
         private static Edit<T>[] GetEditDistance<T>(
             [NotNull] this IList<T> sequence,
@@ -84,7 +74,8 @@ namespace Abacaxi
 
                 for (var op = EditChoice.Match; op <= EditChoice.Delete; op++)
                 {
-                    if (minCostOperation != -1 && !(opr[op] < minCost))
+                    if (minCostOperation != -1 &&
+                        !(opr[op] < minCost))
                     {
                         continue;
                     }
@@ -96,7 +87,7 @@ namespace Abacaxi
                 matrix[i1, i2] = new EditChoice
                 {
                     Cost = minCost,
-                    Operation = minCostOperation,
+                    Operation = minCostOperation
                 };
             }
 
@@ -143,14 +134,14 @@ namespace Abacaxi
 
 
         /// <summary>
-        /// Finds the longest increasing sequence in a given <paramref name="sequence"/>.
+        ///     Finds the longest increasing sequence in a given <paramref name="sequence" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to verify.</param>
         /// <param name="comparer">The comparer used to compare the elements in the sequence.</param>
         /// <returns>The longest increasing sequence.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="comparer"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="comparer" /> is <c>null</c>.</exception>
         [NotNull]
         public static IEnumerable<T> FindLongestIncreasingSequence<T>(
             [NotNull] this IEnumerable<T> sequence,
@@ -170,7 +161,8 @@ namespace Abacaxi
 
                 for (var i = dyna.Count - 1; i >= 0; i--)
                 {
-                    if (comparer.Compare(dyna[i].Item1, e) >= 0 || pi != -1 && pm >= dyna[i].Item2)
+                    if (comparer.Compare(dyna[i].Item1, e) >= 0 ||
+                        pi != -1 && pm >= dyna[i].Item2)
                     {
                         continue;
                     }
@@ -212,7 +204,10 @@ namespace Abacaxi
         /// <returns>
         ///   <c>true</c> if the <paramref name="sequence"/> contains two elements that aggregate; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregator"/> or <paramref name="comparer"/> are null.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" />, <paramref name="aggregator" /> or
+        ///     <paramref name="comparer" /> are null.
+        /// </exception>
         public static bool ContainsTwoElementsThatAggregateTo<T>(
             [NotNull] this IEnumerable<T> sequence,
             [NotNull] Aggregator<T> aggregator,
@@ -257,13 +252,16 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds all duplicate items in a given <paramref name="sequence"/>.
+        ///     Finds all duplicate items in a given <paramref name="sequence" />.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to inspect.</param>
         /// <param name="equalityComparer">The comparer used to verify the elements in the sequence.</param>
         /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either the <paramref name="sequence"/> or the <paramref name="equalityComparer"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either the <paramref name="sequence" /> or the
+        ///     <paramref name="equalityComparer" /> are <c>null</c>.
+        /// </exception>
         [NotNull]
         public static Frequency<T>[] FindDuplicates<T>(
             [NotNull] this IEnumerable<T> sequence, [NotNull] IEqualityComparer<T> equalityComparer)
@@ -298,14 +296,17 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds all duplicate integers in a given <paramref name="sequence"/>.
+        ///     Finds all duplicate integers in a given <paramref name="sequence" />.
         /// </summary>
         /// <param name="sequence">The sequence to inspect.</param>
-        /// <param name="minInSequence">The minimum possible value of an element part of the <paramref name="sequence"/>.</param>
-        /// <param name="maxInSequence">The maximum possible value of an element part of the <paramref name="sequence"/>.</param>
+        /// <param name="minInSequence">The minimum possible value of an element part of the <paramref name="sequence" />.</param>
+        /// <param name="maxInSequence">The maximum possible value of an element part of the <paramref name="sequence" />.</param>
         /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="maxInSequence"/> is less than <paramref name="minInSequence"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="maxInSequence" /> is less than
+        ///     <paramref name="minInSequence" />.
+        /// </exception>
         [NotNull]
         public static Frequency<int>[] FindDuplicates(
             [NotNull] this IEnumerable<int> sequence, int minInSequence, int maxInSequence)
@@ -316,7 +317,8 @@ namespace Abacaxi
             var appearances = new int[maxInSequence - minInSequence + 1];
             foreach (var item in sequence)
             {
-                if (item < minInSequence || item > maxInSequence)
+                if (item < minInSequence ||
+                    item > maxInSequence)
                 {
                     throw new InvalidOperationException(
                         $"The sequence of integers contains element {item} which is outside of the given {minInSequence}..{maxInSequence} range.");
@@ -391,15 +393,18 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Extracts all nested groups from sequence. The method returns a sequence of sequences.
+        ///     Extracts all nested groups from sequence. The method returns a sequence of sequences.
         /// </summary>
-        /// <typeparam name="T">The type of the elements of <paramref name="sequence"/>.</typeparam>
+        /// <typeparam name="T">The type of the elements of <paramref name="sequence" />.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <param name="openBracket">The element that signifies the start of a group.</param>
         /// <param name="closeBracket">The element that signifies the end of a group.</param>
-        /// <param name="comparer">The equality comparer for the elements of the <paramref name="sequence"/>.</param>
+        /// <param name="comparer">The equality comparer for the elements of the <paramref name="sequence" />.</param>
         /// <returns>The sequence of extracted groups, starting with the inner most ones.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are
+        ///     <c>null</c>.
+        /// </exception>
         /// <exception cref="InvalidOperationException">Throws if the number of open and close brackets do not match.</exception>
         [NotNull, ItemNotNull]
         public static IEnumerable<T[]> ExtractNestedBlocks<T>(
@@ -473,7 +478,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds the sub-sequences whose aggregated values are equal to a given <paramref name="target"/> value.
+        ///     Finds the sub-sequences whose aggregated values are equal to a given <paramref name="target" /> value.
         /// </summary>
         /// <param name="sequence">The sequence to check.</param>
         /// <param name="aggregator">The value aggregator.</param>
@@ -481,7 +486,7 @@ namespace Abacaxi
         /// <param name="comparer">The comparer.</param>
         /// <param name="target">The target aggregated value.</param>
         /// <returns>A sequence of found integers.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence" /> is <c>null</c>.</exception>
         [NotNull]
         public static IEnumerable<T[]> FindSubsequencesWithGivenAggregatedValue<T>(
             [NotNull] this IList<T> sequence,
@@ -543,15 +548,18 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Interleaves multiple sequences into one output sequence.
+        ///     Interleaves multiple sequences into one output sequence.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequences.</typeparam>
         /// <param name="comparer">The comparer.</param>
         /// <param name="sequence">The first sequence to interleave.</param>
         /// <param name="sequences">The next sequences to interleave.</param>
         /// <returns>A new interleaved stream.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="comparer"/> or <paramref name="sequences"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if the <paramref name="sequences"/> is empty.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if the <paramref name="comparer" /> or <paramref name="sequences" /> is
+        ///     <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if the <paramref name="sequences" /> is empty.</exception>
         /// <exception cref="InvalidOperationException">Thrown if one or more sequences contain unsorted items.</exception>
         [NotNull]
         public static IEnumerable<T> Interleave<T>(
@@ -567,14 +575,17 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Reverses a given <paramref name="sequence"/> in place (mutating the original).
+        ///     Reverses a given <paramref name="sequence" /> in place (mutating the original).
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to reverse.</param>
         /// <param name="startIndex">The start index in the sequence.</param>
         /// <param name="length">The length of sequence to reverse.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static void Reverse<T>([NotNull] this IList<T> sequence, int startIndex, int length)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
@@ -588,14 +599,18 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Creates an array whose contents are the elements of the <paramref name="input"/> repeated <paramref name="repetitions"/> times.
+        ///     Creates an array whose contents are the elements of the <paramref name="input" /> repeated
+        ///     <paramref name="repetitions" /> times.
         /// </summary>
         /// <typeparam name="T">The type of the sequence's elements</typeparam>
         /// <param name="input">The input sequence.</param>
         /// <param name="repetitions">Number of times to repeat the sequence.</param>
         /// <returns>A new array.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="input"/> sequence is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value of <paramref name="repetitions"/> argument is less than <c>1</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="input" /> sequence is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if the value of <paramref name="repetitions" /> argument is less
+        ///     than <c>1</c>.
+        /// </exception>
         [NotNull]
         public static T[] Repeat<T>([NotNull] this IEnumerable<T> input, int repetitions)
         {
@@ -629,7 +644,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds the location of <paramref name="item"/> in the given <paramref name="sequence"/>.
+        ///     Finds the location of <paramref name="item" /> in the given <paramref name="sequence" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to search.</param>
@@ -638,9 +653,15 @@ namespace Abacaxi
         /// <param name="item">The item to search for.</param>
         /// <param name="comparer">Comparer used in the search.</param>
         /// <param name="ascending">Specifies whether the sequence is sorted in ascending or descending order.</param>
-        /// <returns>The index in the sequence where the <paramref name="item"/> was found; <c>-1</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <returns>The index in the sequence where the <paramref name="item" /> was found; <c>-1</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static int BinarySearch<T>(
             [NotNull] this IList<T> sequence,
             int startIndex,
@@ -665,7 +686,8 @@ namespace Abacaxi
                 {
                     return mid;
                 }
-                else if (compareResult < 0)
+
+                if (compareResult < 0)
                 {
                     start = mid + 1;
                 }
@@ -679,13 +701,20 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Evaluates the edit distance between two given sequences <paramref name="sequence"/> and <paramref name="resultSequence"/>.
+        ///     Evaluates the edit distance between two given sequences <paramref name="sequence" /> and
+        ///     <paramref name="resultSequence" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in both sequences.</typeparam>
         /// <param name="sequence">The sequence to compare to.</param>
         /// <param name="resultSequence">The sequence to compare with.</param>
-        /// <returns>A sequence of "edits" applied to the original <paramref name="sequence"/> to obtain the <paramref name="resultSequence"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="resultSequence"/> are <c>null</c>.</exception>
+        /// <returns>
+        ///     A sequence of "edits" applied to the original <paramref name="sequence" /> to obtain the
+        ///     <paramref name="resultSequence" />.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or
+        ///     <paramref name="resultSequence" /> are <c>null</c>.
+        /// </exception>
         [NotNull]
         public static Edit<T>[] Diff<T>([NotNull] this IList<T> sequence, [NotNull] IList<T> resultSequence)
         {
@@ -699,7 +728,7 @@ namespace Abacaxi
                     return new EditChoice
                     {
                         Operation = row > 0 ? EditChoice.Insert : EditChoice.Cancel,
-                        Cost = row,
+                        Cost = row
                     };
                 },
                 column =>
@@ -708,7 +737,7 @@ namespace Abacaxi
                     return new EditChoice
                     {
                         Operation = column > 0 ? EditChoice.Delete : EditChoice.Cancel,
-                        Cost = column,
+                        Cost = column
                     };
                 },
                 (l, r) => Equals(l, r) ? 0 : 1,
@@ -718,13 +747,16 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Gets the longest common sub-sequence shared by <paramref name="sequence"/> and <paramref name="otherSequence"/>.
+        ///     Gets the longest common sub-sequence shared by <paramref name="sequence" /> and <paramref name="otherSequence" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in both sequences.</typeparam>
         /// <param name="sequence">The sequence to compare to.</param>
         /// <param name="otherSequence">The sequence to compare with.</param>
         /// <returns>The longest common sub-sequence shared by both sequences.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="sequence"/> or <paramref name="otherSequence"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or
+        ///     <paramref name="otherSequence" /> are <c>null</c>.
+        /// </exception>
         [NotNull]
         public static T[] GetLongestCommonSubSequence<T>([NotNull] this IList<T> sequence,
             [NotNull] IList<T> otherSequence)
@@ -733,38 +765,44 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(otherSequence), otherSequence);
 
             return GetEditDistance(sequence, otherSequence,
-                row =>
-                {
-                    Assert.Condition(row >= 0 && row <= otherSequence.Count);
-                    return new EditChoice
+                    row =>
                     {
-                        Operation = row > 0 ? EditChoice.Insert : EditChoice.Cancel,
-                        Cost = row,
-                    };
-                },
-                column =>
-                {
-                    Assert.Condition(column >= 0 && column <= sequence.Count);
-                    return new EditChoice
+                        Assert.Condition(row >= 0 && row <= otherSequence.Count);
+                        return new EditChoice
+                        {
+                            Operation = row > 0 ? EditChoice.Insert : EditChoice.Cancel,
+                            Cost = row
+                        };
+                    },
+                    column =>
                     {
-                        Operation = column > 0 ? EditChoice.Delete : EditChoice.Cancel,
-                        Cost = column,
-                    };
-                },
-                (l, r) => Equals(l, r) ? 0 : double.PositiveInfinity,
-                i => 1,
-                d => 1
-            ).Where(p => p.Operation == EditOperation.Match).Select(s => s.Item).ToArray();
+                        Assert.Condition(column >= 0 && column <= sequence.Count);
+                        return new EditChoice
+                        {
+                            Operation = column > 0 ? EditChoice.Delete : EditChoice.Cancel,
+                            Cost = column
+                        };
+                    },
+                    (l, r) => Equals(l, r) ? 0 : double.PositiveInfinity,
+                    i => 1,
+                    d => 1
+                )
+                .Where(p => p.Operation == EditOperation.Match)
+                .Select(s => s.Item)
+                .ToArray();
         }
 
         /// <summary>
-        /// Converts a sequence to a set.
+        ///     Converts a sequence to a set.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <param name="comparer">An equality comparer.</param>
-        /// <returns>A new set containing the elements in <paramref name="sequence"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
+        /// <returns>A new set containing the elements in <paramref name="sequence" />.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either of <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
         [NotNull]
         public static ISet<T> ToSet<T>([NotNull] this IEnumerable<T> sequence, [NotNull] IEqualityComparer<T> comparer)
         {
@@ -775,12 +813,12 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Converts a sequence to a set.
+        ///     Converts a sequence to a set.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
-        /// <returns>A new set containing the elements in <paramref name="sequence"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <returns>A new set containing the elements in <paramref name="sequence" />.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
         [NotNull]
         public static ISet<T> ToSet<T>([NotNull] this IEnumerable<T> sequence)
         {
@@ -790,16 +828,19 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Converts a sequence to a set using a selector.
+        ///     Converts a sequence to a set using a selector.
         /// </summary>
         /// <typeparam name="TSource">The type of items in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of elements in the resulting set.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <param name="selector">The selector.</param>
         /// <returns>
-        /// A new set containing the values selected from elements in <paramref name="sequence" />.
+        ///     A new set containing the values selected from elements in <paramref name="sequence" />.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> or <paramref name="selector" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="selector" /> is
+        ///     <c>null</c>.
+        /// </exception>
         [NotNull]
         public static ISet<TResult> ToSet<TSource, TResult>([NotNull] this IEnumerable<TSource> sequence,
             [NotNull] Func<TSource, TResult> selector)
@@ -817,13 +858,13 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Interprets a given <paramref name="sequence"/> as a list. The returned list can either be the same object or a new
-        /// object.
+        ///     Interprets a given <paramref name="sequence" /> as a list. The returned list can either be the same object or a new
+        ///     object.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <returns>A list representing the original sequence.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
         [NotNull]
         public static IList<T> AsList<T>([NotNull] this IEnumerable<T> sequence)
         {
@@ -844,13 +885,19 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Evaluates the appearance frequency for each item in a <paramref name="sequence"/>.
+        ///     Evaluates the appearance frequency for each item in a <paramref name="sequence" />.
         /// </summary>
         /// <typeparam name="T">The type of items in the sequence </typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <param name="comparer">The comparer.</param>
-        /// <returns>A new dictionary where each key is an item form the <paramref name="sequence"/> and associated values are the frequencies.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="sequence"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
+        /// <returns>
+        ///     A new dictionary where each key is an item form the <paramref name="sequence" /> and associated values are the
+        ///     frequencies.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either of <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
         [NotNull]
         public static IDictionary<T, int> GetItemFrequencies<T>([NotNull] this IEnumerable<T> sequence,
             [NotNull] IEqualityComparer<T> comparer)
@@ -875,7 +922,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Adds a new key/valuer pair or updates an existing one.
+        ///     Adds a new key/valuer pair or updates an existing one.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
@@ -884,7 +931,10 @@ namespace Abacaxi
         /// <param name="value">The value.</param>
         /// <param name="updateFunc">The value update function.</param>
         /// <returns><c>true</c> if the a new key/value pair was added; otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if either of <paramref name="dict"/> or <paramref name="updateFunc"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either of <paramref name="dict" /> or <paramref name="updateFunc" />
+        ///     are <c>null</c>.
+        /// </exception>
         public static bool AddOrUpdate<TKey, TValue>(
             [NotNull] this IDictionary<TKey, TValue> dict,
             [NotNull] TKey key, TValue value,
@@ -904,12 +954,12 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Appends the specified <paramref name="item1"/> to an array <paramref name="array"/>.
+        ///     Appends the specified <paramref name="item1" /> to an array <paramref name="array" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in <paramref name="array" />.</typeparam>
         /// <param name="array">The array.</param>
         /// <param name="item1">The item to append to array.</param>
-        /// <returns>A new array consisting <paramref name="array"/> and appended <paramref name="item1"/>.</returns>
+        /// <returns>A new array consisting <paramref name="array" /> and appended <paramref name="item1" />.</returns>
         [NotNull]
         public static T[] Append<T>([CanBeNull] this T[] array, T item1)
         {
@@ -921,13 +971,13 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Appends the specified items to an array <paramref name="array"/>.
+        ///     Appends the specified items to an array <paramref name="array" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in <paramref name="array" />.</typeparam>
         /// <param name="array">The array.</param>
         /// <param name="item1">The first item to append to array.</param>
         /// <param name="item2">The second item to append to array.</param>
-        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
+        /// <returns>A new array consisting <paramref name="array" /> and appended items.</returns>
         [NotNull]
         public static T[] Append<T>([CanBeNull] this T[] array, T item1, T item2)
         {
@@ -940,14 +990,14 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Appends the specified items to an array <paramref name="array"/>.
+        ///     Appends the specified items to an array <paramref name="array" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in <paramref name="array" />.</typeparam>
         /// <param name="array">The array.</param>
         /// <param name="item1">The first item to append to array.</param>
         /// <param name="item2">The second item to append to array.</param>
         /// <param name="item3">The third item to append to array.</param>
-        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
+        /// <returns>A new array consisting <paramref name="array" /> and appended items.</returns>
         [NotNull]
         public static T[] Append<T>([CanBeNull] this T[] array, T item1, T item2, T item3)
         {
@@ -961,15 +1011,15 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Appends the specified items to an array <paramref name="array"/>.
+        ///     Appends the specified items to an array <paramref name="array" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in <paramref name="array" />.</typeparam>
         /// <param name="array">The array.</param>
         /// <param name="item1">The first item to append to array.</param>
         /// <param name="item2">The second item to append to array.</param>
         /// <param name="item3">The third item to append to array.</param>
         /// <param name="item4">The fourth item to append to array.</param>
-        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
+        /// <returns>A new array consisting <paramref name="array" /> and appended items.</returns>
         [NotNull]
         public static T[] Append<T>([CanBeNull] this T[] array, T item1, T item2, T item3, T item4)
         {
@@ -984,16 +1034,16 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Appends the specified items to an array <paramref name="array"/>.
+        ///     Appends the specified items to an array <paramref name="array" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in <paramref name="array" />.</typeparam>
         /// <param name="array">The array.</param>
         /// <param name="item1">The first item to append to array.</param>
         /// <param name="item2">The second item to append to array.</param>
         /// <param name="item3">The third item to append to array.</param>
         /// <param name="item4">The fourth item to append to array.</param>
         /// <param name="item5">The fifth item to append to array.</param>
-        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
+        /// <returns>A new array consisting <paramref name="array" /> and appended items.</returns>
         [NotNull]
         public static T[] Append<T>([CanBeNull] this T[] array, T item1, T item2, T item3, T item4, T item5)
         {
@@ -1009,12 +1059,12 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Appends the specified <paramref name="items"/> to an array <paramref name="array"/>.
+        ///     Appends the specified <paramref name="items" /> to an array <paramref name="array" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in <paramref name="array" />.</typeparam>
         /// <param name="array">The array.</param>
         /// <param name="items">The items to append to the array.</param>
-        /// <returns>A new array consisting <paramref name="array"/> and appended items.</returns>
+        /// <returns>A new array consisting <paramref name="array" /> and appended items.</returns>
         [NotNull]
         public static T[] Append<T>([CanBeNull] this T[] array, [NotNull] params T[] items)
         {
@@ -1031,14 +1081,18 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Converts a given sequence to a list by applying a <paramref name="selector"/> to each element of the <paramref name="sequence"/>.
+        ///     Converts a given sequence to a list by applying a <paramref name="selector" /> to each element of the
+        ///     <paramref name="sequence" />.
         /// </summary>
         /// <typeparam name="T">/The type of elements in the sequence.</typeparam>
         /// <typeparam name="TResult">The type of the resulting elements.</typeparam>
         /// <param name="sequence">The input sequence.</param>
         /// <param name="selector">The selector function.</param>
         /// <returns>A new list which contains the selected values.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="sequence"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="sequence" /> are
+        ///     <c>null</c>.
+        /// </exception>
         [NotNull]
         public static List<TResult> ToList<T, TResult>([NotNull] this IEnumerable<T> sequence,
             [NotNull] Func<T, TResult> selector)
@@ -1071,15 +1125,22 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Converts a given sequence to a list by applying a <paramref name="selector"/> to each element of the <paramref name="sequence"/>.
+        ///     Converts a given sequence to a list by applying a <paramref name="selector" /> to each element of the
+        ///     <paramref name="sequence" />.
         /// </summary>
         /// <typeparam name="T">/The type of elements in the sequence.</typeparam>
         /// <typeparam name="TResult">The type of the resulting elements.</typeparam>
         /// <param name="sequence">The input sequence.</param>
         /// <param name="selector">The selector function.</param>
-        /// <remarks>The second argument to <paramref name="selector"/> is the index of the element in the original <paramref name="sequence"/>.</remarks>
+        /// <remarks>
+        ///     The second argument to <paramref name="selector" /> is the index of the element in the original
+        ///     <paramref name="sequence" />.
+        /// </remarks>
         /// <returns>A new list which contains the selected values.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="sequence"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="sequence" /> are
+        ///     <c>null</c>.
+        /// </exception>
         [NotNull]
         public static List<TResult> ToList<T, TResult>([NotNull] this IEnumerable<T> sequence,
             [NotNull] Func<T, int, TResult> selector)
@@ -1148,14 +1209,17 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Partitions a specified <paramref name="sequence"/> into chunks of given <paramref name="size"/>.
+        ///     Partitions a specified <paramref name="sequence" /> into chunks of given <paramref name="size" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the input sequence.</typeparam>
         /// <param name="sequence">The sequence to partition.</param>
         /// <param name="size">The size of each partition.</param>
-        /// <returns>A sequence of partitioned items. Each partition is of the specified <paramref name="size"/> (or less, if no elements are left).</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size"/> is less than one.</exception>
+        /// <returns>
+        ///     A sequence of partitioned items. Each partition is of the specified <paramref name="size" /> (or less, if no
+        ///     elements are left).
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size" /> is less than one.</exception>
         [NotNull, ItemNotNull]
         public static IEnumerable<T[]> Partition<T>([NotNull] this IEnumerable<T> sequence, int size)
         {
@@ -1166,28 +1230,33 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Returns either the given <paramref name="sequence"/> or an empty one if <paramref name="sequence"/> is <c>null</c>.
+        ///     Returns either the given <paramref name="sequence" /> or an empty one if <paramref name="sequence" /> is
+        ///     <c>null</c>.
         /// </summary>
         /// <typeparam name="T">The type of elements in the given sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <returns>The original sequence or an empty one.</returns>
         [NotNull]
-        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence) =>
-            sequence ?? Enumerable.Empty<T>();
+        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence)
+        {
+            return sequence ?? Enumerable.Empty<T>();
+        }
 
         /// <summary>
-        /// Determines whether the given <paramref name="sequence"/> is null or empty.
+        ///     Determines whether the given <paramref name="sequence" /> is null or empty.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <returns>
-        ///   <c>true</c> if the sequence is null or empty; otherwise, <c>false</c>.
+        ///     <c>true</c> if the sequence is null or empty; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> sequence) =>
-            sequence?.Any() != true;
+        public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> sequence)
+        {
+            return sequence?.Any() != true;
+        }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this sequence of elements.
+        ///     Returns a <see cref="string" /> that represents this sequence of elements.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <typeparam name="TResult">The type of the result of the selector.</typeparam>
@@ -1195,9 +1264,12 @@ namespace Abacaxi
         /// <param name="selector">The result selector.</param>
         /// <param name="separator">The separator used between selected items.</param>
         /// <returns>
-        /// A <see cref="string"/> that contains all the elements of the <paramref name="sequence"/>.
+        ///     A <see cref="string" /> that contains all the elements of the <paramref name="sequence" />.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> or <paramref name="separator"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="selector" /> or
+        ///     <paramref name="separator" /> are <c>null</c>.
+        /// </exception>
         [NotNull]
         public static string ToString<T, TResult>(
             [NotNull] this IEnumerable<T> sequence,
@@ -1224,15 +1296,18 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this sequence of elements.
+        ///     Returns a <see cref="string" /> that represents this sequence of elements.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <param name="separator">The separator used between selected items.</param>
         /// <returns>
-        /// A <see cref="string"/> that contains all the elements of the <paramref name="sequence"/>.
+        ///     A <see cref="string" /> that contains all the elements of the <paramref name="sequence" />.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="separator"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="separator" /> are
+        ///     <c>null</c>.
+        /// </exception>
         [NotNull]
         public static string ToString<T>(
             [NotNull] this IEnumerable<T> sequence,
@@ -1256,17 +1331,23 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds the object that has a given minimum <typeparamref name="TKey"/>.
+        ///     Finds the object that has a given minimum <typeparamref name="TKey" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
-        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector" />.</typeparam>
         /// <param name="sequence">The input sequence.</param>
         /// <param name="selector">The selector that return the key to compare.</param>
         /// <param name="comparer">The comparer used to compare the keys.</param>
         /// <returns>The item that has the minimum key.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="sequence"/> is empty and <typeparamref name="T"/> is a value type.</exception>
-        [CanBeNull]
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="selector" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown if the <paramref name="sequence" /> is empty and
+        ///     <typeparamref name="T" /> is a value type.
+        /// </exception>
+        [CanBeNull, SuppressMessage("ReSharper", "CompareNonConstrainedGenericWithNull")]
         public static T Min<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
             [NotNull] Func<T, TKey> selector,
@@ -1300,7 +1381,8 @@ namespace Abacaxi
                     var nextItem = enumerator.Current;
                     var nextMin = selector(nextItem);
 
-                    if (nextMin == null || min != null && comparer.Compare(min, nextMin) <= 0)
+                    if (nextMin == null ||
+                        min != null && comparer.Compare(min, nextMin) <= 0)
                     {
                         continue;
                     }
@@ -1314,33 +1396,48 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds the object that has a given minimum <typeparamref name="TKey"/>.
+        ///     Finds the object that has a given minimum <typeparamref name="TKey" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
-        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector" />.</typeparam>
         /// <param name="sequence">The input sequence.</param>
         /// <param name="selector">The selector that return the key to compare.</param>
-        /// <remarks>The default comparer is used to compare values of type <typeparamref name="TKey"/>.</remarks>
+        /// <remarks>The default comparer is used to compare values of type <typeparamref name="TKey" />.</remarks>
         /// <returns>The item that has the minimum key.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> are <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="sequence"/> is empty and <typeparamref name="T"/> is a value type.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="selector" /> are
+        ///     <c>null</c>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown if the <paramref name="sequence" /> is empty and
+        ///     <typeparamref name="T" /> is a value type.
+        /// </exception>
         [CanBeNull]
         public static T Min<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
-            [NotNull] Func<T, TKey> selector) => Min(sequence, selector, Comparer<TKey>.Default);
+            [NotNull] Func<T, TKey> selector)
+        {
+            return Min(sequence, selector, Comparer<TKey>.Default);
+        }
 
         /// <summary>
-        /// Finds the object that has a given maximum <typeparamref name="TKey"/>.
+        ///     Finds the object that has a given maximum <typeparamref name="TKey" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
-        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector" />.</typeparam>
         /// <param name="sequence">The input sequence.</param>
         /// <param name="selector">The selector that return the key to compare.</param>
         /// <param name="comparer">The comparer used to compare the keys.</param>
         /// <returns>The item that has the maximum key.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> or <paramref name="comparer"/> are <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="sequence"/> is empty and <typeparamref name="T"/> is a value type.</exception>
-        [CanBeNull]
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="selector" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown if the <paramref name="sequence" /> is empty and
+        ///     <typeparamref name="T" /> is a value type.
+        /// </exception>
+        [CanBeNull, SuppressMessage("ReSharper", "CompareNonConstrainedGenericWithNull")]
         public static T Max<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
             [NotNull] Func<T, TKey> selector,
@@ -1374,7 +1471,8 @@ namespace Abacaxi
                     var nextItem = enumerator.Current;
                     var nextMin = selector(nextItem);
 
-                    if (nextMin == null || min != null && comparer.Compare(min, nextMin) >= 0)
+                    if (nextMin == null ||
+                        min != null && comparer.Compare(min, nextMin) >= 0)
                     {
                         continue;
                     }
@@ -1388,37 +1486,61 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds the object that has a given maximum <typeparamref name="TKey"/>.
+        ///     Finds the object that has a given maximum <typeparamref name="TKey" />.
         /// </summary>
-        /// <typeparam name="T">The type of elements in the <paramref name="sequence"/>.</typeparam>
-        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <typeparam name="TKey">The type of the key selected by <paramref name="selector" />.</typeparam>
         /// <param name="sequence">The input sequence.</param>
         /// <param name="selector">The selector that return the key to compare.</param>
-        /// <remarks>The default comparer is used to compare values of type <typeparamref name="TKey"/>.</remarks>
+        /// <remarks>The default comparer is used to compare values of type <typeparamref name="TKey" />.</remarks>
         /// <returns>The item that has the maximum key.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> or <paramref name="selector"/> are <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="sequence"/> is empty and <typeparamref name="T"/> is a value type.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="selector" /> are
+        ///     <c>null</c>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown if the <paramref name="sequence" /> is empty and
+        ///     <typeparamref name="T" /> is a value type.
+        /// </exception>
         [CanBeNull]
         public static T Max<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
-            [NotNull] Func<T, TKey> selector) => Max(sequence, selector, Comparer<TKey>.Default);
+            [NotNull] Func<T, TKey> selector)
+        {
+            return Max(sequence, selector, Comparer<TKey>.Default);
+        }
 
         /// <summary>
-        /// Obtains a dedicated view into a segment of a given list. The returned list is a wrapper object that
-        /// acts as an intermediary to the original one. All operations on the intermediary list will be applied to the original one.
+        ///     Obtains a dedicated view into a segment of a given list. The returned list is a wrapper object that
+        ///     acts as an intermediary to the original one. All operations on the intermediary list will be applied to the
+        ///     original one.
         /// </summary>
         /// <typeparam name="T">The type of items in the sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <param name="startIndex">The start index for the segment.</param>
         /// <param name="length">The length of the segment.</param>
         /// <returns>A new list that wraps the given segment.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the combination of <paramref name="startIndex"/> and <paramref name="length"/> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         [NotNull]
         public static IList<T> Segment<T>([NotNull] this IList<T> sequence, int startIndex, int length)
         {
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             return new ListViewWrapper<T>(sequence, startIndex, length);
+        }
+
+        private struct EditChoice
+        {
+            public const int Cancel = -1;
+            public const int Match = 0;
+            public const int Insert = 1;
+            public const int Delete = 2;
+
+            public int Operation;
+            public double Cost;
         }
     }
 }

@@ -17,12 +17,48 @@ namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Collections.Generic;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class ToSetTests
     {
+        [Test]
+        public void ToSet_ReturnsAValidSet1()
+        {
+            var set = new[] { 1, 1, 2, 3 }.ToSet();
+
+            TestHelper.AssertSequence(set, 1, 2, 3);
+        }
+
+        [Test]
+        public void ToSet_ReturnsAValidSet2()
+        {
+            var set = new[] { 1, 1, 2, 3 }.ToSet(EqualityComparer<int>.Default);
+
+            TestHelper.AssertSequence(set, 1, 2, 3);
+        }
+
+        [Test]
+        public void ToSet_ReturnsAValidSet3()
+        {
+            var set = new[] { 1, 1, 2, 3 }.ToSet(a => a.ToString());
+
+            TestHelper.AssertSequence(set, "1", "2", "3");
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToSet_ThrowsException_IfEqualityComparerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.ToSet(null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void ToSet_ThrowsException_IfSelectorIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.ToSet((Func<int, int>) null));
+        }
+
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfSequenceIsNull1()
         {
@@ -38,49 +74,13 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToSet_ThrowsException_IfSequenceIsNull3()
         {
-            Assert.Throws<ArgumentNullException>(() => ((int[])null).ToSet(a => a));
-        }
-
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ToSet_ThrowsException_IfEqualityComparerIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new[] {1}.ToSet(null));
-        }
-
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void ToSet_ThrowsException_IfSelectorIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new[] { 1 }.ToSet((Func<int, int>)null));
-        }
-
-        [Test]
-        public void ToSet_ReturnsAValidSet1()
-        {
-            var set = new[] {1, 1, 2, 3}.ToSet();
-
-            TestHelper.AssertSequence(set, 1, 2, 3);
-        }
-
-        [Test]
-        public void ToSet_ReturnsAValidSet2()
-        {
-            var set = new[] {1, 1, 2, 3}.ToSet(EqualityComparer<int>.Default);
-
-            TestHelper.AssertSequence(set, 1, 2, 3);
-        }
-
-        [Test]
-        public void ToSet_ReturnsAValidSet3()
-        {
-            var set = new[] { 1, 1, 2, 3 }.ToSet(a => a.ToString());
-
-            TestHelper.AssertSequence(set, "1", "2", "3");
+            Assert.Throws<ArgumentNullException>(() => ((int[]) null).ToSet(a => a));
         }
 
         [Test]
         public void ToSet_UsesTheEqualityComparer()
         {
-            var set = new[] {"a", "A", "b", "c"}.ToSet(StringComparer.OrdinalIgnoreCase);
+            var set = new[] { "a", "A", "b", "c" }.ToSet(StringComparer.OrdinalIgnoreCase);
 
             TestHelper.AssertSequence(set, "a", "b", "c");
         }

@@ -18,71 +18,77 @@ namespace Abacaxi.Graphs
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Defines a 2-D coordinate to be used when manipulating matrices.
+    ///     Defines a 2-D coordinate to be used when manipulating matrices.
     /// </summary>
     [PublicAPI]
     public struct Cell
     {
         /// <summary>
-        /// Gets the X coordinate.
+        ///     Gets the X coordinate.
         /// </summary>
         /// <value>
-        /// The X coordinate.
+        ///     The X coordinate.
         /// </value>
         public int X { get; }
 
         /// <summary>
-        /// Gets the Y coordinate.
+        ///     Gets the Y coordinate.
         /// </summary>
         /// <value>
-        /// The Y coordinate.
+        ///     The Y coordinate.
         /// </value>
         public int Y { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Cell"/> struct.
+        ///     Initializes a new instance of the <see cref="Cell" /> struct.
         /// </summary>
         /// <param name="x">The X coordinate.</param>
         /// <param name="y">The Y coordinate.</param>
         public Cell(int x, int y)
         {
-
             X = x;
             Y = y;
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" />, is equal to this instance.
+        ///     Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
         /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || obj.GetType() != GetType())
+            if (obj == null ||
+                obj.GetType() != GetType())
             {
                 return false;
             }
 
-            var co = (Cell)obj;
+            var co = (Cell) obj;
             return co.X == X && co.Y == Y;
         }
 
         /// <summary>
-        /// Returns a hash code for this instance.
+        ///     Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
-        public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode();
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() ^ Y.GetHashCode();
+        }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
+        ///     Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="string" /> that represents this instance.
+        ///     A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString() => $"({X}, {Y})";
+        public override string ToString()
+        {
+            return $"({X}, {Y})";
+        }
     }
 }

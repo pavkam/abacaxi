@@ -17,19 +17,68 @@
 namespace Abacaxi.Tests.Containers
 {
     using System;
-    using Abacaxi.Containers;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using Abacaxi.Containers;
+    using NUnit.Framework;
 
     [TestFixture]
-    public class DisjointSetTests
+    public sealed class DisjointSetTests
     {
-        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Ctor_ThrowsException_WhenComparerIsNull()
+        [Test]
+        public void CheckAndMerge_MergesTheSets_IfRequired()
         {
-            Assert.Throws<ArgumentNullException>(() => new DisjointSet<int>(null));
+            var set = new DisjointSet<string>();
+            set.CheckAndMerge("1", "2");
+
+            Assert.AreSame(set["1"], set["2"]);
+        }
+
+        [Test]
+        public void CheckAndMerge_ReturnsFalse_IfBothObjectsAreInDifferentSets()
+        {
+            var set = new DisjointSet<string>();
+            set.Merge("1");
+            set.Merge("2");
+
+            Assert.IsFalse(set.CheckAndMerge("1", "2"));
+        }
+
+        [Test]
+        public void CheckAndMerge_ReturnsTrue_IfBothObjectsAreInTheSameSet()
+        {
+            var set = new DisjointSet<string>();
+            set.Merge("1", "2");
+
+            Assert.IsTrue(set.CheckAndMerge("1", "2"));
+        }
+
+        [Test]
+        public void CheckAndMerge_SelectsTheHeaviestSet_ForMerging()
+        {
+            var set = new DisjointSet<string>();
+            var expectedRoot = set.Merge("1", "2");
+            set.Merge("3");
+
+            set.CheckAndMerge("2", "3");
+
+            Assert.AreSame(expectedRoot, set["1"]);
+            Assert.AreSame(expectedRoot, set["2"]);
+            Assert.AreSame(expectedRoot, set["3"]);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void CheckAndMerge_ThrowsException_IfObject1IsNull()
+        {
+            var set = new DisjointSet<string>();
+            Assert.Throws<ArgumentNullException>(() => set.CheckAndMerge(null, "o2"));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void CheckAndMerge_ThrowsException_IfObject2IsNull()
+        {
+            var set = new DisjointSet<string>();
+            Assert.Throws<ArgumentNullException>(() => set.CheckAndMerge("o1", null));
         }
 
         [Test]
@@ -47,6 +96,13 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual("test", set["TEST"]);
         }
 
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Ctor_ThrowsException_WhenComparerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new DisjointSet<int>(null));
+        }
+
         [Test]
         public void Ctor_UsesDefaultEqualityComparerIfNotSpecified()
         {
@@ -56,50 +112,12 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual("TEST", set["TEST"]);
         }
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Indexer_ThrowsException_IfObjectIsNull()
-        {
-            var set = new DisjointSet<string>();
-            Assert.Throws<ArgumentNullException>(
-                () => Assert.NotNull(set[null]));
-        }
-
-        [Test]
-        public void Indexer_ReturnsSameObject_IfTheObjectIsNotInside()
-        {
-            var set = new DisjointSet<string>();
-            const string o = "first";
-            Assert.AreSame(o, set[o]);
-        }
-
-        [Test]
-        public void Indexer_ReturnsInitialObject_IfTheObjectIsInside()
-        {
-            var set = new DisjointSet<string>();
-            const string o = "first";
-            var s = new string(o.ToCharArray());
-
-            set.Merge(o);
-            Assert.AreSame(o, set[s]);
-        }
-
         [Test]
         public void Indexer_ActuallyAddsTheObject_IfReferenced()
         {
             var set = new DisjointSet<string>();
             const string o = "first";
             if (set[o] == o)
-            {
-                TestHelper.AssertSequence(set, o);
-            }
-        }
-
-        [Test]
-        public void Indexer_DoesNotAddTheObject_IfAlreadyThere()
-        {
-            var set = new DisjointSet<string>();
-            const string o = "first";
-            if (set[o] != "not" && set[o] != "this")
             {
                 TestHelper.AssertSequence(set, o);
             }
@@ -137,12 +155,15 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Indexer_ReturnsTheSameSetLabel_ForItemsInTheSameSet()
+        public void Indexer_DoesNotAddTheObject_IfAlreadyThere()
         {
             var set = new DisjointSet<string>();
-            set.Merge("a", "b");
-
-            Assert.AreEqual(set["a"], set["b"]);
+            const string o = "first";
+            if (set[o] != "not" &&
+                set[o] != "this")
+            {
+                TestHelper.AssertSequence(set, o);
+            }
         }
 
         [Test]
@@ -155,26 +176,40 @@ namespace Abacaxi.Tests.Containers
             Assert.AreNotEqual(set["a"], set["b"]);
         }
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Merge_ThrowsException_IfObjectIsNull()
+        [Test]
+        public void Indexer_ReturnsInitialObject_IfTheObjectIsInside()
         {
             var set = new DisjointSet<string>();
-            Assert.Throws<ArgumentNullException>(() => set.Merge(null));
+            const string o = "first";
+            var s = new string(o.ToCharArray());
+
+            set.Merge(o);
+            Assert.AreSame(o, set[s]);
         }
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
-         SuppressMessage("ReSharper", "RedundantCast")]
-        public void Merge_ThrowsException_IfOtherObjectsIsNull()
+        [Test]
+        public void Indexer_ReturnsSameObject_IfTheObjectIsNotInside()
         {
             var set = new DisjointSet<string>();
-            Assert.Throws<ArgumentNullException>(() => set.Merge("a", (string[]) null));
+            const string o = "first";
+            Assert.AreSame(o, set[o]);
+        }
+
+        [Test]
+        public void Indexer_ReturnsTheSameSetLabel_ForItemsInTheSameSet()
+        {
+            var set = new DisjointSet<string>();
+            set.Merge("a", "b");
+
+            Assert.AreEqual(set["a"], set["b"]);
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Merge_ThrowsException_IfOneOfOtherObjectsIsNull()
+        public void Indexer_ThrowsException_IfObjectIsNull()
         {
             var set = new DisjointSet<string>();
-            Assert.Throws<ArgumentNullException>(() => set.Merge("a", "b", null));
+            Assert.Throws<ArgumentNullException>(
+                () => Assert.NotNull(set[null]));
         }
 
         [Test]
@@ -184,95 +219,6 @@ namespace Abacaxi.Tests.Containers
             set.Merge("first");
 
             TestHelper.AssertSequence(set, "first");
-        }
-
-        [Test]
-        public void Merge_DoesNotDoAnythingIfTheObjectIsInTheSet()
-        {
-            var set = new DisjointSet<string>();
-            set.Merge("first");
-            set.Merge("first");
-            TestHelper.AssertSequence(set, "first");
-        }
-
-        [Test]
-        public void Merge_WillAddTwoItemsTheSet()
-        {
-            var set = new DisjointSet<string>();
-            set.Merge("a", "b");
-            TestHelper.AssertSequence(set, "a", "b");
-        }
-
-        [Test]
-        public void Merge_WillMergeSetsForExistingItemAndNew()
-        {
-            var set = new DisjointSet<string>();
-            if (set["a"] == "a")
-            {
-                set.Merge("a", "b", "c");
-            }
-
-            Assert.IsTrue(set["a"] == set["b"] && set["b"] == set["c"]);
-        }
-
-        [Test]
-        public void Merge_Individually_AddsNewSets()
-        {
-            var set = new DisjointSet<string>();
-            set.Merge("a");
-            set.Merge("b");
-            set.Merge("c");
-
-            Assert.IsTrue(set["a"] != set["b"] && set["b"] != set["c"] && set["a"] != set["c"]);
-        }
-
-        [Test]
-        public void Merge_WillMergeThreeDistinctSetsTogether()
-        {
-            var set = new DisjointSet<string>();
-            set.Merge("a");
-            set.Merge("b");
-            set.Merge("c");
-
-            set.Merge("a", "b", "c");
-
-            Assert.IsTrue(set["a"] == set["b"] && set["b"] == set["c"]);
-        }
-
-        [Test]
-        public void Merge_ReturnsTheObjectIfItsAlone()
-        {
-            var set = new DisjointSet<string>();
-            Assert.AreEqual("first", set.Merge("first"));
-        }
-
-        [Test]
-        public void Merge_ReturnsTheSetLabelObjectIfMultipleElementsMerged()
-        {
-            var set = new DisjointSet<string>();
-            var label = set.Merge("a", "b", "c");
-
-            Assert.IsTrue(set["a"] == label && set["b"] == label && set["c"] == label);
-        }
-
-        [Test]
-        public void Merge_SelectsHeaviestSetForItsTree()
-        {
-            var set = new DisjointSet<string>();
-            var heavy = set.Merge("a", "b");
-
-            Assert.AreEqual(heavy, set.Merge("a", "c"));
-        }
-
-        [Test]
-        public void Merge_CombinesTwoSubTreesIfOneElementIsUsedForMerge()
-        {
-            var set = new DisjointSet<string>();
-            set.Merge("a", "b", "c");
-            set.Merge("d", "e", "f");
-            var label = set.Merge("f", "a");
-
-            Assert.IsTrue(set.All(item => set[item] == label));
         }
 
         [Test]
@@ -302,60 +248,115 @@ namespace Abacaxi.Tests.Containers
             }
         }
 
+        [Test]
+        public void Merge_CombinesTwoSubTreesIfOneElementIsUsedForMerge()
+        {
+            var set = new DisjointSet<string>();
+            set.Merge("a", "b", "c");
+            set.Merge("d", "e", "f");
+            var label = set.Merge("f", "a");
+
+            Assert.IsTrue(set.All(item => set[item] == label));
+        }
+
+        [Test]
+        public void Merge_DoesNotDoAnythingIfTheObjectIsInTheSet()
+        {
+            var set = new DisjointSet<string>();
+            set.Merge("first");
+            set.Merge("first");
+            TestHelper.AssertSequence(set, "first");
+        }
+
+        [Test]
+        public void Merge_Individually_AddsNewSets()
+        {
+            var set = new DisjointSet<string>();
+            set.Merge("a");
+            set.Merge("b");
+            set.Merge("c");
+
+            Assert.IsTrue(set["a"] != set["b"] && set["b"] != set["c"] && set["a"] != set["c"]);
+        }
+
+        [Test]
+        public void Merge_ReturnsTheObjectIfItsAlone()
+        {
+            var set = new DisjointSet<string>();
+            Assert.AreEqual("first", set.Merge("first"));
+        }
+
+        [Test]
+        public void Merge_ReturnsTheSetLabelObjectIfMultipleElementsMerged()
+        {
+            var set = new DisjointSet<string>();
+            var label = set.Merge("a", "b", "c");
+
+            Assert.IsTrue(set["a"] == label && set["b"] == label && set["c"] == label);
+        }
+
+        [Test]
+        public void Merge_SelectsHeaviestSetForItsTree()
+        {
+            var set = new DisjointSet<string>();
+            var heavy = set.Merge("a", "b");
+
+            Assert.AreEqual(heavy, set.Merge("a", "c"));
+        }
+
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void CheckAndMerge_ThrowsException_IfObject1IsNull()
+        public void Merge_ThrowsException_IfObjectIsNull()
         {
             var set = new DisjointSet<string>();
-            Assert.Throws<ArgumentNullException>(() => set.CheckAndMerge(null, "o2"));
+            Assert.Throws<ArgumentNullException>(() => set.Merge(null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void CheckAndMerge_ThrowsException_IfObject2IsNull()
+        public void Merge_ThrowsException_IfOneOfOtherObjectsIsNull()
         {
             var set = new DisjointSet<string>();
-            Assert.Throws<ArgumentNullException>(() => set.CheckAndMerge("o1", null));
+            Assert.Throws<ArgumentNullException>(() => set.Merge("a", "b", null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "RedundantCast")]
+        public void Merge_ThrowsException_IfOtherObjectsIsNull()
+        {
+            var set = new DisjointSet<string>();
+            Assert.Throws<ArgumentNullException>(() => set.Merge("a", (string[]) null));
         }
 
         [Test]
-        public void CheckAndMerge_ReturnsTrue_IfBothObjectsAreInTheSameSet()
+        public void Merge_WillAddTwoItemsTheSet()
         {
             var set = new DisjointSet<string>();
-            set.Merge("1", "2");
-
-            Assert.IsTrue(set.CheckAndMerge("1", "2"));
+            set.Merge("a", "b");
+            TestHelper.AssertSequence(set, "a", "b");
         }
 
         [Test]
-        public void CheckAndMerge_ReturnsFalse_IfBothObjectsAreInDifferentSets()
+        public void Merge_WillMergeSetsForExistingItemAndNew()
         {
             var set = new DisjointSet<string>();
-            set.Merge("1");
-            set.Merge("2");
+            if (set["a"] == "a")
+            {
+                set.Merge("a", "b", "c");
+            }
 
-            Assert.IsFalse(set.CheckAndMerge("1", "2"));
+            Assert.IsTrue(set["a"] == set["b"] && set["b"] == set["c"]);
         }
 
         [Test]
-        public void CheckAndMerge_MergesTheSets_IfRequired()
+        public void Merge_WillMergeThreeDistinctSetsTogether()
         {
             var set = new DisjointSet<string>();
-            set.CheckAndMerge("1", "2");
+            set.Merge("a");
+            set.Merge("b");
+            set.Merge("c");
 
-            Assert.AreSame(set["1"], set["2"]);
-        }
+            set.Merge("a", "b", "c");
 
-        [Test]
-        public void CheckAndMerge_SelectsTheHeaviestSet_ForMerging()
-        {
-            var set = new DisjointSet<string>();
-            var expectedRoot = set.Merge("1", "2");
-            set.Merge("3");
-
-            set.CheckAndMerge("2", "3");
-
-            Assert.AreSame(expectedRoot, set["1"]);
-            Assert.AreSame(expectedRoot, set["2"]);
-            Assert.AreSame(expectedRoot, set["3"]);
+            Assert.IsTrue(set["a"] == set["b"] && set["b"] == set["c"]);
         }
     }
 }

@@ -17,8 +17,8 @@ namespace Abacaxi.Tests.Graphs
 {
     using System;
     using Abacaxi.Graphs;
-    using NUnit.Framework;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class IsBipartiteTests

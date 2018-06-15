@@ -21,25 +21,14 @@ namespace Abacaxi.Containers
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Represents a linked list node.
+    ///     Represents a linked list node.
     /// </summary>
     /// <typeparam name="T">The type of the value stored in the node.</typeparam>
     [PublicAPI]
     public sealed class SingleLinkedNode<T> : IEnumerable<SingleLinkedNode<T>>
     {
         /// <summary>
-        /// The node's value.
-        /// </summary>
-        public T Value { get; }
-
-        /// <summary>
-        /// Next element in the list.
-        /// </summary>
-        [CanBeNull]
-        public SingleLinkedNode<T> Next { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="SingleLinkedNode{T}"/> class with a given value.
+        ///     Initializes a new instance of <see cref="SingleLinkedNode{T}" /> class with a given value.
         /// </summary>
         /// <param name="value">The node's value.</param>
         public SingleLinkedNode(T value)
@@ -48,7 +37,47 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Creates a new linked list from a given <paramref name="sequence"/>.
+        ///     The node's value.
+        /// </summary>
+        public T Value { get; }
+
+        /// <summary>
+        ///     Next element in the list.
+        /// </summary>
+        [CanBeNull]
+        public SingleLinkedNode<T> Next { get; set; }
+
+        /// <summary>
+        ///     Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// <summary>
+        ///     Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        ///     An enumerator that can be used to iterate through the collection.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public IEnumerator<SingleLinkedNode<T>> GetEnumerator()
+        {
+            var current = this;
+            while (current != null)
+            {
+                yield return current;
+
+                current = current.Next;
+            }
+        }
+
+        /// <summary>
+        ///     Creates a new linked list from a given <paramref name="sequence" />.
         /// </summary>
         /// <param name="sequence">The sequence to convert into a linked list.</param>
         /// <returns>The first node in the list (head).</returns>
@@ -59,7 +88,7 @@ namespace Abacaxi.Containers
 
             SingleLinkedNode<T> head = null;
             SingleLinkedNode<T> current = null;
-            foreach(var item in sequence)
+            foreach (var item in sequence)
             {
                 if (current == null)
                 {
@@ -77,7 +106,7 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Find the middle node of a linked list.
+        ///     Find the middle node of a linked list.
         /// </summary>
         /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
         /// <returns>The middle node.</returns>
@@ -100,7 +129,7 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Finds whether the list is knotted.
+        ///     Finds whether the list is knotted.
         /// </summary>
         /// <returns><c>true</c> if the list is knotted; <c>false</c> otherwise.</returns>
         public bool VerifyIfKnotted()
@@ -125,7 +154,7 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Reverses a given linked list using the iterative method.
+        ///     Reverses a given linked list using the iterative method.
         /// </summary>
         /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
         /// <returns>The new head of the linked list.</returns>
@@ -145,32 +174,6 @@ namespace Abacaxi.Containers
             }
 
             return head;
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// An enumerator that can be used to iterate through the collection.
-        /// </returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public IEnumerator<SingleLinkedNode<T>> GetEnumerator()
-        {
-            var current = this;
-            while (current != null)
-            {
-                yield return current;
-
-                current = current.Next;
-            }
         }
     }
 }

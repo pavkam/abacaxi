@@ -15,26 +15,85 @@
 
 namespace Abacaxi.Containers
 {
+    using System.Collections;
     using System.Collections.Generic;
     using Internal;
     using JetBrains.Annotations;
-    using System.Collections;
 
     /// <summary>
-    /// Class implements the "union-find" data structure. This data structure is optimized for find and merge set operations.
-    /// This class does not act as the standard set data structure. See https://en.wikipedia.org/wiki/Disjoint-set_data_structure for details.
+    ///     Class implements the "union-find" data structure. This data structure is optimized for find and merge set
+    ///     operations.
+    ///     This class does not act as the standard set data structure. See
+    ///     https://en.wikipedia.org/wiki/Disjoint-set_data_structure for details.
     /// </summary>
     [PublicAPI]
     public sealed class DisjointSet<T> : IEnumerable<T>
     {
-        private sealed class Node
-        {
-            public int Rank;
-            public T Parent;
-        }
-
         [NotNull] private readonly IEqualityComparer<T> _comparer;
         [NotNull] private readonly IDictionary<T, Node> _nodes;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DisjointSet{T}" /> class.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="comparer" /> is <c>null</c>.</exception>
+        public DisjointSet([NotNull] IEqualityComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+            _comparer = comparer;
+            _nodes = new Dictionary<T, Node>(comparer);
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DisjointSet{T}" /> class using the default equality comparer for
+        ///     <typeparamref name="T" />.
+        /// </summary>
+        public DisjointSet() : this(EqualityComparer<T>.Default)
+        {
+        }
+
+        /// <summary>
+        ///     Gets the root object (called label) that identifies the sub-set that contains this <paramref name="object" />.
+        ///     If <paramref name="object" /> is not stored in this <see cref="DisjointSet{T}" />, it is added into its own set and
+        ///     the return value is itself.
+        /// </summary>
+        /// <value>
+        ///     The "set label" object.
+        /// </value>
+        /// <param name="object">The object to check.</param>
+        /// <returns>The object which serves as the "set label".</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="object" /> is <c>null</c>.</exception>
+        [NotNull]
+        public T this[[NotNull] T @object]
+        {
+            get
+            {
+                Validate.ArgumentNotNull(nameof(@object), @object);
+                return GetRootNode(@object).Parent;
+            }
+        }
+
+        /// <summary>
+        ///     Returns an enumerator that iterates through the set.
+        /// </summary>
+        /// <returns>
+        ///     An enumerator that can be used to iterate through the set.
+        /// </returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _nodes.Keys.GetEnumerator();
+        }
+
+        /// <summary>
+        ///     Returns an enumerator that iterates through the set.
+        /// </summary>
+        /// <returns>
+        ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the set.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         [NotNull]
         private Node GetRootNodeRecursive([NotNull] T @object)
@@ -52,7 +111,6 @@ namespace Abacaxi.Containers
             node.Parent = parentNode.Parent;
 
             return parentNode;
-
         }
 
         [NotNull]
@@ -73,58 +131,21 @@ namespace Abacaxi.Containers
 
             _nodes.Add(@object, node);
             return node;
-
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DisjointSet{T}"/> class.
-        /// </summary>
-        /// <param name="comparer">The comparer.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="comparer"/> is <c>null</c>.</exception>
-        public DisjointSet([NotNull] IEqualityComparer<T> comparer)
-        {
-            Validate.ArgumentNotNull(nameof(comparer), comparer);
-            _comparer = comparer;
-            _nodes = new Dictionary<T, Node>(comparer);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DisjointSet{T}"/> class using the default equality comparer for <typeparamref name="T"/>.
-        /// </summary>
-        public DisjointSet() : this(EqualityComparer<T>.Default)
-        {
-        }
-
-        /// <summary>
-        /// Gets the root object (called label) that identifies the sub-set that contains this <paramref name="object"/>.
-        /// If <paramref name="object"/> is not stored in this <see cref="DisjointSet{T}"/>, it is added into its own set and
-        /// the return value is itself.
-        /// </summary>
-        /// <value>
-        /// The "set label" object.
-        /// </value>
-        /// <param name="object">The object to check.</param>
-        /// <returns>The object which serves as the "set label".</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="object"/> is <c>null</c>.</exception>
-        [NotNull]
-        public T this[[NotNull] T @object]
-        {
-            get
-            {
-                Validate.ArgumentNotNull(nameof(@object), @object);
-                return GetRootNode(@object).Parent;
-            }
-        }
-
-        /// <summary>
-        /// Merges the sets that contain the objects specified as input arguments and returns the "set label" object of the merged set.
-        /// If only one argument is supplied, and it's not already in the set, a new set is created containing that single item.
+        ///     Merges the sets that contain the objects specified as input arguments and returns the "set label" object of the
+        ///     merged set.
+        ///     If only one argument is supplied, and it's not already in the set, a new set is created containing that single
+        ///     item.
         /// </summary>
         /// <param name="object">The first object.</param>
         /// <param name="otherObjects">The other objects.</param>
         /// <returns>The "set label" object that identifies the merged set.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="object"/>,
-        /// <paramref name="otherObjects"/>, or its contents, are <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">
+        ///     Thrown if <paramref name="object" />,
+        ///     <paramref name="otherObjects" />, or its contents, are <c>null</c>.
+        /// </exception>
         public T Merge([NotNull] T @object, [NotNull] params T[] otherObjects)
         {
             Validate.ArgumentNotNull(nameof(@object), @object);
@@ -169,12 +190,15 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Checks whether two objects are in the same sub-set. If the objects are in different sub-sets, they are merged.
+        ///     Checks whether two objects are in the same sub-set. If the objects are in different sub-sets, they are merged.
         /// </summary>
         /// <param name="object1">The first object.</param>
         /// <param name="object2">The second object.</param>
         /// <returns><c>true</c> if the objects are in the same set already; otherwise, <c>false</c>.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="object1"/> or <paramref name="object2"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">
+        ///     Thrown if <paramref name="object1" /> or <paramref name="object2" /> is
+        ///     <c>null</c>.
+        /// </exception>
         public bool CheckAndMerge([NotNull] T object1, [NotNull] T object2)
         {
             Validate.ArgumentNotNull(nameof(object1), object1);
@@ -202,20 +226,10 @@ namespace Abacaxi.Containers
             return false;
         }
 
-        /// <summary>
-        /// Returns an enumerator that iterates through the set.
-        /// </summary>
-        /// <returns>
-        /// An enumerator that can be used to iterate through the set.
-        /// </returns>
-        public IEnumerator<T> GetEnumerator() => _nodes.Keys.GetEnumerator();
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the set.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the set.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        private sealed class Node
+        {
+            public T Parent;
+            public int Rank;
+        }
     }
 }

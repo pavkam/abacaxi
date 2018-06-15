@@ -16,59 +16,22 @@
 namespace Abacaxi.Tests.Knapsack
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public class KnapsackItemTests
     {
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfValueIsZeroOrLess()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new KnapsackItem<char>('z', 0, 1));
         }
 
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_IfWeightIsZeroOrLess()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new KnapsackItem<char>('z', 1, 0));
-        }
-
-        [Test]
-        public void Weight_ReturnsValidValue()
-        {
-            var item = new KnapsackItem<char>('a', 10, 20);
-            Assert.AreEqual(20, item.Weight);
-        }
-
-        [Test]
-        public void Value_ReturnsValidValue()
-        {
-            var item = new KnapsackItem<char>('a', 10, 20);
-            Assert.AreEqual(10, item.Value);
-        }
-
-        [Test]
-        public void Item_ReturnsValidValue()
-        {
-            var item = new KnapsackItem<char>('a', 10, 20);
-            Assert.AreEqual('a', item.Item);
-        }
-
-        [Test]
-        public void ToString_ReturnsValidValue()
-        {
-            var item = new KnapsackItem<char>('a', 1.2, 3);
-            Assert.AreEqual($"a ({1.20:N2}, 3)", item.ToString());
-        }
-
-        [Test]
-        public void Equals_ReturnsTrue_ForEqualKnapsackItems()
-        {
-            var e1 = new KnapsackItem<char>('a', 1, 2);
-            var e2 = new KnapsackItem<char>('a', 1, 2);
-
-            Assert.IsTrue(e1.Equals(e2));
         }
 
         [Test]
@@ -98,7 +61,7 @@ namespace Abacaxi.Tests.Knapsack
             Assert.IsFalse(e1.Equals(e2));
         }
 
-        [Test,SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+        [Test, SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void Equals_ReturnsFalse_ForNonKnapsackItemObject()
         {
             var e1 = new KnapsackItem<char>('a', 1, 2);
@@ -113,12 +76,12 @@ namespace Abacaxi.Tests.Knapsack
         }
 
         [Test]
-        public void GetHashCode_ReturnsEqualHashCodes_ForEqualKnapsackItems()
+        public void Equals_ReturnsTrue_ForEqualKnapsackItems()
         {
             var e1 = new KnapsackItem<char>('a', 1, 2);
             var e2 = new KnapsackItem<char>('a', 1, 2);
 
-            Assert.AreEqual(e1.GetHashCode(), e2.GetHashCode());
+            Assert.IsTrue(e1.Equals(e2));
         }
 
         [Test]
@@ -146,6 +109,43 @@ namespace Abacaxi.Tests.Knapsack
             var e2 = new KnapsackItem<char>('a', 1, 3);
 
             Assert.AreNotEqual(e1.GetHashCode(), e2.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_ReturnsEqualHashCodes_ForEqualKnapsackItems()
+        {
+            var e1 = new KnapsackItem<char>('a', 1, 2);
+            var e2 = new KnapsackItem<char>('a', 1, 2);
+
+            Assert.AreEqual(e1.GetHashCode(), e2.GetHashCode());
+        }
+
+        [Test]
+        public void Item_ReturnsValidValue()
+        {
+            var item = new KnapsackItem<char>('a', 10, 20);
+            Assert.AreEqual('a', item.Item);
+        }
+
+        [Test]
+        public void ToString_ReturnsValidValue()
+        {
+            var item = new KnapsackItem<char>('a', 1.2, 3);
+            Assert.AreEqual($"a ({1.20:N2}, 3)", item.ToString());
+        }
+
+        [Test]
+        public void Value_ReturnsValidValue()
+        {
+            var item = new KnapsackItem<char>('a', 10, 20);
+            Assert.AreEqual(10, item.Value);
+        }
+
+        [Test]
+        public void Weight_ReturnsValidValue()
+        {
+            var item = new KnapsackItem<char>('a', 10, 20);
+            Assert.AreEqual(20, item.Weight);
         }
     }
 }

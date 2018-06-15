@@ -16,17 +16,17 @@
 namespace Abacaxi.Tests.ObjectExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class AsTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void As_ThrowsException_ForNullFormatProvider()
+        [Test]
+        public void As_ReturnsValidValue_WhenConversionSucceeds()
         {
-            Assert.Throws<ArgumentNullException>(() => "a".As<string>(null));
+            Assert.AreEqual(EditOperation.Match, "Match".As<EditOperation>());
         }
 
         [Test]
@@ -37,12 +37,6 @@ namespace Abacaxi.Tests.ObjectExtensions
         }
 
         [Test]
-        public void As_UsesInvariantCulture_ByDefault()
-        {
-            Assert.AreEqual(11, "1,1".As<double>());
-        }
-
-        [Test]
         public void As_ThrowException_WhenConversionFails()
         {
             Assert.Throws<FormatException>(() => "a".As<int>());
@@ -50,9 +44,58 @@ namespace Abacaxi.Tests.ObjectExtensions
         }
 
         [Test]
-        public void As_ReturnsValidValue_WhenConversionSucceeds()
+        public void As_ThrowException_WhenValidationFails()
         {
-            Assert.AreEqual(EditOperation.Match, "Match".As<EditOperation>());
+            Assert.Throws<InvalidOperationException>(() => "100".As<int>(v => false));
+            Assert.Throws<InvalidOperationException>(() => "100".As<int>(CultureInfo.InvariantCulture, v => false));
         }
+
+        [Test]
+        public void As_ActuallyPerformsValidation1()
+        {
+            var result = string.Empty;
+            100.As<string>(v => { result = v;
+                return true;
+            });
+
+            Assert.AreEqual("100", result);
+        }
+
+        [Test]
+        public void As_ActuallyPerformsValidation2()
+        {
+            var result = string.Empty;
+            100.As<string>(CultureInfo.InvariantCulture, v => {
+                result = v;
+                return true;
+            });
+
+            Assert.AreEqual("100", result);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void As_ThrowsException_ForNullFormatProvider()
+        {
+            Assert.Throws<ArgumentNullException>(() => "a".As<string>((IFormatProvider)null));
+        }
+
+        [Test]
+        public void As_UsesInvariantCulture_ByDefault()
+        {
+            Assert.AreEqual(11, "1,1".As<double>());
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void As_ThrowsException_ForNullValidateFunc1()
+        {
+            Assert.Throws<ArgumentNullException>(() => "a".As((Func<string, bool>)null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void As_ThrowsException_ForNullValidateFunc2()
+        {
+            Assert.Throws<ArgumentNullException>(() => "a".As(CultureInfo.InvariantCulture, (Func<string, bool>)null));
+        }
+
     }
 }

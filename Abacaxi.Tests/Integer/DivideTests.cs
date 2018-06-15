@@ -22,18 +22,19 @@ namespace Abacaxi.Tests.Integer
     [TestFixture]
     public class DivideTests
     {
+        [TestCase(0, 1, 0), TestCase(1, 1, 1), TestCase(2, 1, 2), TestCase(10, 2, 5), TestCase(100, 3, 33),
+         TestCase(-10, 2, -5), TestCase(-10, -2, 5), TestCase(10, -2, -5)]
+        public void Divide_ReturnsCorrectResult(int x, int y, int expected)
+        {
+            var result = Integer.Divide(x, y);
+            Assert.AreEqual(expected, result);
+        }
+
         [Test]
         public void Divide_ThrowsException_ForZeroDivisor()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 Integer.Divide(1, 0));
-        }
-
-        [TestCase(0, 1, 0),TestCase(1, 1, 1),TestCase(2, 1, 2),TestCase(10, 2, 5),TestCase(100, 3, 33),TestCase(-10, 2, -5),TestCase(-10, -2, 5),TestCase(10, -2, -5)]
-        public void Divide_ReturnsCorrectResult(int x, int y, int expected)
-        {
-            var result = Integer.Divide(x, y);
-            Assert.AreEqual(expected, result);
         }
     }
 }

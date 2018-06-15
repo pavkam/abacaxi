@@ -21,17 +21,21 @@ namespace Abacaxi.Tests.StringExtensions
     [TestFixture]
     public sealed class EscapeTests
     {
-        [Test]
-        public void Escape_ThrowsException_IfStringIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => ((string)null).Escape());
-        }
-
-        [TestCase("", ""),TestCase("this string should not be escaped!", "this string should not be escaped!"),TestCase("'", "\\'"),TestCase("\"", "\\\""),TestCase("\\", "\\\\"),TestCase("\0", "\\0"),TestCase("\a", "\\a"),TestCase("\b", "\\b"),TestCase("\f", "\\f"),TestCase("\n", "\\n"),TestCase("\r", "\\r"),TestCase("\t", "\\t"),TestCase("\u0001", "\\u0001"),TestCase("\u009f", "\\u009f"),TestCase("Les Misérables", "Les Misérables"),TestCase("क्षि", "क्षि")]
+        [TestCase("", ""), TestCase("this string should not be escaped!", "this string should not be escaped!"),
+         TestCase("'", "\\'"), TestCase("\"", "\\\""), TestCase("\\", "\\\\"), TestCase("\0", "\\0"),
+         TestCase("\a", "\\a"), TestCase("\b", "\\b"), TestCase("\f", "\\f"), TestCase("\n", "\\n"),
+         TestCase("\r", "\\r"), TestCase("\t", "\\t"), TestCase("\u0001", "\\u0001"), TestCase("\u009f", "\\u009f"),
+         TestCase("Les Misérables", "Les Misérables"), TestCase("क्षि", "क्षि")]
         public void Escape_ReturnsTheExpectedString(string input, string expected)
         {
             var actual = input.Escape();
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void Escape_ThrowsException_IfStringIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((string) null).Escape());
         }
     }
 }

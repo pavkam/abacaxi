@@ -22,31 +22,9 @@ namespace Abacaxi.Internal
 
     internal sealed class ListViewWrapper<T> : IList<T>
     {
-        [NotNull]
-        private readonly IList<T> _sequence;
+        [NotNull] private readonly IList<T> _sequence;
+
         private readonly int _startIndex;
-
-        private void AssertBounds(int index, bool includeUpperBound = false)
-        {
-            Validate.ArgumentGreaterThanOrEqualToZero(nameof(index), index);
-
-            if (includeUpperBound)
-            {
-                Validate.ArgumentLessThanOrEqualTo(nameof(index), index, Count);
-            }
-            else
-            {
-                Validate.ArgumentLessThan(nameof(index), index, Count);
-            }
-        }
-
-        private void AssertSegmentStillValid()
-        {
-            if (_startIndex + Count > _sequence.Count)
-            {
-                throw new InvalidOperationException("The original list has been modified and the segment no longer fits into its bounds.");
-            }
-        }
 
         public ListViewWrapper([NotNull] IList<T> sequence, int startIndex, int length)
         {
@@ -69,7 +47,10 @@ namespace Abacaxi.Internal
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public void Add(T item)
         {
@@ -184,6 +165,29 @@ namespace Abacaxi.Internal
                 AssertSegmentStillValid();
 
                 _sequence[_startIndex + index] = value;
+            }
+        }
+
+        private void AssertBounds(int index, bool includeUpperBound = false)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(index), index);
+
+            if (includeUpperBound)
+            {
+                Validate.ArgumentLessThanOrEqualTo(nameof(index), index, Count);
+            }
+            else
+            {
+                Validate.ArgumentLessThan(nameof(index), index, Count);
+            }
+        }
+
+        private void AssertSegmentStillValid()
+        {
+            if (_startIndex + Count > _sequence.Count)
+            {
+                throw new InvalidOperationException(
+                    "The original list has been modified and the segment no longer fits into its bounds.");
             }
         }
     }

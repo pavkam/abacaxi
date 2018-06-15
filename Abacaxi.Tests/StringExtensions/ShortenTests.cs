@@ -16,23 +16,31 @@
 namespace Abacaxi.Tests.StringExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class ShortenTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Shorten_ThrowsException_IfStringIsNull()
+        [TestCase("", 1, null, ""), TestCase("1", 1, null, "1"), TestCase("12", 1, null, "1"),
+         TestCase("12345", 5, null, "12345"), TestCase("1234567890", 5, "?", "1234?"),
+         TestCase("1234567890", 5, "...", "12..."), TestCase("12345", 3, "...", "..."), TestCase("1", 1, "?", "1"),
+         TestCase("12", 1, "?", "?")]
+        public void Shorten_ReturnsExpectedString([NotNull] string s, int l, string e, string expected)
         {
-            Assert.Throws<ArgumentNullException>(() => ((string)null).Shorten(100));
+            var actual = s.Shorten(l, e);
+
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test]
-        public void Shorten_ThrowsException_IfMaxLengthLessThanOne()
+        [TestCase("Les Misérables", 7, "Les Mis"), TestCase("Les Misérables", 8, "Les Mis"),
+         TestCase("Les Misérables", 9, "Les Misé"), TestCase("क्षि", 4, "क्षि"), TestCase("क्षि", 3, "क्"),
+         TestCase("क्षि", 2, "क्"), TestCase("क्षि", 1, "")]
+        public void Shorten_TakesIntoAccount_MultiCharSequences([NotNull] string s, int l, string expected)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => "".Shorten(0));
+            var actual = s.Shorten(l);
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
@@ -41,19 +49,16 @@ namespace Abacaxi.Tests.StringExtensions
             Assert.Throws<ArgumentOutOfRangeException>(() => "".Shorten(2, "..."));
         }
 
-        [TestCase("", 1, null, ""),TestCase("1", 1, null, "1"),TestCase("12", 1, null, "1"),TestCase("12345", 5, null, "12345"),TestCase("1234567890", 5, "?", "1234?"),TestCase("1234567890", 5, "...", "12..."),TestCase("12345", 3, "...", "..."),TestCase("1", 1, "?", "1"),TestCase("12", 1, "?", "?")]
-        public void Shorten_ReturnsExpectedString([NotNull] string s, int l, string e, string expected)
+        [Test]
+        public void Shorten_ThrowsException_IfMaxLengthLessThanOne()
         {
-            var actual = s.Shorten(l, e);
-
-            Assert.AreEqual(expected, actual);
+            Assert.Throws<ArgumentOutOfRangeException>(() => "".Shorten(0));
         }
 
-        [TestCase("Les Misérables", 7, "Les Mis"),TestCase("Les Misérables", 8, "Les Mis"),TestCase("Les Misérables", 9, "Les Misé"),TestCase("क्षि", 4, "क्षि"),TestCase("क्षि", 3, "क्"),TestCase("क्षि", 2, "क्"),TestCase("क्षि", 1, "")]
-        public void Shorten_TakesIntoAccount_MultiCharSequences([NotNull] string s, int l, string expected)
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Shorten_ThrowsException_IfStringIsNull()
         {
-            var actual = s.Shorten(l);
-            Assert.AreEqual(expected, actual);
+            Assert.Throws<ArgumentNullException>(() => ((string) null).Shorten(100));
         }
     }
 }

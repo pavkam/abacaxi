@@ -15,13 +15,74 @@
 
 namespace Abacaxi.Tests.Graphs
 {
+    using System.Diagnostics.CodeAnalysis;
     using Abacaxi.Graphs;
     using NUnit.Framework;
-    using System.Diagnostics.CodeAnalysis;
 
     [TestFixture]
     public class CellTests
     {
+        [Test, SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+        public void Equals_ReturnsFalse_ForNonCoordinateObject()
+        {
+            var c1 = new Cell(10, 22);
+
+            Assert.IsFalse(c1.Equals(this));
+        }
+
+        [Test]
+        public void Equals_ReturnsFalse_ForNonEqualCoordinates()
+        {
+            var c1 = new Cell(10, 22);
+            var c2 = new Cell(11, 22);
+
+            Assert.IsFalse(c1.Equals(c2));
+        }
+
+        [Test]
+        public void Equals_ReturnsFalse_ForNullObject()
+        {
+            var c1 = new Cell(10, 22);
+
+            Assert.IsFalse(c1.Equals(null));
+        }
+
+        [Test]
+        public void Equals_ReturnsTrue_ForEqualCoordinates()
+        {
+            var c1 = new Cell(11, 22);
+            var c2 = new Cell(11, 22);
+
+            Assert.IsTrue(c1.Equals(c2));
+        }
+
+        [Test]
+        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentCoordinates()
+        {
+            var c1 = new Cell(10, 22);
+            var c2 = new Cell(11, 22);
+
+            Assert.AreNotEqual(c1.GetHashCode(), c2.GetHashCode());
+        }
+
+
+        [Test]
+        public void GetHashCode_ReturnsEqualHashCodes_ForEqualCoordinates()
+        {
+            var c1 = new Cell(11, 22);
+            var c2 = new Cell(11, 22);
+
+            Assert.AreEqual(c1.GetHashCode(), c2.GetHashCode());
+        }
+
+        [Test]
+        public void ToString_ReturnsValidValue()
+        {
+            var coords = new Cell(11, 22);
+
+            Assert.AreEqual("(11, 22)", coords.ToString());
+        }
+
         [Test]
         public void X_ReturnsValidValue()
         {
@@ -36,67 +97,6 @@ namespace Abacaxi.Tests.Graphs
             var coords = new Cell(0, 99);
 
             Assert.AreEqual(99, coords.Y);
-        }
-
-        [Test]
-        public void ToString_ReturnsValidValue()
-        {
-            var coords = new Cell(11, 22);
-
-            Assert.AreEqual("(11, 22)", coords.ToString());
-        }
-
-        [Test]
-        public void Equals_ReturnsTrue_ForEqualCoordinates()
-        {
-            var c1 = new Cell(11, 22);
-            var c2 = new Cell(11, 22);
-
-            Assert.IsTrue(c1.Equals(c2));
-        }
-
-        [Test]
-        public void Equals_ReturnsFalse_ForNonEqualCoordinates()
-        {
-            var c1 = new Cell(10, 22);
-            var c2 = new Cell(11, 22);
-
-            Assert.IsFalse(c1.Equals(c2));
-        }
-
-        [Test, SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
-        public void Equals_ReturnsFalse_ForNonCoordinateObject()
-        {
-            var c1 = new Cell(10, 22);
-
-            Assert.IsFalse(c1.Equals(this));
-        }
-
-        [Test]
-        public void Equals_ReturnsFalse_ForNullObject()
-        {
-            var c1 = new Cell(10, 22);
-
-            Assert.IsFalse(c1.Equals(null));
-        }
-
-
-        [Test]
-        public void GetHashCode_ReturnsEqualHashCodes_ForEqualCoordinates()
-        {
-            var c1 = new Cell(11, 22);
-            var c2 = new Cell(11, 22);
-
-            Assert.AreEqual(c1.GetHashCode(), c2.GetHashCode());
-        }
-
-        [Test]
-        public void GetHashCode_ReturnsDifferentHashCodes_ForDifferentCoordinates()
-        {
-            var c1 = new Cell(10, 22);
-            var c2 = new Cell(11, 22);
-
-            Assert.AreNotEqual(c1.GetHashCode(), c2.GetHashCode());
         }
     }
 }

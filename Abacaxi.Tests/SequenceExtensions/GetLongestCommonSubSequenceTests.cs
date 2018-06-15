@@ -16,32 +16,37 @@
 namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
+    using NUnit.Framework;
+    using SequenceExtensions = Abacaxi.SequenceExtensions;
 
     [TestFixture]
     public sealed class GetLongestCommonSubSequenceTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetLongestCommonSubSequence_ThrowsException_ForNullSequence()
+        [TestCase("", "", ""), TestCase("a", "a", "a"), TestCase("a", "b", ""), TestCase("", "a", ""),
+         TestCase("a", "", ""), TestCase("ab", "a", "a"), TestCase("a", "ab", "a"), TestCase("ab", "ba", "b"),
+         TestCase("hello my dear friend", "Hello you fiend!", "ello y fiend"),
+         SuppressMessage("ReSharper", "StringLiteralTypo")]
+        public void GetLongestCommonSubSequence_ReturnsExpectedSequence([NotNull] string s1, [NotNull] string s2,
+            string expected)
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                Abacaxi.SequenceExtensions.GetLongestCommonSubSequence(null, new char[] {}));
+            var actual = new string(s1.ToCharArray().GetLongestCommonSubSequence(s2.ToCharArray()));
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetLongestCommonSubSequence_ThrowsException_ForNullOtherSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new char[] { }.GetLongestCommonSubSequence(null));
         }
 
-        [TestCase("", "", ""),TestCase("a", "a", "a"),TestCase("a", "b", ""),TestCase("", "a", ""),TestCase("a", "", ""),TestCase("ab", "a", "a"),TestCase("a", "ab", "a"),TestCase("ab", "ba", "b"),TestCase("hello my dear friend", "Hello you fiend!", "ello y fiend"),SuppressMessage("ReSharper", "StringLiteralTypo")]
-        public void GetLongestCommonSubSequence_ReturnsExpectedSequence([NotNull] string s1, [NotNull] string s2, string expected)
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetLongestCommonSubSequence_ThrowsException_ForNullSequence()
         {
-            var actual = new string(s1.ToCharArray().GetLongestCommonSubSequence(s2.ToCharArray()));
-            Assert.AreEqual(expected, actual);
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceExtensions.GetLongestCommonSubSequence(null, new char[] { }));
         }
     }
 }

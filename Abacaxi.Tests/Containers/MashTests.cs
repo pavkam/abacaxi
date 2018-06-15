@@ -16,216 +16,254 @@
 namespace Abacaxi.Tests.Containers
 {
     using System;
-    using Abacaxi.Containers;
-    using NUnit.Framework;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using Abacaxi.Containers;
+    using NUnit.Framework;
 
-    [TestFixture,SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
-    public class MashTests
+    [TestFixture, SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
+    public sealed class MashTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            _emptyMash = new Mash<string, int>();
+            _oneMash = new Mash<string, int> { 1 };
+            _twoMash = new Mash<string, int> { 1, 2 };
+            _threeMash = new Mash<string, int> { 1, 2, 3 };
+        }
+
         private Mash<string, int> _emptyMash;
         private Mash<string, int> _oneMash;
         private Mash<string, int> _twoMash;
         private Mash<string, int> _threeMash;
 
-        [SetUp]
-        public void SetUp()
+        [TestCase(0, false)]
+        public void Contains_ReturnsExpectedResult_ForEmpty(int i, bool expected)
         {
-            _emptyMash = new Mash<string, int>();
-            _oneMash = new Mash<string, int> {1};
-            _twoMash = new Mash<string, int> {1, 2};
-            _threeMash = new Mash<string, int> {1, 2, 3};
+            var actual = _emptyMash.Contains(i);
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Ctor_ThrowsException_IfEqualityComparerIsNull()
+        [TestCase(0, false), TestCase(1, true)]
+        public void Contains_ReturnsExpectedResult_ForOne(int i, bool expected)
         {
-            Assert.Throws<ArgumentNullException>(() => new Mash<string, int>(null));
+            var actual = _oneMash.Contains(i);
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test]
-        public void Ctor_TakesIntoAccountTheEqualityComparer()
+        [TestCase(0, false), TestCase(1, true), TestCase(2, true)]
+        public void Contains_ReturnsExpectedResult_ForTwo(int i, bool expected)
         {
-            var mash = new Mash<string, int>(StringComparer.OrdinalIgnoreCase);
-
-            Assert.AreSame(mash["A"], mash["a"]);
+            var actual = _twoMash.Contains(i);
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test]
-        public void Ctor_UsesDefaultComparer_IfNotSpecified()
+        [TestCase(0, false), TestCase(1, true), TestCase(2, true), TestCase(3, true)]
+        public void Contains_ReturnsExpectedResult_ForThree(int i, bool expected)
         {
-            var mash = new Mash<string, int>();
-
-            Assert.AreNotSame(mash["A"], mash["a"]);
+            var actual = _threeMash.Contains(i);
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test]
-        public void MashIndexer_Getter_ReturnsANewlyCreatedMash_IfNotRegistered()
+        [TestCase(0, -1)]
+        public void IndexOf_ReturnsExpectedResult_ForEmpty(int i, int expected)
         {
-            var mash = new Mash<string, int>();
-
-            Assert.IsNotNull(mash["test"]);
+            var actual = _emptyMash.IndexOf(i);
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test]
-        public void MashIndexer_Getter_ReturnsExistingMash_IfRegistered()
+        [TestCase(0, -1), TestCase(1, 0)]
+        public void IndexOf_ReturnsExpectedResult_ForOne(int i, int expected)
         {
-            var mash = new Mash<string, int>();
-            var sub = mash["test"];
-            Assert.AreSame(sub, mash["test"]);
+            var actual = _oneMash.IndexOf(i);
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test]
-        public void MashIndexer_Getter_ProperlyTranslatedInternalState()
+        [TestCase(0, -1), TestCase(1, 0), TestCase(2, 1)]
+        public void IndexOf_ReturnsExpectedResult_ForTwo(int i, int expected)
         {
-            var mash = new Mash<string, int>();
-            var sub1 = mash["1"];
-            Assert.AreSame(sub1, mash["1"]);
-
-            var sub2 = mash["2"];
-            Assert.AreSame(sub1, mash["1"]);
-            Assert.AreSame(sub2, mash["2"]);
-            var sub3 = mash["3"];
-            Assert.AreSame(sub1, mash["1"]);
-            Assert.AreSame(sub2, mash["2"]);
-            Assert.AreSame(sub3, mash["3"]);
-            var sub4 = mash["4"];
-            Assert.AreSame(sub1, mash["1"]);
-            Assert.AreSame(sub2, mash["2"]);
-            Assert.AreSame(sub3, mash["3"]);
-            Assert.AreSame(sub4, mash["4"]);
-            var sub5 = mash["5"];
-            Assert.AreSame(sub1, mash["1"]);
-            Assert.AreSame(sub2, mash["2"]);
-            Assert.AreSame(sub3, mash["3"]);
-            Assert.AreSame(sub4, mash["4"]);
-            Assert.AreSame(sub5, mash["5"]);
-            var sub6 = mash["6"];
-            Assert.AreSame(sub1, mash["1"]);
-            Assert.AreSame(sub2, mash["2"]);
-            Assert.AreSame(sub3, mash["3"]);
-            Assert.AreSame(sub4, mash["4"]);
-            Assert.AreSame(sub5, mash["5"]);
-            Assert.AreSame(sub6, mash["6"]);
+            var actual = _twoMash.IndexOf(i);
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test]
-        public void GetLinked_IsTheSameAs_MashIndexer_Getter()
+        [TestCase(0, -1), TestCase(1, 0), TestCase(2, 1), TestCase(3, 2)]
+        public void IndexOf_ReturnsExpectedResult_ForThree(int i, int expected)
         {
-            var mash = new Mash<string, int>();
-            Assert.AreSame(mash["a"], mash.GetLinked("a"));
-            Assert.AreSame(mash.GetLinked("b"), mash["b"]);
+            var actual = _threeMash.IndexOf(i);
+            Assert.AreEqual(expected, actual);
         }
 
-        [Test]
-        public void LinkedCount_IsZero_NewMash()
+        [TestCase(-1), TestCase(1)]
+        public void Insert_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
         {
-            var mash = new Mash<string, int>();
-            Assert.AreEqual(0, mash.LinkedCount);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _emptyMash.Insert(index, 0));
         }
 
-        [Test,SuppressMessage("ReSharper", "UnusedVariable")]
-        public void LinkedCount_IsIncremented_WhenASubMashIsAccessed()
+        [TestCase(-1), TestCase(2)]
+        public void Insert_ThrowsException_IfIndexOutOfRange_ForOne(int index)
         {
-            var mash = new Mash<string, int>();
-            var sub = mash["A"];
-            Assert.AreEqual(1, mash.LinkedCount);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _oneMash.Insert(index, 0));
         }
 
-        [Test,SuppressMessage("ReSharper", "NotAccessedVariable"),SuppressMessage("ReSharper", "RedundantAssignment")]
-        public void LinkedCount_IsNotIncremented_WhenExistingSubMashIsAccessed()
+        [TestCase(-1), TestCase(3)]
+        public void Insert_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
         {
-            var mash = new Mash<string, int>();
-            var sub = mash["A"];
-            sub = mash["A"];
-
-            Assert.AreEqual(1, mash.LinkedCount);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _twoMash.Insert(index, 0));
         }
 
-        [Test,SuppressMessage("ReSharper", "UnusedVariable")]
-        public void LinkedCount_IsProperlyTranslatedInternalState()
+        [TestCase(-1), TestCase(4)]
+        public void Insert_ThrowsException_IfIndexOutOfRange_ForThree(int index)
         {
-            var mash = new Mash<string, int>();
-            var sub1 = mash["1"];
-            Assert.AreEqual(1, mash.LinkedCount);
-
-            var sub2 = mash["2"];
-            Assert.AreEqual(2, mash.LinkedCount);
-
-            var sub3 = mash["3"];
-            Assert.AreEqual(3, mash.LinkedCount);
-
-            var sub4 = mash["4"];
-            Assert.AreEqual(4, mash.LinkedCount);
-
-            var sub5 = mash["5"];
-            Assert.AreEqual(5, mash.LinkedCount);
-
-            var sub6 = mash["6"];
-            Assert.AreEqual(6, mash.LinkedCount);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _threeMash.Insert(index, 0));
         }
 
-        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
-        public void GetEnumerator_ReturnsNothing_ForEmpty()
+        [TestCase(-1), TestCase(1)]
+        public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
         {
-            var result = new List<int>();
-            foreach (var i in _emptyMash)
+            Assert.Throws<ArgumentOutOfRangeException>(() => _emptyMash.RemoveAt(index));
+        }
+
+        [TestCase(-1), TestCase(2)]
+        public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForOne(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _oneMash.RemoveAt(index));
+        }
+
+        [TestCase(-1), TestCase(3)]
+        public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _twoMash.RemoveAt(index));
+        }
+
+        [TestCase(-1), TestCase(4)]
+        public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForThree(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _threeMash.RemoveAt(index));
+        }
+
+        [TestCase(-1), TestCase(1)]
+        public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _emptyMash[index]));
+        }
+
+        [TestCase(-1), TestCase(2)]
+        public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForOne(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _oneMash[index]));
+        }
+
+        [TestCase(-1), TestCase(3)]
+        public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _twoMash[index]));
+        }
+
+        [TestCase(-1), TestCase(4)]
+        public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForThree(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _threeMash[index]));
+        }
+
+        [TestCase(0)]
+        public void Indexer_Getter_ReturnsTheExpectedValue_ForOne(int index)
+        {
+            var all = _oneMash.ToArray();
+            Assert.AreEqual(all[index], _oneMash[index]);
+        }
+
+        [TestCase(0), TestCase(1)]
+        public void Indexer_Getter_ReturnsTheExpectedValue_ForTwo(int index)
+        {
+            var all = _twoMash.ToArray();
+            Assert.AreEqual(all[index], _twoMash[index]);
+        }
+
+        [TestCase(0), TestCase(1), TestCase(2)]
+        public void Indexer_Getter_ReturnsTheExpectedValue_ForThree(int index)
+        {
+            var all = _threeMash.ToArray();
+            Assert.AreEqual(all[index], _threeMash[index]);
+        }
+
+        [TestCase(-1), TestCase(1)]
+        public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _emptyMash[index] = 1);
+        }
+
+        [TestCase(-1), TestCase(2)]
+        public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForOne(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _oneMash[index] = 1);
+        }
+
+        [TestCase(-1), TestCase(3)]
+        public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _twoMash[index] = 1);
+        }
+
+        [TestCase(-1), TestCase(4)]
+        public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForThree(int index)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _threeMash[index] = 1);
+        }
+
+        [TestCase(0)]
+        public void Indexer_Setter_SetsTheExpectedValue_ForOne(int index)
+        {
+            var all = _oneMash.ToArray();
+            all[index] = -1;
+            _oneMash[index] = -1;
+            TestHelper.AssertSequence(_oneMash, all);
+        }
+
+        [TestCase(0), TestCase(1)]
+        public void Indexer_Setter_SetsTheExpectedValue_ForTwo(int index)
+        {
+            var all = _twoMash.ToArray();
+            all[index] = -1;
+            _twoMash[index] = -1;
+            TestHelper.AssertSequence(_twoMash, all);
+        }
+
+        [TestCase(0), TestCase(1), TestCase(2)]
+        public void Indexer_Setter_SetsTheExpectedValue_ForThree(int index)
+        {
+            var all = _threeMash.ToArray();
+            all[index] = -1;
+            _threeMash[index] = -1;
+            TestHelper.AssertSequence(_threeMash, all);
+        }
+
+        [TestCase(0, 6), TestCase(1, 6), TestCase(2, 6), TestCase(3, 6), TestCase(4, 6), TestCase(5, 6), TestCase(0, 5),
+         TestCase(1, 5), TestCase(2, 5), TestCase(3, 5), TestCase(4, 5), TestCase(0, 4), TestCase(1, 4), TestCase(2, 4),
+         TestCase(3, 4), TestCase(0, 3), TestCase(1, 3), TestCase(2, 3), TestCase(0, 2), TestCase(1, 2), TestCase(0, 1)]
+        public void Unlink_RemovesTheExpectedElement(int index, int count)
+        {
+            var mash = new Mash<int, string>();
+            var ms = new Mash<int, string>[count];
+            for (var i = 0; i < count; i++)
             {
-                result.Add(i);
+                ms[i] = new Mash<int, string>();
+                mash.Link(i, ms[i]);
             }
 
-            TestHelper.AssertSequence(result);
-        }
+            mash.Unlink(index);
 
-        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
-        public void GetEnumerator_ReturnsElements_ForOne()
-        {
-            var result = new List<int>();
-            foreach (var i in _oneMash)
+            for (var i = 0; i < count; i++)
             {
-                result.Add(i);
+                if (i != index)
+                {
+                    Assert.AreSame(ms[i], mash.GetLinked(i));
+                }
             }
 
-            TestHelper.AssertSequence(result, 1);
-        }
-
-        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
-        public void GetEnumerator_ReturnsElements_ForTwo()
-        {
-            var result = new List<int>();
-            foreach (var i in _twoMash)
-            {
-                result.Add(i);
-            }
-
-            TestHelper.AssertSequence(result, 1, 2);
-        }
-
-        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
-        public void GetEnumerator_ReturnsElements_ForThree()
-        {
-            var result = new List<int>();
-            foreach (var i in _threeMash)
-            {
-                result.Add(i);
-            }
-
-            TestHelper.AssertSequence(result, 1, 2, 3);
-        }
-
-        [Test,SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
-        public void Implicit_GetEnumerator_FunctionsAsExpected()
-        {
-            var result = new List<int>();
-            foreach (var i in (IEnumerable) _threeMash)
-            {
-                result.Add((int) i);
-            }
-
-            TestHelper.AssertSequence(result, 1, 2, 3);
+            Assert.AreNotSame(ms[index], mash.GetLinked(index));
         }
 
         [Test]
@@ -269,35 +307,43 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(0, _threeMash.Count);
         }
 
-        [TestCase(0, false)]
-        public void Contains_ReturnsExpectedResult_ForEmpty(int i, bool expected)
+        [Test]
+        public void CopyTo_CopiesAllItems_ToArray_ForOne()
         {
-            var actual = _emptyMash.Contains(i);
-            Assert.AreEqual(expected, actual);
+            var array = new int[1];
+
+            _oneMash.CopyTo(array, 0);
+            TestHelper.AssertSequence(array, 1);
         }
 
-        [TestCase(0, false),TestCase(1, true)]
-        public void Contains_ReturnsExpectedResult_ForOne(int i, bool expected)
+        [Test]
+        public void CopyTo_CopiesAllItems_ToArray_ForThree()
         {
-            var actual = _oneMash.Contains(i);
-            Assert.AreEqual(expected, actual);
+            var array = new int[3];
+
+            _threeMash.CopyTo(array, 0);
+            TestHelper.AssertSequence(array, 1, 2, 3);
         }
 
-        [TestCase(0, false),TestCase(1, true),TestCase(2, true)]
-        public void Contains_ReturnsExpectedResult_ForTwo(int i, bool expected)
+        [Test]
+        public void CopyTo_CopiesAllItems_ToArray_ForTwo()
         {
-            var actual = _twoMash.Contains(i);
-            Assert.AreEqual(expected, actual);
+            var array = new int[2];
+
+            _twoMash.CopyTo(array, 0);
+            TestHelper.AssertSequence(array, 1, 2);
         }
 
-        [TestCase(0, false),TestCase(1, true),TestCase(2, true),TestCase(3, true)]
-        public void Contains_ReturnsExpectedResult_ForThree(int i, bool expected)
+        [Test]
+        public void CopyTo_DoesNothing_ForEmpty()
         {
-            var actual = _threeMash.Contains(i);
-            Assert.AreEqual(expected, actual);
+            var array = new int[1];
+            _emptyMash.CopyTo(array, 0);
+
+            Assert.AreEqual(0, array[0]);
         }
 
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void CopyTo_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() => _oneMash.CopyTo(null, 0));
@@ -322,96 +368,6 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void CopyTo_CopiesAllItems_ToArray_ForOne()
-        {
-            var array = new int[1];
-
-            _oneMash.CopyTo(array, 0);
-            TestHelper.AssertSequence(array, 1);
-        }
-
-        [Test]
-        public void CopyTo_CopiesAllItems_ToArray_ForTwo()
-        {
-            var array = new int[2];
-
-            _twoMash.CopyTo(array, 0);
-            TestHelper.AssertSequence(array, 1, 2);
-        }
-
-        [Test]
-        public void CopyTo_CopiesAllItems_ToArray_ForThree()
-        {
-            var array = new int[3];
-
-            _threeMash.CopyTo(array, 0);
-            TestHelper.AssertSequence(array, 1, 2, 3);
-        }
-
-        [Test]
-        public void CopyTo_DoesNothing_ForEmpty()
-        {
-            var array = new int[1];
-            _emptyMash.CopyTo(array, 0);
-
-            Assert.AreEqual(0, array[0]);
-        }
-
-        [Test]
-        public void Remove_ReturnsFalse_IfItemNotFound_ForEmpty()
-        {
-            Assert.IsFalse(_emptyMash.Remove(0));
-        }
-
-        [Test]
-        public void Remove_ReturnsFalse_IfItemNotFound_ForOne()
-        {
-            Assert.IsFalse(_oneMash.Remove(0));
-        }
-
-        [Test]
-        public void Remove_ReturnsFalse_IfItemNotFound_ForTwo()
-        {
-            Assert.IsFalse(_twoMash.Remove(0));
-        }
-
-        [Test]
-        public void Remove_ReturnsFalse_IfItemNotFound_ForThree()
-        {
-            Assert.IsFalse(_threeMash.Remove(0));
-        }
-
-        [Test]
-        public void Remove_ReturnsTrue_IfItemFound_ForOne()
-        {
-            Assert.IsTrue(_oneMash.Remove(1));
-        }
-
-        [Test]
-        public void Remove_ReturnsTrue_IfItemFound_ForTwo()
-        {
-            Assert.IsTrue(_twoMash.Remove(2));
-        }
-
-        [Test]
-        public void Remove_DecrementsCount_IfElementWasRemoved()
-        {
-            _threeMash.Remove(3);
-            Assert.AreEqual(2, _threeMash.Count);
-        }
-
-        [Test]
-        public void Remove_PreservesInternalStructure()
-        {
-            _threeMash.Remove(1);
-            TestHelper.AssertSequence(_threeMash, 2, 3);
-            _threeMash.Remove(3);
-            TestHelper.AssertSequence(_threeMash, 2);
-            _threeMash.Remove(2);
-            TestHelper.AssertSequence(_threeMash);
-        }
-
-        [Test]
         public void Count_IsValidInContextOfDifferentInternalStructures()
         {
             Assert.AreEqual(0, _emptyMash.Count);
@@ -426,61 +382,94 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void IsReadOnly_ReturnsFalse()
+        public void Ctor_TakesIntoAccountTheEqualityComparer()
         {
-            Assert.IsFalse(_emptyMash.IsReadOnly);
+            var mash = new Mash<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            Assert.AreSame(mash["A"], mash["a"]);
         }
 
-        [TestCase(0, -1)]
-        public void IndexOf_ReturnsExpectedResult_ForEmpty(int i, int expected)
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Ctor_ThrowsException_IfEqualityComparerIsNull()
         {
-            var actual = _emptyMash.IndexOf(i);
-            Assert.AreEqual(expected, actual);
+            Assert.Throws<ArgumentNullException>(() => new Mash<string, int>(null));
         }
 
-        [TestCase(0, -1),TestCase(1, 0)]
-        public void IndexOf_ReturnsExpectedResult_ForOne(int i, int expected)
+        [Test]
+        public void Ctor_UsesDefaultComparer_IfNotSpecified()
         {
-            var actual = _oneMash.IndexOf(i);
-            Assert.AreEqual(expected, actual);
+            var mash = new Mash<string, int>();
+
+            Assert.AreNotSame(mash["A"], mash["a"]);
         }
 
-        [TestCase(0, -1),TestCase(1, 0),TestCase(2, 1)]
-        public void IndexOf_ReturnsExpectedResult_ForTwo(int i, int expected)
+        [Test, SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        public void GetEnumerator_ReturnsElements_ForOne()
         {
-            var actual = _twoMash.IndexOf(i);
-            Assert.AreEqual(expected, actual);
+            var result = new List<int>();
+            foreach (var i in _oneMash)
+            {
+                result.Add(i);
+            }
+
+            TestHelper.AssertSequence(result, 1);
         }
 
-        [TestCase(0, -1),TestCase(1, 0),TestCase(2, 1),TestCase(3, 2)]
-        public void IndexOf_ReturnsExpectedResult_ForThree(int i, int expected)
+        [Test, SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        public void GetEnumerator_ReturnsElements_ForThree()
         {
-            var actual = _threeMash.IndexOf(i);
-            Assert.AreEqual(expected, actual);
+            var result = new List<int>();
+            foreach (var i in _threeMash)
+            {
+                result.Add(i);
+            }
+
+            TestHelper.AssertSequence(result, 1, 2, 3);
         }
 
-        [TestCase(-1),TestCase(1)]
-        public void Insert_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
+        [Test, SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        public void GetEnumerator_ReturnsElements_ForTwo()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _emptyMash.Insert(index, 0));
+            var result = new List<int>();
+            foreach (var i in _twoMash)
+            {
+                result.Add(i);
+            }
+
+            TestHelper.AssertSequence(result, 1, 2);
         }
 
-        [TestCase(-1),TestCase(2)]
-        public void Insert_ThrowsException_IfIndexOutOfRange_ForOne(int index)
+        [Test, SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        public void GetEnumerator_ReturnsNothing_ForEmpty()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _oneMash.Insert(index, 0));
+            var result = new List<int>();
+            foreach (var i in _emptyMash)
+            {
+                result.Add(i);
+            }
+
+            TestHelper.AssertSequence(result);
         }
 
-        [TestCase(-1),TestCase(3)]
-        public void Insert_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
+        [Test]
+        public void GetLinked_IsTheSameAs_MashIndexer_Getter()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _twoMash.Insert(index, 0));
+            var mash = new Mash<string, int>();
+            Assert.AreSame(mash["a"], mash.GetLinked("a"));
+            Assert.AreSame(mash.GetLinked("b"), mash["b"]);
         }
 
-        [TestCase(-1),TestCase(4)]
-        public void Insert_ThrowsException_IfIndexOutOfRange_ForThree(int index)
+        [Test, SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        public void Implicit_GetEnumerator_FunctionsAsExpected()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _threeMash.Insert(index, 0));
+            var result = new List<int>();
+            foreach (var i in (IEnumerable) _threeMash)
+            {
+                result.Add((int) i);
+            }
+
+            TestHelper.AssertSequence(result, 1, 2, 3);
         }
 
         [Test]
@@ -498,6 +487,13 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        public void Insert_AppendsItem_IfIndexEqualsToLength_ForThree()
+        {
+            _threeMash.Insert(3, 10);
+            TestHelper.AssertSequence(_threeMash, 1, 2, 3, 10);
+        }
+
+        [Test]
         public void Insert_AppendsItem_IfIndexEqualsToLength_ForTwo()
         {
             _twoMash.Insert(2, 10);
@@ -505,10 +501,10 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Insert_AppendsItem_IfIndexEqualsToLength_ForThree()
+        public void Insert_IncrementsCountByOne()
         {
-            _threeMash.Insert(3, 10);
-            TestHelper.AssertSequence(_threeMash, 1, 2, 3, 10);
+            _emptyMash.Insert(0, 1);
+            Assert.AreEqual(1, _emptyMash.Count);
         }
 
         [Test]
@@ -519,17 +515,17 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Insert_PrependsItem_IfIndexEqualsToZero_ForTwo()
-        {
-            _twoMash.Insert(0, 10);
-            TestHelper.AssertSequence(_twoMash, 10, 1, 2);
-        }
-
-        [Test]
         public void Insert_PrependsItem_IfIndexEqualsToZero_ForThree()
         {
             _threeMash.Insert(0, 10);
             TestHelper.AssertSequence(_threeMash, 10, 1, 2, 3);
+        }
+
+        [Test]
+        public void Insert_PrependsItem_IfIndexEqualsToZero_ForTwo()
+        {
+            _twoMash.Insert(0, 10);
+            TestHelper.AssertSequence(_twoMash, 10, 1, 2);
         }
 
         [Test]
@@ -544,255 +540,9 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Insert_IncrementsCountByOne()
+        public void IsReadOnly_ReturnsFalse()
         {
-            _emptyMash.Insert(0, 1);
-            Assert.AreEqual(1, _emptyMash.Count);
-        }
-
-        [TestCase(-1),TestCase(1)]
-        public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _emptyMash.RemoveAt(index));
-        }
-
-        [TestCase(-1),TestCase(2)]
-        public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForOne(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _oneMash.RemoveAt(index));
-        }
-
-        [TestCase(-1),TestCase(3)]
-        public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _twoMash.RemoveAt(index));
-        }
-
-        [TestCase(-1),TestCase(4)]
-        public void RemoveAt_ThrowsException_IfIndexOutOfRange_ForThree(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _threeMash.RemoveAt(index));
-        }
-
-        [Test]
-        public void RemoveAt_RemovesFirstElement_ForOne()
-        {
-            _oneMash.RemoveAt(0);
-            TestHelper.AssertSequence(_oneMash);
-        }
-
-        [Test]
-        public void RemoveAt_RemovesFirstElement_ForTwo()
-        {
-            _twoMash.RemoveAt(0);
-            TestHelper.AssertSequence(_twoMash, 2);
-        }
-
-        [Test]
-        public void RemoveAt_RemovesFirstElement_ForThree()
-        {
-            _threeMash.RemoveAt(0);
-            TestHelper.AssertSequence(_threeMash, 2, 3);
-        }
-
-        [Test]
-        public void RemoveAt_RemovesLastElement_ForTwo()
-        {
-            _twoMash.RemoveAt(1);
-            TestHelper.AssertSequence(_twoMash, 1);
-        }
-
-        [Test]
-        public void RemoveAt_RemovesLastElement_ForThree()
-        {
-            _threeMash.RemoveAt(2);
-            TestHelper.AssertSequence(_threeMash, 1, 2);
-        }
-
-        [Test]
-        public void RemoveAt_DecrementsCountByOne()
-        {
-            _threeMash.RemoveAt(0);
-            Assert.AreEqual(2, _threeMash.Count);
-        }
-
-        [Test]
-        public void RemoveAt_PreservesStructure()
-        {
-            _threeMash.RemoveAt(0);
-            TestHelper.AssertSequence(_threeMash, 2, 3);
-            _threeMash.RemoveAt(0);
-            TestHelper.AssertSequence(_threeMash, 3);
-            _threeMash.RemoveAt(0);
-            TestHelper.AssertSequence(_threeMash);
-        }
-
-        [TestCase(-1),TestCase(1)]
-        public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _emptyMash[index]));
-        }
-
-        [TestCase(-1),TestCase(2)]
-        public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForOne(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _oneMash[index]));
-        }
-
-        [TestCase(-1),TestCase(3)]
-        public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _twoMash[index]));
-        }
-
-        [TestCase(-1),TestCase(4)]
-        public void Indexer_Getter_ThrowsException_IfIndexOutOfRange_ForThree(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Assert.AreEqual(1, _threeMash[index]));
-        }
-
-        [TestCase(0)]
-        public void Indexer_Getter_ReturnsTheExpectedValue_ForOne(int index)
-        {
-            var all = _oneMash.ToArray();
-            Assert.AreEqual(all[index], _oneMash[index]);
-        }
-
-        [TestCase(0),TestCase(1)]
-        public void Indexer_Getter_ReturnsTheExpectedValue_ForTwo(int index)
-        {
-            var all = _twoMash.ToArray();
-            Assert.AreEqual(all[index], _twoMash[index]);
-        }
-
-        [TestCase(0),TestCase(1),TestCase(2)]
-        public void Indexer_Getter_ReturnsTheExpectedValue_ForThree(int index)
-        {
-            var all = _threeMash.ToArray();
-            Assert.AreEqual(all[index], _threeMash[index]);
-        }
-
-        [TestCase(-1),TestCase(1)]
-        public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForEmpty(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _emptyMash[index] = 1);
-        }
-
-        [TestCase(-1),TestCase(2)]
-        public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForOne(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _oneMash[index] = 1);
-        }
-
-        [TestCase(-1),TestCase(3)]
-        public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForTwo(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _twoMash[index] = 1);
-        }
-
-        [TestCase(-1),TestCase(4)]
-        public void Indexer_Setter_ThrowsException_IfIndexOutOfRange_ForThree(int index)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _threeMash[index] = 1);
-        }
-
-        [TestCase(0)]
-        public void Indexer_Setter_SetsTheExpectedValue_ForOne(int index)
-        {
-            var all = _oneMash.ToArray();
-            all[index] = -1;
-            _oneMash[index] = -1;
-            TestHelper.AssertSequence(_oneMash, all);
-        }
-
-        [TestCase(0),TestCase(1)]
-        public void Indexer_Setter_SetsTheExpectedValue_ForTwo(int index)
-        {
-            var all = _twoMash.ToArray();
-            all[index] = -1;
-            _twoMash[index] = -1;
-            TestHelper.AssertSequence(_twoMash, all);
-        }
-
-        [TestCase(0),TestCase(1),TestCase(2)]
-        public void Indexer_Setter_SetsTheExpectedValue_ForThree(int index)
-        {
-            var all = _threeMash.ToArray();
-            all[index] = -1;
-            _threeMash[index] = -1;
-            TestHelper.AssertSequence(_threeMash, all);
-        }
-
-        [Test]
-        public void Value_Getter_ReturnsDefaultValue_ForEmpty()
-        {
-            Assert.AreEqual(0, _emptyMash.Value);
-        }
-
-        [Test]
-        public void Value_Getter_ReturnsFirstValue_ForOne()
-        {
-            Assert.AreEqual(1, _oneMash.Value);
-        }
-
-        [Test]
-        public void Value_Getter_ReturnsFirstValue_ForTwo()
-        {
-            Assert.AreEqual(1, _twoMash.Value);
-        }
-
-        [Test]
-        public void Value_Getter_ReturnsFirstValue_ForThree()
-        {
-            Assert.AreEqual(1, _threeMash.Value);
-        }
-
-        [Test]
-        public void Value_Setter_AddsNewValue_ForEmpty()
-        {
-            _emptyMash.Value = 1;
-
-            Assert.AreEqual(1, _emptyMash[0]);
-        }
-
-        [Test]
-        public void Value_Setter_IncrementsCountByOne_ForEmpty()
-        {
-            _emptyMash.Value = 1;
-            Assert.AreEqual(1, _emptyMash.Count);
-        }
-
-        [Test]
-        public void Value_Setter_SetsElementZero_ForOne()
-        {
-            _oneMash.Value = 10;
-            TestHelper.AssertSequence(_oneMash, 10);
-        }
-
-        [Test]
-        public void Value_Setter_SetsElementZero_ForTwo()
-        {
-            _twoMash.Value = 10;
-            TestHelper.AssertSequence(_twoMash, 10, 2);
-        }
-
-        [Test]
-        public void Value_Setter_SetsElementZero_ForThree()
-        {
-            _threeMash.Value = 10;
-            TestHelper.AssertSequence(_threeMash, 10, 2, 3);
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Link_ThrowsException_IfKeyIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => _emptyMash.Link(null, _threeMash));
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Link_ThrowsException_IfMashIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => _emptyMash.Link("a", null));
+            Assert.IsFalse(_emptyMash.IsReadOnly);
         }
 
         [Test]
@@ -801,14 +551,6 @@ namespace Abacaxi.Tests.Containers
             _emptyMash.Link("a", _threeMash);
 
             Assert.AreSame(_threeMash, _emptyMash["a"]);
-        }
-
-        [Test]
-        public void Link_IncrementsLinkedCount_IfAdded()
-        {
-            _emptyMash.Link("a", _threeMash);
-
-            Assert.AreEqual(1, _emptyMash.LinkedCount);
         }
 
         [Test]
@@ -821,12 +563,11 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Link_ReplacesTheMash_IfExists()
+        public void Link_IncrementsLinkedCount_IfAdded()
         {
             _emptyMash.Link("a", _threeMash);
-            _emptyMash.Link("a", _twoMash);
 
-            Assert.AreSame(_twoMash, _emptyMash["a"]);
+            Assert.AreEqual(1, _emptyMash.LinkedCount);
         }
 
         [Test]
@@ -1042,29 +783,239 @@ namespace Abacaxi.Tests.Containers
             Assert.AreSame(shunt, mash["6"]);
         }
 
-
-
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Unlink_ThrowsException_IfKeyIsNull()
+        [Test]
+        public void Link_ReplacesTheMash_IfExists()
         {
-            Assert.Throws<ArgumentNullException>(() => _emptyMash.Unlink(null));
+            _emptyMash.Link("a", _threeMash);
+            _emptyMash.Link("a", _twoMash);
+
+            Assert.AreSame(_twoMash, _emptyMash["a"]);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Link_ThrowsException_IfKeyIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _emptyMash.Link(null, _threeMash));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Link_ThrowsException_IfMashIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _emptyMash.Link("a", null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "UnusedVariable")]
+        public void LinkedCount_IsIncremented_WhenASubMashIsAccessed()
+        {
+            var mash = new Mash<string, int>();
+            var sub = mash["A"];
+            Assert.AreEqual(1, mash.LinkedCount);
+        }
+
+        [Test, SuppressMessage("ReSharper", "NotAccessedVariable"), SuppressMessage("ReSharper", "RedundantAssignment")]
+        public void LinkedCount_IsNotIncremented_WhenExistingSubMashIsAccessed()
+        {
+            var mash = new Mash<string, int>();
+            var sub = mash["A"];
+            sub = mash["A"];
+
+            Assert.AreEqual(1, mash.LinkedCount);
+        }
+
+        [Test, SuppressMessage("ReSharper", "UnusedVariable")]
+        public void LinkedCount_IsProperlyTranslatedInternalState()
+        {
+            var mash = new Mash<string, int>();
+            var sub1 = mash["1"];
+            Assert.AreEqual(1, mash.LinkedCount);
+
+            var sub2 = mash["2"];
+            Assert.AreEqual(2, mash.LinkedCount);
+
+            var sub3 = mash["3"];
+            Assert.AreEqual(3, mash.LinkedCount);
+
+            var sub4 = mash["4"];
+            Assert.AreEqual(4, mash.LinkedCount);
+
+            var sub5 = mash["5"];
+            Assert.AreEqual(5, mash.LinkedCount);
+
+            var sub6 = mash["6"];
+            Assert.AreEqual(6, mash.LinkedCount);
         }
 
         [Test]
-        public void Unlink_ReturnsFalse_IfNothingRemoved()
+        public void LinkedCount_IsZero_NewMash()
         {
-            _emptyMash.Link("a", _threeMash);
-
-            Assert.IsFalse(_emptyMash.Unlink("b"));
+            var mash = new Mash<string, int>();
+            Assert.AreEqual(0, mash.LinkedCount);
         }
 
         [Test]
-        public void Unlink_ReturnsTrue_IfRemoved()
+        public void MashIndexer_Getter_ProperlyTranslatedInternalState()
+        {
+            var mash = new Mash<string, int>();
+            var sub1 = mash["1"];
+            Assert.AreSame(sub1, mash["1"]);
+
+            var sub2 = mash["2"];
+            Assert.AreSame(sub1, mash["1"]);
+            Assert.AreSame(sub2, mash["2"]);
+            var sub3 = mash["3"];
+            Assert.AreSame(sub1, mash["1"]);
+            Assert.AreSame(sub2, mash["2"]);
+            Assert.AreSame(sub3, mash["3"]);
+            var sub4 = mash["4"];
+            Assert.AreSame(sub1, mash["1"]);
+            Assert.AreSame(sub2, mash["2"]);
+            Assert.AreSame(sub3, mash["3"]);
+            Assert.AreSame(sub4, mash["4"]);
+            var sub5 = mash["5"];
+            Assert.AreSame(sub1, mash["1"]);
+            Assert.AreSame(sub2, mash["2"]);
+            Assert.AreSame(sub3, mash["3"]);
+            Assert.AreSame(sub4, mash["4"]);
+            Assert.AreSame(sub5, mash["5"]);
+            var sub6 = mash["6"];
+            Assert.AreSame(sub1, mash["1"]);
+            Assert.AreSame(sub2, mash["2"]);
+            Assert.AreSame(sub3, mash["3"]);
+            Assert.AreSame(sub4, mash["4"]);
+            Assert.AreSame(sub5, mash["5"]);
+            Assert.AreSame(sub6, mash["6"]);
+        }
+
+        [Test]
+        public void MashIndexer_Getter_ReturnsANewlyCreatedMash_IfNotRegistered()
+        {
+            var mash = new Mash<string, int>();
+
+            Assert.IsNotNull(mash["test"]);
+        }
+
+        [Test]
+        public void MashIndexer_Getter_ReturnsExistingMash_IfRegistered()
+        {
+            var mash = new Mash<string, int>();
+            var sub = mash["test"];
+            Assert.AreSame(sub, mash["test"]);
+        }
+
+        [Test]
+        public void Remove_DecrementsCount_IfElementWasRemoved()
+        {
+            _threeMash.Remove(3);
+            Assert.AreEqual(2, _threeMash.Count);
+        }
+
+        [Test]
+        public void Remove_PreservesInternalStructure()
+        {
+            _threeMash.Remove(1);
+            TestHelper.AssertSequence(_threeMash, 2, 3);
+            _threeMash.Remove(3);
+            TestHelper.AssertSequence(_threeMash, 2);
+            _threeMash.Remove(2);
+            TestHelper.AssertSequence(_threeMash);
+        }
+
+        [Test]
+        public void Remove_ReturnsFalse_IfItemNotFound_ForEmpty()
+        {
+            Assert.IsFalse(_emptyMash.Remove(0));
+        }
+
+        [Test]
+        public void Remove_ReturnsFalse_IfItemNotFound_ForOne()
+        {
+            Assert.IsFalse(_oneMash.Remove(0));
+        }
+
+        [Test]
+        public void Remove_ReturnsFalse_IfItemNotFound_ForThree()
+        {
+            Assert.IsFalse(_threeMash.Remove(0));
+        }
+
+        [Test]
+        public void Remove_ReturnsFalse_IfItemNotFound_ForTwo()
+        {
+            Assert.IsFalse(_twoMash.Remove(0));
+        }
+
+        [Test]
+        public void Remove_ReturnsTrue_IfItemFound_ForOne()
+        {
+            Assert.IsTrue(_oneMash.Remove(1));
+        }
+
+        [Test]
+        public void Remove_ReturnsTrue_IfItemFound_ForTwo()
+        {
+            Assert.IsTrue(_twoMash.Remove(2));
+        }
+
+        [Test]
+        public void RemoveAt_DecrementsCountByOne()
+        {
+            _threeMash.RemoveAt(0);
+            Assert.AreEqual(2, _threeMash.Count);
+        }
+
+        [Test]
+        public void RemoveAt_PreservesStructure()
+        {
+            _threeMash.RemoveAt(0);
+            TestHelper.AssertSequence(_threeMash, 2, 3);
+            _threeMash.RemoveAt(0);
+            TestHelper.AssertSequence(_threeMash, 3);
+            _threeMash.RemoveAt(0);
+            TestHelper.AssertSequence(_threeMash);
+        }
+
+        [Test]
+        public void RemoveAt_RemovesFirstElement_ForOne()
+        {
+            _oneMash.RemoveAt(0);
+            TestHelper.AssertSequence(_oneMash);
+        }
+
+        [Test]
+        public void RemoveAt_RemovesFirstElement_ForThree()
+        {
+            _threeMash.RemoveAt(0);
+            TestHelper.AssertSequence(_threeMash, 2, 3);
+        }
+
+        [Test]
+        public void RemoveAt_RemovesFirstElement_ForTwo()
+        {
+            _twoMash.RemoveAt(0);
+            TestHelper.AssertSequence(_twoMash, 2);
+        }
+
+        [Test]
+        public void RemoveAt_RemovesLastElement_ForThree()
+        {
+            _threeMash.RemoveAt(2);
+            TestHelper.AssertSequence(_threeMash, 1, 2);
+        }
+
+        [Test]
+        public void RemoveAt_RemovesLastElement_ForTwo()
+        {
+            _twoMash.RemoveAt(1);
+            TestHelper.AssertSequence(_twoMash, 1);
+        }
+
+        [Test]
+        public void Unlink_ActuallyRemovesTheItem()
         {
             _emptyMash.Link("a", _threeMash);
+            _emptyMash.Unlink("a");
 
-            Assert.IsTrue(_emptyMash.Unlink("a"));
+            Assert.AreNotSame(_threeMash, _emptyMash["a"]);
         }
 
         [Test]
@@ -1086,36 +1037,86 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Unlink_ActuallyRemovesTheItem()
+        public void Unlink_ReturnsFalse_IfNothingRemoved()
         {
             _emptyMash.Link("a", _threeMash);
-            _emptyMash.Unlink("a");
 
-            Assert.AreNotSame(_threeMash, _emptyMash["a"]);
+            Assert.IsFalse(_emptyMash.Unlink("b"));
         }
 
-        [TestCase(0, 6),TestCase(1, 6),TestCase(2, 6),TestCase(3, 6),TestCase(4, 6),TestCase(5, 6),TestCase(0, 5),TestCase(1, 5),TestCase(2, 5),TestCase(3, 5),TestCase(4, 5),TestCase(0, 4),TestCase(1, 4),TestCase(2, 4),TestCase(3, 4),TestCase(0, 3),TestCase(1, 3),TestCase(2, 3),TestCase(0, 2),TestCase(1, 2),TestCase(0, 1)]
-        public void Unlink_RemovesTheExpectedElement(int index, int count)
+        [Test]
+        public void Unlink_ReturnsTrue_IfRemoved()
         {
-            var mash = new Mash<int, string>();
-            var ms = new Mash<int, string>[count];
-            for (var i = 0; i < count; i++)
-            {
-                ms[i] = new Mash<int, string>();
-                mash.Link(i, ms[i]);
-            }
+            _emptyMash.Link("a", _threeMash);
 
-            mash.Unlink(index);
+            Assert.IsTrue(_emptyMash.Unlink("a"));
+        }
 
-            for (var i = 0; i < count; i++)
-            {
-                if (i != index)
-                {
-                    Assert.AreSame(ms[i], mash.GetLinked(i));
-                }
-            }
 
-            Assert.AreNotSame(ms[index], mash.GetLinked(index));
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Unlink_ThrowsException_IfKeyIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _emptyMash.Unlink(null));
+        }
+
+        [Test]
+        public void Value_Getter_ReturnsDefaultValue_ForEmpty()
+        {
+            Assert.AreEqual(0, _emptyMash.Value);
+        }
+
+        [Test]
+        public void Value_Getter_ReturnsFirstValue_ForOne()
+        {
+            Assert.AreEqual(1, _oneMash.Value);
+        }
+
+        [Test]
+        public void Value_Getter_ReturnsFirstValue_ForThree()
+        {
+            Assert.AreEqual(1, _threeMash.Value);
+        }
+
+        [Test]
+        public void Value_Getter_ReturnsFirstValue_ForTwo()
+        {
+            Assert.AreEqual(1, _twoMash.Value);
+        }
+
+        [Test]
+        public void Value_Setter_AddsNewValue_ForEmpty()
+        {
+            _emptyMash.Value = 1;
+
+            Assert.AreEqual(1, _emptyMash[0]);
+        }
+
+        [Test]
+        public void Value_Setter_IncrementsCountByOne_ForEmpty()
+        {
+            _emptyMash.Value = 1;
+            Assert.AreEqual(1, _emptyMash.Count);
+        }
+
+        [Test]
+        public void Value_Setter_SetsElementZero_ForOne()
+        {
+            _oneMash.Value = 10;
+            TestHelper.AssertSequence(_oneMash, 10);
+        }
+
+        [Test]
+        public void Value_Setter_SetsElementZero_ForThree()
+        {
+            _threeMash.Value = 10;
+            TestHelper.AssertSequence(_threeMash, 10, 2, 3);
+        }
+
+        [Test]
+        public void Value_Setter_SetsElementZero_ForTwo()
+        {
+            _twoMash.Value = 10;
+            TestHelper.AssertSequence(_twoMash, 10, 2);
         }
     }
 }

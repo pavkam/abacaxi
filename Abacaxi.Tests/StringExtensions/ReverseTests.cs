@@ -16,25 +16,27 @@
 namespace Abacaxi.Tests.StringExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class ReverseTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Reverse_ThrowsException_IfStringIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => ((string)null).Reverse());
-        }
-
-        [TestCase("", ""),TestCase("1", "1"),TestCase("Hello World", "dlroW olleH"),TestCase("Les Misérables", "selbarésiM seL"),TestCase("This is: 🀜", "🀜 :si sihT"),SuppressMessage("ReSharper", "StringLiteralTypo")]
+        [TestCase("", ""), TestCase("1", "1"), TestCase("Hello World", "dlroW olleH"),
+         TestCase("Les Misérables", "selbarésiM seL"), TestCase("This is: 🀜", "🀜 :si sihT"),
+         SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void Reverse_ReversesTheString_AsExpected([NotNull] string input, string expected)
         {
             var actual = input.Reverse();
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Reverse_ThrowsException_IfStringIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((string) null).Reverse());
         }
     }
 }

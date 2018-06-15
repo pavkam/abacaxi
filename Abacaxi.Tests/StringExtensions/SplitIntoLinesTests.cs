@@ -16,29 +16,17 @@
 namespace Abacaxi.Tests.StringExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class SplitIntoLinesTests
     {
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void SplitIntoLines_ThrowsException_IfStringIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => ((string)null).SplitIntoLines());
-        }
-
         [Test]
-        public void SplitIntoLines_ReturnsString_IfEmpty()
+        public void SplitIntoLines_GeneratesTwoEmptyLinesOnASingleLineBreak()
         {
-            TestHelper.AssertSequence(string.Empty.SplitIntoLines(), "");
-        }
-
-        [Test]
-        public void SplitIntoLines_ReturnsOriginalStringAsLine_IfNoLineBreaksFound()
-        {
-            const string line = "This is a single line";
-            TestHelper.AssertSequence(line.SplitIntoLines(), line);
+            const string line = "\n";
+            TestHelper.AssertSequence(line.SplitIntoLines(), "", "");
         }
 
         [Test]
@@ -49,17 +37,22 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [Test]
-        public void SplitIntoLines_UnderstandsSingleLFCharacter()
+        public void SplitIntoLines_ReturnsOriginalStringAsLine_IfNoLineBreaksFound()
         {
-            const string line = "The\ncut.";
-            TestHelper.AssertSequence(line.SplitIntoLines(), "The", "cut.");
+            const string line = "This is a single line";
+            TestHelper.AssertSequence(line.SplitIntoLines(), line);
         }
 
         [Test]
-        public void SplitIntoLines_UnderstandsCRLFCharacters()
+        public void SplitIntoLines_ReturnsString_IfEmpty()
         {
-            const string line = "The\r\ncut.";
-            TestHelper.AssertSequence(line.SplitIntoLines(), "The", "cut.");
+            TestHelper.AssertSequence(string.Empty.SplitIntoLines(), "");
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void SplitIntoLines_ThrowsException_IfStringIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((string) null).SplitIntoLines());
         }
 
         [Test]
@@ -70,10 +63,10 @@ namespace Abacaxi.Tests.StringExtensions
         }
 
         [Test]
-        public void SplitIntoLines_GeneratesTwoEmptyLinesOnASingleLineBreak()
+        public void SplitIntoLines_UnderstandsCRLFCharacters()
         {
-            const string line = "\n";
-            TestHelper.AssertSequence(line.SplitIntoLines(), "", "");
+            const string line = "The\r\ncut.";
+            TestHelper.AssertSequence(line.SplitIntoLines(), "The", "cut.");
         }
 
         [Test]
@@ -88,6 +81,13 @@ namespace Abacaxi.Tests.StringExtensions
         {
             const string line = "a\n";
             TestHelper.AssertSequence(line.SplitIntoLines(), "a", "");
+        }
+
+        [Test]
+        public void SplitIntoLines_UnderstandsSingleLFCharacter()
+        {
+            const string line = "The\ncut.";
+            TestHelper.AssertSequence(line.SplitIntoLines(), "The", "cut.");
         }
     }
 }

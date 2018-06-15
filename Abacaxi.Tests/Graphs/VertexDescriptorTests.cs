@@ -25,28 +25,28 @@ namespace Abacaxi.Tests.Graphs
     {
         private readonly VertexDescriptor<string> _descriptor = new VertexDescriptor<string>("VERTEX", 10, 1, 2);
 
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test]
+        public void VertexDescriptor_ComponentIndex_ReturnsValidValue()
+        {
+            Assert.AreEqual(10, _descriptor.ComponentIndex);
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void VertexDescriptor_ctor_ThrowsException_ForNegativeComponentIndex()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new VertexDescriptor<string>("V", -1, 0, 0));
         }
 
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void VertexDescriptor_ctor_ThrowsException_ForNegativeInDegree()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new VertexDescriptor<string>("V", 0, -1, 0));
         }
 
-        [Test,SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void VertexDescriptor_ctor_ThrowsException_ForNegativeOutDegree()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new VertexDescriptor<string>("V", 0, 0, -1));
-        }
-
-        [Test]
-        public void VertexDescriptor_Vertex_ReturnsValidValue()
-        {
-            Assert.AreEqual("VERTEX", _descriptor.Vertex);
         }
 
         [Test]
@@ -62,15 +62,15 @@ namespace Abacaxi.Tests.Graphs
         }
 
         [Test]
-        public void VertexDescriptor_ComponentIndex_ReturnsValidValue()
-        {
-            Assert.AreEqual(10, _descriptor.ComponentIndex);
-        }
-
-        [Test]
         public void VertexDescriptor_ToString_ReturnsValidValue()
         {
             Assert.AreEqual("1 => VERTEX (10) => 2", _descriptor.ToString());
+        }
+
+        [Test]
+        public void VertexDescriptor_Vertex_ReturnsValidValue()
+        {
+            Assert.AreEqual("VERTEX", _descriptor.Vertex);
         }
     }
 }

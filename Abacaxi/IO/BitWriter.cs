@@ -16,13 +16,13 @@
 namespace Abacaxi.IO
 {
     using System;
-    using System.Text;
     using System.IO;
+    using System.Text;
     using Internal;
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Class implements writing bits/bytes to un underlying stream.
+    ///     Class implements writing bits/bytes to un underlying stream.
     /// </summary>
     [PublicAPI]
     public sealed class BitWriter : IDisposable
@@ -32,27 +32,74 @@ namespace Abacaxi.IO
         private const int BitsInWord = BitsInByte * BytesInWord;
         private const int Msb = BitsInWord - 1;
 
-        [NotNull]
-        private readonly Encoding _encoding;
-        [CanBeNull]
-        private Stream _stream;
+        [NotNull] private readonly byte[] _assemblyBuffer;
+
+        [NotNull] private readonly byte[] _disassemblyBuffer;
+
+        [NotNull] private readonly Encoding _encoding;
+
         private readonly bool _leaveOpen;
-        private uint _currentWord;
+
+        [NotNull] private readonly char[] _singleCharBuffer;
+
         private int _currentBitIndex;
-        [NotNull]
-        private readonly byte[] _disassemblyBuffer;
-        [NotNull]
-        private readonly byte[] _assemblyBuffer;
-        [NotNull]
-        private readonly char[] _singleCharBuffer;
+        private uint _currentWord;
+
+        [CanBeNull] private Stream _stream;
+
+        /// <summary>
+        ///     Initializes a new instance of <see cref="BitWriter" /> class.
+        /// </summary>
+        /// <param name="stream">The stream to write into.</param>
+        /// <param name="encoding">The encoding object used to convert strings into bytes.</param>
+        /// <param name="leaveOpen">Forces this instance to leave the stream open.</param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="stream" /> or <paramref name="encoding" /> are
+        ///     <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="stream" /> is not writable.</exception>
+        public BitWriter([NotNull] Stream stream, [NotNull] Encoding encoding, bool leaveOpen = false)
+        {
+            Validate.ArgumentNotNull(nameof(stream), stream);
+            Validate.ArgumentNotNull(nameof(encoding), encoding);
+
+            if (!stream.CanWrite)
+            {
+                throw new ArgumentException("Stream is not writable.", nameof(stream));
+            }
+
+            _encoding = encoding;
+            _stream = stream;
+            _leaveOpen = leaveOpen;
+            _currentBitIndex = Msb;
+            _disassemblyBuffer = new byte[BytesInWord];
+            _assemblyBuffer = new byte[BytesInWord * 4];
+            _singleCharBuffer = new char[1];
+        }
+
+        /// <summary>
+        ///     Specifies whether the writer is word aligned. When word-aligned, bytes can be written
+        ///     directly into the output stream.
+        /// </summary>
+        private bool IsWordAligned => _currentBitIndex == Msb;
+
+        /// <summary>
+        ///     Disposes this instance of <see cref="BitWriter" /> class and attempts to close
+        ///     the underlying stream.
+        /// </summary>
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Dispose(true);
+        }
 
         [NotNull]
         private byte[] DisassembleWord(uint word)
         {
-            _disassemblyBuffer[0] = (byte)(word >> 24);
-            _disassemblyBuffer[1] = (byte)(word >> 16);
-            _disassemblyBuffer[2] = (byte)(word >> 8);
-            _disassemblyBuffer[3] = (byte)word;
+            _disassemblyBuffer[0] = (byte) (word >> 24);
+            _disassemblyBuffer[1] = (byte) (word >> 16);
+            _disassemblyBuffer[2] = (byte) (word >> 8);
+            _disassemblyBuffer[3] = (byte) word;
 
             return _disassemblyBuffer;
         }
@@ -63,9 +110,9 @@ namespace Abacaxi.IO
             Assert.Condition(index + BytesInWord <= bytes.Length);
 
             var word =
-                ((uint)bytes[index + 3] << 24) |
-                ((uint)bytes[index + 2] << 16) |
-                ((uint)bytes[index + 1] << 8) |
+                ((uint) bytes[index + 3] << 24) |
+                ((uint) bytes[index + 2] << 16) |
+                ((uint) bytes[index + 1] << 8) |
                 bytes[index];
 
             return word;
@@ -124,40 +171,7 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Specifies whether the writer is word aligned. When word-aligned, bytes can be written
-        /// directly into the output stream.
-        /// </summary>
-        private bool IsWordAligned => _currentBitIndex == Msb;
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="BitWriter"/> class.
-        /// </summary>
-        /// <param name="stream">The stream to write into.</param>
-        /// <param name="encoding">The encoding object used to convert strings into bytes.</param>
-        /// <param name="leaveOpen">Forces this instance to leave the stream open.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="stream"/> or <paramref name="encoding"/> are <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="stream"/> is not writable.</exception>
-        public BitWriter([NotNull] Stream stream, [NotNull] Encoding encoding, bool leaveOpen = false)
-        {
-            Validate.ArgumentNotNull(nameof(stream), stream);
-            Validate.ArgumentNotNull(nameof(encoding), encoding);
-
-            if (!stream.CanWrite)
-            {
-                throw new ArgumentException("Stream is not writable.", nameof(stream));
-            }
-
-            _encoding = encoding;
-            _stream = stream;
-            _leaveOpen = leaveOpen;
-            _currentBitIndex = Msb;
-            _disassemblyBuffer = new byte[BytesInWord];
-            _assemblyBuffer = new byte[BytesInWord * 4];
-            _singleCharBuffer = new char[1];
-        }
-
-        /// <summary>
-        /// Writes a <paramref name="count"/> of bits (starting with bit 0) from parameter <paramref name="bits"/>.
+        ///     Writes a <paramref name="count" /> of bits (starting with bit 0) from parameter <paramref name="bits" />.
         /// </summary>
         /// <param name="bits">An <c>uint</c> value holding the bits to be written.</param>
         /// <param name="count">The number of bits to consider for writing.</param>
@@ -181,13 +195,16 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Writes an array of bytes to the output stream.
+        ///     Writes an array of bytes to the output stream.
         /// </summary>
         /// <param name="bytes">The byte array.</param>
         /// <param name="offset">Index of the first element in the array.</param>
         /// <param name="count">The number of bytes to write.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count"/> or <paramref name="offset"/> are out of bounds.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="bytes"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="count" /> or <paramref name="offset" /> are out
+        ///     of bounds.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="bytes" /> is <c>null</c>.</exception>
         public void WriteBytes([NotNull] byte[] bytes, int offset, int count)
         {
             Validate.CollectionArgumentsInBounds(nameof(bytes), bytes, offset, count);
@@ -226,20 +243,20 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Writes an array of bytes to the output stream. Writes a prefix word that identifies the
-        /// number of bytes the array contains.
+        ///     Writes an array of bytes to the output stream. Writes a prefix word that identifies the
+        ///     number of bytes the array contains.
         /// </summary>
         /// <param name="bytes">The byte array.</param>
         /// <param name="offset">Index of the first element in the array.</param>
         /// <param name="count">The number of bytes to write.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count"/> is out of bounds.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="offset"/> is out of bounds.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="bytes"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count" /> is out of bounds.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="offset" /> is out of bounds.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="bytes" /> is <c>null</c>.</exception>
         public void Write([NotNull] byte[] bytes, int offset, int count)
         {
             Validate.CollectionArgumentsInBounds(nameof(bytes), bytes, offset, count);
 
-            Write((uint)count);
+            Write((uint) count);
             if (count > 0)
             {
                 WriteBytes(bytes, offset, count);
@@ -247,11 +264,11 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Writes an array of bytes to the output stream. Writes a prefix word that identifies the
-        /// number of bytes the array contains.
+        ///     Writes an array of bytes to the output stream. Writes a prefix word that identifies the
+        ///     number of bytes the array contains.
         /// </summary>
         /// <param name="bytes">The byte array.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="bytes"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="bytes" /> is <c>null</c>.</exception>
         public void Write([NotNull] byte[] bytes)
         {
             Validate.ArgumentNotNull(nameof(bytes), bytes);
@@ -260,16 +277,16 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Encodes a <c>bool</c> value.
+        ///     Encodes a <c>bool</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(bool value)
         {
-            WriteBits(value ? (uint)1 : 0, BitsInByte * sizeof(byte));
+            WriteBits(value ? (uint) 1 : 0, BitsInByte * sizeof(byte));
         }
 
         /// <summary>
-        /// Encodes a <c>byte</c> value.
+        ///     Encodes a <c>byte</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(byte value)
@@ -278,16 +295,16 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Encodes a <c>sbyte</c> value.
+        ///     Encodes a <c>sbyte</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(sbyte value)
         {
-            WriteBits((byte)value, BitsInByte * sizeof(byte));
+            WriteBits((byte) value, BitsInByte * sizeof(byte));
         }
 
         /// <summary>
-        /// Encodes a <c>ushort</c> value.
+        ///     Encodes a <c>ushort</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(ushort value)
@@ -296,16 +313,16 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Encodes a <c>short</c> value.
+        ///     Encodes a <c>short</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(short value)
         {
-            WriteBits((ushort)value, BitsInByte * sizeof(ushort));
+            WriteBits((ushort) value, BitsInByte * sizeof(ushort));
         }
 
         /// <summary>
-        /// Encodes an <c>uint</c> value.
+        ///     Encodes an <c>uint</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(uint value)
@@ -314,60 +331,60 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Encodes an <c>int</c> value.
+        ///     Encodes an <c>int</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(int value)
         {
-            WriteBits((uint)value, BitsInByte * sizeof(uint));
+            WriteBits((uint) value, BitsInByte * sizeof(uint));
         }
 
         /// <summary>
-        /// Encodes an <c>ulong</c> value.
+        ///     Encodes an <c>ulong</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(ulong value)
         {
-            WriteBits((uint)(value >> (BitsInByte * sizeof(uint))), BitsInByte * sizeof(uint));
-            WriteBits((uint)value, BitsInByte * sizeof(uint));
+            WriteBits((uint) (value >> (BitsInByte * sizeof(uint))), BitsInByte * sizeof(uint));
+            WriteBits((uint) value, BitsInByte * sizeof(uint));
         }
 
         /// <summary>
-        /// Encodes a <c>long</c> value.
+        ///     Encodes a <c>long</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(long value)
         {
-            WriteBits((uint)(value >> (BitsInByte * sizeof(uint))), BitsInByte * sizeof(uint));
-            WriteBits((uint)value, BitsInByte * sizeof(uint));
+            WriteBits((uint) (value >> (BitsInByte * sizeof(uint))), BitsInByte * sizeof(uint));
+            WriteBits((uint) value, BitsInByte * sizeof(uint));
         }
 
         /// <summary>
-        /// Encodes a <c>float</c> value.
+        ///     Encodes a <c>float</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public unsafe void Write(float value)
         {
             // ReSharper disable once IdentifierTypo
-            var repr = *(uint*)&value;
+            var repr = *(uint*) &value;
             WriteBits(repr, BitsInByte * sizeof(uint));
         }
 
         /// <summary>
-        /// Encodes a <c>double</c> value.
+        ///     Encodes a <c>double</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public unsafe void Write(double value)
         {
             // ReSharper disable once IdentifierTypo
-            var repr = *(ulong*)&value;
+            var repr = *(ulong*) &value;
 
-            WriteBits((uint)(repr >> (BitsInByte * sizeof(uint))), BitsInByte * sizeof(uint));
-            WriteBits((uint)repr, BitsInByte * sizeof(uint));
+            WriteBits((uint) (repr >> (BitsInByte * sizeof(uint))), BitsInByte * sizeof(uint));
+            WriteBits((uint) repr, BitsInByte * sizeof(uint));
         }
 
         /// <summary>
-        /// Encodes a <c>decimal</c> value.
+        ///     Encodes a <c>decimal</c> value.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         public void Write(decimal value)
@@ -383,7 +400,7 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Encodes a <c>char</c> value using the encoding supplied at construction time.
+        ///     Encodes a <c>char</c> value using the encoding supplied at construction time.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         /// <exception cref="ArgumentException">Thrown if the character is a surrogate.</exception>
@@ -401,7 +418,7 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Encodes a <c>string</c> value using the encoding supplied at construction time.
+        ///     Encodes a <c>string</c> value using the encoding supplied at construction time.
         /// </summary>
         /// <param name="value">The value to encode.</param>
         /// <exception cref="ArgumentNullException">Thrown is the supplied string is <c>null</c>.</exception>
@@ -414,8 +431,8 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Closes the underlying stream if this instance was initialized with <c>leaveOpen</c>
-        /// set to <c>true</c>.
+        ///     Closes the underlying stream if this instance was initialized with <c>leaveOpen</c>
+        ///     set to <c>true</c>.
         /// </summary>
         public void Close()
         {
@@ -424,7 +441,7 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Finalizes this instance of <see cref="BitWriter"/> class.
+        ///     Finalizes this instance of <see cref="BitWriter" /> class.
         /// </summary>
         ~BitWriter()
         {
@@ -432,21 +449,13 @@ namespace Abacaxi.IO
         }
 
         /// <summary>
-        /// Disposes this instance of <see cref="BitWriter"/> class and attempts to close
-        /// the underlying stream.
+        ///     Disposes this instance of <see cref="BitWriter" /> class and attempts to close
+        ///     the underlying stream.
         /// </summary>
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            Dispose(true);
-        }
-
-        /// <summary>
-        /// Disposes this instance of <see cref="BitWriter"/> class and attempts to close
-        /// the underlying stream.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> if method called explicitly; <c>false</c>
-        /// if method was called from finalizer.</param>
+        /// <param name="disposing">
+        ///     <c>true</c> if method called explicitly; <c>false</c>
+        ///     if method was called from finalizer.
+        /// </param>
         private void Dispose(bool disposing)
         {
             if (_stream == null)

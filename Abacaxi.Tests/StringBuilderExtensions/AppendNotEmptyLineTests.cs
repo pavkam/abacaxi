@@ -16,24 +16,18 @@
 namespace Abacaxi.Tests.StringBuilderExtensions
 {
     using System;
-    using NUnit.Framework;
     using System.Diagnostics.CodeAnalysis;
     using System.Text;
+    using NUnit.Framework;
 
     [TestFixture]
     public sealed class AppendNotEmptyLineTests
     {
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void AppendNotEmptyLine_ThrowsException_IfStringBuilderIsNull1()
-        {
-            Assert.Throws<ArgumentNullException>(() => ((StringBuilder)null).AppendNotEmptyLine(null));
-        }
-
         [Test]
-        public void AppendNotEmptyLine_DoesNotAppendTheValueIfItIsNull()
+        public void AppendNotEmptyLine_AppendsTheValueIfItIsNotEmpty()
         {
-            var result = new StringBuilder("-->").AppendNotEmptyLine(null).Append("<--").ToString();
-            Assert.AreEqual("--><--", result);
+            var result = new StringBuilder("-->").AppendNotEmptyLine("Hello").Append("<--").ToString();
+            Assert.AreEqual("-->Hello\r\n<--", result);
         }
 
         [Test]
@@ -44,10 +38,16 @@ namespace Abacaxi.Tests.StringBuilderExtensions
         }
 
         [Test]
-        public void AppendNotEmptyLine_AppendsTheValueIfItIsNotEmpty()
+        public void AppendNotEmptyLine_DoesNotAppendTheValueIfItIsNull()
         {
-            var result = new StringBuilder("-->").AppendNotEmptyLine("Hello").Append("<--").ToString();
-            Assert.AreEqual("-->Hello\r\n<--", result);
+            var result = new StringBuilder("-->").AppendNotEmptyLine(null).Append("<--").ToString();
+            Assert.AreEqual("--><--", result);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void AppendNotEmptyLine_ThrowsException_IfStringBuilderIsNull1()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((StringBuilder) null).AppendNotEmptyLine(null));
         }
     }
 }

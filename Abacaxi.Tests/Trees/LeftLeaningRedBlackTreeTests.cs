@@ -15,16 +15,22 @@
 
 namespace Abacaxi.Tests.Trees
 {
-    using NUnit.Framework;
-    using Abacaxi.Trees;
     using System.Collections.Generic;
+    using Abacaxi.Trees;
+    using NUnit.Framework;
 
     [TestFixture]
     public class LeftLeaningRedBlackTreeTests : BinarySearchTreeTests
     {
-        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>(IComparer<TKey> comparer) => new LeftLeaningRedBlackTree<TKey, TValue>(comparer);
+        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>(IComparer<TKey> comparer)
+        {
+            return new LeftLeaningRedBlackTree<TKey, TValue>(comparer);
+        }
 
-        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>() => new LeftLeaningRedBlackTree<TKey, TValue>();
+        protected override BinarySearchTree<TKey, TValue> Create<TKey, TValue>()
+        {
+            return new LeftLeaningRedBlackTree<TKey, TValue>();
+        }
 
         [Test]
         public override void GetEnumerator_PostOrder_ReturnsElementsPostOrder()
@@ -77,6 +83,5 @@ namespace Abacaxi.Tests.Trees
                 new KeyValuePair<int, int>(6, 600),
                 new KeyValuePair<int, int>(9, 900));
         }
-
     }
 }

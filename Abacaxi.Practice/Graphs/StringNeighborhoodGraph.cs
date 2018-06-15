@@ -23,12 +23,69 @@ namespace Abacaxi.Practice.Graphs
     using JetBrains.Annotations;
 
     /// <summary>
-    /// A graph composed by a number of strings (representing vertices) and connected by edges signifying potential one-letter transformations.
+    ///     A graph composed by a number of strings (representing vertices) and connected by edges signifying potential
+    ///     one-letter transformations.
     /// </summary>
     public sealed class StringNeighborhoodGraph : Graph<string>
     {
         [NotNull] private readonly Trie<char, ISet<string>> _neighborhoods;
         [NotNull] private readonly ISet<string> _vertices;
+
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="StringNeighborhoodGraph" /> class.
+        /// </summary>
+        /// <param name="sequence">The sequence of strings to build the graph upon.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
+        public StringNeighborhoodGraph([NotNull, ItemNotNull] IEnumerable<string> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            _neighborhoods = new Trie<char, ISet<string>>();
+            _vertices = new HashSet<string>();
+            foreach (var item in sequence)
+            {
+                _vertices.Add(item);
+
+                foreach (var pattern in GetAllStringPatterns(item))
+                {
+                    if (!_neighborhoods.TryGetValue(pattern, out var neighbors))
+                    {
+                        neighbors = new HashSet<string>();
+                        _neighborhoods.Add(pattern, neighbors);
+                    }
+
+                    neighbors.Add(item);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Gets a value indicating whether this graph's edges are directed.
+        /// </summary>
+        /// <value>
+        ///     Always returns <c>false</c>.
+        /// </value>
+        public override bool IsDirected => false;
+
+        /// <summary>
+        ///     Gets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsReadOnly => true;
+
+        /// <summary>
+        ///     Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
+        /// </summary>
+        /// <remarks>
+        ///     This implementation always returns <c>false</c>.
+        /// </remarks>
+        /// <value>
+        ///     <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsPotentialWeightEvaluation => false;
 
         [NotNull, ItemNotNull]
         private static IEnumerable<char[]> GetAllStringPatterns([NotNull] string s)
@@ -68,7 +125,7 @@ namespace Abacaxi.Practice.Graphs
             }
         }
 
-        private void ValidateVertex([InvokerParameterName, NotNull]  string argumentName, [CanBeNull] string vertex)
+        private void ValidateVertex([InvokerParameterName, NotNull] string argumentName, [CanBeNull] string vertex)
         {
             Validate.ArgumentNotNull(argumentName, vertex);
             if (!_vertices.Contains(vertex))
@@ -78,78 +135,25 @@ namespace Abacaxi.Practice.Graphs
         }
 
         /// <summary>
-        /// Gets a value indicating whether this graph's edges are directed.
+        ///     Returns an enumerator that iterates all vertices in the graph.
         /// </summary>
-        /// <value>
-        /// Always returns <c>false</c>.
-        /// </value>
-        public override bool IsDirected => false;
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is read only.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
-        /// </value>
-        public override bool IsReadOnly => true;
-
-        /// <summary>
-        /// Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
-        /// </summary>
-        /// <remarks>
-        /// This implementation always returns <c>false</c>.
-        /// </remarks>
-        /// <value>
-        /// <c>true</c> if graph supports potential weight evaluation; otherwise, <c>false</c>.
-        /// </value>
-        public override bool SupportsPotentialWeightEvaluation => false;
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StringNeighborhoodGraph"/> class.
-        /// </summary>
-        /// <param name="sequence">The sequence of strings to build the graph upon.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/> is <c>null</c>.</exception>
-        public StringNeighborhoodGraph([NotNull, ItemNotNull]  IEnumerable<string> sequence)
+        /// <returns>
+        ///     A <see cref="IEnumerator{T}" /> that can be used to iterate through the collection.
+        /// </returns>
+        public override IEnumerator<string> GetEnumerator()
         {
-            Validate.ArgumentNotNull(nameof(sequence), sequence);
-
-            _neighborhoods = new Trie<char, ISet<string>>();
-            _vertices = new HashSet<string>();
-            foreach (var item in sequence)
-            {
-                _vertices.Add(item);
-
-                foreach (var pattern in GetAllStringPatterns(item))
-                {
-                    if (!_neighborhoods.TryGetValue(pattern, out var neighbors))
-                    {
-                        neighbors = new HashSet<string>();
-                        _neighborhoods.Add(pattern, neighbors);
-                    }
-
-                    neighbors.Add(item);
-                }
-            }
+            return _vertices.GetEnumerator();
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates all vertices in the graph.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="IEnumerator{T}" /> that can be used to iterate through the collection.
-        /// </returns>
-        public override IEnumerator<string> GetEnumerator() => _vertices.GetEnumerator();
-
-        /// <summary>
-        /// Gets the edges for a given <paramref name="vertex" />.
+        ///     Gets the edges for a given <paramref name="vertex" />.
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns>
-        /// A sequence of edges connected to the given <paramref name="vertex" />
+        ///     A sequence of edges connected to the given <paramref name="vertex" />
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vertex"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex"/> is not part of the graph.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vertex" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex" /> is not part of the graph.</exception>
         public override IEnumerable<Edge<string>> GetEdges(string vertex)
         {
             ValidateVertex(nameof(vertex), vertex);
@@ -158,17 +162,21 @@ namespace Abacaxi.Practice.Graphs
         }
 
         /// <summary>
-        /// Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" /> vertices.
+        ///     Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" />
+        ///     vertices.
         /// </summary>
         /// <remarks>
-        /// This graph does not support potential weight evaluation.
+        ///     This graph does not support potential weight evaluation.
         /// </remarks>
         /// <param name="fromVertex">The first vertex.</param>
         /// <param name="toVertex">The destination vertex.</param>
         /// <returns>
-        /// The potential total cost.
+        ///     The potential total cost.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="fromVertex"/> or <paramref name="toVertex"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="fromVertex" /> or <paramref name="toVertex" /> is
+        ///     <c>null</c>.
+        /// </exception>
         /// <exception cref="NotSupportedException">Always thrown.</exception>
         public override double GetPotentialWeight(string fromVertex, string toVertex)
         {
