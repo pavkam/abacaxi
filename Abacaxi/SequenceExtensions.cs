@@ -202,7 +202,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Determines whether the sequence contains two elements that target to a given <paramref name="target"/> value.
+        /// Determines whether the sequence contains two elements that aggregate to a given <paramref name="target"/> value.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to check.</param>
@@ -210,7 +210,7 @@ namespace Abacaxi
         /// <param name="aggregator">The function that aggregates two values.</param>
         /// <param name="comparer">The comparer.</param>
         /// <returns>
-        ///   <c>true</c> if the <paramref name="sequence"/> contains two elements that target; otherwise, <c>false</c>.
+        ///   <c>true</c> if the <paramref name="sequence"/> contains two elements that aggregate; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence"/>, <paramref name="aggregator"/> or <paramref name="comparer"/> are null.</exception>
         public static bool ContainsTwoElementsThatAggregateTo<T>(
