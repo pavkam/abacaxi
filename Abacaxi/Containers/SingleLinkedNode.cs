@@ -20,6 +20,7 @@ namespace Abacaxi.Containers
     using Internal;
     using JetBrains.Annotations;
 
+    /// <inheritdoc />
     /// <summary>
     ///     Represents a linked list node.
     /// </summary>
@@ -47,6 +48,7 @@ namespace Abacaxi.Containers
         [CanBeNull]
         public SingleLinkedNode<T> Next { get; set; }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through a collection.
         /// </summary>
@@ -58,13 +60,14 @@ namespace Abacaxi.Containers
             return GetEnumerator();
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
         ///     An enumerator that can be used to iterate through the collection.
         /// </returns>
-        /// <exception cref="System.NotImplementedException"></exception>
+        /// <exception cref="T:System.NotImplementedException"></exception>
         public IEnumerator<SingleLinkedNode<T>> GetEnumerator()
         {
             var current = this;
