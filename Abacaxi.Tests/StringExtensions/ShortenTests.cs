@@ -36,7 +36,7 @@ namespace Abacaxi.Tests.StringExtensions
 
         [TestCase("Les Misérables", 7, "Les Mis"), TestCase("Les Misérables", 8, "Les Mis"),
          TestCase("Les Misérables", 9, "Les Misé"), TestCase("क्षि", 4, "क्षि"), TestCase("क्षि", 3, "क्"),
-         TestCase("क्षि", 2, "क्"), TestCase("क्षि", 1, "")]
+         TestCase("क्षि", 2, "क्"), TestCase("क्षि", 1, ""), SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void Shorten_TakesIntoAccount_MultiCharSequences([NotNull] string s, int l, string expected)
         {
             var actual = s.Shorten(l);

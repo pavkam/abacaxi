@@ -25,6 +25,115 @@ namespace Abacaxi.Tests.Threading
     public sealed class NanoCacheTests
     {
         [Test]
+        public void Count_IncludesExpiredItems()
+        {
+            var cache = new NanoCache<string, int>(10)
+            {
+                ["1"] = 1
+            };
+
+            Thread.Sleep(100);
+
+            Assert.AreEqual(1, cache.Count);
+        }
+
+        [Test]
+        public void Count_IsDecrementedWhenItemIsRemoved()
+        {
+            var cache = new NanoCache<string, int>
+            {
+                ["1"] = 1
+            };
+
+            cache.Remove("1");
+            Assert.AreEqual(0, cache.Count);
+        }
+
+
+        [Test]
+        public void Count_IsDecrementedWhenItemIsReplacedWithDefaultValue()
+        {
+            var cache = new NanoCache<string, int>
+            {
+                ["1"] = 1,
+                ["1"] = 0
+            };
+
+            Assert.AreEqual(0, cache.Count);
+        }
+
+        [Test]
+        public void Count_IsIncrementedWhenItemIsAdded()
+        {
+            var cache = new NanoCache<string, int> { ["1"] = 1 };
+            Assert.AreEqual(1, cache.Count);
+        }
+
+        [Test]
+        public void Count_IsNotIncrementedWhenItemIsUpdated()
+        {
+            var cache = new NanoCache<string, int>
+            {
+                ["1"] = 1,
+                ["1"] = 2
+            };
+
+            Assert.AreEqual(1, cache.Count);
+        }
+
+        [Test]
+        public void Count_IsUpdatedWhenExpiredItemIsFlushed1()
+        {
+            var cache = new NanoCache<string, int>(10)
+            {
+                ["1"] = 1
+            };
+
+            Thread.Sleep(100);
+
+            cache.TryGetValue("1", out var _);
+
+            Assert.AreEqual(0, cache.Count);
+        }
+
+        [Test]
+        public void Count_IsUpdatedWhenExpiredItemIsFlushed2()
+        {
+            var cache = new NanoCache<string, int>(10)
+            {
+                ["1"] = 1
+            };
+
+            Thread.Sleep(100);
+
+            Assert.AreEqual(0, cache["1"]);
+            Assert.AreEqual(0, cache.Count);
+        }
+
+        [Test]
+        public void Count_IsUpdatedWhenExpiredItemIsFlushed3()
+        {
+            var cache = new NanoCache<string, int>(10)
+            {
+                ["1"] = 1
+            };
+
+            Thread.Sleep(100);
+
+            cache.Remove("1");
+
+            Assert.AreEqual(0, cache.Count);
+        }
+
+        [Test]
+        public void Count_IsZeroOnCreation()
+        {
+            var cache = new NanoCache<string, int>();
+
+            Assert.AreEqual(0, cache.Count);
+        }
+
+        [Test]
         public void Ctor_TakesEqualityComparer_IntoConsideration()
         {
             var cache = new NanoCache<string, int>(StringComparer.OrdinalIgnoreCase) { ["a"] = 999 };
@@ -61,12 +170,64 @@ namespace Abacaxi.Tests.Threading
         }
 
         [Test]
+        public void Flush_DoesNothingForUnExpiredItems()
+        {
+            var cache = new NanoCache<string, int>
+            {
+                ["1"] = 1
+            };
+
+            cache.Flush();
+
+            Assert.AreEqual(1, cache.Count);
+        }
+
+        [Test]
+        public void Flush_RemovesTheExpiredItems()
+        {
+            var cache = new NanoCache<string, int>(10)
+            {
+                ["1"] = 1
+            };
+
+            Thread.Sleep(100);
+
+            cache.Flush();
+
+            Assert.AreEqual(0, cache.Count);
+        }
+
+        [Test]
+        public void Flush_RemovesTheExpiredItemsWhileLeavingTheNormalOnes()
+        {
+            var cache = new NanoCache<string, int>(10)
+            {
+                ["1"] = 1
+            };
+
+            Thread.Sleep(100);
+
+            cache["2"] = 2;
+            cache.Flush();
+
+            Assert.AreEqual(1, cache.Count);
+        }
+
+        [Test]
         public void Indexer_DoesNotAcknowledgeExpiredItems()
         {
             var cache = new NanoCache<string, int>(10) { ["item"] = 1234 };
             Thread.Sleep(100);
 
             Assert.AreEqual(0, cache["item"]);
+        }
+
+        [Test,
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Indexer_Get_ThrowsException_IfKeyIsNull()
+        {
+            var cache = new NanoCache<string, int>();
+            Assert.Throws<ArgumentNullException>(() => Assert.AreEqual(0, cache[null]));
         }
 
         [Test]
@@ -117,6 +278,14 @@ namespace Abacaxi.Tests.Threading
             Assert.IsNull(cache["item"]);
         }
 
+        [Test,
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Indexer_Set_ThrowsException_IfKeyIsNull()
+        {
+            var cache = new NanoCache<string, int>();
+            Assert.Throws<ArgumentNullException>(() => cache[null] = 123);
+        }
+
         [Test]
         public void Indexer_StoresANewValueIntoTheCache()
         {
@@ -161,6 +330,15 @@ namespace Abacaxi.Tests.Threading
             };
 
             Assert.IsTrue(cache.Remove("item"));
+        }
+
+        [Test,
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Remove_ThrowsException_IfKeyIsNull()
+        {
+            var cache = new NanoCache<string, int>();
+
+            Assert.Throws<ArgumentNullException>(() => cache.Remove(null));
         }
 
         [Test]
@@ -212,184 +390,5 @@ namespace Abacaxi.Tests.Threading
 
             Assert.Throws<ArgumentNullException>(() => cache.TryGetValue(null, out var _));
         }
-
-        [Test,
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Indexer_Get_ThrowsException_IfKeyIsNull()
-        {
-            var cache = new NanoCache<string, int>();
-            Assert.Throws<ArgumentNullException>(() => Assert.AreEqual(0, cache[null]));
-        }
-
-        [Test,
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Indexer_Set_ThrowsException_IfKeyIsNull()
-        {
-            var cache = new NanoCache<string, int>();
-            Assert.Throws<ArgumentNullException>(() => cache[null] = 123);
-        }
-
-        [Test,
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Remove_ThrowsException_IfKeyIsNull()
-        {
-            var cache = new NanoCache<string, int>();
-
-            Assert.Throws<ArgumentNullException>(() => cache.Remove(null));
-        }
-
-        [Test]
-        public void Count_IsZeroOnCreation()
-        {
-            var cache = new NanoCache<string, int>();
-
-            Assert.AreEqual(0, cache.Count);
-        }
-
-        [Test]
-        public void Count_IsIncrementedWhenItemIsAdded()
-        {
-            var cache = new NanoCache<string, int> { ["1"] = 1 };
-            Assert.AreEqual(1, cache.Count);
-        }
-
-        [Test]
-        public void Count_IsNotIncrementedWhenItemIsUpdated()
-        {
-            var cache = new NanoCache<string, int>
-            {
-                ["1"] = 1,
-                ["1"] = 2
-            };
-
-            Assert.AreEqual(1, cache.Count);
-        }
-
-        [Test]
-        public void Count_IsDecrementedWhenItemIsRemoved()
-        {
-            var cache = new NanoCache<string, int>
-            {
-                ["1"] = 1
-            };
-
-            cache.Remove("1");
-            Assert.AreEqual(0, cache.Count);
-        }
-
-
-        [Test]
-        public void Count_IsDecrementedWhenItemIsReplacedWithDefaultValue()
-        {
-            var cache = new NanoCache<string, int>
-            {
-                ["1"] = 1,
-                ["1"] = 0
-            };
-
-            Assert.AreEqual(0, cache.Count);
-        }
-
-        [Test]
-        public void Count_IncludesExpiredItems()
-        {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
-
-            Thread.Sleep(100);
-
-            Assert.AreEqual(1, cache.Count);
-        }
-
-        [Test]
-        public void Count_IsUpdatedWhenExpiredItemIsFlushed1()
-        {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
-
-            Thread.Sleep(100);
-
-            cache.TryGetValue("1", out _);
-
-            Assert.AreEqual(0, cache.Count);
-        }
-
-        [Test]
-        public void Count_IsUpdatedWhenExpiredItemIsFlushed2()
-        {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
-
-            Thread.Sleep(100);
-
-            Assert.AreEqual(0, cache["1"]);
-            Assert.AreEqual(0, cache.Count);
-        }
-
-        [Test]
-        public void Count_IsUpdatedWhenExpiredItemIsFlushed3()
-        {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
-
-            Thread.Sleep(100);
-
-            cache.Remove("1");
-
-            Assert.AreEqual(0, cache.Count);
-        }
-
-        [Test]
-        public void Flush_DoesNothingForUnExpiredItems()
-        {
-            var cache = new NanoCache<string, int>
-            {
-                ["1"] = 1
-            };
-
-            cache.Flush();
-
-            Assert.AreEqual(1, cache.Count);
-        }
-
-        [Test]
-        public void Flush_RemovesTheExpiredItems()
-        {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
-
-            Thread.Sleep(100);
-
-            cache.Flush();
-
-            Assert.AreEqual(0, cache.Count);
-        }
-
-        [Test]
-        public void Flush_RemovesTheExpiredItemsWhileLeavingTheNormalOnes()
-        {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
-
-            Thread.Sleep(100);
-
-            cache["2"] = 2;
-            cache.Flush();
-
-            Assert.AreEqual(1, cache.Count);
-        }
-
     }
 }

@@ -24,7 +24,7 @@ namespace Abacaxi.Tests.StringExtensions
     public sealed class StripDiacriticsTests
     {
         [TestCase("", ""), TestCase("ł", "l"), TestCase("Ł", "L"), TestCase("Café", "Cafe"),
-         TestCase("Gebärden", "Gebarden")]
+         TestCase("Gebärden", "Gebarden"), SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void StripDiacritics_ReturnsTheExpectedResult([NotNull] string a, string e)
         {
             Assert.AreEqual(e, a.StripDiacritics());

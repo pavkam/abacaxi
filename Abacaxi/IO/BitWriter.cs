@@ -21,6 +21,7 @@ namespace Abacaxi.IO
     using Internal;
     using JetBrains.Annotations;
 
+    /// <inheritdoc />
     /// <summary>
     ///     Class implements writing bits/bytes to un underlying stream.
     /// </summary>
@@ -34,7 +35,7 @@ namespace Abacaxi.IO
 
         [NotNull] private readonly byte[] _assemblyBuffer;
 
-        [NotNull] private readonly byte[] _disassemblyBuffer;
+        [NotNull] private readonly byte[] _disAssemblyBuffer;
 
         [NotNull] private readonly Encoding _encoding;
 
@@ -72,7 +73,7 @@ namespace Abacaxi.IO
             _stream = stream;
             _leaveOpen = leaveOpen;
             _currentBitIndex = Msb;
-            _disassemblyBuffer = new byte[BytesInWord];
+            _disAssemblyBuffer = new byte[BytesInWord];
             _assemblyBuffer = new byte[BytesInWord * 4];
             _singleCharBuffer = new char[1];
         }
@@ -83,8 +84,9 @@ namespace Abacaxi.IO
         /// </summary>
         private bool IsWordAligned => _currentBitIndex == Msb;
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Disposes this instance of <see cref="BitWriter" /> class and attempts to close
+        ///     Disposes this instance of <see cref="T:Abacaxi.IO.BitWriter" /> class and attempts to close
         ///     the underlying stream.
         /// </summary>
         public void Dispose()
@@ -96,12 +98,12 @@ namespace Abacaxi.IO
         [NotNull]
         private byte[] DisassembleWord(uint word)
         {
-            _disassemblyBuffer[0] = (byte) (word >> 24);
-            _disassemblyBuffer[1] = (byte) (word >> 16);
-            _disassemblyBuffer[2] = (byte) (word >> 8);
-            _disassemblyBuffer[3] = (byte) word;
+            _disAssemblyBuffer[0] = (byte) (word >> 24);
+            _disAssemblyBuffer[1] = (byte) (word >> 16);
+            _disAssemblyBuffer[2] = (byte) (word >> 8);
+            _disAssemblyBuffer[3] = (byte) word;
 
-            return _disassemblyBuffer;
+            return _disAssemblyBuffer;
         }
 
         private static uint AssembleWord([NotNull] byte[] bytes, int index)

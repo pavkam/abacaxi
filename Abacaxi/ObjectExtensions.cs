@@ -221,18 +221,21 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
+        ///     Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
         /// </summary>
         /// <typeparam name="T">The type to convert to.</typeparam>
         /// <param name="object">The value to convert.</param>
         /// <param name="formatProvider">The format provider.</param>
         /// <param name="validateFunc">The validation function.</param>
         /// <returns>
-        /// The converted value.
+        ///     The converted value.
         /// </returns>
         /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
         /// <exception cref="InvalidOperationException">Thrown if the validation failed.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="formatProvider" /> or <paramref name="validateFunc" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="formatProvider" /> or
+        ///     <paramref name="validateFunc" /> is <c>null</c>.
+        /// </exception>
         public static T As<T>([CanBeNull] this object @object,
             [NotNull] IFormatProvider formatProvider, [NotNull] Func<T, bool> validateFunc)
         {
@@ -270,14 +273,14 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
-        /// This method uses <seealso cref="CultureInfo.InvariantCulture" /> for the conversion.
+        ///     Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
+        ///     This method uses <seealso cref="CultureInfo.InvariantCulture" /> for the conversion.
         /// </summary>
         /// <typeparam name="T">The type to convert to.</typeparam>
         /// <param name="object">The value to convert.</param>
         /// <param name="validateFunc">The validation function.</param>
         /// <returns>
-        /// The converted value.
+        ///     The converted value.
         /// </returns>
         /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
         /// <exception cref="InvalidOperationException">Thrown if the validation failed.</exception>

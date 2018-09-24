@@ -163,7 +163,7 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(1, _empty.Count);
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Count_IsNotZero_ForHeapifiedCollections()
         {
             var heap = new Heap<int>(new[] { 1, 2, 3 }, Comparer<int>.Default);
@@ -177,7 +177,7 @@ namespace Abacaxi.Tests.Containers
             Assert.AreEqual(0, _empty.Count);
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Ctor_Heapifies_TheCollection1()
         {
             var heap = new Heap<int>(new[] { 1 }, Comparer<int>.Default);
@@ -186,7 +186,7 @@ namespace Abacaxi.Tests.Containers
                 1);
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Ctor_Heapifies_TheCollection2()
         {
             var heap = new Heap<int>(new[] { 1, 2 }, Comparer<int>.Default);
@@ -195,7 +195,7 @@ namespace Abacaxi.Tests.Containers
                 2, 1);
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Ctor_Heapifies_TheCollection3()
         {
             var heap = new Heap<int>(new[] { 3, 1, 5, 2 }, Comparer<int>.Default);

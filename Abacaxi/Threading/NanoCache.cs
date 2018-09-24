@@ -35,7 +35,7 @@ namespace Abacaxi.Threading
         private int _itemTtlInMillis;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NanoCache{TKey, TValue}" /> class.
+        ///     Initializes a new instance of the <see cref="NanoCache{TKey, TValue}" /> class.
         /// </summary>
         /// <param name="equalityComparer">The equality comparer used for th item's keys.</param>
         /// <param name="itemTtl">The lifespan of cached items.</param>
@@ -50,7 +50,7 @@ namespace Abacaxi.Threading
 
         /// <inheritdoc />
         /// <summary>
-        /// Initializes a new instance of the <see cref="NanoCache{TKey, TValue}" /> class.
+        ///     Initializes a new instance of the <see cref="NanoCache{TKey, TValue}" /> class.
         /// </summary>
         /// <param name="itemTtl">The lifespan of cached items.</param>
         public NanoCache(int itemTtl = Timeout.Infinite) : this(EqualityComparer<TKey>.Default, itemTtl)
@@ -58,14 +58,14 @@ namespace Abacaxi.Threading
         }
 
         /// <summary>
-        /// Caches an item of gets the cached value of an item using its key.
+        ///     Caches an item of gets the cached value of an item using its key.
         /// </summary>
         /// <value>
-        /// The value stored in the cache.
+        ///     The value stored in the cache.
         /// </value>
         /// <param name="key">The key.</param>
         /// <returns>
-        /// The value stored in the cache or the default value if nothing is cached.
+        ///     The value stored in the cache or the default value if nothing is cached.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="key" /> is <c>null</c>.</exception>
         [CanBeNull]
@@ -78,7 +78,7 @@ namespace Abacaxi.Threading
 
                 if (Equals(value, default(TValue)))
                 {
-                    _dictionary.TryRemove(key, out _);
+                    _dictionary.TryRemove(key, out var _);
                 }
                 else
                 {
@@ -92,12 +92,20 @@ namespace Abacaxi.Threading
         }
 
         /// <summary>
+        ///     Gets the count of items stored in the cache (expired included).
+        /// </summary>
+        /// <value>
+        ///     The count of items in the cache.
+        /// </value>
+        public int Count => _dictionary.Count;
+
+        /// <summary>
         ///     Tries the get the value of a cached item.
         /// </summary>
         /// <param name="key">The key of the item.</param>
         /// <param name="value">The value of the item, if was cached.</param>
         /// <returns><c>true</c> if the item is found; <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="key"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="key" /> is null.</exception>
         public bool TryGetValue([NotNull] TKey key, [CanBeNull] out TValue value)
         {
             Validate.ArgumentNotNull(nameof(key), key);
@@ -124,7 +132,7 @@ namespace Abacaxi.Threading
         }
 
         /// <summary>
-        /// Removes the specified item from the cache.
+        ///     Removes the specified item from the cache.
         /// </summary>
         /// <param name="key">The key representing the item to remove.</param>
         /// <returns><c>true</c> if the item was removed; otherwise, <c>false</c>.</returns>
@@ -135,15 +143,7 @@ namespace Abacaxi.Threading
         }
 
         /// <summary>
-        /// Gets the count of items stored in the cache (expired included).
-        /// </summary>
-        /// <value>
-        /// The count of items in the cache.
-        /// </value>
-        public int Count => _dictionary.Count;
-
-        /// <summary>
-        /// Flushes all expired items from this cache instance.
+        ///     Flushes all expired items from this cache instance.
         /// </summary>
         public void Flush()
         {

@@ -62,7 +62,7 @@ namespace Abacaxi.Tests.StringExtensions
                 "a", "bb");
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void WordWrap_GoesConsecutive_ForSpecials()
         {
             var result = "aaaabbb.cc.cd.d.dd...e".WordWrap(4);
@@ -70,7 +70,7 @@ namespace Abacaxi.Tests.StringExtensions
                 "aaaa", "bbb.", "cc.", "cd.", "d.", "dd..", ".e");
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void WordWrap_GoesConsecutive_ForWhiteSpaces()
         {
             var result = "aaaabbb cc cd d dd   e".WordWrap(4);

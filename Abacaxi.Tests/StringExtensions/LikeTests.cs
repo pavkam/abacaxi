@@ -29,7 +29,8 @@ namespace Abacaxi.Tests.StringExtensions
             Assert.AreEqual(expected, s.Like(p, i));
         }
 
-        [TestCase("a", "A"), TestCase("a*b*c", "abc"), TestCase("a?b?c", "aoboc")]
+        [TestCase("a", "A"), TestCase("a*b*c", "abc"), TestCase("a?b?c", "aoboc"),
+         SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void Like_MatchesTheExpectedString([NotNull] string p, [NotNull] string s)
         {
             Assert.IsTrue(s.Like(p));

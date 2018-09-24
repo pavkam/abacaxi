@@ -49,48 +49,10 @@ namespace Abacaxi.Tests.Containers
             }
         }
 
-        [Test,
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
-         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
-        public void Constructor_ThrowsException_ForNullEqualityComparer()
-        {
-            Assert.Throws<ArgumentNullException>(() => new DependencySquid<string>(null));
-        }
-
-        [Test]
-        public void Selection_IsEmpty_ByDefault()
-        {
-            Assert.AreEqual(0, _empty.Selection.Length);
-        }
-
-        [Test,SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void AddDependencies_ThrowsException_ForNullDependencies()
-        {
-            Assert.Throws<ArgumentNullException>(() => _empty.AddDependencies("1", null));
-        }
-
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void AddConflicts_ThrowsException_ForNullDependencies()
         {
             Assert.Throws<ArgumentNullException>(() => _empty.AddConflicts("1", null));
-        }
-
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void RemoveDependencies_ThrowsException_ForNullDependencies()
-        {
-            Assert.Throws<ArgumentNullException>(() => _empty.RemoveDependencies("1", null));
-        }
-
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void RemoveConflicts_ThrowsException_ForNullDependencies()
-        {
-            Assert.Throws<ArgumentNullException>(() => _empty.RemoveConflicts("1", null));
-        }
-
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void AddDependencies_ThrowsException_ForNullDependent()
-        {
-            Assert.Throws<ArgumentNullException>(() => _empty.AddDependencies(null, "1"));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
@@ -100,59 +62,15 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void RemoveDependencies_ThrowsException_ForNullDependent()
+        public void AddDependencies_ThrowsException_ForNullDependencies()
         {
-            Assert.Throws<ArgumentNullException>(() => _empty.RemoveDependencies(null, "1"));
+            Assert.Throws<ArgumentNullException>(() => _empty.AddDependencies("1", null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void RemoveConflicts_ThrowsException_ForNullDependent()
+        public void AddDependencies_ThrowsException_ForNullDependent()
         {
-            Assert.Throws<ArgumentNullException>(() => _empty.RemoveConflicts(null, "1"));
-        }
-
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Toggle_ThrowsException_ForNullTag()
-        {
-            Assert.Throws<ArgumentNullException>(() => _empty.Toggle(null, true));
-        }
-
-        [Test]
-        public void Toggle_AddsTagIfDoesNotExist()
-        {
-            _empty.Toggle("A", true);
-            AssertSet(_empty.Selection, "A");
-        }
-
-        [Test]
-        public void EqualityComparer_IsTakenIntoAccount()
-        {
-            var squid = new DependencySquid<string>(StringComparer.OrdinalIgnoreCase);
-
-            squid.AddDependencies("A", "b");
-            squid.AddDependencies("B", "c", "D", "E");
-            squid.RemoveDependencies("B", "e");
-
-            squid.Toggle("a", true);
-            AssertSet(squid.Selection, "A", "b", "c", "D");
-        }
-
-        [Test]
-        public void Toggle_DoesNothingIfTheTagDoesNotExist_AndRemoving()
-        {
-            _empty.Toggle("A", true);
-            _empty.Toggle("B", false);
-
-            AssertSet(_empty.Selection, "A");
-        }
-
-        [Test]
-        public void Toggle_UnSelectsTagIfPreviouslySelected()
-        {
-            _empty.Toggle("A", true);
-            _empty.Toggle("A", false);
-
-            AssertSet(_empty.Selection);
+            Assert.Throws<ArgumentNullException>(() => _empty.AddDependencies(null, "1"));
         }
 
         [Test]
@@ -163,6 +81,140 @@ namespace Abacaxi.Tests.Containers
             _empty.Clear();
 
             AssertSet(_empty.Selection);
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase1()
+        {
+            _empty.AddConflicts("A", "A");
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection);
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase2()
+        {
+            _empty.AddConflicts("A", "B");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A");
+
+            _empty.Toggle("B", true);
+            AssertSet(_empty.Selection, "B");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase3()
+        {
+            _empty.AddDependencies("A", "B");
+            _empty.AddConflicts("B", "C");
+
+            _empty.Toggle("C", true);
+            AssertSet(_empty.Selection, "C");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A", "B");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase4()
+        {
+            _empty.AddConflicts("A", "B");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A");
+
+            _empty.Toggle("B", true);
+            AssertSet(_empty.Selection, "B");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase5()
+        {
+            _empty.AddDependencies("A", "B");
+            _empty.AddDependencies("B", "C");
+            _empty.AddDependencies("B", "G");
+            _empty.AddDependencies("F", "E");
+            _empty.AddDependencies("E", "D");
+            _empty.AddDependencies("E", "H");
+            _empty.AddConflicts("C", "D");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A", "B", "C", "G");
+
+            _empty.Toggle("H", true);
+            AssertSet(_empty.Selection, "A", "B", "C", "G", "H");
+
+            _empty.Toggle("E", true);
+            AssertSet(_empty.Selection, "D", "E", "G", "H");
+
+            _empty.Toggle("C", true);
+            AssertSet(_empty.Selection, "C", "G", "H");
+
+            _empty.AddConflicts("C", "H");
+            AssertSet(_empty.Selection, "C", "G");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A", "B", "C", "G");
+
+            _empty.Toggle("F", true);
+            AssertSet(_empty.Selection, "D", "E", "F", "G", "H");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase6()
+        {
+            _empty.AddDependencies("A", "B");
+            _empty.AddDependencies("B", "C");
+            _empty.AddConflicts("A", "C");
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection);
+
+            _empty.Toggle("B", true);
+            AssertSet(_empty.Selection, "B", "C");
+
+            _empty.Toggle("C", false);
+            AssertSet(_empty.Selection);
+
+            _empty.Toggle("C", true);
+            AssertSet(_empty.Selection, "C");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase7()
+        {
+            _empty.AddDependencies("A", "B");
+            _empty.AddDependencies("B", "C");
+            _empty.AddConflicts("A", "C");
+
+            _empty.Toggle("A", true);
+            _empty.RemoveConflicts("A", "C");
+            AssertSet(_empty.Selection);
+
+            _empty.Toggle("A", true);
+            AssertSet(_empty.Selection, "A", "B", "C");
+        }
+
+        [Test]
+        public void Conflicts_WorkAsExpected_ForCase8()
+        {
+            _empty.Toggle("A", true);
+            _empty.Toggle("B", true);
+            _empty.AddDependencies("B", "C");
+
+            AssertSet(_empty.Selection, "A", "B", "C");
+            _empty.AddConflicts("A", "C");
+
+            AssertSet(_empty.Selection, "A");
+        }
+
+        [Test,
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void Constructor_ThrowsException_ForNullEqualityComparer()
+        {
+            Assert.Throws<ArgumentNullException>(() => new DependencySquid<string>(null));
         }
 
         [Test]
@@ -317,129 +369,77 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Conflicts_WorkAsExpected_ForCase1()
+        public void EqualityComparer_IsTakenIntoAccount()
         {
-            _empty.AddConflicts("A", "A");
-            _empty.Toggle("A", true);
-            AssertSet(_empty.Selection);
+            var squid = new DependencySquid<string>(StringComparer.OrdinalIgnoreCase);
+
+            squid.AddDependencies("A", "b");
+            squid.AddDependencies("B", "c", "D", "E");
+            squid.RemoveDependencies("B", "e");
+
+            squid.Toggle("a", true);
+            AssertSet(squid.Selection, "A", "b", "c", "D");
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void RemoveConflicts_ThrowsException_ForNullDependencies()
+        {
+            Assert.Throws<ArgumentNullException>(() => _empty.RemoveConflicts("1", null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void RemoveConflicts_ThrowsException_ForNullDependent()
+        {
+            Assert.Throws<ArgumentNullException>(() => _empty.RemoveConflicts(null, "1"));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void RemoveDependencies_ThrowsException_ForNullDependencies()
+        {
+            Assert.Throws<ArgumentNullException>(() => _empty.RemoveDependencies("1", null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void RemoveDependencies_ThrowsException_ForNullDependent()
+        {
+            Assert.Throws<ArgumentNullException>(() => _empty.RemoveDependencies(null, "1"));
         }
 
         [Test]
-        public void Conflicts_WorkAsExpected_ForCase2()
+        public void Selection_IsEmpty_ByDefault()
         {
-            _empty.AddConflicts("A", "B");
+            Assert.AreEqual(0, _empty.Selection.Length);
+        }
 
+        [Test]
+        public void Toggle_AddsTagIfDoesNotExist()
+        {
             _empty.Toggle("A", true);
             AssertSet(_empty.Selection, "A");
-
-            _empty.Toggle("B", true);
-            AssertSet(_empty.Selection, "B");
         }
 
         [Test]
-        public void Conflicts_WorkAsExpected_ForCase3()
-        {
-            _empty.AddDependencies("A", "B");
-            _empty.AddConflicts("B", "C");
-
-            _empty.Toggle("C", true);
-            AssertSet(_empty.Selection, "C");
-
-            _empty.Toggle("A", true);
-            AssertSet(_empty.Selection, "A", "B");
-        }
-
-        [Test]
-        public void Conflicts_WorkAsExpected_ForCase4()
-        {
-            _empty.AddConflicts("A", "B");
-
-            _empty.Toggle("A", true);
-            AssertSet(_empty.Selection, "A");
-
-            _empty.Toggle("B", true);
-            AssertSet(_empty.Selection, "B");
-        }
-
-        [Test]
-        public void Conflicts_WorkAsExpected_ForCase5()
-        {
-            _empty.AddDependencies("A", "B");
-            _empty.AddDependencies("B", "C");
-            _empty.AddDependencies("B", "G");
-            _empty.AddDependencies("F", "E");
-            _empty.AddDependencies("E", "D");
-            _empty.AddDependencies("E", "H");
-            _empty.AddConflicts("C", "D");
-
-            _empty.Toggle("A", true);
-            AssertSet(_empty.Selection, "A", "B", "C", "G");
-
-            _empty.Toggle("H", true);
-            AssertSet(_empty.Selection, "A", "B", "C", "G", "H");
-
-            _empty.Toggle("E", true);
-            AssertSet(_empty.Selection, "D", "E", "G", "H");
-
-            _empty.Toggle("C", true);
-            AssertSet(_empty.Selection, "C", "G", "H");
-
-            _empty.AddConflicts("C", "H");
-            AssertSet(_empty.Selection, "C", "G");
-
-            _empty.Toggle("A", true);
-            AssertSet(_empty.Selection, "A", "B", "C", "G");
-
-            _empty.Toggle("F", true);
-            AssertSet(_empty.Selection, "D", "E", "F", "G", "H");
-        }
-
-        [Test]
-        public void Conflicts_WorkAsExpected_ForCase6()
-        {
-            _empty.AddDependencies("A", "B");
-            _empty.AddDependencies("B", "C");
-            _empty.AddConflicts("A", "C");
-
-            _empty.Toggle("A", true);
-            AssertSet(_empty.Selection);
-
-            _empty.Toggle("B", true);
-            AssertSet(_empty.Selection, "B", "C");
-
-            _empty.Toggle("C", false);
-            AssertSet(_empty.Selection);
-
-            _empty.Toggle("C", true);
-            AssertSet(_empty.Selection, "C");
-        }
-
-        [Test]
-        public void Conflicts_WorkAsExpected_ForCase7()
-        {
-            _empty.AddDependencies("A", "B");
-            _empty.AddDependencies("B", "C");
-            _empty.AddConflicts("A", "C");
-
-            _empty.Toggle("A", true);
-            _empty.RemoveConflicts("A", "C");
-            AssertSet(_empty.Selection);
-
-            _empty.Toggle("A", true);
-            AssertSet(_empty.Selection, "A", "B", "C");
-        }
-
-        [Test]
-        public void Conflicts_WorkAsExpected_ForCase8()
+        public void Toggle_DoesNothingIfTheTagDoesNotExist_AndRemoving()
         {
             _empty.Toggle("A", true);
-            _empty.Toggle("B", true);
-            _empty.AddDependencies("B", "C");
-
-            AssertSet(_empty.Selection, "A", "B", "C");
-            _empty.AddConflicts("A", "C");
+            _empty.Toggle("B", false);
 
             AssertSet(_empty.Selection, "A");
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Toggle_ThrowsException_ForNullTag()
+        {
+            Assert.Throws<ArgumentNullException>(() => _empty.Toggle(null, true));
+        }
+
+        [Test]
+        public void Toggle_UnSelectsTagIfPreviouslySelected()
+        {
+            _empty.Toggle("A", true);
+            _empty.Toggle("A", false);
+
+            AssertSet(_empty.Selection);
         }
     }
 }
