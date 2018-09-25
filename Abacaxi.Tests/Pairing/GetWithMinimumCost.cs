@@ -74,11 +74,7 @@ namespace Abacaxi.Tests.Pairing
         {
             var result = Pairing.GetWithMinimumCost(new[] {1, 2, 3, 8, 9, 12, 4, 6}, DistanceCostOfPairsEvaluator);
 
-            TestHelper.AssertSequence(result,
-                Tuple.Create(1, 2),
-                Tuple.Create(3, 4),
-                Tuple.Create(8, 6),
-                Tuple.Create(9, 12));
+            TestHelper.AssertSequence(result, (1, 2), (3, 4), (8, 6), (9, 12));
         }
 
         [Test]
@@ -93,7 +89,7 @@ namespace Abacaxi.Tests.Pairing
         {
             var result = Pairing.GetWithMinimumCost(new[] {1, 2}, BanalCostOfPairsEvaluator);
 
-            TestHelper.AssertSequence(result, Tuple.Create(1, 2));
+            TestHelper.AssertSequence(result, (1, 2));
         }
 
         [Test]
@@ -101,9 +97,7 @@ namespace Abacaxi.Tests.Pairing
         {
             var result = Pairing.GetWithMinimumCost(new[] {4, 10, 2, 8}, BanalCostOfPairsEvaluator);
 
-            TestHelper.AssertSequence(result,
-                Tuple.Create(4, 10),
-                Tuple.Create(2, 8));
+            TestHelper.AssertSequence(result, (4, 10), (2, 8));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]

@@ -150,7 +150,7 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
             // ReSharper disable once IdentifierTypo
-            var dyna = new List<Tuple<T, int, int>>();
+            var dyna = new List<(T item, int start, int end)>();
             var li = -1;
             var lm = 0;
             foreach (var e in sequence)
@@ -160,18 +160,18 @@ namespace Abacaxi
 
                 for (var i = dyna.Count - 1; i >= 0; i--)
                 {
-                    if (comparer.Compare(dyna[i].Item1, e) >= 0 ||
-                        pi != -1 && pm >= dyna[i].Item2)
+                    if (comparer.Compare(dyna[i].item, e) >= 0 ||
+                        pi != -1 && pm >= dyna[i].start)
                     {
                         continue;
                     }
 
                     pi = i;
-                    pm = dyna[i].Item2;
+                    pm = dyna[i].start;
                 }
 
                 var nm = pm + 1;
-                dyna.Add(Tuple.Create(e, nm, pi));
+                dyna.Add((e, nm, pi));
 
                 if (lm >= nm)
                 {
@@ -185,8 +185,8 @@ namespace Abacaxi
             var result = new T[lm];
             while (li > -1)
             {
-                result[--lm] = dyna[li].Item1;
-                li = dyna[li].Item3;
+                result[--lm] = dyna[li].item;
+                li = dyna[li].end;
             }
 
             return result;
