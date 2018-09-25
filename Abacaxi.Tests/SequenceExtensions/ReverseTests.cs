@@ -34,51 +34,51 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Reverse_DoesNothing_ForZeroLength()
         {
-            var array = new[] { 1, 2 };
+            var array = new[] {1, 2};
             array.Reverse(1, 0);
 
-            Assert.AreEqual(new[] { 1, 2 }, array);
+            Assert.AreEqual(new[] {1, 2}, array);
         }
 
         [Test]
         public void Reverse_Reverses_AnEvenLengthArray()
         {
-            var array = new[] { 1, 2, 3, 4 };
+            var array = new[] {1, 2, 3, 4};
             array.Reverse(0, 4);
 
-            Assert.AreEqual(new[] { 4, 3, 2, 1 }, array);
+            Assert.AreEqual(new[] {4, 3, 2, 1}, array);
         }
 
         [Test]
         public void Reverse_Reverses_AnOddLengthArray()
         {
-            var array = new[] { 1, 2, 3, 4, 5 };
+            var array = new[] {1, 2, 3, 4, 5};
             array.Reverse(0, 5);
 
-            Assert.AreEqual(new[] { 5, 4, 3, 2, 1 }, array);
+            Assert.AreEqual(new[] {5, 4, 3, 2, 1}, array);
         }
 
         [Test]
         public void Reverse_Reverses_ASegmentOfTheArray()
         {
-            var array = new[] { 1, 2, 3, 4, 5 };
+            var array = new[] {1, 2, 3, 4, 5};
             array.Reverse(0, 2);
 
-            Assert.AreEqual(new[] { 2, 1, 3, 4, 5 }, array);
+            Assert.AreEqual(new[] {2, 1, 3, 4, 5}, array);
         }
 
         [Test]
         public void Reverse_ThrowsException_ForNegativeLength()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Reverse(0, -1));
+                new[] {1}.Reverse(0, -1));
         }
 
         [Test]
         public void Reverse_ThrowsException_ForNegativeStartIndex()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Reverse(-1, 1));
+                new[] {1}.Reverse(-1, 1));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
@@ -92,14 +92,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void Reverse_ThrowsException_ForOutOfBounds1()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Reverse(0, 2));
+                new[] {1}.Reverse(0, 2));
         }
 
         [Test]
         public void Reverse_ThrowsException_ForOutOfBounds2()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.Reverse(1, 1));
+                new[] {1}.Reverse(1, 1));
         }
     }
 }

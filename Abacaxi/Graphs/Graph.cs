@@ -122,10 +122,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         ///     An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private static int CompareEdgesByWeight([NotNull] Edge<TVertex> a, [NotNull] Edge<TVertex> b)
         {
@@ -626,8 +623,8 @@ namespace Abacaxi.Graphs
                     SupportsPotentialWeightEvaluation ? GetPotentialWeight(startVertex, endVertex) : 0
             };
 
-            var discoveredVertices = new Dictionary<TVertex, PathNode> { { startVertex, startVertexNode } };
-            var visitationQueue = new Heap<PathNode>(comparer) { startVertexNode };
+            var discoveredVertices = new Dictionary<TVertex, PathNode> {{startVertex, startVertexNode}};
+            var visitationQueue = new Heap<PathNode>(comparer) {startVertexNode};
             var foundAPath = false;
             var cheapestCostSoFar = .0;
 

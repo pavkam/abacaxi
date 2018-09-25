@@ -25,10 +25,7 @@ namespace Abacaxi.Tests.Graphs
     [TestFixture]
     public sealed class TraverseDfsTests
     {
-        private static bool True<T>(Graph<T>.IDfsNode node)
-        {
-            return true;
-        }
+        private static bool True<T>(Graph<T>.IDfsNode node) => true;
 
         [TestCase("A-1-B,A-1-C", "A>B,A>C,>A"), TestCase("A-1-B,C-1-D", "A>B,>A"),
          TestCase("A-1-B,A-1-D,B-1-C,C-1-D,C-1-E", "C>D,C>E,B>C,A>B,>A"),

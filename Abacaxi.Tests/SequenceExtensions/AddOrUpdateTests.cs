@@ -36,7 +36,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void AddOrUpdate_ReturnsFalse_IfKeyValueIsUpdated()
         {
-            var dict = new Dictionary<string, int> { { "key", 1 } };
+            var dict = new Dictionary<string, int> {{"key", 1}};
             Assert.IsFalse(dict.AddOrUpdate("key", 1, i => i));
         }
 
@@ -62,7 +62,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void AddOrUpdate_UpdatesTheValue_IfTheKeyIsFound()
         {
-            var dict = new Dictionary<string, int> { { "key", 1 } };
+            var dict = new Dictionary<string, int> {{"key", 1}};
             dict.AddOrUpdate("key", 2, i => -1);
 
             Assert.IsTrue(dict.TryGetValue("key", out var value));

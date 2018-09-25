@@ -23,7 +23,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsNullOrEmpty_ReturnsFalse_IfSequenceIsNotEmpty()
         {
-            var actual = new[] { 1 }.IsNullOrEmpty();
+            var actual = new[] {1}.IsNullOrEmpty();
             Assert.IsFalse(actual);
         }
 

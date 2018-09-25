@@ -31,7 +31,7 @@ namespace Abacaxi.Tests.Containers
         public void SetUp()
         {
             _empty = new Heap<int>(Comparer<int>.Default);
-            _three = new Heap<int>(new[] { 2, 3, 1 }, Comparer<int>.Default);
+            _three = new Heap<int>(new[] {2, 3, 1}, Comparer<int>.Default);
         }
 
         private Heap<int> _empty;
@@ -166,7 +166,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Count_IsNotZero_ForHeapifiedCollections()
         {
-            var heap = new Heap<int>(new[] { 1, 2, 3 }, Comparer<int>.Default);
+            var heap = new Heap<int>(new[] {1, 2, 3}, Comparer<int>.Default);
 
             Assert.AreEqual(3, heap.Count);
         }
@@ -180,7 +180,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Ctor_Heapifies_TheCollection1()
         {
-            var heap = new Heap<int>(new[] { 1 }, Comparer<int>.Default);
+            var heap = new Heap<int>(new[] {1}, Comparer<int>.Default);
 
             TestHelper.AssertSequence(heap,
                 1);
@@ -189,7 +189,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Ctor_Heapifies_TheCollection2()
         {
-            var heap = new Heap<int>(new[] { 1, 2 }, Comparer<int>.Default);
+            var heap = new Heap<int>(new[] {1, 2}, Comparer<int>.Default);
 
             TestHelper.AssertSequence(heap,
                 2, 1);
@@ -198,7 +198,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Ctor_Heapifies_TheCollection3()
         {
-            var heap = new Heap<int>(new[] { 3, 1, 5, 2 }, Comparer<int>.Default);
+            var heap = new Heap<int>(new[] {3, 1, 5, 2}, Comparer<int>.Default);
 
             TestHelper.AssertSequence(heap,
                 5, 3, 2, 1);
@@ -316,7 +316,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Heap_AllowsDuplicates()
         {
-            var heap = new Heap<int>(new[] { 1, 1, 1 }, Comparer<int>.Default);
+            var heap = new Heap<int>(new[] {1, 1, 1}, Comparer<int>.Default);
 
             TestHelper.AssertSequence(heap, 1, 1, 1);
         }
@@ -326,7 +326,7 @@ namespace Abacaxi.Tests.Containers
         {
             var comparer = Comparer<int>.Create((a, b) => b - a);
 
-            var heap = new Heap<int>(new[] { 10, 8, 1 }, comparer);
+            var heap = new Heap<int>(new[] {10, 8, 1}, comparer);
 
             TestHelper.AssertSequence(heap, 1, 8, 10);
         }
@@ -376,7 +376,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Remove_ReordersHeap_ForUnbalancedLeft()
         {
-            var unb = new Heap<int>(new[] { 100, 90, 50, 80, 81, 40, 41 }, Comparer<int>.Default);
+            var unb = new Heap<int>(new[] {100, 90, 50, 80, 81, 40, 41}, Comparer<int>.Default);
             unb.Remove(90);
 
             TestHelper.AssertSequence(unb, 100, 81, 80, 50, 41, 40);
@@ -385,7 +385,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Remove_ReordersHeap_ForUnbalancedRight()
         {
-            var unb = new Heap<int>(new[] { 100, 50, 90, 41, 42, 81, 82 }, Comparer<int>.Default);
+            var unb = new Heap<int>(new[] {100, 50, 90, 41, 42, 81, 82}, Comparer<int>.Default);
             unb.Remove(41);
 
             TestHelper.AssertSequence(unb, 100, 90, 82, 81, 50, 42);

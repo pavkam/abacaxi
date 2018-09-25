@@ -24,15 +24,9 @@ namespace Abacaxi.Tests.Pairing
     [TestFixture]
     public sealed class GetWithMinimumCost
     {
-        private static double BanalCostOfPairsEvaluator(int l, int r)
-        {
-            return l + r;
-        }
+        private static double BanalCostOfPairsEvaluator(int l, int r) => l + r;
 
-        private static double DistanceCostOfPairsEvaluator(int l, int r)
-        {
-            return Math.Abs(l - r);
-        }
+        private static double DistanceCostOfPairsEvaluator(int l, int r) => Math.Abs(l - r);
 
         [TestCase(10), TestCase(20)]
         public void GetWithMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
@@ -50,7 +44,7 @@ namespace Abacaxi.Tests.Pairing
             var result = Pairing.GetWithMinimumCost(sequence, DistanceCostOfPairsEvaluator);
             foreach (var r in result)
             {
-                var x = new[] { r.Item1, r.Item2 };
+                var x = new[] {r.Item1, r.Item2};
                 foreach (var item in x)
                 {
                     Assert.IsTrue(expected.TryGetValue(item, out var appearances));
@@ -72,7 +66,7 @@ namespace Abacaxi.Tests.Pairing
         [Test]
         public void GetWithMinimumCost_CreatesSets_UsingTheActualCost()
         {
-            var result = Pairing.GetWithMinimumCost(new[] { 1, 2, 3, 8, 9, 12, 4, 6 }, DistanceCostOfPairsEvaluator);
+            var result = Pairing.GetWithMinimumCost(new[] {1, 2, 3, 8, 9, 12, 4, 6}, DistanceCostOfPairsEvaluator);
 
             TestHelper.AssertSequence(result,
                 Tuple.Create(1, 2),
@@ -91,7 +85,7 @@ namespace Abacaxi.Tests.Pairing
         [Test]
         public void GetWithMinimumCost_ReturnsOnePair_ForTwoElementSequence()
         {
-            var result = Pairing.GetWithMinimumCost(new[] { 1, 2 }, BanalCostOfPairsEvaluator);
+            var result = Pairing.GetWithMinimumCost(new[] {1, 2}, BanalCostOfPairsEvaluator);
 
             TestHelper.AssertSequence(result, Tuple.Create(1, 2));
         }
@@ -99,7 +93,7 @@ namespace Abacaxi.Tests.Pairing
         [Test]
         public void GetWithMinimumCost_ReturnsTwoPairs_ForFourElementSequence()
         {
-            var result = Pairing.GetWithMinimumCost(new[] { 4, 10, 2, 8 }, BanalCostOfPairsEvaluator);
+            var result = Pairing.GetWithMinimumCost(new[] {4, 10, 2, 8}, BanalCostOfPairsEvaluator);
 
             TestHelper.AssertSequence(result,
                 Tuple.Create(4, 10),
@@ -110,7 +104,7 @@ namespace Abacaxi.Tests.Pairing
         public void GetWithMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
         {
             Assert.Throws<ArgumentNullException>(
-                () => Pairing.GetWithMinimumCost(new[] { 1, 2 }, null));
+                () => Pairing.GetWithMinimumCost(new[] {1, 2}, null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
@@ -124,7 +118,7 @@ namespace Abacaxi.Tests.Pairing
         public void GetWithMinimumCost_ThrowsException_ForSequenceWithOddNumberOfElements()
         {
             Assert.Throws<ArgumentException>(
-                () => Pairing.GetWithMinimumCost(new[] { 1, 2, 3 }, BanalCostOfPairsEvaluator));
+                () => Pairing.GetWithMinimumCost(new[] {1, 2, 3}, BanalCostOfPairsEvaluator));
         }
     }
 }

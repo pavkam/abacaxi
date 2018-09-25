@@ -28,7 +28,7 @@ namespace Abacaxi.Tests.Graphs
         [TestCase("a", "b,c"), TestCase("b", "a,c"), TestCase("c", "a,b")]
         public void GetEdges_ProperlyJoinsSingleLetterStrings([NotNull] string vertex, string expected)
         {
-            var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
+            var graph = new StringNeighborhoodGraph(new[] {"a", "b", "c"});
             var actual = string.Join(",", graph.GetEdges(vertex).Select(s => s.ToVertex));
 
             Assert.AreEqual(expected, actual);
@@ -44,7 +44,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void Enumeration_ReturnsAllVertices()
         {
-            var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
+            var graph = new StringNeighborhoodGraph(new[] {"a", "b", "c"});
 
             TestHelper.AssertSequence(graph, "a", "b", "c");
         }
@@ -60,7 +60,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void Enumeration_ReturnsSingleVertex()
         {
-            var graph = new StringNeighborhoodGraph(new[] { "test" });
+            var graph = new StringNeighborhoodGraph(new[] {"test"});
 
             TestHelper.AssertSequence(graph, "test");
         }
@@ -68,7 +68,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void FindShortestPath_WillTraverseTheGraphInExpectedOrder()
         {
-            var graph = new StringNeighborhoodGraph(new[] { "aa", "za", "zz", "zb", "ib", "i7", "17", "a6", "16" });
+            var graph = new StringNeighborhoodGraph(new[] {"aa", "za", "zz", "zb", "ib", "i7", "17", "a6", "16"});
 
             TestHelper.AssertSequence(graph.FindShortestPath("aa", "17"),
                 "aa", "a6", "16", "17");
@@ -77,7 +77,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void GetEdges_CorrectlyReports_FromVertex()
         {
-            var graph = new StringNeighborhoodGraph(new[] { "a", "b" });
+            var graph = new StringNeighborhoodGraph(new[] {"a", "b"});
 
             Assert.IsTrue(graph.GetEdges("a").All(e => e.FromVertex == "a"));
         }
@@ -85,7 +85,7 @@ namespace Abacaxi.Tests.Graphs
         [Test]
         public void GetEdges_CorrectlyReports_Weight()
         {
-            var graph = new StringNeighborhoodGraph(new[] { "a", "b" });
+            var graph = new StringNeighborhoodGraph(new[] {"a", "b"});
 
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             Assert.IsTrue(graph.GetEdges("a").All(e => e.Weight == 1));
@@ -94,7 +94,7 @@ namespace Abacaxi.Tests.Graphs
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void GetEdges_ThrowsException_ForInvalidVertex()
         {
-            var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
+            var graph = new StringNeighborhoodGraph(new[] {"a", "b", "c"});
 
             Assert.Throws<ArgumentException>(() => graph.GetEdges("z"));
         }
@@ -103,7 +103,7 @@ namespace Abacaxi.Tests.Graphs
          SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetEdges_ThrowsException_ForNullVertex()
         {
-            var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
+            var graph = new StringNeighborhoodGraph(new[] {"a", "b", "c"});
 
             Assert.Throws<ArgumentNullException>(() => graph.GetEdges(null));
         }
@@ -112,27 +112,27 @@ namespace Abacaxi.Tests.Graphs
         public void GetPotentialWeight_ThrowsException_Always()
         {
             Assert.Throws<NotSupportedException>(
-                () => new StringNeighborhoodGraph(new[] { "a", "b", "c" }).GetPotentialWeight("a", "b"));
+                () => new StringNeighborhoodGraph(new[] {"a", "b", "c"}).GetPotentialWeight("a", "b"));
         }
 
         [Test]
         public void GetPotentialWeight_ThrowsException_IfFromVertexNotPartOfGraph()
         {
             Assert.Throws<ArgumentException>(
-                () => new StringNeighborhoodGraph(new[] { "a", "b", "c" }).GetPotentialWeight("z", "a"));
+                () => new StringNeighborhoodGraph(new[] {"a", "b", "c"}).GetPotentialWeight("z", "a"));
         }
 
         [Test]
         public void GetPotentialWeight_ThrowsException_IfToVertexNotPartOfGraph()
         {
             Assert.Throws<ArgumentException>(
-                () => new StringNeighborhoodGraph(new[] { "a", "b", "c" }).GetPotentialWeight("a", "z"));
+                () => new StringNeighborhoodGraph(new[] {"a", "b", "c"}).GetPotentialWeight("a", "z"));
         }
 
         [Test]
         public void SupportsPotentialWeightEvaluation_ReturnsFalse()
         {
-            var graph = new StringNeighborhoodGraph(new[] { "a", "b", "c" });
+            var graph = new StringNeighborhoodGraph(new[] {"a", "b", "c"});
             Assert.IsFalse(graph.SupportsPotentialWeightEvaluation);
         }
     }

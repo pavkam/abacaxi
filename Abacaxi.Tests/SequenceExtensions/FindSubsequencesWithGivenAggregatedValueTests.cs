@@ -23,36 +23,30 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public sealed class FindSubsequencesWithGivenAggregatedValueTests
     {
-        private static int IntegerAggregator(int a, int b)
-        {
-            return a + b;
-        }
+        private static int IntegerAggregator(int a, int b) => a + b;
 
-        private static int IntegerDisaggregator(int a, int b)
-        {
-            return a - b;
-        }
+        private static int IntegerDisaggregator(int a, int b) => a - b;
 
         [Test]
         public void FindSubsequencesWithGivenAggregatedValue_ReturnsAll_ForNeutrals()
         {
-            var array = new[] { 1, 0, 0 };
+            var array = new[] {1, 0, 0};
             TestHelper.AssertSequence(
                 array.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator,
                     Comparer<int>.Default, 1),
-                new[] { 1 },
-                new[] { 1, 0 },
-                new[] { 1, 0, 0 });
+                new[] {1},
+                new[] {1, 0},
+                new[] {1, 0, 0});
         }
 
         [Test]
         public void FindSubsequencesWithGivenAggregatedValue_ReturnsAllSequence_IfAggregates()
         {
-            var array = new[] { 1, 2, 3, 4, 5, 6 };
+            var array = new[] {1, 2, 3, 4, 5, 6};
             TestHelper.AssertSequence(
                 array.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator,
                     Comparer<int>.Default, 21),
-                new[] { 1, 2, 3, 4, 5, 6 });
+                new[] {1, 2, 3, 4, 5, 6});
         }
 
         [Test]
@@ -68,7 +62,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void FindSubsequencesWithGivenAggregatedValue_ReturnsNothing_IfDoesNotAggregate()
         {
-            var array = new[] { 1, 2, 3, 4, 5, 6 };
+            var array = new[] {1, 2, 3, 4, 5, 6};
             TestHelper.AssertSequence(
                 array.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator,
                     Comparer<int>.Default, 8));
@@ -77,22 +71,22 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void FindSubsequencesWithGivenAggregatedValue_ReturnsSingleElement_IfAggregates()
         {
-            var array = new[] { 1 };
+            var array = new[] {1};
             TestHelper.AssertSequence(
                 array.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator,
                     Comparer<int>.Default, 1),
-                new[] { 1 });
+                new[] {1});
         }
 
         [Test]
         public void FindSubsequencesWithGivenAggregatedValue_ReturnsTwoSequences_IfAggregates()
         {
-            var array = new[] { 1, 2, 3, 4, 5, 6 };
+            var array = new[] {1, 2, 3, 4, 5, 6};
             TestHelper.AssertSequence(
                 array.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator,
                     Comparer<int>.Default, 6),
-                new[] { 1, 2, 3 },
-                new[] { 6 });
+                new[] {1, 2, 3},
+                new[] {6});
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
@@ -100,7 +94,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindSubsequencesWithGivenAggregatedValue(null, IntegerDisaggregator, Comparer<int>.Default,
+                new[] {1}.FindSubsequencesWithGivenAggregatedValue(null, IntegerDisaggregator, Comparer<int>.Default,
                     1));
         }
 
@@ -109,7 +103,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator, null, 1));
+                new[] {1}.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, IntegerDisaggregator, null, 1));
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
@@ -117,7 +111,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindSubsequencesWithGivenAggregatedValue_ThrowsException_IfDisaggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, null, Comparer<int>.Default,
+                new[] {1}.FindSubsequencesWithGivenAggregatedValue(IntegerAggregator, null, Comparer<int>.Default,
                     1));
         }
 

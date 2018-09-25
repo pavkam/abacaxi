@@ -145,8 +145,7 @@ namespace JetBrains.Annotations
             FormatParameterName = formatParameterName;
         }
 
-        [NotNull]
-        public string FormatParameterName { get; }
+        [NotNull] public string FormatParameterName { get; }
     }
 
     /// <summary>
@@ -163,8 +162,7 @@ namespace JetBrains.Annotations
             Name = name;
         }
 
-        [NotNull]
-        public string Name { get; }
+        [NotNull] public string Name { get; }
     }
 
     /// <summary>
@@ -254,8 +252,7 @@ namespace JetBrains.Annotations
             ParameterName = parameterName;
         }
 
-        [CanBeNull]
-        public string ParameterName { get; }
+        [CanBeNull] public string ParameterName { get; }
     }
 
     /// <summary>
@@ -328,8 +325,7 @@ namespace JetBrains.Annotations
             ForceFullStates = forceFullStates;
         }
 
-        [NotNull]
-        public string Contract { get; }
+        [NotNull] public string Contract { get; }
 
         public bool ForceFullStates { get; }
     }
@@ -408,8 +404,7 @@ namespace JetBrains.Annotations
             BaseType = baseType;
         }
 
-        [NotNull]
-        public Type BaseType { get; }
+        [NotNull] public Type BaseType { get; }
     }
 
     /// <summary>
@@ -473,11 +468,9 @@ namespace JetBrains.Annotations
             TargetFlags = targetFlags;
         }
 
-        [UsedImplicitly]
-        public ImplicitUseKindFlags UseKindFlags { get; private set; }
+        [UsedImplicitly] public ImplicitUseKindFlags UseKindFlags { get; private set; }
 
-        [UsedImplicitly]
-        public ImplicitUseTargetFlags TargetFlags { get; private set; }
+        [UsedImplicitly] public ImplicitUseTargetFlags TargetFlags { get; private set; }
     }
 
     [Flags]
@@ -534,8 +527,7 @@ namespace JetBrains.Annotations
             Comment = comment;
         }
 
-        [CanBeNull]
-        public string Comment { get; }
+        [CanBeNull] public string Comment { get; }
     }
 
     /// <summary>
@@ -581,8 +573,7 @@ namespace JetBrains.Annotations
             Justification = justification;
         }
 
-        [CanBeNull]
-        public string Justification { get; }
+        [CanBeNull] public string Justification { get; }
     }
 
     /// <summary>
@@ -631,8 +622,7 @@ namespace JetBrains.Annotations
             BasePath = basePath;
         }
 
-        [CanBeNull]
-        public string BasePath { get; }
+        [CanBeNull] public string BasePath { get; }
     }
 
     /// <summary>
@@ -729,8 +719,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        [NotNull]
-        public string Format { get; }
+        [NotNull] public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -742,8 +731,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        [NotNull]
-        public string Format { get; }
+        [NotNull] public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -755,8 +743,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        [NotNull]
-        public string Format { get; }
+        [NotNull] public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -768,8 +755,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        [NotNull]
-        public string Format { get; }
+        [NotNull] public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -781,8 +767,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        [NotNull]
-        public string Format { get; }
+        [NotNull] public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -794,8 +779,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        [NotNull]
-        public string Format { get; }
+        [NotNull] public string Format { get; }
     }
 
     /// <summary>
@@ -816,8 +800,7 @@ namespace JetBrains.Annotations
             AnonymousProperty = anonymousProperty;
         }
 
-        [CanBeNull]
-        public string AnonymousProperty { get; }
+        [CanBeNull] public string AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -837,8 +820,7 @@ namespace JetBrains.Annotations
             AnonymousProperty = anonymousProperty;
         }
 
-        [CanBeNull]
-        public string AnonymousProperty { get; }
+        [CanBeNull] public string AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -859,8 +841,7 @@ namespace JetBrains.Annotations
             AnonymousProperty = anonymousProperty;
         }
 
-        [CanBeNull]
-        public string AnonymousProperty { get; }
+        [CanBeNull] public string AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -989,8 +970,7 @@ namespace JetBrains.Annotations
             Name = name;
         }
 
-        [CanBeNull]
-        public string Name { get; }
+        [CanBeNull] public string Name { get; }
     }
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
@@ -1001,8 +981,7 @@ namespace JetBrains.Annotations
             Name = name;
         }
 
-        [NotNull]
-        public string Name { get; }
+        [NotNull] public string Name { get; }
     }
 
     /// <summary>
@@ -1170,11 +1149,9 @@ namespace JetBrains.Annotations
             ControlType = controlType;
         }
 
-        [NotNull]
-        public string TagName { get; }
+        [NotNull] public string TagName { get; }
 
-        [NotNull]
-        public Type ControlType { get; }
+        [NotNull] public Type ControlType { get; }
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
@@ -1200,8 +1177,7 @@ namespace JetBrains.Annotations
             Attribute = attribute;
         }
 
-        [NotNull]
-        public string Attribute { get; }
+        [NotNull] public string Attribute { get; }
     }
 
     [AttributeUsage(AttributeTargets.Property)]
@@ -1223,8 +1199,7 @@ namespace JetBrains.Annotations
             Name = name;
         }
 
-        [NotNull]
-        public string Name { get; }
+        [NotNull] public string Name { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -1236,11 +1211,9 @@ namespace JetBrains.Annotations
             FieldName = fieldName;
         }
 
-        [NotNull]
-        public string Type { get; }
+        [NotNull] public string Type { get; }
 
-        [NotNull]
-        public string FieldName { get; }
+        [NotNull] public string FieldName { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -1251,8 +1224,7 @@ namespace JetBrains.Annotations
             Directive = directive;
         }
 
-        [NotNull]
-        public string Directive { get; }
+        [NotNull] public string Directive { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -1269,11 +1241,9 @@ namespace JetBrains.Annotations
             PageName = pageName;
         }
 
-        [NotNull]
-        public string BaseType { get; }
+        [NotNull] public string BaseType { get; }
 
-        [CanBeNull]
-        public string PageName { get; }
+        [CanBeNull] public string PageName { get; }
     }
 
     [AttributeUsage(AttributeTargets.Method)]

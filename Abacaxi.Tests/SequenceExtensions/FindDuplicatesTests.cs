@@ -46,7 +46,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void GenericFindDuplicates_ThrowsException_ForNullEqualityComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindDuplicates(null));
+                new[] {1}.FindDuplicates(null));
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
@@ -61,7 +61,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void GenericFindDuplicates_UsesTheComparer()
         {
             TestHelper.AssertSequence(
-                new[] { "a", "A" }.FindDuplicates(StringComparer.InvariantCultureIgnoreCase),
+                new[] {"a", "A"}.FindDuplicates(StringComparer.InvariantCultureIgnoreCase),
                 new Frequency<string>("a", 2));
         }
 
@@ -69,7 +69,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void IntegerFindDuplicates_ReturnsDuplicates_ForDistinctElements()
         {
             TestHelper.AssertSequence(
-                new[] { 1, 2, 1, 3, 1, 2 }.FindDuplicates(1, 3),
+                new[] {1, 2, 1, 3, 1, 2}.FindDuplicates(1, 3),
                 new Frequency<int>(1, 3),
                 new Frequency<int>(2, 2));
         }
@@ -78,14 +78,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void IntegerFindDuplicates_ReturnsNothing_ForDistinctElements()
         {
             TestHelper.AssertSequence(
-                new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.FindDuplicates(1, 9));
+                new[] {1, 2, 3, 4, 5, 6, 7, 8, 9}.FindDuplicates(1, 9));
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored")]
         public void IntegerFindDuplicates_ThrowsException_ForMaxLessThanMin()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new[] { 1 }.FindDuplicates(1, 0));
+                new[] {1}.FindDuplicates(1, 0));
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
@@ -100,7 +100,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void IntegerFindDuplicates_ThrowsException_IfSequenceContainsElementsOutOfMinAndMax()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                new[] { 0, 1, -1 }.FindDuplicates(0, 1).ToArray());
+                new[] {0, 1, -1}.FindDuplicates(0, 1).ToArray());
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),

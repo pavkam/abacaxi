@@ -36,35 +36,35 @@ namespace Abacaxi.Tests.Sorting
         public void Sort_ThrowsException_ForNegativeStartIndex()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Sort(new[] { 1 }, -1, 1, Comparer<int>.Default));
+                Sort(new[] {1}, -1, 1, Comparer<int>.Default));
         }
 
         [Test]
         public void Sort_ThrowsException_ForNegativeLength()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Sort(new[] { 1 }, 0, -1, Comparer<int>.Default));
+                Sort(new[] {1}, 0, -1, Comparer<int>.Default));
         }
 
         [Test]
         public void Sort_ThrowsException_ForOutOfBounds1()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Sort(new[] { 1 }, 0, 2, Comparer<int>.Default));
+                Sort(new[] {1}, 0, 2, Comparer<int>.Default));
         }
 
         [Test]
         public void Sort_ThrowsException_ForOutOfBounds2()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Sort(new[] { 1 }, 1, 1, Comparer<int>.Default));
+                Sort(new[] {1}, 1, 1, Comparer<int>.Default));
         }
 
         [Test]
         public void Sort_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Sort(new[] { 1 }, 0, 1, null));
+                Sort(new[] {1}, 0, 1, null));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace Abacaxi.Tests.Sorting
         [Test]
         public void Sort_TakesIntoAccount_TheComparer()
         {
-            var array = new[] { "B", "A", "a" };
+            var array = new[] {"B", "A", "a"};
             Sort(array, 0, 3, StringComparer.OrdinalIgnoreCase);
 
             Assert.IsTrue(StringComparer.OrdinalIgnoreCase.Equals(array[0], "A"));
@@ -87,7 +87,7 @@ namespace Abacaxi.Tests.Sorting
         [Test]
         public void Sort_DoesNothing_OnOneElementArray()
         {
-            var array = new[] { 1 };
+            var array = new[] {1};
 
             Sort(array, 0, 1, Comparer<int>.Default);
 
@@ -99,7 +99,7 @@ namespace Abacaxi.Tests.Sorting
         [Test]
         public void Sort_SortsTheArray_ForTwoElementArray()
         {
-            var array = new[] { 2, 1 };
+            var array = new[] {2, 1};
             Sort(array, 0, 2, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,
@@ -109,7 +109,7 @@ namespace Abacaxi.Tests.Sorting
         [Test]
         public void Sort_SortsTheFirstTwoElements_ForThreeElementArray()
         {
-            var array = new[] { 3, 2, 1 };
+            var array = new[] {3, 2, 1};
             Sort(array, 0, 2, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,
@@ -119,7 +119,7 @@ namespace Abacaxi.Tests.Sorting
         [Test]
         public void Sort_DoesNothing_ForAlreadySortedArray()
         {
-            var array = new[] { 1, 2, 3 };
+            var array = new[] {1, 2, 3};
             Sort(array, 0, 3, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,
@@ -129,7 +129,7 @@ namespace Abacaxi.Tests.Sorting
         [Test]
         public void Sort_SortsTheArray_ForTenElementArray()
         {
-            var array = new[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+            var array = new[] {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
             Sort(array, 0, 10, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,
@@ -139,7 +139,7 @@ namespace Abacaxi.Tests.Sorting
         [Test]
         public void Sort_SortsHalfTheArray_ForTenElementArray()
         {
-            var array = new[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+            var array = new[] {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
             Sort(array, 5, 5, Comparer<int>.Default);
 
             TestHelper.AssertSequence(array,
@@ -151,7 +151,7 @@ namespace Abacaxi.Tests.Sorting
         {
             if (IsStable)
             {
-                var array = new[] { "c", "C", "A", "a", "b", "B", "D", "d" };
+                var array = new[] {"c", "C", "A", "a", "b", "B", "D", "d"};
                 Sort(array, 0, 8, StringComparer.OrdinalIgnoreCase);
 
                 TestHelper.AssertSequence(array,

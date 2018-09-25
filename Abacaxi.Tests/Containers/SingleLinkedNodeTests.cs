@@ -34,7 +34,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Create_ReturnsOneValidNode_ForSequenceOfOne()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1 });
+            var head = SingleLinkedNode<int>.Create(new[] {1});
 
             Assert.NotNull(head);
             Assert.AreEqual(1, head.Value);
@@ -44,7 +44,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Create_ReturnsTwoValidNodes_ForSequenceOfTwo()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
+            var head = SingleLinkedNode<int>.Create(new[] {1, 2});
 
             Assert.NotNull(head);
             Assert.AreEqual(1, head.Value);
@@ -88,7 +88,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void FindMiddle_ReturnsFirst_ForSingleNodeList()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1 });
+            var head = SingleLinkedNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
             var node = head.FindMiddle();
@@ -98,7 +98,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void FindMiddle_ReturnsFirst_ForTwoNodeList()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
+            var head = SingleLinkedNode<int>.Create(new[] {1, 2});
             Debug.Assert(head != null);
 
             var node = head.FindMiddle();
@@ -108,7 +108,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void FindMiddle_ReturnsSecond_ForThreeNodeList()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
+            var head = SingleLinkedNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(head != null);
 
             var node = head.FindMiddle();
@@ -137,7 +137,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Reverse_DoesNothing_ForSingleNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1 });
+            var head = SingleLinkedNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
             var newHead = head.Reverse();
@@ -150,7 +150,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Reverse_Reverses_AListOfThree()
         {
-            var e1 = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
+            var e1 = SingleLinkedNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(e1 != null);
             var e2 = e1.Next;
             Debug.Assert(e2 != null);
@@ -168,7 +168,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Reverse_Reverses_AListOfTwo()
         {
-            var e1 = SingleLinkedNode<int>.Create(new[] { 1, 2 });
+            var e1 = SingleLinkedNode<int>.Create(new[] {1, 2});
             Debug.Assert(e1 != null);
             var e2 = e1.Next;
             Debug.Assert(e2 != null);
@@ -183,7 +183,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void VerifyIfKnotted_ReturnsFalse_ForDoubleUnknottedNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
+            var head = SingleLinkedNode<int>.Create(new[] {1, 2});
             Debug.Assert(head != null);
 
             var check = head.VerifyIfKnotted();
@@ -193,7 +193,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void VerifyIfKnotted_ReturnsFalse_ForSingleUnknottedNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1 });
+            var head = SingleLinkedNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
             var check = head.VerifyIfKnotted();
@@ -203,7 +203,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void VerifyIfKnotted_ReturnsFalse_ForTripleUnknottedNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
+            var head = SingleLinkedNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(head != null);
 
             var check = head.VerifyIfKnotted();
@@ -213,7 +213,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void VerifyIfKnotted_ReturnsTrue_ForDoubleKnottedNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2 });
+            var head = SingleLinkedNode<int>.Create(new[] {1, 2});
             Debug.Assert(head != null);
             Debug.Assert(head.Next != null);
 
@@ -226,7 +226,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void VerifyIfKnotted_ReturnsTrue_ForSingleKnottedNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1 });
+            var head = SingleLinkedNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
             head.Next = head;
@@ -238,7 +238,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void VerifyIfKnotted_ReturnsTrue_ForTripleKnottedNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] { 1, 2, 3 });
+            var head = SingleLinkedNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(head != null);
             Debug.Assert(head.Next != null);
             Debug.Assert(head.Next.Next != null);

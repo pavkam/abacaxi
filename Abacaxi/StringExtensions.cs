@@ -30,8 +30,8 @@ namespace Abacaxi
         [NotNull] private static readonly IDictionary<char, char> SpecialDiacriticMappings = new
             Dictionary<char, char>
             {
-                { 'ł', 'l' },
-                { 'Ł', 'L' }
+                {'ł', 'l'},
+                {'Ł', 'L'}
             };
 
         /// <summary>

@@ -33,11 +33,11 @@ namespace Abacaxi.Tests.Containers
             _trie0 = new Trie<char, int>();
             _trie5 = new Trie<char, int>
             {
-                { _("abc"), 1 },
-                { _("acb"), 2 },
-                { _("abd"), 3 },
-                { _("cbc"), 4 },
-                { _("cba"), 5 }
+                {_("abc"), 1},
+                {_("acb"), 2},
+                {_("abd"), 3},
+                {_("cbc"), 4},
+                {_("cba"), 5}
             };
         }
 
@@ -45,10 +45,7 @@ namespace Abacaxi.Tests.Containers
         private Trie<char, int> _trie5;
 
         [NotNull]
-        private static char[] _([NotNull] string a)
-        {
-            return a.ToCharArray();
-        }
+        private static char[] _([NotNull] string a) => a.ToCharArray();
 
         [TestCase(0, 0), TestCase(0, 1), TestCase(4, 0), TestCase(5, 1)]
         public void CopyTo_ThrowsException_ForInvalidArrayIndex(int arrayLength, int arrayIndex)
@@ -572,9 +569,9 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Trie_TakesIntoAccountTheComparer()
         {
-            var trie = new Trie<string, int>(StringComparer.OrdinalIgnoreCase) { { new[] { "A" }, 1 } };
+            var trie = new Trie<string, int>(StringComparer.OrdinalIgnoreCase) {{new[] {"A"}, 1}};
 
-            Assert.IsTrue(trie.Contains(new[] { "a" }));
+            Assert.IsTrue(trie.Contains(new[] {"a"}));
         }
 
         [Test]

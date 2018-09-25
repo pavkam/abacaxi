@@ -31,7 +31,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void EmptyIfNull_ReturnsOriginalSequence_IfSequenceContainsElements()
         {
-            var o = new[] { "a" };
+            var o = new[] {"a"};
             var actual = o.EmptyIfNull();
 
             Assert.AreSame(o, actual);

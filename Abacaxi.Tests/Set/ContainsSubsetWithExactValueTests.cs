@@ -27,14 +27,14 @@ namespace Abacaxi.Tests.Set
          TestCase(9), TestCase(10), TestCase(11), TestCase(12), TestCase(13), TestCase(14), TestCase(15)]
         public void ContainsSubsetWithExactValue_ReturnsTrue_IfSumFound(int target)
         {
-            var result = Set.ContainsSubsetWithExactValue(new[] { 1, 2, 3, 4, 5 }, target);
+            var result = Set.ContainsSubsetWithExactValue(new[] {1, 2, 3, 4, 5}, target);
             Assert.IsTrue(result);
         }
 
         [TestCase(2), TestCase(14), TestCase(17)]
         public void ContainsSubsetWithExactValue_ReturnsFalse_IfSumNotFound(int target)
         {
-            var result = Set.ContainsSubsetWithExactValue(new[] { 1, 3, 5, 7 }, target);
+            var result = Set.ContainsSubsetWithExactValue(new[] {1, 3, 5, 7}, target);
             Assert.IsFalse(result);
         }
 
@@ -48,7 +48,7 @@ namespace Abacaxi.Tests.Set
         [Test]
         public void ContainsSubsetWithExactValue_ReturnsFalse_WhenSumCannotBeCompleted()
         {
-            var result = Set.ContainsSubsetWithExactValue(new[] { 2 }, 1);
+            var result = Set.ContainsSubsetWithExactValue(new[] {2}, 1);
             Assert.IsFalse(result);
         }
 
@@ -56,7 +56,7 @@ namespace Abacaxi.Tests.Set
         public void ContainsSubsetWithExactValue_ThrowsException_ForNegativeNumberInSequence()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Set.ContainsSubsetWithExactValue(new[] { -1 }, 1));
+                Set.ContainsSubsetWithExactValue(new[] {-1}, 1));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]

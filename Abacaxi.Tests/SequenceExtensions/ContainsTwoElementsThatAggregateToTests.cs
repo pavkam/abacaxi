@@ -23,10 +23,7 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public sealed class ContainsTwoElementsThatAggregateToTests
     {
-        private static int IntegerAggregator(int a, int b)
-        {
-            return a + b;
-        }
+        private static int IntegerAggregator(int a, int b) => a + b;
 
         [Test]
         public void ContainsTwoElementsThatAggregateTo_ReturnsFalse_ForEmptySequence()
@@ -40,7 +37,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void ContainsTwoElementsThatAggregateTo_ReturnsFalse_IsSumImpossible_ForFiveElements()
         {
             var result =
-                new[] { 1, 2, 3, 4, 5 }.ContainsTwoElementsThatAggregateTo(IntegerAggregator, Comparer<int>.Default,
+                new[] {1, 2, 3, 4, 5}.ContainsTwoElementsThatAggregateTo(IntegerAggregator, Comparer<int>.Default,
                     10);
 
             Assert.IsFalse(result);
@@ -50,7 +47,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void ContainsTwoElementsThatAggregateTo_ReturnsTrue_ForLongSequence()
         {
             var result =
-                new[] { 1, 10, 2, 8, 2, 2, 3, 4, 19, 6 }.ContainsTwoElementsThatAggregateTo(IntegerAggregator,
+                new[] {1, 10, 2, 8, 2, 2, 3, 4, 19, 6}.ContainsTwoElementsThatAggregateTo(IntegerAggregator,
                     Comparer<int>.Default, 29);
 
             Assert.IsTrue(result);
@@ -59,7 +56,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ContainsTwoElementsThatAggregateTo_ReturnsTrue_ForTwoElements()
         {
-            var result = new[] { 1, 0 }.ContainsTwoElementsThatAggregateTo(IntegerAggregator, Comparer<int>.Default, 1);
+            var result = new[] {1, 0}.ContainsTwoElementsThatAggregateTo(IntegerAggregator, Comparer<int>.Default, 1);
 
             Assert.IsTrue(result);
         }
@@ -68,14 +65,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void ContainsTwoElementsThatAggregateTo_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.ContainsTwoElementsThatAggregateTo(null, Comparer<int>.Default, 1));
+                new[] {1}.ContainsTwoElementsThatAggregateTo(null, Comparer<int>.Default, 1));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ContainsTwoElementsThatAggregateTo_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.ContainsTwoElementsThatAggregateTo(IntegerAggregator, null, 1));
+                new[] {1}.ContainsTwoElementsThatAggregateTo(IntegerAggregator, null, 1));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]

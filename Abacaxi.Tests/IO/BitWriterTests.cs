@@ -266,7 +266,7 @@ namespace Abacaxi.Tests.IO
         [Test]
         public void Expect_WriteBytes1_DoesNotWrite_EmptyArray()
         {
-            var bytes = Encode(Encoding.UTF8, bitEncoder => bitEncoder.WriteBytes(new byte[] { 1, 2 }, 0, 0));
+            var bytes = Encode(Encoding.UTF8, bitEncoder => bitEncoder.WriteBytes(new byte[] {1, 2}, 0, 0));
 
             Assert.AreEqual(0, bytes.Length);
         }
@@ -317,7 +317,7 @@ namespace Abacaxi.Tests.IO
                 using (var bitWriter = new BitWriter(stream, Encoding.Default, true))
                 {
                     bitWriter.WriteBits(1, 1);
-                    bitWriter.WriteBytes(new byte[] { 1 }, 0, 1);
+                    bitWriter.WriteBytes(new byte[] {1}, 0, 1);
                 }
 
                 var bytes = stream.ToArray();
@@ -331,7 +331,7 @@ namespace Abacaxi.Tests.IO
         public void Expect_WriteBytes1_WritesCorrectly()
         {
             var bytes = Encode(Encoding.UTF8,
-                bitEncoder => bitEncoder.WriteBytes(new byte[] { 0xAA, 0xFF, 0xCC, 0x00 }, 0, 4));
+                bitEncoder => bitEncoder.WriteBytes(new byte[] {0xAA, 0xFF, 0xCC, 0x00}, 0, 4));
 
             Assert.AreEqual(4, bytes.Length);
             Assert.AreEqual(0xAA, bytes[0]);
@@ -347,7 +347,7 @@ namespace Abacaxi.Tests.IO
             {
                 using (var bitWriter = new BitWriter(stream, Encoding.Default, true))
                 {
-                    bitWriter.WriteBytes(new byte[] { 5, 6, 1, 2 }, 0, 4);
+                    bitWriter.WriteBytes(new byte[] {5, 6, 1, 2}, 0, 4);
                 }
 
                 var bytes = stream.ToArray();
@@ -366,7 +366,7 @@ namespace Abacaxi.Tests.IO
             {
                 using (var bitWriter = new BitWriter(stream, Encoding.Default, true))
                 {
-                    bitWriter.WriteBytes(new byte[] { 5, 6 }, 0, 2);
+                    bitWriter.WriteBytes(new byte[] {5, 6}, 0, 2);
                 }
 
                 var bytes = stream.ToArray();
@@ -383,7 +383,7 @@ namespace Abacaxi.Tests.IO
             {
                 using (var bitWriter = new BitWriter(stream, Encoding.Default, true))
                 {
-                    bitWriter.WriteBytes(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 }, 1, 6);
+                    bitWriter.WriteBytes(new byte[] {0, 1, 2, 3, 4, 5, 6, 7}, 1, 6);
                 }
 
                 var bytes = stream.ToArray();
@@ -438,7 +438,7 @@ namespace Abacaxi.Tests.IO
         public void Expect_WriteBytes2_WritesCorrectly()
         {
             var bytes = Encode(Encoding.UTF8,
-                bitEncoder => bitEncoder.Write(new byte[] { 0xAA, 0xFF, 0xCC, 0x00 }, 0, 4));
+                bitEncoder => bitEncoder.Write(new byte[] {0xAA, 0xFF, 0xCC, 0x00}, 0, 4));
 
             Assert.AreEqual(8, bytes.Length);
             Assert.AreEqual(0x00, bytes[0]);
@@ -454,7 +454,7 @@ namespace Abacaxi.Tests.IO
         [Test]
         public void Expect_WriteBytes2_WritesCorrectly_EmptyArray()
         {
-            var bytes = Encode(Encoding.UTF8, bitEncoder => bitEncoder.Write(new byte[] { 1, 2 }, 0, 0));
+            var bytes = Encode(Encoding.UTF8, bitEncoder => bitEncoder.Write(new byte[] {1, 2}, 0, 0));
 
             Assert.AreEqual(4, bytes.Length);
             Assert.AreEqual(0x00, bytes[0]);
@@ -466,7 +466,7 @@ namespace Abacaxi.Tests.IO
         [Test]
         public void Expect_WriteBytes3_WritesCorrectly()
         {
-            var bytes = Encode(Encoding.UTF8, bitEncoder => bitEncoder.Write(new byte[] { 0xAA, 0xFF, 0xCC, 0x00 }));
+            var bytes = Encode(Encoding.UTF8, bitEncoder => bitEncoder.Write(new byte[] {0xAA, 0xFF, 0xCC, 0x00}));
 
             Assert.AreEqual(8, bytes.Length);
             Assert.AreEqual(0x00, bytes[0]);

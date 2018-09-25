@@ -27,26 +27,26 @@ namespace Abacaxi.Tests.Set
         public void EnumerateSubsetCombinations_DoesNotCareIfDuplicates()
         {
             TestHelper.AssertSequence(
-                Set.EnumerateSubsetCombinations(new[] { 1, 1 }, 2),
+                Set.EnumerateSubsetCombinations(new[] {1, 1}, 2),
                 new[]
                 {
-                    new[] { 1, 1 },
+                    new[] {1, 1},
                     new int[] { }
                 },
                 new[]
                 {
-                    new[] { 1 },
-                    new[] { 1 }
+                    new[] {1},
+                    new[] {1}
                 },
                 new[]
                 {
-                    new[] { 1 },
-                    new[] { 1 }
+                    new[] {1},
+                    new[] {1}
                 },
                 new[]
                 {
                     new int[] { },
-                    new[] { 1, 1 }
+                    new[] {1, 1}
                 });
         }
 
@@ -54,26 +54,26 @@ namespace Abacaxi.Tests.Set
         public void EnumerateSubsetCombinations_ReturnsFourCombinations_ForTwoElementAndTwoSubsets()
         {
             TestHelper.AssertSequence(
-                Set.EnumerateSubsetCombinations(new[] { 11, 19 }, 2),
+                Set.EnumerateSubsetCombinations(new[] {11, 19}, 2),
                 new[]
                 {
-                    new[] { 11, 19 },
+                    new[] {11, 19},
                     new int[] { }
                 },
                 new[]
                 {
-                    new[] { 11 },
-                    new[] { 19 }
+                    new[] {11},
+                    new[] {19}
                 },
                 new[]
                 {
-                    new[] { 19 },
-                    new[] { 11 }
+                    new[] {19},
+                    new[] {11}
                 },
                 new[]
                 {
                     new int[] { },
-                    new[] { 11, 19 }
+                    new[] {11, 19}
                 });
         }
 
@@ -89,17 +89,17 @@ namespace Abacaxi.Tests.Set
         public void EnumerateSubsetCombinations_ReturnsOneCombination_ForOneElementAndOneSubset()
         {
             TestHelper.AssertSequence(
-                Set.EnumerateSubsetCombinations(new[] { 10 }, 1),
-                new[] { new[] { 10 } });
+                Set.EnumerateSubsetCombinations(new[] {10}, 1),
+                new[] {new[] {10}});
         }
 
         [Test]
         public void EnumerateSubsetCombinations_ReturnsTwoCombinations_ForOneElementAndTwoSubsets()
         {
             TestHelper.AssertSequence(
-                Set.EnumerateSubsetCombinations(new[] { 10 }, 2),
-                new[] { new[] { 10 }, new int[] { } },
-                new[] { new int[] { }, new[] { 10 } });
+                Set.EnumerateSubsetCombinations(new[] {10}, 2),
+                new[] {new[] {10}, new int[] { }},
+                new[] {new int[] { }, new[] {10}});
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]

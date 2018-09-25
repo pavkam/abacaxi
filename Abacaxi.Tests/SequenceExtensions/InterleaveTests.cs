@@ -29,8 +29,8 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void Interleave_InterleavesThreeStreams()
         {
             TestHelper.AssertSequence(
-                SequenceExtensions.Interleave(Comparer<int>.Default, new[] { 20, 17 }, new[] { 19, 16, 14 },
-                    new[] { 18, 15, 13, 12 }),
+                SequenceExtensions.Interleave(Comparer<int>.Default, new[] {20, 17}, new[] {19, 16, 14},
+                    new[] {18, 15, 13, 12}),
                 20, 19, 18, 17, 16, 15, 14, 13, 12);
         }
 
@@ -44,7 +44,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void Interleave_ReturnsOriginalSequence_IfOnlyOne()
         {
-            TestHelper.AssertSequence(SequenceExtensions.Interleave(Comparer<int>.Default, new[] { 10, 9, 8, 7 }),
+            TestHelper.AssertSequence(SequenceExtensions.Interleave(Comparer<int>.Default, new[] {10, 9, 8, 7}),
                 10, 9, 8, 7);
         }
 
@@ -76,7 +76,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void Interleave_ThrowsException_WhenStreamIsUnsorted()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                SequenceExtensions.Interleave(Comparer<int>.Default, new[] { 10, 11 }).ToArray());
+                SequenceExtensions.Interleave(Comparer<int>.Default, new[] {10, 11}).ToArray());
         }
     }
 }

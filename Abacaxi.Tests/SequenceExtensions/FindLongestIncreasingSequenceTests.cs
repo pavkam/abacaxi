@@ -27,7 +27,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindLongestIncreasingSequence_ReturnsAllElements_ForPerfectSequence()
         {
             TestHelper.AssertSequence(
-                new[] { 1, 2, 3, 4, 5 }.FindLongestIncreasingSequence(Comparer<int>.Default),
+                new[] {1, 2, 3, 4, 5}.FindLongestIncreasingSequence(Comparer<int>.Default),
                 1, 2, 3, 4, 5);
         }
 
@@ -42,7 +42,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindLongestIncreasingSequence_ReturnsSingleElement()
         {
             TestHelper.AssertSequence(
-                new[] { 1 }.FindLongestIncreasingSequence(Comparer<int>.Default),
+                new[] {1}.FindLongestIncreasingSequence(Comparer<int>.Default),
                 1);
         }
 
@@ -50,7 +50,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindLongestIncreasingSequence_ReturnsTheLastClosedSequence_IfTwoAvailable()
         {
             TestHelper.AssertSequence(
-                new[] { 1, 4, 2, 5, 3 }.FindLongestIncreasingSequence(Comparer<int>.Default),
+                new[] {1, 4, 2, 5, 3}.FindLongestIncreasingSequence(Comparer<int>.Default),
                 1, 2, 5);
         }
 
@@ -58,7 +58,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindLongestIncreasingSequence_SkipsAllTheJunk_ForANiceLongSequence()
         {
             TestHelper.AssertSequence(
-                new[] { 1, 10, 2, 3, 0, 4, 5 }.FindLongestIncreasingSequence(Comparer<int>.Default),
+                new[] {1, 10, 2, 3, 0, 4, 5}.FindLongestIncreasingSequence(Comparer<int>.Default),
                 1, 2, 3, 4, 5);
         }
 
@@ -66,7 +66,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindLongestIncreasingSequence_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindLongestIncreasingSequence(null));
+                new[] {1}.FindLongestIncreasingSequence(null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]

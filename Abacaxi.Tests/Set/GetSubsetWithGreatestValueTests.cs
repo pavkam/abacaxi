@@ -24,16 +24,13 @@ namespace Abacaxi.Tests.Set
     [TestFixture]
     public sealed class GetSubsetWithGreatestValueTests
     {
-        private static int IntegerAggregator(int a, int b)
-        {
-            return a + b;
-        }
+        private static int IntegerAggregator(int a, int b) => a + b;
 
         [Test]
         public void GetSubsetWithGreatestValue_ReturnsAllElements_ForCountOfThree()
         {
             TestHelper.AssertSequence(
-                Set.GetSubsetWithGreatestValue(new[] { 3, 2, 1 }, 3, IntegerAggregator,
+                Set.GetSubsetWithGreatestValue(new[] {3, 2, 1}, 3, IntegerAggregator,
                     Comparer<int>.Default),
                 1, 2, 3);
         }
@@ -42,7 +39,7 @@ namespace Abacaxi.Tests.Set
         public void GetSubsetWithGreatestValue_ReturnsBiggestElement_ForCountOfOne()
         {
             TestHelper.AssertSequence(
-                Set.GetSubsetWithGreatestValue(new[] { 1, 2, 3 }, 1, IntegerAggregator,
+                Set.GetSubsetWithGreatestValue(new[] {1, 2, 3}, 1, IntegerAggregator,
                     Comparer<int>.Default),
                 3);
         }
@@ -51,7 +48,7 @@ namespace Abacaxi.Tests.Set
         public void GetSubsetWithGreatestValue_ReturnsLastThreeElements()
         {
             TestHelper.AssertSequence(
-                Set.GetSubsetWithGreatestValue(new[] { 100, 200, 1, 50, 70, 188 }, 3,
+                Set.GetSubsetWithGreatestValue(new[] {100, 200, 1, 50, 70, 188}, 3,
                     IntegerAggregator, Comparer<int>.Default),
                 100, 188, 200);
         }
@@ -60,14 +57,14 @@ namespace Abacaxi.Tests.Set
         public void GetSubsetWithGreatestValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Set.GetSubsetWithGreatestValue(new[] { 1 }, 1, null, Comparer<int>.Default));
+                Set.GetSubsetWithGreatestValue(new[] {1}, 1, null, Comparer<int>.Default));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetSubsetWithGreatestValue_ThrowsException_IfComparerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Set.GetSubsetWithGreatestValue(new[] { 1 }, 1, IntegerAggregator, null));
+                Set.GetSubsetWithGreatestValue(new[] {1}, 1, IntegerAggregator, null));
         }
 
         [Test]

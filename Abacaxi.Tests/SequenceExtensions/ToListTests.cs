@@ -27,7 +27,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToList1_SelectsExpectedItems_ForAList()
         {
-            var actual = new List<string> { "1", "2", "3" }.ToList(int.Parse);
+            var actual = new List<string> {"1", "2", "3"}.ToList(int.Parse);
 
             TestHelper.AssertSequence(actual, 1, 2, 3);
         }
@@ -35,7 +35,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToList1_SelectsExpectedItems_ForEnumerable()
         {
-            var actual = new List<string> { "1", "2", "3" }.Where(p => true).ToList(int.Parse);
+            var actual = new List<string> {"1", "2", "3"}.Where(p => true).ToList(int.Parse);
 
             TestHelper.AssertSequence(actual, 1, 2, 3);
         }
@@ -55,7 +55,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToList2_SelectsExpectedItems_ForAList()
         {
-            var actual = new List<string> { "a", "b", "c" }.ToList((s, i) => $"{i}:{s}");
+            var actual = new List<string> {"a", "b", "c"}.ToList((s, i) => $"{i}:{s}");
 
             TestHelper.AssertSequence(actual, "0:a", "1:b", "2:c");
         }
@@ -63,7 +63,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void ToList2_SelectsExpectedItems_ForEnumerable()
         {
-            var actual = new List<string> { "a", "b", "c" }.Where(p => true).ToList((s, i) => $"{i}:{s}");
+            var actual = new List<string> {"a", "b", "c"}.Where(p => true).ToList((s, i) => $"{i}:{s}");
 
             TestHelper.AssertSequence(actual, "0:a", "1:b", "2:c");
         }

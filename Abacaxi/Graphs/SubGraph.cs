@@ -118,10 +118,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         ///     A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
-        public override IEnumerator<TVertex> GetEnumerator()
-        {
-            return _vertices.GetEnumerator();
-        }
+        public override IEnumerator<TVertex> GetEnumerator() => _vertices.GetEnumerator();
 
         /// <summary>
         ///     Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" />

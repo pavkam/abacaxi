@@ -24,8 +24,8 @@ namespace Abacaxi.Tests.SequenceExtensions
     {
         private readonly int[] _nullArray = null;
         private readonly int[] _emptyArray = { };
-        private readonly int[] _oneArray = { 123 };
-        private readonly int[] _twoArray = { 123, 456 };
+        private readonly int[] _oneArray = {123};
+        private readonly int[] _twoArray = {123, 456};
 
         [Test]
         public void ToString1_ActuallyCaresAboutSelector()

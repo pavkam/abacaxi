@@ -45,7 +45,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void AsList_ReturnsANewList_FromACollection()
         {
-            var coll = new[] { 1, 2, 3 }.ToSet();
+            var coll = new[] {1, 2, 3}.ToSet();
             var asList = coll.AsList();
 
             TestHelper.AssertSequence(asList, 1, 2, 3);
@@ -60,7 +60,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void AsList_ReturnsSameObject_IfItIsAList()
         {
-            var list = new List<int> { 1 };
+            var list = new List<int> {1};
             var asList = list.AsList();
 
             Assert.AreSame(list, asList);
@@ -69,7 +69,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void AsList_ReturnsSameObject_IfItIsAnArray()
         {
-            var list = new[] { 1 };
+            var list = new[] {1};
             var asList = list.AsList();
 
             Assert.AreSame(list, asList);

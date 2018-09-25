@@ -138,7 +138,7 @@ namespace Abacaxi.Graphs
             Assert.NotNull(relationships);
 
             // ReSharper disable once IdentifierTypo
-            var rels = new HashSet<char> { '-' };
+            var rels = new HashSet<char> {'-'};
             if (IsDirected)
             {
                 rels.Add('>');
@@ -308,10 +308,7 @@ namespace Abacaxi.Graphs
         ///     Gets the enumerator.
         /// </summary>
         /// <returns></returns>
-        public override IEnumerator<char> GetEnumerator()
-        {
-            return _vertices.Keys.GetEnumerator();
-        }
+        public override IEnumerator<char> GetEnumerator() => _vertices.Keys.GetEnumerator();
 
         /// <summary>
         ///     Gets the edges of a given <paramref name="vertex" />.

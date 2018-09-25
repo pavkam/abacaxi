@@ -26,10 +26,8 @@ namespace Abacaxi.Tests.ObjectExtensions
     {
         private static readonly InspectMockObject Mock = new InspectMockObject();
 
-        private static KeyValuePair<string, object> Kvp(string key, object value)
-        {
-            return new KeyValuePair<string, object>(key, value);
-        }
+        private static KeyValuePair<string, object> Kvp(string key, object value) =>
+            new KeyValuePair<string, object>(key, value);
 
         [Test]
         public void Inspect_ReturnsAll_IfChosenTo()
