@@ -1628,6 +1628,219 @@ namespace Abacaxi
             return new ListViewWrapper<T>(sequence, startIndex, length);
         }
 
+
+        private static bool IsOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer,
+            bool strict,
+            bool ascending)
+        {
+            Assert.NotNull(comparer);
+            Assert.NotNull(sequence);
+
+            using (var enumerator = sequence.GetEnumerator())
+            {
+                if (!enumerator.MoveNext())
+                {
+                    return true;
+                }
+
+                var prev = enumerator.Current;
+                while (enumerator.MoveNext())
+                {
+                    var current = enumerator.Current;
+                    var comp = comparer.Compare(prev, current);
+                    if (comp == 0 && strict ||
+                        comp > 0 && ascending ||
+                        comp < 0 && !ascending)
+                    {
+                        return false;
+                    }
+
+                    prev = current;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is ordered (ascending).
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are greater or equal than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static bool IsOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            return IsOrdered(sequence, comparer, false, true);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is ordered (ascending) using the default comparer.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are greater or equal than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static bool IsOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return IsOrdered(sequence, Comparer<T>.Default, false, true);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is strictly ordered (ascending).
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are strictly greater than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static bool IsStrictlyOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            return IsOrdered(sequence, comparer, true, true);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is strictly ordered (ascending) using the default comparer.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are strictly greater than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static bool IsStrictlyOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return IsOrdered(sequence, Comparer<T>.Default, true, true);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is ordered (descending).
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are less than or equal to their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static bool IsOrderedDescending<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            return IsOrdered(sequence, comparer, false, false);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is ordered (descending) using the default comparer.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are less than or equal to their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static bool IsOrderedDescending<T>(
+            [NotNull] this IEnumerable<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return IsOrdered(sequence, Comparer<T>.Default, false, false);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is strictly ordered (descending).
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are strictly smaller than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static bool IsStrictlyOrderedDescending<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            return IsOrdered(sequence, comparer, true, false);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is strictly ordered (descending) using the default comparer.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are strictly smaller than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static bool IsStrictlyOrderedDescending<T>(
+            [NotNull] this IEnumerable<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return IsOrdered(sequence, Comparer<T>.Default, true, false);
+        }
+
+
         private struct EditChoice
         {
             public const int Cancel = -1;
@@ -1641,8 +1854,8 @@ namespace Abacaxi
 
         private sealed class DllNode<T>
         {
-            [CanBeNull] public DllNode<T> Prev;
             [CanBeNull] public DllNode<T> Next;
+            [CanBeNull] public DllNode<T> Prev;
             [CanBeNull] public T Value;
         }
     }

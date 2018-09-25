@@ -68,21 +68,8 @@ namespace Abacaxi.Tests.SequenceExtensions
             var random = new Random(0);
             var sequence = Enumerable.Range(1, 1000).Select(s => random.Next(200)).ToList();
             var uniques = sequence.FindUniquesInOrder(EqualityComparer<int>.Default);
-            var indexes = uniques.Select(s => sequence.IndexOf(s)).ToArray();
 
-            var isOrderedAsc = true;
-            if (indexes.Length > 1)
-            {
-                for (var i = 0; i < indexes.Length - 1; i++)
-                {
-                    if (indexes[i] >= indexes[i + 1])
-                    {
-                        isOrderedAsc = false;
-                        break;
-                    }
-                }
-            }
-
+            var isOrderedAsc = uniques.Select(s => sequence.IndexOf(s)).IsStrictlyOrdered();
             Assert.IsTrue(isOrderedAsc);
         }
     }
