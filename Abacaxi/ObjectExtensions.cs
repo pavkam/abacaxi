@@ -141,7 +141,7 @@ namespace Abacaxi
                 return result == null;
             }
 
-            /* Quick'n'dirty */
+            /* Quick and dirty */
             var toType = typeof(T);
             var objType = @object.GetType();
 
@@ -215,8 +215,10 @@ namespace Abacaxi
         /// <param name="object">The object to convert.</param>
         /// <param name="result">The resulting converted value.</param>
         /// <returns><c>true</c> if the conversion succeeded; otherwise, <c>false</c>.</returns>
-        public static bool TryConvert<T>([CanBeNull] this object @object, out T result) =>
-            TryConvert(@object, CultureInfo.InvariantCulture, out result);
+        public static bool TryConvert<T>([CanBeNull] this object @object, out T result)
+        {
+            return TryConvert(@object, CultureInfo.InvariantCulture, out result);
+        }
 
         /// <summary>
         ///     Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.
@@ -282,8 +284,10 @@ namespace Abacaxi
         /// </returns>
         /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
         /// <exception cref="InvalidOperationException">Thrown if the validation failed.</exception>
-        public static T As<T>([CanBeNull] this object @object, [NotNull] Func<T, bool> validateFunc) =>
-            As(@object, CultureInfo.InvariantCulture, validateFunc);
+        public static T As<T>([CanBeNull] this object @object, [NotNull] Func<T, bool> validateFunc)
+        {
+            return As(@object, CultureInfo.InvariantCulture, validateFunc);
+        }
 
         /// <summary>
         ///     Converts a given <paramref name="object" /> to a given type <typeparamref name="T" />.

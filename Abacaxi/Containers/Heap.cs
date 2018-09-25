@@ -158,7 +158,8 @@ namespace Abacaxi.Containers
 
         /// <inheritdoc />
         /// <summary>
-        ///     Copies the elements of the <see cref="T:Abacaxi.Containers.Heap{T}" /> to an <see cref="T:System.Array" />, starting at a particular
+        ///     Copies the elements of the <see cref="T:Abacaxi.Containers.Heap{T}" /> to an <see cref="T:System.Array" />,
+        ///     starting at a particular
         ///     <see cref="T:System.Array" /> index.
         /// </summary>
         /// <param name="array">
@@ -167,7 +168,10 @@ namespace Abacaxi.Containers
         /// </param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="T:System.ArgumentNullException">Thrown if the <paramref name="array" /> is <c>null</c>.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">Thrown if there is not enough space in the <paramref name="array" />.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        ///     Thrown if there is not enough space in the
+        ///     <paramref name="array" />.
+        /// </exception>
         public void CopyTo(T[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
@@ -240,8 +244,10 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <param name="item">The object to remove from the <see cref="T:Abacaxi.Containers.Heap{T}" />.</param>
         /// <returns>
-        ///     true if <paramref name="item" /> was successfully removed from the <see cref="T:Abacaxi.Containers.Heap{T}" />; otherwise, false. This
-        ///     method also returns false if <paramref name="item" /> is not found in the original <see cref="T:Abacaxi.Containers.Heap{T}" />.
+        ///     true if <paramref name="item" /> was successfully removed from the <see cref="T:Abacaxi.Containers.Heap{T}" />;
+        ///     otherwise, false. This
+        ///     method also returns false if <paramref name="item" /> is not found in the original
+        ///     <see cref="T:Abacaxi.Containers.Heap{T}" />.
         /// </returns>
         public bool Remove(T item)
         {
@@ -283,7 +289,10 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         private void SiftDown([NotNull] IList<T> array, int length, int pi)
         {

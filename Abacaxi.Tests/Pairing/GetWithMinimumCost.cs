@@ -24,9 +24,15 @@ namespace Abacaxi.Tests.Pairing
     [TestFixture]
     public sealed class GetWithMinimumCost
     {
-        private static double BanalCostOfPairsEvaluator(int l, int r) => l + r;
+        private static double BanalCostOfPairsEvaluator(int l, int r)
+        {
+            return l + r;
+        }
 
-        private static double DistanceCostOfPairsEvaluator(int l, int r) => Math.Abs(l - r);
+        private static double DistanceCostOfPairsEvaluator(int l, int r)
+        {
+            return Math.Abs(l - r);
+        }
 
         [TestCase(10), TestCase(20)]
         public void GetWithMinimumCost_OperatesAsExpected_AtLargeInputs(int length)

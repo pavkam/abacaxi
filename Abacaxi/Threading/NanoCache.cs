@@ -79,14 +79,6 @@ namespace Abacaxi.Threading
         public int Count => _dictionary.Count;
 
         /// <summary>
-        ///     Gets the count of items stored in the cache (expired included).
-        /// </summary>
-        /// <value>
-        ///     The count of items in the cache.
-        /// </value>
-        public int Count => _dictionary.Count;
-
-        /// <summary>
         ///     Tries the get the value of a cached item.
         /// </summary>
         /// <param name="key">The key of the item.</param>

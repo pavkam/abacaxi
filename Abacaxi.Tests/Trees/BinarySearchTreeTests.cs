@@ -28,11 +28,16 @@ namespace Abacaxi.Tests.Trees
     public class BinarySearchTreeTests
     {
         [NotNull]
-        protected virtual BinarySearchTree<TKey, TValue> Create<TKey, TValue>([NotNull] IComparer<TKey> comparer) =>
-            new BinarySearchTree<TKey, TValue>(comparer);
+        protected virtual BinarySearchTree<TKey, TValue> Create<TKey, TValue>([NotNull] IComparer<TKey> comparer)
+        {
+            return new BinarySearchTree<TKey, TValue>(comparer);
+        }
 
         [NotNull]
-        protected virtual BinarySearchTree<TKey, TValue> Create<TKey, TValue>() => new BinarySearchTree<TKey, TValue>();
+        protected virtual BinarySearchTree<TKey, TValue> Create<TKey, TValue>()
+        {
+            return new BinarySearchTree<TKey, TValue>();
+        }
 
         [NotNull]
         protected BinarySearchTree<int, int> CreateFilled()

@@ -47,7 +47,8 @@ namespace Abacaxi.Containers
 
         /// <inheritdoc />
         /// <summary>
-        ///     Initializes a new instance of the <see cref="T:Abacaxi.Containers.DisjointSet`1" /> class using the default equality comparer for
+        ///     Initializes a new instance of the <see cref="T:Abacaxi.Containers.DisjointSet`1" /> class using the default
+        ///     equality comparer for
         ///     <typeparamref name="T" />.
         /// </summary>
         public DisjointSet() : this(EqualityComparer<T>.Default)
@@ -82,7 +83,10 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     An enumerator that can be used to iterate through the set.
         /// </returns>
-        public IEnumerator<T> GetEnumerator() => _nodes.Keys.GetEnumerator();
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _nodes.Keys.GetEnumerator();
+        }
 
         /// <inheritdoc />
         /// <summary>
@@ -91,7 +95,10 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the set.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         [NotNull]
         private Node GetRootNodeRecursive([NotNull] T @object)

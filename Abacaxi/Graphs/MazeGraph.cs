@@ -72,7 +72,10 @@ namespace Abacaxi.Graphs
         /// </value>
         public override bool SupportsPotentialWeightEvaluation => true;
 
-        private bool VertexExists(int x, int y) => x >= 0 && x < _lengthX && y >= 0 && y < _lengthY && _matrix[x, y];
+        private bool VertexExists(int x, int y)
+        {
+            return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY && _matrix[x, y];
+        }
 
         private void ValidateVertex([InvokerParameterName, NotNull] string argumentName, Cell vertex)
         {

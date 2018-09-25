@@ -61,8 +61,10 @@ namespace Abacaxi.Trees
             set => base.Root = value;
         }
 
-        private static bool IsRed([CanBeNull] RedBlackTreeNode<TKey, TValue> node) =>
-            node?.Color == RedBlackTreeNodeColor.Red;
+        private static bool IsRed([CanBeNull] RedBlackTreeNode<TKey, TValue> node)
+        {
+            return node?.Color == RedBlackTreeNodeColor.Red;
+        }
 
         private static void FlipColor([NotNull] RedBlackTreeNode<TKey, TValue> node)
         {

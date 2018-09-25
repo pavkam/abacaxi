@@ -188,50 +188,6 @@ namespace Abacaxi.Tests.Threading
         }
 
         [Test]
-        public void Flush_DoesNothingForUnExpiredItems()
-        {
-            var cache = new NanoCache<string, int>
-            {
-                ["1"] = 1
-            };
-
-            cache.Flush();
-
-            Assert.AreEqual(1, cache.Count);
-        }
-
-        [Test]
-        public void Flush_RemovesTheExpiredItems()
-        {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
-
-            Thread.Sleep(100);
-
-            cache.Flush();
-
-            Assert.AreEqual(0, cache.Count);
-        }
-
-        [Test]
-        public void Flush_RemovesTheExpiredItemsWhileLeavingTheNormalOnes()
-        {
-            var cache = new NanoCache<string, int>(10)
-            {
-                ["1"] = 1
-            };
-
-            Thread.Sleep(100);
-
-            cache["2"] = 2;
-            cache.Flush();
-
-            Assert.AreEqual(1, cache.Count);
-        }
-
-        [Test]
         public void Indexer_DoesNotAcknowledgeExpiredItems()
         {
             var cache = new NanoCache<string, int>();
@@ -366,13 +322,6 @@ namespace Abacaxi.Tests.Threading
         }
 
         [Test]
-        public void Set_ThrowsException_ForTtlLessThanMinusOne()
-        {
-            var cache = new NanoCache<string, int>();
-            Assert.Throws<ArgumentOutOfRangeException>(() => cache.Set("a", 1, -2));
-        }
-        
-        [Test]
         public void Set_RefreshesValueOfExpiredItem()
         {
             var cache = new NanoCache<string, int>();
@@ -410,6 +359,15 @@ namespace Abacaxi.Tests.Threading
             Assert.AreEqual(cache["item"], 111);
         }
 
+        [Test]
+        public void Set_StoresANewValueIntoTheCache()
+        {
+            var cache = new NanoCache<string, int>();
+
+            cache.Set("item", 999);
+            Assert.AreEqual(cache["item"], 999);
+        }
+
         [Test,
          SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Set_ThrowsException_ForNullKey()
@@ -419,12 +377,10 @@ namespace Abacaxi.Tests.Threading
         }
 
         [Test]
-        public void Set_StoresANewValueIntoTheCache()
+        public void Set_ThrowsException_ForTtlLessThanMinusOne()
         {
             var cache = new NanoCache<string, int>();
-
-            cache.Set("item", 999);
-            Assert.AreEqual(cache["item"], 999);
+            Assert.Throws<ArgumentOutOfRangeException>(() => cache.Set("a", 1, -2));
         }
 
         [Test]

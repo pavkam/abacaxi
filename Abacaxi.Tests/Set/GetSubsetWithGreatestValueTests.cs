@@ -24,7 +24,10 @@ namespace Abacaxi.Tests.Set
     [TestFixture]
     public sealed class GetSubsetWithGreatestValueTests
     {
-        private static int IntegerAggregator(int a, int b) => a + b;
+        private static int IntegerAggregator(int a, int b)
+        {
+            return a + b;
+        }
 
         [Test]
         public void GetSubsetWithGreatestValue_ReturnsAllElements_ForCountOfThree()

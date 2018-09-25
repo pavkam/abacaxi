@@ -45,7 +45,10 @@ namespace Abacaxi.Tests.Containers
         private Trie<char, int> _trie5;
 
         [NotNull]
-        private static char[] _([NotNull] string a) => a.ToCharArray();
+        private static char[] _([NotNull] string a)
+        {
+            return a.ToCharArray();
+        }
 
         [TestCase(0, 0), TestCase(0, 1), TestCase(4, 0), TestCase(5, 1)]
         public void CopyTo_ThrowsException_ForInvalidArrayIndex(int arrayLength, int arrayIndex)

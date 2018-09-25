@@ -23,7 +23,10 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public sealed class ContainsTwoElementsThatAggregateToTests
     {
-        private static int IntegerAggregator(int a, int b) => a + b;
+        private static int IntegerAggregator(int a, int b)
+        {
+            return a + b;
+        }
 
         [Test]
         public void ContainsTwoElementsThatAggregateTo_ReturnsFalse_ForEmptySequence()

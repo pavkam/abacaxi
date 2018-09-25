@@ -47,7 +47,10 @@ namespace Abacaxi.Internal
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public void Add(T item)
         {

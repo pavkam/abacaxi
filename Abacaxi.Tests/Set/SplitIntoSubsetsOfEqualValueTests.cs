@@ -24,7 +24,10 @@ namespace Abacaxi.Tests.Set
     [TestFixture]
     public sealed class SplitIntoSubsetsOfEqualValueTests
     {
-        private static int IntegerAggregator(int a, int b) => a + b;
+        private static int IntegerAggregator(int a, int b)
+        {
+            return a + b;
+        }
 
         [Test]
         public void SplitIntoSubsetsOfEqualValue_ReturnsEmptyArrayAndAll_ForNegativeZeroing()

@@ -26,7 +26,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending1_ReturnsFalse_ForEqualElements()
         {
-            var result = new[] { 1, 1 }.IsStrictlyOrderedDescending(Comparer<int>.Default);
+            var result = new[] {1, 1}.IsStrictlyOrderedDescending(Comparer<int>.Default);
 
             Assert.IsFalse(result);
         }
@@ -34,7 +34,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending1_ReturnsFalse_IfThreeElementsAreNotOrderedDescending()
         {
-            var result = new[] { 1, 2, 3 }.IsStrictlyOrderedDescending(Comparer<int>.Default);
+            var result = new[] {1, 2, 3}.IsStrictlyOrderedDescending(Comparer<int>.Default);
 
             Assert.IsFalse(result);
         }
@@ -42,7 +42,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending1_ReturnsFalse_IfTwoElementsAreNotOrderedDescending()
         {
-            var result = new[] { 1, 2 }.IsStrictlyOrderedDescending(Comparer<int>.Default);
+            var result = new[] {1, 2}.IsStrictlyOrderedDescending(Comparer<int>.Default);
 
             Assert.IsFalse(result);
         }
@@ -59,14 +59,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending1_ReturnsTrue_ForOneElement()
         {
-            var isOrdered = new[] { "A" }.IsStrictlyOrderedDescending(StringComparer.Ordinal);
+            var isOrdered = new[] {"A"}.IsStrictlyOrderedDescending(StringComparer.Ordinal);
             Assert.IsTrue(isOrdered);
         }
 
         [Test]
         public void IsStrictlyOrderedDescending1_ReturnsTrue_IfThreeElementsAreOrderedDescending()
         {
-            var result = new[] { 8, 5, 3 }.IsStrictlyOrderedDescending(Comparer<int>.Default);
+            var result = new[] {8, 5, 3}.IsStrictlyOrderedDescending(Comparer<int>.Default);
 
             Assert.IsTrue(result);
         }
@@ -74,7 +74,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending1_ReturnsTrue_IfTwoElementsAreOrderedDescending()
         {
-            var result = new[] { 2, 1 }.IsStrictlyOrderedDescending(Comparer<int>.Default);
+            var result = new[] {2, 1}.IsStrictlyOrderedDescending(Comparer<int>.Default);
 
             Assert.IsTrue(result);
         }
@@ -83,7 +83,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending1_TakesComparer_IntoAccount()
         {
-            var result = new[] { "A", "a" }.IsStrictlyOrderedDescending(StringComparer.OrdinalIgnoreCase);
+            var result = new[] {"A", "a"}.IsStrictlyOrderedDescending(StringComparer.OrdinalIgnoreCase);
             Assert.IsFalse(result);
         }
 
@@ -91,7 +91,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void IsStrictlyOrderedDescending1_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { "bb", "ccc", "a", "z" }.IsStrictlyOrderedDescending(null));
+                new[] {"bb", "ccc", "a", "z"}.IsStrictlyOrderedDescending(null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
@@ -104,7 +104,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending2_ReturnsFalse_ForEqualElements()
         {
-            var result = new[] { 1, 1 }.IsStrictlyOrderedDescending();
+            var result = new[] {1, 1}.IsStrictlyOrderedDescending();
 
             Assert.IsFalse(result);
         }
@@ -112,7 +112,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending2_ReturnsFalse_IfThreeElementsAreNotOrderedDescending()
         {
-            var result = new[] { 1, 3, 2 }.IsStrictlyOrderedDescending();
+            var result = new[] {1, 3, 2}.IsStrictlyOrderedDescending();
 
             Assert.IsFalse(result);
         }
@@ -120,7 +120,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending2_ReturnsFalse_IfTwoElementsAreNotOrderedDescending()
         {
-            var result = new[] { 1, 2 }.IsStrictlyOrderedDescending();
+            var result = new[] {1, 2}.IsStrictlyOrderedDescending();
 
             Assert.IsFalse(result);
         }
@@ -135,14 +135,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending2_ReturnsTrue_ForOneElement()
         {
-            var isOrdered = new[] { "A" }.IsStrictlyOrderedDescending();
+            var isOrdered = new[] {"A"}.IsStrictlyOrderedDescending();
             Assert.IsTrue(isOrdered);
         }
 
         [Test]
         public void IsStrictlyOrderedDescending2_ReturnsTrue_IfThreeElementsAreOrderedDescending()
         {
-            var result = new[] { 8, 5, 3 }.IsStrictlyOrderedDescending();
+            var result = new[] {8, 5, 3}.IsStrictlyOrderedDescending();
 
             Assert.IsTrue(result);
         }
@@ -150,7 +150,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsStrictlyOrderedDescending2_ReturnsTrue_IfTwoElementsAreOrderedDescending()
         {
-            var result = new[] { 2, 1 }.IsStrictlyOrderedDescending();
+            var result = new[] {2, 1}.IsStrictlyOrderedDescending();
 
             Assert.IsTrue(result);
         }

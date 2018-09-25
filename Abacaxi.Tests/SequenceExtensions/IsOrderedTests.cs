@@ -26,7 +26,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered1_ReturnsFalse_IfThreeElementsAreNotOrderedAscending()
         {
-            var result = new[] { 2, 3, 1 }.IsOrdered(Comparer<int>.Default);
+            var result = new[] {2, 3, 1}.IsOrdered(Comparer<int>.Default);
 
             Assert.IsFalse(result);
         }
@@ -34,7 +34,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered1_ReturnsFalse_IfTwoElementsAreNotOrderedAscending()
         {
-            var result = new[] { 2, 1 }.IsOrdered(Comparer<int>.Default);
+            var result = new[] {2, 1}.IsOrdered(Comparer<int>.Default);
 
             Assert.IsFalse(result);
         }
@@ -50,7 +50,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered1_ReturnsTrue_ForEqualElements()
         {
-            var result = new[] { 1, 1 }.IsOrdered(Comparer<int>.Default);
+            var result = new[] {1, 1}.IsOrdered(Comparer<int>.Default);
 
             Assert.IsTrue(result);
         }
@@ -59,14 +59,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered1_ReturnsTrue_ForOneElement()
         {
-            var isOrdered = new[] { "A" }.IsOrdered(StringComparer.Ordinal);
+            var isOrdered = new[] {"A"}.IsOrdered(StringComparer.Ordinal);
             Assert.IsTrue(isOrdered);
         }
 
         [Test]
         public void IsOrdered1_ReturnsTrue_IfThreeElementsAreOrderedAscending()
         {
-            var result = new[] { 3, 5, 8 }.IsOrdered(Comparer<int>.Default);
+            var result = new[] {3, 5, 8}.IsOrdered(Comparer<int>.Default);
 
             Assert.IsTrue(result);
         }
@@ -74,7 +74,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered1_ReturnsTrue_IfTwoElementsAreOrderedAscending()
         {
-            var result = new[] { 1, 2 }.IsOrdered(Comparer<int>.Default);
+            var result = new[] {1, 2}.IsOrdered(Comparer<int>.Default);
 
             Assert.IsTrue(result);
         }
@@ -83,7 +83,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered1_TakesComparer_IntoAccount()
         {
-            var result = new[] { "A", "a" }.IsOrdered(StringComparer.OrdinalIgnoreCase);
+            var result = new[] {"A", "a"}.IsOrdered(StringComparer.OrdinalIgnoreCase);
             Assert.IsTrue(result);
         }
 
@@ -91,7 +91,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void IsOrdered1_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { "bb", "ccc", "a", "z" }.IsOrdered(null));
+                new[] {"bb", "ccc", "a", "z"}.IsOrdered(null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
@@ -104,7 +104,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered2_ReturnsFalse_IfThreeElementsAreNotOrderedAscending()
         {
-            var result = new[] { 2, 3, 1 }.IsOrdered();
+            var result = new[] {2, 3, 1}.IsOrdered();
 
             Assert.IsFalse(result);
         }
@@ -112,7 +112,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered2_ReturnsFalse_IfTwoElementsAreNotOrderedAscending()
         {
-            var result = new[] { 2, 1 }.IsOrdered();
+            var result = new[] {2, 1}.IsOrdered();
 
             Assert.IsFalse(result);
         }
@@ -127,7 +127,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered2_ReturnsTrue_ForEqualElements()
         {
-            var result = new[] { 1, 1 }.IsOrdered();
+            var result = new[] {1, 1}.IsOrdered();
 
             Assert.IsTrue(result);
         }
@@ -135,14 +135,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered2_ReturnsTrue_ForOneElement()
         {
-            var isOrdered = new[] { "A" }.IsOrdered();
+            var isOrdered = new[] {"A"}.IsOrdered();
             Assert.IsTrue(isOrdered);
         }
 
         [Test]
         public void IsOrdered2_ReturnsTrue_IfThreeElementsAreOrderedAscending()
         {
-            var result = new[] { 3, 5, 8 }.IsOrdered();
+            var result = new[] {3, 5, 8}.IsOrdered();
 
             Assert.IsTrue(result);
         }
@@ -150,7 +150,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void IsOrdered2_ReturnsTrue_IfTwoElementsAreOrderedAscending()
         {
-            var result = new[] { 1, 2 }.IsOrdered();
+            var result = new[] {1, 2}.IsOrdered();
 
             Assert.IsTrue(result);
         }

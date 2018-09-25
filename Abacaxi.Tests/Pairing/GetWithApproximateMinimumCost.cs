@@ -25,7 +25,10 @@ namespace Abacaxi.Tests.Pairing
     [TestFixture]
     public sealed class GetWithApproximateMinimumCost
     {
-        private static double DistanceCostOfPairsEvaluator(int l, int r) => Math.Abs(l - r);
+        private static double DistanceCostOfPairsEvaluator(int l, int r)
+        {
+            return Math.Abs(l - r);
+        }
 
         [TestCase(10), TestCase(20), TestCase(100), TestCase(1000), Parallelizable]
         public void GetWithApproximateMinimumCost_OperatesAsExpected_AtLargeInputs(int length)

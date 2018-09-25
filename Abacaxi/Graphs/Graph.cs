@@ -122,7 +122,10 @@ namespace Abacaxi.Graphs
         /// <returns>
         ///     An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         private static int CompareEdgesByWeight([NotNull] Edge<TVertex> a, [NotNull] Edge<TVertex> b)
         {

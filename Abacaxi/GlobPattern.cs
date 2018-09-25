@@ -95,6 +95,9 @@ namespace Abacaxi
         ///     <c>true</c> if the specified string matches the pattern; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
-        public bool IsMatch([NotNull] string s) => _regex.IsMatch(s);
+        public bool IsMatch([NotNull] string s)
+        {
+            return _regex.IsMatch(s);
+        }
     }
 }

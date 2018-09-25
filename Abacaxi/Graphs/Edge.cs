@@ -118,6 +118,9 @@ namespace Abacaxi.Graphs
         /// <returns>
         ///     A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString() => $"{FromVertex} >={Weight}=> {ToVertex}";
+        public override string ToString()
+        {
+            return $"{FromVertex} >={Weight}=> {ToVertex}";
+        }
     }
 }

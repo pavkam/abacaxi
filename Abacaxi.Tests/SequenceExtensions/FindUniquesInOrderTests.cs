@@ -26,6 +26,17 @@ namespace Abacaxi.Tests.SequenceExtensions
     public sealed class FindUniquesInOrderTests
     {
         [Test]
+        public void FindUniquesInOrder_KeepsTheOrder()
+        {
+            var random = new Random(0);
+            var sequence = Enumerable.Range(1, 1000).Select(s => random.Next(200)).ToList();
+            var uniques = sequence.FindUniquesInOrder(EqualityComparer<int>.Default);
+
+            var isOrderedAsc = uniques.Select(s => sequence.IndexOf(s)).IsStrictlyOrdered();
+            Assert.IsTrue(isOrderedAsc);
+        }
+
+        [Test]
         public void FindUniquesInOrder_ReturnsDuplicates_ForDistinctElements()
         {
             TestHelper.AssertSequence(
@@ -44,7 +55,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindUniquesInOrder_ThrowsException_ForNullEqualityComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindUniquesInOrder(null));
+                new[] {1}.FindUniquesInOrder(null));
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
@@ -59,18 +70,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindUniquesInOrder_UsesTheComparer()
         {
             TestHelper.AssertSequence(
-                new[] { "a", "A" }.FindUniquesInOrder(StringComparer.InvariantCultureIgnoreCase));
-        }
-
-        [Test]
-        public void FindUniquesInOrder_KeepsTheOrder()
-        {
-            var random = new Random(0);
-            var sequence = Enumerable.Range(1, 1000).Select(s => random.Next(200)).ToList();
-            var uniques = sequence.FindUniquesInOrder(EqualityComparer<int>.Default);
-
-            var isOrderedAsc = uniques.Select(s => sequence.IndexOf(s)).IsStrictlyOrdered();
-            Assert.IsTrue(isOrderedAsc);
+                new[] {"a", "A"}.FindUniquesInOrder(StringComparer.InvariantCultureIgnoreCase));
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void GenericFindUniques_ThrowsException_ForNullEqualityComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] { 1 }.FindUniques(null));
+                new[] {1}.FindUniques(null));
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
@@ -58,7 +58,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void GenericFindUniques_UsesTheComparer()
         {
             TestHelper.AssertSequence(
-                new[] { "a", "A" }.FindUniques(StringComparer.InvariantCultureIgnoreCase));
+                new[] {"a", "A"}.FindUniques(StringComparer.InvariantCultureIgnoreCase));
         }
     }
 }
