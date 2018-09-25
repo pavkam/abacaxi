@@ -69,7 +69,9 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `RandomExtensions.NextItem` | An extension method that allows retrieving a *random item* from a sequence of objects. |
 | `SequenceExtensions. FindLongestIncreasingSequence` | Finds the *longest increasing sequence* within a given sequence. |
 | `SequenceExtensions. ContainsTwoElementsThatAggregateTo` | Determines whether the sequence contains two elements *that aggregate to a given target*. |
-| `SequenceExtensions.FindDuplicates` | *Finds duplicates* in a sequence of objects. A specialized and optimized version for integer sequences also provided. |
+| `SequenceExtensions.FindDuplicates` | *Finds duplicates* in a sequence. A specialized and optimized version for integer sequences also provided. |
+| `SequenceExtensions.FindUniques` | *Finds unique* elements in a sequence. |
+| `SequenceExtensions.FindUniquesInOrder` | *Finds unique* elements in a sequence and retains the order of their appearance in the sequence. |
 | `SequenceExtensions.ExtractNestedBlocks` | An algorithm to allow *extracting nested* sub-sequences from a sequence (e.g. _"(a(b))"_ would return _"(b)"_ then _"(a(b))"_). |
 | `SequenceExtensions. FindSubsequencesWithGivenAggregatedValue` | Finds all *sub-sequences of a given aggregated value*. |
 | `SequenceExtensions.Interleave` | Creates a sequence which combines multiple *interleaved sequences* based on a given comparison. |
