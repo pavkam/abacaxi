@@ -22,11 +22,11 @@ namespace Abacaxi.Containers
 
     /// <inheritdoc />
     /// <summary>
-    ///     Represents a linked list node.
+    ///     Represents a single-linked list node.
     /// </summary>
     /// <typeparam name="T">The type of the value stored in the node.</typeparam>
     [PublicAPI]
-    public sealed class SingleLinkedNode<T> : IEnumerable<SingleLinkedNode<T>>
+    public class SingleLinkedNode<T> : IEnumerable<SingleLinkedNode<T>>
     {
         /// <summary>
         ///     Initializes a new instance of <see cref="SingleLinkedNode{T}" /> class with a given value.

@@ -22,6 +22,7 @@ namespace Abacaxi.Containers
     using Internal;
     using JetBrains.Annotations;
 
+    /// <inheritdoc />
     /// <summary>
     ///     Class implements the heap data structure, most commonly known as the "priority queue".
     /// </summary>
@@ -93,20 +94,23 @@ namespace Abacaxi.Containers
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Gets the number of elements contained in the <see cref="Heap{T}" />.
+        ///     Gets the number of elements contained in the <see cref="T:Abacaxi.Containers.Heap`1" />.
         /// </summary>
         public int Count { get; private set; }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Gets a value indicating whether the <see cref="Heap{T}" /> is read-only.
+        ///     Gets a value indicating whether the <see cref="T:Abacaxi.Containers.Heap`1" /> is read-only.
         /// </summary>
         public bool IsReadOnly => false;
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Adds an item to the <see cref="Heap{T}" />.
+        ///     Adds an item to the <see cref="T:Abacaxi.Containers.Heap`1" />.
         /// </summary>
-        /// <param name="item">The object to add to the <see cref="Heap{T}" />.</param>
+        /// <param name="item">The object to add to the <see cref="T:Abacaxi.Containers.Heap`1" />.</param>
         public void Add(T item)
         {
             if (Count == _array.Length)
@@ -121,8 +125,9 @@ namespace Abacaxi.Containers
             Count++;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Removes all items from the <see cref="Heap{T}" />.
+        ///     Removes all items from the <see cref="T:Abacaxi.Containers.Heap`1" />.
         /// </summary>
         public void Clear()
         {
@@ -130,12 +135,13 @@ namespace Abacaxi.Containers
             _ver++;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Determines whether the <see cref="Heap{T}" /> contains a specific value.
+        ///     Determines whether the <see cref="T:Abacaxi.Containers.Heap`1" /> contains a specific value.
         /// </summary>
-        /// <param name="item">The object to locate in the <see cref="Heap{T}" />.</param>
+        /// <param name="item">The object to locate in the <see cref="T:Abacaxi.Containers.Heap`1" />.</param>
         /// <returns>
-        ///     true if <paramref name="item" /> is found in the <see cref="Heap{T}" />; otherwise, false.
+        ///     true if <paramref name="item" /> is found in the <see cref="T:Abacaxi.Containers.Heap`1" />; otherwise, false.
         /// </returns>
         public bool Contains(T item)
         {
@@ -150,17 +156,18 @@ namespace Abacaxi.Containers
             return false;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Copies the elements of the <see cref="Heap{T}" /> to an <see cref="T:System.Array" />, starting at a particular
+        ///     Copies the elements of the <see cref="T:Abacaxi.Containers.Heap{T}" /> to an <see cref="T:System.Array" />, starting at a particular
         ///     <see cref="T:System.Array" /> index.
         /// </summary>
         /// <param name="array">
         ///     The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied
-        ///     from <see cref="Heap{T}" />. The <see cref="T:System.Array" /> must have zero-based indexing.
+        ///     from <see cref="T:Abacaxi.Containers.Heap{T}" />. The <see cref="T:System.Array" /> must have zero-based indexing.
         /// </param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="array" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if there is not enough space in the <paramref name="array" />.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if the <paramref name="array" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">Thrown if there is not enough space in the <paramref name="array" />.</exception>
         public void CopyTo(T[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
@@ -189,11 +196,12 @@ namespace Abacaxi.Containers
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
-        ///     A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        ///     A <see cref="T:System.Collections.Generic.IEnumerator{T}" /> that can be used to iterate through the collection.
         /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
@@ -226,13 +234,14 @@ namespace Abacaxi.Containers
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Removes the first occurrence of a specific object from the <see cref="Heap{T}" />.
+        ///     Removes the first occurrence of a specific object from the <see cref="T:Abacaxi.Containers.Heap`1" />.
         /// </summary>
-        /// <param name="item">The object to remove from the <see cref="Heap{T}" />.</param>
+        /// <param name="item">The object to remove from the <see cref="T:Abacaxi.Containers.Heap{T}" />.</param>
         /// <returns>
-        ///     true if <paramref name="item" /> was successfully removed from the <see cref="Heap{T}" />; otherwise, false. This
-        ///     method also returns false if <paramref name="item" /> is not found in the original <see cref="Heap{T}" />.
+        ///     true if <paramref name="item" /> was successfully removed from the <see cref="T:Abacaxi.Containers.Heap{T}" />; otherwise, false. This
+        ///     method also returns false if <paramref name="item" /> is not found in the original <see cref="T:Abacaxi.Containers.Heap{T}" />.
         /// </returns>
         public bool Remove(T item)
         {
@@ -267,6 +276,7 @@ namespace Abacaxi.Containers
             return false;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through a collection.
         /// </summary>
