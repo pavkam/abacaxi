@@ -21,6 +21,7 @@ namespace Abacaxi.Trees
     using Internal;
     using JetBrains.Annotations;
 
+    /// <inheritdoc />
     /// <summary>
     ///     Class implements the binary search tree and serves as a base class for other balanced search trees.
     /// </summary>
@@ -43,8 +44,9 @@ namespace Abacaxi.Trees
             Comparer = comparer;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BinarySearchTree{TKey, TValue}" /> class using the default
+        ///     Initializes a new instance of the <see cref="T:Abacaxi.Trees.BinarySearchTree`2" /> class using the default
         ///     <typeparamref name="TKey" /> comparer.
         /// </summary>
         public BinarySearchTree() : this(Comparer<TKey>.Default)
@@ -96,21 +98,23 @@ namespace Abacaxi.Trees
             set => AddOrUpdate(key, value);
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Adds the specified key/value node to the tree.
         /// </summary>
         /// <param name="item">The node's key/value pair.</param>
-        /// <exception cref="ArgumentException">Thrown if a node with the same key is already present in the tree.</exception>
+        /// <exception cref="T:System.ArgumentException">Thrown if a node with the same key is already present in the tree.</exception>
         public void Add(KeyValuePair<TKey, TValue> item)
         {
             Add(item.Key, item.Value);
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Removes the node identified by the key and value of the given <paramref name="item" />.
         /// </summary>
         /// <remarks>
-        ///     This method is provided for compatibility with <see cref="ICollection{T}" />. It is not recommended for normal use.
+        ///     This method is provided for compatibility with <see cref="T:System.Collections.Generic.ICollection`1" />. It is not recommended for normal use.
         ///     The values of nodes are compared using the default equality comparer for that type.
         /// </remarks>
         /// <param name="item">The key/value pair to remove from the tree.</param>
@@ -125,6 +129,7 @@ namespace Abacaxi.Trees
                    Remove(item.Key);
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Determines whether the tree contains the given key/value node.
         /// </summary>
@@ -133,7 +138,7 @@ namespace Abacaxi.Trees
         ///     <c>true</c> if <paramref name="item" /> is found in the tree; otherwise, <c>false</c>.
         /// </returns>
         /// <remarks>
-        ///     This method is provided for compatibility with <see cref="ICollection{T}" />. It is not recommended for normal use.
+        ///     This method is provided for compatibility with <see cref="T:System.Collections.Generic.ICollection`1" />. It is not recommended for normal use.
         ///     The values of nodes are compared using the default equality comparer for that type.
         /// </remarks>
         public bool Contains(KeyValuePair<TKey, TValue> item)
@@ -143,6 +148,7 @@ namespace Abacaxi.Trees
                        item.Value);
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Clears this tree.
         /// </summary>
@@ -154,6 +160,7 @@ namespace Abacaxi.Trees
             Count = 0;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Copies the elements of the tree to an <see cref="T:System.Array" />, starting at a particular
         ///     <see cref="T:System.Array" /> index.
@@ -164,7 +171,7 @@ namespace Abacaxi.Trees
         ///     zero-based indexing.
         /// </param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <exception cref="T:System.NotImplementedException"></exception>
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             Validate.ArgumentNotNull(nameof(array), array);
@@ -181,6 +188,7 @@ namespace Abacaxi.Trees
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Gets the count of nodes in this tree.
         /// </summary>
@@ -189,6 +197,7 @@ namespace Abacaxi.Trees
         /// </value>
         public int Count { get; private set; }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Gets a value indicating whether the tree is read-only.
         /// </summary>
@@ -205,6 +214,7 @@ namespace Abacaxi.Trees
             return GetEnumerator(TreeTraversalMode.InOrder);
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through the tree in-order.
         /// </summary>
