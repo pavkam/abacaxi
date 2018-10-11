@@ -295,7 +295,10 @@ namespace Abacaxi
         /// </exception>
         public static bool ContainsSubsetWithExactValue(
             [NotNull] IEnumerable<int> sequence,
-            int target) => GetSubsetWithNearValue(sequence, target).Sum() == target;
+            int target)
+        {
+            return GetSubsetWithNearValue(sequence, target).Sum() == target;
+        }
 
         /// <summary>
         ///     Finds the elements, which summed, yield the biggest sum.

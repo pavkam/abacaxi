@@ -20,6 +20,7 @@ namespace Abacaxi.Containers
     using Internal;
     using JetBrains.Annotations;
 
+    /// <inheritdoc />
     /// <summary>
     ///     Class implements the "union-find" data structure. This data structure is optimized for find and merge set
     ///     operations.
@@ -44,8 +45,10 @@ namespace Abacaxi.Containers
             _nodes = new Dictionary<T, Node>(comparer);
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DisjointSet{T}" /> class using the default equality comparer for
+        ///     Initializes a new instance of the <see cref="T:Abacaxi.Containers.DisjointSet`1" /> class using the default
+        ///     equality comparer for
         ///     <typeparamref name="T" />.
         /// </summary>
         public DisjointSet() : this(EqualityComparer<T>.Default)
@@ -73,21 +76,29 @@ namespace Abacaxi.Containers
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through the set.
         /// </summary>
         /// <returns>
         ///     An enumerator that can be used to iterate through the set.
         /// </returns>
-        public IEnumerator<T> GetEnumerator() => _nodes.Keys.GetEnumerator();
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _nodes.Keys.GetEnumerator();
+        }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through the set.
         /// </summary>
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the set.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         [NotNull]
         private Node GetRootNodeRecursive([NotNull] T @object)

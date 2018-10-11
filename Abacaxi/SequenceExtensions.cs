@@ -132,7 +132,6 @@ namespace Abacaxi
             return path.ToArray();
         }
 
-
         /// <summary>
         ///     Finds the longest increasing sequence in a given <paramref name="sequence" />.
         /// </summary>
@@ -151,7 +150,7 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
             // ReSharper disable once IdentifierTypo
-            var dyna = new List<Tuple<T, int, int>>();
+            var dyna = new List<(T item, int start, int end)>();
             var li = -1;
             var lm = 0;
             foreach (var e in sequence)
@@ -161,18 +160,18 @@ namespace Abacaxi
 
                 for (var i = dyna.Count - 1; i >= 0; i--)
                 {
-                    if (comparer.Compare(dyna[i].Item1, e) >= 0 ||
-                        pi != -1 && pm >= dyna[i].Item2)
+                    if (comparer.Compare(dyna[i].item, e) >= 0 ||
+                        pi != -1 && pm >= dyna[i].start)
                     {
                         continue;
                     }
 
                     pi = i;
-                    pm = dyna[i].Item2;
+                    pm = dyna[i].start;
                 }
 
                 var nm = pm + 1;
-                dyna.Add(Tuple.Create(e, nm, pi));
+                dyna.Add((e, nm, pi));
 
                 if (lm >= nm)
                 {
@@ -186,8 +185,8 @@ namespace Abacaxi
             var result = new T[lm];
             while (li > -1)
             {
-                result[--lm] = dyna[li].Item1;
-                li = dyna[li].Item3;
+                result[--lm] = dyna[li].item;
+                li = dyna[li].end;
             }
 
             return result;
@@ -257,7 +256,7 @@ namespace Abacaxi
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to inspect.</param>
         /// <param name="equalityComparer">The comparer used to verify the elements in the sequence.</param>
-        /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
+        /// <returns>A sequence of element-frequency pairs of the detected duplicates.</returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown if either the <paramref name="sequence" /> or the
         ///     <paramref name="equalityComparer" /> are <c>null</c>.
@@ -266,24 +265,10 @@ namespace Abacaxi
         public static Frequency<T>[] FindDuplicates<T>(
             [NotNull] this IEnumerable<T> sequence, [NotNull] IEqualityComparer<T> equalityComparer)
         {
-            Validate.ArgumentNotNull(nameof(sequence), sequence);
-            Validate.ArgumentNotNull(nameof(equalityComparer), equalityComparer);
-
-            var appearances = new Dictionary<T, int>(equalityComparer);
-            foreach (var item in sequence)
-            {
-                if (!appearances.TryGetValue(item, out var count))
-                {
-                    appearances.Add(item, 1);
-                }
-                else
-                {
-                    appearances[item] = count + 1;
-                }
-            }
-
+            var appearances = GetItemFrequencies(sequence, equalityComparer);
             var result = new List<Frequency<T>>();
 
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var kvp in appearances)
             {
                 if (kvp.Value > 1)
@@ -301,7 +286,7 @@ namespace Abacaxi
         /// <param name="sequence">The sequence to inspect.</param>
         /// <param name="minInSequence">The minimum possible value of an element part of the <paramref name="sequence" />.</param>
         /// <param name="maxInSequence">The maximum possible value of an element part of the <paramref name="sequence" />.</param>
-        /// <returns>A sequence of element-appearances pairs of the detected duplicates.</returns>
+        /// <returns>A sequence of element-frequency pairs of the detected duplicates.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown if <paramref name="maxInSequence" /> is less than
@@ -334,6 +319,117 @@ namespace Abacaxi
                 {
                     result.Add(new Frequency<int>(i + minInSequence, appearances[i]));
                 }
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        ///     Finds all unique items in a given <paramref name="sequence" />.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to inspect.</param>
+        /// <param name="equalityComparer">The comparer used to verify the elements in the sequence.</param>
+        /// <returns>A sequence of detected uniques.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either the <paramref name="sequence" /> or the
+        ///     <paramref name="equalityComparer" /> are <c>null</c>.
+        /// </exception>
+        [NotNull]
+        public static T[] FindUniques<T>(
+            [NotNull] this IEnumerable<T> sequence, [NotNull] IEqualityComparer<T> equalityComparer)
+        {
+            var appearances = GetItemFrequencies(sequence, equalityComparer);
+            var result = new List<T>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var kvp in appearances)
+            {
+                if (kvp.Value == 1)
+                {
+                    result.Add(kvp.Key);
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        ///     Finds all unique items in a given <paramref name="sequence" /> and returns them in order of appearance.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to inspect.</param>
+        /// <param name="equalityComparer">The comparer used to verify the elements in the sequence.</param>
+        /// <returns>A sequence of detected uniques in order of appearance.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either the <paramref name="sequence" /> or the
+        ///     <paramref name="equalityComparer" /> are <c>null</c>.
+        /// </exception>
+        [NotNull]
+        public static T[] FindUniquesInOrder<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IEqualityComparer<T> equalityComparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(equalityComparer), equalityComparer);
+
+            var appearanceMap = new Dictionary<T, DllNode<T>>(equalityComparer);
+            DllNode<T> head = null, tail = null;
+
+            foreach (var item in sequence)
+            {
+                if (!appearanceMap.TryGetValue(item, out var node))
+                {
+                    node = new DllNode<T>
+                    {
+                        Prev = tail,
+                        Value = item
+                    };
+
+                    if (head == null)
+                    {
+                        Assert.Null(tail);
+                        head = node;
+                    }
+
+                    if (tail != null)
+                    {
+                        tail.Next = node;
+                    }
+
+                    tail = node;
+
+                    appearanceMap.Add(item, node);
+                }
+                else if (node != null)
+                {
+                    if (node.Prev != null)
+                    {
+                        node.Prev.Next = node.Next;
+                    }
+                    else
+                    {
+                        head = node.Next;
+                    }
+
+                    if (node.Next != null)
+                    {
+                        node.Next.Prev = node.Prev;
+                    }
+                    else
+                    {
+                        tail = node.Prev;
+                    }
+
+                    appearanceMap[item] = null;
+                }
+            }
+
+            var result = new List<T>();
+            while (head != null)
+            {
+                result.Add(head.Value);
+                head = head.Next;
             }
 
             return result.ToArray();
@@ -1237,8 +1333,10 @@ namespace Abacaxi
         /// <param name="sequence">The sequence.</param>
         /// <returns>The original sequence or an empty one.</returns>
         [NotNull]
-        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence) =>
-            sequence ?? Enumerable.Empty<T>();
+        public static IEnumerable<T> EmptyIfNull<T>([CanBeNull] this IEnumerable<T> sequence)
+        {
+            return sequence ?? Enumerable.Empty<T>();
+        }
 
         /// <summary>
         ///     Determines whether the given <paramref name="sequence" /> is null or empty.
@@ -1248,7 +1346,10 @@ namespace Abacaxi
         /// <returns>
         ///     <c>true</c> if the sequence is null or empty; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> sequence) => sequence?.Any() != true;
+        public static bool IsNullOrEmpty<T>([CanBeNull] this IEnumerable<T> sequence)
+        {
+            return sequence?.Any() != true;
+        }
 
         /// <summary>
         ///     Returns a <see cref="string" /> that represents this sequence of elements.
@@ -1410,7 +1511,10 @@ namespace Abacaxi
         [CanBeNull]
         public static T Min<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
-            [NotNull] Func<T, TKey> selector) => Min(sequence, selector, Comparer<TKey>.Default);
+            [NotNull] Func<T, TKey> selector)
+        {
+            return Min(sequence, selector, Comparer<TKey>.Default);
+        }
 
         /// <summary>
         ///     Finds the object that has a given maximum <typeparamref name="TKey" />.
@@ -1497,7 +1601,10 @@ namespace Abacaxi
         [CanBeNull]
         public static T Max<T, TKey>(
             [NotNull] this IEnumerable<T> sequence,
-            [NotNull] Func<T, TKey> selector) => Max(sequence, selector, Comparer<TKey>.Default);
+            [NotNull] Func<T, TKey> selector)
+        {
+            return Max(sequence, selector, Comparer<TKey>.Default);
+        }
 
         /// <summary>
         ///     Obtains a dedicated view into a segment of a given list. The returned list is a wrapper object that
@@ -1521,6 +1628,219 @@ namespace Abacaxi
             return new ListViewWrapper<T>(sequence, startIndex, length);
         }
 
+
+        private static bool IsOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer,
+            bool strict,
+            bool ascending)
+        {
+            Assert.NotNull(comparer);
+            Assert.NotNull(sequence);
+
+            using (var enumerator = sequence.GetEnumerator())
+            {
+                if (!enumerator.MoveNext())
+                {
+                    return true;
+                }
+
+                var prev = enumerator.Current;
+                while (enumerator.MoveNext())
+                {
+                    var current = enumerator.Current;
+                    var comp = comparer.Compare(prev, current);
+                    if (comp == 0 && strict ||
+                        comp > 0 && ascending ||
+                        comp < 0 && !ascending)
+                    {
+                        return false;
+                    }
+
+                    prev = current;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is ordered (ascending).
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are greater or equal than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static bool IsOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            return IsOrdered(sequence, comparer, false, true);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is ordered (ascending) using the default comparer.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are greater or equal than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static bool IsOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return IsOrdered(sequence, Comparer<T>.Default, false, true);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is strictly ordered (ascending).
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are strictly greater than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static bool IsStrictlyOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            return IsOrdered(sequence, comparer, true, true);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is strictly ordered (ascending) using the default comparer.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are strictly greater than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static bool IsStrictlyOrdered<T>(
+            [NotNull] this IEnumerable<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return IsOrdered(sequence, Comparer<T>.Default, true, true);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is ordered (descending).
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are less than or equal to their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static bool IsOrderedDescending<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            return IsOrdered(sequence, comparer, false, false);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is ordered (descending) using the default comparer.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are less than or equal to their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static bool IsOrderedDescending<T>(
+            [NotNull] this IEnumerable<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return IsOrdered(sequence, Comparer<T>.Default, false, false);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is strictly ordered (descending).
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="comparer">The comparer used to compare the keys.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are strictly smaller than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static bool IsStrictlyOrderedDescending<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            return IsOrdered(sequence, comparer, true, false);
+        }
+
+        /// <summary>
+        ///     Checks whether a given sequence is strictly ordered (descending) using the default comparer.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     <c>true</c> if all elements in <paramref name="sequence" /> are strictly smaller than their predecessors.
+        ///     <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static bool IsStrictlyOrderedDescending<T>(
+            [NotNull] this IEnumerable<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return IsOrdered(sequence, Comparer<T>.Default, true, false);
+        }
+
+
         private struct EditChoice
         {
             public const int Cancel = -1;
@@ -1530,6 +1850,13 @@ namespace Abacaxi
 
             public int Operation;
             public double Cost;
+        }
+
+        private sealed class DllNode<T>
+        {
+            [CanBeNull] public DllNode<T> Next;
+            [CanBeNull] public DllNode<T> Prev;
+            [CanBeNull] public T Value;
         }
     }
 }

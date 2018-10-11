@@ -91,9 +91,8 @@ namespace Abacaxi
         ///     <paramref name="evaluateCostOfPairFunc" /> are <c>null</c>.
         /// </exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence" /> is not even.</exception>
-        [NotNull,
-         ItemNotNull]
-        public static Tuple<T, T>[] GetWithMinimumCost<T>(
+        [NotNull]
+        public static (T, T)[] GetWithMinimumCost<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Func<T, T, double> evaluateCostOfPairFunc)
         {
@@ -102,7 +101,7 @@ namespace Abacaxi
 
             if (sequence.Count == 0)
             {
-                return new Tuple<T, T>[0];
+                return new (T, T)[0];
             }
 
             var context = new RecursiveFindSubsetPairingWithLowestCostContext(
@@ -136,7 +135,7 @@ namespace Abacaxi
                 }
             }
 
-            return sets.Select(s => Tuple.Create(s.Item1, s.Item2)).ToArray();
+            return sets.Select(s => (s.Item1, s.Item2)).ToArray();
         }
 
         /// <summary>
@@ -154,8 +153,8 @@ namespace Abacaxi
         ///     <paramref name="evaluateCostOfPairFunc" /> are <c>null</c>.
         /// </exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence" /> is not even.</exception>
-        [NotNull, ItemNotNull]
-        public static Tuple<T, T>[] GetWithApproximateMinimumCost<T>(
+        [NotNull]
+        public static (T, T)[] GetWithApproximateMinimumCost<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Func<T, T, double> evaluateCostOfPairFunc,
             int iterations = 100000)
@@ -166,7 +165,7 @@ namespace Abacaxi
 
             if (sequence.Count == 0)
             {
-                return new Tuple<T, T>[0];
+                return new (T, T)[0];
             }
 
             var steps = (int) Math.Sqrt(iterations);
@@ -184,7 +183,7 @@ namespace Abacaxi
                     Assert.NotNull(pair);
                     Assert.Condition(pair.Length == 2);
 
-                    return Tuple.Create(pair[0], pair[1]);
+                    return (pair[0], pair[1]);
                 })
                 .ToArray();
         }

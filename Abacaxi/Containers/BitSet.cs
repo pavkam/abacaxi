@@ -22,6 +22,7 @@ namespace Abacaxi.Containers
     using Internal;
     using JetBrains.Annotations;
 
+    /// <inheritdoc />
     /// <summary>
     ///     Class implements an integer set internally represented by a bit array. Provides O(1) access times.
     /// </summary>
@@ -54,21 +55,24 @@ namespace Abacaxi.Containers
             _chunks = new int[chunkCount];
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Initializes a new instance of <see cref="BitSet" /> class.
+        ///     Initializes a new instance of <see cref="T:Abacaxi.Containers.BitSet" /> class.
         /// </summary>
         /// <param name="count">The number of integers this set can hold (<c>0</c>...<paramref name="count" /><c>-1</c>)</param>
         public BitSet(int count) : this(0, count - 1)
         {
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     The count of integers currently stored in the set.
         /// </summary>
         public int Count { get; private set; }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Always returns <c>false</c>. The <see cref="BitSet" /> is not read-only.
+        ///     Always returns <c>false</c>. The <see cref="T:Abacaxi.Containers.BitSet" /> is not read-only.
         /// </summary>
         public bool IsReadOnly => false;
 
@@ -95,11 +99,12 @@ namespace Abacaxi.Containers
             return true;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Removes all elements in the specified collection from the current set.
         /// </summary>
         /// <param name="other">The collection of items to remove from the set.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public void ExceptWith(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -110,12 +115,12 @@ namespace Abacaxi.Containers
             }
         }
 
-
+        /// <inheritdoc />
         /// <summary>
         ///     Modifies the current set so that it contains only elements that are also in a specified collection.
         /// </summary>
         /// <param name="other">The collection to compare to the current set.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public void IntersectWith(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -140,6 +145,7 @@ namespace Abacaxi.Containers
             Count = count;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Determines whether the current set is a proper (strict) subset of a specified collection.
         /// </summary>
@@ -147,7 +153,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     true if the current set is a proper subset of <paramref name="other" />; otherwise, false.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public bool IsProperSubsetOf(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -178,6 +184,7 @@ namespace Abacaxi.Containers
             return unmatched > 0;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Determines whether the current set is a proper (strict) superset of a specified collection.
         /// </summary>
@@ -185,7 +192,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     true if the current set is a proper superset of <paramref name="other" />; otherwise, false.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public bool IsProperSupersetOf(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -204,6 +211,7 @@ namespace Abacaxi.Containers
             return inner.Count < Count;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Determines whether the current set is a subset of a specified collection.
         /// </summary>
@@ -211,7 +219,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     true if the current set is a subset of <paramref name="other" />; otherwise, false.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public bool IsSubsetOf(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -237,6 +245,7 @@ namespace Abacaxi.Containers
             return true;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Determines whether the current set is a superset of a specified collection.
         /// </summary>
@@ -244,7 +253,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     true if the current set is a superset of <paramref name="other" />; otherwise, false.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public bool IsSupersetOf(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -252,6 +261,7 @@ namespace Abacaxi.Containers
             return other.All(Contains);
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Determines whether the current set overlaps with the specified collection.
         /// </summary>
@@ -259,7 +269,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     true if the current set and <paramref name="other" /> share at least one common element; otherwise, false.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public bool Overlaps(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -278,6 +288,7 @@ namespace Abacaxi.Containers
             return !otherHasItems;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Determines whether the current set and the specified collection contain the same elements.
         /// </summary>
@@ -285,7 +296,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     true if the current set is equal to <paramref name="other" />; otherwise, false.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public bool SetEquals(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -310,12 +321,13 @@ namespace Abacaxi.Containers
             return copy.All(t => t == 0);
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Modifies the current set so that it contains only elements that are present either in the current set or in the
         ///     specified collection, but not both.
         /// </summary>
         /// <param name="other">The collection to compare to the current set.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public void SymmetricExceptWith(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -345,12 +357,13 @@ namespace Abacaxi.Containers
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Modifies the current set so that it contains all elements that are present in either the current set or the
         ///     specified collection.
         /// </summary>
         /// <param name="other">The collection to compare to the current set.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="other" /> is <c>null</c>.</exception>
         public void UnionWith(IEnumerable<int> other)
         {
             Validate.ArgumentNotNull(nameof(other), other);
@@ -361,6 +374,7 @@ namespace Abacaxi.Containers
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
@@ -370,6 +384,7 @@ namespace Abacaxi.Containers
             Add(item);
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
@@ -384,12 +399,13 @@ namespace Abacaxi.Containers
             Count = 0;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.
+        ///     Determines whether the <see cref="T:System.Collections.Generic.ICollection{T}" /> contains a specific value.
         /// </summary>
-        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection{T}" />.</param>
         /// <returns>
-        ///     true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />;
+        ///     true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection{T}" />;
         ///     otherwise, false.
         /// </returns>
         public bool Contains(int item)
@@ -405,18 +421,19 @@ namespace Abacaxi.Containers
             return (_chunks[chunk] & mask) != 0;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        ///     Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1" /> to an
+        ///     Copies the elements of the <see cref="T:System.Collections.Generic.ICollection{T}" /> to an
         ///     <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
         /// </summary>
         /// <param name="array">
         ///     The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied
-        ///     from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have
+        ///     from <see cref="T:System.Collections.Generic.ICollection{T}" />. The <see cref="T:System.Array" /> must have
         ///     zero-based indexing.
         /// </param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="array" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="array" /> is <c>null</c>.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
         ///     Thrown if the destination <paramref name="array" /> does not have enough
         ///     space to hold the contents of the set.
         /// </exception>
@@ -444,6 +461,7 @@ namespace Abacaxi.Containers
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Removes the first occurrence of a specific object from the
         ///     <see cref="T:System.Collections.Generic.ICollection{T}" />.
@@ -452,7 +470,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     true if <paramref name="item" /> was successfully removed from the
         ///     <see cref="T:System.Collections.Generic.ICollection{T}" />; otherwise, false. This method also returns false if
-        ///     <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.
+        ///     <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection{T}" />.
         /// </returns>
         public bool Remove(int item)
         {
@@ -475,6 +493,7 @@ namespace Abacaxi.Containers
             return true;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through the collection.
         /// </summary>
@@ -508,13 +527,17 @@ namespace Abacaxi.Containers
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         private void LocateItem(int item, out int chunk, out int mask)
         {

@@ -25,7 +25,10 @@ namespace Abacaxi.Tests.Pairing
     [TestFixture]
     public sealed class GetWithApproximateMinimumCost
     {
-        private static double DistanceCostOfPairsEvaluator(int l, int r) => Math.Abs(l - r);
+        private static double DistanceCostOfPairsEvaluator(int l, int r)
+        {
+            return Math.Abs(l - r);
+        }
 
         [TestCase(10), TestCase(20), TestCase(100), TestCase(1000), Parallelizable]
         public void GetWithApproximateMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
@@ -120,7 +123,7 @@ namespace Abacaxi.Tests.Pairing
             var result = Pairing.GetWithApproximateMinimumCost(new[] {1, 2}, DistanceCostOfPairsEvaluator);
 
             Assert.AreEqual(1, result.Length);
-            Assert.IsTrue(result[0].Equals(Tuple.Create(1, 2)) || result[0].Equals(Tuple.Create(2, 1)));
+            Assert.IsTrue(result[0].Equals((1, 2)) || result[0].Equals((2, 1)));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]

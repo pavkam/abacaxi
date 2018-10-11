@@ -23,9 +23,15 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public sealed class FindSubsequencesWithGivenAggregatedValueTests
     {
-        private static int IntegerAggregator(int a, int b) => a + b;
+        private static int IntegerAggregator(int a, int b)
+        {
+            return a + b;
+        }
 
-        private static int IntegerDisaggregator(int a, int b) => a - b;
+        private static int IntegerDisaggregator(int a, int b)
+        {
+            return a - b;
+        }
 
         [Test]
         public void FindSubsequencesWithGivenAggregatedValue_ReturnsAll_ForNeutrals()

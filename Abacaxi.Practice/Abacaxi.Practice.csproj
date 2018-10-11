@@ -20,6 +20,9 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
  
   <ItemGroup>
     <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />

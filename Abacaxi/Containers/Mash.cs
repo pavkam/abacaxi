@@ -276,7 +276,10 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         /// <summary>
         ///     Adds an item to the <see cref="Mash{TKey,TValue}" />'s value collection.
@@ -356,7 +359,10 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     <c>true</c> if <paramref name="item" /> is found in the <see cref="Mash{TKey,TValue}" />; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(TValue item) => IndexOf(item) > -1;
+        public bool Contains(TValue item)
+        {
+            return IndexOf(item) > -1;
+        }
 
         /// <summary>
         ///     Copies the elements of the <see cref="Mash{TKey,TValue}" />'s value collection to an <see cref="T:System.Array" />,

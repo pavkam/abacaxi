@@ -16,6 +16,7 @@
 namespace Abacaxi.Tests.Containers
 {
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using Abacaxi.Containers;
     using NUnit.Framework;
 
@@ -179,7 +180,7 @@ namespace Abacaxi.Tests.Containers
             Assert.IsNull(e1.Next);
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void VerifyIfKnotted_ReturnsFalse_ForDoubleUnknottedNode()
         {
             var head = SingleLinkedNode<int>.Create(new[] {1, 2});
@@ -189,7 +190,7 @@ namespace Abacaxi.Tests.Containers
             Assert.IsFalse(check);
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void VerifyIfKnotted_ReturnsFalse_ForSingleUnknottedNode()
         {
             var head = SingleLinkedNode<int>.Create(new[] {1});
@@ -199,7 +200,7 @@ namespace Abacaxi.Tests.Containers
             Assert.IsFalse(check);
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void VerifyIfKnotted_ReturnsFalse_ForTripleUnknottedNode()
         {
             var head = SingleLinkedNode<int>.Create(new[] {1, 2, 3});

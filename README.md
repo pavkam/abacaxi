@@ -69,7 +69,9 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `RandomExtensions.NextItem` | An extension method that allows retrieving a *random item* from a sequence of objects. |
 | `SequenceExtensions. FindLongestIncreasingSequence` | Finds the *longest increasing sequence* within a given sequence. |
 | `SequenceExtensions. ContainsTwoElementsThatAggregateTo` | Determines whether the sequence contains two elements *that aggregate to a given target*. |
-| `SequenceExtensions.FindDuplicates` | *Finds duplicates* in a sequence of objects. A specialized and optimized version for integer sequences also provided. |
+| `SequenceExtensions.FindDuplicates` | *Finds duplicates* in a sequence. A specialized and optimized version for integer sequences also provided. |
+| `SequenceExtensions.FindUniques` | *Finds unique* elements in a sequence. |
+| `SequenceExtensions.FindUniquesInOrder` | *Finds unique* elements in a sequence and retains the order of their appearance in the sequence. |
 | `SequenceExtensions.ExtractNestedBlocks` | An algorithm to allow *extracting nested* sub-sequences from a sequence (e.g. _"(a(b))"_ would return _"(b)"_ then _"(a(b))"_). |
 | `SequenceExtensions. FindSubsequencesWithGivenAggregatedValue` | Finds all *sub-sequences of a given aggregated value*. |
 | `SequenceExtensions.Interleave` | Creates a sequence which combines multiple *interleaved sequences* based on a given comparison. |
@@ -91,6 +93,10 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.Min` | Returns the element of a sequence with a given *selected minimum* (e.g. select the person object with the smallest age). |
 | `SequenceExtensions.Max` | Returns the element of a sequence with a given *selected maximum* (e.g. select the person object with the greatest age). |
 | `SequenceExtensions.Segment` | Returns a view of the original sequence bounded to a segment of the list. Useful when other methods do not allow specifying a start/length pair of arguments. |
+| `SequenceExtensions.IsOrdered` | Checkes whether the elements of a given sequence are sorted in ascending order. |
+| `SequenceExtensions.IsStrictlyOrdered` | Checkes whether the elements of a given sequence are strictly sorted in ascending order. |
+| `SequenceExtensions.IsOrderedDescending` | Checkes whether the elements of a given sequence are sorted in descending order. |
+| `SequenceExtensions.IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
 | `Set.EnumerateSubsetCombinations` |  |
 | `Set.SplitIntoSubsetsOfEqualValue` |  |
 | `Set.GetSubsetWithNearValue` |  |

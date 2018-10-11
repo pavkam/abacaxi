@@ -22,6 +22,7 @@ namespace Abacaxi.Practice.Graphs
     using Internal;
     using JetBrains.Annotations;
 
+    /// <inheritdoc />
     /// <summary>
     ///     A chess-horse virtual graph. Each cell is connected to the cells that are reachable by a chess horse (L-shaped
     ///     movements).
@@ -47,6 +48,7 @@ namespace Abacaxi.Practice.Graphs
             _lengthY = boardHeight;
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Gets a value indicating whether this graph's edges are directed.
         /// </summary>
@@ -55,6 +57,7 @@ namespace Abacaxi.Practice.Graphs
         /// </value>
         public override bool IsDirected => false;
 
+        /// <inheritdoc />
         /// <summary>
         ///     Gets a value indicating whether this instance is read only.
         /// </summary>
@@ -63,6 +66,7 @@ namespace Abacaxi.Practice.Graphs
         /// </value>
         public override bool IsReadOnly => true;
 
+        /// <inheritdoc />
         /// <summary>
         ///     Gets a value indicating whether this graph supports potential weight evaluation (heuristics).
         /// </summary>
@@ -74,7 +78,10 @@ namespace Abacaxi.Practice.Graphs
         /// </value>
         public override bool SupportsPotentialWeightEvaluation => false;
 
-        private bool VertexExists(int x, int y) => x >= 0 && x < _lengthX && y >= 0 && y < _lengthY;
+        private bool VertexExists(int x, int y)
+        {
+            return x >= 0 && x < _lengthX && y >= 0 && y < _lengthY;
+        }
 
         private void ValidateVertex([InvokerParameterName, NotNull] string argumentName, Cell vertex)
         {
@@ -104,6 +111,7 @@ namespace Abacaxi.Practice.Graphs
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates all vertices in the graph.
         /// </summary>
@@ -119,6 +127,7 @@ namespace Abacaxi.Practice.Graphs
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Gets the potential total weight connecting <paramref name="fromVertex" /> and <paramref name="toVertex" />
         ///     vertices.
@@ -131,7 +140,7 @@ namespace Abacaxi.Practice.Graphs
         /// <returns>
         ///     The potential total cost.
         /// </returns>
-        /// <exception cref="NotImplementedException">Always thrown.</exception>
+        /// <exception cref="T:System.NotImplementedException">Always thrown.</exception>
         public override double GetPotentialWeight(Cell fromVertex, Cell toVertex)
         {
             ValidateVertex(nameof(fromVertex), fromVertex);
@@ -140,6 +149,7 @@ namespace Abacaxi.Practice.Graphs
             throw new NotSupportedException("This graph does not support potential weight evaluation.");
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Gets the edges for a given <paramref name="vertex" />.
         /// </summary>
@@ -147,7 +157,7 @@ namespace Abacaxi.Practice.Graphs
         /// <returns>
         ///     A sequence of edges connected to the given <paramref name="vertex" />
         /// </returns>
-        /// <exception cref="ArgumentException">Thrown if the <paramref name="vertex" /> is not part of the graph.</exception>
+        /// <exception cref="T:System.ArgumentException">Thrown if the <paramref name="vertex" /> is not part of the graph.</exception>
         public override IEnumerable<Edge<Cell>> GetEdges(Cell vertex)
         {
             ValidateVertex(nameof(vertex), vertex);

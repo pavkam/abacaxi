@@ -69,14 +69,15 @@ namespace Abacaxi.Tests.StringExtensions
 
         [TestCase("a*", "a1"), TestCase("a*", "a"), TestCase("a*", "a123"), TestCase("*a", "1a"), TestCase("*a", "a"),
          TestCase("*a", "123a"), TestCase("*a", "aaaa"), TestCase("a*c", "abc"), TestCase("a*x", "alex"),
-         TestCase("a*x", "ax")]
+         TestCase("a*x", "ax"), SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void Pattern_AsteriskInString_MatchesSimilarString([NotNull] string pattern, [NotNull] string test)
         {
             var result = new GlobPattern(pattern, false).IsMatch(test);
             Assert.IsTrue(result);
         }
 
-        [TestCase("a*", "b"), TestCase("a*", "ba"), TestCase("*a", "123ab"), TestCase("a*c", "abcd")]
+        [TestCase("a*", "b"), TestCase("a*", "ba"), TestCase("*a", "123ab"), TestCase("a*c", "abcd"),
+         SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void Pattern_AsteriskInString_DoesNotMatchDifferentString([NotNull] string pattern,
             [NotNull] string test)
         {
@@ -84,14 +85,16 @@ namespace Abacaxi.Tests.StringExtensions
             Assert.IsFalse(result);
         }
 
-        [TestCase("a", "A"), TestCase("ABC", "ABc"), TestCase("*A", "AAAAAa"), TestCase("A??X", "AXXx")]
+        [TestCase("a", "A"), TestCase("ABC", "ABc"), TestCase("*A", "AAAAAa"), TestCase("A??X", "AXXx"),
+         SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void Pattern_MatchingFails_IfCaseSensitive([NotNull] string pattern, [NotNull] string test)
         {
             var result = new GlobPattern(pattern, false).IsMatch(test);
             Assert.IsFalse(result);
         }
 
-        [TestCase("a", "A"), TestCase("ABC", "ABc"), TestCase("*A", "AAAAAa"), TestCase("A??X", "AXXx")]
+        [TestCase("a", "A"), TestCase("ABC", "ABc"), TestCase("*A", "AAAAAa"), TestCase("A??X", "AXXx"),
+         SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void Pattern_MatchingSucceeds_IfCaseInsensitive([NotNull] string pattern, [NotNull] string test)
         {
             var result = new GlobPattern(pattern, true).IsMatch(test);

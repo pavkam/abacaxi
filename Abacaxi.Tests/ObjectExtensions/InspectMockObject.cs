@@ -49,21 +49,39 @@ namespace Abacaxi.Tests.ObjectExtensions
         [NotNull] public string this[string index] => "public_property_with_index_argument";
 
         [NotNull]
-        public string PublicMethod() => "public_method";
+        public string PublicMethod()
+        {
+            return "public_method";
+        }
 
         [NotNull]
-        internal string InternalMethod() => "internal_method";
+        internal string InternalMethod()
+        {
+            return "internal_method";
+        }
 
         [NotNull]
-        private string PrivateMethod() => "private_method";
+        private string PrivateMethod()
+        {
+            return "private_method";
+        }
 
         [NotNull]
-        private string ProtectedMethod() => "protected_method";
+        private string ProtectedMethod()
+        {
+            return "protected_method";
+        }
 
         [NotNull]
-        public string PublicMethodWithOneArgument(string arg) => "public_method_with_one_argument";
+        public string PublicMethodWithOneArgument(string arg)
+        {
+            return "public_method_with_one_argument";
+        }
 
         [NotNull]
-        public string PublicGenericMethod<T>() => "public_generic_method";
+        public string PublicGenericMethod<T>()
+        {
+            return "public_generic_method";
+        }
     }
 }

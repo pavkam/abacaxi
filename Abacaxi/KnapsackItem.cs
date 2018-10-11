@@ -97,7 +97,10 @@ namespace Abacaxi
         /// <returns>
         ///     A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString() => $"{Item} ({Value:N2}, {Weight})";
+        public override string ToString()
+        {
+            return $"{Item} ({Value:N2}, {Weight})";
+        }
 
         /// <summary>
         ///     Returns a hash code for this instance.

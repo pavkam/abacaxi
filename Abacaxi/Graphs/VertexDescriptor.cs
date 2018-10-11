@@ -88,6 +88,9 @@ namespace Abacaxi.Graphs
         /// <returns>
         ///     A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString() => $"{InDegree} => {Vertex} ({ComponentIndex}) => {OutDegree}";
+        public override string ToString()
+        {
+            return $"{InDegree} => {Vertex} ({ComponentIndex}) => {OutDegree}";
+        }
     }
 }

@@ -16,6 +16,7 @@
 namespace Abacaxi.Tests.StringExtensions
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -25,7 +26,8 @@ namespace Abacaxi.Tests.StringExtensions
          TestCase("'", "\\'"), TestCase("\"", "\\\""), TestCase("\\", "\\\\"), TestCase("\0", "\\0"),
          TestCase("\a", "\\a"), TestCase("\b", "\\b"), TestCase("\f", "\\f"), TestCase("\n", "\\n"),
          TestCase("\r", "\\r"), TestCase("\t", "\\t"), TestCase("\u0001", "\\u0001"), TestCase("\u009f", "\\u009f"),
-         TestCase("Les Misérables", "Les Misérables"), TestCase("क्षि", "क्षि")]
+         TestCase("Les Misérables", "Les Misérables"), TestCase("क्षि", "क्षि"),
+         SuppressMessage("ReSharper", "StringLiteralTypo")]
         public void Escape_ReturnsTheExpectedString(string input, string expected)
         {
             var actual = input.Escape();

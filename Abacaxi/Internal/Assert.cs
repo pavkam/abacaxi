@@ -24,6 +24,21 @@ namespace Abacaxi.Internal
     internal static class Assert
     {
         [Conditional("DEBUG"),
+         ContractAnnotation("value:notnull => halt"),
+         SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Global")]
+        public static void Null(
+            [CanBeNull] object value,
+            [CanBeNull, CallerMemberName] string callerMemberName = null,
+            [CallerLineNumber] int callerLineNumber = 0)
+        {
+            if (value != null)
+            {
+                throw new InvalidOperationException(
+                    $"Assertion failed. Value must be null at method: {callerMemberName}, line: {callerLineNumber}.");
+            }
+        }
+
+        [Conditional("DEBUG"),
          ContractAnnotation("value:null => halt"),
          SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Global")]
         public static void NotNull(
@@ -52,7 +67,6 @@ namespace Abacaxi.Internal
                     $"Assertion failed. Condition failed at method: {callerMemberName}, line: {callerLineNumber}.");
             }
         }
-
 
         [Conditional("DEBUG"),
          ContractAnnotation("=> halt")]

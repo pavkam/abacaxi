@@ -20,12 +20,13 @@ namespace Abacaxi.Containers
     using Internal;
     using JetBrains.Annotations;
 
+    /// <inheritdoc />
     /// <summary>
-    ///     Represents a linked list node.
+    ///     Represents a single-linked list node.
     /// </summary>
     /// <typeparam name="T">The type of the value stored in the node.</typeparam>
     [PublicAPI]
-    public sealed class SingleLinkedNode<T> : IEnumerable<SingleLinkedNode<T>>
+    public class SingleLinkedNode<T> : IEnumerable<SingleLinkedNode<T>>
     {
         /// <summary>
         ///     Initializes a new instance of <see cref="SingleLinkedNode{T}" /> class with a given value.
@@ -47,21 +48,26 @@ namespace Abacaxi.Containers
         [CanBeNull]
         public SingleLinkedNode<T> Next { get; set; }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
         ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
         ///     An enumerator that can be used to iterate through the collection.
         /// </returns>
-        /// <exception cref="System.NotImplementedException"></exception>
+        /// <exception cref="T:System.NotImplementedException"></exception>
         public IEnumerator<SingleLinkedNode<T>> GetEnumerator()
         {
             var current = this;

@@ -32,9 +32,15 @@ namespace Abacaxi.Internal
             _s = s;
         }
 
-        public IEnumerator<char> GetEnumerator() => _s.Cast<char>().GetEnumerator();
+        public IEnumerator<char> GetEnumerator()
+        {
+            return _s.Cast<char>().GetEnumerator();
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) _s).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable) _s).GetEnumerator();
+        }
 
         [ContractAnnotation("=> halt")]
         public void Add(char item)
@@ -48,7 +54,10 @@ namespace Abacaxi.Internal
             throw new NotSupportedException();
         }
 
-        public bool Contains(char item) => _s.Contains(item.ToString());
+        public bool Contains(char item)
+        {
+            return _s.Contains(item.ToString());
+        }
 
         public void CopyTo(char[] array, int arrayIndex)
         {
@@ -56,13 +65,19 @@ namespace Abacaxi.Internal
         }
 
         [ContractAnnotation("=> halt")]
-        public bool Remove(char item) => throw new NotSupportedException();
+        public bool Remove(char item)
+        {
+            throw new NotSupportedException();
+        }
 
         public int Count => _s.Length;
 
         public bool IsReadOnly => true;
 
-        public int IndexOf(char item) => _s.IndexOf(item);
+        public int IndexOf(char item)
+        {
+            return _s.IndexOf(item);
+        }
 
         [ContractAnnotation("=> halt")]
         public void Insert(int index, char item)
