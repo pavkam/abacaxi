@@ -80,6 +80,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.BinarySearch` | Implements the standard *binary search* algorithm. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
 | `SequenceExtensions.Diff` | Implements the generic *edit distance* algorithm. See related material: <https://en.wikipedia.org/wiki/Edit_distance> |
 | `SequenceExtensions. GetLongestCommonSubSequence` |  |
+| `SequenceExtensions.DeconstructIntoTerms` | Deconstructs a given sequence into a sequence of terms (sub-sequences) based on given term scoring (e.g. think of recognizing an English phrase for all lower-case text without whitespaces using a given dictionary of known words: "_ilovecookies_" will be split into "_i_", "_love_", "_cookies_"). |
 | `SequenceExtensions.GetItemFrequencies` | Gets the *items and their frequencies* within a sequence. |
 | `SequenceExtensions.ToSet` | Helper methods to *convert a given sequence into a set*. |
 | `SequenceExtensions.AsList` | Helper method that *interprets a given sequence as a list*. If the sequence is already a list/array then the original object is returned; otherwise, the sequence is converted to an array. **This method may or may not create a new object and does not guarantee mutability of the result.** |
