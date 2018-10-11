@@ -97,16 +97,18 @@ namespace Abacaxi.Practice.Graphs
             Assert.Condition(VertexExists(vertex.X, vertex.Y));
 
             for (var i = -2; i <= 2; i += 4)
-            for (var j = -1; j <= 1; j += 2)
             {
-                if (VertexExists(vertex.X + i, vertex.Y + j))
+                for (var j = -1; j <= 1; j += 2)
                 {
-                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y + j));
-                }
+                    if (VertexExists(vertex.X + i, vertex.Y + j))
+                    {
+                        yield return new Edge<Cell>(vertex, new Cell(vertex.X + i, vertex.Y + j));
+                    }
 
-                if (VertexExists(vertex.X + j, vertex.Y + i))
-                {
-                    yield return new Edge<Cell>(vertex, new Cell(vertex.X + j, vertex.Y + i));
+                    if (VertexExists(vertex.X + j, vertex.Y + i))
+                    {
+                        yield return new Edge<Cell>(vertex, new Cell(vertex.X + j, vertex.Y + i));
+                    }
                 }
             }
         }
