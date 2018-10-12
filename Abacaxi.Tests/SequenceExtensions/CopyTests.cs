@@ -84,7 +84,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         {
             var a = new[] {1, 2, 3, 4, 5};
 
-            TestHelper.AssertSequence(a, a.Copy(0, a.Length));
+            TestHelper.AssertSequence(a.Skip(1).Take(3), a.Copy(1, a.Length - 2));
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         {
             var a = new[] {1, 2, 3, 4, 5}.Segment(0, 5);
 
-            TestHelper.AssertSequence(a, a.Copy(0, a.Count));
+            TestHelper.AssertSequence(a.Skip(1).Take(3), a.Copy(1, a.Count - 2));
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         {
             var a = new List<int> {1, 2, 3, 4, 5};
 
-            TestHelper.AssertSequence(a, a.Copy(0, a.Count));
+            TestHelper.AssertSequence(a.Skip(1).Take(3), a.Copy(1, a.Count - 2));
         }
     }
 }

@@ -1306,7 +1306,7 @@ namespace Abacaxi
                 {
                     for (var i = 0; i < count; i++)
                     {
-                        result[i] = sequence[i];
+                        result[i] = sequence[i + startIndex];
                     }
 
                     break;
@@ -1946,11 +1946,7 @@ namespace Abacaxi
                 var end = sequence.Count - 1;
                 while (last.prev >= 0)
                 {
-                    var piece = new T[end - last.prev + 1];
-                    for (var i = 0; i < piece.Length; i++)
-                    {
-                        piece[i] = sequence[i + last.prev];
-                    }
+                    var piece = sequence.Copy(last.prev, end - last.prev + 1);
 
                     path.Add(piece);
 
