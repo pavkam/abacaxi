@@ -26,13 +26,13 @@ namespace Abacaxi.Containers
     /// </summary>
     /// <typeparam name="T">The type of the value stored in the node.</typeparam>
     [PublicAPI]
-    public class SingleLinkedNode<T> : IEnumerable<SingleLinkedNode<T>>
+    public sealed class LinkedListNode<T> : IEnumerable<LinkedListNode<T>>
     {
         /// <summary>
-        ///     Initializes a new instance of <see cref="SingleLinkedNode{T}" /> class with a given value.
+        ///     Initializes a new instance of <see cref="LinkedListNode{T}" /> class with a given value.
         /// </summary>
         /// <param name="value">The node's value.</param>
-        public SingleLinkedNode(T value)
+        public LinkedListNode(T value)
         {
             Value = value;
         }
@@ -46,7 +46,7 @@ namespace Abacaxi.Containers
         ///     Next element in the list.
         /// </summary>
         [CanBeNull]
-        public SingleLinkedNode<T> Next { get; set; }
+        public LinkedListNode<T> Next { get; set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -68,7 +68,7 @@ namespace Abacaxi.Containers
         ///     An enumerator that can be used to iterate through the collection.
         /// </returns>
         /// <exception cref="T:System.NotImplementedException"></exception>
-        public IEnumerator<SingleLinkedNode<T>> GetEnumerator()
+        public IEnumerator<LinkedListNode<T>> GetEnumerator()
         {
             var current = this;
             while (current != null)
@@ -85,22 +85,22 @@ namespace Abacaxi.Containers
         /// <param name="sequence">The sequence to convert into a linked list.</param>
         /// <returns>The first node in the list (head).</returns>
         [CanBeNull]
-        public static SingleLinkedNode<T> Create([NotNull] IEnumerable<T> sequence)
+        public static LinkedListNode<T> Create([NotNull] IEnumerable<T> sequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
-            SingleLinkedNode<T> head = null;
-            SingleLinkedNode<T> current = null;
+            LinkedListNode<T> head = null;
+            LinkedListNode<T> current = null;
             foreach (var item in sequence)
             {
                 if (current == null)
                 {
-                    current = new SingleLinkedNode<T>(item);
+                    current = new LinkedListNode<T>(item);
                     head = current;
                 }
                 else
                 {
-                    current.Next = new SingleLinkedNode<T>(item);
+                    current.Next = new LinkedListNode<T>(item);
                     current = current.Next;
                 }
             }
@@ -109,51 +109,51 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        ///     Find the middle node of a linked list.
+        /// Tries the get the middle and tail nodes in one iteration.
         /// </summary>
-        /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
-        /// <returns>The middle node.</returns>
-        [NotNull]
-        public SingleLinkedNode<T> FindMiddle()
+        /// <param name="middleNode">The middle node, if the list is not knotted.</param>
+        /// <param name="tailNode">The tail node, if the list is not knotted.</param>
+        /// <returns><c>true</c> if the list is not knotted and has middle and tail nodes; <c>false</c> otherwise.</returns>
+        [ContractAnnotation(
+            "=> true, middleNode: notnull, tailNode: notnull; => false, middleNode: null, tailNode: null")]
+        public bool TryGetMiddleAndTailNodes([CanBeNull] out LinkedListNode<T> middleNode,
+            [CanBeNull] out LinkedListNode<T> tailNode)
         {
-            var one = this;
-            var two = Next?.Next;
+            var current = this;
+            var skip = this;
+            middleNode = null;
+            tailNode = null;
 
-            while (two != null)
+            for (;;)
             {
-                Assert.NotNull(one);
-
-                one = one.Next;
-                two = two.Next?.Next;
-            }
-
-            Assert.NotNull(one);
-            return one;
-        }
-
-        /// <summary>
-        ///     Finds whether the list is knotted.
-        /// </summary>
-        /// <returns><c>true</c> if the list is knotted; <c>false</c> otherwise.</returns>
-        public bool VerifyIfKnotted()
-        {
-            var one = this;
-            var two = Next?.Next;
-
-            while (two != null)
-            {
-                Assert.NotNull(one);
-
-                one = one.Next;
-                two = two.Next?.Next;
-
-                if (two == one)
+                /* Find middle condition. */
+                if (skip != null)
                 {
-                    return true;
+                    if (skip.Next?.Next == null)
+                    {
+                        middleNode = current;
+                    }
+
+                    skip = skip.Next?.Next;
                 }
+
+                /* Find tail condition. */
+                if (current.Next == null)
+                {
+                    tailNode = current;
+                    break;
+                }
+
+                /* Knotted condition. */
+                if (current == skip)
+                {
+                    return false;
+                }
+
+                current = current.Next;
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Abacaxi.Containers
         /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
         /// <returns>The new head of the linked list.</returns>
         [NotNull]
-        public SingleLinkedNode<T> Reverse()
+        public LinkedListNode<T> Reverse()
         {
             var current = Next;
             Next = null;

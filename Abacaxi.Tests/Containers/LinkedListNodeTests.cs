@@ -16,17 +16,16 @@
 namespace Abacaxi.Tests.Containers
 {
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using Abacaxi.Containers;
     using NUnit.Framework;
 
     [TestFixture]
-    public class SingleLinkedNodeTests
+    public sealed class LinkedListNodeTests
     {
         [Test]
         public void Create_ReturnsNull_ForEmptySequence()
         {
-            var head = SingleLinkedNode<int>.Create(new int[] { });
+            var head = LinkedListNode<int>.Create(new int[] { });
 
             Assert.IsNull(head);
         }
@@ -34,7 +33,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Create_ReturnsOneValidNode_ForSequenceOfOne()
         {
-            var head = SingleLinkedNode<int>.Create(new[] {1});
+            var head = LinkedListNode<int>.Create(new[] {1});
 
             Assert.NotNull(head);
             Assert.AreEqual(1, head.Value);
@@ -44,7 +43,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Create_ReturnsTwoValidNodes_ForSequenceOfTwo()
         {
-            var head = SingleLinkedNode<int>.Create(new[] {1, 2});
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
 
             Assert.NotNull(head);
             Assert.AreEqual(1, head.Value);
@@ -55,7 +54,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Ctor_StoresTheValue()
         {
-            var node = new SingleLinkedNode<int>(99);
+            var node = new LinkedListNode<int>(99);
 
             Assert.AreEqual(99, node.Value);
         }
@@ -63,7 +62,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Enumeration_ReturnsSelf()
         {
-            var node = SingleLinkedNode<char>.Create("A");
+            var node = LinkedListNode<char>.Create("A");
             Debug.Assert(node != null);
 
             TestHelper.AssertSequence(node,
@@ -73,7 +72,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Enumeration_ReturnsSequence()
         {
-            var head = SingleLinkedNode<char>.Create("ALEX");
+            var head = LinkedListNode<char>.Create("ALEX");
             Debug.Assert(head != null);
             Debug.Assert(head.Next != null);
             Debug.Assert(head.Next.Next != null);
@@ -85,40 +84,109 @@ namespace Abacaxi.Tests.Containers
                 head.Next.Next.Next);
         }
 
+
         [Test]
-        public void FindMiddle_ReturnsFirst_ForSingleNodeList()
+        public void TryGetMiddleAndTailNodes_ReturnsTrue_ForSingleNodeList()
         {
-            var head = SingleLinkedNode<int>.Create(new[] {1});
+            var head = LinkedListNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
-            var node = head.FindMiddle();
-            Assert.AreSame(head, node);
+            var result = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.IsTrue(result);
         }
 
         [Test]
-        public void FindMiddle_ReturnsFirst_ForTwoNodeList()
+        public void TryGetMiddleAndTailNodes_ReturnsTrue_ForTwoNodeList()
         {
-            var head = SingleLinkedNode<int>.Create(new[] {1, 2});
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
             Debug.Assert(head != null);
 
-            var node = head.FindMiddle();
-            Assert.AreSame(head, node);
+            var result = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.IsTrue(result);
         }
 
         [Test]
-        public void FindMiddle_ReturnsSecond_ForThreeNodeList()
+        public void TryGetMiddleAndTailNodes_ReturnsTrue_ForThreeNodeList()
         {
-            var head = SingleLinkedNode<int>.Create(new[] {1, 2, 3});
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(head != null);
 
-            var node = head.FindMiddle();
-            Assert.AreSame(head.Next, node);
+            var result = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.IsTrue(result);
         }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsMiddle_ForSingleNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out var middle, out _);
+
+            Assert.AreSame(head, middle);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsMiddle_ForTwoNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out var middle, out _);
+
+            Assert.AreSame(head, middle);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsSecondNode_AsMiddle_ForThreeNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out var middle, out _);
+
+            Assert.AreSame(head.Next, middle);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsTail_ForSingleNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out _, out var tail);
+
+            Assert.AreSame(head, tail);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsSecondNode_AsTail_ForTwoNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out _, out var tail);
+
+            Assert.AreSame(head.Next, tail);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsThirdNode_AsTail_ForThreeNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out _, out var tail);
+
+            Debug.Assert(head.Next != null);
+            Assert.AreSame(head.Next.Next, tail);
+        }
+
 
         [Test]
         public void Next_CanBeAssigned()
         {
-            var node = new SingleLinkedNode<int>(0);
+            var node = new LinkedListNode<int>(0);
 
             node.Next = node;
             Assert.AreSame(node, node.Next);
@@ -127,7 +195,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Next_CanBeSetToNull()
         {
-            var node = new SingleLinkedNode<int>(0);
+            var node = new LinkedListNode<int>(0);
             node.Next = node;
             node.Next = null;
 
@@ -137,7 +205,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Reverse_DoesNothing_ForSingleNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] {1});
+            var head = LinkedListNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
             var newHead = head.Reverse();
@@ -146,11 +214,10 @@ namespace Abacaxi.Tests.Containers
             Assert.IsNull(newHead.Next);
         }
 
-
         [Test]
         public void Reverse_Reverses_AListOfThree()
         {
-            var e1 = SingleLinkedNode<int>.Create(new[] {1, 2, 3});
+            var e1 = LinkedListNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(e1 != null);
             var e2 = e1.Next;
             Debug.Assert(e2 != null);
@@ -168,7 +235,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Reverse_Reverses_AListOfTwo()
         {
-            var e1 = SingleLinkedNode<int>.Create(new[] {1, 2});
+            var e1 = LinkedListNode<int>.Create(new[] {1, 2});
             Debug.Assert(e1 != null);
             var e2 = e1.Next;
             Debug.Assert(e2 != null);
@@ -180,73 +247,44 @@ namespace Abacaxi.Tests.Containers
             Assert.IsNull(e1.Next);
         }
 
-        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
-        public void VerifyIfKnotted_ReturnsFalse_ForDoubleUnknottedNode()
-        {
-            var head = SingleLinkedNode<int>.Create(new[] {1, 2});
-            Debug.Assert(head != null);
-
-            var check = head.VerifyIfKnotted();
-            Assert.IsFalse(check);
-        }
-
-        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
-        public void VerifyIfKnotted_ReturnsFalse_ForSingleUnknottedNode()
-        {
-            var head = SingleLinkedNode<int>.Create(new[] {1});
-            Debug.Assert(head != null);
-
-            var check = head.VerifyIfKnotted();
-            Assert.IsFalse(check);
-        }
-
-        [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
-        public void VerifyIfKnotted_ReturnsFalse_ForTripleUnknottedNode()
-        {
-            var head = SingleLinkedNode<int>.Create(new[] {1, 2, 3});
-            Debug.Assert(head != null);
-
-            var check = head.VerifyIfKnotted();
-            Assert.IsFalse(check);
-        }
 
         [Test]
-        public void VerifyIfKnotted_ReturnsTrue_ForDoubleKnottedNode()
+        public void TryGetMiddleAndTailNodes_ReturnsFalse_ForDoubleKnottedNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] {1, 2});
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
             Debug.Assert(head != null);
             Debug.Assert(head.Next != null);
 
             head.Next.Next = head;
 
-            var check = head.VerifyIfKnotted();
-            Assert.IsTrue(check);
+            var check = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.IsFalse(check);
         }
 
         [Test]
-        public void VerifyIfKnotted_ReturnsTrue_ForSingleKnottedNode()
+        public void TryGetMiddleAndTailNodes_ReturnsFalse_ForSingleKnottedNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] {1});
+            var head = LinkedListNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
             head.Next = head;
 
-            var check = head.VerifyIfKnotted();
-            Assert.IsTrue(check);
+            var check = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.IsFalse(check);
         }
 
         [Test]
-        public void VerifyIfKnotted_ReturnsTrue_ForTripleKnottedNode()
+        public void TryGetMiddleAndTailNodes_ReturnsFalse_ForTripleKnottedNode()
         {
-            var head = SingleLinkedNode<int>.Create(new[] {1, 2, 3});
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(head != null);
             Debug.Assert(head.Next != null);
             Debug.Assert(head.Next.Next != null);
 
             head.Next.Next.Next = head.Next;
 
-            var check = head.VerifyIfKnotted();
-            Assert.IsTrue(check);
+            var check = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.IsFalse(check);
         }
     }
 }
