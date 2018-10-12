@@ -1274,7 +1274,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Copies a number of elements from the given <paramref name="sequence"/> into a new array.
+        ///     Copies a number of elements from the given <paramref name="sequence" /> into a new array.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to copy from.</param>
@@ -1315,7 +1315,6 @@ namespace Abacaxi
 
             return result;
         }
-
 
         [NotNull, ItemNotNull]
         private static IEnumerable<T[]> PartitionIterate<T>([NotNull] this IEnumerable<T> sequence, int size)
@@ -1675,14 +1674,25 @@ namespace Abacaxi
             return new ListViewWrapper<T>(sequence, startIndex, length);
         }
 
-        private static bool IsOrdered<T>(
+        /// <summary>
+        ///     Determines whether all adjacent elements are in a valid "neighboring" relation.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to check.</param>
+        /// <param name="validAdjacencyFunc">The predicate that ise used to validate each two adjacent elements.</param>
+        /// <returns>
+        ///     <c>true</c> if all adjacent elements in the sequence conform to the given predicate; <c>false</c> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="validAdjacencyFunc" /> are <c>null</c>.
+        /// </exception>
+        public static bool IsValidAdjacency<T>(
             [NotNull] this IEnumerable<T> sequence,
-            [NotNull] IComparer<T> comparer,
-            bool strict,
-            bool ascending)
+            [NotNull] Func<T, T, bool> validAdjacencyFunc)
         {
-            Assert.NotNull(comparer);
-            Assert.NotNull(sequence);
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(validAdjacencyFunc), validAdjacencyFunc);
 
             using (var enumerator = sequence.GetEnumerator())
             {
@@ -1695,10 +1705,9 @@ namespace Abacaxi
                 while (enumerator.MoveNext())
                 {
                     var current = enumerator.Current;
-                    var comp = comparer.Compare(prev, current);
-                    if (comp == 0 && strict ||
-                        comp > 0 && ascending ||
-                        comp < 0 && !ascending)
+
+                    var comp = validAdjacencyFunc(prev, current);
+                    if (!comp)
                     {
                         return false;
                     }
@@ -1728,10 +1737,9 @@ namespace Abacaxi
             [NotNull] this IEnumerable<T> sequence,
             [NotNull] IComparer<T> comparer)
         {
-            Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
-            return IsOrdered(sequence, comparer, false, true);
+            return IsValidAdjacency(sequence, (l, r) => comparer.Compare(l, r) <= 0);
         }
 
         /// <summary>
@@ -1751,7 +1759,7 @@ namespace Abacaxi
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
-            return IsOrdered(sequence, Comparer<T>.Default, false, true);
+            return IsOrdered(sequence, Comparer<T>.Default);
         }
 
         /// <summary>
@@ -1772,10 +1780,9 @@ namespace Abacaxi
             [NotNull] this IEnumerable<T> sequence,
             [NotNull] IComparer<T> comparer)
         {
-            Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
-            return IsOrdered(sequence, comparer, true, true);
+            return IsValidAdjacency(sequence, (l, r) => comparer.Compare(l, r) < 0);
         }
 
         /// <summary>
@@ -1795,7 +1802,7 @@ namespace Abacaxi
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
-            return IsOrdered(sequence, Comparer<T>.Default, true, true);
+            return IsStrictlyOrdered(sequence, Comparer<T>.Default);
         }
 
         /// <summary>
@@ -1816,10 +1823,9 @@ namespace Abacaxi
             [NotNull] this IEnumerable<T> sequence,
             [NotNull] IComparer<T> comparer)
         {
-            Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
-            return IsOrdered(sequence, comparer, false, false);
+            return IsValidAdjacency(sequence, (l, r) => comparer.Compare(l, r) >= 0);
         }
 
         /// <summary>
@@ -1839,7 +1845,7 @@ namespace Abacaxi
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
-            return IsOrdered(sequence, Comparer<T>.Default, false, false);
+            return IsOrderedDescending(sequence, Comparer<T>.Default);
         }
 
         /// <summary>
@@ -1860,10 +1866,9 @@ namespace Abacaxi
             [NotNull] this IEnumerable<T> sequence,
             [NotNull] IComparer<T> comparer)
         {
-            Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
-            return IsOrdered(sequence, comparer, true, false);
+            return IsValidAdjacency(sequence, (l, r) => comparer.Compare(l, r) > 0);
         }
 
         /// <summary>
@@ -1883,7 +1888,7 @@ namespace Abacaxi
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
-            return IsOrdered(sequence, Comparer<T>.Default, true, false);
+            return IsStrictlyOrderedDescending(sequence, Comparer<T>.Default);
         }
 
         /// <summary>
