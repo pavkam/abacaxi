@@ -854,7 +854,8 @@ namespace Abacaxi
         ///     <paramref name="otherSequence" /> are <c>null</c>.
         /// </exception>
         [NotNull]
-        public static T[] GetLongestCommonSubSequence<T>([NotNull] this IList<T> sequence,
+        public static T[] GetLongestCommonSubSequence<T>(
+            [NotNull] this IList<T> sequence,
             [NotNull] IList<T> otherSequence)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -900,7 +901,9 @@ namespace Abacaxi
         ///     <paramref name="comparer" /> are <c>null</c>.
         /// </exception>
         [NotNull]
-        public static ISet<T> ToSet<T>([NotNull] this IEnumerable<T> sequence, [NotNull] IEqualityComparer<T> comparer)
+        public static ISet<T> ToSet<T>(
+            [NotNull] this IEnumerable<T> sequence,
+            [NotNull] IEqualityComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
@@ -1270,6 +1273,50 @@ namespace Abacaxi
             return result;
         }
 
+        /// <summary>
+        /// Copies a number of elements from the given <paramref name="sequence"/> into a new array.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to copy from.</param>
+        /// <param name="startIndex">The start index to copy from.</param>
+        /// <param name="count">The count of elements to copy.</param>
+        /// <returns>A new array containing the copied elements.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> is  <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="count" /> is out of bounds.
+        /// </exception>
+        [NotNull]
+        public static T[] Copy<T>([NotNull] this IList<T> sequence, int startIndex, int count)
+        {
+            Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, count);
+
+            var result = new T[count];
+            switch (sequence)
+            {
+                case T[] arraySequence:
+                    Array.Copy(arraySequence, startIndex, result, 0, count);
+                    break;
+                case List<T> listSequence:
+                    listSequence.CopyTo(startIndex, result, 0, count);
+                    break;
+                default:
+                {
+                    for (var i = 0; i < count; i++)
+                    {
+                        result[i] = sequence[i];
+                    }
+
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+
         [NotNull, ItemNotNull]
         private static IEnumerable<T[]> PartitionIterate<T>([NotNull] this IEnumerable<T> sequence, int size)
         {
@@ -1627,7 +1674,6 @@ namespace Abacaxi
             Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
             return new ListViewWrapper<T>(sequence, startIndex, length);
         }
-
 
         private static bool IsOrdered<T>(
             [NotNull] this IEnumerable<T> sequence,

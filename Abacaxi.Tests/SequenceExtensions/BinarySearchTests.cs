@@ -21,7 +21,7 @@ namespace Abacaxi.Tests.SequenceExtensions
     using NUnit.Framework;
 
     [TestFixture]
-    public class BinarySearchTests
+    public sealed class BinarySearchTests
     {
         [TestCase(0, -1), TestCase(1, 0), TestCase(2, 1), TestCase(3, 2), TestCase(4, 3), TestCase(5, 4),
          TestCase(6, -1)]
