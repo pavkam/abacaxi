@@ -1840,6 +1840,79 @@ namespace Abacaxi
             return IsOrdered(sequence, Comparer<T>.Default, true, false);
         }
 
+        /// <summary>
+        ///     Deconstructs a give n<paramref name="sequence" /> into subsequences known as "terms". Each term is validated/scored
+        ///     by
+        ///     <paramref name="scoreTermFunc" /> function.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="scoreTermFunc">The scoring function.</param>
+        /// <returns>A sequence of terms that the original sequence was split into.</returns>
+        public static T[][] DeconstructIntoTerms<T>(
+            [NotNull] this IList<T> sequence,
+            [NotNull] Func<IList<T>, int, int, double> scoreTermFunc)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(scoreTermFunc), scoreTermFunc);
+
+            var mem = new (double score, int prev)[sequence.Count + 1, sequence.Count + 1];
+
+            mem[0, 0] = (0, -1);
+
+            for (var i = 1; i <= sequence.Count; i++)
+            {
+                mem[i, 0] = (double.NaN, -1);
+                mem[0, i] = (double.NaN, -1);
+            }
+
+            for (var m = 0; m < sequence.Count; m++)
+            {
+                for (var e = m; e < sequence.Count; e++)
+                {
+                    var wordScore = scoreTermFunc(sequence, m, e - m + 1);
+                    var left = mem[m, m];
+                    var other = mem[m, e + 1];
+
+                    if (!double.IsNaN(wordScore) &&
+                        !double.IsNaN(left.score) &&
+                        (double.IsNaN(other.score) ||
+                         left.score + wordScore > other.score))
+                    {
+                        mem[m + 1, e + 1] = (left.score + wordScore, m);
+                    }
+                    else
+                    {
+                        mem[m + 1, e + 1] = mem[m, e + 1];
+                    }
+                }
+            }
+
+            var last = mem[sequence.Count, sequence.Count];
+            var path = new List<T[]>();
+
+            if (!double.IsNaN(last.score))
+            {
+                var end = sequence.Count - 1;
+                while (last.prev >= 0)
+                {
+                    var piece = new T[end - last.prev + 1];
+                    for (var i = 0; i < piece.Length; i++)
+                    {
+                        piece[i] = sequence[i + last.prev];
+                    }
+
+                    path.Add(piece);
+
+                    end = last.prev - 1;
+                    last = mem[last.prev, last.prev];
+                }
+
+                path.Reverse();
+            }
+
+            return path.ToArray();
+        }
 
         private struct EditChoice
         {
