@@ -25,7 +25,8 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public sealed class DeconstructIntoTermsTests
     {
-        [NotNull] private static readonly HashSet<string> Words = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
+        [NotNull, SuppressMessage("ReSharper", "StringLiteralTypo")]
+        private static readonly HashSet<string> Words = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
         {
             "a",
             "aa",
@@ -52,66 +53,6 @@ namespace Abacaxi.Tests.SequenceExtensions
         }
 
         [Test]
-        public void DeconstructIntoTerms_SplitsAccordingToScoreFunc()
-        {
-            var split = "aza".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
-
-            TestHelper.AssertSequence(split, "a", "z", "a");
-        }
-
-        [Test]
-        public void DeconstructIntoTerms_SelectsTheSingleBestScoredVersion()
-        {
-            var split = "aa".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
-
-            TestHelper.AssertSequence(split, "aa");
-        }
-
-        [Test]
-        public void DeconstructIntoTerms_SelectsTheBestScoredVersions()
-        {
-            var split = "aaa".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
-
-            TestHelper.AssertSequence(split, "a", "aa");
-        }
-
-        [Test]
-        public void DeconstructIntoTerms_ReturnsTheWholeThingIfNotMatched()
-        {
-            var split = "1234567890".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
-
-            TestHelper.AssertSequence(split, "1234567890");
-        }
-
-        [Test]
-        public void DeconstructIntoTerms_WillDefinitelyMatchTheLongestThing()
-        {
-            var split = "abadaba".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
-
-            TestHelper.AssertSequence(split, "abadaba");
-        }
-
-        [Test]
-        public void DeconstructIntoTerms_SplitsByKnownTerms()
-        {
-            var split = "ThisIsAGoodPhraseToSplitBecauseItContainsTheWords".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
-
-            TestHelper.AssertSequence(split,
-                "ThisIs",
-                "A",
-                "GoodPhr",
-                "a",
-                "seToSplit",
-                "B",
-                "ec",
-                "a",
-                "useItCont",
-                "a",
-                "insTheWords"
-                );
-        }
-
-        [Test]
         public void DeconstructIntoTerms_RefusesATerm()
         {
             var split = "g".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
@@ -127,6 +68,59 @@ namespace Abacaxi.Tests.SequenceExtensions
             TestHelper.AssertSequence(split);
         }
 
+        [Test]
+        public void DeconstructIntoTerms_ReturnsTheWholeThingIfNotMatched()
+        {
+            var split = "1234567890".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
+
+            TestHelper.AssertSequence(split, "1234567890");
+        }
+
+        [Test]
+        public void DeconstructIntoTerms_SelectsTheBestScoredVersions()
+        {
+            var split = "aaa".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
+
+            TestHelper.AssertSequence(split, "a", "aa");
+        }
+
+        [Test]
+        public void DeconstructIntoTerms_SelectsTheSingleBestScoredVersion()
+        {
+            var split = "aa".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
+
+            TestHelper.AssertSequence(split, "aa");
+        }
+
+        [Test]
+        public void DeconstructIntoTerms_SplitsAccordingToScoreFunc()
+        {
+            var split = "aza".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
+
+            TestHelper.AssertSequence(split, "a", "z", "a");
+        }
+
+        [Test]
+        public void DeconstructIntoTerms_SplitsByKnownTerms()
+        {
+            var split = "ThisIsAGoodPhraseToSplitBecauseItContainsTheWords".AsList().DeconstructIntoTerms(ScoreWord)
+                .Select(s => new string(s));
+
+            TestHelper.AssertSequence(split,
+                "ThisIs",
+                "A",
+                "GoodPhr",
+                "a",
+                "seToSplit",
+                "B",
+                "ec",
+                "a",
+                "useItCont",
+                "a",
+                "insTheWords"
+            );
+        }
+
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void DeconstructIntoTerms_ThrowsException_ForNullFunc()
         {
@@ -137,6 +131,14 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void DeconstructIntoTerms_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() => ((int[]) null).DeconstructIntoTerms((l, s, e) => 0));
+        }
+
+        [Test, SuppressMessage("ReSharper", "StringLiteralTypo")]
+        public void DeconstructIntoTerms_WillDefinitelyMatchTheLongestThing()
+        {
+            var split = "abadaba".AsList().DeconstructIntoTerms(ScoreWord).Select(s => new string(s));
+
+            TestHelper.AssertSequence(split, "abadaba");
         }
     }
 }

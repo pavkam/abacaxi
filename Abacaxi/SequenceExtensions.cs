@@ -1849,6 +1849,7 @@ namespace Abacaxi
         /// <param name="sequence">The sequence.</param>
         /// <param name="scoreTermFunc">The scoring function.</param>
         /// <returns>A sequence of terms that the original sequence was split into.</returns>
+        [NotNull, ItemNotNull]
         public static T[][] DeconstructIntoTerms<T>(
             [NotNull] this IList<T> sequence,
             [NotNull] Func<IList<T>, int, int, double> scoreTermFunc)
