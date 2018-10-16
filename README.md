@@ -38,9 +38,8 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 ### The list of implemented algorithms/helper methods:
 | Algorithm/Method | Description |
 | :--- | :--- |
-| `SingleLinkedNode.FindMiddle` | Algorithm to *find the middle* node of a singly-linked list using one pass only. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists> |
-| `SingleLinkedNode.VerifyIfKnotted` | Verifies if a singly-linked list *contains a knot (cycle)* using one pass only. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
-| `SingleLinkedNode.Reverse` | *Reverses* a singly-linked list using the recursive algorithm. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
+| `LinkedListNode.TryGetMiddleAndTailNodes` | Finds the middle and tail nodes in one pass. If the list os circular, the method returns `false` See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists> |
+| `LinkedListNode.Reverse` | *Reverses* a singly-linked list using the recursive algorithm. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
 | `Graph.TraverseBfs` | Traverses the vertices in a graph using the *breadth-first search*. See related material: <https://en.wikipedia.org/wiki/Breadth-first_search> |
 | `Graph.TraverseDfs` | Traverses the vertices in a graph using the *depth-first search*. See related material: <https://en.wikipedia.org/wiki/Depth-first_search> |
 | `Graph.FillWithOneColor` | *Fills* all vertices of a graph with a given "color". See related material: <https://en.wikipedia.org/wiki/Flood_fill> |
@@ -84,6 +83,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.GetItemFrequencies` | Gets the *items and their frequencies* within a sequence. |
 | `SequenceExtensions.ToSet` | Helper methods to *convert a given sequence into a set*. |
 | `SequenceExtensions.AsList` | Helper method that *interprets a given sequence as a list*. If the sequence is already a list/array then the original object is returned; otherwise, the sequence is converted to an array. **This method may or may not create a new object and does not guarantee mutability of the result.** |
+| `SequenceExtensions.Copy` | Helper method to *copy a sub-sequence* into a new array. |
 | `SequenceExtensions.AddOrUpdate` | Extends the dictionary classes with the ability to *add a new, or update an existing* key/pair. |
 | `SequenceExtensions.Append` | A number of small utility methods used to *append items to arrays*. If the array is null, a new array is created. These methods return new arrays as their return values. |
 | `SequenceExtensions.ToList` | Utility method that replaces a common _"Select(...).Tolist()"_ LINQ pattern. |
@@ -94,10 +94,12 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.Min` | Returns the element of a sequence with a given *selected minimum* (e.g. select the person object with the smallest age). |
 | `SequenceExtensions.Max` | Returns the element of a sequence with a given *selected maximum* (e.g. select the person object with the greatest age). |
 | `SequenceExtensions.Segment` | Returns a view of the original sequence bounded to a segment of the list. Useful when other methods do not allow specifying a start/length pair of arguments. |
+| `SequenceExtensions.IsValidAdjacency` | Checkes whether all sequence adjacent elements satisfy a common condition. |
 | `SequenceExtensions.IsOrdered` | Checkes whether the elements of a given sequence are sorted in ascending order. |
 | `SequenceExtensions.IsStrictlyOrdered` | Checkes whether the elements of a given sequence are strictly sorted in ascending order. |
 | `SequenceExtensions.IsOrderedDescending` | Checkes whether the elements of a given sequence are sorted in descending order. |
 | `SequenceExtensions.IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
+| `SequenceExtensions.IsPalindrome` | Checks if a given (sub)sequence is a palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
 | `Set.EnumerateSubsetCombinations` |  |
 | `Set.SplitIntoSubsetsOfEqualValue` |  |
 | `Set.GetSubsetWithNearValue` |  |

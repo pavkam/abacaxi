@@ -997,6 +997,23 @@ namespace Abacaxi
             return path.ToArray();
         }
 
+        public static bool IsPalindrome<T>(
+            [NotNull] this IList<T> sequence, int startIndex, int length, [NotNull] IEqualityComparer<T> comparer)
+        {
+            Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            for (var x = 0; x < length; x++)
+            {
+                if (!comparer.Equals(sequence[x + startIndex], sequence[length + startIndex - x - 1]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private struct EditChoice
         {
             public const int Cancel = -1;
