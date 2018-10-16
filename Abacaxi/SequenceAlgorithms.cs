@@ -794,6 +794,90 @@ namespace Abacaxi
         }
 
         /// <summary>
+        ///     Finds the location of <paramref name="item" /> in the given <paramref name="sequence" />. If the item is repeated a number of times,
+        /// this method returns their index range. Otherwise, this method returns the item immediately smaller than the searched value.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to search.</param>
+        /// <param name="startIndex">The start index in the sequence.</param>
+        /// <param name="length">The length of sequence to search..</param>
+        /// <param name="item">The item to search for.</param>
+        /// <param name="comparer">Comparer used in the search.</param>
+        /// <param name="ascending">Specifies whether the sequence is sorted in ascending or descending order.</param>
+        /// <returns>An index pair in the sequence where the <paramref name="item" />(s) were found; <c>-1</c> is .</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if either <paramref name="sequence" /> or <paramref name="comparer" />
+        ///     are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
+        public static (int first, int last) BinaryLookup<T>(
+            [NotNull] this IList<T> sequence,
+            int startIndex,
+            int length,
+            T item,
+            [NotNull] IComparer<T> comparer,
+            bool ascending = true)
+        {
+            Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var direction = ascending ? 1 : -1;
+
+            /* Search the first appearance. */
+            var left = startIndex;
+            var right = startIndex + length - 1;
+            while (left < right)
+            {
+                var mid = (left + right) / 2;
+                if (direction * comparer.Compare(sequence[mid], item) < 0)
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid;
+                }
+            }
+
+            var comp = right < 0 ? -1 : direction * comparer.Compare(sequence[left], item);
+
+            if (comp > 0)
+            {
+                return comp > 0 ? (left - 1, left - 1) : (left, left);
+            }
+
+            if (comp < 0)
+            {
+                return (left, left);
+            }
+
+            var first = left;
+
+            /* Search the last appearance. */
+            left = startIndex;
+            right = startIndex + length - 1;
+            while (left < right)
+            {
+                var dia = left + right;
+                var mid = dia / 2 + dia % 2;
+
+                if (direction * comparer.Compare(sequence[mid], item) > 0)
+                {
+                    right = mid - 1;
+                }
+                else
+                {
+                    left = mid;
+                }
+            }
+
+            return (first, left);
+        }
+
+        /// <summary>
         ///     Evaluates the edit distance between two given sequences <paramref name="sequence" /> and
         ///     <paramref name="resultSequence" />.
         /// </summary>
@@ -997,6 +1081,24 @@ namespace Abacaxi
             return path.ToArray();
         }
 
+        /// <summary>
+        ///     Determines whether the specified <paramref name="sequence" /> is a palindrome.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="startIndex">The start index.</param>
+        /// <param name="length">The length to check.</param>
+        /// <param name="comparer">The element comparer.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified sequence is a palindrome; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
         public static bool IsPalindrome<T>(
             [NotNull] this IList<T> sequence, int startIndex, int length, [NotNull] IEqualityComparer<T> comparer)
         {

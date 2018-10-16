@@ -77,6 +77,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.Reverse` | *Reverses* a sequence in place. |
 | `SequenceExtensions.Repeat` | Creates a sequence which is based on the original sequence *repeated a number of times*. |
 | `SequenceExtensions.BinarySearch` | Implements the standard *binary search* algorithm. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
+| `SequenceExtensions.BinaryLookup` | Implements a slightly modified *binary search* algorithm that returns the range of matching items or the position of immediatelly smaller item. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
 | `SequenceExtensions.Diff` | Implements the generic *edit distance* algorithm. See related material: <https://en.wikipedia.org/wiki/Edit_distance> |
 | `SequenceExtensions. GetLongestCommonSubSequence` |  |
 | `SequenceExtensions.DeconstructIntoTerms` | Deconstructs a given sequence into a sequence of terms (sub-sequences) based on given term scoring (e.g. think of recognizing an English phrase for all lower-case text without whitespaces using a given dictionary of known words: "_ilovecookies_" will be split into "_i_", "_love_", "_cookies_"). |
