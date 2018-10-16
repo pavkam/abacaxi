@@ -13,7 +13,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.SequenceAlgorithms
 {
     using System;
     using System.Collections.Generic;
@@ -22,60 +22,71 @@ namespace Abacaxi.Tests.SequenceExtensions
     using NUnit.Framework;
 
     [TestFixture]
-    public sealed class InterleaveTests
+    public class ExtractNestedBlocksTests
     {
         [Test]
-        public void Interleave_InterleavesThreeStreams()
+        public void ExtractNestedBlocks_ReturnsAllSequences_InMultiBlock()
         {
             TestHelper.AssertSequence(
-                SequenceAlgorithms.Interleave(Comparer<int>.Default, new[] {20, 17}, new[] {19, 16, 14},
-                    new[] {18, 15, 13, 12}),
-                20, 19, 18, 17, 16, 15, 14, 13, 12);
+                "a(b(c))d(e)".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
+                "c".ToCharArray(),
+                "b(c)".ToCharArray(),
+                "e".ToCharArray(),
+                "a(b(c))d(e)".ToCharArray());
         }
 
         [Test]
-        public void Interleave_ReturnsNothingIfSequencesAreEmpty()
+        public void ExtractNestedBlocks_ReturnsFullSequence_IfNoBlocksDefined()
         {
-            TestHelper.AssertSequence(SequenceAlgorithms.Interleave(Comparer<int>.Default, new int[] { }, new int[] { },
-                new int[] { }));
+            TestHelper.AssertSequence(
+                "Hello World".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
+                "Hello World".ToCharArray());
         }
 
         [Test]
-        public void Interleave_ReturnsOriginalSequence_IfOnlyOne()
+        public void ExtractNestedBlocks_ReturnsNothing_ForEmptySequence()
         {
-            TestHelper.AssertSequence(SequenceAlgorithms.Interleave(Comparer<int>.Default, new[] {10, 9, 8, 7}),
-                10, 9, 8, 7);
+            TestHelper.AssertSequence(
+                new int[] { }.ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default));
+        }
+
+        [Test]
+        public void ExtractNestedBlocks_ReturnsTwoSequences_IfOneBlockPresent()
+        {
+            TestHelper.AssertSequence(
+                "(Hello World)".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default),
+                "Hello World".ToCharArray(),
+                "(Hello World)".ToCharArray());
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
          SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Interleave_ThrowsException_WhenComparerIsNull()
+        public void ExtractNestedBlocks_ThrowsException_ForComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                SequenceAlgorithms.Interleave(null, new int[] { }));
+                new int[] { }.ExtractNestedBlocks(1, 1, null));
         }
 
         [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
          SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Interleave_ThrowsException_WhenParamsIsNull()
+        public void ExtractNestedBlocks_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                SequenceAlgorithms.Interleave(Comparer<int>.Default, new int[] { }, null));
-        }
-
-        [Test, SuppressMessage("ReSharper", "IteratorMethodResultIsIgnored"),
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Interleave_ThrowsException_WhenSequenceIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                SequenceAlgorithms.Interleave(Comparer<int>.Default, null, new int[] { }));
+                ((int[]) null).ExtractNestedBlocks(1, 1, EqualityComparer<int>.Default));
         }
 
         [Test, SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
-        public void Interleave_ThrowsException_WhenStreamIsUnsorted()
+        public void ExtractNestedBlocks_ThrowsException_ForOrphanCloseBracket()
         {
             Assert.Throws<InvalidOperationException>(() =>
-                SequenceAlgorithms.Interleave(Comparer<int>.Default, new[] {10, 11}).ToArray());
+                ")".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
+        }
+
+        [Test, SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
+        public void ExtractNestedBlocks_ThrowsException_ForOrphanOpenBracket()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                "(".ExtractNestedBlocks('(', ')', EqualityComparer<char>.Default).ToArray());
         }
     }
 }

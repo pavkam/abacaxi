@@ -13,13 +13,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.SequenceAlgorithms
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Text;
     using JetBrains.Annotations;
     using NUnit.Framework;
+    using SequenceAlgorithms = Abacaxi.SequenceAlgorithms;
 
     [TestFixture]
     public sealed class DiffTests

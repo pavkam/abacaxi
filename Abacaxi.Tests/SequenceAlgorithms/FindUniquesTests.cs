@@ -13,12 +13,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.SequenceAlgorithms
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using NUnit.Framework;
+    using SequenceAlgorithms = Abacaxi.SequenceAlgorithms;
 
     [TestFixture]
     public sealed class FindUniquesTests

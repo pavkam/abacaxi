@@ -22,7 +22,7 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    ///     Class implements a set of  knapsack algorithms.
+    ///     Class implements a set of knapsack algorithms.
     /// </summary>
     [PublicAPI]
     public static class Knapsack

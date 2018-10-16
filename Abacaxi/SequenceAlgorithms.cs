@@ -244,7 +244,6 @@ namespace Abacaxi
                 }
             }
 
-
             return false;
         }
 
@@ -852,7 +851,7 @@ namespace Abacaxi
         ///     <paramref name="otherSequence" /> are <c>null</c>.
         /// </exception>
         [NotNull]
-        public static T[] GetLongestCommonSubSequence<T>(
+        public static T[] GetLongestCommonSubsequence<T>(
             [NotNull] this IList<T> sequence,
             [NotNull] IList<T> otherSequence)
         {

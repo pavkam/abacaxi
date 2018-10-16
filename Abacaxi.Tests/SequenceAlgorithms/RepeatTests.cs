@@ -13,39 +13,55 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceExtensions
+namespace Abacaxi.Tests.SequenceAlgorithms
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using JetBrains.Annotations;
     using NUnit.Framework;
 
     [TestFixture]
-    public sealed class GetLongestCommonSubSequenceTests
+    public class RepeatTests
     {
-        [TestCase("", "", ""), TestCase("a", "a", "a"), TestCase("a", "b", ""), TestCase("", "a", ""),
-         TestCase("a", "", ""), TestCase("ab", "a", "a"), TestCase("a", "ab", "a"), TestCase("ab", "ba", "b"),
-         TestCase("hello my dear friend", "Hello you fiend!", "ello y fiend"),
-         SuppressMessage("ReSharper", "StringLiteralTypo")]
-        public void GetLongestCommonSubSequence_ReturnsExpectedSequence([NotNull] string s1, [NotNull] string s2,
-            string expected)
+        [Test]
+        public void Repeat_DoesNothing_ForOneRepetition()
         {
-            var actual = new string(s1.ToCharArray().GetLongestCommonSubSequence(s2.ToCharArray()));
-            Assert.AreEqual(expected, actual);
+            var result = "A".Repeat(1);
+            Assert.AreEqual("A", result);
+        }
+
+        [Test]
+        public void Repeat_DoublesString_ForTwoRepetition()
+        {
+            var result = "A".Repeat(2);
+            Assert.AreEqual("AA", result);
+        }
+
+        [Test]
+        public void Repeat_ReturnsNothing_ForEmptyEnumerable()
+        {
+            var result = "".Repeat(5);
+            Assert.AreEqual("", result);
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetLongestCommonSubSequence_ThrowsException_ForNullOtherSequence()
+        public void Repeat_ThrowsException_ForNullString()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new char[] { }.GetLongestCommonSubSequence(null));
+                ((int[]) null).Repeat(1));
         }
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetLongestCommonSubSequence_ThrowsException_ForNullSequence()
+        [Test]
+        public void Repeat_ThrowsException_ForZeroRepetitions()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                SequenceAlgorithms.GetLongestCommonSubSequence(null, new char[] { }));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                "A".Repeat(0));
+        }
+
+        [Test]
+        public void Repeat_TriplesString_ForThreeRepetition()
+        {
+            var result = "A".Repeat(3);
+            Assert.AreEqual("AAA", result);
         }
     }
 }
