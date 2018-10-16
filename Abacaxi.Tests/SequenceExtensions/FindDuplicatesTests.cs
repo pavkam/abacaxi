@@ -20,10 +20,9 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using NUnit.Framework;
-    using SequenceExtensions = Abacaxi.SequenceExtensions;
 
     [TestFixture]
-    public class FindDuplicatesTests
+    public sealed class FindDuplicatesTests
     {
         [Test]
         public void GenericFindDuplicates_ReturnsDuplicates_ForDistinctElements()
@@ -54,7 +53,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void GenericFindDuplicates_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                SequenceExtensions.FindDuplicates(null, EqualityComparer<int>.Default));
+                SequenceAlgorithms.FindDuplicates(null, EqualityComparer<int>.Default));
         }
 
         [Test]
@@ -93,7 +92,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void IntegerFindDuplicates_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                SequenceExtensions.FindDuplicates(null, 1, 1));
+                SequenceAlgorithms.FindDuplicates(null, 1, 1));
         }
 
         [Test, SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]

@@ -18,7 +18,7 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    ///     Represents an unique "edit" step in a sequence transformation. See <seealso cref="SequenceExtensions.Diff{T}" />
+    ///     Represents an unique "edit" step in a sequence transformation. See <seealso cref="SequenceAlgorithms.Diff{T}" />
     ///     for more details.
     /// </summary>
     /// <typeparam name="T">The type of elements being edited.</typeparam>

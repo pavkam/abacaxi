@@ -19,7 +19,6 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
     using NUnit.Framework;
-    using SequenceExtensions = Abacaxi.SequenceExtensions;
 
     [TestFixture]
     public sealed class GetLongestCommonSubSequenceTests
@@ -46,7 +45,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void GetLongestCommonSubSequence_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                SequenceExtensions.GetLongestCommonSubSequence(null, new char[] { }));
+                SequenceAlgorithms.GetLongestCommonSubSequence(null, new char[] { }));
         }
     }
 }

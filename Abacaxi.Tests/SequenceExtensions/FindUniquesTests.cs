@@ -19,7 +19,6 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using NUnit.Framework;
-    using SequenceExtensions = Abacaxi.SequenceExtensions;
 
     [TestFixture]
     public sealed class FindUniquesTests
@@ -51,7 +50,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void GenericFindUniques_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                SequenceExtensions.FindUniques(null, EqualityComparer<int>.Default));
+                SequenceAlgorithms.FindUniques(null, EqualityComparer<int>.Default));
         }
 
         [Test]

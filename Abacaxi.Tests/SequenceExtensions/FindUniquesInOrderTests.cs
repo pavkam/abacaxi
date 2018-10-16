@@ -20,7 +20,6 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using NUnit.Framework;
-    using SequenceExtensions = Abacaxi.SequenceExtensions;
 
     [TestFixture]
     public sealed class FindUniquesInOrderTests
@@ -63,7 +62,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void FindUniquesInOrder_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                SequenceExtensions.FindUniquesInOrder(null, EqualityComparer<int>.Default));
+                SequenceAlgorithms.FindUniquesInOrder(null, EqualityComparer<int>.Default));
         }
 
         [Test]

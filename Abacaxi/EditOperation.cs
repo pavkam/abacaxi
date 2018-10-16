@@ -18,7 +18,7 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    ///     Defines the allowed set of edit operations used by the <seealso cref="SequenceExtensions.Diff{T}" /> method.
+    ///     Defines the allowed set of edit operations used by the <seealso cref="SequenceAlgorithms.Diff{T}" /> method.
     /// </summary>
     [PublicAPI]
     public enum EditOperation

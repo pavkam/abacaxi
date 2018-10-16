@@ -20,7 +20,6 @@ namespace Abacaxi.Tests.SequenceExtensions
     using System.Text;
     using JetBrains.Annotations;
     using NUnit.Framework;
-    using SequenceExtensions = Abacaxi.SequenceExtensions;
 
     [TestFixture]
     public sealed class DiffTests
@@ -67,7 +66,7 @@ namespace Abacaxi.Tests.SequenceExtensions
         public void Diff_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                SequenceExtensions.Diff(null, new char[] { }));
+                SequenceAlgorithms.Diff(null, new char[] { }));
         }
     }
 }
