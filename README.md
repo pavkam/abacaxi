@@ -102,7 +102,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
 | `SequenceExtensions.IsPalindrome` | Checks if a given (sub)sequence is a palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
 | `Set.EnumerateSubsetCombinations` |  |
-| `Set.SplitIntoSubsetsOfEqualValue` |  |
+| `Set.SplitIntoSubsetsOfEqualValue` | Tries to find all subsets with equal aggregate value. See related material: <http://www.usaco.org/index.php?page=viewproblem2&cpid=139> |
 | `Set.GetSubsetWithNearValue` |  |
 | `Set.ContainsSubsetWithExactValue` |  |
 | `Set.GetSubsetWithGreatestValue` |  |
