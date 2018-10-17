@@ -851,7 +851,7 @@ namespace Abacaxi
 
             if (comp < 0)
             {
-                return (left, left);
+                return (right, right);
             }
 
             var first = left;
