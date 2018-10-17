@@ -22,7 +22,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     using SequenceAlgorithms = Abacaxi.SequenceAlgorithms;
 
     [TestFixture]
-    public sealed class FindUniquesTests
+    public sealed class MergeTests
     {
         [Test]
         public void GenericFindUniques_ReturnsDuplicates_ForDistinctElements()
