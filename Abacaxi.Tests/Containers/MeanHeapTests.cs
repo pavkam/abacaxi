@@ -23,17 +23,22 @@ namespace Abacaxi.Tests.Containers
     using NUnit.Framework;
 
     [TestFixture]
-    public sealed class HeapTests
+    public sealed class MeanHeapTests
     {
+        private static int Avg(int a, int b)
+        {
+            return (a + b) / 2;
+        }
+
         [SetUp]
         public void SetUp()
         {
-            _empty = new Heap<int>(Comparer<int>.Default);
-            _three = new Heap<int>(new[] {2, 3, 1}, Comparer<int>.Default);
+            _empty = new MeanHeap<int>(Comparer<int>.Default, Avg);
+            _three = new MeanHeap<int>(new[] {2, 3, 1}, Comparer<int>.Default, Avg);
         }
 
-        private Heap<int> _empty;
-        private Heap<int> _three;
+        private MeanHeap<int> _empty;
+        private MeanHeap<int> _three;
 
         [Test]
         public void Add_AddsNewElement_ToEmptyHeap()
@@ -85,12 +90,41 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Contains_ReturnsTrue_IfElementIsInHeap_AndNotTop()
+        public void Contains_ReturnsTrue_IfElementIsInHeap_AndNotMean()
         {
             _empty.Add(1);
             _empty.Add(2);
+            _empty.Add(3);
 
-            Assert.IsTrue(_empty.Contains(1));
+            Assert.IsTrue(_empty.Contains(3));
+        }
+
+        [Test]
+        public void Contains_ReturnsTrue_IfElementIsInHeap_AndMean()
+        {
+            _empty.Add(1);
+            _empty.Add(2);
+            _empty.Add(3);
+
+            Assert.IsTrue(_empty.Contains(2));
+        }
+
+        [Test]
+        public void Contains_ReturnsTrue_IfSmallest()
+        {
+            _empty.Add(100);
+            _empty.Add(200);
+
+            Assert.IsTrue(_empty.Contains(100));
+        }
+
+        [Test]
+        public void Contains_ReturnsTrue_IfGreatest()
+        {
+            _empty.Add(100);
+            _empty.Add(200);
+
+            Assert.IsTrue(_empty.Contains(200));
         }
 
         [Test]
@@ -112,8 +146,7 @@ namespace Abacaxi.Tests.Containers
         }
 
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void CopyTo_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() => _three.CopyTo(null, 0));
@@ -141,16 +174,7 @@ namespace Abacaxi.Tests.Containers
         public void Count_DecreasesByOne_WhenElementIsRemoved()
         {
             _empty.Add(1);
-            _empty.RemoveTop();
-
-            Assert.AreEqual(0, _empty.Count);
-        }
-
-        [Test]
-        public void Count_DecreasesByOne_WhenTopIsRemoved()
-        {
-            _empty.Add(1);
-            _empty.RemoveTop();
+            _empty.Remove(1);
 
             Assert.AreEqual(0, _empty.Count);
         }
@@ -165,7 +189,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Count_IsNotZero_ForHeapifiedCollections()
         {
-            var heap = new Heap<int>(new[] {1, 2, 3}, Comparer<int>.Default);
+            var heap = new MeanHeap<int>(new[] {1, 2, 3}, Comparer<int>.Default, Avg);
 
             Assert.AreEqual(3, heap.Count);
         }
@@ -179,7 +203,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Ctor_Heapifies_TheCollection1()
         {
-            var heap = new Heap<int>(new[] {1}, Comparer<int>.Default);
+            var heap = new MeanHeap<int>(new[] {1}, Comparer<int>.Default, Avg);
 
             TestHelper.AssertSequence(heap,
                 1);
@@ -188,7 +212,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Ctor_Heapifies_TheCollection2()
         {
-            var heap = new Heap<int>(new[] {1, 2}, Comparer<int>.Default);
+            var heap = new MeanHeap<int>(new[] {1, 2}, Comparer<int>.Default, Avg);
 
             TestHelper.AssertSequence(heap,
                 2, 1);
@@ -197,7 +221,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "IdentifierTypo")]
         public void Ctor_Heapifies_TheCollection3()
         {
-            var heap = new Heap<int>(new[] {3, 1, 5, 2}, Comparer<int>.Default);
+            var heap = new MeanHeap<int>(new[] {3, 1, 5, 2}, Comparer<int>.Default, Avg);
 
             TestHelper.AssertSequence(heap,
                 5, 3, 2, 1);
@@ -206,7 +230,7 @@ namespace Abacaxi.Tests.Containers
         [Test, SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
         public void Ctor_InitializesEmptyCollection1()
         {
-            var heap = new Heap<int>(Comparer<int>.Default);
+            var heap = new MeanHeap<int>(Comparer<int>.Default, Avg);
 
             TestHelper.AssertSequence(heap);
         }
@@ -214,33 +238,38 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Ctor_InitializesEmptyCollection2()
         {
-            var heap = new Heap<int>(new int[] { }, Comparer<int>.Default);
+            var heap = new MeanHeap<int>(new int[] { }, Comparer<int>.Default, Avg);
 
             TestHelper.AssertSequence(heap);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_WhenCollectionIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new Heap<int>(null, Comparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => new MeanHeap<int>(null, Comparer<int>.Default, Avg));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_WhenComparerIsNull1()
         {
-            Assert.Throws<ArgumentNullException>(() => new Heap<int>(null));
+            Assert.Throws<ArgumentNullException>(() => new MeanHeap<int>(null, Avg));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Ctor_ThrowsException_WhenAvgFuncIsNull1()
+        {
+            Assert.Throws<ArgumentNullException>(() => new MeanHeap<int>(Comparer<int>.Default, null));
+        }
+
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_WhenComparerIsNull2()
         {
-            Assert.Throws<ArgumentNullException>(() => new Heap<int>(new int[] { }, null));
+            Assert.Throws<ArgumentNullException>(() => new MeanHeap<int>(new int[] { }, null, Avg));
         }
 
         [Test]
@@ -255,44 +284,7 @@ namespace Abacaxi.Tests.Containers
             });
         }
 
-        [Test]
-        public void Enumeration_ThrowsException_IfClearing()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-            {
-                foreach (var _ in _three)
-                {
-                    _three.Clear();
-                }
-            });
-        }
-
-        [Test]
-        public void Enumeration_ThrowsException_IfRemovingElement()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-            {
-                foreach (var _ in _three)
-                {
-                    _three.Remove(1);
-                }
-            });
-        }
-
-        [Test]
-        public void Enumeration_ThrowsException_IfRemovingTop()
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-            {
-                foreach (var _ in _three)
-                {
-                    _three.RemoveTop();
-                }
-            });
-        }
-
-        [Test]
-        [SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
+        [Test, SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
         public void GetEnumerator_EnumeratesAllElements()
         {
             var enumerator = _three.GetEnumerator();
@@ -305,8 +297,7 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(elements, 3, 2, 1);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
+        [Test, SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
         public void GetEnumerator_MoveNext_ReturnsFalse_ForEmptyHeap()
         {
             var enumerator = _empty.GetEnumerator();
@@ -323,7 +314,7 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Heap_AllowsDuplicates()
         {
-            var heap = new Heap<int>(new[] {1, 1, 1}, Comparer<int>.Default);
+            var heap = new MeanHeap<int>(new[] {1, 1, 1}, Comparer<int>.Default, Avg);
 
             TestHelper.AssertSequence(heap, 1, 1, 1);
         }
@@ -333,7 +324,7 @@ namespace Abacaxi.Tests.Containers
         {
             var comparer = Comparer<int>.Create((a, b) => b - a);
 
-            var heap = new Heap<int>(new[] {10, 8, 1}, comparer);
+            var heap = new MeanHeap<int>(new[] {10, 8, 1}, comparer, Avg);
 
             TestHelper.AssertSequence(heap, 1, 8, 10);
         }
@@ -374,16 +365,9 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Remove_DoesNotReorderHeap_IfElementNotTop()
-        {
-            _three.Remove(1);
-            Assert.AreEqual(3, _three.Top);
-        }
-
-        [Test]
         public void Remove_ReordersHeap_ForUnbalancedLeft()
         {
-            var unb = new Heap<int>(new[] {100, 90, 50, 80, 81, 40, 41}, Comparer<int>.Default);
+            var unb = new MeanHeap<int>(new[] {100, 90, 50, 80, 81, 40, 41}, Comparer<int>.Default, Avg);
             unb.Remove(90);
 
             TestHelper.AssertSequence(unb, 100, 81, 80, 50, 41, 40);
@@ -392,17 +376,10 @@ namespace Abacaxi.Tests.Containers
         [Test]
         public void Remove_ReordersHeap_ForUnbalancedRight()
         {
-            var unb = new Heap<int>(new[] {100, 50, 90, 41, 42, 81, 82}, Comparer<int>.Default);
+            var unb = new MeanHeap<int>(new[] {100, 50, 90, 41, 42, 81, 82}, Comparer<int>.Default, Avg);
             unb.Remove(41);
 
             TestHelper.AssertSequence(unb, 100, 90, 82, 81, 50, 42);
-        }
-
-        [Test]
-        public void Remove_ReordersHeap_IfElementIsTop()
-        {
-            _three.Remove(3);
-            Assert.AreEqual(2, _three.Top);
         }
 
         [Test]
@@ -419,42 +396,32 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void RemoveTop_RemovesTheTop_ForOneElement()
-        {
-            _empty.Add(1);
-            Assert.AreEqual(1, _empty.RemoveTop());
-        }
-
-        [Test]
-        public void RemoveTop_RemovesTheTop_RemovesTopForMoreElements()
-        {
-            Assert.AreEqual(3, _three.RemoveTop());
-        }
-
-        [Test]
-        public void RemoveTop_RemovesTheTop_ReordersTop()
-        {
-            _three.RemoveTop();
-
-            Assert.AreEqual(2, _three.Top);
-        }
-
-        [Test]
-        public void RemoveTop_ThrowsException_IfHeapIsEmpty()
-        {
-            Assert.Throws<InvalidOperationException>(() => _empty.RemoveTop());
-        }
-
-        [Test]
-        public void Top_ReturnsSingleElement_ForOneElementHeap()
+        public void Mean_ReturnsSingleElement_ForOneElementHeap()
         {
             _empty.Add(1);
 
-            Assert.AreEqual(1, _empty.Top);
+            Assert.AreEqual(1, _empty.Mean);
         }
 
         [Test]
-        public void Top_ReturnsTheGreatestElement_InHeap()
+        public void Mean_ActuallyUsesTheAvgFunction()
+        {
+            var heap = new MeanHeap<int>(Comparer<int>.Default, (a, b) => -1) {1, 2};
+
+            Assert.AreEqual(-1, heap.Mean);
+        }
+
+        [Test]
+        public void Mean_ReturnsAvg_IfOnlyTwoElementsInHeap()
+        {
+            _empty.Add(4);
+            _empty.Add(2);
+
+            Assert.AreEqual(3, _empty.Mean);
+        }
+
+        [Test]
+        public void Mean_ReturnsTheMeanElement_InHeap()
         {
             _empty.Add(1);
             _empty.Add(2);
@@ -462,13 +429,26 @@ namespace Abacaxi.Tests.Containers
             _empty.Add(4);
             _empty.Add(8);
 
-            Assert.AreEqual(10, _empty.Top);
+            Assert.AreEqual(4, _empty.Mean);
         }
 
         [Test]
-        public void Top_ThrowsException_ForEmptyHeap()
+        public void Mean_ReturnsTheAvgMeanElements_InHeap()
         {
-            Assert.Throws<InvalidOperationException>(() => Assert.AreEqual(0, _empty.Top));
+            _empty.Add(1);
+            _empty.Add(2);
+            _empty.Add(10);
+            _empty.Add(4);
+            _empty.Add(8);
+            _empty.Add(6);
+
+            Assert.AreEqual(5, _empty.Mean);
+        }
+
+        [Test]
+        public void Mean_ThrowsException_ForEmptyHeap()
+        {
+            Assert.Throws<InvalidOperationException>(() => Assert.AreEqual(0, _empty.Mean));
         }
     }
 }

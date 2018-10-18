@@ -251,6 +251,17 @@ namespace Abacaxi.Containers
         /// </returns>
         public bool Remove(T item)
         {
+            if (Count < 0)
+            {
+                return false;
+            }
+
+            if (_comparer.Compare(_array[0], item) == 0)
+            {
+                RemoveTop();
+                return true;
+            }
+
             for (var i = 0; i < Count; i++)
             {
                 if (_comparer.Compare(_array[i], item) != 0)

@@ -10,6 +10,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | Data structure | Description |
 | :--- | :--- |
 | `Heap` | Implements the *heap* data structure (also known as *priority queue*). Related material: <https://en.wikipedia.org/wiki/Heap_(data_structure)> |
+| `MeanHeap` | Helper class that uses two *heaps* to provide O(1) mean value access to a sequence. Related material: <https://en.wikipedia.org/wiki/Heap_(data_structure)> |
 | `BitSet` | Implements the standard *ISet&lt;int&gt;* data structure in an optimized form (using bit masks). Related material: <https://en.wikipedia.org/wiki/Bit_array> |
 | `DisjointSet` | Also known as *union-find* or *merge-find* data structure. Related material: <https://en.wikipedia.org/wiki/Disjoint-set_data_structure> |
 | `SingleLinkedNode` | Represents a node in a *singly-linked list*. All operations implemented by the node classes. Related material: <https://en.wikipedia.org/wiki/Linked_list> |
