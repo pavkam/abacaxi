@@ -94,9 +94,10 @@ namespace Abacaxi
         ///     are <c>null</c>.
         /// </exception>
         /// <exception cref="InvalidOperationException">Thrown if any interval is invalid (start is greater than end).</exception>
+        [NotNull]
         public static (T start, T end)[] ChoseBestNonOverlapping<T>(
-                    [NotNull] IEnumerable<(T start, T end, double score)> intervals,
-                    [NotNull] IComparer<T> comparer)
+            [NotNull] IEnumerable<(T start, T end, double score)> intervals,
+            [NotNull] IComparer<T> comparer)
         {
             Validate.ArgumentNotNull(nameof(intervals), intervals);
             Validate.ArgumentNotNull(nameof(comparer), comparer);

@@ -4,7 +4,7 @@
 
 I'm building this library as a repository of algorithms, data structures and helper methods that make one's daily programming life easier (in .NET that is).
 
-Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is built against __.NET Framework 4.5.__
+Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is built against __.NET Standard 2.0.__
 
 ### The list of core data structures:
 | Data structure | Description |
@@ -13,7 +13,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `MeanHeap` | Helper class that uses two *heaps* to provide O(1) mean value access to a sequence. Related material: <https://en.wikipedia.org/wiki/Heap_(data_structure)> |
 | `BitSet` | Implements the standard *ISet&lt;int&gt;* data structure in an optimized form (using bit masks). Related material: <https://en.wikipedia.org/wiki/Bit_array> |
 | `DisjointSet` | Also known as *union-find* or *merge-find* data structure. Related material: <https://en.wikipedia.org/wiki/Disjoint-set_data_structure> |
-| `SingleLinkedNode` | Represents a node in a *singly-linked list*. All operations implemented by the node classes. Related material: <https://en.wikipedia.org/wiki/Linked_list> |
+| `LinkedLinkedNode` | Represents a node in a *singly-linked list*. All operations implemented by the node classes. Related material: <https://en.wikipedia.org/wiki/Linked_list> |
 | `Trie` | A *trie* that implements the *IDictionary&lt;TKey, TValue&gt;* interface. Related material: <https://en.wikipedia.org/wiki/Trie> |
 | `AvlTree` | The standard *AVL self-balancing tree*. Related material: <https://en.wikipedia.org/wiki/AVL_tree> |
 | `BinarySearchTree` | The standard *binary search tree*. Related material: <https://en.wikipedia.org/wiki/Binary_search_tree> |
