@@ -1155,6 +1155,92 @@ namespace Abacaxi
             return set.Count <= 1;
         }
 
+        /// <summary>
+        /// Returns the index of a permutation substring.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="subSequence">The sub-sequence to check for.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns>A zero-based index in the <paramref name="sequence"/> where a permutation of <paramref name="subSequence"/> was found. <c>-1</c> if not found.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static int IndexOfPermutationOf<T>(
+            [NotNull] this IList<T> sequence,
+            [NotNull] IList<T> subSequence,
+            [NotNull] IEqualityComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(subSequence), subSequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            if (subSequence.Count > sequence.Count)
+            {
+                return -1;
+            }
+
+            /* Build patterns (sub-sequence and the first part of the sequence) */
+            var acc = new Dictionary<T, int>(comparer);
+            var pattern = new Dictionary<T, int>(comparer);
+
+            for (var i = 0; i < subSequence.Count; i++)
+            {
+                pattern.AddOrUpdate(subSequence[i], 1, v => v + 1);
+                acc.AddOrUpdate(sequence[i], 1, v => v + 1);
+            }
+
+            /* The pattern matching function. */
+            bool PatternsMatch()
+            {
+                if (acc.Count != pattern.Count)
+                {
+                    return false;
+                }
+
+                foreach (var kvp in acc)
+                {
+                    if (!pattern.TryGetValue(kvp.Key, out var freq) || freq != kvp.Value)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            /* Check current pattern matching. */
+            if (PatternsMatch())
+            {
+                return 0;
+            }
+
+            /* Check the rest of the sequence. */
+            for (var i = 1; i <= sequence.Count - subSequence.Count; i++)
+            {
+                var prev = sequence[i - 1];
+
+                var c = acc[prev] - 1;
+                if (c == 0)
+                {
+                    acc.Remove(prev);
+                }
+                else
+                {
+                    acc[prev] = c;
+                }
+
+                var next = sequence[i + subSequence.Count - 1];
+                acc.AddOrUpdate(next, 1, v => v + 1);
+
+                if (PatternsMatch())
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
 
         private struct EditChoice
         {
