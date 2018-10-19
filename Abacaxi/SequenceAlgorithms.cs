@@ -794,8 +794,10 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Finds the location of <paramref name="item" /> in the given <paramref name="sequence" />. If the item is repeated a number of times,
-        /// this method returns their index range. Otherwise, this method returns the item immediately smaller than the searched value.
+        ///     Finds the location of <paramref name="item" /> in the given <paramref name="sequence" />. If the item is repeated a
+        ///     number of times,
+        ///     this method returns their index range. Otherwise, this method returns the item immediately smaller than the
+        ///     searched value.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to search.</param>
@@ -1115,6 +1117,44 @@ namespace Abacaxi
 
             return true;
         }
+
+        /// <summary>
+        /// Determines whether the given <paramref name="sequence"/> is a permutation of a palindrome.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="startIndex">The start index.</param>
+        /// <param name="length">The length to check.</param>
+        /// <param name="comparer">The element comparer.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified sequence is a permutation of a palindrome; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the combination of <paramref name="startIndex" /> and
+        ///     <paramref name="length" /> is out of bounds.
+        /// </exception>
+        public static bool IsPermutationOfPalindrome<T>(
+            [NotNull] this IList<T> sequence, int startIndex, int length, [NotNull] IEqualityComparer<T> comparer)
+        {
+            Validate.CollectionArgumentsInBounds(nameof(sequence), sequence, startIndex, length);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var set = new HashSet<T>(comparer);
+            for (var x = 0; x < length; x++)
+            {
+                var item = sequence[x + startIndex];
+                if (!set.Add(item))
+                {
+                    set.Remove(item);
+                }
+            }
+
+            return set.Count <= 1;
+        }
+
 
         private struct EditChoice
         {
