@@ -111,6 +111,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `Set.GetSubsetWithNearValue` | Extracts a subset of integers whose sum is equal or very *close to the target value*. |
 | `Set.ContainsSubsetWithExactValue` | Checks whether there is a subset of integers whose sum is *equal to a target value*. |
 | `Set.GetSubsetWithGreatestValue` | Finds the first *N* number of pairs with greatest sums. |
+| `Set.GetPermutations` | Evaluates and returns all permutations of a given set. See related material: <https://en.wikipedia.org/wiki/Permutation> |
 | `Sorting.BubbleSort` | Implements the standard *bubble sort* algorithm. See related material: <https://en.wikipedia.org/wiki/Bubble_sort> |
 | `Sorting.CocktailShakerSort` | Implements the standard *cocktail shaker sort* algorithm. See related material: <https://en.wikipedia.org/wiki/Cocktail_shaker_sort> |
 | `Sorting.CombSort` | Implements the standard *comb sort* algorithm. See related material: <https://en.wikipedia.org/wiki/Comb_sort> |

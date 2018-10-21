@@ -342,6 +342,65 @@ namespace Abacaxi
             return result;
         }
 
+        [NotNull, ItemNotNull]
+        private static IReadOnlyList<T[]> GetAllPermutationsRecursive<T>([NotNull] IList<T> sequence, int length)
+        {
+            Assert.NotNull(sequence);
+            Assert.Condition(length <= sequence.Count);
+
+            var outer = new List<T[]>();
+
+            if (length == 1)
+            {
+                outer.Add(sequence.Copy(0, 1));
+            }
+            else
+            {
+                var item = sequence[length - 1];
+                foreach (var combo in GetAllPermutationsRecursive(sequence, length - 1))
+                {
+                    for (var i = 0; i <= combo.Length; i++)
+                    {
+                        var copy = new T[combo.Length + 1];
+
+                        if (i > 0)
+                        {
+                            Array.Copy(combo, 0, copy, 0, i);
+                        }
+
+                        copy[i] = item;
+
+                        if (i < combo.Length)
+                        {
+                            Array.Copy(combo, i, copy, i + 1, combo.Length - i);
+                        }
+
+                        outer.Add(copy);
+                    }
+                }
+            }
+
+            return outer;
+        }
+
+        /// <summary>
+        ///     Gets all the permutations for a given set.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The sequence of elements.</param>
+        /// <returns>An array of permutations of <paramref name="sequence" />.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is null.
+        /// </exception>
+        [NotNull, ItemNotNull]
+        public static T[][] GetPermutations<T>([NotNull] IList<T> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return
+                sequence.Count == 0 ? new T[0][] : GetAllPermutationsRecursive(sequence, sequence.Count).ToArray();
+        }
+
         private struct EvaluateAllSubsetCombinationsStep
         {
             public int ItemIndex { get; }
