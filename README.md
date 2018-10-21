@@ -82,7 +82,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.BinarySearch` | Implements the standard *binary search* algorithm. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
 | `SequenceExtensions.BinaryLookup` | Implements a slightly modified *binary search* algorithm that returns the range of matching items or the position of immediatelly smaller item. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
 | `SequenceExtensions.Diff` | Implements the generic *edit distance* algorithm. See related material: <https://en.wikipedia.org/wiki/Edit_distance> |
-| `SequenceExtensions. GetLongestCommonSubSequence` |  |
+| `SequenceExtensions. GetLongestCommonSubSequence` | Finds the longest sub-sequence that is common to two distinct sequences. See related material: <https://en.wikipedia.org/wiki/Longest_common_subsequence_problem> |
 | `SequenceExtensions.DeconstructIntoTerms` | Deconstructs a given sequence into a sequence of terms (sub-sequences) based on given term scoring (e.g. think of recognizing an English phrase for all lower-case text without whitespaces using a given dictionary of known words: "_ilovecookies_" will be split into "_i_", "_love_", "_cookies_"). |
 | `SequenceExtensions.GetItemFrequencies` | Gets the *items and their frequencies* within a sequence. |
 | `SequenceExtensions.ToSet` | Helper methods to *convert a given sequence into a set*. |
@@ -105,11 +105,12 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
 | `SequenceExtensions.IsPalindrome` | Checks if a given (sub)sequence is a palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
 | `SequenceExtensions.IsPermutationOfPalindrome` | Checks if a given (sub)sequence is a possible permutation of palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
-| `Set.EnumerateSubsetCombinations` |  |
-| `Set.SplitIntoSubsetsOfEqualValue` | Tries to find all subsets with equal aggregate value. See related material: <http://www.usaco.org/index.php?page=viewproblem2&cpid=139> |
-| `Set.GetSubsetWithNearValue` |  |
-| `Set.ContainsSubsetWithExactValue` |  |
-| `Set.GetSubsetWithGreatestValue` |  |
+| `SequenceExtensions.IndexOfPermutationOf` | Find the first occurence of sub-sequence (or any of its permutations) in the given sequence. |
+| `Set.EnumerateSubsetCombinations` | *Splits a set into subsets* of a given length and returns all such combinations. |
+| `Set.SplitIntoSubsetsOfEqualValue` | Tries to find all *subsets with equal aggregate value*. See related material: <http://www.usaco.org/index.php?page=viewproblem2&cpid=139> |
+| `Set.GetSubsetWithNearValue` | Extracts a subset of integers whose sum is equal or very *close to the target value*. |
+| `Set.ContainsSubsetWithExactValue` | Checks whether there is a subset of integers whose sum is *equal to a target value*. |
+| `Set.GetSubsetWithGreatestValue` | Finds the first *N* number of pairs with greatest sums. |
 | `Sorting.BubbleSort` | Implements the standard *bubble sort* algorithm. See related material: <https://en.wikipedia.org/wiki/Bubble_sort> |
 | `Sorting.CocktailShakerSort` | Implements the standard *cocktail shaker sort* algorithm. See related material: <https://en.wikipedia.org/wiki/Cocktail_shaker_sort> |
 | `Sorting.CombSort` | Implements the standard *comb sort* algorithm. See related material: <https://en.wikipedia.org/wiki/Comb_sort> |
