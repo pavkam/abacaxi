@@ -18,6 +18,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
     using NUnit.Framework;
 
     [TestFixture]
@@ -27,7 +28,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
          TestCase("abc", "bc", 1),
          TestCase("abcdefgh", "gef", 4), TestCase("abcdefgh", "hgfedcb", 1),
          SuppressMessage("ReSharper", "StringLiteralTypo")]
-        public void IndexOfPermutationOf_ReturnsTheExpectedResult(string seq, string sub, int expected)
+        public void IndexOfPermutationOf_ReturnsTheExpectedResult([NotNull] string seq, [NotNull] string sub, int expected)
         {
             var index = seq.AsList().IndexOfPermutationOf(sub.AsList(), EqualityComparer<char>.Default);
 
