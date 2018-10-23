@@ -47,6 +47,63 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         }
 
         [Test]
+        public void GetSubsequencesOfAggregateValue_ReturnsAllExpectedSubsequences_AllNegative()
+        {
+            var array = new[] {-1, -2, -3, -4, -1, -1, -6, -1, -1, -2, -1, -1, -1, -3, -3};
+            var result = array
+                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, -6)
+                .ToArray();
+
+            TestHelper.AssertSequence(
+                result,
+                new[] {-1, -2, -3},
+                new[] {-4, -1, -1},
+                new[] {-6},
+                new[] {-1, -1, -2, -1, -1},
+                new[] {-1, -2, -1, -1, -1},
+                new[] {-1, -1, -1, -3},
+                new[] {-3, -3});
+        }
+
+        [Test]
+        public void GetSubsequencesOfAggregateValue_ReturnsAllExpectedSubsequences_AllPositive()
+        {
+            var array = new[] {1, 2, 3, 4, 1, 1, 6, 1, 1, 2, 1, 1, 1, 3, 3};
+            var result = array
+                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, 6)
+                .ToArray();
+
+            TestHelper.AssertSequence(
+                result,
+                new[] {1, 2, 3},
+                new[] {4, 1, 1},
+                new[] {6},
+                new[] {1, 1, 2, 1, 1},
+                new[] {1, 2, 1, 1, 1},
+                new[] {1, 1, 1, 3},
+                new[] {3, 3});
+        }
+
+        [Test]
+        public void GetSubsequencesOfAggregateValue_ReturnsAllExpectedSubsequences_MixedSigns()
+        {
+            var array = new[] {-1, 2, -3, 4, 1, 1, -6, 1, -1, -2, 1, -1, 2, 3, -3};
+            var result = array
+                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, 3)
+                .ToArray();
+
+            TestHelper.AssertSequence(
+                result,
+                new[] {2, -3, 4},
+                new[] {-1, 2, -3, 4, 1},
+                new[] {-3, 4, 1, 1},
+                new[] {4, 1, 1, -6, 1, -1, -2, 1, -1, 2, 3},
+                new[] {1, -1, -2, 1, -1, 2, 3},
+                new[] {-2, 1, -1, 2, 3},
+                new[] {3});
+        }
+
+        [Test]
         public void GetSubsequencesOfAggregateValue_ReturnsAllSequence_IfAggregates()
         {
             var array = new[] {1, 2, 3, 4, 5, 6};
@@ -129,63 +186,6 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             Assert.Throws<ArgumentNullException>(() =>
                 ((int[]) null).GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator,
                     Comparer<int>.Default, 1));
-        }
-
-        [Test]
-        public void GetSubsequencesOfAggregateValue_ReturnsAllExpectedSubsequences_AllPositive()
-        {
-            var array = new[] {1, 2, 3, 4, 1, 1, 6, 1, 1, 2, 1, 1, 1, 3, 3};
-            var result = array
-                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, 6)
-                .ToArray();
-
-            TestHelper.AssertSequence(
-                result,
-                new[] {1, 2, 3},
-                new[] {4, 1, 1},
-                new[] {6},
-                new[] {1, 1, 2, 1, 1},
-                new[] {1, 2, 1, 1, 1},
-                new[] {1, 1, 1, 3},
-                new[] {3, 3});
-        }
-
-        [Test]
-        public void GetSubsequencesOfAggregateValue_ReturnsAllExpectedSubsequences_AllNegative()
-        {
-            var array = new[] {-1, -2, -3, -4, -1, -1, -6, -1, -1, -2, -1, -1, -1, -3, -3};
-            var result = array
-                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, -6)
-                .ToArray();
-
-            TestHelper.AssertSequence(
-                result,
-                new[] {-1, -2, -3},
-                new[] {-4, -1, -1},
-                new[] {-6},
-                new[] {-1, -1, -2, -1, -1},
-                new[] {-1, -2, -1, -1, -1},
-                new[] {-1, -1, -1, -3},
-                new[] {-3, -3});
-        }
-
-        [Test]
-        public void GetSubsequencesOfAggregateValue_ReturnsAllExpectedSubsequences_MixedSigns()
-        {
-            var array = new[] {-1, 2, -3, 4, 1, 1, -6, 1, -1, -2, 1, -1, 2, 3, -3};
-            var result = array
-                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, 3)
-                .ToArray();
-
-            TestHelper.AssertSequence(
-                result,
-                new[] {2, -3, 4},
-                new[] {-1, 2, -3, 4, 1},
-                new[] {-3, 4, 1, 1},
-                new[] {4, 1, 1, -6, 1, -1, -2, 1, -1, 2, 3},
-                new[] {1, -1, -2, 1, -1, 2, 3},
-                new[] {-2, 1, -1, 2, 3},
-                new[] {3});
         }
     }
 }
