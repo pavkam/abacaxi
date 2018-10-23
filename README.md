@@ -75,7 +75,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.FindUniques` | *Finds unique* elements in a sequence. |
 | `SequenceExtensions.FindUniquesInOrder` | *Finds unique* elements in a sequence and retains the order of their appearance in the sequence. |
 | `SequenceExtensions.ExtractNestedBlocks` | An algorithm to allow *extracting nested* sub-sequences from a sequence (e.g. _"(a(b))"_ would return _"(b)"_ then _"(a(b))"_). |
-| `SequenceExtensions. FindSubsequencesWithGivenAggregatedValue` | Finds all *sub-sequences of a given aggregated value*. |
+| `SequenceExtensions. GetSubsequencesOfAggregateValue` | Finds all *sub-sequences of a given aggregated value* in another sequence. |
 | `SequenceExtensions.Interleave` | Creates a sequence which combines multiple *interleaved sequences* based on a given comparison. |
 | `SequenceExtensions.Reverse` | *Reverses* a sequence in place. |
 | `SequenceExtensions.Repeat` | Creates a sequence which is based on the original sequence *repeated a number of times*. |

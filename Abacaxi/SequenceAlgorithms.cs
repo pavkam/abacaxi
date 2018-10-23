@@ -513,7 +513,7 @@ namespace Abacaxi
         }
 
         [ItemNotNull, NotNull]
-        private static IEnumerable<T[]> FindSubsequencesWithGivenAggregatedValueIterate<T>(
+        private static IEnumerable<T[]> GetSubsequencesOfAggregateValueIterate<T>(
             [NotNull] this IList<T> sequence,
             [NotNull] Aggregator<T> aggregator,
             [NotNull] Aggregator<T> disaggregator,
@@ -525,46 +525,30 @@ namespace Abacaxi
             Assert.NotNull(disaggregator);
             Assert.NotNull(comparer);
 
-            if (sequence.Count == 0)
+
+            var aggregate = default(T);
+
+            var mem = new Dictionary<T, List<int>> {{aggregate, new List<int> {-1}}};
+            for (var i = 0; i < sequence.Count; i++)
             {
-                yield break;
-            }
+                /* Calculate the current aggregate. */
+                aggregate = aggregator(aggregate, sequence[i]);
 
-            var s = 0;
-            var e = 0;
-            var sum = sequence[s];
-
-            while (e < sequence.Count)
-            {
-                var cmp = comparer.Compare(sum, target);
-                if (cmp < 0)
+                /* Record the current "aggregate" x "index" */
+                if (!mem.TryGetValue(aggregate, out var list))
                 {
-                    e++;
-                    if (e < sequence.Count)
-                    {
-                        sum = aggregator(sum, sequence[e]);
-                    }
+                    list = new List<int>();
+                    mem.Add(aggregate, list);
                 }
-                else if (cmp > 0)
-                {
-                    sum = disaggregator(sum, sequence[s]);
-                    s++;
-                }
-                else
-                {
-                    var l = e - s + 1;
-                    var t = new T[l];
-                    for (var i = 0; i < l; i++)
-                    {
-                        t[i] = sequence[i + s];
-                    }
 
-                    yield return t;
+                list.Add(i);
 
-                    e++;
-                    if (e < sequence.Count)
+                /* Check if target achieved by previous pre-calculations. */
+                if (mem.TryGetValue(disaggregator(aggregate, target), out var prevStarts))
+                {
+                    foreach (var start in prevStarts)
                     {
-                        sum = aggregator(sum, sequence[e]);
+                        yield return sequence.Copy(start + 1, i - start);
                     }
                 }
             }
@@ -581,7 +565,7 @@ namespace Abacaxi
         /// <returns>A sequence of found integers.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence" /> is <c>null</c>.</exception>
         [NotNull]
-        public static IEnumerable<T[]> FindSubsequencesWithGivenAggregatedValue<T>(
+        public static IEnumerable<T[]> GetSubsequencesOfAggregateValue<T>(
             [NotNull] this IList<T> sequence,
             [NotNull] Aggregator<T> aggregator,
             [NotNull] Aggregator<T> disaggregator,
@@ -593,7 +577,7 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(disaggregator), disaggregator);
             Validate.ArgumentNotNull(nameof(comparer), comparer);
 
-            return FindSubsequencesWithGivenAggregatedValueIterate(sequence, aggregator, disaggregator, comparer,
+            return GetSubsequencesOfAggregateValueIterate(sequence, aggregator, disaggregator, comparer,
                 target);
         }
 
