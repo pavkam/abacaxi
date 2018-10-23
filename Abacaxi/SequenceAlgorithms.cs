@@ -517,7 +517,7 @@ namespace Abacaxi
             [NotNull] this IList<T> sequence,
             [NotNull] Aggregator<T> aggregator,
             [NotNull] Aggregator<T> disaggregator,
-            [NotNull] IComparer<T> comparer,
+            [NotNull] IEqualityComparer<T> comparer,
             T target)
         {
             Assert.NotNull(sequence);
@@ -525,10 +525,9 @@ namespace Abacaxi
             Assert.NotNull(disaggregator);
             Assert.NotNull(comparer);
 
-
             var aggregate = default(T);
 
-            var mem = new Dictionary<T, List<int>> {{aggregate, new List<int> {-1}}};
+            var mem = new Dictionary<T, List<int>>(comparer) {{aggregate, new List<int> {-1}}};
             for (var i = 0; i < sequence.Count; i++)
             {
                 /* Calculate the current aggregate. */
@@ -555,21 +554,24 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Finds the sub-sequences whose aggregated values are equal to a given <paramref name="target" /> value.
+        /// Finds the sub-sequences whose aggregated values are equal to a given <paramref name="target" /> value.
         /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to check.</param>
         /// <param name="aggregator">The value aggregator.</param>
         /// <param name="disaggregator">The value dis-aggregator.</param>
-        /// <param name="comparer">The comparer.</param>
+        /// <param name="comparer">The equality comparer for the items in the sequence.</param>
         /// <param name="target">The target aggregated value.</param>
-        /// <returns>A sequence of found integers.</returns>
+        /// <returns>
+        /// A sequence of found integers.
+        /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence" /> is <c>null</c>.</exception>
         [NotNull]
         public static IEnumerable<T[]> GetSubsequencesOfAggregateValue<T>(
             [NotNull] this IList<T> sequence,
             [NotNull] Aggregator<T> aggregator,
             [NotNull] Aggregator<T> disaggregator,
-            [NotNull] IComparer<T> comparer,
+            [NotNull] IEqualityComparer<T> comparer,
             T target)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);

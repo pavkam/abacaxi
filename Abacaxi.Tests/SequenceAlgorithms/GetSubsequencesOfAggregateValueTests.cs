@@ -40,7 +40,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             var array = new[] {1, 0, 0};
             TestHelper.AssertSequence(
                 array.GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator,
-                    Comparer<int>.Default, 1),
+                    EqualityComparer<int>.Default, 1),
                 new[] {1},
                 new[] {1, 0},
                 new[] {1, 0, 0});
@@ -51,7 +51,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         {
             var array = new[] {-1, -2, -3, -4, -1, -1, -6, -1, -1, -2, -1, -1, -1, -3, -3};
             var result = array
-                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, -6)
+                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, EqualityComparer<int>.Default, -6)
                 .ToArray();
 
             TestHelper.AssertSequence(
@@ -70,7 +70,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         {
             var array = new[] {1, 2, 3, 4, 1, 1, 6, 1, 1, 2, 1, 1, 1, 3, 3};
             var result = array
-                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, 6)
+                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, EqualityComparer<int>.Default, 6)
                 .ToArray();
 
             TestHelper.AssertSequence(
@@ -89,7 +89,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         {
             var array = new[] {-1, 2, -3, 4, 1, 1, -6, 1, -1, -2, 1, -1, 2, 3, -3};
             var result = array
-                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, Comparer<int>.Default, 3)
+                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, EqualityComparer<int>.Default, 3)
                 .ToArray();
 
             TestHelper.AssertSequence(
@@ -109,7 +109,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             var array = new[] {1, 2, 3, 4, 5, 6};
             TestHelper.AssertSequence(
                 array.GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator,
-                    Comparer<int>.Default, 21),
+                    EqualityComparer<int>.Default, 21),
                 new[] {1, 2, 3, 4, 5, 6});
         }
 
@@ -119,7 +119,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             var array = new int[] { };
             TestHelper.AssertSequence(
                 array.GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator,
-                    Comparer<int>.Default, 1)
+                    EqualityComparer<int>.Default, 1)
             );
         }
 
@@ -129,7 +129,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             var array = new[] {1, 2, 3, 4, 5, 6};
             TestHelper.AssertSequence(
                 array.GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator,
-                    Comparer<int>.Default, 8));
+                    EqualityComparer<int>.Default, 8));
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             var array = new[] {1};
             TestHelper.AssertSequence(
                 array.GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator,
-                    Comparer<int>.Default, 1),
+                    EqualityComparer<int>.Default, 1),
                 new[] {1});
         }
 
@@ -148,7 +148,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             var array = new[] {1, 2, 3, 4, 5, 6};
             TestHelper.AssertSequence(
                 array.GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator,
-                    Comparer<int>.Default, 6),
+                    EqualityComparer<int>.Default, 6),
                 new[] {1, 2, 3},
                 new[] {6});
         }
@@ -158,7 +158,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         public void GetSubsequencesOfAggregateValue_ThrowsException_IfAggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] {1}.GetSubsequencesOfAggregateValue(null, IntegerDisaggregator, Comparer<int>.Default,
+                new[] {1}.GetSubsequencesOfAggregateValue(null, IntegerDisaggregator, EqualityComparer<int>.Default,
                     1));
         }
 
@@ -175,7 +175,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         public void GetSubsequencesOfAggregateValue_ThrowsException_IfDisaggregatorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new[] {1}.GetSubsequencesOfAggregateValue(IntegerAggregator, null, Comparer<int>.Default,
+                new[] {1}.GetSubsequencesOfAggregateValue(IntegerAggregator, null, EqualityComparer<int>.Default,
                     1));
         }
 
@@ -185,7 +185,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         {
             Assert.Throws<ArgumentNullException>(() =>
                 ((int[]) null).GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator,
-                    Comparer<int>.Default, 1));
+                    EqualityComparer<int>.Default, 1));
         }
     }
 }
