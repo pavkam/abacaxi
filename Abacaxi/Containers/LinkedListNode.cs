@@ -117,12 +117,13 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        ///     Tries the get the middle and tail nodes in one iteration.
+        ///     Tries the get the middle and tail nodes in one iteration and returns the length of the list in the process.
         /// </summary>
-        /// <param name="middleNode">The middle node, if the list is not knotted.</param>
-        /// <param name="tailNode">The tail node, if the list is not knotted.</param>
-        /// <returns>The length of the linked list if it's not knotted; <c>-1</c> otherwise.</returns>
-        public int TryGetMiddleAndTailNodes([CanBeNull] out LinkedListNode<T> middleNode,
+        /// <param name="middleNode">The middle node, if the list is not knotted (circular).</param>
+        /// <param name="tailNode">The tail node, if the list is not knotted (circular).</param>
+        /// <returns>The length of the linked list if it's not knotted (circular); <c>-1</c> otherwise.</returns>
+        public int TryGetMiddleAndTailNodes(
+            [CanBeNull] out LinkedListNode<T> middleNode,
             [CanBeNull] out LinkedListNode<T> tailNode)
         {
             var current = this;
