@@ -15,8 +15,10 @@
 
 namespace Abacaxi.Containers
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -79,6 +81,12 @@ namespace Abacaxi.Containers
             }
         }
 
+        private static void RaiseListKnottedError()
+        {
+            throw new InvalidOperationException(
+                "The linked list is knotted (circular) and its length cannot be evaluated.");
+        }
+
         /// <summary>
         ///     Creates a new linked list from a given <paramref name="sequence" />.
         /// </summary>
@@ -109,14 +117,12 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Tries the get the middle and tail nodes in one iteration.
+        ///     Tries the get the middle and tail nodes in one iteration.
         /// </summary>
         /// <param name="middleNode">The middle node, if the list is not knotted.</param>
         /// <param name="tailNode">The tail node, if the list is not knotted.</param>
-        /// <returns><c>true</c> if the list is not knotted and has middle and tail nodes; <c>false</c> otherwise.</returns>
-        [ContractAnnotation(
-            "=> true, middleNode: notnull, tailNode: notnull; => false, middleNode: null, tailNode: null")]
-        public bool TryGetMiddleAndTailNodes([CanBeNull] out LinkedListNode<T> middleNode,
+        /// <returns>The length of the linked list if it's not knotted; <c>-1</c> otherwise.</returns>
+        public int TryGetMiddleAndTailNodes([CanBeNull] out LinkedListNode<T> middleNode,
             [CanBeNull] out LinkedListNode<T> tailNode)
         {
             var current = this;
@@ -124,6 +130,7 @@ namespace Abacaxi.Containers
             middleNode = null;
             tailNode = null;
 
+            var count = 1;
             for (;;)
             {
                 /* Find middle condition. */
@@ -147,19 +154,72 @@ namespace Abacaxi.Containers
                 /* Knotted condition. */
                 if (current == skip)
                 {
-                    return false;
+                    return -1;
                 }
 
+                count++;
                 current = current.Next;
             }
 
-            return true;
+            return count;
+        }
+
+        /// <summary>
+        ///     Evaluates the length of the linked list that starts with this node.
+        /// </summary>
+        /// <returns>The length of the linked list.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the list is knotted (circular).</exception>
+        public int GetLength()
+        {
+            var result = TryGetMiddleAndTailNodes(out _, out _);
+            if (result == -1)
+            {
+                RaiseListKnottedError();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the linked list's middle node.
+        /// </summary>
+        /// <returns>The middle node.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the list is knotted (circular).</exception>
+        [NotNull]
+        public LinkedListNode<T> GetMiddleNode()
+        {
+            if (TryGetMiddleAndTailNodes(out var result, out _) == -1)
+            {
+                RaiseListKnottedError();
+            }
+
+            Debug.Assert(result != null);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the linked list's tail node.
+        /// </summary>
+        /// <returns>The tail node.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the list is knotted (circular).</exception>
+        [NotNull]
+        public LinkedListNode<T> GetTailNode()
+        {
+            if (TryGetMiddleAndTailNodes(out _, out var result) == -1)
+            {
+                RaiseListKnottedError();
+            }
+
+            Debug.Assert(result != null);
+
+            return result;
         }
 
         /// <summary>
         ///     Reverses a given linked list using the iterative method.
         /// </summary>
-        /// <remarks>This method does not check for knotted lists. A knotted list will force this method to execute indefinitely.</remarks>
+        /// <remarks>This method does not check for knotted lists. A knotted (circular) list will force this method to execute indefinitely.</remarks>
         /// <returns>The new head of the linked list.</returns>
         [NotNull]
         public LinkedListNode<T> Reverse()

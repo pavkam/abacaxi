@@ -15,6 +15,7 @@
 
 namespace Abacaxi.Tests.Containers
 {
+    using System;
     using System.Diagnostics;
     using Abacaxi.Containers;
     using NUnit.Framework;
@@ -86,100 +87,82 @@ namespace Abacaxi.Tests.Containers
 
 
         [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsTrue_ForSingleNodeList()
+        public void GetLength_ReturnsOne_ForSingleNodeList()
         {
             var head = LinkedListNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
-            var result = head.TryGetMiddleAndTailNodes(out _, out _);
-            Assert.IsTrue(result);
+            var result = head.GetLength();
+            Assert.AreEqual(1, result);
         }
 
         [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsTrue_ForTwoNodeList()
-        {
-            var head = LinkedListNode<int>.Create(new[] {1, 2});
-            Debug.Assert(head != null);
-
-            var result = head.TryGetMiddleAndTailNodes(out _, out _);
-            Assert.IsTrue(result);
-        }
-
-        [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsTrue_ForThreeNodeList()
+        public void GetLength_ReturnsThree_ForThreeNodeList()
         {
             var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(head != null);
 
-            var result = head.TryGetMiddleAndTailNodes(out _, out _);
-            Assert.IsTrue(result);
+            var result = head.GetLength();
+
+            Assert.AreEqual(3, result);
         }
 
         [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsMiddle_ForSingleNodeList()
+        public void GetLength_ReturnsTwo_ForTwoNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            var result = head.GetLength();
+            Assert.AreEqual(2, result);
+        }
+
+        [Test]
+        public void GetLength_ThrowsError_ForKnottedList()
+        {
+            var head = new LinkedListNode<int>(1);
+            head.Next = head;
+
+            Assert.Throws<InvalidOperationException>(() => head.GetLength());
+        }
+
+        [Test]
+        public void GetMiddleNode_ReturnsFirstNode_ForSingleNodeList()
         {
             var head = LinkedListNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
-            head.TryGetMiddleAndTailNodes(out var middle, out _);
-
-            Assert.AreSame(head, middle);
+            var result = head.GetMiddleNode();
+            Assert.AreSame(head, result);
         }
 
         [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsMiddle_ForTwoNodeList()
+        public void GetMiddleNode_ReturnsFirstNode_ForTwoNodeList()
         {
             var head = LinkedListNode<int>.Create(new[] {1, 2});
             Debug.Assert(head != null);
 
-            head.TryGetMiddleAndTailNodes(out var middle, out _);
-
-            Assert.AreSame(head, middle);
+            var result = head.GetMiddleNode();
+            Assert.AreSame(head, result);
         }
 
         [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsSecondNode_AsMiddle_ForThreeNodeList()
+        public void GetMiddleNode_ReturnsSecondNode_ForThreeNodeList()
         {
             var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(head != null);
 
-            head.TryGetMiddleAndTailNodes(out var middle, out _);
-
-            Assert.AreSame(head.Next, middle);
+            var result = head.GetMiddleNode();
+            Assert.AreSame(head.Next, result);
         }
 
         [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsTail_ForSingleNodeList()
+        public void GetMiddleNode_ThrowsError_ForKnottedList()
         {
-            var head = LinkedListNode<int>.Create(new[] {1});
-            Debug.Assert(head != null);
+            var head = new LinkedListNode<int>(1);
+            head.Next = head;
 
-            head.TryGetMiddleAndTailNodes(out _, out var tail);
-
-            Assert.AreSame(head, tail);
-        }
-
-        [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsSecondNode_AsTail_ForTwoNodeList()
-        {
-            var head = LinkedListNode<int>.Create(new[] {1, 2});
-            Debug.Assert(head != null);
-
-            head.TryGetMiddleAndTailNodes(out _, out var tail);
-
-            Assert.AreSame(head.Next, tail);
-        }
-
-        [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsThirdNode_AsTail_ForThreeNodeList()
-        {
-            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
-            Debug.Assert(head != null);
-
-            head.TryGetMiddleAndTailNodes(out _, out var tail);
-
-            Debug.Assert(head.Next != null);
-            Assert.AreSame(head.Next.Next, tail);
+            Assert.Throws<InvalidOperationException>(() => head.GetMiddleNode());
         }
 
 
@@ -249,7 +232,40 @@ namespace Abacaxi.Tests.Containers
 
 
         [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsFalse_ForDoubleKnottedNode()
+        public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsMiddle_ForSingleNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out var middle, out _);
+
+            Assert.AreSame(head, middle);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsMiddle_ForTwoNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out var middle, out _);
+
+            Assert.AreSame(head, middle);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsTail_ForSingleNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out _, out var tail);
+
+            Assert.AreSame(head, tail);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsMinusOne_ForDoubleKnottedNode()
         {
             var head = LinkedListNode<int>.Create(new[] {1, 2});
             Debug.Assert(head != null);
@@ -257,24 +273,24 @@ namespace Abacaxi.Tests.Containers
 
             head.Next.Next = head;
 
-            var check = head.TryGetMiddleAndTailNodes(out _, out _);
-            Assert.IsFalse(check);
+            var len = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.AreEqual(-1, len);
         }
 
         [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsFalse_ForSingleKnottedNode()
+        public void TryGetMiddleAndTailNodes_ReturnsMinusOne_ForSingleKnottedNode()
         {
             var head = LinkedListNode<int>.Create(new[] {1});
             Debug.Assert(head != null);
 
             head.Next = head;
 
-            var check = head.TryGetMiddleAndTailNodes(out _, out _);
-            Assert.IsFalse(check);
+            var len = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.AreEqual(-1, len);
         }
 
         [Test]
-        public void TryGetMiddleAndTailNodes_ReturnsFalse_ForTripleKnottedNode()
+        public void TryGetMiddleAndTailNodes_ReturnsMinusOne_ForTripleKnottedNode()
         {
             var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
             Debug.Assert(head != null);
@@ -283,8 +299,116 @@ namespace Abacaxi.Tests.Containers
 
             head.Next.Next.Next = head.Next;
 
-            var check = head.TryGetMiddleAndTailNodes(out _, out _);
-            Assert.IsFalse(check);
+            var len = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.AreEqual(-1, len);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsOne_ForSingleNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+
+            var result = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.AreEqual(1, result);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsSecondNode_AsMiddle_ForThreeNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out var middle, out _);
+
+            Assert.AreSame(head.Next, middle);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsSecondNode_AsTail_ForTwoNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out _, out var tail);
+
+            Assert.AreSame(head.Next, tail);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsThirdNode_AsTail_ForThreeNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+
+            head.TryGetMiddleAndTailNodes(out _, out var tail);
+
+            Debug.Assert(head.Next != null);
+            Assert.AreSame(head.Next.Next, tail);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsThree_ForThreeNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+
+            var result = head.TryGetMiddleAndTailNodes(out _, out _);
+
+            Assert.AreEqual(3, result);
+        }
+
+        [Test]
+        public void TryGetMiddleAndTailNodes_ReturnsTwo_ForTwoNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            var result = head.TryGetMiddleAndTailNodes(out _, out _);
+            Assert.AreEqual(2, result);
+        }
+
+
+        [Test]
+        public void GetTailNode_ReturnsSecondNode_ForTwoNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            var tail = head.GetTailNode();
+            Assert.AreSame(head.Next, tail);
+        }
+
+        [Test]
+        public void GetTailNode_ReturnsThirdNode_ForThreeNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+
+            var tail = head.GetTailNode();
+
+            Debug.Assert(head.Next != null);
+            Assert.AreSame(head.Next.Next, tail);
+        }
+
+        [Test]
+        public void GetTailNode_ReturnsFirstNode_ForSingleNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+
+            var tail = head.GetTailNode();
+
+            Assert.AreSame(head, tail);
+        }
+
+        [Test]
+        public void GetTailNode_ThrowsError_ForKnottedList()
+        {
+            var head = new LinkedListNode<int>(1);
+            head.Next = head;
+
+            Assert.Throws<InvalidOperationException>(() => head.GetTailNode());
         }
     }
 }
