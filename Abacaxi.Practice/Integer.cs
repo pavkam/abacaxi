@@ -83,6 +83,12 @@ namespace Abacaxi.Practice
             a = a ^ b;
         }
 
+        /// <summary>
+        /// Gets the count of trailing zeroes in factorial.
+        /// </summary>
+        /// <param name="n">The number to factor.</param>
+        /// <returns>The number of trailing zeroes in the factorial.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="n" /> is negative.</exception>
         public static int GetCountOfTrailingZeroesInFactorial(int n)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(n), n);
