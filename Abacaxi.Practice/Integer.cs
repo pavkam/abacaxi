@@ -70,5 +70,12 @@ namespace Abacaxi.Practice
 
             return result;
         }
+
+        public static void Swap(ref int a, ref int b)
+        {
+            a = a ^ b;
+            b = a ^ b;
+            a = a ^ b;
+        }
     }
 }

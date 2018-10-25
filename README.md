@@ -58,7 +58,8 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `Integer.DeconstructIntoPrimeFactors` | *Deconstructs* an integer into a prime factors. |
 | `Integer.IsPrime` | Checks whether an integer is a *prime number*. |
 | `Integer.Zip` | *Zips the digits* of two integers into a new integer. |
-| `Integer.Divide` | A simple *division* algorithm. |
+| `Integer.Divide` | A simple *division* algorithm that only uses addition. |
+| `Integer.Swap` | Algorithms that performs a *swap* of two integers without an additional variable. |
 | `IntegerPartitions.Enumerate` | Enumerates all *integer partition* for a given number. |
 | `IntegerPartitions.GetCount` | Calculates the number of *integer partitions* for a given number. |
 | `Knapsack.Fill` | The generic *0/1 knapsack* algorithm. See related material: <https://en.wikipedia.org/wiki/Knapsack_problem> |
