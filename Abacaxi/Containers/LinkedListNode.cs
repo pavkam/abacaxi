@@ -18,7 +18,6 @@ namespace Abacaxi.Containers
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using Internal;
     using JetBrains.Annotations;
 
@@ -194,8 +193,7 @@ namespace Abacaxi.Containers
                 RaiseListKnottedError();
             }
 
-            Debug.Assert(result != null);
-
+            Assert.NotNull(result);
             return result;
         }
 
@@ -212,7 +210,7 @@ namespace Abacaxi.Containers
                 RaiseListKnottedError();
             }
 
-            Debug.Assert(result != null);
+            Assert.NotNull(result);
 
             return result;
         }
@@ -286,6 +284,30 @@ namespace Abacaxi.Containers
             }
 
             return head1;
+        }
+
+        /// <summary>
+        /// Gets the knot node (the would-be tail).
+        /// </summary>
+        /// <returns>The knot node. If the list is not knotted, <c>null</c>.</returns>
+        [CanBeNull]
+        public LinkedListNode<T> GetKnotNode()
+        {
+            /* Rotate until we detect the knotting */
+            var current = this;
+            var visitedSet = new HashSet<LinkedListNode<T>> {current};
+
+            while (current.Next != null)
+            {
+                if (!visitedSet.Add(current.Next))
+                {
+                    return current;
+                }
+
+                current = current.Next;
+            }
+
+            return null;
         }
     }
 }

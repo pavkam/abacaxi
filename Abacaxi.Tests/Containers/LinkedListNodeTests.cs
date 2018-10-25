@@ -195,6 +195,95 @@ namespace Abacaxi.Tests.Containers
             Assert.Throws<ArgumentNullException>(() => list.GetIntersectionNode(null));
         }
 
+        [Test]
+        public void GetKnotNode_ReturnsHead_IfKnot()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+            head.Next = head;
+
+            Assert.AreSame(head, head.GetKnotNode());
+        }
+
+
+        [Test]
+        public void GetKnotNode_ReturnsNull_IfTheListIsNotKnotted_1()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+
+            Assert.IsNull(head.GetKnotNode());
+        }
+
+        [Test]
+        public void GetKnotNode_ReturnsNull_IfTheListIsNotKnotted_2()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            Assert.IsNull(head.GetKnotNode());
+        }
+
+        [Test]
+        public void GetKnotNode_ReturnsNull_IfTheListIsNotKnotted_3()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+
+            Assert.IsNull(head.GetKnotNode());
+        }
+
+        [Test]
+        public void GetKnotNode_ReturnsSecond_IfKnot()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+            Debug.Assert(head.Next != null);
+
+            head.Next.Next = head;
+
+            Assert.That(head.Next == head.GetKnotNode());
+        }
+
+        [Test]
+        public void GetKnotNode_ReturnsThird_IfKnot_1()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+            Debug.Assert(head.Next != null);
+            Debug.Assert(head.Next.Next != null);
+
+            head.Next.Next.Next = head;
+
+            Assert.That(head.Next.Next == head.GetKnotNode());
+        }
+
+        [Test]
+        public void GetKnotNode_ReturnsThird_IfKnot_2()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+            Debug.Assert(head.Next != null);
+            Debug.Assert(head.Next.Next != null);
+
+            head.Next.Next.Next = head.Next;
+
+            Assert.That(head.Next.Next == head.GetKnotNode());
+        }
+
+        [Test]
+        public void GetKnotNode_ReturnsThird_IfKnot_3()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+            Debug.Assert(head.Next != null);
+            Debug.Assert(head.Next.Next != null);
+
+            head.Next.Next.Next = head.Next.Next;
+
+            Assert.That(head.Next.Next == head.GetKnotNode());
+        }
+
 
         [Test]
         public void GetLength_ReturnsOne_ForSingleNodeList()

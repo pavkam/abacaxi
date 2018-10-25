@@ -42,6 +42,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `LinkedListNode.TryGetMiddleAndTailNodes` | Finds the middle and tail nodes in one pass. If the list os circular, the method returns `false` See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists> |
 | `LinkedListNode.Reverse` | *Reverses* a singly-linked list using the recursive algorithm. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
 | `LinkedListNode.GetIntersectionNode` | Find the node that is the *intersection* of two singly-linked. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
+| `LinkedListNode.GetKnotNode` | Find the node that connects the tail of the list to another interior node (knot) in a singly-linked. See related material: <https://www.geeksforgeeks.org/detect-and-remove-loop-in-a-linked-list/>  |
 | `Graph.TraverseBfs` | Traverses the vertices in a graph using the *breadth-first search*. See related material: <https://en.wikipedia.org/wiki/Breadth-first_search> |
 | `Graph.TraverseDfs` | Traverses the vertices in a graph using the *depth-first search*. See related material: <https://en.wikipedia.org/wiki/Depth-first_search> |
 | `Graph.FillWithOneColor` | *Fills* all vertices of a graph with a given "color". See related material: <https://en.wikipedia.org/wiki/Flood_fill> |
