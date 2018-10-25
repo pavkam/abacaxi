@@ -82,5 +82,23 @@ namespace Abacaxi.Practice
             b = a ^ b;
             a = a ^ b;
         }
+
+        public static int GetCountOfTrailingZeroesInFactorial(int n)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(n), n);
+
+            var count = 0;
+            for (var i = 2; i <= n; i++)
+            {
+                var k = i;
+                while (k % 5 == 0)
+                {
+                    k = k / 5;
+                    count++;
+                }
+            }
+
+            return count;
+        }
     }
 }
