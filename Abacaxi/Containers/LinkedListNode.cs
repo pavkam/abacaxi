@@ -182,7 +182,7 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets the linked list's middle node.
+        ///     Gets the linked list's middle node.
         /// </summary>
         /// <returns>The middle node.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the list is knotted (circular).</exception>
@@ -200,7 +200,7 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets the linked list's tail node.
+        ///     Gets the linked list's tail node.
         /// </summary>
         /// <returns>The tail node.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the list is knotted (circular).</exception>
@@ -220,7 +220,10 @@ namespace Abacaxi.Containers
         /// <summary>
         ///     Reverses a given linked list using the iterative method.
         /// </summary>
-        /// <remarks>This method does not check for knotted lists. A knotted (circular) list will force this method to execute indefinitely.</remarks>
+        /// <remarks>
+        ///     This method does not check for knotted lists. A knotted (circular) list will force this method to execute
+        ///     indefinitely.
+        /// </remarks>
         /// <returns>The new head of the linked list.</returns>
         [NotNull]
         public LinkedListNode<T> Reverse()
@@ -238,6 +241,51 @@ namespace Abacaxi.Containers
             }
 
             return head;
+        }
+
+        /// <summary>
+        ///     Gets the node that is the intersection of two linked lists.
+        /// </summary>
+        /// <param name="head">The head of the other linked list.</param>
+        /// <returns>The node that is the intersection of the two lists (or <c>null</c> if the lists do not intersect.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the list is knotted (circular).</exception>
+        [CanBeNull]
+        public LinkedListNode<T> GetIntersectionNode([NotNull] LinkedListNode<T> head)
+        {
+            Validate.ArgumentNotNull(nameof(head), head);
+
+            var head1 = this;
+            var head2 = head;
+
+            var len1 = head1.GetLength();
+            var len2 = head2.GetLength();
+
+            while (len1 > len2)
+            {
+                Assert.NotNull(head1);
+
+                len1--;
+                head1 = head1.Next;
+            }
+
+            while (len2 > len1)
+            {
+                Assert.NotNull(head2);
+
+                len2--;
+                head2 = head2.Next;
+            }
+
+            while (head1 != head2)
+            {
+                Assert.NotNull(head1);
+                Assert.NotNull(head2);
+
+                head1 = head1.Next;
+                head2 = head2.Next;
+            }
+
+            return head1;
         }
     }
 }

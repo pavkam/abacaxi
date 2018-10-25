@@ -17,6 +17,7 @@ namespace Abacaxi.Tests.Containers
 {
     using System;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using Abacaxi.Containers;
     using NUnit.Framework;
 
@@ -83,6 +84,115 @@ namespace Abacaxi.Tests.Containers
                 head.Next,
                 head.Next.Next,
                 head.Next.Next.Next);
+        }
+
+
+        [Test]
+        public void GetIntersectionNode_ReturnsFirstNode_IfSelfChecking_1()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+
+            Assert.AreSame(head, head.GetIntersectionNode(head));
+        }
+
+        [Test]
+        public void GetIntersectionNode_ReturnsFirstNode_IfSelfChecking_2()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            Assert.AreSame(head, head.GetIntersectionNode(head));
+        }
+
+        [Test]
+        public void GetIntersectionNode_ReturnsFirstNode_IfSelfChecking_3()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+
+            Assert.AreSame(head, head.GetIntersectionNode(head));
+        }
+
+        [Test]
+        public void GetIntersectionNode_ReturnsMiddleNode_IfSelfChecking_ByMiddle()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+            Debug.Assert(head.Next != null);
+
+            Assert.AreSame(head.Next, head.GetIntersectionNode(head.Next));
+        }
+
+        [Test]
+        public void GetIntersectionNode_ReturnsTheProperNode_1()
+        {
+            var list1 = LinkedListNode<int>.Create(new[] {1, 2, 3, 4, 5});
+            Debug.Assert(list1 != null);
+
+            var list2 = LinkedListNode<int>.Create(new[] {12});
+            Debug.Assert(list2 != null);
+
+            list2.Next = list1.Next;
+
+            Assert.AreSame(list1.Next, list2.GetIntersectionNode(list1));
+        }
+
+        [Test]
+        public void GetIntersectionNode_ReturnsTheProperNode_2()
+        {
+            var list1 = LinkedListNode<int>.Create(new[] {1, 2, 3, 4, 5});
+            Debug.Assert(list1 != null);
+
+            var list2 = LinkedListNode<int>.Create(new[] {11, 12, 13, 14, 15, 16});
+            Debug.Assert(list2 != null);
+
+            list2.GetTailNode().Next = list1.GetMiddleNode();
+
+            Assert.AreSame(list1.GetMiddleNode(), list2.GetIntersectionNode(list1));
+        }
+
+        [Test]
+        public void GetIntersectionNode_ReturnsTheProperNode_3()
+        {
+            var list1 = LinkedListNode<int>.Create(new[] {1, 2, 3, 4, 5});
+            Debug.Assert(list1 != null);
+
+            var list2 = LinkedListNode<int>.Create(new[] {6});
+            Debug.Assert(list2 != null);
+
+            list2.Next = list1.GetTailNode();
+
+            Assert.IsTrue(list1.GetIntersectionNode(list2) == list2.Next);
+        }
+
+
+        [Test]
+        public void GetIntersectionNode_ThrowsError_IfListIsKnotted()
+        {
+            var list = new LinkedListNode<int>(1);
+            list.Next = list;
+            var other = new LinkedListNode<int>(2);
+
+            Assert.Throws<InvalidOperationException>(() => list.GetIntersectionNode(other));
+        }
+
+        [Test]
+        public void GetIntersectionNode_ThrowsError_IfOtherListIsKnotted()
+        {
+            var list = new LinkedListNode<int>(1);
+            var other = new LinkedListNode<int>(2);
+            other.Next = other;
+
+            Assert.Throws<InvalidOperationException>(() => list.GetIntersectionNode(other));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetIntersectionNode_ThrowsError_IfOtherListIsNull()
+        {
+            var list = new LinkedListNode<int>(1);
+
+            Assert.Throws<ArgumentNullException>(() => list.GetIntersectionNode(null));
         }
 
 
@@ -163,6 +273,49 @@ namespace Abacaxi.Tests.Containers
             head.Next = head;
 
             Assert.Throws<InvalidOperationException>(() => head.GetMiddleNode());
+        }
+
+        [Test]
+        public void GetTailNode_ReturnsFirstNode_ForSingleNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1});
+            Debug.Assert(head != null);
+
+            var tail = head.GetTailNode();
+
+            Assert.AreSame(head, tail);
+        }
+
+
+        [Test]
+        public void GetTailNode_ReturnsSecondNode_ForTwoNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2});
+            Debug.Assert(head != null);
+
+            var tail = head.GetTailNode();
+            Assert.AreSame(head.Next, tail);
+        }
+
+        [Test]
+        public void GetTailNode_ReturnsThirdNode_ForThreeNodeList()
+        {
+            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
+            Debug.Assert(head != null);
+
+            var tail = head.GetTailNode();
+
+            Debug.Assert(head.Next != null);
+            Assert.AreSame(head.Next.Next, tail);
+        }
+
+        [Test]
+        public void GetTailNode_ThrowsError_ForKnottedList()
+        {
+            var head = new LinkedListNode<int>(1);
+            head.Next = head;
+
+            Assert.Throws<InvalidOperationException>(() => head.GetTailNode());
         }
 
 
@@ -366,49 +519,6 @@ namespace Abacaxi.Tests.Containers
 
             var result = head.TryGetMiddleAndTailNodes(out _, out _);
             Assert.AreEqual(2, result);
-        }
-
-
-        [Test]
-        public void GetTailNode_ReturnsSecondNode_ForTwoNodeList()
-        {
-            var head = LinkedListNode<int>.Create(new[] {1, 2});
-            Debug.Assert(head != null);
-
-            var tail = head.GetTailNode();
-            Assert.AreSame(head.Next, tail);
-        }
-
-        [Test]
-        public void GetTailNode_ReturnsThirdNode_ForThreeNodeList()
-        {
-            var head = LinkedListNode<int>.Create(new[] {1, 2, 3});
-            Debug.Assert(head != null);
-
-            var tail = head.GetTailNode();
-
-            Debug.Assert(head.Next != null);
-            Assert.AreSame(head.Next.Next, tail);
-        }
-
-        [Test]
-        public void GetTailNode_ReturnsFirstNode_ForSingleNodeList()
-        {
-            var head = LinkedListNode<int>.Create(new[] {1});
-            Debug.Assert(head != null);
-
-            var tail = head.GetTailNode();
-
-            Assert.AreSame(head, tail);
-        }
-
-        [Test]
-        public void GetTailNode_ThrowsError_ForKnottedList()
-        {
-            var head = new LinkedListNode<int>(1);
-            head.Next = head;
-
-            Assert.Throws<InvalidOperationException>(() => head.GetTailNode());
         }
     }
 }
