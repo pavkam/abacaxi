@@ -309,5 +309,12 @@ namespace Abacaxi.Containers
 
             return null;
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            var next = Next == null ? "null" : Next.Value?.ToString();
+            return $"{Value} => {next}";
+        }
     }
 }
