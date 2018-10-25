@@ -25,7 +25,7 @@ namespace Abacaxi.Practice
     public static class Integer
     {
         /// <summary>
-        ///     Divides <paramref name="number" /> by <paramref name="divisor" />.
+        ///     Divides <paramref name="number" /> by <paramref name="divisor" /> using only addition.
         /// </summary>
         /// <param name="number">The number to divide.</param>
         /// <param name="divisor">The divisor.</param>
@@ -71,6 +71,11 @@ namespace Abacaxi.Practice
             return result;
         }
 
+        /// <summary>
+        /// Swaps the values of two variables without using an intermediary variable (using XORs).
+        /// </summary>
+        /// <param name="a">The first variable.</param>
+        /// <param name="b">The second variable.</param>
         public static void Swap(ref int a, ref int b)
         {
             a = a ^ b;
