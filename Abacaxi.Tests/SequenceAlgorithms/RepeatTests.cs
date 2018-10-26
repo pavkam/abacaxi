@@ -20,7 +20,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     using NUnit.Framework;
 
     [TestFixture]
-    public class RepeatTests
+    public sealed class RepeatTests
     {
         [Test]
         public void Repeat_DoesNothing_ForOneRepetition()

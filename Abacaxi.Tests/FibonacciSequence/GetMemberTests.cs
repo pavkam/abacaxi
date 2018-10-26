@@ -20,7 +20,7 @@ namespace Abacaxi.Tests.FibonacciSequence
     using FibonacciSequence = Abacaxi.FibonacciSequence;
 
     [TestFixture]
-    public class GetFibonacciNumber
+    public sealed class GetFibonacciNumber
     {
         [Test]
         public void GetMember_ReturnsCorrectNumber_ForGivenIndex()

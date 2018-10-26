@@ -22,7 +22,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     using NUnit.Framework;
 
     [TestFixture]
-    public class ExtractNestedBlocksTests
+    public sealed class ExtractNestedBlocksTests
     {
         [Test]
         public void ExtractNestedBlocks_ReturnsAllSequences_InMultiBlock()

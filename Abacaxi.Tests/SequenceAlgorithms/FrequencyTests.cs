@@ -19,7 +19,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     using NUnit.Framework;
 
     [TestFixture]
-    public class FrequencyTests
+    public sealed class FrequencyTests
     {
         [Test]
         public void Count_ReturnsValidValue()
