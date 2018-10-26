@@ -16,53 +16,24 @@
 namespace Abacaxi.Tests.Integer
 {
     using NUnit.Framework;
-    using Integer = Practice.Integer;
+    using Practice;
 
     [TestFixture]
-    public sealed class SwapTests
+    public sealed class MaxTests
     {
-        [Test]
-        public void Swap_DoesNothing_IfValuesAreEqual()
+        [TestCase(0, 0, 0),
+         TestCase(int.MaxValue, 1, int.MaxValue),
+         TestCase(int.MinValue, -1, -1),
+         TestCase(int.MinValue, int.MaxValue, int.MaxValue),
+         TestCase(1, int.MaxValue, int.MaxValue),
+         TestCase(-1, int.MinValue, -1),
+         TestCase(int.MaxValue, int.MinValue, int.MaxValue)
+        ]
+        public void Max_ReturnsProperValue(int a, int b, int expected)
         {
-            var a = 100;
-            var b = 100;
+            var result = Integer.Max(a, b);
 
-            Integer.Swap(ref a, ref b);
-
-            Assert.That(a == b && a == 100);
-        }
-
-        [Test]
-        public void Swap_SwapsTwoPositiveValues()
-        {
-            var a = int.MaxValue;
-            var b = int.MaxValue / 2;
-
-            Integer.Swap(ref a, ref b);
-
-            Assert.That(a == int.MaxValue / 2 && b == int.MaxValue);
-        }
-
-        [Test]
-        public void Swap_SwapsTwoNegativeValues()
-        {
-            var a = int.MinValue;
-            var b = int.MinValue / 2;
-
-            Integer.Swap(ref a, ref b);
-
-            Assert.That(a == int.MinValue / 2 && b == int.MinValue);
-        }
-
-        [Test]
-        public void Swap_SwapsNegativeAndPositiveValues()
-        {
-            var a = int.MaxValue;
-            var b = int.MinValue;
-
-            Integer.Swap(ref a, ref b);
-
-            Assert.That(a == int.MinValue && b == int.MaxValue);
+            Assert.AreEqual(expected, result);
         }
     }
 }

@@ -62,6 +62,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `Integer.Divide` | A simple *division* algorithm that only uses addition. |
 | `Integer.Swap` | Algorithm that performs a *swap* of two integers without an additional variable. |
 | `Integer. GetCountOfTrailingZeroesInFactorial` | Find the number of *trailing zeroes* for a factorial number. See related material: <https://www.geeksforgeeks.org/count-trailing-zeroes-factorial-number/> |
+| `Integer.Max` | Returns the *maximum of two integers* without using comparisons. |
 | `IntegerPartitions.Enumerate` | Enumerates all *integer partitions* for a given number. |
 | `IntegerPartitions.GetCount` | Calculates the number of *integer partitions* for a given number. |
 | `Knapsack.Fill` | The generic *0/1 knapsack* algorithm. See related material: <https://en.wikipedia.org/wiki/Knapsack_problem> |

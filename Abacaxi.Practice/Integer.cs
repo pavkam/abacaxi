@@ -106,5 +106,27 @@ namespace Abacaxi.Practice
 
             return count;
         }
+
+        /// <summary>
+        /// Returns the maximum of two numbers without using comparison operators.
+        /// </summary>
+        /// <param name="a">The first value.</param>
+        /// <param name="b">The second value.</param>
+        /// <returns>The maximum of two values.</returns>
+        public static int Max(int a, int b)
+        {
+            /* Identify if a, b and their difference are positive (cha, chb and chd will be 1 if that is the case and 0 otherwise). */
+            var cha = ((a >> 31) & 1) ^ 1;
+            var chb = ((b >> 31) & 1) ^ 1;
+            var chd = (((a - b) >> 31) & 1) ^ 1;
+
+            /* Calculate the "max" using two cases - when the sign differs (z1)
+             and when the sign is the same (z2). One of the terms will be equal to either a or b. Otherwise, zero. */
+            var z1 = (cha ^ chb) * (cha * a + chb * b);
+            var z2 = ((cha ^ chb) ^ 1) * (chd * a + (chd ^ 1) * b);
+
+            /* Select either z1 or z2 (they are exclusive) */
+            return z1 + z2;
+        }
     }
 }
