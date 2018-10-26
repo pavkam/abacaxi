@@ -1229,6 +1229,16 @@ namespace Abacaxi
         }
 
 
+        /// <summary>
+        /// Finds the index and length of the unordered subsequence in the given <paramref name="sequence"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence to check.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns>A tuple consisting of the index where the sub-sequence starts and its length.<c>(0, 0)</c> is returned if there is no such sub-sequence.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
         public static (int index, int length) FindUnorderedSubsequenceRange<T>(
             [NotNull] this IList<T> sequence,
             [NotNull] IComparer<T> comparer)
