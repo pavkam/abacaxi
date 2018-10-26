@@ -1228,6 +1228,84 @@ namespace Abacaxi
             return -1;
         }
 
+
+        public static (int index, int length) FindUnorderedSubsequenceRange<T>(
+            [NotNull] this IList<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            /* Find the start of middle sequence */
+            var si = 0;
+            while (si < sequence.Count - 1 &&
+                   comparer.Compare(sequence[si], sequence[si + 1]) <= 0)
+            {
+                si++;
+            }
+
+            if (si >= sequence.Count - 1)
+            {
+                return (0, 0);
+            }
+
+            /* Find the end of middle sequence */
+            var ei = sequence.Count - 1;
+            while (ei > 0 &&
+                   comparer.Compare(sequence[ei - 1], sequence[ei]) <= 0)
+            {
+                ei--;
+            }
+
+            /* Min/max */
+            var min = default(T);
+            var fstMin = true;
+
+            var max = default(T);
+            var fstMax = true;
+
+            if (ei < sequence.Count - 1)
+            {
+                min = sequence[ei + 1];
+                fstMin = false;
+            }
+
+            if (si > 0)
+            {
+                max = sequence[si - 1];
+                fstMax = false;
+            }
+
+            for (var i = si; i <= ei; i++)
+            {
+                if (fstMin || comparer.Compare(min, sequence[i]) > 0)
+                {
+                    min = sequence[i];
+                    fstMin = false;
+                }
+
+                if (fstMax || comparer.Compare(max, sequence[i]) < 0)
+                {
+                    max = sequence[i];
+                    fstMax = false;
+                }
+            }
+
+            /* Shrink left. */
+            while (si > 0 && comparer.Compare(sequence[si - 1], min) >= 0)
+            {
+                si--;
+            }
+
+            /* Shrink right. */
+            while (ei < sequence.Count - 1 && comparer.Compare(sequence[ei + 1], max) < 0)
+            {
+                ei++;
+            }
+
+            return (si, ei - si + 1);
+        }
+
         private struct EditChoice
         {
             public const int Cancel = -1;
