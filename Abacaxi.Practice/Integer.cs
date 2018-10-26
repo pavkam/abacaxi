@@ -72,6 +72,25 @@ namespace Abacaxi.Practice
         }
 
         /// <summary>
+        /// Sums the two integers using only bitwise operations.
+        /// </summary>
+        /// <param name="a">The first value.</param>
+        /// <param name="b">The second value.</param>
+        /// <returns>The sum of <paramref name="a"/> and <paramref name="b"/>.</returns>
+        public static int Sum(int a, int b)
+        {
+            while (b != 0)
+            {
+                var z = a ^ b;
+
+                b = (a & b) << 1;
+                a = z;
+            }
+
+            return a;
+        }
+
+        /// <summary>
         /// Swaps the values of two variables without using an intermediary variable (using XORs).
         /// </summary>
         /// <param name="a">The first variable.</param>
