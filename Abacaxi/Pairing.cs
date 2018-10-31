@@ -221,6 +221,22 @@ namespace Abacaxi
             return (array[0], array[array.Length - 1]);
         }
 
+        /// <summary>
+        ///     Gets the first pair in <paramref name="sequence" /> that whose elements are in are at maximum distance from each
+        ///     other (in
+        ///     terms of value) and in increasing order.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="evaluateDiffOfPairFunc">The difference evaluation function.</param>
+        /// <returns>
+        ///     The pair that has the maximum difference between its elements. If the <paramref name="sequence" /> contains
+        ///     less than two elements or all elements are in decreasing order, <c>null</c> is returned.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="evaluateDiffOfPairFunc" /> are <c>null</c>.
+        /// </exception>
         public static (T first, T last)? GetPairWithIncreasingOrderMaximumDifference<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Func<T, T, double> evaluateDiffOfPairFunc)
