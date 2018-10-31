@@ -23,7 +23,7 @@ namespace Abacaxi.Tests.Pairing
     using Pairing = Abacaxi.Pairing;
 
     [TestFixture]
-    public sealed class GetWithApproximateMinimumCost
+    public sealed class GetPairsWithApproximateMinimumCostTests
     {
         private static double DistanceCostOfPairsEvaluator(int l, int r)
         {
@@ -31,7 +31,7 @@ namespace Abacaxi.Tests.Pairing
         }
 
         [TestCase(10), TestCase(20), TestCase(100), TestCase(1000), Parallelizable]
-        public void GetWithApproximateMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
+        public void GetPairsWithApproximateMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
         {
             var random = new Random();
             var sequence = new List<int>();
@@ -43,7 +43,7 @@ namespace Abacaxi.Tests.Pairing
                 expected.AddOrUpdate(item, 1, e => e + 1);
             }
 
-            var result = Pairing.GetWithApproximateMinimumCost(sequence, DistanceCostOfPairsEvaluator);
+            var result = Pairing.GetPairsWithApproximateMinimumCost(sequence, DistanceCostOfPairsEvaluator);
             foreach (var r in result)
             {
                 var x = new[] {r.Item1, r.Item2};
@@ -68,7 +68,7 @@ namespace Abacaxi.Tests.Pairing
          TestCase(1024, 50, 90000, 0.01), TestCase(4096, 25, 400000, 0.01), TestCase(4, 100, 10, 0.10),
          TestCase(32, 100, 350, 0.11), TestCase(128, 100, 1500, 0.10), TestCase(1024, 50, 9000, 0.10),
          TestCase(4096, 25, 35000, 0.10), Parallelizable]
-        public void GetWithApproximateMinimumCost_ApproximatesAtExpectedError(int length, int samples, int iterations,
+        public void GetPairsWithApproximateMinimumCost_ApproximatesAtExpectedError(int length, int samples, int iterations,
             double expectedMaxError)
         {
             var totalError = .0;
@@ -83,7 +83,7 @@ namespace Abacaxi.Tests.Pairing
                 }
 
                 var approxResult =
-                    Pairing.GetWithApproximateMinimumCost(sequence, DistanceCostOfPairsEvaluator, iterations);
+                    Pairing.GetPairsWithApproximateMinimumCost(sequence, DistanceCostOfPairsEvaluator, iterations);
                 var approxCost = approxResult.Sum(s => DistanceCostOfPairsEvaluator(s.Item1, s.Item2));
 
                 sequence.Sort();
@@ -111,47 +111,47 @@ namespace Abacaxi.Tests.Pairing
         }
 
         [Test]
-        public void GetWithApproximateMinimumCost_ReturnsEmptyArray_ForEmptySequence()
+        public void GetPairsWithApproximateMinimumCost_ReturnsEmptyArray_ForEmptySequence()
         {
-            var result = Pairing.GetWithApproximateMinimumCost(new int[] { }, DistanceCostOfPairsEvaluator);
+            var result = Pairing.GetPairsWithApproximateMinimumCost(new int[] { }, DistanceCostOfPairsEvaluator);
             TestHelper.AssertSequence(result);
         }
 
         [Test]
-        public void GetWithApproximateMinimumCost_ReturnsOnePair_ForTwoElementSequence()
+        public void GetPairsWithApproximateMinimumCost_ReturnsOnePair_ForTwoElementSequence()
         {
-            var result = Pairing.GetWithApproximateMinimumCost(new[] {1, 2}, DistanceCostOfPairsEvaluator);
+            var result = Pairing.GetPairsWithApproximateMinimumCost(new[] {1, 2}, DistanceCostOfPairsEvaluator);
 
             Assert.AreEqual(1, result.Length);
             Assert.IsTrue(result[0].Equals((1, 2)) || result[0].Equals((2, 1)));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetWithApproximateMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
+        public void GetPairsWithApproximateMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
         {
             Assert.Throws<ArgumentNullException>(
-                () => Pairing.GetWithApproximateMinimumCost(new[] {1, 2}, null));
+                () => Pairing.GetPairsWithApproximateMinimumCost(new[] {1, 2}, null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetWithApproximateMinimumCost_ThrowsException_ForNullSequence()
+        public void GetPairsWithApproximateMinimumCost_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(
-                () => Pairing.GetWithApproximateMinimumCost<int>(null, DistanceCostOfPairsEvaluator));
+                () => Pairing.GetPairsWithApproximateMinimumCost<int>(null, DistanceCostOfPairsEvaluator));
         }
 
         [Test]
-        public void GetWithApproximateMinimumCost_ThrowsException_ForSequenceWithOddNumberOfElements()
+        public void GetPairsWithApproximateMinimumCost_ThrowsException_ForSequenceWithOddNumberOfElements()
         {
             Assert.Throws<ArgumentException>(
-                () => Pairing.GetWithApproximateMinimumCost(new[] {1, 2, 3}, DistanceCostOfPairsEvaluator));
+                () => Pairing.GetPairsWithApproximateMinimumCost(new[] {1, 2, 3}, DistanceCostOfPairsEvaluator));
         }
 
         [Test]
-        public void GetWithApproximateMinimumCost_ThrowsException_ForZeroOrLessIterationCount()
+        public void GetPairsWithApproximateMinimumCost_ThrowsException_ForZeroOrLessIterationCount()
         {
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => Pairing.GetWithApproximateMinimumCost(new[] {1, 2}, DistanceCostOfPairsEvaluator, 0));
+                () => Pairing.GetPairsWithApproximateMinimumCost(new[] {1, 2}, DistanceCostOfPairsEvaluator, 0));
         }
     }
 }

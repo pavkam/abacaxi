@@ -92,7 +92,7 @@ namespace Abacaxi
         /// </exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence" /> is not even.</exception>
         [NotNull]
-        public static (T, T)[] GetWithMinimumCost<T>(
+        public static (T, T)[] GetPairsWithMinimumCost<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Func<T, T, double> evaluateCostOfPairFunc)
         {
@@ -154,7 +154,7 @@ namespace Abacaxi
         /// </exception>
         /// <exception cref="ArgumentException">Thrown if the number of elements in <paramref name="sequence" /> is not even.</exception>
         [NotNull]
-        public static (T, T)[] GetWithApproximateMinimumCost<T>(
+        public static (T, T)[] GetPairsWithApproximateMinimumCost<T>(
             [NotNull] IList<T> sequence,
             [NotNull] Func<T, T, double> evaluateCostOfPairFunc,
             int iterations = 100000)
@@ -186,6 +186,39 @@ namespace Abacaxi
                     return (pair[0], pair[1]);
                 })
                 .ToArray();
+        }
+
+        /// <summary>
+        ///     Gets the first pair in <paramref name="sequence" /> that whose elements are at maximum distance from each other (in
+        ///     terms of value).
+        /// </summary>
+        /// <typeparam name="T">The type of items in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="comparer">The element comparer.</param>
+        /// <returns>
+        ///     The pair that has the maximum difference between its elements. If the <paramref name="sequence" /> contains
+        ///     less than two elements, <c>null</c> is returned.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        public static (T first, T last)? GetPairWithMaximumDifference<T>(
+            [NotNull] IEnumerable<T> sequence,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var array = sequence.ToArray();
+            if (array.Length < 2)
+            {
+                return null;
+            }
+
+            Sorting.QuickSort(array, 0, array.Length, comparer);
+
+            return (array[0], array[array.Length - 1]);
         }
 
         private sealed class RecursiveFindSubsetPairingWithLowestCostContext
