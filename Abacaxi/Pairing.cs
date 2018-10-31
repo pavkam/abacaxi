@@ -221,6 +221,49 @@ namespace Abacaxi
             return (array[0], array[array.Length - 1]);
         }
 
+        public static (T first, T last)? GetPairWithIncreasingOrderMaximumDifference<T>(
+            [NotNull] IList<T> sequence,
+            [NotNull] Func<T, T, double> evaluateDiffOfPairFunc)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(evaluateDiffOfPairFunc), evaluateDiffOfPairFunc);
+
+            if (sequence.Count < 2)
+            {
+                return null;
+            }
+
+            (T first, T last, double diff) current = (sequence[0], sequence[1],
+                evaluateDiffOfPairFunc(sequence[1], sequence[0]));
+
+            (T first, T last, double diff) best = (default(T), default(T), 0);
+
+            for (var i = 2; i < sequence.Count; i++)
+            {
+                var diff = evaluateDiffOfPairFunc(sequence[i], current.first);
+                if (diff > current.diff)
+                {
+                    current = (current.first, sequence[i], diff);
+                }
+                else if (diff < 0)
+                {
+                    if (best.diff < current.diff)
+                    {
+                        best = current;
+                    }
+
+                    current = (sequence[i], default(T), 0);
+                }
+            }
+
+            if (best.diff < current.diff)
+            {
+                best = current;
+            }
+
+            return best.diff <= 0 ? ((T, T)?) null : (best.first, best.last);
+        }
+
         private sealed class RecursiveFindSubsetPairingWithLowestCostContext
         {
             [NotNull] public readonly Func<int, int, double> CalculatePairCost;

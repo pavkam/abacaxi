@@ -72,6 +72,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `Pairing.GetPairsWithMinimumCost` | *Pairs the elements of a sequence* as to minimize the cost of each pair. |
 | `Pairing. GetPairsWithApproximateMinimumCost` | *Pairs the elements of a sequence* as to approximate minimization of the cost of each pair.  |
 | `Pairing. GetPairWithMaximumDifference` | Find the first pair in a sequence whose elements *yield the greatest difference*. |
+| `Pairing. GetPairWithIncreasingOrderMaximumDifference` | Find the first pair in a sequence whose elements *yield the greatest difference* with the restriction that elements in eth pair are strictly increasing. |
 | `ZArray.Construct` | Constructs a *Z-array* from a given input sequence. Z-arrays are useful for string pattern matching. See related materials: <http://wittawat.com/assets/talks/z_algorithm.pdf>, <https://shiv4289.wordpress.com/2013/09/17/z-algorithm-for-pattern-matching/> |
 | `RandomExtensions.Sample` | A *random sampling* algorithm for a sequence of objects. See related material: <https://en.wikipedia.org/wiki/Reservoir_sampling> |
 | `RandomExtensions.NextBool` | An extension method that allows retrieving a *random boolean* value. |
@@ -109,11 +110,11 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.IsOrdered` | Checkes whether the elements of a given sequence are sorted in ascending order. |
 | `SequenceExtensions.IsStrictlyOrdered` | Checkes whether the elements of a given sequence are strictly sorted in ascending order. |
 | `SequenceExtensions.IsOrderedDescending` | Checkes whether the elements of a given sequence are sorted in descending order. |
-| `SequenceExtensions.IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
+| `SequenceExtensions. IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
 | `SequenceExtensions.IsPalindrome` | Checks if a given (sub)sequence is a palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
-| `SequenceExtensions.IsPermutationOfPalindrome` | Checks if a given (sub)sequence is a possible permutation of palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
+| `SequenceExtensions. IsPermutationOfPalindrome` | Checks if a given (sub)sequence is a possible permutation of palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
 | `SequenceExtensions.IndexOfPermutationOf` | Finds the first occurence of sub-sequence (or any of its permutations) in the given sequence. |
-| `SequenceExtensions.FindUnorderedSubsequenceRange` | Finds the *un-ordered sub-sequence* inside a given sequence. Once found sub-sequence is sorted, the whole sequence becomes ordered. |
+| `SequenceExtensions. FindUnorderedSubsequenceRange` | Finds the *un-ordered sub-sequence* inside a given sequence. Once found sub-sequence is sorted, the whole sequence becomes ordered. |
 | `Set.EnumerateSubsetCombinations` | *Splits a set into subsets* of a given length and returns all such combinations. |
 | `Set.SplitIntoSubsetsOfEqualValue` | Tries to find all *subsets with equal aggregate value*. See related material: <http://www.usaco.org/index.php?page=viewproblem2&cpid=139> |
 | `Set.GetSubsetWithNearValue` | Extracts a subset of integers whose sum is equal or very *close to the target value*. |
@@ -143,4 +144,4 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `StringExtensions.SplitIntoLines` | *Splits* a given string into its contituent lines. Treats both _"\n"_ and _"\r\n"_ as line breaks. |
 | `StringExtensions.WordWrap` | *Word-wraps* a string to a given max line length. Uses white-spaces and puctuation characters as potential line breaks. |
 | `StringExtensions.StripDiacritics` | *Strips the Unicode diacritics* from a text. Useful for text normalization in searches. |
-| `StringBuilderExtensions.AppendNotEmptyLine` | *Appends a line to the string builder* if the line is not empty. |
+| `StringBuilderExtensions. AppendNotEmptyLine` | *Appends a line to the string builder* if the line is not empty. |
