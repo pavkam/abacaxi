@@ -57,6 +57,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `FibonacciSequence.GetMember` | Returns the *Fibonacci number* at a given index in the series. See related material: <https://en.wikipedia.org/wiki/Fibonacci_number> |
 | `Integer.DeconstructIntoPowersOfTwo` | *Deconstructs* an integer into a sum of powers of two. |
 | `Integer.DeconstructIntoPrimeFactors` | *Deconstructs* an integer into a prime factors. |
+| `Integer.Break` | *Deconstructs* an integer into repeatable components. See related material: <https://en.wikipedia.org/wiki/Change-making_problem> |
 | `Integer.IsPrime` | Checks whether an integer is a *prime number*. |
 | `Integer.Zip` | *Zips the digits* of two integers into a new integer. |
 | `Integer.Divide` | A simple *division* algorithm that only uses addition. |

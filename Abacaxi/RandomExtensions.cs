@@ -107,7 +107,7 @@ namespace Abacaxi
         public static T NextItem<T>([NotNull] this Random random, [NotNull] IList<T> sequence)
         {
             Validate.ArgumentNotNull(nameof(random), random);
-            Validate.SequenceArgumentNotEmpty(nameof(sequence), sequence);
+            Validate.ArgumentNotEmpty(nameof(sequence), sequence);
 
             return sequence[random.Next(sequence.Count)];
         }
