@@ -117,6 +117,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions. IsPermutationOfPalindrome` | Checks if a given (sub)sequence is a possible permutation of palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
 | `SequenceExtensions.IndexOfPermutationOf` | Finds the first occurence of sub-sequence (or any of its permutations) in the given sequence. |
 | `SequenceExtensions. FindUnorderedSubsequenceRange` | Finds the *un-ordered sub-sequence* inside a given sequence. Once found sub-sequence is sorted, the whole sequence becomes ordered. |
+| `SequenceExtensions. GetRangeWithGreatestAggregateValue` | Finds the sub-sequence range with the *greatest aggregate* value. |
 | `Set.EnumerateSubsetCombinations` | *Splits a set into subsets* of a given length and returns all such combinations. |
 | `Set.SplitIntoSubsetsOfEqualValue` | Tries to find all *subsets with equal aggregate value*. See related material: <http://www.usaco.org/index.php?page=viewproblem2&cpid=139> |
 | `Set.GetSubsetWithNearValue` | Extracts a subset of integers whose sum is equal or very *close to the target value*. |

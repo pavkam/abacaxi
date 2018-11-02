@@ -1231,7 +1231,6 @@ namespace Abacaxi
             return -1;
         }
 
-
         /// <summary>
         ///     Finds the index and length of the unordered subsequence in the given <paramref name="sequence" />.
         /// </summary>
@@ -1320,6 +1319,73 @@ namespace Abacaxi
             }
 
             return (si, ei - si + 1);
+        }
+
+        /// <summary>
+        ///     Gets the subsequence with greatest aggregate value.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="aggregator">The element aggregator (sum).</param>
+        /// <param name="comparer">The element comparer.</param>
+        /// <returns>The range of the subsequence that satisfies the problem; <c>null</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" />, <paramref name="aggregator" /> or <paramref name="comparer" /> are
+        ///     <c>null</c>.
+        /// </exception>
+        [CanBeNull]
+        public static (int index, int length)? GetRangeWithGreatestAggregateValue<T>(
+            [NotNull] this IList<T> sequence,
+            [NotNull] Aggregator<T> aggregator,
+            [NotNull] IComparer<T> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(aggregator), aggregator);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            var s = default(T);
+            var ssi = -1;
+            var m = default(T);
+            var msi = -1;
+            var mei = -1;
+
+            for (var i = 0; i < sequence.Count; i++)
+            {
+                s = aggregator(s, sequence[i]);
+                if (comparer.Compare(s, default(T)) < 0)
+                {
+                    if (msi == -1 || comparer.Compare(sequence[i], m) > 0)
+                    {
+                        msi = i;
+                        mei = i;
+                        m = sequence[i];
+                    }
+
+                    s = default(T);
+                    ssi = -1;
+                }
+                else
+                {
+                    if (ssi == -1)
+                    {
+                        ssi = i;
+                    }
+
+                    if (comparer.Compare(s, m) > 0)
+                    {
+                        msi = ssi;
+                        mei = i;
+                        m = s;
+                    }
+                }
+            }
+
+            if (msi >= 0)
+            {
+                return (msi, mei - msi + 1);
+            }
+
+            return null;
         }
 
         private struct EditChoice
