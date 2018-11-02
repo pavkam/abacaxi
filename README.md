@@ -39,7 +39,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 ### The list of implemented algorithms/helper methods:
 | Algorithm/Method | Description |
 | :--- | :--- |
-| `LinkedListNode.TryGetMiddleAndTailNodes` | Finds the middle and tail nodes in one pass. If the list os circular, the method returns `false` See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists> |
+| `LinkedListNode.TryGetMiddleAndTailNodes` | Finds the middlem, tail nodes and the length of the list in one pass. If the list is circular, the method returns `-1` See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists> |
 | `LinkedListNode.Reverse` | *Reverses* a singly-linked list using the recursive algorithm. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
 | `Graph.TraverseBfs` | Traverses the vertices in a graph using the *breadth-first search*. See related material: <https://en.wikipedia.org/wiki/Breadth-first_search> |
 | `Graph.TraverseDfs` | Traverses the vertices in a graph using the *depth-first search*. See related material: <https://en.wikipedia.org/wiki/Depth-first_search> |
