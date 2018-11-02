@@ -25,16 +25,16 @@ namespace Abacaxi.Tests.Containers
     [TestFixture]
     public sealed class MeanHeapTests
     {
-        private static int Avg(int a, int b)
-        {
-            return (a + b) / 2;
-        }
-
         [SetUp]
         public void SetUp()
         {
             _empty = new MeanHeap<int>(Comparer<int>.Default, Avg);
             _three = new MeanHeap<int>(new[] {2, 3, 1}, Comparer<int>.Default, Avg);
+        }
+
+        private static int Avg(int a, int b)
+        {
+            return (a + b) / 2;
         }
 
         private MeanHeap<int> _empty;
@@ -90,16 +90,6 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Contains_ReturnsTrue_IfElementIsInHeap_AndNotMean()
-        {
-            _empty.Add(1);
-            _empty.Add(2);
-            _empty.Add(3);
-
-            Assert.IsTrue(_empty.Contains(3));
-        }
-
-        [Test]
         public void Contains_ReturnsTrue_IfElementIsInHeap_AndMean()
         {
             _empty.Add(1);
@@ -110,12 +100,13 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
-        public void Contains_ReturnsTrue_IfSmallest()
+        public void Contains_ReturnsTrue_IfElementIsInHeap_AndNotMean()
         {
-            _empty.Add(100);
-            _empty.Add(200);
+            _empty.Add(1);
+            _empty.Add(2);
+            _empty.Add(3);
 
-            Assert.IsTrue(_empty.Contains(100));
+            Assert.IsTrue(_empty.Contains(3));
         }
 
         [Test]
@@ -125,6 +116,15 @@ namespace Abacaxi.Tests.Containers
             _empty.Add(200);
 
             Assert.IsTrue(_empty.Contains(200));
+        }
+
+        [Test]
+        public void Contains_ReturnsTrue_IfSmallest()
+        {
+            _empty.Add(100);
+            _empty.Add(200);
+
+            Assert.IsTrue(_empty.Contains(100));
         }
 
         [Test]
@@ -245,6 +245,13 @@ namespace Abacaxi.Tests.Containers
 
         [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
          SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void Ctor_ThrowsException_WhenAvgFuncIsNull1()
+        {
+            Assert.Throws<ArgumentNullException>(() => new MeanHeap<int>(Comparer<int>.Default, null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
+         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_ThrowsException_WhenCollectionIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new MeanHeap<int>(null, Comparer<int>.Default, Avg));
@@ -255,13 +262,6 @@ namespace Abacaxi.Tests.Containers
         public void Ctor_ThrowsException_WhenComparerIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => new MeanHeap<int>(null, Avg));
-        }
-
-        [Test, SuppressMessage("ReSharper", "ObjectCreationAsStatement"),
-         SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Ctor_ThrowsException_WhenAvgFuncIsNull1()
-        {
-            Assert.Throws<ArgumentNullException>(() => new MeanHeap<int>(Comparer<int>.Default, null));
         }
 
 
@@ -365,6 +365,62 @@ namespace Abacaxi.Tests.Containers
         }
 
         [Test]
+        public void Mean_ActuallyUsesTheAvgFunction()
+        {
+            var heap = new MeanHeap<int>(Comparer<int>.Default, (a, b) => -1) {1, 2};
+
+            Assert.AreEqual(-1, heap.Mean);
+        }
+
+        [Test]
+        public void Mean_ReturnsAvg_IfOnlyTwoElementsInHeap()
+        {
+            _empty.Add(4);
+            _empty.Add(2);
+
+            Assert.AreEqual(3, _empty.Mean);
+        }
+
+        [Test]
+        public void Mean_ReturnsSingleElement_ForOneElementHeap()
+        {
+            _empty.Add(1);
+
+            Assert.AreEqual(1, _empty.Mean);
+        }
+
+        [Test]
+        public void Mean_ReturnsTheAvgMeanElements_InHeap()
+        {
+            _empty.Add(1);
+            _empty.Add(2);
+            _empty.Add(10);
+            _empty.Add(4);
+            _empty.Add(8);
+            _empty.Add(6);
+
+            Assert.AreEqual(5, _empty.Mean);
+        }
+
+        [Test]
+        public void Mean_ReturnsTheMeanElement_InHeap()
+        {
+            _empty.Add(1);
+            _empty.Add(2);
+            _empty.Add(10);
+            _empty.Add(4);
+            _empty.Add(8);
+
+            Assert.AreEqual(4, _empty.Mean);
+        }
+
+        [Test]
+        public void Mean_ThrowsException_ForEmptyHeap()
+        {
+            Assert.Throws<InvalidOperationException>(() => Assert.AreEqual(0, _empty.Mean));
+        }
+
+        [Test]
         public void Remove_ReordersHeap_ForUnbalancedLeft()
         {
             var unb = new MeanHeap<int>(new[] {100, 90, 50, 80, 81, 40, 41}, Comparer<int>.Default, Avg);
@@ -393,62 +449,6 @@ namespace Abacaxi.Tests.Containers
         {
             _empty.Add(1);
             Assert.IsTrue(_empty.Remove(1));
-        }
-
-        [Test]
-        public void Mean_ReturnsSingleElement_ForOneElementHeap()
-        {
-            _empty.Add(1);
-
-            Assert.AreEqual(1, _empty.Mean);
-        }
-
-        [Test]
-        public void Mean_ActuallyUsesTheAvgFunction()
-        {
-            var heap = new MeanHeap<int>(Comparer<int>.Default, (a, b) => -1) {1, 2};
-
-            Assert.AreEqual(-1, heap.Mean);
-        }
-
-        [Test]
-        public void Mean_ReturnsAvg_IfOnlyTwoElementsInHeap()
-        {
-            _empty.Add(4);
-            _empty.Add(2);
-
-            Assert.AreEqual(3, _empty.Mean);
-        }
-
-        [Test]
-        public void Mean_ReturnsTheMeanElement_InHeap()
-        {
-            _empty.Add(1);
-            _empty.Add(2);
-            _empty.Add(10);
-            _empty.Add(4);
-            _empty.Add(8);
-
-            Assert.AreEqual(4, _empty.Mean);
-        }
-
-        [Test]
-        public void Mean_ReturnsTheAvgMeanElements_InHeap()
-        {
-            _empty.Add(1);
-            _empty.Add(2);
-            _empty.Add(10);
-            _empty.Add(4);
-            _empty.Add(8);
-            _empty.Add(6);
-
-            Assert.AreEqual(5, _empty.Mean);
-        }
-
-        [Test]
-        public void Mean_ThrowsException_ForEmptyHeap()
-        {
-            Assert.Throws<InvalidOperationException>(() => Assert.AreEqual(0, _empty.Mean));
         }
     }
 }

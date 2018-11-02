@@ -280,6 +280,62 @@ namespace Abacaxi
             return best.diff <= 0 ? ((T, T)?) null : (best.first, best.last);
         }
 
+        /// <summary>
+        ///     Gets all the pair of elements from <paramref name="sequence1" /> and <paramref name="sequence2" /> that can be
+        ///     swapped in order to equalize the sums of given sequences.
+        /// </summary>
+        /// <param name="sequence1">The first sequence.</param>
+        /// <param name="sequence2">The second sequence.</param>
+        /// <returns>A list of pairs composed of elements from both sequences.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence1" /> or
+        ///     <paramref name="sequence2" /> are <c>null</c>.
+        /// </exception>
+        [NotNull]
+        public static (int element1, int element2)[] GetEqualizationPairs(
+            [NotNull] IList<int> sequence1,
+            [NotNull] IList<int> sequence2)
+        {
+            Validate.ArgumentNotNull(nameof(sequence1), sequence1);
+            Validate.ArgumentNotNull(nameof(sequence2), sequence2);
+
+            /* Calculate aggregates of both sequences. */
+            var a1 = 0;
+            var map1 = new HashSet<int>();
+            foreach (var i in sequence1)
+            {
+                a1 += i;
+                map1.Add(i);
+            }
+
+            var a2 = 0;
+            var map2 = new HashSet<int>();
+            foreach (var i in sequence2)
+            {
+                a2 += i;
+                map2.Add(i);
+            }
+
+            /* Calculate the expected relationship and find the swap. */
+            var delta = (a1 - a2) / 2;
+            var result = new List<(int element1, int element2)>();
+            foreach (var i in sequence2)
+            {
+                if (!map2.Remove(i))
+                {
+                    continue;
+                }
+
+                var opposite = delta + i;
+                if (map1.Contains(opposite))
+                {
+                    result.Add((opposite, i));
+                }
+            }
+
+            return result.ToArray();
+        }
+
         private sealed class RecursiveFindSubsetPairingWithLowestCostContext
         {
             [NotNull] public readonly Func<int, int, double> CalculatePairCost;

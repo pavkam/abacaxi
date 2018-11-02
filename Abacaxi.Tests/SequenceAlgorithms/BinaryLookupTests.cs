@@ -23,27 +23,33 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     [TestFixture]
     public sealed class BinaryLookupTests
     {
-        [TestCase(0, -1, -1), TestCase(1, 0, 0), TestCase(2, 1, 1), TestCase(3, 2, 2), TestCase(4, 3, 3), TestCase(5, 4, 4),
+        [TestCase(0, -1, -1), TestCase(1, 0, 0), TestCase(2, 1, 1), TestCase(3, 2, 2), TestCase(4, 3, 3),
+         TestCase(5, 4, 4),
          TestCase(6, 4, 4)]
-        public void BinaryLookup_ReturnsValidIndexPairs_ForAscSortedArray(int element, int expectedLeft, int expectedRight)
+        public void BinaryLookup_ReturnsValidIndexPairs_ForAscSortedArray(int element, int expectedLeft,
+            int expectedRight)
         {
             var result = new[] {1, 2, 3, 4, 5}.BinaryLookup(0, 5, element, Comparer<int>.Default);
 
             Assert.AreEqual((expectedLeft, expectedRight), result);
         }
 
-        [TestCase(-1, -1, -1), TestCase(2, 0, 0), TestCase(4, 0, 0), TestCase(6, 1, 1), TestCase(14, 2, 2), TestCase(15, 3, 3), TestCase(17, 3, 3),
+        [TestCase(-1, -1, -1), TestCase(2, 0, 0), TestCase(4, 0, 0), TestCase(6, 1, 1), TestCase(14, 2, 2),
+         TestCase(15, 3, 3), TestCase(17, 3, 3),
          TestCase(21, 4, 4), TestCase(1000, 4, 4)]
-        public void BinaryLookup_ReturnsValidIndexPairs_ForAscSortedArray_AndMissingElements(int element, int expectedLeft, int expectedRight)
+        public void BinaryLookup_ReturnsValidIndexPairs_ForAscSortedArray_AndMissingElements(int element,
+            int expectedLeft, int expectedRight)
         {
             var result = new[] {1, 5, 10, 15, 20}.BinaryLookup(0, 5, element, Comparer<int>.Default);
 
             Assert.AreEqual((expectedLeft, expectedRight), result);
         }
 
-        [TestCase(0, 4, 4), TestCase(1, 4, 4), TestCase(2, 3, 3), TestCase(3, 2, 2), TestCase(4, 1, 1), TestCase(5, 0, 0),
+        [TestCase(0, 4, 4), TestCase(1, 4, 4), TestCase(2, 3, 3), TestCase(3, 2, 2), TestCase(4, 1, 1),
+         TestCase(5, 0, 0),
          TestCase(6, -1, -1)]
-        public void BinaryLookup_ReturnsValidIndexPairs_ForDescSortedArray(int element, int expectedLeft, int expectedRight)
+        public void BinaryLookup_ReturnsValidIndexPairs_ForDescSortedArray(int element, int expectedLeft,
+            int expectedRight)
         {
             var result = new[] {5, 4, 3, 2, 1}.BinaryLookup(0, 5, element, Comparer<int>.Default, false);
             Assert.AreEqual((expectedLeft, expectedRight), result);
@@ -64,16 +70,16 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         }
 
         [Test]
-        public void BinaryLookup_ReturnsIndexes_WhenInTheMiddle_Odd()
+        public void BinaryLookup_ReturnsIndexes_WhenInTheMiddle_Even()
         {
-            var result = new[] {0, 1, 2, 2, 2, 3, 4}.BinaryLookup(0, 7, 2, Comparer<int>.Default);
+            var result = new[] {0, 1, 2, 2, 2, 4}.BinaryLookup(0, 6, 2, Comparer<int>.Default);
             Assert.AreEqual((2, 4), result);
         }
 
         [Test]
-        public void BinaryLookup_ReturnsIndexes_WhenInTheMiddle_Even()
+        public void BinaryLookup_ReturnsIndexes_WhenInTheMiddle_Odd()
         {
-            var result = new[] {0, 1, 2, 2, 2, 4}.BinaryLookup(0, 6, 2, Comparer<int>.Default);
+            var result = new[] {0, 1, 2, 2, 2, 3, 4}.BinaryLookup(0, 7, 2, Comparer<int>.Default);
             Assert.AreEqual((2, 4), result);
         }
 
@@ -106,17 +112,17 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         }
 
         [Test]
-        public void BinaryLookup_ReturnsTwo_WhenNotFoundUpper()
-        {
-            var result = new[] {1, 4, 6}.BinaryLookup(0, 3, 7, Comparer<int>.Default);
-            Assert.AreEqual((2, 2), result);
-        }
-
-        [Test]
         public void BinaryLookup_ReturnsOneIndexPair_ForTwoElementArray()
         {
             var result = new[] {1, 2}.BinaryLookup(0, 2, 2, Comparer<int>.Default);
             Assert.AreEqual((1, 1), result);
+        }
+
+        [Test]
+        public void BinaryLookup_ReturnsTwo_WhenNotFoundUpper()
+        {
+            var result = new[] {1, 4, 6}.BinaryLookup(0, 3, 7, Comparer<int>.Default);
+            Assert.AreEqual((2, 2), result);
         }
 
         [Test]

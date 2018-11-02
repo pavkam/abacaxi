@@ -87,7 +87,8 @@ namespace Abacaxi.Tests.Interval
         [Test]
         public void MergeOverlapping_ThrowsException_IfAnyIntervalIsInvalid()
         {
-            Assert.Throws<InvalidOperationException>(() => Interval.MergeOverlapping(new[] {(2, 1)}, Comparer<int>.Default));
+            Assert.Throws<InvalidOperationException>(() =>
+                Interval.MergeOverlapping(new[] {(2, 1)}, Comparer<int>.Default));
         }
     }
 }

@@ -287,7 +287,7 @@ namespace Abacaxi.Containers
         }
 
         /// <summary>
-        /// Gets the knot node (the would-be tail).
+        ///     Gets the knot node (the would-be tail).
         /// </summary>
         /// <returns>The knot node. If the list is not knotted, <c>null</c>.</returns>
         [CanBeNull]

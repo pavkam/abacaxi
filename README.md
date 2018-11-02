@@ -72,8 +72,9 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `Interval.ChoseBestNonOverlapping` | Selects the non-overlapping (and scored) intervals that yeild the best aggregate score. |
 | `Pairing.GetPairsWithMinimumCost` | *Pairs the elements of a sequence* as to minimize the cost of each pair. |
 | `Pairing. GetPairsWithApproximateMinimumCost` | *Pairs the elements of a sequence* as to approximate minimization of the cost of each pair.  |
-| `Pairing. GetPairWithMaximumDifference` | Find the first pair in a sequence whose elements *yield the greatest difference*. |
+| `Pairing.GetPairWithMaximumDifference` | Find the first pair in a sequence whose elements *yield the greatest difference*. |
 | `Pairing. GetPairWithIncreasingOrderMaximumDifference` | Find the first pair in a sequence whose elements *yield the greatest difference* with the restriction that elements in eth pair are strictly increasing. |
+| `Pairing.GetEqualizationPairs` | Finds all pairs of elements from both sequences whose values, if swapped, makes the sequences being equal in their sum. |
 | `ZArray.Construct` | Constructs a *Z-array* from a given input sequence. Z-arrays are useful for string pattern matching. See related materials: <http://wittawat.com/assets/talks/z_algorithm.pdf>, <https://shiv4289.wordpress.com/2013/09/17/z-algorithm-for-pattern-matching/> |
 | `RandomExtensions.Sample` | A *random sampling* algorithm for a sequence of objects. See related material: <https://en.wikipedia.org/wiki/Reservoir_sampling> |
 | `RandomExtensions.NextBool` | An extension method that allows retrieving a *random boolean* value. |

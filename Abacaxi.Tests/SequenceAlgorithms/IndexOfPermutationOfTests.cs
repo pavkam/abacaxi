@@ -28,7 +28,8 @@ namespace Abacaxi.Tests.SequenceAlgorithms
          TestCase("abc", "bc", 1),
          TestCase("abcdefgh", "gef", 4), TestCase("abcdefgh", "hgfedcb", 1),
          SuppressMessage("ReSharper", "StringLiteralTypo")]
-        public void IndexOfPermutationOf_ReturnsTheExpectedResult([NotNull] string seq, [NotNull] string sub, int expected)
+        public void IndexOfPermutationOf_ReturnsTheExpectedResult([NotNull] string seq, [NotNull] string sub,
+            int expected)
         {
             var index = seq.AsList().IndexOfPermutationOf(sub.AsList(), EqualityComparer<char>.Default);
 
@@ -41,14 +42,6 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             var index = "".AsList().IndexOfPermutationOf("a".AsList(), EqualityComparer<char>.Default);
 
             Assert.AreEqual(-1, index);
-        }
-
-        [Test]
-        public void IndexOfPermutationOf_ReturnsZero_ForEmptySubsequence()
-        {
-            var index = "a".AsList().IndexOfPermutationOf("".AsList(), EqualityComparer<char>.Default);
-
-            Assert.AreEqual(0, index);
         }
 
         [Test]
@@ -73,6 +66,14 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             var index = "abc".AsList().IndexOfPermutationOf("abcd".AsList(), EqualityComparer<char>.Default);
 
             Assert.AreEqual(-1, index);
+        }
+
+        [Test]
+        public void IndexOfPermutationOf_ReturnsZero_ForEmptySubsequence()
+        {
+            var index = "a".AsList().IndexOfPermutationOf("".AsList(), EqualityComparer<char>.Default);
+
+            Assert.AreEqual(0, index);
         }
 
         [Test]

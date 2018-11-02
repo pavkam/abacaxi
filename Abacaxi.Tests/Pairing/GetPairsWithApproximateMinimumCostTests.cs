@@ -68,7 +68,8 @@ namespace Abacaxi.Tests.Pairing
          TestCase(1024, 50, 90000, 0.01), TestCase(4096, 25, 400000, 0.01), TestCase(4, 100, 10, 0.10),
          TestCase(32, 100, 350, 0.11), TestCase(128, 100, 1500, 0.10), TestCase(1024, 50, 9000, 0.10),
          TestCase(4096, 25, 35000, 0.10), Parallelizable]
-        public void GetPairsWithApproximateMinimumCost_ApproximatesAtExpectedError(int length, int samples, int iterations,
+        public void GetPairsWithApproximateMinimumCost_ApproximatesAtExpectedError(int length, int samples,
+            int iterations,
             double expectedMaxError)
         {
             var totalError = .0;

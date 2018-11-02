@@ -472,6 +472,25 @@ namespace Abacaxi.Tests.Containers
             Assert.IsNull(e1.Next);
         }
 
+        [Test]
+        public void ToString_Returns_ProperValue_1()
+        {
+            var node = new LinkedListNode<string>("this");
+
+            Assert.AreEqual("this => null", node.ToString());
+        }
+
+        [Test]
+        public void ToString_Returns_ProperValue_2()
+        {
+            var node = new LinkedListNode<string>("this")
+            {
+                Next = new LinkedListNode<string>("next")
+            };
+
+            Assert.AreEqual("this => next", node.ToString());
+        }
+
 
         [Test]
         public void TryGetMiddleAndTailNodes_ReturnsFirstNode_AsMiddle_ForSingleNodeList()
@@ -608,25 +627,6 @@ namespace Abacaxi.Tests.Containers
 
             var result = head.TryGetMiddleAndTailNodes(out _, out _);
             Assert.AreEqual(2, result);
-        }
-
-        [Test]
-        public void ToString_Returns_ProperValue_1()
-        {
-            var node = new LinkedListNode<string>("this");
-
-            Assert.AreEqual("this => null", node.ToString());
-        }
-
-        [Test]
-        public void ToString_Returns_ProperValue_2()
-        {
-            var node = new LinkedListNode<string>("this")
-            {
-                Next = new LinkedListNode<string>("next")
-            };
-
-            Assert.AreEqual("this => next", node.ToString());
         }
     }
 }

@@ -112,8 +112,7 @@ namespace Abacaxi.Tests.Containers
         }
 
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void CopyTo_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() => _three.CopyTo(null, 0));
@@ -219,25 +218,22 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(heap);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_WhenCollectionIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new Heap<int>(null, Comparer<int>.Default));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_WhenComparerIsNull1()
         {
             Assert.Throws<ArgumentNullException>(() => new Heap<int>(null));
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute"),
+         SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Ctor_ThrowsException_WhenComparerIsNull2()
         {
             Assert.Throws<ArgumentNullException>(() => new Heap<int>(new int[] { }, null));
@@ -291,8 +287,7 @@ namespace Abacaxi.Tests.Containers
             });
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
+        [Test, SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
         public void GetEnumerator_EnumeratesAllElements()
         {
             var enumerator = _three.GetEnumerator();
@@ -305,8 +300,7 @@ namespace Abacaxi.Tests.Containers
             TestHelper.AssertSequence(elements, 3, 2, 1);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
+        [Test, SuppressMessage("ReSharper", "GenericEnumeratorNotDisposed")]
         public void GetEnumerator_MoveNext_ReturnsFalse_ForEmptyHeap()
         {
             var enumerator = _empty.GetEnumerator();

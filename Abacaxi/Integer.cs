@@ -181,13 +181,18 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Breaks the specified natural number into smaller components minimizing the number of time those components are used.
+        ///     Breaks the specified natural number into smaller components minimizing the number of time those components are
+        ///     used.
         /// </summary>
         /// <param name="number">The number to break.</param>
         /// <param name="components">The components that can be used.</param>
-        /// <returns>A list of components and the number of times they are used. An empty array is returned if the number cannot be broken into specified components.</returns>
+        /// <returns>
+        ///     A list of components and the number of times they are used. An empty array is returned if the number cannot be
+        ///     broken into specified components.
+        /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     Thrown if <paramref name="number" /> is less than zero or items in <paramref name="components" /> are less than one.
+        ///     Thrown if <paramref name="number" /> is less than zero or items in <paramref name="components" /> are less than
+        ///     one.
         /// </exception>
         /// <exception cref="ArgumentNullException">
         ///     Thrown if <paramref name="components" /> is <c>null</c>.

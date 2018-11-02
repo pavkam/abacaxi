@@ -72,11 +72,11 @@ namespace Abacaxi.Practice
         }
 
         /// <summary>
-        /// Sums the two integers using only bitwise operations.
+        ///     Sums the two integers using only bitwise operations.
         /// </summary>
         /// <param name="a">The first value.</param>
         /// <param name="b">The second value.</param>
-        /// <returns>The sum of <paramref name="a"/> and <paramref name="b"/>.</returns>
+        /// <returns>The sum of <paramref name="a" /> and <paramref name="b" />.</returns>
         public static int Sum(int a, int b)
         {
             while (b != 0)
@@ -91,7 +91,7 @@ namespace Abacaxi.Practice
         }
 
         /// <summary>
-        /// Swaps the values of two variables without using an intermediary variable (using XORs).
+        ///     Swaps the values of two variables without using an intermediary variable (using XORs).
         /// </summary>
         /// <param name="a">The first variable.</param>
         /// <param name="b">The second variable.</param>
@@ -103,7 +103,7 @@ namespace Abacaxi.Practice
         }
 
         /// <summary>
-        /// Gets the count of trailing zeroes in factorial.
+        ///     Gets the count of trailing zeroes in factorial.
         /// </summary>
         /// <param name="n">The number to factor.</param>
         /// <returns>The number of trailing zeroes in the factorial.</returns>
@@ -127,7 +127,7 @@ namespace Abacaxi.Practice
         }
 
         /// <summary>
-        /// Returns the maximum of two numbers without using comparison operators.
+        ///     Returns the maximum of two numbers without using comparison operators.
         /// </summary>
         /// <param name="a">The first value.</param>
         /// <param name="b">The second value.</param>
@@ -142,7 +142,7 @@ namespace Abacaxi.Practice
             /* Calculate the "max" using two cases - when the sign differs (z1)
              and when the sign is the same (z2). One of the terms will be equal to either a or b. Otherwise, zero. */
             var z1 = (cha ^ chb) * (cha * a + chb * b);
-            var z2 = ((cha ^ chb) ^ 1) * (chd * a + (chd ^ 1) * b);
+            var z2 = (cha ^ chb ^ 1) * (chd * a + (chd ^ 1) * b);
 
             /* Select either z1 or z2 (they are exclusive) */
             return z1 + z2;

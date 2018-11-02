@@ -24,46 +24,6 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     public sealed class FindUnorderedSubsequenceRangeTests
     {
         [Test]
-        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForEmptySequence()
-        {
-            var result = new int[] { }.FindUnorderedSubsequenceRange(Comparer<int>.Default);
-
-            Assert.AreEqual((0, 0), result);
-        }
-
-        [Test]
-        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForOneElementSequence()
-        {
-            var result = new[] {1}.FindUnorderedSubsequenceRange(Comparer<int>.Default);
-
-            Assert.AreEqual((0, 0), result);
-        }
-
-        [Test]
-        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForOrderedSequence_1()
-        {
-            var result = new[] {1, 2}.FindUnorderedSubsequenceRange(Comparer<int>.Default);
-
-            Assert.AreEqual((0, 0), result);
-        }
-
-        [Test]
-        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForOrderedSequence_2()
-        {
-            var result = new[] {1, 2, 3}.FindUnorderedSubsequenceRange(Comparer<int>.Default);
-
-            Assert.AreEqual((0, 0), result);
-        }
-
-        [Test]
-        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForOrderedSequence_3()
-        {
-            var result = new[] {1, 2, 3, 10, 20, 30}.FindUnorderedSubsequenceRange(Comparer<int>.Default);
-
-            Assert.AreEqual((0, 0), result);
-        }
-
-        [Test]
         public void FindUnorderedSubsequence_ReturnsWholeSequence_1()
         {
             var result = new[] {10, 1}.FindUnorderedSubsequenceRange(
@@ -124,6 +84,46 @@ namespace Abacaxi.Tests.SequenceAlgorithms
                 Comparer<int>.Default);
 
             Assert.AreEqual((0, 7), result);
+        }
+
+        [Test]
+        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForEmptySequence()
+        {
+            var result = new int[] { }.FindUnorderedSubsequenceRange(Comparer<int>.Default);
+
+            Assert.AreEqual((0, 0), result);
+        }
+
+        [Test]
+        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForOneElementSequence()
+        {
+            var result = new[] {1}.FindUnorderedSubsequenceRange(Comparer<int>.Default);
+
+            Assert.AreEqual((0, 0), result);
+        }
+
+        [Test]
+        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForOrderedSequence_1()
+        {
+            var result = new[] {1, 2}.FindUnorderedSubsequenceRange(Comparer<int>.Default);
+
+            Assert.AreEqual((0, 0), result);
+        }
+
+        [Test]
+        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForOrderedSequence_2()
+        {
+            var result = new[] {1, 2, 3}.FindUnorderedSubsequenceRange(Comparer<int>.Default);
+
+            Assert.AreEqual((0, 0), result);
+        }
+
+        [Test]
+        public void FindUnorderedSubsequence_ReturnsZeroTuple_ForOrderedSequence_3()
+        {
+            var result = new[] {1, 2, 3, 10, 20, 30}.FindUnorderedSubsequenceRange(Comparer<int>.Default);
+
+            Assert.AreEqual((0, 0), result);
         }
 
         [Test]

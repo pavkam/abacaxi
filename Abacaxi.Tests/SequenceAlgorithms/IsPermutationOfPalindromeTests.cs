@@ -25,7 +25,8 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     public sealed class IsPermutationOfPalindromeTests
     {
         [TestCase(1, 0, 2), TestCase(1, 2, 0), TestCase(1, -1, 0), TestCase(1, 0, -1), TestCase(2, 1, 2)]
-        public void IsPermutationOfPalindrome_ThrowsException_ForInvalidIndexes(int actualCount, int startIndex, int count)
+        public void IsPermutationOfPalindrome_ThrowsException_ForInvalidIndexes(int actualCount, int startIndex,
+            int count)
         {
             var list = Enumerable.Range(0, actualCount).ToList();
 
@@ -34,7 +35,8 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         }
 
         [TestCase(0, 0, 0), TestCase(1, 0, 0), TestCase(1, 1, 0)]
-        public void IsPermutationOfPalindrome_ReturnsTrue_ForEmptySequenceCombos(int actualCount, int startIndex, int count)
+        public void IsPermutationOfPalindrome_ReturnsTrue_ForEmptySequenceCombos(int actualCount, int startIndex,
+            int count)
         {
             var list = Enumerable.Range(0, actualCount).ToList();
             var result = list.IsPermutationOfPalindrome(startIndex, count, EqualityComparer<int>.Default);
@@ -42,7 +44,8 @@ namespace Abacaxi.Tests.SequenceAlgorithms
             Assert.IsTrue(result);
         }
 
-        [TestCase(1, true), TestCase(2, false), TestCase(3, false), TestCase(4, false), TestCase(5, true), TestCase(6, true), TestCase(7, true)]
+        [TestCase(1, true), TestCase(2, false), TestCase(3, false), TestCase(4, false), TestCase(5, true),
+         TestCase(6, true), TestCase(7, true)]
         public void IsPermutationOfPalindrome_ReturnsTrue_ForLongExample(int length, bool expected)
         {
             var list = new[] {'1', '2', '3', '1', '2', '3', '4'};

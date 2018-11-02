@@ -24,13 +24,6 @@ namespace Abacaxi.Tests.Set
     [TestFixture]
     public sealed class GetPermutationsTests
     {
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetPermutations_ThrowsException_ForNullSequence()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                Set.GetPermutations<int>(null));
-        }
-
         [Test]
         public void GetPermutations_ReturnsEmptySequence_ForEmptySet()
         {
@@ -47,6 +40,14 @@ namespace Abacaxi.Tests.Set
         }
 
         [Test]
+        public void GetPermutations_ReturnsPermutationsOfThree()
+        {
+            var result = Set.GetPermutations("abc".AsList()).Select(s => s.ToString(string.Empty)).ToArray();
+
+            TestHelper.AssertSequence(result, "cba", "bca", "bac", "cab", "acb", "abc");
+        }
+
+        [Test]
         public void GetPermutations_ReturnsPermutationsOfTwo()
         {
             var result = Set.GetPermutations("ab".AsList()).Select(s => s.ToString(string.Empty)).ToArray();
@@ -54,12 +55,11 @@ namespace Abacaxi.Tests.Set
             TestHelper.AssertSequence(result, "ba", "ab");
         }
 
-        [Test]
-        public void GetPermutations_ReturnsPermutationsOfThree()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetPermutations_ThrowsException_ForNullSequence()
         {
-            var result = Set.GetPermutations("abc".AsList()).Select(s => s.ToString(string.Empty)).ToArray();
-
-            TestHelper.AssertSequence(result, "cba", "bca", "bac", "cab", "acb", "abc");
+            Assert.Throws<ArgumentNullException>(() =>
+                Set.GetPermutations<int>(null));
         }
     }
 }

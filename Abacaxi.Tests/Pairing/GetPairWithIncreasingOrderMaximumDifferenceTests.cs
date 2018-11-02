@@ -37,6 +37,14 @@ namespace Abacaxi.Tests.Pairing
         }
 
         [Test]
+        public void GetPairWithIncreasingOrderMaximumDifference_ReturnsNull_ForEqualElements()
+        {
+            var result = Pairing.GetPairWithIncreasingOrderMaximumDifference(new[] {1, 1, 1, 1}, Subtract);
+
+            Assert.IsNull(result);
+        }
+
+        [Test]
         public void GetPairWithIncreasingOrderMaximumDifference_ReturnsNull_ForOneElement()
         {
             var result = Pairing.GetPairWithIncreasingOrderMaximumDifference(new[] {1}, Subtract);
@@ -45,9 +53,9 @@ namespace Abacaxi.Tests.Pairing
         }
 
         [Test]
-        public void GetPairWithIncreasingOrderMaximumDifference_ReturnsNull_ForEqualElements()
+        public void GetPairWithIncreasingOrderMaximumDifference_ReturnsNull_ForTwoDecreasingElements()
         {
-            var result = Pairing.GetPairWithIncreasingOrderMaximumDifference(new[] {1, 1, 1, 1}, Subtract);
+            var result = Pairing.GetPairWithIncreasingOrderMaximumDifference(new[] {2, 1}, Subtract);
 
             Assert.IsNull(result);
         }
@@ -69,17 +77,10 @@ namespace Abacaxi.Tests.Pairing
         }
 
         [Test]
-        public void GetPairWithIncreasingOrderMaximumDifference_ReturnsNull_ForTwoDecreasingElements()
-        {
-            var result = Pairing.GetPairWithIncreasingOrderMaximumDifference(new[] {2, 1}, Subtract);
-
-            Assert.IsNull(result);
-        }
-
-        [Test]
         public void GetPairWithIncreasingOrderMaximumDifference_TakesFuncIntoAccount()
         {
-            var result = Pairing.GetPairWithIncreasingOrderMaximumDifference(new[] {0, -10, 10, -11}, (l, r) => Math.Abs(l - r));
+            var result =
+                Pairing.GetPairWithIncreasingOrderMaximumDifference(new[] {0, -10, 10, -11}, (l, r) => Math.Abs(l - r));
 
             Assert.AreEqual((0, -11), result);
         }

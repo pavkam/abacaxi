@@ -554,7 +554,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Finds the sub-sequences whose aggregated values are equal to a given <paramref name="target" /> value.
+        ///     Finds the sub-sequences whose aggregated values are equal to a given <paramref name="target" /> value.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to check.</param>
@@ -563,7 +563,7 @@ namespace Abacaxi
         /// <param name="comparer">The equality comparer for the items in the sequence.</param>
         /// <param name="target">The target aggregated value.</param>
         /// <returns>
-        /// A sequence of found integers.
+        ///     A sequence of found integers.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="sequence" /> is <c>null</c>.</exception>
         [NotNull]
@@ -1105,7 +1105,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Determines whether the given <paramref name="sequence"/> is a permutation of a palindrome.
+        ///     Determines whether the given <paramref name="sequence" /> is a permutation of a palindrome.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
@@ -1142,13 +1142,16 @@ namespace Abacaxi
         }
 
         /// <summary>
-        /// Returns the index of a permutation substring.
+        ///     Returns the index of a permutation substring.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence.</param>
         /// <param name="subSequence">The sub-sequence to check for.</param>
         /// <param name="comparer">The comparer.</param>
-        /// <returns>A zero-based index in the <paramref name="sequence"/> where a permutation of <paramref name="subSequence"/> was found. <c>-1</c> if not found.</returns>
+        /// <returns>
+        ///     A zero-based index in the <paramref name="sequence" /> where a permutation of <paramref name="subSequence" />
+        ///     was found. <c>-1</c> if not found.
+        /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
         /// </exception>
@@ -1230,12 +1233,15 @@ namespace Abacaxi
 
 
         /// <summary>
-        /// Finds the index and length of the unordered subsequence in the given <paramref name="sequence"/>.
+        ///     Finds the index and length of the unordered subsequence in the given <paramref name="sequence" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to check.</param>
         /// <param name="comparer">The comparer.</param>
-        /// <returns>A tuple consisting of the index where the sub-sequence starts and its length.<c>(0, 0)</c> is returned if there is no such sub-sequence.</returns>
+        /// <returns>
+        ///     A tuple consisting of the index where the sub-sequence starts and its length.<c>(0, 0)</c> is returned if
+        ///     there is no such sub-sequence.
+        /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
         /// </exception>

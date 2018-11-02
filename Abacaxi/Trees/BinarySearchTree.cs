@@ -114,7 +114,8 @@ namespace Abacaxi.Trees
         ///     Removes the node identified by the key and value of the given <paramref name="item" />.
         /// </summary>
         /// <remarks>
-        ///     This method is provided for compatibility with <see cref="T:System.Collections.Generic.ICollection`1" />. It is not recommended for normal use.
+        ///     This method is provided for compatibility with <see cref="T:System.Collections.Generic.ICollection`1" />. It is not
+        ///     recommended for normal use.
         ///     The values of nodes are compared using the default equality comparer for that type.
         /// </remarks>
         /// <param name="item">The key/value pair to remove from the tree.</param>
@@ -138,7 +139,8 @@ namespace Abacaxi.Trees
         ///     <c>true</c> if <paramref name="item" /> is found in the tree; otherwise, <c>false</c>.
         /// </returns>
         /// <remarks>
-        ///     This method is provided for compatibility with <see cref="T:System.Collections.Generic.ICollection`1" />. It is not recommended for normal use.
+        ///     This method is provided for compatibility with <see cref="T:System.Collections.Generic.ICollection`1" />. It is not
+        ///     recommended for normal use.
         ///     The values of nodes are compared using the default equality comparer for that type.
         /// </remarks>
         public bool Contains(KeyValuePair<TKey, TValue> item)

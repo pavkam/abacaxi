@@ -51,7 +51,8 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         {
             var array = new[] {-1, -2, -3, -4, -1, -1, -6, -1, -1, -2, -1, -1, -1, -3, -3};
             var result = array
-                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, EqualityComparer<int>.Default, -6)
+                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, EqualityComparer<int>.Default,
+                    -6)
                 .ToArray();
 
             TestHelper.AssertSequence(
@@ -70,7 +71,8 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         {
             var array = new[] {1, 2, 3, 4, 1, 1, 6, 1, 1, 2, 1, 1, 1, 3, 3};
             var result = array
-                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, EqualityComparer<int>.Default, 6)
+                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, EqualityComparer<int>.Default,
+                    6)
                 .ToArray();
 
             TestHelper.AssertSequence(
@@ -89,7 +91,8 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         {
             var array = new[] {-1, 2, -3, 4, 1, 1, -6, 1, -1, -2, 1, -1, 2, 3, -3};
             var result = array
-                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, EqualityComparer<int>.Default, 3)
+                .GetSubsequencesOfAggregateValue(IntegerAggregator, IntegerDisaggregator, EqualityComparer<int>.Default,
+                    3)
                 .ToArray();
 
             TestHelper.AssertSequence(

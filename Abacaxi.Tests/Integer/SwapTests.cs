@@ -16,7 +16,7 @@
 namespace Abacaxi.Tests.Integer
 {
     using NUnit.Framework;
-    using Integer = Practice.Integer;
+    using Practice;
 
     [TestFixture]
     public sealed class SwapTests
@@ -33,14 +33,14 @@ namespace Abacaxi.Tests.Integer
         }
 
         [Test]
-        public void Swap_SwapsTwoPositiveValues()
+        public void Swap_SwapsNegativeAndPositiveValues()
         {
             var a = int.MaxValue;
-            var b = int.MaxValue / 2;
+            var b = int.MinValue;
 
             Integer.Swap(ref a, ref b);
 
-            Assert.That(a == int.MaxValue / 2 && b == int.MaxValue);
+            Assert.That(a == int.MinValue && b == int.MaxValue);
         }
 
         [Test]
@@ -55,14 +55,14 @@ namespace Abacaxi.Tests.Integer
         }
 
         [Test]
-        public void Swap_SwapsNegativeAndPositiveValues()
+        public void Swap_SwapsTwoPositiveValues()
         {
             var a = int.MaxValue;
-            var b = int.MinValue;
+            var b = int.MaxValue / 2;
 
             Integer.Swap(ref a, ref b);
 
-            Assert.That(a == int.MinValue && b == int.MaxValue);
+            Assert.That(a == int.MaxValue / 2 && b == int.MaxValue);
         }
     }
 }
