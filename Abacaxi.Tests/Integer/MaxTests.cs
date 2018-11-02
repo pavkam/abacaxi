@@ -13,31 +13,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.FibonacciSequence
+namespace Abacaxi.Tests.Integer
 {
-    using System;
     using NUnit.Framework;
-    using FibonacciSequence = Abacaxi.FibonacciSequence;
+    using Practice;
 
     [TestFixture]
-    public sealed class GetFibonacciNumber
+    public sealed class MaxTests
     {
-        [Test]
-        public void GetMember_ReturnsCorrectNumber_ForGivenIndex()
+        [TestCase(0, 0, 0),
+         TestCase(int.MaxValue, 1, int.MaxValue),
+         TestCase(int.MinValue, -1, -1),
+         TestCase(int.MinValue, int.MaxValue, int.MaxValue),
+         TestCase(1, int.MaxValue, int.MaxValue),
+         TestCase(-1, int.MinValue, -1),
+         TestCase(int.MaxValue, int.MinValue, int.MaxValue)
+        ]
+        public void Max_ReturnsProperValue(int a, int b, int expected)
         {
-            var expected = new[]
-                {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765};
-            for (var i = 0; i < expected.Length; i++)
-            {
-                var result = FibonacciSequence.GetMember(i);
-                Assert.AreEqual(expected[i], result);
-            }
-        }
+            var result = Integer.Max(a, b);
 
-        [Test]
-        public void GetMember_ThrowsException_ForNegativeIndex()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => FibonacciSequence.GetMember(-1));
+            Assert.AreEqual(expected, result);
         }
     }
 }

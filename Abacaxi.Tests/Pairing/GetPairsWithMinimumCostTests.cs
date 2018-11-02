@@ -22,7 +22,7 @@ namespace Abacaxi.Tests.Pairing
     using Pairing = Abacaxi.Pairing;
 
     [TestFixture]
-    public sealed class GetWithMinimumCost
+    public sealed class GetPairsWithMinimumCostTests
     {
         private static double BanalCostOfPairsEvaluator(int l, int r)
         {
@@ -35,7 +35,7 @@ namespace Abacaxi.Tests.Pairing
         }
 
         [TestCase(10), TestCase(20)]
-        public void GetWithMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
+        public void GetPairsWithMinimumCost_OperatesAsExpected_AtLargeInputs(int length)
         {
             var random = new Random();
             var sequence = new List<int>();
@@ -47,7 +47,7 @@ namespace Abacaxi.Tests.Pairing
                 expected.AddOrUpdate(item, 1, e => e + 1);
             }
 
-            var result = Pairing.GetWithMinimumCost(sequence, DistanceCostOfPairsEvaluator);
+            var result = Pairing.GetPairsWithMinimumCost(sequence, DistanceCostOfPairsEvaluator);
             foreach (var r in result)
             {
                 var x = new[] {r.Item1, r.Item2};
@@ -70,55 +70,55 @@ namespace Abacaxi.Tests.Pairing
 
 
         [Test]
-        public void GetWithMinimumCost_CreatesSets_UsingTheActualCost()
+        public void GetPairsWithMinimumCost_CreatesSets_UsingTheActualCost()
         {
-            var result = Pairing.GetWithMinimumCost(new[] {1, 2, 3, 8, 9, 12, 4, 6}, DistanceCostOfPairsEvaluator);
+            var result = Pairing.GetPairsWithMinimumCost(new[] {1, 2, 3, 8, 9, 12, 4, 6}, DistanceCostOfPairsEvaluator);
 
             TestHelper.AssertSequence(result, (1, 2), (3, 4), (8, 6), (9, 12));
         }
 
         [Test]
-        public void GetWithMinimumCost_ReturnsEmptyArray_ForEmptySequence()
+        public void GetPairsWithMinimumCost_ReturnsEmptyArray_ForEmptySequence()
         {
-            var result = Pairing.GetWithMinimumCost(new int[] { }, BanalCostOfPairsEvaluator);
+            var result = Pairing.GetPairsWithMinimumCost(new int[] { }, BanalCostOfPairsEvaluator);
             TestHelper.AssertSequence(result);
         }
 
         [Test]
-        public void GetWithMinimumCost_ReturnsOnePair_ForTwoElementSequence()
+        public void GetPairsWithMinimumCost_ReturnsOnePair_ForTwoElementSequence()
         {
-            var result = Pairing.GetWithMinimumCost(new[] {1, 2}, BanalCostOfPairsEvaluator);
+            var result = Pairing.GetPairsWithMinimumCost(new[] {1, 2}, BanalCostOfPairsEvaluator);
 
             TestHelper.AssertSequence(result, (1, 2));
         }
 
         [Test]
-        public void GetWithMinimumCost_ReturnsTwoPairs_ForFourElementSequence()
+        public void GetPairsWithMinimumCost_ReturnsTwoPairs_ForFourElementSequence()
         {
-            var result = Pairing.GetWithMinimumCost(new[] {4, 10, 2, 8}, BanalCostOfPairsEvaluator);
+            var result = Pairing.GetPairsWithMinimumCost(new[] {4, 10, 2, 8}, BanalCostOfPairsEvaluator);
 
             TestHelper.AssertSequence(result, (4, 10), (2, 8));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetWithMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
+        public void GetPairsWithMinimumCost_ThrowsException_ForNullEvaluateCostOfPairFunc()
         {
             Assert.Throws<ArgumentNullException>(
-                () => Pairing.GetWithMinimumCost(new[] {1, 2}, null));
+                () => Pairing.GetPairsWithMinimumCost(new[] {1, 2}, null));
         }
 
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetWithMinimumCost_ThrowsException_ForNullSequence()
+        public void GetPairsWithMinimumCost_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(
-                () => Pairing.GetWithMinimumCost<int>(null, BanalCostOfPairsEvaluator));
+                () => Pairing.GetPairsWithMinimumCost<int>(null, BanalCostOfPairsEvaluator));
         }
 
         [Test]
-        public void GetWithMinimumCost_ThrowsException_ForSequenceWithOddNumberOfElements()
+        public void GetPairsWithMinimumCost_ThrowsException_ForSequenceWithOddNumberOfElements()
         {
             Assert.Throws<ArgumentException>(
-                () => Pairing.GetWithMinimumCost(new[] {1, 2, 3}, BanalCostOfPairsEvaluator));
+                () => Pairing.GetPairsWithMinimumCost(new[] {1, 2, 3}, BanalCostOfPairsEvaluator));
         }
     }
 }

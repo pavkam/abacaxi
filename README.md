@@ -41,6 +41,8 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | :--- | :--- |
 | `LinkedListNode.TryGetMiddleAndTailNodes` | Finds the middlem, tail nodes and the length of the list in one pass. If the list is circular, the method returns `-1` See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists> |
 | `LinkedListNode.Reverse` | *Reverses* a singly-linked list using the recursive algorithm. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
+| `LinkedListNode.GetIntersectionNode` | Find the node that is the *intersection* of two singly-linked. See related material: <https://en.wikibooks.org/wiki/Data_Structures/LinkedLists>  |
+| `LinkedListNode.GetKnotNode` | Find the node that connects the tail of the list to another interior node (knot) in a singly-linked. See related material: <https://www.geeksforgeeks.org/detect-and-remove-loop-in-a-linked-list/>  |
 | `Graph.TraverseBfs` | Traverses the vertices in a graph using the *breadth-first search*. See related material: <https://en.wikipedia.org/wiki/Breadth-first_search> |
 | `Graph.TraverseDfs` | Traverses the vertices in a graph using the *depth-first search*. See related material: <https://en.wikipedia.org/wiki/Depth-first_search> |
 | `Graph.FillWithOneColor` | *Fills* all vertices of a graph with a given "color". See related material: <https://en.wikipedia.org/wiki/Flood_fill> |
@@ -55,16 +57,23 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `FibonacciSequence.GetMember` | Returns the *Fibonacci number* at a given index in the series. See related material: <https://en.wikipedia.org/wiki/Fibonacci_number> |
 | `Integer.DeconstructIntoPowersOfTwo` | *Deconstructs* an integer into a sum of powers of two. |
 | `Integer.DeconstructIntoPrimeFactors` | *Deconstructs* an integer into a prime factors. |
+| `Integer.Break` | *Deconstructs* an integer into repeatable components. See related material: <https://en.wikipedia.org/wiki/Change-making_problem> |
 | `Integer.IsPrime` | Checks whether an integer is a *prime number*. |
 | `Integer.Zip` | *Zips the digits* of two integers into a new integer. |
-| `Integer.Divide` | A simple *division* algorithm. |
-| `IntegerPartitions.Enumerate` | Enumerates all *integer partition* for a given number. |
+| `Integer.Divide` | A simple *division* algorithm that only uses addition. |
+| `Integer.Swap` | Algorithm that performs a *swap* of two integers without an additional variable. |
+| `Integer. GetCountOfTrailingZeroesInFactorial` | Find the number of *trailing zeroes* for a factorial number. See related material: <https://www.geeksforgeeks.org/count-trailing-zeroes-factorial-number/> |
+| `Integer.Max` | Returns the *maximum of two integers* without using comparisons. |
+| `Integer.Sum` | Returns the *sum of two integers* using only bitwise operations. |
+| `IntegerPartitions.Enumerate` | Enumerates all *integer partitions* for a given number. |
 | `IntegerPartitions.GetCount` | Calculates the number of *integer partitions* for a given number. |
 | `Knapsack.Fill` | The generic *0/1 knapsack* algorithm. See related material: <https://en.wikipedia.org/wiki/Knapsack_problem> |
 | `Interval.MergeOverlapping` | Merges a sequence of overlapping intervals (_or whatever intervals do overlap_) leaving the other ones untouched. |
 | `Interval.ChoseBestNonOverlapping` | Selects the non-overlapping (and scored) intervals that yeild the best aggregate score. |
-| `Pairing.GetWithMinimumCost` | *Pairs the elements of a sequence* as to minimize the cost of each pair. |
-| `Pairing.GetWithApproximateMinimumCost` | *Pairs the elements of a sequence* as to approximate minimization of the cost of each pair.  |
+| `Pairing.GetPairsWithMinimumCost` | *Pairs the elements of a sequence* as to minimize the cost of each pair. |
+| `Pairing. GetPairsWithApproximateMinimumCost` | *Pairs the elements of a sequence* as to approximate minimization of the cost of each pair.  |
+| `Pairing. GetPairWithMaximumDifference` | Find the first pair in a sequence whose elements *yield the greatest difference*. |
+| `Pairing. GetPairWithIncreasingOrderMaximumDifference` | Find the first pair in a sequence whose elements *yield the greatest difference* with the restriction that elements in eth pair are strictly increasing. |
 | `ZArray.Construct` | Constructs a *Z-array* from a given input sequence. Z-arrays are useful for string pattern matching. See related materials: <http://wittawat.com/assets/talks/z_algorithm.pdf>, <https://shiv4289.wordpress.com/2013/09/17/z-algorithm-for-pattern-matching/> |
 | `RandomExtensions.Sample` | A *random sampling* algorithm for a sequence of objects. See related material: <https://en.wikipedia.org/wiki/Reservoir_sampling> |
 | `RandomExtensions.NextBool` | An extension method that allows retrieving a *random boolean* value. |
@@ -102,10 +111,11 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.IsOrdered` | Checkes whether the elements of a given sequence are sorted in ascending order. |
 | `SequenceExtensions.IsStrictlyOrdered` | Checkes whether the elements of a given sequence are strictly sorted in ascending order. |
 | `SequenceExtensions.IsOrderedDescending` | Checkes whether the elements of a given sequence are sorted in descending order. |
-| `SequenceExtensions.IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
+| `SequenceExtensions. IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
 | `SequenceExtensions.IsPalindrome` | Checks if a given (sub)sequence is a palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
-| `SequenceExtensions.IsPermutationOfPalindrome` | Checks if a given (sub)sequence is a possible permutation of palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
-| `SequenceExtensions.IndexOfPermutationOf` | Find the first occurence of sub-sequence (or any of its permutations) in the given sequence. |
+| `SequenceExtensions. IsPermutationOfPalindrome` | Checks if a given (sub)sequence is a possible permutation of palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
+| `SequenceExtensions.IndexOfPermutationOf` | Finds the first occurence of sub-sequence (or any of its permutations) in the given sequence. |
+| `SequenceExtensions. FindUnorderedSubsequenceRange` | Finds the *un-ordered sub-sequence* inside a given sequence. Once found sub-sequence is sorted, the whole sequence becomes ordered. |
 | `Set.EnumerateSubsetCombinations` | *Splits a set into subsets* of a given length and returns all such combinations. |
 | `Set.SplitIntoSubsetsOfEqualValue` | Tries to find all *subsets with equal aggregate value*. See related material: <http://www.usaco.org/index.php?page=viewproblem2&cpid=139> |
 | `Set.GetSubsetWithNearValue` | Extracts a subset of integers whose sum is equal or very *close to the target value*. |
@@ -135,4 +145,4 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `StringExtensions.SplitIntoLines` | *Splits* a given string into its contituent lines. Treats both _"\n"_ and _"\r\n"_ as line breaks. |
 | `StringExtensions.WordWrap` | *Word-wraps* a string to a given max line length. Uses white-spaces and puctuation characters as potential line breaks. |
 | `StringExtensions.StripDiacritics` | *Strips the Unicode diacritics* from a text. Useful for text normalization in searches. |
-| `StringBuilderExtensions.AppendNotEmptyLine` | *Appends a line to the string builder* if the line is not empty. |
+| `StringBuilderExtensions. AppendNotEmptyLine` | *Appends a line to the string builder* if the line is not empty. |

@@ -20,7 +20,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     using NUnit.Framework;
 
     [TestFixture]
-    public class ReverseTests
+    public sealed class ReverseTests
     {
         [Test]
         public void Reverse_DoesNothing_ForEmptyArray()

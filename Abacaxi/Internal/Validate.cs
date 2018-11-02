@@ -192,7 +192,7 @@ namespace Abacaxi.Internal
         }
 
         [ContractAnnotation("sequence:null => halt")]
-        public static void SequenceArgumentNotEmpty<T>([NotNull, InvokerParameterName] string argumentName,
+        public static void ArgumentNotEmpty<T>([NotNull, InvokerParameterName] string argumentName,
             [CanBeNull] IEnumerable<T> sequence)
         {
             Assert.Condition(!string.IsNullOrEmpty(argumentName));

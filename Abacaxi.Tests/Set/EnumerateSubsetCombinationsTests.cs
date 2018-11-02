@@ -21,7 +21,7 @@ namespace Abacaxi.Tests.Set
     using Set = Abacaxi.Set;
 
     [TestFixture]
-    public class EnumerateSubsetCombinationsTests
+    public sealed class EnumerateSubsetCombinationsTests
     {
         [Test]
         public void EnumerateSubsetCombinations_DoesNotCareIfDuplicates()

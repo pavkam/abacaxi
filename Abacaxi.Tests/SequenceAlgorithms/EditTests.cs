@@ -19,7 +19,7 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     using NUnit.Framework;
 
     [TestFixture]
-    public class EditTests
+    public sealed class EditTests
     {
         [TestCase(EditOperation.Match, 'a', "=a"), TestCase(EditOperation.Delete, 'b', "-b"),
          TestCase(EditOperation.Insert, 'c', "+c"), TestCase(EditOperation.Substitute, 'd', "#d")]

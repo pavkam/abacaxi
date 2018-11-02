@@ -22,7 +22,7 @@ namespace Abacaxi.Tests.Knapsack
     using Knapsack = Abacaxi.Knapsack;
 
     [TestFixture]
-    public class FillTests
+    public sealed class FillTests
     {
         [Test]
         public void Fill_FitsTwoItems_1()

@@ -22,7 +22,7 @@ namespace Abacaxi.Tests.Set
     using Set = Abacaxi.Set;
 
     [TestFixture]
-    public class GetOptimalFullCoverageTests
+    public sealed class GetOptimalFullCoverageTests
     {
         [Test]
         public void GetOptimalFullCoverage_ReturnsBestChoiceOnly()

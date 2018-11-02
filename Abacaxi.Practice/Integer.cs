@@ -25,7 +25,7 @@ namespace Abacaxi.Practice
     public static class Integer
     {
         /// <summary>
-        ///     Divides <paramref name="number" /> by <paramref name="divisor" />.
+        ///     Divides <paramref name="number" /> by <paramref name="divisor" /> using only addition.
         /// </summary>
         /// <param name="number">The number to divide.</param>
         /// <param name="divisor">The divisor.</param>
@@ -69,6 +69,83 @@ namespace Abacaxi.Practice
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Sums the two integers using only bitwise operations.
+        /// </summary>
+        /// <param name="a">The first value.</param>
+        /// <param name="b">The second value.</param>
+        /// <returns>The sum of <paramref name="a"/> and <paramref name="b"/>.</returns>
+        public static int Sum(int a, int b)
+        {
+            while (b != 0)
+            {
+                var z = a ^ b;
+
+                b = (a & b) << 1;
+                a = z;
+            }
+
+            return a;
+        }
+
+        /// <summary>
+        /// Swaps the values of two variables without using an intermediary variable (using XORs).
+        /// </summary>
+        /// <param name="a">The first variable.</param>
+        /// <param name="b">The second variable.</param>
+        public static void Swap(ref int a, ref int b)
+        {
+            a = a ^ b;
+            b = a ^ b;
+            a = a ^ b;
+        }
+
+        /// <summary>
+        /// Gets the count of trailing zeroes in factorial.
+        /// </summary>
+        /// <param name="n">The number to factor.</param>
+        /// <returns>The number of trailing zeroes in the factorial.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="n" /> is negative.</exception>
+        public static int GetCountOfTrailingZeroesInFactorial(int n)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(n), n);
+
+            var count = 0;
+            for (var i = 2; i <= n; i++)
+            {
+                var k = i;
+                while (k % 5 == 0)
+                {
+                    k = k / 5;
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        /// <summary>
+        /// Returns the maximum of two numbers without using comparison operators.
+        /// </summary>
+        /// <param name="a">The first value.</param>
+        /// <param name="b">The second value.</param>
+        /// <returns>The maximum of two values.</returns>
+        public static int Max(int a, int b)
+        {
+            /* Identify if a, b and their difference are positive (cha, chb and chd will be 1 if that is the case and 0 otherwise). */
+            var cha = ((a >> 31) & 1) ^ 1;
+            var chb = ((b >> 31) & 1) ^ 1;
+            var chd = (((a - b) >> 31) & 1) ^ 1;
+
+            /* Calculate the "max" using two cases - when the sign differs (z1)
+             and when the sign is the same (z2). One of the terms will be equal to either a or b. Otherwise, zero. */
+            var z1 = (cha ^ chb) * (cha * a + chb * b);
+            var z2 = ((cha ^ chb) ^ 1) * (chd * a + (chd ^ 1) * b);
+
+            /* Select either z1 or z2 (they are exclusive) */
+            return z1 + z2;
         }
     }
 }

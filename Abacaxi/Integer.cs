@@ -179,5 +179,75 @@ namespace Abacaxi
 
             return result;
         }
+
+        /// <summary>
+        /// Breaks the specified natural number into smaller components minimizing the number of time those components are used.
+        /// </summary>
+        /// <param name="number">The number to break.</param>
+        /// <param name="components">The components that can be used.</param>
+        /// <returns>A list of components and the number of times they are used. An empty array is returned if the number cannot be broken into specified components.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown if <paramref name="number" /> is less than zero or items in <paramref name="components" /> are less than one.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="components" /> is <c>null</c>.
+        /// </exception>
+        [NotNull]
+        public static (int component, int count)[] Break(int number, [NotNull] params int[] components)
+        {
+            Validate.ArgumentGreaterThanOrEqualToZero(nameof(number), number);
+            Validate.ArgumentNotNull(nameof(components), components);
+
+            foreach (var c in components)
+            {
+                Validate.ArgumentGreaterThanZero(nameof(components), c);
+            }
+
+            /* Do the dynamic dance */
+            var mem = new (int score, int component)[number + 1];
+            mem[0] = (0, 0);
+
+            for (var i = 1; i <= number; i++)
+            {
+                var min = int.MaxValue;
+                var component = -1;
+
+                for (var j = 0; j < components.Length; j++)
+                {
+                    if (components[j] <= i)
+                    {
+                        var p = mem[i - components[j]];
+                        if (p.component > -1 && p.score < min)
+                        {
+                            min = p.score;
+                            component = j;
+                        }
+                    }
+                }
+
+                mem[i] = (min + 1, component);
+            }
+
+            /* Extract the results */
+            var z = number;
+            var mx = new int[components.Length];
+            while (z > 0 && mem[z].component >= 0)
+            {
+                mx[mem[z].component]++;
+                z = z - components[mem[z].component];
+            }
+
+            /* Convert the results into output form. */
+            var output = new List<(int component, int count)>(components.Length);
+            for (var x = 0; x < components.Length; x++)
+            {
+                if (mx[x] > 0)
+                {
+                    output.Add((components[x], mx[x]));
+                }
+            }
+
+            return output.ToArray();
+        }
     }
 }

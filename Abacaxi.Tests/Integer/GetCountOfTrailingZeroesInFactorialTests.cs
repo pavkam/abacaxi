@@ -13,55 +13,50 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceAlgorithms
+namespace Abacaxi.Tests.Integer
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using NUnit.Framework;
+    using Practice;
 
     [TestFixture]
-    public sealed class RepeatTests
+    public sealed class GetCountOfTrailingZeroesInFactorialTests
     {
-        [Test]
-        public void Repeat_DoesNothing_ForOneRepetition()
+        [TestCase(0, 0), TestCase(1, 0), TestCase(2, 0), TestCase(3, 0), TestCase(4, 0), TestCase(5, 1), TestCase(6, 1),
+         TestCase(7, 1), TestCase(8, 1), TestCase(9, 1), TestCase(10, 2), TestCase(11, 2),
+         TestCase(12, 2), TestCase(13, 2), TestCase(14, 2), TestCase(15, 3), TestCase(25, 6)]
+        public void GetCountOfTrailingZeroesInFactorial_ReturnsAppropriateValue(int n, int expected)
         {
-            var result = "A".Repeat(1);
-            Assert.AreEqual("A", result);
+            Assert.AreEqual(expected, Integer.GetCountOfTrailingZeroesInFactorial(n));
         }
 
         [Test]
-        public void Repeat_DoublesString_ForTwoRepetition()
+        public void GetCountOfTrailingZeroesInFactorial_ThrowsException_IfNumberIsNegative()
         {
-            var result = "A".Repeat(2);
-            Assert.AreEqual("AA", result);
+            Assert.Throws<ArgumentOutOfRangeException>(() => Integer.GetCountOfTrailingZeroesInFactorial(-1));
         }
 
         [Test]
-        public void Repeat_ReturnsNothing_ForEmptyEnumerable()
+        public void Swap_SwapsNegativeAndPositiveValues()
         {
-            var result = "".Repeat(5);
-            Assert.AreEqual("", result);
+            var a = int.MaxValue;
+            var b = int.MinValue;
+
+            Integer.Swap(ref a, ref b);
+
+            Assert.That(a == int.MinValue && b == int.MaxValue);
         }
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Repeat_ThrowsException_ForNullString()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((int[]) null).Repeat(1));
-        }
 
         [Test]
-        public void Repeat_ThrowsException_ForZeroRepetitions()
+        public void Swap_SwapsTwoNegativeValues()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                "A".Repeat(0));
-        }
+            var a = int.MinValue;
+            var b = int.MinValue / 2;
 
-        [Test]
-        public void Repeat_TriplesString_ForThreeRepetition()
-        {
-            var result = "A".Repeat(3);
-            Assert.AreEqual("AAA", result);
+            Integer.Swap(ref a, ref b);
+
+            Assert.That(a == int.MinValue / 2 && b == int.MinValue);
         }
     }
 }

@@ -13,55 +13,56 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.SequenceAlgorithms
+namespace Abacaxi.Tests.Integer
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
     using NUnit.Framework;
+    using Integer = Practice.Integer;
 
     [TestFixture]
-    public sealed class RepeatTests
+    public sealed class SwapTests
     {
         [Test]
-        public void Repeat_DoesNothing_ForOneRepetition()
+        public void Swap_DoesNothing_IfValuesAreEqual()
         {
-            var result = "A".Repeat(1);
-            Assert.AreEqual("A", result);
+            var a = 100;
+            var b = 100;
+
+            Integer.Swap(ref a, ref b);
+
+            Assert.That(a == b && a == 100);
         }
 
         [Test]
-        public void Repeat_DoublesString_ForTwoRepetition()
+        public void Swap_SwapsTwoPositiveValues()
         {
-            var result = "A".Repeat(2);
-            Assert.AreEqual("AA", result);
+            var a = int.MaxValue;
+            var b = int.MaxValue / 2;
+
+            Integer.Swap(ref a, ref b);
+
+            Assert.That(a == int.MaxValue / 2 && b == int.MaxValue);
         }
 
         [Test]
-        public void Repeat_ReturnsNothing_ForEmptyEnumerable()
+        public void Swap_SwapsTwoNegativeValues()
         {
-            var result = "".Repeat(5);
-            Assert.AreEqual("", result);
-        }
+            var a = int.MinValue;
+            var b = int.MinValue / 2;
 
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void Repeat_ThrowsException_ForNullString()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                ((int[]) null).Repeat(1));
+            Integer.Swap(ref a, ref b);
+
+            Assert.That(a == int.MinValue / 2 && b == int.MinValue);
         }
 
         [Test]
-        public void Repeat_ThrowsException_ForZeroRepetitions()
+        public void Swap_SwapsNegativeAndPositiveValues()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-                "A".Repeat(0));
-        }
+            var a = int.MaxValue;
+            var b = int.MinValue;
 
-        [Test]
-        public void Repeat_TriplesString_ForThreeRepetition()
-        {
-            var result = "A".Repeat(3);
-            Assert.AreEqual("AAA", result);
+            Integer.Swap(ref a, ref b);
+
+            Assert.That(a == int.MinValue && b == int.MaxValue);
         }
     }
 }

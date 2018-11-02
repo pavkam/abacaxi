@@ -13,31 +13,30 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Abacaxi.Tests.FibonacciSequence
+namespace Abacaxi.Tests.Integer
 {
-    using System;
     using NUnit.Framework;
-    using FibonacciSequence = Abacaxi.FibonacciSequence;
+    using Practice;
 
     [TestFixture]
-    public sealed class GetFibonacciNumber
+    public sealed class SumTests
     {
-        [Test]
-        public void GetMember_ReturnsCorrectNumber_ForGivenIndex()
+        [TestCase(0, 0),
+         TestCase(1, 2),
+         TestCase(int.MaxValue, -1),
+         TestCase(int.MinValue, 1),
+         TestCase(-1, -2),
+         TestCase(100, -100),
+         TestCase(int.MaxValue, int.MinValue),
+         TestCase(int.MaxValue, 1),
+         TestCase(int.MinValue, -1)
+        ]
+        public void Sum_WorksAsExpected(int a, int b)
         {
-            var expected = new[]
-                {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765};
-            for (var i = 0; i < expected.Length; i++)
-            {
-                var result = FibonacciSequence.GetMember(i);
-                Assert.AreEqual(expected[i], result);
-            }
-        }
+            var r = Integer.Sum(a, b);
+            var e = a + b;
 
-        [Test]
-        public void GetMember_ThrowsException_ForNegativeIndex()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => FibonacciSequence.GetMember(-1));
+            Assert.That(r == e);
         }
     }
 }

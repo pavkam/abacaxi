@@ -22,7 +22,7 @@ namespace Abacaxi.Tests.Set
     using Set = Abacaxi.Set;
 
     [TestFixture]
-    public class GetPermutationsTests
+    public sealed class GetPermutationsTests
     {
         [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void GetPermutations_ThrowsException_ForNullSequence()

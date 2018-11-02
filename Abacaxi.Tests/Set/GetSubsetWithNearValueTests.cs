@@ -21,7 +21,7 @@ namespace Abacaxi.Tests.Set
     using Set = Abacaxi.Set;
 
     [TestFixture]
-    public class GetSubsetWithNearValueTests
+    public sealed class GetSubsetWithNearValueTests
     {
         [Test]
         public void GetSubsetWithNearValue_ReturnsNothing_ForEmptyArray()
