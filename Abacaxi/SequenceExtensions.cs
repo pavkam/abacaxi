@@ -156,6 +156,36 @@ namespace Abacaxi
         }
 
         /// <summary>
+        ///     Increments the value associated with the specified <paramref name="key" /> by a given <paramref name="delta" />.
+        ///     Missing keys are treated as having a zero value.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key stored in the dictionary.</typeparam>
+        /// <param name="dict">The dictionary.</param>
+        /// <param name="key">The key whose value needs to be incremented.</param>
+        /// <param name="delta">The delta to increment.</param>
+        /// <returns>The value after it was incremented.</returns>
+        public static int Increment<TKey>(
+            [NotNull] this IDictionary<TKey, int> dict,
+            [NotNull] TKey key,
+            int delta = 1)
+        {
+            Validate.ArgumentNotNull(nameof(dict), dict);
+
+            if (!dict.TryGetValue(key, out var value))
+            {
+                value = delta;
+                dict.Add(key, value);
+            }
+            else
+            {
+                value += delta;
+                dict[key] = value;
+            }
+
+            return value;
+        }
+
+        /// <summary>
         ///     Appends the specified <paramref name="item1" /> to an array <paramref name="array" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in <paramref name="array" />.</typeparam>
