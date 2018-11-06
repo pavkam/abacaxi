@@ -18,9 +18,9 @@ namespace Abacaxi.Tests.SequenceAlgorithms
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using Abacaxi;
     using JetBrains.Annotations;
     using NUnit.Framework;
+    using SequenceAlgorithms = Abacaxi.SequenceAlgorithms;
 
     [TestFixture]
     public sealed class GetRangeWithGreatestAggregateValueTests
@@ -37,27 +37,17 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetRangeWithGreatestAggregateValue_ThrowsException_IfSequenceIsNull()
+        public void GetRangeWithGreatestAggregateValue_AvoidsStartingNegative()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                SequenceAlgorithms.GetRangeWithGreatestAggregateValue(null, IntegerAggregator, Comparer<int>.Default));
+            var r = Do(-1, 2, 3, 4);
+            Assert.AreEqual((1, 3), r);
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetRangeWithGreatestAggregateValue_ThrowsException_IfAggregatorIsNull()
+        public void GetRangeWithGreatestAggregateValue_ReturnsFullSequenceOfPositives()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                new int[]{}.GetRangeWithGreatestAggregateValue(null, Comparer<int>.Default));
-        }
-
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void GetRangeWithGreatestAggregateValue_ThrowsException_IfComparerIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new int[] { }.GetRangeWithGreatestAggregateValue(IntegerAggregator, null));
+            var r = Do(1, 2, 3, 4);
+            Assert.AreEqual((0, 4), r);
         }
 
         [Test]
@@ -68,16 +58,16 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         }
 
         [Test]
-        public void GetRangeWithGreatestAggregateValue_ReturnsSingleElement_IfPositive()
+        public void GetRangeWithGreatestAggregateValue_ReturnsSingleElement_IfNegative()
         {
-            var r = Do(10);
+            var r = Do(-10);
             Assert.AreEqual((0, 1), r);
         }
 
         [Test]
-        public void GetRangeWithGreatestAggregateValue_ReturnsSingleElement_IfNegative()
+        public void GetRangeWithGreatestAggregateValue_ReturnsSingleElement_IfPositive()
         {
-            var r = Do(-10);
+            var r = Do(10);
             Assert.AreEqual((0, 1), r);
         }
 
@@ -89,24 +79,10 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         }
 
         [Test]
-        public void GetRangeWithGreatestAggregateValue_ReturnsFullSequenceOfPositives()
+        public void GetRangeWithGreatestAggregateValue_SelectsMiddleBecauseItsBetter()
         {
-            var r = Do(1, 2, 3, 4);
-            Assert.AreEqual((0, 4), r);
-        }
-
-        [Test]
-        public void GetRangeWithGreatestAggregateValue_AvoidsStartingNegative()
-        {
-            var r = Do(-1, 2, 3, 4);
-            Assert.AreEqual((1, 3), r);
-        }
-
-        [Test]
-        public void GetRangeWithGreatestAggregateValue_TakesInNegativesToMakeALongerSequence()
-        {
-            var r = Do(5, -2, -3, 10);
-            Assert.AreEqual((0, 4), r);
+            var r = Do(2, -8, 3, -1, 2, -1, 2, -5, 4);
+            Assert.AreEqual((2, 5), r);
         }
 
         [Test]
@@ -117,10 +93,31 @@ namespace Abacaxi.Tests.SequenceAlgorithms
         }
 
         [Test]
-        public void GetRangeWithGreatestAggregateValue_SelectsMiddleBecauseItsBetter()
+        public void GetRangeWithGreatestAggregateValue_TakesInNegativesToMakeALongerSequence()
         {
-            var r = Do(2, -8, 3, -1, 2, -1, 2, -5, 4);
-            Assert.AreEqual((2, 5), r);
+            var r = Do(5, -2, -3, 10);
+            Assert.AreEqual((0, 4), r);
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetRangeWithGreatestAggregateValue_ThrowsException_IfAggregatorIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new int[] { }.GetRangeWithGreatestAggregateValue(null, Comparer<int>.Default));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetRangeWithGreatestAggregateValue_ThrowsException_IfComparerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new int[] { }.GetRangeWithGreatestAggregateValue(IntegerAggregator, null));
+        }
+
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void GetRangeWithGreatestAggregateValue_ThrowsException_IfSequenceIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                SequenceAlgorithms.GetRangeWithGreatestAggregateValue(null, IntegerAggregator, Comparer<int>.Default));
         }
     }
 }
