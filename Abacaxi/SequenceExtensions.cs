@@ -1023,5 +1023,85 @@ namespace Abacaxi
 
             return IsStrictlyOrderedDescending(sequence, Comparer<T>.Default);
         }
+
+        /// <summary>
+        ///     Folds the specified <paramref name="sequence" /> by merging consecutive items if possible.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the keys that identifies the items.</typeparam>
+        /// <typeparam name="TSource">The type of the source items.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="keySelector">The key selector.</param>
+        /// <param name="foldFunc">The folding function.</param>
+        /// <param name="comparer">The key comparer.</param>
+        /// <returns>A new sequence that contains the folded results.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" />, <paramref name="keySelector" />, <paramref name="foldFunc" /> or
+        ///     <paramref name="comparer" /> are <c>null</c>.
+        /// </exception>
+        [NotNull]
+        public static IEnumerable<TSource> Fold<TKey, TSource>(
+            [NotNull] this IEnumerable<TSource> sequence,
+            [NotNull] Func<TSource, TKey> keySelector,
+            [NotNull] Func<TSource, TSource, TSource> foldFunc,
+            [NotNull] IEqualityComparer<TKey> comparer)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(keySelector), keySelector);
+            Validate.ArgumentNotNull(nameof(foldFunc), foldFunc);
+            Validate.ArgumentNotNull(nameof(comparer), comparer);
+
+            using (var enumerator = sequence.GetEnumerator())
+            {
+                if (!enumerator.MoveNext())
+                {
+                    yield break;
+                }
+
+                var current = enumerator.Current;
+                var currentKey = keySelector(current);
+                while (enumerator.MoveNext())
+                {
+                    var c = enumerator.Current;
+                    var k = keySelector(c);
+
+                    if (comparer.Equals(k, currentKey))
+                    {
+                        /* This is a "fold" situation. */
+                        current = foldFunc(current, c);
+                    }
+                    else
+                    {
+                        yield return current;
+
+                        current = c;
+                        currentKey = k;
+                    }
+                }
+
+                yield return current;
+            }
+        }
+
+        /// <summary>
+        ///     Folds the specified <paramref name="sequence" /> by merging consecutive items if possible.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the keys that identifies the items.</typeparam>
+        /// <typeparam name="TSource">The type of the source items.</typeparam>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="keySelector">The key selector.</param>
+        /// <param name="foldFunc">The folding function.</param>
+        /// <returns>A new sequence that contains the folded results.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" />, <paramref name="keySelector" /> or <paramref name="foldFunc" /> are
+        ///     <c>null</c>.
+        /// </exception>
+        [NotNull]
+        public static IEnumerable<TSource> Fold<TKey, TSource>(
+            [NotNull] this IEnumerable<TSource> sequence,
+            [NotNull] Func<TSource, TKey> keySelector,
+            [NotNull] Func<TSource, TSource, TSource> foldFunc)
+        {
+            return Fold(sequence, keySelector, foldFunc, EqualityComparer<TKey>.Default);
+        }
     }
 }

@@ -119,6 +119,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `SequenceExtensions.IsStrictlyOrdered` | Checkes whether the elements of a given sequence are strictly sorted in ascending order. |
 | `SequenceExtensions.IsOrderedDescending` | Checkes whether the elements of a given sequence are sorted in descending order. |
 | `SequenceExtensions. IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
+| `SequenceExtensions.Fold` | *Folds a sequence* by merging consecutive appearances of a given item into one output item (think reduce). |
 | `Set.EnumerateSubsetCombinations` | *Splits a set into subsets* of a given length and returns all such combinations. |
 | `Set.SplitIntoSubsetsOfEqualValue` | Tries to find all *subsets with equal aggregate value*. See related material: <http://www.usaco.org/index.php?page=viewproblem2&cpid=139> |
 | `Set.GetSubsetWithNearValue` | Extracts a subset of integers whose sum is equal or very *close to the target value*. |
