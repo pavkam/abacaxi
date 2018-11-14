@@ -53,6 +53,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 | `Graph.IsBipartite` | Checks if a graph is *bipartite*. See related material: <https://en.wikipedia.org/wiki/Bipartite_graph> |
 | `Graph.DescribeVertices` | Returns a *description* of all vertices in a graph, including in-degree, out-degree and component index. |
 | `Graph.FindCheapestPath` | Finds the *cheapest path* between two vertices in a graph. See related material: <https://en.wikipedia.org/wiki/A*_search_algorithm> |
+| `Graph.Colorize` | Finds the minimum number of colors and applies thm on graph verticesh. See related material: <https://en.wikipedia.org/wiki/Graph_coloring> |
 | `FibonacciSequence.Enumerate` | Lists all *Fibonacci numbers* up to a given index in the series. See related material: <https://en.wikipedia.org/wiki/Fibonacci_number> |
 | `FibonacciSequence.GetMember` | Returns the *Fibonacci number* at a given index in the series. See related material: <https://en.wikipedia.org/wiki/Fibonacci_number> |
 | `Integer.DeconstructIntoPowersOfTwo` | *Deconstructs* an integer into a sum of powers of two. |
