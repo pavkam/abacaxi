@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Library.fs" />
+    <Compile Include="Sorting.fs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +25,10 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />
   </ItemGroup>
 
 </Project>

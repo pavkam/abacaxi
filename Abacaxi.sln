@@ -8,7 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA960A00-F5C7-4299-8C52-41F254607F5E}"
 	ProjectSection(SolutionItems) = preProject
 		40218-200.png = 40218-200.png
-		LICENSE = LICENSE
+		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abacaxi.Practice", "Abacaxi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abacaxi", "Abacaxi\Abacaxi.csproj", "{762A124B-8058-4BBE-94C0-1F1EA7453F4D}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Abacaxi.FSharp", "Abacaxi.FSharp\Abacaxi.FSharp.fsproj", "{2F526774-74AF-48FA-9339-A52E9430BE36}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Abacaxi.FSharp", "Abacaxi.FSharp\Abacaxi.FSharp.fsproj", "{2F526774-74AF-48FA-9339-A52E9430BE36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

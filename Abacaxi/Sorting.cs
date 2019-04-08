@@ -1,4 +1,4 @@
-﻿/* Copyright 2017-2018 by Alexandru Ciobanu (alex+git@ciobanu.org)
+﻿/* Copyright 2017-2019 by Alexandru Ciobanu (alex+git@ciobanu.org)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, 
@@ -252,7 +252,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Bubble-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Bubble-sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
@@ -294,7 +294,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Cocktail-Shaker-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Cocktail-Shaker-sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
@@ -360,7 +360,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Comb-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Comb-sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
@@ -407,7 +407,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Gnome-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Gnome-sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
@@ -450,7 +450,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Heap-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Heap-sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
@@ -481,7 +481,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Insertion-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Insertion-sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
@@ -518,7 +518,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Merge-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Merge-sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
@@ -546,7 +546,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Odd-Even-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Odd-even-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
@@ -604,7 +604,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Quick-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Quick-sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>
@@ -632,7 +632,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Shell-Sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
+        ///     Shell-sorts the <paramref name="sequence" /> using the provided <paramref name="comparer" />.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to sort.</param>

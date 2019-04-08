@@ -2,9 +2,15 @@
 
 *"No code library is complete without a binary search!"*
 
-I'm building this library as a repository of algorithms, data structures and helper methods that make one's daily programming life easier (in .NET that is).
+A library and repository of algorithms, data structures and helper methods that make one's daily programming life easier (in .NET that is).
 
-Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is built against __.NET Standard 2.0.__
+Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is built against __.NET Standard 2.0__ and __.NET 4.5__.
+
+### F# Support:
+
+F# bindings are available in the **Abacaxi.FSharp** library (targets __.NET Standard 2.0__ only). 
+
+Note that not all C# methods have F# bindings since F# core library already contaions comparable implementations. Also, some methods in F# do not make sense in C# world as well.
 
 ### The list of core data structures:
 | Data structure | Description |
