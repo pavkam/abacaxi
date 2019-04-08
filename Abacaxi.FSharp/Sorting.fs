@@ -101,7 +101,7 @@ module Seq =
     /// <exception cref="ArgumentNullException">
     ///     Thrown if sequence is <c>null</c>.
     /// </exception>
-    [<CompiledName("AlgoSortBy")>]
+    [<CompiledName("AlgoSort")>]
     let inline algoSort algo = 
         let inline comparer a b = Operators.compare a b
         algoSortWith algo comparer
