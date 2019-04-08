@@ -134,7 +134,7 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(formatProvider), formatProvider);
 
             /* nulls */
-            result = default(T);
+            result = default;
             if (@object == null)
             {
                 // ReSharper disable once CompareNonConstrainedGenericWithNull

@@ -615,7 +615,7 @@ namespace Abacaxi
                 {
                     if (item == null)
                     {
-                        return default(T);
+                        return default;
                     }
 
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
@@ -705,7 +705,7 @@ namespace Abacaxi
                 {
                     if (item == null)
                     {
-                        return default(T);
+                        return default;
                     }
 
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
@@ -992,6 +992,26 @@ namespace Abacaxi
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
             return IsStrictlyOrderedDescending(sequence, Comparer<T>.Default);
+        }
+
+        /// <summary>
+        ///     Filters a sequence of nullable items and select the values of those items.
+        /// </summary>
+        /// <typeparam name="T">The type of values in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     A new sequence that contains only the values of nullable items that had a value.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static IEnumerable<T> SelectValues<T>([NotNull] this IEnumerable<T?> sequence) where T: struct
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            return sequence
+                .Where(p => p.HasValue)
+                .Select(s => s.Value);
         }
     }
 }

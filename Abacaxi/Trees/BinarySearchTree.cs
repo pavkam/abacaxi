@@ -560,7 +560,7 @@ namespace Abacaxi.Trees
                 return true;
             }
 
-            value = default(TValue);
+            value = default;
             return false;
         }
 

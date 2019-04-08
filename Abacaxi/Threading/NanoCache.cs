@@ -66,7 +66,7 @@ namespace Abacaxi.Threading
         [CanBeNull]
         public TValue this[[NotNull] TKey key]
         {
-            get => TryGetValue(key, out var result) ? result : default(TValue);
+            get => TryGetValue(key, out var result) ? result : default;
             set => Set(key, value);
         }
 
@@ -89,7 +89,7 @@ namespace Abacaxi.Threading
         {
             Validate.ArgumentNotNull(nameof(key), key);
 
-            value = default(TValue);
+            value = default;
             if (!_dictionary.TryGetValue(key, out var tuple))
             {
                 return false;

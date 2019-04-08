@@ -1352,7 +1352,7 @@ namespace Abacaxi
             for (var i = 0; i < sequence.Count; i++)
             {
                 s = aggregator(s, sequence[i]);
-                if (comparer.Compare(s, default(T)) < 0)
+                if (comparer.Compare(s, default) < 0)
                 {
                     if (msi == -1 || comparer.Compare(sequence[i], m) > 0)
                     {
@@ -1361,7 +1361,7 @@ namespace Abacaxi
                         m = sequence[i];
                     }
 
-                    s = default(T);
+                    s = default;
                     ssi = -1;
                 }
                 else
