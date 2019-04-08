@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.0.0.0</Version>
+    <Authors>Alexandru Ciobanu (alex+git@ciobanu.org)</Authors>
+    <Company>Alexandru Ciobanu (alex+git@ciobanu.org)</Company>
+    <Product>Abacaxi</Product>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <Description>A library with data structures, various algorithms and numerous extension methods: F# facade.</Description>
+    <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017 - 2019</Copyright>
+    <PackageProjectUrl>https://github.com/pavkam/abacaxi</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/40218-200.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/pavkam/abacaxi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>algorithms containers learning extensions</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Library.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

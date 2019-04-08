@@ -77,7 +77,7 @@ namespace Abacaxi.Containers
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (_state & StorageState.ValueMask)
                 {
-                    case 0:
+                    case StorageState.Empty:
                         Assert.Condition(_valueObj == null);
                         break;
                     case StorageState.ValueIsOneObject:
@@ -98,14 +98,14 @@ namespace Abacaxi.Containers
                         break;
                 }
 
-                return default(TValue);
+                return default;
             }
             set
             {
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (_state & StorageState.ValueMask)
                 {
-                    case 0:
+                    case StorageState.Empty:
                         Assert.Condition(_valueObj == null);
                         _ver++;
                         _state = (_state & StorageState.ChildrenMask) | StorageState.ValueIsOneObject;
@@ -165,7 +165,7 @@ namespace Abacaxi.Containers
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (_state & StorageState.ChildrenMask)
                 {
-                    case 0:
+                    case StorageState.Empty:
                         Assert.Condition(_childrenObj == null);
                         return 0;
                     case StorageState.HasOneChildInATuple:
@@ -210,7 +210,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_valueObj == null);
                     if (ver != _ver)
                     {
@@ -290,7 +290,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_valueObj == null);
 
                     _ver++;
@@ -386,7 +386,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_valueObj == null);
                     Validate.ArgumentLessThanOrEqualTo(nameof(arrayIndex), 0, array.Length - arrayIndex);
 
@@ -431,7 +431,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_valueObj == null);
                     return false;
                 case StorageState.ValueIsOneObject:
@@ -511,7 +511,7 @@ namespace Abacaxi.Containers
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (_state & StorageState.ValueMask)
                 {
-                    case 0:
+                    case StorageState.Empty:
                         Assert.Condition(_valueObj == null);
                         return 0;
                     case StorageState.ValueIsOneObject:
@@ -556,7 +556,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_valueObj == null);
                     return -1;
                 case StorageState.ValueIsOneObject:
@@ -609,7 +609,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_valueObj == null);
                     Validate.ArgumentLessThanOrEqualTo(nameof(index), index, 0);
 
@@ -715,7 +715,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_valueObj == null);
                     Validate.ArgumentLessThan(nameof(index), index, 0);
                     break;
@@ -798,7 +798,7 @@ namespace Abacaxi.Containers
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (_state & StorageState.ValueMask)
                 {
-                    case 0:
+                    case StorageState.Empty:
                         Assert.Condition(_valueObj == null);
                         Validate.ArgumentLessThan(nameof(index), index, 0);
 
@@ -831,7 +831,7 @@ namespace Abacaxi.Containers
                         break;
                 }
 
-                return default(TValue);
+                return default;
             }
             set
             {
@@ -840,7 +840,7 @@ namespace Abacaxi.Containers
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (_state & StorageState.ValueMask)
                 {
-                    case 0:
+                    case StorageState.Empty:
                         Assert.Condition(_valueObj == null);
                         Validate.ArgumentLessThan(nameof(index), index, 0);
 
@@ -908,7 +908,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ChildrenMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_childrenObj == null);
                     _state = (_state & StorageState.ValueMask) | StorageState.HasOneChildInATuple;
                     var subMash = new Mash<TKey, TValue>(_equalityComparer);
@@ -1102,7 +1102,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ChildrenMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_childrenObj == null);
                     _state = (_state & StorageState.ValueMask) | StorageState.HasOneChildInATuple;
                     _childrenObj = Tuple.Create(key, mash);
@@ -1286,7 +1286,7 @@ namespace Abacaxi.Containers
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ChildrenMask)
             {
-                case 0:
+                case StorageState.Empty:
                     Assert.Condition(_childrenObj == null);
                     break;
 
@@ -1504,6 +1504,8 @@ namespace Abacaxi.Containers
         [Flags]
         private enum StorageState : byte
         {
+            Empty = 0,
+                
             HasOneChildInATuple = 1,
             HasTwoChildrenInKeyValuePairArray = 2,
             HasThreeChildrenInKeyValuePairArray = 3,

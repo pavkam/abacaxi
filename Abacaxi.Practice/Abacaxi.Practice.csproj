@@ -4,12 +4,12 @@
     <Version>1.1</Version>
     <Authors>Alexandru Ciobanu (alex+git@ciobanu.org)</Authors>
     <Company>Alexandru Ciobanu (alex+git@ciobanu.org)</Company>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/40218-200.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/pavkam/abacaxi</PackageProjectUrl>
     <Description>An extension library for Abacaxi. This library only contains practice-related code (not useful).</Description>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017-2018</Copyright>
+    <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017 - 2019</Copyright>
     <PackageTags>Algorithms Containers Learning Extensions</PackageTags>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -19,6 +19,7 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Abacaxi.Practice.xml</DocumentationFile>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
@@ -26,6 +27,13 @@
  
   <ItemGroup>
     <ProjectReference Include="..\Abacaxi\Abacaxi.csproj" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
   
 </Project>

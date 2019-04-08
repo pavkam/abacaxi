@@ -5,12 +5,12 @@
     <Version>0.0.0.0</Version>
     <Authors>Alexandru Ciobanu (alex+git@ciobanu.org)</Authors>
     <Company>Alexandru Ciobanu (alex+git@ciobanu.org)</Company>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/pavkam/abacaxi/master/40218-200.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/pavkam/abacaxi</PackageProjectUrl>
     <Description>A library with data structures, various algorithms and numerous extension methods.</Description>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017-2018</Copyright>
+    <Copyright>Alexandru Ciobanu (alex+git@ciobanu.org), 2017 - 2019</Copyright>
     <PackageTags>algorithms containers learning extensions</PackageTags>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -19,10 +19,18 @@
     <RepositoryType>git</RepositoryType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Abacaxi.xml</DocumentationFile>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
   
 </Project>
