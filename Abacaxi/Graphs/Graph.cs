@@ -24,6 +24,7 @@ namespace Abacaxi.Graphs
     using Internal;
     using JetBrains.Annotations;
 
+    /// <inheritdoc />
     /// <summary>
     ///     Generic graph class. This class serves as an abstract base for all concrete implementations.
     /// </summary>
@@ -315,7 +316,7 @@ namespace Abacaxi.Graphs
         ///     Fills the graph with one color.
         /// </summary>
         /// <param name="startVertex">The start vertex.</param>
-        /// <param name="applyColor">Color to apply to each vertex.</param>
+        /// <param name="applyColor">Color application function to apply to each vertex.</param>
         /// <exception cref="ArgumentNullException">
         ///     Thrown if <paramref name="applyColor" /> or <paramref name="startVertex" /> is
         ///     <c>null</c>.
@@ -705,6 +706,62 @@ namespace Abacaxi.Graphs
             result.Reverse();
 
             return result;
+        }
+
+        /// <summary>
+        ///     Fills the graph with multiple colors and tries to minimize the number of such colors.
+        /// </summary>
+        /// <param name="applyColor">Color application function.</param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="applyColor" /> is <c>null</c>.
+        /// </exception>
+        public void Colorize([NotNull] Action<TVertex, int> applyColor)
+        {
+            Validate.ArgumentNotNull(nameof(applyColor), applyColor);
+
+            RequireUndirectedGraph();
+
+            /* Get the vertices, calculate their in-degrees and order them in decreasing order. */
+            var vertices = this.Select(v => (Vertex: v, Edges: GetEdges(v).AsList()));
+            var currentColor = 0;
+            var colors = new Dictionary<TVertex, int>();
+
+            var temp = new HashSet<int>();
+            foreach (var (vertex, edges) in vertices.OrderByDescending(v => v.Edges.Count))
+            {
+                /* Get the used colors of neighbors */
+                temp.Clear();
+                foreach (var edge in edges)
+                {
+                    if (colors.TryGetValue(edge.ToVertex, out var c))
+                    {
+                        temp.Add(c);
+                    }
+                }
+
+                /* Get the first unused color. */
+                var color = -1;
+                for (var c = 0; c <= currentColor; c++)
+                {
+                    if (!temp.Contains(c))
+                    {
+                        color = c;
+                        break;
+                    }
+                }
+
+                /* No suitable color found, apply a new one. */
+                if (color == -1)
+                {
+                    currentColor++;
+                    color = currentColor;
+                }
+
+                colors.Add(vertex, color);
+
+                /* Call the external code. */
+                applyColor(vertex, color);
+            }
         }
 
         private sealed class PathNode

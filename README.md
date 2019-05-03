@@ -59,6 +59,7 @@ Note that not all C# methods have F# bindings since F# core library already cont
 | `Graph.IsBipartite` | Checks if a graph is *bipartite*. See related material: <https://en.wikipedia.org/wiki/Bipartite_graph> |
 | `Graph.DescribeVertices` | Returns a *description* of all vertices in a graph, including in-degree, out-degree and component index. |
 | `Graph.FindCheapestPath` | Finds the *cheapest path* between two vertices in a graph. See related material: <https://en.wikipedia.org/wiki/A*_search_algorithm> |
+| `Graph.Colorize` | Finds the minimum number of colors and applies thm on graph verticesh. See related material: <https://en.wikipedia.org/wiki/Graph_coloring> |
 | `FibonacciSequence.Enumerate` | Lists all *Fibonacci numbers* up to a given index in the series. See related material: <https://en.wikipedia.org/wiki/Fibonacci_number> |
 | `FibonacciSequence.GetMember` | Returns the *Fibonacci number* at a given index in the series. See related material: <https://en.wikipedia.org/wiki/Fibonacci_number> |
 | `Integer.DeconstructIntoPowersOfTwo` | *Deconstructs* an integer into a sum of powers of two. |
@@ -85,26 +86,32 @@ Note that not all C# methods have F# bindings since F# core library already cont
 | `RandomExtensions.Sample` | A *random sampling* algorithm for a sequence of objects. See related material: <https://en.wikipedia.org/wiki/Reservoir_sampling> |
 | `RandomExtensions.NextBool` | An extension method that allows retrieving a *random boolean* value. |
 | `RandomExtensions.NextItem` | An extension method that allows retrieving a *random item* from a sequence of objects. |
-| `SequenceExtensions. FindLongestIncreasingSequence` | Finds the *longest increasing sequence* within a given sequence. |
-| `SequenceExtensions. ContainsTwoElementsThatAggregateTo` | Determines whether the sequence contains two elements *that aggregate to a given target*. |
-| `SequenceExtensions.FindDuplicates` | *Finds duplicates* in a sequence. A specialized and optimized version for integer sequences also provided. |
-| `SequenceExtensions.FindUniques` | *Finds unique* elements in a sequence. |
-| `SequenceExtensions.FindUniquesInOrder` | *Finds unique* elements in a sequence and retains the order of their appearance in the sequence. |
-| `SequenceExtensions.ExtractNestedBlocks` | An algorithm to allow *extracting nested* sub-sequences from a sequence (e.g. _"(a(b))"_ would return _"(b)"_ then _"(a(b))"_). |
-| `SequenceExtensions. GetSubsequencesOfAggregateValue` | Finds all *sub-sequences of a given aggregated value* in another sequence. |
-| `SequenceExtensions.Interleave` | Creates a sequence which combines multiple *interleaved sequences* based on a given comparison. |
-| `SequenceExtensions.Reverse` | *Reverses* a sequence in place. |
-| `SequenceExtensions.Repeat` | Creates a sequence which is based on the original sequence *repeated a number of times*. |
-| `SequenceExtensions.BinarySearch` | Implements the standard *binary search* algorithm. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
-| `SequenceExtensions.BinaryLookup` | Implements a slightly modified *binary search* algorithm that returns the range of matching items or the position of immediatelly smaller item. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
-| `SequenceExtensions.Diff` | Implements the generic *edit distance* algorithm. See related material: <https://en.wikipedia.org/wiki/Edit_distance> |
-| `SequenceExtensions. GetLongestCommonSubSequence` | Finds the longest sub-sequence that is common to two distinct sequences. See related material: <https://en.wikipedia.org/wiki/Longest_common_subsequence_problem> |
-| `SequenceExtensions.DeconstructIntoTerms` | Deconstructs a given sequence into a sequence of terms (sub-sequences) based on given term scoring (e.g. think of recognizing an English phrase for all lower-case text without whitespaces using a given dictionary of known words: "_ilovecookies_" will be split into "_i_", "_love_", "_cookies_"). |
-| `SequenceExtensions.GetItemFrequencies` | Gets the *items and their frequencies* within a sequence. |
+| `SequenceAlgorithms. FindLongestIncreasingSequence` | Finds the *longest increasing sequence* within a given sequence. |
+| `SequenceAlgorithms. ContainsTwoElementsThatAggregateTo` | Determines whether the sequence contains two elements *that aggregate to a given target*. |
+| `SequenceAlgorithms.FindDuplicates` | *Finds duplicates* in a sequence. A specialized and optimized version for integer sequences also provided. |
+| `SequenceAlgorithms.FindUniques` | *Finds unique* elements in a sequence. |
+| `SequenceAlgorithms.FindUniquesInOrder` | *Finds unique* elements in a sequence and retains the order of their appearance in the sequence. |
+| `SequenceAlgorithms.ExtractNestedBlocks` | An algorithm to allow *extracting nested* sub-sequences from a sequence (e.g. _"(a(b))"_ would return _"(b)"_ then _"(a(b))"_). |
+| `SequenceAlgorithms. GetSubsequencesOfAggregateValue` | Finds all *sub-sequences of a given aggregated value* in another sequence. |
+| `SequenceAlgorithms.Interleave` | Creates a sequence which combines multiple *interleaved sequences* based on a given comparison. |
+| `SequenceAlgorithms.Reverse` | *Reverses* a sequence in place. |
+| `SequenceAlgorithms.Repeat` | Creates a sequence which is based on the original sequence *repeated a number of times*. |
+| `SequenceAlgorithms.BinarySearch` | Implements the standard *binary search* algorithm. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
+| `SequenceAlgorithms.BinaryLookup` | Implements a slightly modified *binary search* algorithm that returns the range of matching items or the position of immediatelly smaller item. See related material: <https://en.wikipedia.org/wiki/Binary_search_algorithm> |
+| `SequenceAlgorithms.Diff` | Implements the generic *edit distance* algorithm. See related material: <https://en.wikipedia.org/wiki/Edit_distance> |
+| `SequenceAlgorithms. GetLongestCommonSubSequence` | Finds the longest sub-sequence that is common to two distinct sequences. See related material: <https://en.wikipedia.org/wiki/Longest_common_subsequence_problem> |
+| `SequenceAlgorithms.DeconstructIntoTerms` | Deconstructs a given sequence into a sequence of terms (sub-sequences) based on given term scoring (e.g. think of recognizing an English phrase for all lower-case text without whitespaces using a given dictionary of known words: "_ilovecookies_" will be split into "_i_", "_love_", "_cookies_"). |
+| `SequenceAlgorithms.GetItemFrequencies` | Gets the *items and their frequencies* within a sequence. |
+| `SequenceAlgorithms.IsPalindrome` | Checks if a given (sub)sequence is a palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
+| `SequenceAlgorithms. IsPermutationOfPalindrome` | Checks if a given (sub)sequence is a possible permutation of palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
+| `SequenceAlgorithms.IndexOfPermutationOf` | Finds the first occurence of sub-sequence (or any of its permutations) in the given sequence. |
+| `SequenceAlgorithms. FindUnorderedSubsequenceRange` | Finds the *un-ordered sub-sequence* inside a given sequence. Once found sub-sequence is sorted, the whole sequence becomes ordered. |
+| `SequenceAlgorithms. GetRangeWithGreatestAggregateValue` | Finds the sub-sequence range with the *greatest aggregate* value. |
 | `SequenceExtensions.ToSet` | Helper methods to *convert a given sequence into a set*. |
 | `SequenceExtensions.AsList` | Helper method that *interprets a given sequence as a list*. If the sequence is already a list/array then the original object is returned; otherwise, the sequence is converted to an array. **This method may or may not create a new object and does not guarantee mutability of the result.** |
 | `SequenceExtensions.Copy` | Helper method to *copy a sub-sequence* into a new array. |
 | `SequenceExtensions.AddOrUpdate` | Extends the dictionary classes with the ability to *add a new, or update an existing* key/pair. |
+| `SequenceExtensions.Increment` | Extends the dictionary classes with the ability to *increment integer value* for a given key (treating non-existing keys as having value of zero). |
 | `SequenceExtensions.Append` | A number of small utility methods used to *append items to arrays*. If the array is null, a new array is created. These methods return new arrays as their return values. |
 | `SequenceExtensions.ToList` | Utility method that replaces a common _"Select(...).Tolist()"_ LINQ pattern. |
 | `SequenceExtensions.Partition` | *Partitions* a given sequence into a batch of smaller partitions of a given size. |
@@ -122,11 +129,7 @@ Note that not all C# methods have F# bindings since F# core library already cont
 | `SequenceExtensions.IsStrictlyOrdered` | Checkes whether the elements of a given sequence are strictly sorted in ascending order. |
 | `SequenceExtensions.IsOrderedDescending` | Checkes whether the elements of a given sequence are sorted in descending order. |
 | `SequenceExtensions. IsStrictlyOrderedDescending` | Checkes whether the elements of a given sequence are strictly sorted in descending order. |
-| `SequenceExtensions.IsPalindrome` | Checks if a given (sub)sequence is a palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
-| `SequenceExtensions. IsPermutationOfPalindrome` | Checks if a given (sub)sequence is a possible permutation of palindrome. See related material: <https://en.wikipedia.org/wiki/Palindrome> |
-| `SequenceExtensions.IndexOfPermutationOf` | Finds the first occurence of sub-sequence (or any of its permutations) in the given sequence. |
-| `SequenceExtensions. FindUnorderedSubsequenceRange` | Finds the *un-ordered sub-sequence* inside a given sequence. Once found sub-sequence is sorted, the whole sequence becomes ordered. |
-| `SequenceExtensions. GetRangeWithGreatestAggregateValue` | Finds the sub-sequence range with the *greatest aggregate* value. |
+| `SequenceExtensions.Fold` | *Folds a sequence* by merging consecutive appearances of a given item into one output item (think reduce). |
 | `Set.EnumerateSubsetCombinations` | *Splits a set into subsets* of a given length and returns all such combinations. |
 | `Set.SplitIntoSubsetsOfEqualValue` | Tries to find all *subsets with equal aggregate value*. See related material: <http://www.usaco.org/index.php?page=viewproblem2&cpid=139> |
 | `Set.GetSubsetWithNearValue` | Extracts a subset of integers whose sum is equal or very *close to the target value*. |
