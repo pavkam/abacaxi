@@ -10,7 +10,7 @@ Abacaxi is available on NuGet: https://www.nuget.org/packages/Abacaxi/ and is bu
 
 F# bindings are available in the **Abacaxi.FSharp** library (targets __.NET Standard 2.0__ only). 
 
-Note that not all C# methods have F# bindings since F# core library already contaions comparable implementations. Also, some methods in F# do not make sense in C# world as well.
+Note that not all C# methods have F# bindings since F# core library already contains comparable implementations. Also, some methods in F# do not make sense in C# world as well.
 
 ### The list of core data structures:
 | Data structure | Description |
