@@ -1005,13 +1005,50 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">
         ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
         /// </exception>
-        public static IEnumerable<T> SelectValues<T>([NotNull] this IEnumerable<T?> sequence) where T: struct
+        public static IEnumerable<T> SelectValues<T>(
+            [NotNull] this IEnumerable<T?> sequence) where T: struct
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
             return sequence
                 .Where(p => p.HasValue)
                 .Select(s => s.Value);
+        }
+
+        /// <summary>
+        ///     Separates the items in <paramref name="sequence"/> into two arrays based on a predicate.
+        /// </summary>
+        /// <typeparam name="T">The type of values in the <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <param name="predicate">The separation predicate.</param>
+        /// <returns>
+        ///     A tuple that contains the array of matching items and the array of the others.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="predicate"/> are <c>null</c>.
+        /// </exception>
+        public static (T[] matching, T[] notMatching) Separate<T>(
+            [NotNull] this IEnumerable<T> sequence, [NotNull] Func<T, bool> predicate)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+            Validate.ArgumentNotNull(nameof(predicate), predicate);
+
+            var matching = new List<T>();
+            var notMatching = new List<T>();
+
+            foreach (var item in sequence)
+            {
+                if (predicate(item))
+                {
+                    matching.Add(item);
+                }
+                else
+                {
+                    notMatching.Add(item);
+                }
+            }
+
+            return (matching.ToArray(), notMatching.ToArray());
         }
     }
 }

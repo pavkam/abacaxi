@@ -74,7 +74,6 @@ module Seq =
     /// <exception cref="ArgumentNullException">
     ///     Thrown if either sequence or comparer are <c>null</c>.
     /// </exception>
-    [<CompiledName("AlgoSortWith")>]
     let inline algoSortWith algo comparer sequence =
         let method = 
             match algo with 
@@ -101,7 +100,6 @@ module Seq =
     /// <exception cref="ArgumentNullException">
     ///     Thrown if sequence is <c>null</c>.
     /// </exception>
-    [<CompiledName("AlgoSort")>]
     let inline algoSort algo = 
         let inline comparer a b = Operators.compare a b
         algoSortWith algo comparer
@@ -113,7 +111,6 @@ module Seq =
     /// <exception cref="ArgumentNullException">
     ///     Thrown if sequence is <c>null</c>.
     /// </exception>
-    [<CompiledName("AlgoSortDescending")>]
     let inline genSortDescending algo = 
         let inline comparer a b = Operators.compare b a
         algoSortWith algo comparer
@@ -124,7 +121,6 @@ module Seq =
     /// <exception cref="ArgumentNullException">
     ///     Thrown if sequence is <c>null</c>.
     /// </exception>
-    [<CompiledName("AlgoSortBy")>]
     let inline algoSortBy algo projection = 
         let inline comparer a b = Operators.compare (projection a) (projection b)
         algoSortWith algo comparer
@@ -136,7 +132,6 @@ module Seq =
     /// <exception cref="ArgumentNullException">
     ///     Thrown if sequence is <c>null</c>.
     /// </exception>
-    [<CompiledName("AlgoSortByDescending")>]
     let inline genSortByDescending algo projection = 
         let inline comparer a b = Operators.compare (projection b) (projection a)
         algoSortWith algo comparer
