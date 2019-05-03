@@ -13,68 +13,64 @@
 * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *)
 
-namespace Abacaxi
+namespace Abacaxi.FSharp
 
-open System.Collections.Generic
 open System
+open System.Collections.Generic
+open Abacaxi
 
 // <summary>
 ///     Specifies a supported sorting algorithm. 
 /// </summary>
 [<RequireQualifiedAccess>]
 type SortingAlgorithm =
-/// <summary>
-///     Bubble-sort. Uses <see name="Sorting.BubbleSort" /> method.
-/// </summary>
-| Bubble
-/// <summary>
-///     Cocktail-Shaker-sort. Uses <see name="Sorting.CocktailShakerSort" /> method.
-/// </summary>
-| CocktailShaker
-/// <summary>
-///     Comb-sort. Uses <see name="Sorting.CombSort" /> method.
-/// </summary>
-| Comb 
-/// <summary>
-///     Gnome-sort. Uses <see name="Sorting.GnomeSort" /> method.
-/// </summary>
-| Gnome 
-/// <summary>
-///     Heap-sort. Uses <see name="Sorting.HeapSort" /> method.
-/// </summary>
-| Heap 
-/// <summary>
-///     Insertion-sort. Uses <see name="Sorting.InsertionSort" /> method.
-/// </summary>
-| Insertion 
-/// <summary>
-///     Merge-sort. Uses <see name="Sorting.MergeSort" /> method.
-/// </summary>
-| Merge 
-/// <summary>
-///     Odd-Even-sort. Uses <see name="Sorting.OddEvenSort" /> method.
-/// </summary>
-| OddEven 
-/// <summary>
-///     Quick-sort. Uses <see name="Sorting.QuickSort" /> method.
-/// </summary>
-| Quick 
-/// <summary>
-///     Shell-sort. Uses <see name="Sorting.ShellSort" /> method.
-/// </summary>
-| Shell
+    /// <summary>
+    ///     Bubble-sort. Uses <see name="Sorting.BubbleSort" /> method.
+    /// </summary>
+    | Bubble
+    /// <summary>
+    ///     Cocktail-Shaker-sort. Uses <see name="Sorting.CocktailShakerSort" /> method.
+    /// </summary>
+    | CocktailShaker
+    /// <summary>
+    ///     Comb-sort. Uses <see name="Sorting.CombSort" /> method.
+    /// </summary>
+    | Comb 
+    /// <summary>
+    ///     Gnome-sort. Uses <see name="Sorting.GnomeSort" /> method.
+    /// </summary>
+    | Gnome 
+    /// <summary>
+    ///     Heap-sort. Uses <see name="Sorting.HeapSort" /> method.
+    /// </summary>
+    | Heap 
+    /// <summary>
+    ///     Insertion-sort. Uses <see name="Sorting.InsertionSort" /> method.
+    /// </summary>
+    | Insertion 
+    /// <summary>
+    ///     Merge-sort. Uses <see name="Sorting.MergeSort" /> method.
+    /// </summary>
+    | Merge 
+    /// <summary>
+    ///     Odd-Even-sort. Uses <see name="Sorting.OddEvenSort" /> method.
+    /// </summary>
+    | OddEven 
+    /// <summary>
+    ///     Quick-sort. Uses <see name="Sorting.QuickSort" /> method.
+    /// </summary>
+    | Quick 
+    /// <summary>
+    ///     Shell-sort. Uses <see name="Sorting.ShellSort" /> method.
+    /// </summary>
+    | Shell
 
 /// Abacaxi sorting extensions to the Seq module.
 [<RequireQualifiedAccess>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Seq =
-    /// <summary>
-    ///     Sorts the sequence using the provided algorithm and comparer.
-    /// </summary>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if either sequence or comparer are <c>null</c>.
-    /// </exception>
-    let inline algoSortWith algo comparer sequence =
+
+    let inline private algoSortWith comparer algo sequence =
         let method = 
             match algo with 
             | SortingAlgorithm.Bubble -> Sorting.BubbleSort
@@ -101,8 +97,7 @@ module Seq =
     ///     Thrown if sequence is <c>null</c>.
     /// </exception>
     let inline algoSort algo = 
-        let inline comparer a b = Operators.compare a b
-        algoSortWith algo comparer
+        algoSortWith Operators.compare algo
 
     /// <summary>
     ///     Sorts the sequence using the selected algorithm using and the default <see name="Operators.compare" /> operation.
@@ -112,8 +107,7 @@ module Seq =
     ///     Thrown if sequence is <c>null</c>.
     /// </exception>
     let inline genSortDescending algo = 
-        let inline comparer a b = Operators.compare b a
-        algoSortWith algo comparer
+        algoSortWith (Operators.compare >> (-)) algo
 
     /// <summary>
     ///     Sorts the sequence extracting a comparison key and then using the selected algorithm and the default <see name="Operators.compare" /> operation. 
@@ -123,7 +117,7 @@ module Seq =
     /// </exception>
     let inline algoSortBy algo projection = 
         let inline comparer a b = Operators.compare (projection a) (projection b)
-        algoSortWith algo comparer
+        algoSortWith comparer algo
 
     /// <summary>
     ///     Sorts the sequence extracting a comparison key and then using the selected algorithm and the default <see name="Operators.compare" /> operation in.
@@ -134,4 +128,4 @@ module Seq =
     /// </exception>
     let inline genSortByDescending algo projection = 
         let inline comparer a b = Operators.compare (projection b) (projection a)
-        algoSortWith algo comparer
+        algoSortWith comparer algo

@@ -17,6 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Comparer.fs" />
+    <Compile Include="ZArray.fs" />
     <Compile Include="Sorting.fs" />
   </ItemGroup>
 
