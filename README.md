@@ -114,6 +114,8 @@ Note that not all C# methods have F# bindings since F# core library already cont
 | `SequenceExtensions.Min` | Returns the element of a sequence with a given *selected minimum* (e.g. select the person object with the smallest age). |
 | `SequenceExtensions.Max` | Returns the element of a sequence with a given *selected maximum* (e.g. select the person object with the greatest age). |
 | `SequenceExtensions.Segment` | Returns a view of the original sequence bounded to a segment of the list. Useful when other methods do not allow specifying a start/length pair of arguments. |
+| `SequenceExtensions.SelectValues` | Selects the *values of a sequence of nullables*. Nullable items that have no value are skipped. |
+| `SequenceExtensions.Separate` | Separates items from a sequence into *two distinct arrays* based on a predicate. |
 | `SequenceExtensions.IsValidAdjacency` | Checkes whether all sequence adjacent elements satisfy a common condition. |
 | `SequenceExtensions.IsOrdered` | Checkes whether the elements of a given sequence are sorted in ascending order. |
 | `SequenceExtensions.IsStrictlyOrdered` | Checkes whether the elements of a given sequence are strictly sorted in ascending order. |
