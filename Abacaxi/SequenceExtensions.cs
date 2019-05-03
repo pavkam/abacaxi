@@ -1027,7 +1027,7 @@ namespace Abacaxi
         /// <exception cref="ArgumentNullException">
         ///     Thrown if <paramref name="sequence" /> or <paramref name="predicate" /> are <c>null</c>.
         /// </exception>
-        public static (T[] matching, T[] notMatching) Separate<T>(
+        public static (T[], T[]) Separate<T>(
             [NotNull] this IEnumerable<T> sequence, [NotNull] Func<T, bool> predicate)
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
@@ -1049,6 +1049,93 @@ namespace Abacaxi
             }
 
             return (matching.ToArray(), notMatching.ToArray());
+        }
+
+        /// <summary>
+        ///     Splits the tuples in a <paramref name="sequence" /> into two arrays.
+        /// </summary>
+        /// <typeparam name="T1">The type of first item of the tuple in <paramref name="sequence" />.</typeparam>
+        /// <typeparam name="T2">The type of second item of the tuple in <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     A tuple that contains the two arrays containing the separated tuples.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static (T1[], T2[]) Unzip<T1, T2>([NotNull] this IEnumerable<(T1, T2)> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            var seq1 = new List<T1>();
+            var seq2 = new List<T2>();
+            
+            foreach (var (item1, item2) in sequence)
+            {
+                seq1.Add(item1);
+                seq2.Add(item2);
+            }
+
+            return (seq1.ToArray(), seq2.ToArray());
+        }
+
+        /// <summary>
+        ///     Splits the tuples in a <paramref name="sequence" /> into three arrays.
+        /// </summary>
+        /// <typeparam name="T1">The type of first item of the tuple in <paramref name="sequence" />.</typeparam>
+        /// <typeparam name="T2">The type of second item of the tuple in <paramref name="sequence" />.</typeparam>
+        /// <typeparam name="T3">The type of third item of the tuple in <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     A tuple that contains the three arrays containing the separated tuples.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static (T1[], T2[], T3[]) Unzip<T1, T2, T3>([NotNull] this IEnumerable<(T1, T2, T3)> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            var seq1 = new List<T1>();
+            var seq2 = new List<T2>();
+            var seq3 = new List<T3>();
+                
+            foreach (var (item1, item2, item3) in sequence)
+            {
+                seq1.Add(item1);
+                seq2.Add(item2);
+                seq3.Add(item3);
+            }
+
+            return (seq1.ToArray(), seq2.ToArray(), seq3.ToArray());
+        }
+
+        /// <summary>
+        ///     Splits the key-value-pair (as tuple) in a <paramref name="sequence" /> into two arrays.
+        /// </summary>
+        /// <typeparam name="T1">The type of first item of the tuple in <paramref name="sequence" />.</typeparam>
+        /// <typeparam name="T2">The type of second item of the tuple in <paramref name="sequence" />.</typeparam>
+        /// <param name="sequence">The input sequence.</param>
+        /// <returns>
+        ///     A tuple that contains the two arrays containing the separated tuples.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+        /// </exception>
+        public static (T1[], T2[]) Unzip<T1, T2>([NotNull] this IEnumerable<KeyValuePair<T1, T2>> sequence)
+        {
+            Validate.ArgumentNotNull(nameof(sequence), sequence);
+
+            var seq1 = new List<T1>();
+            var seq2 = new List<T2>();
+
+            foreach (var kvp in sequence)
+            {
+                seq1.Add(kvp.Key);
+                seq2.Add(kvp.Value);
+            }
+
+            return (seq1.ToArray(), seq2.ToArray());
         }
     }
 }
