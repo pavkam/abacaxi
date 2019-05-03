@@ -81,7 +81,7 @@ namespace Abacaxi
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">
         ///     Thrown if <paramref name="maxLength" /> is less than one or the
-        ///     length of <paramref name="ellipsis" />is greater than <paramref name="maxLength" />.
+        ///     length of <paramref name="ellipsis" /> is greater than <paramref name="maxLength" />.
         /// </exception>
         [NotNull]
         public static string Shorten([NotNull] this string s, int maxLength, [CanBeNull] string ellipsis = null)

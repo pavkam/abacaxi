@@ -2,20 +2,14 @@
 
 open Abacaxi
 
+/// Z-Array related functionality
 module ZArray =
     /// <summary>
-    ///     Computes the Z-array for the given <paramref name="array" />.
+    ///     Computes the Z-array for the given <paramref name="sequence" />.
     /// </summary>
     /// <param name="sequence">The sequence to compute the Z-array for.</param>
-    /// <param name="start">The start index in the sequence.</param>
-    /// <param name="length">The length of the sequence.</param>
-    /// <param name="comparer">The comparer.</param>
     /// <returns>A new, computed Z-array (of integers).</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer" /> ic <c>null</c>.</exception>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown when the combination of <paramref name="startIndex" /> and
-    ///     <paramref name="length" /> is out of bounds.
-    /// </exception>
-    let constructWith<'T when 'T: equality> (array: 'T array) start length =
-        ZArray.Construct(array, start, length, EqualityComparer.makeDefault<'T>)
+    let construct<'T when 'T: equality> (sequence: 'T seq) =
+        let array = sequence |> Seq.toArray
+        ZArray.Construct(array, 0, array.Length, EqualityComparer.makeDefault<'T>)
