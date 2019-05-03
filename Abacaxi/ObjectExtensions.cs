@@ -28,6 +28,163 @@ namespace Abacaxi
     [PublicAPI]
     public static class ObjectExtensions
     {
+        [CanBeNull]
+        private static object[] Deconstruct([NotNull] Type type, [NotNull] object @object)
+        {
+            Assert.NotNull(type);
+            Assert.NotNull(@object);
+
+            if (type.IsConstructedGenericType &&
+                type.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+            {
+                return new[]
+                {
+                    type.GetProperty("Key")?.GetValue(@object),
+                    type.GetProperty("Value")?.GetValue(@object)
+                };
+            }
+
+            var intfType = type.GetInterface("ITuple");
+            if (intfType != null && type.IsConstructedGenericType)
+            {
+                var itemProperty = intfType.GetProperty("Item");
+                if (itemProperty == null || 
+                   itemProperty.GetIndexParameters().Length != 1 || 
+                   itemProperty.GetIndexParameters()[0].ParameterType != typeof(int))
+                {
+                    return null;
+                }
+
+                var lengthProperty = intfType.GetProperty("Length");
+                if (lengthProperty == null || lengthProperty.PropertyType != typeof(int))
+                {
+                    return null;
+                }
+
+                var count = (int)lengthProperty.GetValue(@object);
+                if (count == 0)
+                {
+                    return null;
+                }
+
+                var result = new object[count];
+                var argArray = new object[1];
+                for (var i = 0; i < count; i++)
+                {
+                    argArray[0] = i;
+                    result[i] = itemProperty.GetValue(@object, argArray);
+                }
+
+                return result;
+            }
+
+            return null;
+        }
+
+        private static bool TryConvert(
+            [CanBeNull] object @object, [NotNull] Type toType, [NotNull] IFormatProvider formatProvider, 
+            out object result)
+        {
+            Assert.NotNull(formatProvider);
+            Assert.NotNull(toType);
+
+            /* nulls */
+            result = default;
+            if (@object == null)
+            {
+                return !toType.IsValueType || Nullable.GetUnderlyingType(toType) != null;
+            }
+
+            /* Quick and dirty */
+            var objType = @object.GetType();
+
+            if (objType == toType)
+            {
+                result = @object;
+                return true;
+            }
+
+            var underlyingType = Nullable.GetUnderlyingType(toType);
+            if (underlyingType != null)
+            {
+                toType = underlyingType;
+            }
+
+            var toTypeInfo = toType.GetTypeInfo();
+            var objTypeInfo = objType.GetTypeInfo();
+
+            /* Sub-class/interface */
+            if (toTypeInfo.IsAssignableFrom(objTypeInfo))
+            {
+                result = @object;
+                return true;
+            }
+
+            /* Enums */
+            if (toTypeInfo.IsEnum)
+            {
+                try
+                {
+                    result = Enum.Parse(toType, @object.ToString());
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            if (toType == typeof(string))
+            {
+                if (@object is IFormattable formattable)
+                {
+                    result = formattable.ToString(null, formatProvider);
+                }
+                else
+                {
+                    result = @object.ToString();
+                }
+
+                return true;
+            }
+
+            /* Tuple conversion */
+            var inputTuple = Deconstruct(objType, @object);
+            if (inputTuple != null)
+            {
+                var genArgs = toType.GetGenericArguments();
+                if (inputTuple.Length == genArgs.Length)
+                {
+                    var failed = false;
+                    for (var i = 0; i < genArgs.Length; i++)
+                    {
+                        if (!TryConvert(inputTuple[i], genArgs[i], formatProvider, out inputTuple[i]))
+                        {
+                            failed = true;
+                            break;
+                        }
+                    }
+
+                    if (!failed)
+                    {
+                        result = Activator.CreateInstance(toType, inputTuple);
+                        return true;
+                    }
+                }
+            }
+
+            /* Last resort */
+            try
+            {
+                result = Convert.ChangeType(@object, toType, formatProvider);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         ///     Determines whether <paramref name="value" /> is equal to any of the given candidates.
         /// </summary>
@@ -133,78 +290,15 @@ namespace Abacaxi
         {
             Validate.ArgumentNotNull(nameof(formatProvider), formatProvider);
 
-            /* nulls */
+            var r = TryConvert(@object, typeof(T), formatProvider, out var d);
+            if (r)
+            {
+                result = (T) d;
+                return true;
+            }
+
             result = default;
-            if (@object == null)
-            {
-                // ReSharper disable once CompareNonConstrainedGenericWithNull
-                return result == null;
-            }
-
-            /* Quick and dirty */
-            var toType = typeof(T);
-            var objType = @object.GetType();
-
-            if (objType == toType)
-            {
-                result = (T) @object;
-                return true;
-            }
-
-            var underlyingType = Nullable.GetUnderlyingType(toType);
-            if (underlyingType != null)
-            {
-                toType = underlyingType;
-            }
-
-            var toTypeInfo = toType.GetTypeInfo();
-            var objTypeInfo = objType.GetTypeInfo();
-
-            /* Enums */
-            if (toTypeInfo.IsEnum)
-            {
-                try
-                {
-                    result = (T) Enum.Parse(toType, @object.ToString());
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-
-            /* Sub-class/interface */
-            if (toTypeInfo.IsAssignableFrom(objTypeInfo))
-            {
-                result = (T) @object;
-                return true;
-            }
-
-            if (toType == typeof(string))
-            {
-                if (@object is IFormattable formattable)
-                {
-                    result = (T) (object) formattable.ToString(null, formatProvider);
-                }
-                else
-                {
-                    result = (T) (object) @object.ToString();
-                }
-
-                return true;
-            }
-
-            /* Last resort */
-            try
-            {
-                result = (T) Convert.ChangeType(@object, toType, formatProvider);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>

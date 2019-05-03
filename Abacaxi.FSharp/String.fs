@@ -17,7 +17,7 @@ namespace Abacaxi.FSharp
 
 open Abacaxi
 
-/// String related functionality
+/// String-related functionality and helpers.
 module String =
     /// <summary>
     ///     Reverses the specified string using "undivided" string chunks.

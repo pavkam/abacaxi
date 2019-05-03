@@ -17,6 +17,7 @@ namespace Abacaxi.Tests.ObjectExtensions
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using NUnit.Framework;
@@ -190,6 +191,165 @@ namespace Abacaxi.Tests.ObjectExtensions
         {
             Assert.IsTrue("1,1".TryConvert(CultureInfo.InvariantCulture, out double value2));
             Assert.AreEqual(11, value2);
+        }
+
+        [Test]
+        public void TryConvert_Supports_ValueTuple2ToKeyValuePair()
+        {
+            var input = ValueTuple.Create(99, "test");
+            var expected = new KeyValuePair<int, string>(99, "test");
+            var result = input.TryConvert<KeyValuePair<int, string>>(CultureInfo.InvariantCulture, out var output);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual(expected, output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_KeyValuePairToValueTuple2()
+        {
+            var input = new KeyValuePair<int, string>(99, "test"); 
+            var expected = ValueTuple.Create(99, "test");
+            var result = input.TryConvert<ValueTuple<int, string>>(CultureInfo.InvariantCulture, out var output);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual(expected, output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_KeyValuePairToTuple2()
+        {
+            var input = new KeyValuePair<int, string>(99, "test");
+            var expected = Tuple.Create(99, "test");
+            var result = input.TryConvert<Tuple<int, string>>(CultureInfo.InvariantCulture, out var output);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual(expected, output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_ValueTupleToTuple_1()
+        {
+            Assert.IsTrue(
+                ValueTuple.Create(1)
+                    .TryConvert<Tuple<int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(Tuple.Create(1), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_ValueTupleToTuple_2()
+        {
+            Assert.IsTrue(
+                ValueTuple.Create(1, 2)
+                    .TryConvert<Tuple<int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(Tuple.Create(1, 2), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_ValueTupleToTuple_3()
+        {
+            Assert.IsTrue(
+                ValueTuple.Create(1, 2, 3)
+                    .TryConvert<Tuple<int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(Tuple.Create(1, 2, 3), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_ValueTupleToTuple_4()
+        {
+            Assert.IsTrue(
+                ValueTuple.Create(1, 2, 3, 4)
+                    .TryConvert<Tuple<int, int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(Tuple.Create(1, 2, 3, 4), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_ValueTupleToTuple_5()
+        {
+            Assert.IsTrue(
+                ValueTuple.Create(1, 2, 3, 4, 5)
+                    .TryConvert<Tuple<int, int, int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(Tuple.Create(1, 2, 3, 4, 5), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_ValueTupleToTuple_6()
+        {
+            Assert.IsTrue(
+                ValueTuple.Create(1, 2, 3, 4, 5, 6)
+                    .TryConvert<Tuple<int, int, int, int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(Tuple.Create(1, 2, 3, 4, 5, 6), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_ValueTupleToTuple_7()
+        {
+            Assert.IsTrue(
+                ValueTuple.Create(1, 2, 3, 4, 5, 6, 7)
+                    .TryConvert<Tuple<int, int, int, int, int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(Tuple.Create(1, 2, 3, 4, 5, 6, 7), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_TupleToValueTuple_1()
+        {
+            Assert.IsTrue(
+                Tuple.Create(1)
+                    .TryConvert<ValueTuple<int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(ValueTuple.Create(1), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_TupleToValueTuple_2()
+        {
+            Assert.IsTrue(
+                Tuple.Create(1, 2)
+                    .TryConvert<ValueTuple<int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(ValueTuple.Create(1, 2), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_TupleToValueTuple_3()
+        {
+            Assert.IsTrue(
+                Tuple.Create(1, 2, 3)
+                    .TryConvert<ValueTuple<int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(ValueTuple.Create(1, 2, 3), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_TupleToValueTuple_4()
+        {
+            Assert.IsTrue(
+                Tuple.Create(1, 2, 3, 4)
+                    .TryConvert<ValueTuple<int, int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(ValueTuple.Create(1, 2, 3, 4), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_TupleToValueTuple_5()
+        {
+            Assert.IsTrue(
+                Tuple.Create(1, 2, 3, 4, 5)
+                    .TryConvert<ValueTuple<int, int, int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(ValueTuple.Create(1, 2, 3, 4, 5), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_TupleToValueTuple_6()
+        {
+            Assert.IsTrue(
+                Tuple.Create(1, 2, 3, 4, 5, 6)
+                    .TryConvert<ValueTuple<int, int, int, int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(ValueTuple.Create(1, 2, 3, 4, 5, 6), output);
+        }
+
+        [Test]
+        public void TryConvert_Supports_TupleToValueTuple_7()
+        {
+            Assert.IsTrue(
+                Tuple.Create(1, 2, 3, 4, 5, 6, 7)
+                    .TryConvert<ValueTuple<int, int, int, int, int, int, int>>(CultureInfo.InvariantCulture, out var output));
+            Assert.AreEqual(ValueTuple.Create(1, 2, 3, 4, 5, 6, 7), output);
         }
     }
 }
