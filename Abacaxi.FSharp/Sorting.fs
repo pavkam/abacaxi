@@ -19,50 +19,28 @@ open System
 open System.Collections.Generic
 open Abacaxi
 
-// <summary>
-///     Specifies a supported sorting algorithm. 
-/// </summary>
+/// Specifies a supported sorting algorithm. 
 [<RequireQualifiedAccess>]
 type SortingAlgorithm =
-    /// <summary>
-    ///     Bubble-sort. Uses <see name="Sorting.BubbleSort" /> method.
-    /// </summary>
+    /// Bubble-sort. Uses <see name="Sorting.BubbleSort" /> method.
     | Bubble
-    /// <summary>
-    ///     Cocktail-Shaker-sort. Uses <see name="Sorting.CocktailShakerSort" /> method.
-    /// </summary>
+    /// Cocktail-Shaker-sort. Uses <see name="Sorting.CocktailShakerSort" /> method.
     | CocktailShaker
-    /// <summary>
-    ///     Comb-sort. Uses <see name="Sorting.CombSort" /> method.
-    /// </summary>
+    /// Comb-sort. Uses <see name="Sorting.CombSort" /> method.
     | Comb 
-    /// <summary>
-    ///     Gnome-sort. Uses <see name="Sorting.GnomeSort" /> method.
-    /// </summary>
+    /// Gnome-sort. Uses <see name="Sorting.GnomeSort" /> method.
     | Gnome 
-    /// <summary>
-    ///     Heap-sort. Uses <see name="Sorting.HeapSort" /> method.
-    /// </summary>
+    /// Heap-sort. Uses <see name="Sorting.HeapSort" /> method.
     | Heap 
-    /// <summary>
-    ///     Insertion-sort. Uses <see name="Sorting.InsertionSort" /> method.
-    /// </summary>
+    /// Insertion-sort. Uses <see name="Sorting.InsertionSort" /> method.
     | Insertion 
-    /// <summary>
-    ///     Merge-sort. Uses <see name="Sorting.MergeSort" /> method.
-    /// </summary>
+    /// Merge-sort. Uses <see name="Sorting.MergeSort" /> method.
     | Merge 
-    /// <summary>
-    ///     Odd-Even-sort. Uses <see name="Sorting.OddEvenSort" /> method.
-    /// </summary>
+    /// Odd-Even-sort. Uses <see name="Sorting.OddEvenSort" /> method.
     | OddEven 
-    /// <summary>
-    ///     Quick-sort. Uses <see name="Sorting.QuickSort" /> method.
-    /// </summary>
+    /// Quick-sort. Uses <see name="Sorting.QuickSort" /> method.
     | Quick 
-    /// <summary>
-    ///     Shell-sort. Uses <see name="Sorting.ShellSort" /> method.
-    /// </summary>
+    /// Shell-sort. Uses <see name="Sorting.ShellSort" /> method.
     | Shell
 
 /// Abacaxi sorting extensions to the Seq module.
