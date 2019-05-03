@@ -22,10 +22,22 @@ namespace Abacaxi.Tests.SequenceExtensions
     [TestFixture]
     public sealed class SelectValuesTests
     {
-        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public void SelectValues_ThrowsException_ForNullSequence()
+        [Test]
+        public void SelectValues_ReturnsElement_ForSequenceOfOneElement()
         {
-            Assert.Throws<ArgumentNullException>(() => ((int?[]) null).SelectValues());
+            var sequence = new int?[] {1};
+            var result = sequence.SelectValues();
+
+            TestHelper.AssertSequence(result, 1);
+        }
+
+        [Test]
+        public void SelectValues_ReturnsElements_ForSequenceOfTwoAndThree()
+        {
+            var sequence = new int?[] {null, 1, null, 2, 3};
+            var result = sequence.SelectValues();
+
+            TestHelper.AssertSequence(result, 1, 2, 3);
         }
 
         [Test]
@@ -40,28 +52,16 @@ namespace Abacaxi.Tests.SequenceExtensions
         [Test]
         public void SelectValues_ReturnsNothing_ForSequenceOfNull()
         {
-            var sequence = new int?[] { null };
+            var sequence = new int?[] {null};
             var result = sequence.SelectValues();
 
             TestHelper.AssertSequence(result);
         }
 
-        [Test]
-        public void SelectValues_ReturnsElement_ForSequenceOfOneElement()
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        public void SelectValues_ThrowsException_ForNullSequence()
         {
-            var sequence = new int?[] { 1 };
-            var result = sequence.SelectValues();
-
-            TestHelper.AssertSequence(result, 1);
-        }
-
-        [Test]
-        public void SelectValues_ReturnsElements_ForSequenceOfTwoAndThree()
-        {
-            var sequence = new int?[] { null, 1, null, 2, 3 };
-            var result = sequence.SelectValues();
-
-            TestHelper.AssertSequence(result, 1, 2, 3);
+            Assert.Throws<ArgumentNullException>(() => ((int?[]) null).SelectValues());
         }
     }
 }

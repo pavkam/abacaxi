@@ -1006,7 +1006,7 @@ namespace Abacaxi
         ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
         /// </exception>
         public static IEnumerable<T> SelectValues<T>(
-            [NotNull] this IEnumerable<T?> sequence) where T: struct
+            [NotNull] this IEnumerable<T?> sequence) where T : struct
         {
             Validate.ArgumentNotNull(nameof(sequence), sequence);
 
@@ -1016,7 +1016,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Separates the items in <paramref name="sequence"/> into two arrays based on a predicate.
+        ///     Separates the items in <paramref name="sequence" /> into two arrays based on a predicate.
         /// </summary>
         /// <typeparam name="T">The type of values in the <paramref name="sequence" />.</typeparam>
         /// <param name="sequence">The input sequence.</param>
@@ -1025,7 +1025,7 @@ namespace Abacaxi
         ///     A tuple that contains the array of matching items and the array of the others.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="sequence" /> or <paramref name="predicate"/> are <c>null</c>.
+        ///     Thrown if <paramref name="sequence" /> or <paramref name="predicate" /> are <c>null</c>.
         /// </exception>
         public static (T[] matching, T[] notMatching) Separate<T>(
             [NotNull] this IEnumerable<T> sequence, [NotNull] Func<T, bool> predicate)

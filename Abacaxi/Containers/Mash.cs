@@ -1505,7 +1505,7 @@ namespace Abacaxi.Containers
         private enum StorageState : byte
         {
             Empty = 0,
-                
+
             HasOneChildInATuple = 1,
             HasTwoChildrenInKeyValuePairArray = 2,
             HasThreeChildrenInKeyValuePairArray = 3,
