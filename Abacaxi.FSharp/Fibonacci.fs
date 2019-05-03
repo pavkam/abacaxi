@@ -17,14 +17,22 @@ namespace Abacaxi.FSharp
 
 open Abacaxi
 
-/// Z-Array related functionality
-module ZArray =
+/// Functionality related to the "Fibonacci sequence".
+module Fibonacci =
     /// <summary>
-    ///     Computes the Z-array for the given <paramref name="sequence" />.
+    ///     Enumerates the first <paramref name="count" /> Fibonacci numbers.
     /// </summary>
-    /// <param name="sequence">The sequence to compute the Z-array for.</param>
-    /// <returns>A new, computed Z-array (of integers).</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
-    let construct<'T when 'T: equality> (sequence: 'T seq) =
-        let array = sequence |> Seq.toArray
-        ZArray.Construct(array, 0, array.Length, EqualityComparer.makeDefault<'T>)
+    /// <param name="count">The count of Fibonacci "numbers" to enumerate.</param>
+    /// <returns>The Fibonacci sequence.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="count" /> is less than zero.</exception>
+    let listNumbers count : seq<_> = 
+        FibonacciSequence.Enumerate(int count)
+
+    /// <summary>
+    ///     Gets the Nth Fibonacci number.
+    /// </summary>
+    /// <param name="index">The index of the Fibonacci number to calculate.</param>
+    /// <returns>The Fibonacci number</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index" /> is less than zero.</exception>
+    let getNumber index =
+        FibonacciSequence.GetMember(int index)

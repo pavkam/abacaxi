@@ -17,8 +17,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="String.fs" />
     <Compile Include="Comparer.fs" />
+    <Compile Include="EqualityComparer.fs" />
+    <Compile Include="Interval.fs" />
+    <Compile Include="Integer.fs" />
+    <Compile Include="Fibonacci.fs" />
+    <Compile Include="String.fs" />
     <Compile Include="ZArray.fs" />
     <Compile Include="Sorting.fs" />
   </ItemGroup>

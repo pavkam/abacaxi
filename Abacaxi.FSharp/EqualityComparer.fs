@@ -15,16 +15,26 @@
 
 namespace Abacaxi.FSharp
 
-open Abacaxi
+open System.Collections.Generic
 
-/// Z-Array related functionality
-module ZArray =
+/// Contains a number of utilities to deal with .NET equality comparer interoperability.
+module EqualityComparer =
+
+    type private EqualityComparer<'T> (eq, hc) =
+        interface IEqualityComparer<'T> with
+            member ___.Equals(a, b) = eq a b
+            member ___.GetHashCode(value) = hc value
+
     /// <summary>
-    ///     Computes the Z-array for the given <paramref name="sequence" />.
+    ///     Creates a new .NET equality comparer based on a given <paramref name="func" />.
     /// </summary>
-    /// <param name="sequence">The sequence to compute the Z-array for.</param>
-    /// <returns>A new, computed Z-array (of integers).</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="sequence" /> is <c>null</c>.</exception>
-    let construct<'T when 'T: equality> (sequence: 'T seq) =
-        let array = sequence |> Seq.toArray
-        ZArray.Construct(array, 0, array.Length, EqualityComparer.makeDefault<'T>)
+    /// <param name="func">The comparison function.</param>
+    /// <returns>A a new .NET-compatible comparer object.</returns>
+    let inline make<'T> compare hashCode : IEqualityComparer<'T> =
+        EqualityComparer<'T> (compare, hashCode)  :> _
+
+    /// <summary>
+    ///     Creates a .NET comparer based on standard F# <c>Operators.compare</c>.
+    /// </summary>
+    /// <returns>A a new .NET-compatible comparer object.</returns>
+    let makeDefault<'T when 'T: equality> = make<'T> (=) hash

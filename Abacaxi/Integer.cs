@@ -181,7 +181,7 @@ namespace Abacaxi
         }
 
         /// <summary>
-        ///     Breaks the specified natural number into smaller components minimizing the number of time those components are
+        ///     Breaks the specified natural number into smaller components minimizing the number of times those components are
         ///     used.
         /// </summary>
         /// <param name="number">The number to break.</param>
@@ -239,7 +239,7 @@ namespace Abacaxi
             while (z > 0 && mem[z].component >= 0)
             {
                 mx[mem[z].component]++;
-                z = z - components[mem[z].component];
+                z -= components[mem[z].component];
             }
 
             /* Convert the results into output form. */
