@@ -16,6 +16,8 @@
 namespace Abacaxi.FSharp
 
 open Abacaxi
+open System.Collections.Generic
+open System
 
 /// Contains all Abacaxi algorithms.
 module Algorithm =
@@ -409,99 +411,86 @@ module Algorithm =
         |> Map.ofSeq
 
     /// <summary>
-    ///     Deconstructs a give n<paramref name="sequence" /> into subsequences known as "terms". Each term is validated/scored
-    ///     by
-    ///     <paramref name="scoreTermFunc" /> function.
+    ///     Deconstructs a given <paramref name="seq" /> into subsequences known as "terms". Each term is validated/scored
+    ///     by <paramref name="arbiter" /> function.
     /// </summary>
-    /// <typeparam name="T">The type of items in the sequence.</typeparam>
-    /// <param name="sequence">The sequence.</param>
-    /// <param name="scoreTermFunc">The scoring function.</param>
+    /// <param name="seq">The sequence.</param>
+    /// <param name="arbiter">The scoring function.</param>
     /// <returns>A sequence of terms that the original sequence was split into.</returns>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="sequence" /> or <paramref name="scoreTermFunc" /> are <c>null</c>.
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
     /// </exception>
-    [NotNull, ItemNotNull]
-    public static T[][] DeconstructIntoTerms<T>(
-        [NotNull] this IList<T> sequence,
-        [NotNull] Func<IList<T>, int, int, double> scoreTermFunc)
+    let inline deconstructIntoTerms arbiter (seq: 'T[]) =
+        let shunt (l: IList<'T>) i1 i2 = arbiter l.[i1] l.[i2]
+        SequenceAlgorithms.DeconstructIntoTerms(seq, Func<_,_,_,_> shunt)
 
     /// <summary>
-    ///     Determines whether the specified <paramref name="sequence" /> is a palindrome.
+    ///     Determines whether the specified <paramref name="seq" /> is a palindrome.
     /// </summary>
-    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
-    /// <param name="sequence">The sequence.</param>
-    /// <param name="startIndex">The start index.</param>
+    /// <param name="seq">The sequence.</param>
+    /// <param name="start">The start index.</param>
     /// <param name="length">The length to check.</param>
-    /// <param name="comparer">The element comparer.</param>
     /// <returns>
     ///     <c>true</c> if the specified sequence is a palindrome; otherwise, <c>false</c>.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+    ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown when the combination of <paramref name="startIndex" /> and
+    ///     Thrown when the combination of <paramref name="start" /> and
     ///     <paramref name="length" /> is out of bounds.
     /// </exception>
-    public static bool IsPalindrome<T>(
-        [NotNull] this IList<T> sequence, int startIndex, int length, [NotNull] IEqualityComparer<T> comparer)
+    let inline isPalindrome (start, length) (seq: 'T[]) = 
+        SequenceAlgorithms.IsPalindrome(seq, start, length, EqualityComparer.makeDefault)
 
     /// <summary>
-    ///     Determines whether the given <paramref name="sequence" /> is a permutation of a palindrome.
+    ///     Determines whether the given <paramref name="seq" /> is a permutation of a palindrome.
     /// </summary>
-    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
-    /// <param name="sequence">The sequence.</param>
-    /// <param name="startIndex">The start index.</param>
+    /// <param name="seq">The sequence.</param>
+    /// <param name="start">The start index.</param>
     /// <param name="length">The length to check.</param>
-    /// <param name="comparer">The element comparer.</param>
     /// <returns>
     ///     <c>true</c> if the specified sequence is a permutation of a palindrome; otherwise, <c>false</c>.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown when the combination of <paramref name="startIndex" /> and
+    ///     Thrown when the combination of <paramref name="start" /> and
     ///     <paramref name="length" /> is out of bounds.
     /// </exception>
-    public static bool IsPermutationOfPalindrome<T>(
-        [NotNull] this IList<T> sequence, int startIndex, int length, [NotNull] IEqualityComparer<T> comparer)
+    let inline isPermutationOfPalindrome (start, length) (seq: 'T[]) =
+        SequenceAlgorithms.IsPermutationOfPalindrome(seq, start, length, EqualityComparer.makeDefault)
 
     /// <summary>
-    ///     Returns the index of a permutation substring.
+    ///     Returns the index of a permutation sub-sequence.
     /// </summary>
-    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
-    /// <param name="sequence">The sequence.</param>
-    /// <param name="subSequence">The sub-sequence to check for.</param>
-    /// <param name="comparer">The comparer.</param>
+    /// <param name="seq">The sequence.</param>
+    /// <param name="subSeq">The sub-sequence to check for.</param>
     /// <returns>
-    ///     A zero-based index in the <paramref name="sequence" /> where a permutation of <paramref name="subSequence" />
+    ///     A zero-based index in the <paramref name="seq" /> where a permutation of <paramref name="subSeq" />
     ///     was found. <c>-1</c> if not found.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
     /// </exception>
-    public static int IndexOfPermutationOf<T>(
-        [NotNull] this IList<T> sequence,
-        [NotNull] IList<T> subSequence,
-        [NotNull] IEqualityComparer<T> comparer)
+    let inline indexOfPermutationOf (seq: 'T[]) (subSeq: 'T[]) =
+        SequenceAlgorithms.IndexOfPermutationOf(seq, subSeq, EqualityComparer.makeDefault)
 
     /// <summary>
-    ///     Finds the index and length of the unordered subsequence in the given <paramref name="sequence" />.
+    ///     Finds the index and length of the unordered subsequence in the given <paramref name="seq" />.
     /// </summary>
-    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
-    /// <param name="sequence">The sequence to check.</param>
-    /// <param name="comparer">The comparer.</param>
+    /// <param name="seq">The sequence to check.</param>
     /// <returns>
     ///     A tuple consisting of the index where the sub-sequence starts and its length.<c>(0, 0)</c> is returned if
     ///     there is no such sub-sequence.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
     /// </exception>
-    public static (int index, int length) FindUnorderedSubsequenceRange<T>(
-        [NotNull] this IList<T> sequence,
-        [NotNull] IComparer<T> comparer)
+    let inline findUnorderedSubsequenceRange (seq: 'T[]) =
+        let struct (i, l) = SequenceAlgorithms.FindUnorderedSubsequenceRange(seq, Comparer.makeDefault)
+        (i, l)
     
     /// <summary>
     ///     Gets the subsequence with greatest aggregate value.
@@ -515,8 +504,10 @@ module Algorithm =
     ///     Thrown if <paramref name="sequence" />, <paramref name="aggregator" /> or <paramref name="comparer" /> are
     ///     <c>null</c>.
     /// </exception>
-    [CanBeNull]
-    public static (int index, int length)? GetRangeWithGreatestAggregateValue<T>(
-        [NotNull] this IList<T> sequence,
-        [NotNull] Aggregator<T> aggregator,
-        [NotNull] IComparer<T> comparer)
+    let inline getRangeWithGreatestAggregateValue (seq: 'T[]) =
+        let r = SequenceAlgorithms.GetRangeWithGreatestAggregateValue(seq, Aggregator<_> (+), Comparer.makeDefault)
+        if r.HasValue then 
+            let struct (i, f) = r.Value
+            Some (i, f)
+        else
+            None
