@@ -19,6 +19,8 @@ open Abacaxi
 open System
 
 /// Object-related functionality and helpers.
+[<RequireQualifiedAccess>]
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Object =
     /// <summary>
     ///     Inspects a given object and extract a set of key-value pairs. Each pair is a field/property/method and its

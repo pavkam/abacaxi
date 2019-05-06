@@ -18,6 +18,8 @@ namespace Abacaxi.FSharp
 open Abacaxi
 
 /// String-related functionality and helpers.
+[<RequireQualifiedAccess>]
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module String =
     /// <summary>
     ///     Reverses the specified string using "undivided" string chunks.

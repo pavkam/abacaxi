@@ -18,7 +18,34 @@ namespace Abacaxi.FSharp
 open System
 open Abacaxi
 
+
+/// Specifies a supported sorting algorithm. 
+[<RequireQualifiedAccess>]
+type SortingAlgorithm =
+    /// Bubble-sort. Uses <see name="Sorting.BubbleSort" /> method.
+    | Bubble
+    /// Cocktail-Shaker-sort. Uses <see name="Sorting.CocktailShakerSort" /> method.
+    | CocktailShaker
+    /// Comb-sort. Uses <see name="Sorting.CombSort" /> method.
+    | Comb 
+    /// Gnome-sort. Uses <see name="Sorting.GnomeSort" /> method.
+    | Gnome 
+    /// Heap-sort. Uses <see name="Sorting.HeapSort" /> method.
+    | Heap 
+    /// Insertion-sort. Uses <see name="Sorting.InsertionSort" /> method.
+    | Insertion 
+    /// Merge-sort. Uses <see name="Sorting.MergeSort" /> method.
+    | Merge 
+    /// Odd-Even-sort. Uses <see name="Sorting.OddEvenSort" /> method.
+    | OddEven 
+    /// Quick-sort. Uses <see name="Sorting.QuickSort" /> method.
+    | Quick 
+    /// Shell-sort. Uses <see name="Sorting.ShellSort" /> method.
+    | Shell
+
 /// Contains sequence extension function.
+[<RequireQualifiedAccess>]
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Seq =
     /// <summary>
     ///     Determines whether all adjacent elements are in a valid "neighboring" relation.
@@ -187,3 +214,63 @@ module Seq =
     /// <exception cref="ArgumentException">Thrown if <paramref name="sequence" /> is empty.</exception>
     let randomItem random (array: 'T[]) = 
         RandomExtensions.NextItem(random, array)
+
+    let inline private algoSortWith comparer algo sequence =
+        let method = 
+            match algo with 
+            | SortingAlgorithm.Bubble -> Sorting.BubbleSort
+            | SortingAlgorithm.CocktailShaker -> Sorting.CocktailShakerSort
+            | SortingAlgorithm.Comb -> Sorting.CombSort
+            | SortingAlgorithm.Gnome -> Sorting.GnomeSort
+            | SortingAlgorithm.Heap -> Sorting.HeapSort
+            | SortingAlgorithm.Insertion -> Sorting.InsertionSort
+            | SortingAlgorithm.Merge -> Sorting.MergeSort
+            | SortingAlgorithm.OddEven -> Sorting.OddEvenSort
+            | SortingAlgorithm.Quick -> Sorting.QuickSort
+            | SortingAlgorithm.Shell -> Sorting.ShellSort
+
+        let comparer = Comparer<'a>.Create(Comparison<'a>(comparer))
+
+        let array = Seq.toArray sequence
+        method(array, 0, array.Length, comparer)
+        array
+
+    /// <summary>
+    ///     Sorts the sequence extracting a comparison key and then using the selected algorithm and the default <see name="Operators.compare" /> operation. 
+    /// </summary>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if sequence is <c>null</c>.
+    /// </exception>
+    let inline sortWith algo = 
+        algoSortWith Operators.compare algo
+
+    /// <summary>
+    ///     Sorts the sequence using the selected algorithm using and the default <see name="Operators.compare" /> operation.
+    ///     Elements are sorted in descending order. 
+    /// </summary>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if sequence is <c>null</c>.
+    /// </exception>
+    let inline sortDescendingWith algo = 
+        algoSortWith (Operators.compare >> (-)) algo
+
+    /// <summary>
+    ///     Sorts the sequence extracting a comparison key and then using the selected algorithm and the default <see name="Operators.compare" /> operation. 
+    /// </summary>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if sequence is <c>null</c>.
+    /// </exception>
+    let inline sortWithBy algo projection = 
+        let inline comparer a b = Operators.compare (projection a) (projection b)
+        algoSortWith comparer algo
+
+    /// <summary>
+    ///     Sorts the sequence extracting a comparison key and then using the selected algorithm and the default <see name="Operators.compare" /> operation in.
+    ///     Elements are sorted in descending order. 
+    /// </summary>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if sequence is <c>null</c>.
+    /// </exception>
+    let inline sortDescendingWithBy algo projection = 
+        let inline comparer a b = Operators.compare (projection b) (projection a)
+        algoSortWith comparer algo

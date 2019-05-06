@@ -20,6 +20,8 @@ open System.Collections.Generic
 open System
 
 /// Contains all Abacaxi algorithms.
+[<RequireQualifiedAccess>]
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Algorithm =
     /// <summary>
     ///     Finds the best combination of items to be placed in a knapsack of given <paramref name="knapsackWeight" /> weight.
@@ -495,14 +497,10 @@ module Algorithm =
     /// <summary>
     ///     Gets the subsequence with greatest aggregate value.
     /// </summary>
-    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
-    /// <param name="sequence">The sequence.</param>
-    /// <param name="aggregator">The element aggregator (sum).</param>
-    /// <param name="comparer">The element comparer.</param>
+    /// <param name="seq">The sequence.</param>
     /// <returns>The range of the subsequence that satisfies the problem; <c>null</c> otherwise.</returns>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="sequence" />, <paramref name="aggregator" /> or <paramref name="comparer" /> are
-    ///     <c>null</c>.
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
     /// </exception>
     let inline getRangeWithGreatestAggregateValue (seq: 'T[]) =
         let r = SequenceAlgorithms.GetRangeWithGreatestAggregateValue(seq, Aggregator<_> (+), Comparer.makeDefault)
@@ -511,3 +509,29 @@ module Algorithm =
             Some (i, f)
         else
             None
+
+    /// <summary>
+    ///     Merges a sequence of overlapping intervals.
+    /// </summary>
+    /// <param name="intervals">The intervals to merge.</param>
+    /// <returns>An output sequence of all intervals (merged or not).</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if either of <paramref name="intervals" /> or <paramref name="comparer" />
+    ///     are <c>null</c>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">Thrown if any interval is invalid (start is greater than end).</exception>
+    let mergeOverlappingIntervals<'T>(intervals: seq<_>) =
+        Interval.MergeOverlapping(intervals, Comparer.makeDefault)
+
+    /// <summary>
+    ///     Selects the non-overlapping intervals that yield the best aggregate score.
+    /// </summary>
+    /// <param name="intervals">The intervals to merge.</param>
+    /// <returns>An output sequence of all selected intervals.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if either of <paramref name="intervals" /> or <paramref name="comparer" />
+    ///     are <c>null</c>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">Thrown if any interval is invalid (start is greater than end).</exception>
+    let choseBestNonOverlappingInterval (intervals: seq<_>) =
+        Interval.ChoseBestNonOverlapping(intervals, Comparer.makeDefault)

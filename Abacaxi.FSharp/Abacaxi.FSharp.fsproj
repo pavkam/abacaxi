@@ -17,14 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Comparer.fs" />
+    <Compile Include="Utils.fs" />
     <Compile Include="Seq.fs" />
-    <Compile Include="EqualityComparer.fs" />
-    <Compile Include="Interval.fs" />
-    <Compile Include="Integer.fs" />
     <Compile Include="Object.fs" />
     <Compile Include="String.fs" />
-    <Compile Include="Sorting.fs" />
     <Compile Include="Algorithm.fs" />
   </ItemGroup>
 
