@@ -155,3 +155,35 @@ module Seq =
     /// </exception>
     let inline isStrictlyOrderedDescending (seq: seq<'T>) =
         SequenceExtensions.IsStrictlyOrderedDescending(seq)
+
+    /// <summary>
+    ///     Returns a random sample of a given sequence of elements.
+    /// </summary>
+    /// <param name="random">The random instance to use for sampling.</param>
+    /// <param name="seq">The sequence of elements.</param>
+    /// <param name="size">Length of the sample to be selected.</param>
+    /// <returns>
+    ///     A random sequence of elements from <paramref name="sequence" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="seq" /> or <paramref name="random" /> are
+    ///     <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="seq" /> is less than one.</exception>
+    let randomSample random size (seq: seq<'T>) =
+        RandomExtensions.Sample(random, seq, size)
+
+    /// <summary>
+    ///     Returns a random item from a given <paramref name="sequence" />.
+    /// </summary>
+    /// <typeparam name="T">The type of items in the sequence.</typeparam>
+    /// <param name="random">The random class instance.</param>
+    /// <param name="sequence">The sequence.</param>
+    /// <returns>A random element from the given <paramref name="sequence" /></returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> or <paramref name="random" /> are
+    ///     <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="sequence" /> is empty.</exception>
+    let randomItem random (array: 'T[]) = 
+        RandomExtensions.NextItem(random, array)

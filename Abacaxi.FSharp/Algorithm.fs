@@ -77,23 +77,6 @@ module Algorithm =
     ///     Finds the subsets with equal aggregate value.
     /// </summary>
     /// <param name="set">The set of elements.</param>
-    /// <param name="aggregator">The aggregator function.</param>
-    /// <param name="comparer">The comparer.</param>
-    /// <param name="subsets">The number of subsets to split into.</param>
-    /// <returns>The first sequence of subsets that have the same aggregated value.</returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if either <paramref name="set" /> or <paramref name="aggregator" />
-    ///     or <paramref name="comparer" /> is <c>null</c>.
-    /// </exception>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="subsets" /> is less than one.</exception>
-    let inline splitIntoSubsetsOfEqualValue2 aggregator comparer subsets (set: Set<'T>) =
-        Set.SplitIntoSubsetsOfEqualValue(set |> Array.ofSeq, Aggregator<_> aggregator, Comparer.make comparer, subsets)
-        |> Array.map Set<_>
-
-    /// <summary>
-    ///     Finds the subsets with equal aggregate value.
-    /// </summary>
-    /// <param name="set">The set of elements.</param>
     /// <param name="subsets">The number of subsets to split into.</param>
     /// <returns>The first sequence of subsets that have the same aggregated value.</returns>
     /// <exception cref="ArgumentNullException">
@@ -143,8 +126,7 @@ module Algorithm =
     /// <param name="comparer">The comparer.</param>
     /// <returns>An array of elements with the highest sum.</returns>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="set" />, <paramref name="aggregator" /> or
-    ///     <paramref name="comparer" /> are null.
+    ///     Thrown if <paramref name="set" />, <paramref name="aggregator" /> are null.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
     ///     Thrown if the <paramref name="size" /> is greater than the number of
@@ -165,3 +147,376 @@ module Algorithm =
     let inline listPermutations (set: Set<'T>) =
         Set.GetPermutations(set |> Set.toArray)
         |> Array.map Set<_>
+
+    /// <summary>
+    ///     Finds the longest increasing sequence in a given <paramref name="sequence" />.
+    /// </summary>
+    /// <param name="seq">The sequence to verify.</param>
+    /// <returns>The longest increasing sequence.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="seq" /> is <c>null</c>.</exception>
+    let inline longestIncreasingSequence (seq: seq<'T>) : seq<_> = 
+        SequenceAlgorithms.FindLongestIncreasingSequence(seq, Comparer.makeDefault)
+
+    /// <summary>
+    ///     Determines whether the sequence contains two elements that aggregate to a given <paramref name="target" /> value.
+    /// </summary>
+    /// <param name="sequence">The sequence to check.</param>
+    /// <param name="target">The target value to search for.</param>
+    /// <param name="aggregator">The function that aggregates two values.</param>
+    /// <param name="comparer">The comparer.</param>
+    /// <returns>
+    ///     <c>true</c> if the <paramref name="sequence" /> contains two elements that aggregate; otherwise, <c>false</c>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> is <c>null</c>
+    /// </exception>
+    let inline containsTwoElementsThatAggregateTo target (seq: seq<'T>) =
+        SequenceAlgorithms.ContainsTwoElementsThatAggregateTo(seq, Aggregator<_> (+), Comparer.makeDefault, target)
+
+    /// <summary>
+    ///     Finds all duplicate items in a given <paramref name="seq" />.
+    /// </summary>
+    /// <param name="seq">The sequence to inspect.</param>
+    /// <returns>A sequence of element-frequency pairs of the detected duplicates.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
+    /// </exception>
+    let inline listDuplicates (seq: seq<'T>) =
+        SequenceAlgorithms.FindDuplicates(seq, EqualityComparer.makeDefault)
+        |> Array.map (fun i -> i.Item, i.Count)
+
+    /// <summary>
+    ///     Finds all duplicate integers in a given <paramref name="seq" />.
+    /// </summary>
+    /// <param name="seq">The sequence to inspect.</param>
+    /// <param name="min">The minimum possible value of an element part of the <paramref name="seq" />.</param>
+    /// <param name="max">The maximum possible value of an element part of the <paramref name="seq" />.</param>
+    /// <returns>A seq of element-frequency pairs of the detected duplicates.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="seq" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown if <paramref name="max" /> is less than <paramref name="min" />.
+    /// </exception>
+    let inline listIntDuplicates (min, max) (seq: seq<_>) =
+        SequenceAlgorithms.FindDuplicates(seq, min, max)
+        |> Array.map (fun i -> i.Item, i.Count)
+
+    /// <summary>
+    ///     Finds all unique items in a given <paramref name="seq" />.
+    /// </summary>
+    /// <param name="seq">The sequence to inspect.</param>
+    /// <param name="comparer">The comparer function.</param>
+    /// <param name="hash">The hash function.</param>
+    /// <returns>A sequence of detected uniques.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
+    /// </exception>
+    let inline listUniques (seq: seq<_>) =
+        SequenceAlgorithms.FindUniques(seq, EqualityComparer.makeDefault)
+
+    /// <summary>
+    ///     Finds all unique items in a given <paramref name="seq" /> and returns them in order of appearance.
+    /// </summary>
+    /// <param name="seq">The sequence to inspect.</param>
+    /// <param name="comparer">The comparer function.</param>
+    /// <param name="hash">The hash function.</param>
+    /// <returns>A sequence of detected uniques in order of appearance.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
+    /// </exception>
+    let inline listUniquesInOrder (seq: seq<_>) =
+        SequenceAlgorithms.FindUniquesInOrder(seq, EqualityComparer.makeDefault)
+   
+    /// <summary>
+    ///     Extracts all nested groups from sequence. The method returns a sequence of sequences.
+    /// </summary>
+    /// <param name="seq">The sequence.</param>
+    /// <param name="openBracket">The element that signifies the start of a group.</param>
+    /// <param name="closeBracket">The element that signifies the end of a group.</param>
+    /// <returns>The sequence of extracted groups, starting with the inner most ones.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">Throws if the number of open and close brackets do not match.</exception>
+    let inline listNestedBlocks (openBracket, closeBracket) (seq: seq<_>) : seq<_> = 
+        SequenceAlgorithms.ExtractNestedBlocks(seq, openBracket, closeBracket, EqualityComparer.makeDefault)
+
+    /// <summary>
+    ///     Finds the sub-sequences whose aggregated values are equal to a given <paramref name="target" /> value.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="seq">The sequence to check.</param>
+    /// <param name="target">The target aggregated value.</param>
+    /// <returns>
+    ///     A sequence of found integers.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="seq" /> is <c>null</c>.</exception>
+    let inline listSubsequencesOfAggregateValue target (seq: 'T[]) : seq<_> =
+        SequenceAlgorithms.GetSubsequencesOfAggregateValue(seq, Aggregator<_> (+), Aggregator<_> (-), 
+            EqualityComparer.makeDefault, target)
+
+    /// <summary>
+    ///     Interleaves multiple sequences into one output sequence.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequences.</typeparam>
+    /// <param name="comparer">The comparer.</param>
+    /// <param name="seq">The first sequence to interleave.</param>
+    /// <param name="other">The next sequences to interleave.</param>
+    /// <returns>A new interleaved stream.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="seq" /> or <paramref name="others" /> are <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentException">Thrown if the <paramref name="others" /> is empty.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if one or more sequences contain unsorted items.</exception>
+    let inline interleave (seq: seq<'T>) (others: seq<_>[]) =
+        SequenceAlgorithms.Interleave(Comparer.makeDefault, seq, others)
+   
+    /// <summary>
+    ///     Creates an array whose contents are the elements of the <paramref name="seq" /> repeated
+    ///     <paramref name="count" /> times.
+    /// </summary>
+    /// <param name="seq">The input sequence.</param>
+    /// <param name="count">Number of times to repeat the sequence.</param>
+    /// <returns>A new array.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="seq" /> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown if the value of <paramref name="count" /> argument is less
+    ///     than <c>1</c>.
+    /// </exception>
+    let inline repeat count (seq: seq<'T>) =
+        SequenceAlgorithms.Repeat(seq, count)
+
+    /// <summary>
+    ///     Finds the location of <paramref name="item" /> in the given <paramref name="seq" />.
+    /// </summary>
+    /// <param name="seq">The sequence to search.</param>
+    /// <param name="start">The start index in the sequence.</param>
+    /// <param name="length">The length of sequence to search..</param>
+    /// <param name="item">The item to search for.</param>
+    /// <returns>The index in the sequence where the <paramref name="item" /> was found; <c>-1</c> otherwise.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown when the combination of <paramref name="start" /> and
+    ///     <paramref name="length" /> is out of bounds.
+    /// </exception>
+    let inline binarySearch (start, length) item (seq: 'T[]) = 
+        SequenceAlgorithms.BinarySearch(seq, start, length, item, Comparer.makeDefault)
+    
+    /// <summary>
+    ///     Finds the location of <paramref name="item" /> in the given <paramref name="seq" /> that is presumed to be sorted in descending order.
+    /// </summary>
+    /// <param name="seq">The sequence to search.</param>
+    /// <param name="start">The start index in the sequence.</param>
+    /// <param name="length">The length of sequence to search..</param>
+    /// <param name="item">The item to search for.</param>
+    /// <returns>The index in the sequence where the <paramref name="item" /> was found; <c>-1</c> otherwise.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="seq" /> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown when the combination of <paramref name="start" /> and
+    ///     <paramref name="length" /> is out of bounds.
+    /// </exception>
+    let inline binarySearchDescending (start, length) item (seq: 'T[]) = 
+        SequenceAlgorithms.BinarySearch(seq, start, length, item, Comparer.makeDefault, false)
+
+    /// <summary>
+    ///     Finds the location of <paramref name="item" /> in the given <paramref name="seq" />. If the item is repeated a
+    ///     number of times, this method returns their index range. Otherwise, this method returns the item immediately 
+    ///     smaller than the searched value.
+    /// </summary>
+    /// <param name="seq">The sequence to search.</param>
+    /// <param name="start">The start index in the sequence.</param>
+    /// <param name="length">The length of sequence to search..</param>
+    /// <param name="item">The item to search for.</param>
+    /// <returns>An index pair in the sequence where the <paramref name="item" />(s) were found; <c>-1</c> otherwise.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown when the combination of <paramref name="start" /> and <paramref name="length" /> is out of bounds.
+    /// </exception>
+    let inline binaryLookup (start, length) item (seq: 'T[]) = 
+        let struct (f, l) = SequenceAlgorithms.BinaryLookup(seq, start, length, item, Comparer.makeDefault)
+        (f, l)
+
+    /// <summary>
+    ///     Finds the location of <paramref name="item" /> in the given descending sequence <paramref name="seq" />. 
+    ///     If the item is repeated a number of times, this method returns their index range. Otherwise, 
+    ///     this method returns the item immediately smaller than the searched value.
+    /// </summary>
+    /// <param name="seq">The sequence to search.</param>
+    /// <param name="start">The start index in the sequence.</param>
+    /// <param name="length">The length of sequence to search..</param>
+    /// <param name="item">The item to search for.</param>
+    /// <returns>An index pair in the sequence where the <paramref name="item" />(s) were found; <c>-1</c> otherwise.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown when the combination of <paramref name="start" /> and <paramref name="length" /> is out of bounds.
+    /// </exception>
+    let inline binaryLookupDescending (start, length) item (seq: 'T[]) = 
+        let struct (f, l) = SequenceAlgorithms.BinaryLookup(seq, start, length, item, Comparer.makeDefault, false)
+        (f, l)
+
+    /// <summary>
+    ///     Evaluates the edit distance between two given sequences <paramref name="seqA" /> and
+    ///     <paramref name="seqB" />.
+    /// </summary>
+    /// <param name="seqA">The sequence to compare to.</param>
+    /// <param name="seqB">The sequence to compare with.</param>
+    /// <returns>
+    ///     A sequence of "edits" applied to the original <paramref name="seqA" /> to obtain the
+    ///     <paramref name="seqB" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if either <paramref name="seqA" /> or
+    ///     <paramref name="seqB" /> are <c>null</c>.
+    /// </exception>
+    let inline diff (seqA: 'T[]) (seqB: 'T[]) =
+        SequenceAlgorithms.Diff(seqA, seqB)
+        |> Array.map (fun i -> i.Item, i.Operation)
+   
+    /// <summary>
+    ///     Gets the longest common sub-sequence shared by <paramref name="seqA" /> and <paramref name="seqB" />.
+    /// </summary>
+    /// <param name="seqA">The sequence to compare to.</param>
+    /// <param name="seqB">The sequence to compare with.</param>
+    /// <returns>The longest common sub-sequence shared by both sequences.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if either <paramref name="seqA" /> or
+    ///     <paramref name="seqB" /> are <c>null</c>.
+    /// </exception>
+    let inline lcs (seqA: 'T[]) (seqB: 'T[]) =
+        SequenceAlgorithms.GetLongestCommonSubsequence(seqA, seqB)
+   
+    /// <summary>
+    ///     Evaluates the appearance frequency for each item in a <paramref name="seq" />.
+    /// </summary>
+    /// <param name="seq">The sequence.</param>
+    /// <returns>
+    ///     A map where each key is an item form the <paramref name="seq" /> and associated values are the
+    ///     frequencies.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> is <c>null</c>.
+    /// </exception>
+    let inline freq (seq: seq<'T>) =
+        SequenceAlgorithms.GetItemFrequencies(seq, EqualityComparer.makeDefault)
+        |> Seq.map (|KeyValue|)
+        |> Map.ofSeq
+
+    /// <summary>
+    ///     Deconstructs a give n<paramref name="sequence" /> into subsequences known as "terms". Each term is validated/scored
+    ///     by
+    ///     <paramref name="scoreTermFunc" /> function.
+    /// </summary>
+    /// <typeparam name="T">The type of items in the sequence.</typeparam>
+    /// <param name="sequence">The sequence.</param>
+    /// <param name="scoreTermFunc">The scoring function.</param>
+    /// <returns>A sequence of terms that the original sequence was split into.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> or <paramref name="scoreTermFunc" /> are <c>null</c>.
+    /// </exception>
+    [NotNull, ItemNotNull]
+    public static T[][] DeconstructIntoTerms<T>(
+        [NotNull] this IList<T> sequence,
+        [NotNull] Func<IList<T>, int, int, double> scoreTermFunc)
+
+    /// <summary>
+    ///     Determines whether the specified <paramref name="sequence" /> is a palindrome.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="sequence">The sequence.</param>
+    /// <param name="startIndex">The start index.</param>
+    /// <param name="length">The length to check.</param>
+    /// <param name="comparer">The element comparer.</param>
+    /// <returns>
+    ///     <c>true</c> if the specified sequence is a palindrome; otherwise, <c>false</c>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown when the combination of <paramref name="startIndex" /> and
+    ///     <paramref name="length" /> is out of bounds.
+    /// </exception>
+    public static bool IsPalindrome<T>(
+        [NotNull] this IList<T> sequence, int startIndex, int length, [NotNull] IEqualityComparer<T> comparer)
+
+    /// <summary>
+    ///     Determines whether the given <paramref name="sequence" /> is a permutation of a palindrome.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="sequence">The sequence.</param>
+    /// <param name="startIndex">The start index.</param>
+    /// <param name="length">The length to check.</param>
+    /// <param name="comparer">The element comparer.</param>
+    /// <returns>
+    ///     <c>true</c> if the specified sequence is a permutation of a palindrome; otherwise, <c>false</c>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown when the combination of <paramref name="startIndex" /> and
+    ///     <paramref name="length" /> is out of bounds.
+    /// </exception>
+    public static bool IsPermutationOfPalindrome<T>(
+        [NotNull] this IList<T> sequence, int startIndex, int length, [NotNull] IEqualityComparer<T> comparer)
+
+    /// <summary>
+    ///     Returns the index of a permutation substring.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="sequence">The sequence.</param>
+    /// <param name="subSequence">The sub-sequence to check for.</param>
+    /// <param name="comparer">The comparer.</param>
+    /// <returns>
+    ///     A zero-based index in the <paramref name="sequence" /> where a permutation of <paramref name="subSequence" />
+    ///     was found. <c>-1</c> if not found.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+    /// </exception>
+    public static int IndexOfPermutationOf<T>(
+        [NotNull] this IList<T> sequence,
+        [NotNull] IList<T> subSequence,
+        [NotNull] IEqualityComparer<T> comparer)
+
+    /// <summary>
+    ///     Finds the index and length of the unordered subsequence in the given <paramref name="sequence" />.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="sequence">The sequence to check.</param>
+    /// <param name="comparer">The comparer.</param>
+    /// <returns>
+    ///     A tuple consisting of the index where the sub-sequence starts and its length.<c>(0, 0)</c> is returned if
+    ///     there is no such sub-sequence.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" /> or <paramref name="comparer" /> are <c>null</c>.
+    /// </exception>
+    public static (int index, int length) FindUnorderedSubsequenceRange<T>(
+        [NotNull] this IList<T> sequence,
+        [NotNull] IComparer<T> comparer)
+    
+    /// <summary>
+    ///     Gets the subsequence with greatest aggregate value.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="sequence">The sequence.</param>
+    /// <param name="aggregator">The element aggregator (sum).</param>
+    /// <param name="comparer">The element comparer.</param>
+    /// <returns>The range of the subsequence that satisfies the problem; <c>null</c> otherwise.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="sequence" />, <paramref name="aggregator" /> or <paramref name="comparer" /> are
+    ///     <c>null</c>.
+    /// </exception>
+    [CanBeNull]
+    public static (int index, int length)? GetRangeWithGreatestAggregateValue<T>(
+        [NotNull] this IList<T> sequence,
+        [NotNull] Aggregator<T> aggregator,
+        [NotNull] IComparer<T> comparer)
