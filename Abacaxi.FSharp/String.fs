@@ -42,7 +42,7 @@ module String =
     ///     Thrown if <paramref name="maxLength" /> is less than one or the
     ///     length of <paramref name="ellipsis" /> is greater than <paramref name="maxLength" />.
     /// </exception>
-    let inline shorten2 maxLength ellipsis s = 
+    let inline shortenWith maxLength ellipsis s = 
         StringExtensions.Shorten(s, maxLength, ellipsis)
 
     /// <summary>
@@ -62,7 +62,7 @@ module String =
     ///     Escapes the specified string.
     /// </summary>
     /// <remarks>
-    ///     This method escapes the special characters and unicode escape characters.
+    ///     This method escapes the special characters and Unicode escape characters.
     /// </remarks>
     /// <param name="s">The string to escape.</param>
     /// <returns>The escaped string.</returns>
@@ -80,7 +80,7 @@ module String =
     ///     Thrown if <paramref name="s" /> or <paramref name="pattern" /> are
     ///     <c>null</c>.
     /// </exception>
-    let matches2 ignoreCase pattern s =
+    let matches ignoreCase pattern s =
         StringExtensions.Like(s, pattern, ignoreCase)
 
     /// <summary>
@@ -93,8 +93,8 @@ module String =
     ///     Thrown if <paramref name="s" /> or <paramref name="pattern" /> are
     ///     <c>null</c>.
     /// </exception>
-    let matches pattern s =
-        StringExtensions.Like(s, pattern)
+    let matchesIgnoreCase pattern s =
+        StringExtensions.Like(s, pattern, true)
 
     /// <summary>
     ///     Finds all duplicate characters in a given <paramref name="s" />.
@@ -102,7 +102,7 @@ module String =
     /// <param name="s">The string to inspect.</param>
     /// <returns>A s of element-appearances pairs of the detected duplicates.</returns>
     /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
-    let findDuplicateChars s =
+    let getDuplicateChars s =
         StringExtensions.FindDuplicates(s)
         |> Array.map (fun freq -> (freq.Item, freq.Count))
 
@@ -112,7 +112,7 @@ module String =
     /// <param name="s">The string to split.</param>
     /// <returns>A sequence of strings, each representing an individual line in the string.</returns>
     /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="s" /> is <c>null</c>.</exception>
-    let splitIntoLines  s =
+    let splitIntoLines s =
         StringExtensions.SplitIntoLines(s)
 
     /// <summary>

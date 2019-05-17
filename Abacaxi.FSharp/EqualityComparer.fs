@@ -17,42 +17,6 @@ namespace Abacaxi.FSharp
 
 open System.Collections.Generic
 
-/// Contains a number of utilities to deal with .NET comparer interoperability.
-[<RequireQualifiedAccess>]
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Comparer =
-    type private Comparer<'T> (comp, sign) =
-           interface IComparer<'T> with
-               member ___.Compare(a, b) = sign * (comp a b)
-
-    /// <summary>
-    ///     Creates a new .NET comparer based on a given <paramref name="func" />.
-    /// </summary>
-    /// <param name="func">The comparison function.</param>
-    /// <returns>A a new .NET-compatible comparer object.</returns>
-    let inline make<'T> func : IComparer<'T> =
-        Comparer<_> (func, 1) :> _
-
-    /// <summary>
-    ///     Creates a new descending .NET comparer based on a given <paramref name="func" />.
-    /// </summary>
-    /// <param name="func">The comparison function.</param>
-    /// <returns>A a new .NET-compatible comparer object.</returns>
-    let inline makeDescending<'T> func : IComparer<'T> =
-        Comparer<_> (func, -1) :> _
-
-    /// <summary>
-    ///     Creates a .NET comparer based on standard F# <c>Operators.compare</c>.
-    /// </summary>
-    /// <returns>A a new .NET-compatible comparer object.</returns>
-    let makeDefault<'T when 'T: comparison> = make<'T> Operators.compare
-
-    /// <summary>
-    ///     Creates a descending .NET comparer based on standard F# <c>Operators.compare</c>.
-    /// </summary>
-    /// <returns>A a new .NET-compatible comparer object.</returns>
-    let makeDefaultDescending<'T when 'T: comparison> = makeDescending<'T> Operators.compare
-
 /// Contains a number of utilities to deal with .NET equality comparer interoperability.
 [<RequireQualifiedAccess>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -75,9 +39,3 @@ module EqualityComparer =
     /// </summary>
     /// <returns>A a new .NET-compatible comparer object.</returns>
     let makeDefault<'T when 'T: equality> = make<'T> (=) hash
-
-[<RequireQualifiedAccess>]
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Internal =
-    let unboxTuple (struct (a: 'T1, b: 'T2)) = (a, b)
-    let boxTuple (a: 'T1, b: 'T2) = struct (a, b)

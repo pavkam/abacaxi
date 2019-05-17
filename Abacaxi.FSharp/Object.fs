@@ -31,7 +31,7 @@ module Object =
     /// <param name="flags">The inspection flags.</param>
     /// <returns>A readonly dictionary containing all object's inspected members.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="value" /> is <c>null</c>.</exception>
-    let inspect2<'T> flags value =
+    let inspectWith<'T> flags value =
         ObjectExtensions.Inspect<'T>(value, flags)
     
     /// <summary>
@@ -51,7 +51,7 @@ module Object =
     /// <param name="object">The object to convert.</param>
     /// <param name="formatProvider">The format provider.</param>
     /// <returns>Optional converted value.</returns>
-    let tryConvert2<'T> (formatProvider: IFormatProvider) value =
+    let tryConvertWith<'T> (formatProvider: IFormatProvider) value =
         match ObjectExtensions.TryConvert<'T>(value, formatProvider) with
         | (true, v) -> Some v
         | (false, _) -> None
@@ -82,37 +82,9 @@ module Object =
     ///     Thrown if either <paramref name="formatProvider" /> or
     ///     <paramref name="validator" /> is <c>null</c>.
     /// </exception>
-    let convert4<'T> value formatProvider validator =
+    let convertWith<'T> value formatProvider validator =
         ObjectExtensions.As<'T>(value, formatProvider, Func<'T, bool> validator)
        
-    /// <summary>
-    ///     Converts a given <paramref name="object" /> to a value of a different type.
-    /// </summary>
-    /// <param name="object">The value to convert.</param>
-    /// <param name="formatProvider">The format provider.</param>
-    /// <returns>
-    ///     The converted value.
-    /// </returns>
-    /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="formatProvider" /> is <c>null</c>.</exception>
-    let convert3<'T> value (formatProvider: IFormatProvider) =
-        ObjectExtensions.As<'T>(value, formatProvider)
-
-    /// <summary>
-    ///     Converts a given <paramref name="object" /> to a value of a different type.
-    ///     This method uses <seealso cref="CultureInfo.InvariantCulture" /> for the conversion.
-    /// </summary>
-    /// <typeparam name="T">The type to convert to.</typeparam>
-    /// <param name="object">The value to convert.</param>
-    /// <param name="validator">The validation function.</param>
-    /// <returns>
-    ///     The converted value.
-    /// </returns>
-    /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
-    /// <exception cref="InvalidOperationException">Thrown if the validation failed.</exception>
-    let convert2<'T> value validator =
-           ObjectExtensions.As<'T>(value, Func<'T, bool> validator)
-      
     /// <summary>
     ///     Converts a given <paramref name="object" /> to a value of a different type.
     ///     This method uses <seealso cref="CultureInfo.InvariantCulture" /> for the conversion.
