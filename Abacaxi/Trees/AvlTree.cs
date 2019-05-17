@@ -318,7 +318,7 @@ namespace Abacaxi.Trees
             }
         }
 
-        private void Insert(TKey key, TValue value, bool allowUpdate)
+        private void Insert([CanBeNull] TKey key, [CanBeNull] TValue value, bool allowUpdate)
         {
             if (Root == null)
             {
@@ -530,7 +530,7 @@ namespace Abacaxi.Trees
         ///     Thrown if a node with the same <paramref name="key" /> is already present in
         ///     the tree.
         /// </exception>
-        public override void Add(TKey key, TValue value)
+        public override void Add([CanBeNull] TKey key, [CanBeNull] TValue value)
         {
             Insert(key, value, false);
         }
@@ -540,7 +540,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's new value.</param>
-        public override void AddOrUpdate(TKey key, TValue value)
+        public override void AddOrUpdate([CanBeNull] TKey key, [CanBeNull] TValue value)
         {
             Insert(key, value, true);
         }
@@ -550,7 +550,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <returns><c>true</c> if the node was removed; otherwise, <c>false</c>.</returns>
-        public override bool Remove(TKey key)
+        public override bool Remove([CanBeNull] TKey key)
         {
             var node = Root;
 

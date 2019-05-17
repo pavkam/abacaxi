@@ -228,8 +228,8 @@ namespace Abacaxi.Trees
         [NotNull]
         private RedBlackTreeNode<TKey, TValue> InsertRecursive(
             [CanBeNull] RedBlackTreeNode<TKey, TValue> node,
-            TKey key,
-            TValue value,
+            [CanBeNull] TKey key,
+            [CanBeNull] TValue value,
             bool allowUpdate)
         {
             if (node == null)
@@ -292,7 +292,7 @@ namespace Abacaxi.Trees
         }
 
         [CanBeNull]
-        private RedBlackTreeNode<TKey, TValue> RemoveRecursive([NotNull] RedBlackTreeNode<TKey, TValue> node, TKey key)
+        private RedBlackTreeNode<TKey, TValue> RemoveRecursive([NotNull] RedBlackTreeNode<TKey, TValue> node, [CanBeNull] TKey key)
         {
             if (Comparer.Compare(key, node.Key) < 0)
             {
@@ -385,7 +385,7 @@ namespace Abacaxi.Trees
         ///     Thrown if a node with the same <paramref name="key" /> is already present in
         ///     the tree.
         /// </exception>
-        public override void Add(TKey key, TValue value)
+        public override void Add([CanBeNull] TKey key, [CanBeNull] TValue value)
         {
             Root = InsertRecursive(Root, key, value, false);
             Root.Color = RedBlackTreeNodeColor.Black;
@@ -396,7 +396,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <param name="value">The node's new value.</param>
-        public override void AddOrUpdate(TKey key, TValue value)
+        public override void AddOrUpdate([CanBeNull] TKey key, [CanBeNull] TValue value)
         {
             Root = InsertRecursive(Root, key, value, true);
             Root.Color = RedBlackTreeNodeColor.Black;
@@ -407,7 +407,7 @@ namespace Abacaxi.Trees
         /// </summary>
         /// <param name="key">The node's key.</param>
         /// <returns><c>true</c> if the node was removed; otherwise, <c>false</c>.</returns>
-        public override bool Remove(TKey key)
+        public override bool Remove([CanBeNull] TKey key)
         {
             var initialCount = Count;
             if (Root == null)
