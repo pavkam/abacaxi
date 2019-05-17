@@ -23,7 +23,7 @@ namespace Abacaxi
     using JetBrains.Annotations;
 
     /// <summary>
-    ///     Implements a number of object-related helper methods useable across the library (and beyond!).
+    ///     Implements a number of object-related helper methods usable across the library (and beyond!).
     /// </summary>
     [PublicAPI]
     public static class ObjectExtensions
@@ -89,7 +89,8 @@ namespace Abacaxi
             Assert.NotNull(toType);
 
             /* nulls */
-            result = default;
+            // ReSharper disable once AssignNullToNotNullAttribute
+            result = null;
             if (@object == null)
             {
                 return !toType.IsValueType || Nullable.GetUnderlyingType(toType) != null;
@@ -286,7 +287,7 @@ namespace Abacaxi
         /// <param name="result">The resulting converted value.</param>
         /// <returns><c>true</c> if the conversion succeeded; otherwise, <c>false</c>.</returns>
         public static bool TryConvert<T>([CanBeNull] this object @object, [NotNull] IFormatProvider formatProvider,
-            out T result)
+            [CanBeNull] out T result)
         {
             Validate.ArgumentNotNull(nameof(formatProvider), formatProvider);
 
@@ -297,7 +298,7 @@ namespace Abacaxi
                 return true;
             }
 
-            result = default;
+            result = default(T);
             return false;
         }
 
@@ -330,6 +331,7 @@ namespace Abacaxi
         ///     Thrown if either <paramref name="formatProvider" /> or
         ///     <paramref name="validateFunc" /> is <c>null</c>.
         /// </exception>
+        [CanBeNull]
         public static T As<T>([CanBeNull] this object @object,
             [NotNull] IFormatProvider formatProvider, [NotNull] Func<T, bool> validateFunc)
         {
@@ -361,6 +363,7 @@ namespace Abacaxi
         /// </returns>
         /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="formatProvider" /> is <c>null</c>.</exception>
+        [CanBeNull]
         public static T As<T>([CanBeNull] this object @object, [NotNull] IFormatProvider formatProvider)
         {
             return As<T>(@object, formatProvider, v => true);
@@ -378,6 +381,7 @@ namespace Abacaxi
         /// </returns>
         /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
         /// <exception cref="InvalidOperationException">Thrown if the validation failed.</exception>
+        [CanBeNull]
         public static T As<T>([CanBeNull] this object @object, [NotNull] Func<T, bool> validateFunc)
         {
             return As(@object, CultureInfo.InvariantCulture, validateFunc);
@@ -393,6 +397,7 @@ namespace Abacaxi
         ///     The converted value.
         /// </returns>
         /// <exception cref="FormatException">Thrown if the conversion failed.</exception>
+        [CanBeNull]
         public static T As<T>([CanBeNull] this object @object)
         {
             return As<T>(@object, CultureInfo.InvariantCulture, v => true);

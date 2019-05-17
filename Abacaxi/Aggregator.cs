@@ -24,6 +24,6 @@ namespace Abacaxi
     /// <param name="a">The first value.</param>
     /// <param name="b">The second value.</param>
     /// <returns>The aggregated value.</returns>
-    [PublicAPI]
-    public delegate T Aggregator<T>(T a, T b);
+    [PublicAPI, CanBeNull]
+    public delegate T Aggregator<T>([CanBeNull] T a, [CanBeNull] T b);
 }

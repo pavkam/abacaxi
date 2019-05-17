@@ -35,7 +35,7 @@ namespace Abacaxi
         ///     Thrown if <paramref name="value" /> or <paramref name="weight" />
         ///     are less than or equal to zero.
         /// </exception>
-        public KnapsackItem(T item, double value, int weight)
+        public KnapsackItem([CanBeNull] T item, double value, int weight)
         {
             Validate.ArgumentGreaterThanZero(nameof(value), value);
             Validate.ArgumentGreaterThanZero(nameof(weight), weight);
@@ -51,6 +51,7 @@ namespace Abacaxi
         /// <value>
         ///     The item.
         /// </value>
+        [CanBeNull]
         public T Item { get; }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace Abacaxi
         /// <returns>
         ///     <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override bool Equals([CanBeNull] object obj)
         {
             if (obj?.GetType() != GetType())
             {

@@ -406,7 +406,7 @@ namespace Abacaxi.Containers
 
             var success =
                 FlowDown(key, out var node) && node.IsTerminal;
-            result = success ? node.Value : default;
+            result = success ? node.Value : default(TValue);
 
             return success;
         }

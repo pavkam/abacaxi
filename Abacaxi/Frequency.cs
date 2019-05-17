@@ -30,6 +30,7 @@ namespace Abacaxi
         /// <value>
         ///     The item.
         /// </value>
+        [CanBeNull]
         public T Item { get; }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace Abacaxi
         /// </summary>
         /// <param name="item">The item being counted.</param>
         /// <param name="count">The number of appearances.</param>
-        public Frequency(T item, int count)
+        public Frequency([CanBeNull] T item, int count)
         {
             Count = count;
             Item = item;
@@ -58,7 +59,7 @@ namespace Abacaxi
         /// <returns>
         ///     <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override bool Equals([CanBeNull] object obj)
         {
             if (obj?.GetType() != GetType())
             {

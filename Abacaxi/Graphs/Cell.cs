@@ -57,7 +57,7 @@ namespace Abacaxi.Graphs
         /// <returns>
         ///     <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override bool Equals([CanBeNull] object obj)
         {
             if (obj == null ||
                 obj.GetType() != GetType())

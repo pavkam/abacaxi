@@ -98,7 +98,7 @@ namespace Abacaxi.Containers
                         break;
                 }
 
-                return default;
+                return default(TValue);
             }
             set
             {
@@ -285,7 +285,7 @@ namespace Abacaxi.Containers
         ///     Adds an item to the <see cref="Mash{TKey,TValue}" />'s value collection.
         /// </summary>
         /// <param name="item">The object to add to this <see cref="Mash{TKey,TValue}" />.</param>
-        public void Add(TValue item)
+        public void Add([CanBeNull] TValue item)
         {
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
@@ -359,7 +359,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     <c>true</c> if <paramref name="item" /> is found in the <see cref="Mash{TKey,TValue}" />; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(TValue item)
+        public bool Contains([CanBeNull] TValue item)
         {
             return IndexOf(item) > -1;
         }
@@ -426,7 +426,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     <c>true</c> if <paramref name="item" /> was successfully removed; otherwise, <c>false</c>.
         /// </returns>
-        public bool Remove(TValue item)
+        public bool Remove([CanBeNull] TValue item)
         {
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
@@ -551,7 +551,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     The index of <paramref name="item" /> if found in the list; otherwise, -1.
         /// </returns>
-        public int IndexOf(TValue item)
+        public int IndexOf([CanBeNull] TValue item)
         {
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (_state & StorageState.ValueMask)
@@ -602,7 +602,7 @@ namespace Abacaxi.Containers
         /// <param name="index">The zero-based index at which <paramref name="item" /> should be inserted.</param>
         /// <param name="item">The object to insert into the <see cref="Mash{TKey,TValue}" />'s value collection.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index" /> is out of bounds.</exception>
-        public void Insert(int index, TValue item)
+        public void Insert(int index, [CanBeNull] TValue item)
         {
             Validate.ArgumentGreaterThanOrEqualToZero(nameof(index), index);
 
@@ -831,7 +831,7 @@ namespace Abacaxi.Containers
                         break;
                 }
 
-                return default;
+                return default(TValue);
             }
             set
             {

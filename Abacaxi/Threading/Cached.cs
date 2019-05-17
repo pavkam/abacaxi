@@ -131,7 +131,7 @@ namespace Abacaxi.Threading
             lock (_lock)
             {
                 _expiresAtTicks = 0;
-                _value = default;
+                _value = default(T);
             }
         }
     }

@@ -111,7 +111,7 @@ namespace Abacaxi.Containers
         ///     Adds an item to the <see cref="T:Abacaxi.Containers.Heap`1" />.
         /// </summary>
         /// <param name="item">The object to add to the <see cref="T:Abacaxi.Containers.Heap`1" />.</param>
-        public void Add(T item)
+        public void Add([CanBeNull] T item)
         {
             if (Count == _array.Length)
             {
@@ -143,7 +143,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     true if <paramref name="item" /> is found in the <see cref="T:Abacaxi.Containers.Heap`1" />; otherwise, false.
         /// </returns>
-        public bool Contains(T item)
+        public bool Contains([CanBeNull] T item)
         {
             for (var i = 0; i < Count; i++)
             {
@@ -249,7 +249,7 @@ namespace Abacaxi.Containers
         ///     method also returns false if <paramref name="item" /> is not found in the original
         ///     <see cref="T:Abacaxi.Containers.Heap{T}" />.
         /// </returns>
-        public bool Remove(T item)
+        public bool Remove([CanBeNull] T item)
         {
             if (Count < 0)
             {
@@ -374,6 +374,7 @@ namespace Abacaxi.Containers
         /// </summary>
         /// <returns>The top element.</returns>
         /// <exception cref="InvalidOperationException">The heap is empty.</exception>
+        [CanBeNull]
         public T RemoveTop()
         {
             if (Count == 0)

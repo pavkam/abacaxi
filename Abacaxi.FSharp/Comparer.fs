@@ -30,7 +30,7 @@ module Comparer =
     /// </summary>
     /// <param name="func">The comparison function.</param>
     /// <returns>A a new .NET-compatible comparer object.</returns>
-    let inline make<'T> func : IComparer<'T> =
+    let make<'T> func : IComparer<'T> =
         Comparer<_> (func, 1) :> _
 
     /// <summary>
@@ -38,7 +38,7 @@ module Comparer =
     /// </summary>
     /// <param name="func">The comparison function.</param>
     /// <returns>A a new .NET-compatible comparer object.</returns>
-    let inline makeDescending<'T> func : IComparer<'T> =
+    let makeDescending<'T> func : IComparer<'T> =
         Comparer<_> (func, -1) :> _
 
     /// <summary>

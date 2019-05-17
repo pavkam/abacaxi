@@ -33,7 +33,7 @@ namespace Abacaxi.Containers
         ///     Initializes a new instance of <see cref="LinkedListNode{T}" /> class with a given value.
         /// </summary>
         /// <param name="value">The node's value.</param>
-        public LinkedListNode(T value)
+        public LinkedListNode([CanBeNull] T value)
         {
             Value = value;
         }
@@ -41,6 +41,7 @@ namespace Abacaxi.Containers
         /// <summary>
         ///     The node's value.
         /// </summary>
+        [CanBeNull]
         public T Value { get; }
 
         /// <summary>

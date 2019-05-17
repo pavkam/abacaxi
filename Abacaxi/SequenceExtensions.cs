@@ -645,7 +645,7 @@ namespace Abacaxi
                 {
                     if (item == null)
                     {
-                        return default;
+                        return default(T);
                     }
 
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");
@@ -735,7 +735,7 @@ namespace Abacaxi
                 {
                     if (item == null)
                     {
-                        return default;
+                        return default(T);
                     }
 
                     throw new InvalidOperationException($"The {nameof(sequence)} does not contain any elements.");

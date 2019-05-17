@@ -252,7 +252,7 @@ namespace Abacaxi
             (T first, T last, double diff) current = (sequence[0], sequence[1],
                 evaluateDiffOfPairFunc(sequence[1], sequence[0]));
 
-            (T first, T last, double diff) best = (default, default, 0);
+            (T first, T last, double diff) best = (default(T), default(T), 0);
 
             for (var i = 2; i < sequence.Count; i++)
             {
@@ -268,7 +268,7 @@ namespace Abacaxi
                         best = current;
                     }
 
-                    current = (sequence[i], default, 0);
+                    current = (sequence[i], default(T), 0);
                 }
             }
 

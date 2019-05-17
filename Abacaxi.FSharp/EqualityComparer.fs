@@ -31,7 +31,7 @@ module EqualityComparer =
     /// </summary>
     /// <param name="func">The comparison function.</param>
     /// <returns>A a new .NET-compatible comparer object.</returns>
-    let inline make<'T> compare hashCode : IEqualityComparer<'T> =
+    let make<'T> compare hashCode : IEqualityComparer<'T> =
         EqualityComparer<'T> (compare, hashCode)  :> _
 
     /// <summary>

@@ -600,7 +600,7 @@ namespace Abacaxi.Graphs
         /// <param name="startVertex">The start vertex.</param>
         /// <param name="endVertex">The end vertex.</param>
         /// <returns>A sequence of vertices that yield the shortest path. Returns an empty sequence if no path available.</returns>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex" /> is not part of teh graph.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="startVertex" /> is not part of the graph.</exception>
         /// <exception cref="ArgumentNullException">
         ///     Thrown if <paramref name="startVertex" /> or <paramref name="endVertex" /> is
         ///     <c>null</c>.
@@ -787,8 +787,10 @@ namespace Abacaxi.Graphs
                 EntryEdge = entryEdge;
             }
 
+            [NotNull]
             public TVertex Vertex { get; }
             public IBfsNode Parent { get; set; }
+            [CanBeNull]
             public Edge<TVertex> EntryEdge { get; }
         }
 
@@ -807,8 +809,10 @@ namespace Abacaxi.Graphs
                 EntryEdge = entryEdge;
             }
 
+            [NotNull]
             public TVertex Vertex { get; }
             public IDfsNode Parent { get; set; }
+            [CanBeNull]
             public Edge<TVertex> EntryEdge { get; }
             public int EntryTime { get; set; }
             public int ExitTime { get; set; }

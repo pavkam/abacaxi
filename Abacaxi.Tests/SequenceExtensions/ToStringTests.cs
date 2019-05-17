@@ -17,15 +17,16 @@ namespace Abacaxi.Tests.SequenceExtensions
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
     using NUnit.Framework;
 
     [TestFixture]
     public class ToStringTests
     {
-        private readonly int[] _nullArray = null;
-        private readonly int[] _emptyArray = { };
-        private readonly int[] _oneArray = {123};
-        private readonly int[] _twoArray = {123, 456};
+        [CanBeNull] private readonly int[] _nullArray = null;
+        [NotNull] private readonly int[] _emptyArray = { };
+        [NotNull] private readonly int[] _oneArray = {123};
+        [NotNull] private readonly int[] _twoArray = {123, 456};
 
         [Test]
         public void ToString1_ActuallyCaresAboutSelector()
@@ -67,7 +68,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.Throws<ArgumentNullException>(() => _emptyArray.ToString(i => i, null));
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToString1_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() => _nullArray.ToString(s => s, ""));
@@ -100,7 +101,7 @@ namespace Abacaxi.Tests.SequenceExtensions
             Assert.Throws<ArgumentNullException>(() => _emptyArray.ToString(null));
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void ToString2_ThrowsException_ForNullSequence()
         {
             Assert.Throws<ArgumentNullException>(() => _nullArray.ToString(""));

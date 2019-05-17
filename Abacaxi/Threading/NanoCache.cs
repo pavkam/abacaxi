@@ -66,7 +66,7 @@ namespace Abacaxi.Threading
         [CanBeNull]
         public TValue this[[NotNull] TKey key]
         {
-            get => TryGetValue(key, out var result) ? result : default;
+            get => TryGetValue(key, out var result) ? result : default(TValue);
             set => Set(key, value);
         }
 
@@ -89,7 +89,7 @@ namespace Abacaxi.Threading
         {
             Validate.ArgumentNotNull(nameof(key), key);
 
-            value = default;
+            value = default(TValue);
             if (!_dictionary.TryGetValue(key, out var tuple))
             {
                 return false;
@@ -130,7 +130,7 @@ namespace Abacaxi.Threading
         /// <param name="ttl">The TTL of the value.</param>
         /// <exception cref="ArgumentNullException">Thrown if the <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="ttl" /> is less than <c>-1</c>.</exception>
-        public void Set([NotNull] TKey key, TValue value, int ttl = Timeout.Infinite)
+        public void Set([NotNull] TKey key, [CanBeNull] TValue value, int ttl = Timeout.Infinite)
         {
             Validate.ArgumentNotNull(nameof(key), key);
 

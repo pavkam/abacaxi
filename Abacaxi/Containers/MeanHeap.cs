@@ -123,7 +123,7 @@ namespace Abacaxi.Containers
         ///     Adds an item to the <see cref="T:Abacaxi.Containers.MeanHeap{T}" />.
         /// </summary>
         /// <param name="item">The object to add to the <see cref="T:Abacaxi.Containers.MeanHeap{T}" />.</param>
-        public void Add(T item)
+        public void Add([CanBeNull] T item)
         {
             if (_leftHeap.Count <= _rightHeap.Count)
             {
@@ -166,7 +166,7 @@ namespace Abacaxi.Containers
         /// <returns>
         ///     true if <paramref name="item" /> is found in the <see cref="T:Abacaxi.Containers.MeanHeap{T}" />; otherwise, false.
         /// </returns>
-        public bool Contains(T item)
+        public bool Contains([CanBeNull] T item)
         {
             if (_leftHeap.Count > 0 && _comparer.Compare(_leftHeap.Top, item) <= 0)
             {
@@ -241,7 +241,7 @@ namespace Abacaxi.Containers
         ///     method also returns false if <paramref name="item" /> is not found in the original
         ///     <see cref="T:Abacaxi.Containers.Heap{T}" />.
         /// </returns>
-        public bool Remove(T item)
+        public bool Remove([CanBeNull] T item)
         {
             if (_leftHeap.Count > 0 && _comparer.Compare(_leftHeap.Top, item) <= 0)
             {

@@ -609,6 +609,8 @@ namespace Abacaxi
             while (heap.Count > 0)
             {
                 var top = heap.RemoveTop();
+                Assert.NotNull(top);
+
                 var c = top.Current;
                 yield return c;
 
@@ -1352,7 +1354,7 @@ namespace Abacaxi
             for (var i = 0; i < sequence.Count; i++)
             {
                 s = aggregator(s, sequence[i]);
-                if (comparer.Compare(s, default) < 0)
+                if (comparer.Compare(s, default(T)) < 0)
                 {
                     if (msi == -1 || comparer.Compare(sequence[i], m) > 0)
                     {
@@ -1361,7 +1363,7 @@ namespace Abacaxi
                         m = sequence[i];
                     }
 
-                    s = default;
+                    s = default(T);
                     ssi = -1;
                 }
                 else

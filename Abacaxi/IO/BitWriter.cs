@@ -23,7 +23,7 @@ namespace Abacaxi.IO
 
     /// <inheritdoc />
     /// <summary>
-    ///     Class implements writing bits/bytes to un underlying stream.
+    ///     Class implements writing bits/bytes to an underlying stream.
     /// </summary>
     [PublicAPI]
     public sealed class BitWriter : IDisposable

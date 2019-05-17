@@ -52,7 +52,7 @@ namespace Abacaxi.Internal
             return GetEnumerator();
         }
 
-        public void Add(T item)
+        public void Add([CanBeNull] T item)
         {
             AssertSegmentStillValid();
 
@@ -72,7 +72,7 @@ namespace Abacaxi.Internal
             Count = 0;
         }
 
-        public bool Contains(T item)
+        public bool Contains([CanBeNull] T item)
         {
             AssertSegmentStillValid();
 
@@ -93,7 +93,7 @@ namespace Abacaxi.Internal
             }
         }
 
-        public bool Remove(T item)
+        public bool Remove([CanBeNull] T item)
         {
             AssertSegmentStillValid();
 
@@ -117,7 +117,7 @@ namespace Abacaxi.Internal
 
         public bool IsReadOnly => _sequence.IsReadOnly;
 
-        public int IndexOf(T item)
+        public int IndexOf([CanBeNull] T item)
         {
             AssertSegmentStillValid();
 
@@ -132,7 +132,7 @@ namespace Abacaxi.Internal
             return -1;
         }
 
-        public void Insert(int index, T item)
+        public void Insert(int index, [CanBeNull] T item)
         {
             AssertBounds(index, true);
             AssertSegmentStillValid();

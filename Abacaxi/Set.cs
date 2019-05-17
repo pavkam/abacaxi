@@ -191,7 +191,7 @@ namespace Abacaxi
                 for (var i = 0; i < subsets; i++)
                 {
                     var subsetSum = combo[i].Length == 0
-                        ? default
+                        ? default(T)
                         : combo[i].Aggregate((current, item) => aggregator(current, item));
                     if (i == 0)
                     {

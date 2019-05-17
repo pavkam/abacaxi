@@ -17,6 +17,7 @@ namespace Abacaxi.Tests.Sorting
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using NUnit.Framework;
 
@@ -25,7 +26,7 @@ namespace Abacaxi.Tests.Sorting
         protected abstract bool IsStable { get; }
         protected abstract void Sort<T>(T[] array, int startIndex, int length, IComparer<T> comparer);
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Sort_ThrowsException_ForNullArray()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -60,7 +61,7 @@ namespace Abacaxi.Tests.Sorting
                 Sort(new[] {1}, 1, 1, Comparer<int>.Default));
         }
 
-        [Test]
+        [Test, SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Sort_ThrowsException_ForNullComparer()
         {
             Assert.Throws<ArgumentNullException>(() =>
